@@ -2,57 +2,83 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Phase 2: Ranking Code Snippets</title>
+  <title>Phase 2: Comprehensibility Ranking</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 40px;
       background-color: #f9f9f9;
     }
+
     .instructions {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
       margin-bottom: 20px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .draggable-list {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 30px 0;
+
+    .cards-container {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 10px;
+      margin-bottom: 20px;
     }
-    .draggable-list li {
-      background-color: #fff;
-      margin: 10px 0;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
+
+    .card {
+      min-width: 100px;
+      padding: 8px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       cursor: grab;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-size: 14px;
+      flex-shrink: 0;
     }
-    .draggable-list li.dragging {
+
+    .card.dragging {
       opacity: 0.5;
     }
-    .view-code {
-      float: right;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      font-size: 12px;
-      cursor: pointer;
+
+    .preview-area {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
     }
+
+    .code-box {
+      background: #2d2d2d;
+      color: #ccc;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      flex: 1 1 45%;
+      min-width: 300px;
+      font-family: 'Courier New', Courier, monospace;
+      white-space: pre-wrap;
+    }
+
+    .keyword  { color: #569CD6; font-weight: bold; }
+    .type     { color: #4EC9B0; }
+    .function { color: #DCDCAA; }
+    .literal  { color: #B5CEA8; }
+    .string   { color: #CE9178; }
+    .comment  { color: #6A9955; font-style: italic; }
+    .number   { color: #B5CEA8; }
+
     textarea {
       width: 100%;
       height: 150px;
-      margin-top: 20px;
       padding: 10px;
       font-size: 14px;
-      border: 1px solid #bbb;
       border-radius: 5px;
-      resize: vertical;
+      border: 1px solid #bbb;
     }
+
     button {
       margin-top: 20px;
       padding: 10px 20px;
@@ -63,182 +89,45 @@
       color: white;
       cursor: pointer;
     }
+
     button:hover {
       background-color: #45a049;
     }
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 10%;
-      left: 10%;
-      width: 80%;
-      height: 80%;
-      background: white;
-      border: 2px solid #888;
-      overflow: auto;
-      z-index: 1000;
-      padding: 20px;
-      border-radius: 10px;
-    }
-    .modal pre {
-      background-color: #2d2d2d;
-      color: #ccc;
-      padding: 15px;
-      border-radius: 8px;
-      overflow-x: auto;
-    }
-    .close-btn {
-      background-color: red;
-      color: white;
-      float: right;
-      border: none;
-      padding: 5px 10px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .draggable-list li button {
-    margin-left: 5px;
-    font-size: 14px;
-    padding: 3px 6px;
-    cursor: pointer;
-    background-color: #ddd;
-    border: none;
-    border-radius: 4px;
-    }
-    .draggable-list li button:hover {
-    background-color: #ccc;
-    }
+
+    .cards-container {
+    background: linear-gradient(to right, #eaffea, #fff5f5);
+    padding: 10px;
+    border-radius: 6px;
+}
+
   </style>
 </head>
 <body>
 
+<h2>Phase 2: Rank and Compare Code Snippets</h2>
+
+<label for="participantName"><strong>Your Full Name:</strong></label>
+<input type="text" id="participantName" placeholder="Enter your name" style="width: 300px; padding: 8px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;" />
+
 <div class="instructions">
-  <h2>Phase 2: Ranking Code Snippets Based on Comprehensibility</h2>
-  <p><strong>Assign Ranks:</strong> Drag and drop the snippet cards to rank them from easiest (top) to hardest (bottom) based on comprehensibility.</p>
+  <p><strong>Instructions:</strong> Drag and drop the cards below to rank the snippets from easiest to hardest. Use the checkboxes to compare snippet code side-by-side.</p>
   <p><strong>Provide Reasoning:</strong> Briefly explain your ranking decisions after ordering the snippets.</p>
   <p><strong>Prohibited:</strong> No automated metrics or generative AI tools.</p>
 </div>
 
-<ul class="draggable-list" id="snippetList">
-  <!-- snippets will be inserted dynamically -->
-</ul>
-
-<textarea id="reasoning" placeholder="Explain your reasoning here..."></textarea>
-
-<button onclick="submitRanking()">Submit Ranking and Reasoning</button>
-
-<!-- Modal for showing snippet code -->
-<div id="modal" class="modal">
-  <button class="close-btn" onclick="closeModal()">Close</button>
-  <pre id="modalContent"></pre>
+<div style="display: flex; justify-content: space-between; margin: 10px 0 5px 0; padding: 0 5px;">
+    <span style="font-weight: bold; color: #4CAF50;">⬅️ Easiest</span>
+    <span style="font-weight: bold; color: #f44336;">Hardest ➡️</span>
+  </div>  
+<div class="cards-container" id="cardsContainer">
 </div>
 
-<script>
-const TOTAL_SNIPPETS = 10;
+<div class="preview-area" id="previewArea"></div>
 
-window.onload = function() {
-  const list = document.getElementById('snippetList');
-  for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
-    const li = document.createElement('li');
-    li.setAttribute('draggable', true);
-    li.setAttribute('id', `snippet${i}`);
-    li.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          Snippet ${i}
-          <button class="view-code" onclick="viewCode(${i})">View Code</button>
-        </div>
-        <div>
-          <button onclick="moveUp(this)">🔼</button>
-          <button onclick="moveDown(this)">🔽</button>
-        </div>
-      </div>`;
-    list.appendChild(li);
-  }
-  addDragAndDropListeners();
-};
+<textarea id="reasoning" placeholder="Explain your reasoning..."></textarea>
+<button onclick="savePhase2State()">💾 Save Progress</button>
+<button onclick="submitPhase2()">Submit Ranking and Reasoning</button>
 
-function moveUp(button) {
-  const li = button.closest('li');
-  if (li.previousElementSibling) {
-    li.parentNode.insertBefore(li, li.previousElementSibling);
-  }
-}
-
-function moveDown(button) {
-  const li = button.closest('li');
-  if (li.nextElementSibling) {
-    li.parentNode.insertBefore(li.nextElementSibling, li);
-  }
-}
-
-
-function viewCode(snippetNum) {
-  const snippet = snippets.find(s => s.id === snippetNum);
-  if (snippet) {
-    document.getElementById('modalContent').innerHTML = snippet.code;
-    document.getElementById('modal').style.display = 'block';
-  }
-}
-
-
-function closeModal() {
-  document.getElementById('modal').style.display = 'none';
-}
-
-function addDragAndDropListeners() {
-  const listItems = document.querySelectorAll('.draggable-list li');
-  let dragSource = null;
-
-  listItems.forEach(item => {
-    item.addEventListener('dragstart', function() {
-      dragSource = this;
-      this.classList.add('dragging');
-    });
-
-    item.addEventListener('dragover', function(e) {
-      e.preventDefault();
-      const dragging = document.querySelector('.dragging');
-      if (this !== dragging) {
-        this.parentNode.insertBefore(dragging, this.nextSibling);
-      }
-    });
-
-    item.addEventListener('dragend', function() {
-      this.classList.remove('dragging');
-    });
-  });
-}
-
-function submitRanking() {
-  const orderedSnippets = [];
-  document.querySelectorAll('.draggable-list li').forEach(li => {
-    orderedSnippets.push(li.id);
-  });
-  const reasoning = document.getElementById('reasoning').value;
-
-  fetch('/submit_phase2', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ ranking: orderedSnippets, reasoning: reasoning })
-  })
-  .then(response => {
-    if (response.ok) {
-      alert('Ranking submitted successfully!');
-    } else {
-      alert('Failed to submit ranking.');
-    }
-  })
-  .catch(error => {
-    console.error('Error submitting ranking:', error);
-    alert('Error submitting ranking.');
-  });
-}
-</script>
 
 <script>
     const snippets = [
@@ -448,5 +337,172 @@ function submitRanking() {
     ];
 </script>
 
+<script>
+
+window.onload = function () {
+  const container = document.getElementById('cardsContainer');
+
+  // 1. Build cards
+  snippets.forEach(snippet => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.draggable = true;
+    card.id = `snippet-${snippet.id}`;
+    card.innerHTML = `
+      <strong>${snippet.title}</strong><br>
+      <label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> Compare</label>
+    `;
+    container.appendChild(card);
+  });
+
+  // 2. Restore saved state (after cards exist)
+  const saved = JSON.parse(sessionStorage.getItem('phase2_state') || getCookie('phase2_state') || '{}');
+  if (saved) {
+    document.getElementById('participantName').value = saved.name || '';
+    document.getElementById('reasoning').value = saved.reasoning || '';
+
+    // Restore ranking
+    saved.ranking?.forEach(id => {
+      const el = document.getElementById(`snippet-${id}`);
+      if (el) container.appendChild(el);
+    });
+
+    // Restore checked comparisons
+    saved.selectedSnippets?.forEach(id => {
+      const checkbox = document.querySelector(`#snippet-${id} input[type=checkbox]`);
+      if (checkbox) {
+        checkbox.checked = true;
+        togglePreview(parseInt(id), checkbox);
+      }
+    });
+  }
+
+  enableDragAndDrop();
+};
+
+
+function togglePreview(id, checkbox) {
+  const previewArea = document.getElementById('previewArea');
+  const snippet = snippets.find(s => s.id === id);
+  const existing = document.getElementById(`preview-${id}`);
+
+  if (checkbox.checked && !existing) {
+    const box = document.createElement('div');
+    box.className = 'code-box';
+    box.id = `preview-${id}`;
+    box.innerHTML = snippet.code;
+    previewArea.appendChild(box);
+  } else if (!checkbox.checked && existing) {
+    previewArea.removeChild(existing);
+  }
+}
+
+function enableDragAndDrop() {
+  const container = document.getElementById('cardsContainer');
+  let draggedItem = null;
+
+  container.addEventListener('dragstart', (e) => {
+    draggedItem = e.target;
+    e.target.classList.add('dragging');
+  });
+
+  container.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    const afterElement = [...container.querySelectorAll('.card:not(.dragging)')]
+      .find(el => e.clientX < el.getBoundingClientRect().left + el.offsetWidth / 2);
+    if (afterElement) {
+      container.insertBefore(draggedItem, afterElement);
+    } else {
+      container.appendChild(draggedItem);
+    }
+  });
+
+  container.addEventListener('dragend', () => {
+    draggedItem.classList.remove('dragging');
+    draggedItem = null;
+  });
+}
+
+function submitPhase2() {
+  const name = document.getElementById('participantName').value.trim();
+  const reasoning = document.getElementById('reasoning').value.trim();
+  const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
+
+  if (!name || !reasoning || ranking.length === 0) {
+    alert("Please fill in your name, ranking, and reasoning.");
+    return;
+  }
+
+  fetch("https://codecomprehensibility.site/submit_phase2", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: name, ranking: ranking, reasoning: reasoning })
+  })
+  .then(res => res.ok ? alert("Submitted!") : alert("Submission failed."))
+  .catch(err => {
+    console.error(err);
+    alert("Submission error.");
+  });
+}
+</script>
+
+<script>
+    function savePhase2State() {
+  const name = document.getElementById('participantName').value.trim();
+  const reasoning = document.getElementById('reasoning').value.trim();
+  const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
+
+  // Store checkboxes
+  const selectedSnippets = [];
+  document.querySelectorAll('.cards-container input[type=checkbox]').forEach((cb, idx) => {
+    if (cb.checked) selectedSnippets.push(snippets[idx].id);
+  });
+
+  const data = {
+    name,
+    reasoning,
+    ranking,
+    selectedSnippets
+  };
+
+  sessionStorage.setItem('phase2_state', JSON.stringify(data));
+  setCookie('phase2_state', JSON.stringify(data), 30); // store for 30 days
+  alert('Progress saved locally!');
+}
+
+
+const saved = JSON.parse(sessionStorage.getItem('phase2_state'));
+if (saved) {
+  document.getElementById('participantName').value = saved.name || '';
+  document.getElementById('reasoning').value = saved.reasoning || '';
+
+  // Restore ranking order
+  const container = document.getElementById('cardsContainer');
+  saved.ranking?.forEach(id => {
+    const el = document.getElementById(`snippet-${id}`);
+    if (el) container.appendChild(el);
+  });
+
+  // Restore checkboxes
+  saved.selectedSnippets?.forEach(id => {
+    const checkbox = document.querySelector(`#snippet-${id} input[type=checkbox]`);
+    if (checkbox) {
+      checkbox.checked = true;
+      togglePreview(parseInt(id), checkbox); // show preview
+    }
+  });
+}
+
+function setCookie(name, value, days) {
+  const expires = new Date(Date.now() + days*24*60*60*1000).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+}
+
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : null;
+}
+
+</script>
 </body>
 </html>

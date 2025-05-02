@@ -10,7 +10,10 @@ import java.util.Map;
 public class SubmissionController {
 
     // ---- Phase 1: Receive Summaries ----
-    @CrossOrigin(origins = "http://localhost:8000")
+    @CrossOrigin(origins = {
+        "http://localhost:8000",
+        "http://codecomprehensibility.site"
+    })
     @PostMapping("/submit")
     public String handlePhase1(@RequestBody Map<String, String> body) {
         String name = body.getOrDefault("name", "Anonymous");
@@ -31,8 +34,11 @@ public class SubmissionController {
         }
     }
 
-    // ---- Phase 2: Receive Rankings + Reasoning ----
-    @CrossOrigin(origins = "http://localhost:8000")
+        // ---- Phase 2: Receive Rankings + Reasoning ----
+    @CrossOrigin(origins = {
+        "http://localhost:8000",
+        "http://codecomprehensibility.site"
+    })
     @PostMapping("/submit_phase2")
     public String handlePhase2(@RequestBody Phase2Submission submission) {
         try (FileWriter writer = new FileWriter("phase2_submissions.txt", true)) {

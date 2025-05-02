@@ -238,7 +238,7 @@ function submitAll() {
         allSummaries[key] = sessionVal || decodeURIComponent(cookieVal || '');
     }
 
-    fetch("http://localhost:8080/submit", {
+    fetch("https://codecomprehensibility.site/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(allSummaries)
