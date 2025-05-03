@@ -355,6 +355,12 @@ window.onload = function () {
     container.appendChild(card);
   });
 
+  const nameFromPhase1 = getCookie('phase_participant_name');
+  if (nameFromPhase1) {
+    document.getElementById('participantName').value = decodeURIComponent(nameFromPhase1);
+  }
+
+
   // 2. Restore saved state (after cards exist)
   const saved = JSON.parse(sessionStorage.getItem('phase2_state') || decodeURIComponent(getCookie('phase2_state') || '{}'));
   if (saved) {
