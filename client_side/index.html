@@ -265,24 +265,25 @@ function submitAll() {
     }
 
     fetch("https://codecomprehensibility.site/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(allSummaries)
-    })
-    .then(response => {
-      if (response.ok) {
-        alert('Summaries submitted successfully. Click the "Continue to Phase 2" button to proceed!');
-        document.getElementById('continueBtn').style.display = 'inline-block';
-        sessionStorage.setItem('phase1_submitted', 'true');
-        setCookie('phase1_submitted', 'true', 30);
-      } else {
-            alert("Failed to submit. Try again.");
-        }
-    })
-    .catch(error => {
-        console.error("Submission error:", error);
-        alert("Error submitting.");
-    });
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(allSummaries)
+  })
+  .then(response => {
+    if (response.ok) {
+      showSubmissionModal('✅ Summaries submitted successfully. Click "Continue to Phase 2" to proceed.');
+      document.getElementById('continueBtn').style.display = 'inline-block';
+      sessionStorage.setItem('phase1_submitted', 'true');
+      setCookie('phase1_submitted', 'true', 30);
+    } else {
+      showSubmissionModal('❌ Submission failed. Please try again.');
+    }
+  })
+  .catch(error => {
+    console.error("Submission error:", error);
+    showSubmissionModal('⚠️ Error occurred during submission.');
+  });
+
 }
 
 
@@ -513,9 +514,9 @@ function submitAll() {
     z-index: 1000;
     text-align: center;
     font-family: 'Segoe UI', Tahoma, sans-serif;
-">
-    <p style="font-weight: bold;">Summaries saved locally!</p>
-    <p>Make sure to use the <strong>Save</strong> button to save to the server, and click <strong>Submit All Summaries</strong> at the end to submit your work.</p>
+  ">
+    <p style="font-weight: bold;">Summary saved locally!</p>
+    <p>Make sure to click <strong>Submit All Summaries</strong> at the end to submit your work.</p>
     
     <label style="display: block; margin-top: 15px;">
         <input type="checkbox" id="hide-warning-checkbox" onchange="setCookie('hideSaveWarning', 'true', 30)">
@@ -531,6 +532,46 @@ function submitAll() {
         cursor: pointer;
     ">OK</button>
 </div>
+
+<div id="submission-modal" style="
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e6fff2;
+    color: #003d2f;
+    border: 1px solid #7fdcbf;
+    padding: 20px;
+    border-radius: 10px;
+    width: 440px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    z-index: 1001;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+">
+    <p id="submission-message" style="font-weight: bold;">Phase 1 submitted successfully, please </p>
+    <button onclick="hideSubmissionModal()" style="
+        margin-top: 15px;
+        padding: 8px 14px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    ">OK</button>
+</div>
+
+<script>
+  function showSubmissionModal(message) {
+    document.getElementById('submission-message').innerText = message;
+    document.getElementById('submission-modal').style.display = 'block';
+  }
+  
+  function hideSubmissionModal() {
+    document.getElementById('submission-modal').style.display = 'none';
+  }
+  </script>  
 
 <script>
     function setCookie(name, value, days) {
