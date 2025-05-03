@@ -110,9 +110,11 @@
 <input type="text" id="participantName" placeholder="Enter your name" style="width: 300px; padding: 8px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;" />
 
 <div class="instructions">
-  <p><strong>Instructions:</strong> Drag and drop the cards below to rank the snippets from easiest to hardest. Use the checkboxes to view code snippets, or select more than one to compare snippets side by side.</p>
-  <p><strong>Provide Reasoning:</strong> Briefly explain your ranking decisions after ordering the snippets.</p>
-  <p><strong>Prohibited:</strong> No automated metrics or generative AI tools.</p>
+  <p><strong>Complete this on a PC, not a mobile phone.</strong></p>
+  <p><strong>Instructions:</strong> Drag and drop the cards below to rank the snippets from easiest to hardest. Use the "View" checkbox to display a code snippet, or select multiple checkboxes to compare snippets side by side.</p>
+  <p><strong>Provide Reasoning:</strong> Briefly explain your ranking decisions while arranging the snippets. Please include at least one reason for each snippet.</p>
+  <p><strong>Prohibited:</strong> Please <span style="color:red;">do not</span> use any automated metrics or generative AI tools (e.g., ChatGPT) for this task. We are seeking your expert judgment as a critical component of our research.</p>
+  <p>If you find two snippets equally comprehensible, please place them in any order, but indicate in the reasoning section that you consider them to have similar comprehensibility.</p>
 </div>
 
 <div style="display: flex; justify-content: space-between; margin: 10px 0 5px 0; padding: 0 5px;">
@@ -125,7 +127,7 @@
 <div class="preview-area" id="previewArea"></div>
 
 <textarea id="reasoning" placeholder="Explain your reasoning..."></textarea>
-<button onclick="location.href='/'" style="margin-bottom: 20px;">⬅️ Go Back to Phase 1</button>
+<button onclick="location.href='/phase1.html'" style="margin-bottom: 20px;">⬅️ Go Back to Phase 1</button>
 <button onclick="savePhase2State()">💾 Save Progress Locally</button>
 <button onclick="submitPhase2()">Submit Ranking and Reasoning</button>
 
@@ -529,5 +531,10 @@ function getCookie(name) {
 }
 
 </script>
+
+<footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
+  Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
+</footer>
+
 </body>
 </html>
