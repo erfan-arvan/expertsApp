@@ -129,7 +129,17 @@
 <button onclick="savePhase2State()">💾 Save Progress Locally</button>
 <button onclick="submitPhase2()">Submit Ranking and Reasoning</button>
 
+<div id="feedback-modal" style="display:none; position:fixed; top:30%; left:50%; transform:translate(-50%,-50%); background:#fff; color:#333; border:1px solid #ccc; padding:20px; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1000; width:400px; text-align:center; font-family:Segoe UI, sans-serif;">
+  <p id="feedback-message" style="margin-bottom:20px; font-size:16px;"></p>
+  <button onclick="document.getElementById('feedback-modal').style.display='none'" style="padding:8px 16px; background:#4CAF50; color:white; border:none; border-radius:5px;">OK</button>
+</div>
 
+<script>
+  function showModal(message) {
+  document.getElementById('feedback-message').innerText = message;
+  document.getElementById('feedback-modal').style.display = 'block';
+}
+</script>
 <script>
     const snippets = [
       {
@@ -440,7 +450,7 @@ function submitPhase2() {
   const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
 
   if (!name || !reasoning || ranking.length === 0) {
-    alert("Please fill in your name, ranking, and reasoning.");
+    showModal("Please fill in your name, ranking, and reasoning.");
     return;
   }
 
@@ -449,10 +459,10 @@ function submitPhase2() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name: name, ranking: ranking, reasoning: reasoning })
   })
-  .then(res => res.ok ? alert("Submitted!") : alert("Submission failed."))
+  .then(res => res.ok ? showModal("Submitted!") : showModal("Submission failed."))
   .catch(err => {
     console.error(err);
-    alert("Submission error.");
+    showModal("Submission error.");
   });
 }
 </script>
@@ -478,7 +488,7 @@ function submitPhase2() {
 
   sessionStorage.setItem('phase2_state', JSON.stringify(data));
   setCookie('phase2_state', JSON.stringify(data), 30); // store for 30 days
-  alert('Progress saved locally!');
+  showModal('Progress saved locally!');
 }
 
 
