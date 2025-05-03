@@ -754,6 +754,7 @@ function submitAndCloseModal() {
 
 <script>
   function reviewAndSubmit() {
+  saveSummary();
   const name = document.getElementById('participantName').value.trim();
   if (!name) {
     showValidationMessage("Please enter your name.");
