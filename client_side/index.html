@@ -104,7 +104,33 @@
         .dark-mode .comment  { color: #7f848e; }
         .dark-mode .number   { color: #f78c6c; }
 
-    </style>
+              #continueBtn {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        box-shadow: 0 0 10px #4CAF50;
+        animation: glowPulse 1.5s infinite alternate;
+      }
+
+      @keyframes glowPulse {
+        0% {
+          box-shadow: 0 0 10px #4CAF50;
+        }
+        100% {
+          box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+        }
+      }
+
+      #continueBtn:hover {
+        background-color: #45a049;
+      }
+</style>
+
+    
 </head>
 <body>
 
@@ -146,6 +172,9 @@
         <button id="save" onclick="saveSummary()">Save</button>
         <button id="next" onclick="nextSnippet()">Next</button>
         <button id="submit" onclick="submitAll()">Submit All Summaries</button>
+        <button id="continueBtn" onclick="goToPhase2()" style="display: none;">
+          Continue to Phase 2
+        </button>        
     </div>
 </div>
 
@@ -244,9 +273,12 @@ function submitAll() {
         body: JSON.stringify(allSummaries)
     })
     .then(response => {
-        if (response.ok) {
-            alert("Submitted! Your work is saved locally too.");
-        } else {
+      if (response.ok) {
+        alert('Summaries submitted successfully. Click the "Continue to Phase 2" button to proceed!');
+        document.getElementById('continueBtn').style.display = 'inline-block';
+        sessionStorage.setItem('phase1_submitted', 'true');
+        setCookie('phase1_submitted', 'true', 30);
+      } else {
             alert("Failed to submit. Try again.");
         }
     })
@@ -572,6 +604,9 @@ window.onload = function() {
     if (getCookie('hideSaveWarning') === 'true') {
         document.getElementById('hide-warning-checkbox').checked = true;
     }
+      if (sessionStorage.getItem('phase1_submitted') === 'true' || getCookie('phase1_submitted') === 'true') {
+    document.getElementById('continueBtn').style.display = 'inline-block';
+  }
 };
 
 </script>
@@ -582,6 +617,30 @@ window.onload = function() {
     sessionStorage.setItem('participantName', name);
     setCookie('participantName', encodeURIComponent(name), 30); // expires in 30 days
 }
+</script>
+
+<script>
+  function goToPhase2() {
+    const name = document.getElementById('participantName').value.trim();
+    if (!name) {
+      alert("Please enter your name before proceeding.");
+      return;
+    }
+
+    // Save name to session and cookie
+    sessionStorage.setItem('phase_participant_name', name);
+    setCookie('phase_participant_name', name, 30);
+
+    // Redirect
+    window.location.href = 'phase2.html';
+  }
+
+
+  function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+  }
+
 </script>
     
 </body>
