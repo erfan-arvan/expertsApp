@@ -356,7 +356,7 @@ window.onload = function () {
   });
 
   // 2. Restore saved state (after cards exist)
-  const saved = JSON.parse(sessionStorage.getItem('phase2_state') || getCookie('phase2_state') || '{}');
+  const saved = JSON.parse(sessionStorage.getItem('phase2_state') || decodeURIComponent(getCookie('phase2_state') || '{}'));
   if (saved) {
     document.getElementById('participantName').value = saved.name || '';
     document.getElementById('reasoning').value = saved.reasoning || '';
