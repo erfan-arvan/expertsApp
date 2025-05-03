@@ -459,11 +459,15 @@ function submitPhase2() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name: name, ranking: ranking, reasoning: reasoning })
   })
-  .then(res => res.ok ? showModal("Submitted!") : showModal("Submission failed."))
+  .then(res => res.ok
+  ? showModal("Submission successful!\nThank you for your participation. We will contact you regarding potential next steps.")
+  : showModal("Submission failed. Please try again. If the issue persists, contact us at ea442@njit.edu.")
+  )
   .catch(err => {
     console.error(err);
-    showModal("Submission error.");
+    showModal("An error occurred during submission. Please try again. If the issue persists, contact us at ea442@njit.edu.");
   });
+
 }
 </script>
 
