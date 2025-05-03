@@ -104,13 +104,13 @@
 </head>
 <body>
 
-<h2>Phase 2: Rank and Compare Code Snippets</h2>
+<h2>Phase 2: Rank Code Snippets</h2>
 
 <label for="participantName"><strong>Your Full Name:</strong></label>
 <input type="text" id="participantName" placeholder="Enter your name" style="width: 300px; padding: 8px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;" />
 
 <div class="instructions">
-  <p><strong>Instructions:</strong> Drag and drop the cards below to rank the snippets from easiest to hardest. Use the checkboxes to compare snippet code side-by-side.</p>
+  <p><strong>Instructions:</strong> Drag and drop the cards below to rank the snippets from easiest to hardest. Use the checkboxes to view code snippets, or select more than one to compare snippets side by side.</p>
   <p><strong>Provide Reasoning:</strong> Briefly explain your ranking decisions after ordering the snippets.</p>
   <p><strong>Prohibited:</strong> No automated metrics or generative AI tools.</p>
 </div>
@@ -190,7 +190,7 @@
       {
         id: 3,
         title: "Method3",
-        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">Method3</span>(<span class="type">short</span> type) {
+        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method3</span>(<span class="type">short</span> type) {
   <span class="keyword">if</span> (type == IMAGE_FILE_MACHINE_UNKNOWN) {
     <span class="comment">// Unsupported machine type</span>
     <span class="keyword">return</span> <span class="literal">false</span>;
@@ -216,7 +216,7 @@
       {
         id: 4,
         title: "Method4",
-        code: `<span class="keyword">public static</span> <span class="type">int</span> <span class="function">Method4</span>(<span class="type">CharSequence</span> str, <span class="type">CharSequence</span> searchStr, <span class="type">int</span> startPos) {
+        code: `<span class="keyword">public static</span> <span class="type">int</span> <span class="function">method4</span>(<span class="type">CharSequence</span> str, <span class="type">CharSequence</span> searchStr, <span class="type">int</span> startPos) {
   <span class="keyword">if</span> (str == <span class="literal">null</span> || searchStr == <span class="literal">null</span>) {
     <span class="keyword">return</span> INDEX_NOT_FOUND;
   }
@@ -361,7 +361,7 @@ window.onload = function () {
     card.id = `snippet-${snippet.id}`;
     card.innerHTML = `
       <strong>${snippet.title}</strong><br>
-      <label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> Compare</label>
+      <label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
     `;
     container.appendChild(card);
   });
