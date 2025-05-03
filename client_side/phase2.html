@@ -355,16 +355,20 @@ window.onload = function () {
     container.appendChild(card);
   });
 
+  // Try to load name from Phase 1 cookie
   const nameFromPhase1 = getCookie('phase_participant_name');
   if (nameFromPhase1) {
     document.getElementById('participantName').value = decodeURIComponent(nameFromPhase1);
   }
 
-
   // 2. Restore saved state (after cards exist)
   const saved = JSON.parse(sessionStorage.getItem('phase2_state') || decodeURIComponent(getCookie('phase2_state') || '{}'));
   if (saved) {
-    document.getElementById('participantName').value = saved.name || '';
+    // Only overwrite name if saved.name is non-empty
+    if (saved.name) {
+      document.getElementById('participantName').value = saved.name;
+    }
+
     document.getElementById('reasoning').value = saved.reasoning || '';
 
     // Restore ranking
