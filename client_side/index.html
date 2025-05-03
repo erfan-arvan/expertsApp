@@ -216,7 +216,7 @@ function saveSummary() {
 
 
 function nextSnippet() {
-    saveSummary();
+    //saveSummary();
     if (currentSnippet < TOTAL_SNIPPETS) {
         currentSnippet++;
         loadSnippet(currentSnippet);
@@ -226,7 +226,7 @@ function nextSnippet() {
 
 function prevSnippet() {
     if (currentSnippet > 1) {
-        saveSummary();
+        //saveSummary();
         currentSnippet--;
         loadSnippet(currentSnippet);
         updateButtons();
