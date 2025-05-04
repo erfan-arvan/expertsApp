@@ -103,6 +103,36 @@
     border-radius: 6px;
 }
 
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+.dark-mode .instructions,
+.dark-mode .card,
+.dark-mode .code-box,
+.dark-mode textarea {
+  background-color: #2e2e2e;
+  color: #ccc;
+  border-color: #555;
+}
+
+.light-mode .code-box {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.light-mode body {
+  background-color: #ffffff;
+  color: #222;
+}
+
+.light-mode textarea {
+  background-color: #ffffff;
+  color: #000;
+}
+
+
   </style>
 </head>
 <body>
@@ -118,6 +148,10 @@
   <p><strong>Provide Reasoning:</strong> Briefly explain your ranking decisions as you arrange the snippets. Include at least one reason for each snippet—such as clarity of logic, use of language constructs, naming, or structure. You should also provide comparison statements explaining why one snippet was easier or harder to understand than another.</p>
   <p>If you find two snippets equally comprehensible, please place them in any order, but indicate in the reasoning section that you consider them to have similar comprehensibility.</p>
   <p><strong>Prohibited:</strong> Please <span style="color:red;">do not</span> use any automated metrics or generative AI tools (e.g., ChatGPT) for this task. We are seeking your expert judgment as a critical component of our research.</p>
+
+  <button onclick="toggleTheme()" id="theme-toggle" style="float: right; margin-bottom: 10px; padding: 6px 12px; border-radius: 5px; border: none; background-color: #333; color: white; cursor: pointer;">
+    Switch to Light Mode
+  </button>  
 </div>
 
 <div style="display: flex; justify-content: space-between; margin: 10px 0 5px 0; padding: 0 5px;">
@@ -448,6 +482,15 @@ window.onload = function () {
     container.appendChild(card);
   });
 
+  //Restore theme preference on page load:
+    const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "light") {
+    document.body.classList.add("light-mode");
+    document.getElementById('theme-toggle').textContent = "Switch to Dark Mode";
+  } else {
+    document.body.classList.add("dark-mode");
+  }
+
   // Try to load name from Phase 1 cookie
   const nameFromPhase1 = getCookie('phase_participant_name');
   if (nameFromPhase1) {
@@ -560,7 +603,7 @@ function reviewAndConfirmPhase2Submission() {
   const rankingList = document.getElementById('review-ranking');
   ranking.forEach((id) => {
     const li = document.createElement("li");
-    li.textContent = `Method ${id}`;
+    li.textContent = `Snippet ${id}`;
     rankingList.appendChild(li);
   });
 
@@ -690,7 +733,27 @@ function getCookie(name) {
       modal.style.display = 'none';
     }
   }
-  </script>  
+</script>  
+
+<script>
+  function toggleTheme() {
+    const body = document.body;
+    const isLight = body.classList.contains("light-mode");
+  
+    if (isLight) {
+      body.classList.remove("light-mode");
+      body.classList.add("dark-mode");
+      localStorage.setItem("theme", "dark");
+      document.getElementById('theme-toggle').textContent = "Switch to Light Mode";
+    } else {
+      body.classList.add("light-mode");
+      body.classList.remove("dark-mode");
+      localStorage.setItem("theme", "light");
+      document.getElementById('theme-toggle').textContent = "Switch to Dark Mode";
+    }
+  }
+  </script>
+  
 
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
   <div>
