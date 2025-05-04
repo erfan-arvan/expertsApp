@@ -233,13 +233,31 @@ function saveSummary() {
 
 
 function nextSnippet() {
+    const name = document.getElementById('participantName').value.trim();
+    const summary = document.getElementById('summary').value.trim();
+    let messages = [];
+
+    if (!name) {
+        messages.push("• Please enter your name.");
+    }
+    if (!summary) {
+        messages.push(`• Please enter a summary for Snippet ${currentSnippet}.`);
+    }
+
+    if (messages.length > 0) {
+        showValidationMessage("⚠️ Missing Information:\n\n" + messages.join("\n"));
+        return; // Don't proceed
+    }
+
     saveSummary();
+
     if (currentSnippet < TOTAL_SNIPPETS) {
         currentSnippet++;
         loadSnippet(currentSnippet);
         updateButtons();
     }
 }
+
 
 function prevSnippet() {
     if (currentSnippet > 1) {
