@@ -131,10 +131,52 @@
 <button onclick="savePhase2State()">💾 Save Progress Locally</button>
 <button onclick="reviewAndConfirmPhase2Submission()">Review and Submit</button>
 
-<div id="feedback-modal" style="display:none; position:fixed; top:30%; left:50%; transform:translate(-50%,-50%); background:#fff; color:#333; border:1px solid #ccc; padding:20px; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1000; width:400px; text-align:center; font-family:Segoe UI, sans-serif;">
-  <p id="feedback-message" style="margin-bottom:20px; font-size:16px;"></p>
-  <button onclick="document.getElementById('feedback-modal').style.display='none'" style="padding:8px 16px; background:#4CAF50; color:white; border:none; border-radius:5px;">OK</button>
+<div id="feedback-modal" style="
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 20px 20px 30px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  z-index: 1000;
+  width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  font-family: 'Segoe UI', sans-serif;
+  text-align: left;
+">
+
+  <!-- Close button (top-right X) -->
+  <div style="text-align: right;">
+    <button onclick="hideModal()" style="
+      background: none;
+      border: none;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #999;
+    ">&times;</button>
+  </div>
+
+  <div id="feedback-message" style="font-size: 16px; margin-top: 10px;"></div>
+
+  <div style="text-align: center; margin-top: 20px;">
+    <button onclick="hideModal()" style="
+      padding: 8px 16px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    ">OK</button>
+  </div>
 </div>
+
 
 <script>
 function showModal(message, isHTML = false) {
