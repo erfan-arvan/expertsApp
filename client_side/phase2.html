@@ -131,8 +131,9 @@
 <button onclick="savePhase2State()">💾 Save Progress Locally</button>
 <button onclick="reviewAndConfirmPhase2Submission()">Review and Submit</button>
 
-<div id="feedback-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; color:#333; border:1px solid #ccc; padding:20px 30px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.25); z-index:1000; width:500px; max-width:90%; font-family:'Segoe UI', sans-serif;">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+<!-- Modal for reviewing submission -->
+<div id="feedback-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; color:#333; border:1px solid #ccc; padding:20px 30px; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.3); z-index:1000; width:500px; max-width:90%; font-family:'Segoe UI', sans-serif;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
     <h3 style="margin:0;">Review Your Submission</h3>
     <button onclick="hideModal()" style="background:none; border:none; font-size:20px; font-weight:bold; cursor:pointer;">&times;</button>
   </div>
@@ -140,20 +141,19 @@
   <p><strong>Name:</strong> <span id="review-name"></span></p>
 
   <p><strong>Ranking (Easiest to Hardest):</strong></p>
-  <ul id="review-ranking" style="margin-top:-10px; margin-bottom:15px; padding-left:20px;"></ul>
+  <ul id="review-ranking" style="margin-top:5px; padding-left:20px;"></ul>
 
   <p><strong>Reasoning:</strong></p>
-  <div id="review-reasoning" style="white-space:pre-wrap; background:#f8f8f8; padding:10px; border:1px solid #ddd; border-radius:5px; margin-bottom:15px;"></div>
+  <div id="review-reasoning" style="white-space:pre-wrap; background:#f8f8f8; padding:10px; border:1px solid #ddd; border-radius:5px; margin-bottom:10px;"></div>
 
-  <p id="review-warning" style="color:red; font-weight:bold; margin-top:10px;">
-    Please make sure you have included reasoning for all snippets.
-  </p>
+  <p id="review-warning" style="color:red; font-weight:bold;">Please make sure you have included reasoning for all snippets.</p>
 
   <div style="text-align:center; margin-top:20px;">
-    <button onclick="submitPhase2Final()" style="padding:10px 20px; background:#4CAF50; color:white; border:none; border-radius:5px; cursor:pointer; font-size:14px;">✅ Submit Now</button>
-    <button onclick="hideModal()" style="padding:10px 20px; margin-left:10px; background:#ccc; color:black; border:none; border-radius:5px; cursor:pointer; font-size:14px;">Cancel</button>
+    <button onclick="submitPhase2Final()" style="padding:10px 20px; background:#4CAF50; color:white; border:none; border-radius:5px; cursor:pointer;">✅ Submit Now</button>
+    <button onclick="hideModal()" style="padding:10px 20px; margin-left:10px; background:#ccc; color:black; border:none; border-radius:5px; cursor:pointer;">Cancel</button>
   </div>
 </div>
+
 
 
   <h3 style="margin-top: 0;">Review Your Submission</h3>
@@ -197,14 +197,21 @@
 
 <script>
 function showModal(message, isHTML = false) {
-  const feedback = document.getElementById('feedback-message');
-  if (isHTML) {
-    feedback.innerHTML = message; // This will render the HTML properly
-  } else {
-    feedback.innerText = message;
+  const modal = document.getElementById('feedback-modal');
+  const feedback = document.getElementById('review-name'); // Just to test modal is in review mode
+
+  if (!modal || !feedback) {
+    alert("Modal structure is missing from the HTML.");
+    return;
   }
-  document.getElementById('feedback-modal').style.display = 'block';
+
+  if (!isHTML) {
+    document.getElementById('review-reasoning').innerText = message;
+  }
+
+  modal.style.display = 'block';
 }
+
 </script>
 <script>
     const snippets = [
