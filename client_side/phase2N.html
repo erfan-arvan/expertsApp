@@ -9,7 +9,9 @@
       margin: 40px;
       background-color: #f9f9f9;
     }
-
+    h2 {
+      text-align: center;
+    }
     #feedback-modal button:hover {
       color: #f44336;
     }
@@ -18,17 +20,18 @@
       padding: 20px;
       background: #fff;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-
     .cards-container {
       display: flex;
       flex-wrap: nowrap;
       overflow-x: auto;
       gap: 10px;
       margin-bottom: 20px;
+      background: linear-gradient(to right, #eaffea, #fff5f5);
+      padding: 10px;
+      border-radius: 6px;
     }
-
     .card {
       min-width: 100px;
       padding: 8px;
@@ -36,23 +39,20 @@
       border: 1px solid #ccc;
       border-radius: 6px;
       text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       cursor: grab;
       font-size: 14px;
       flex-shrink: 0;
     }
-
     .card.dragging {
       opacity: 0.5;
     }
-
     .preview-area {
       display: flex;
       gap: 20px;
       flex-wrap: wrap;
       margin-bottom: 20px;
     }
-
     .code-box {
       background: #2d2d2d;
       color: #ccc;
@@ -64,15 +64,12 @@
       font-family: 'Courier New', Courier, monospace;
       white-space: pre-wrap;
     }
-
-    .keyword  { color: #569CD6; font-weight: bold; }
-    .type     { color: #4EC9B0; }
+    .keyword { color: #569CD6; font-weight: bold; }
+    .type { color: #4EC9B0; }
     .function { color: #DCDCAA; }
-    .literal  { color: #B5CEA8; }
-    .string   { color: #CE9178; }
-    .comment  { color: #6A9955; font-style: italic; }
-    .number   { color: #B5CEA8; }
-
+    .literal, .number { color: #B5CEA8; }
+    .string { color: #CE9178; }
+    .comment { color: #6A9955; font-style: italic; }
     textarea {
       width: 100%;
       height: 150px;
@@ -81,7 +78,6 @@
       border-radius: 5px;
       border: 1px solid #bbb;
     }
-
     button {
       margin-top: 20px;
       padding: 10px 20px;
@@ -92,26 +88,63 @@
       color: white;
       cursor: pointer;
     }
-
     button:hover {
       background-color: #45a049;
     }
-
-    .cards-container {
-    background: linear-gradient(to right, #eaffea, #fff5f5);
-    padding: 10px;
-    border-radius: 6px;
-}
-
+    footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #ccc;
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      font-family: 'Segoe UI', sans-serif;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .modal-header h3 {
+      margin: 0;
+    }
+    .modal-header button {
+      background: none;
+      border: none;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #333;
+    }
+    .modal-content {
+      font-size: 16px;
+    }
+    .warning {
+      color: red;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-
 <h2>Phase 2: Rank Code Snippets</h2>
-
 <label for="participantName"><strong>Your Full Name:</strong></label>
 <input type="text" id="participantName" placeholder="Enter your name" style="width: 300px; padding: 8px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;" />
-
 <div class="instructions">
   <p><strong>Complete this on a PC, not a mobile phone.</strong></p>
   <p><strong>Instructions:</strong> Drag and drop the cards below to rank the snippets from easiest to hardest. Use the "View" checkbox to display a code snippet, or select multiple checkboxes to compare snippets side by side.</p>
@@ -119,106 +152,61 @@
   <p><strong>Prohibited:</strong> Please <span style="color:red;">do not</span> use any automated metrics or generative AI tools (e.g., ChatGPT) for this task. We are seeking your expert judgment as a critical component of our research.</p>
   <p>If you find two snippets equally comprehensible, please place them in any order, but indicate in the reasoning section that you consider them to have similar comprehensibility.</p>
 </div>
-
 <div style="display: flex; justify-content: space-between; margin: 10px 0 5px 0; padding: 0 5px;">
-    <span style="font-weight: bold; color: #4CAF50;">⬅️ Easiest</span>
-    <span style="font-weight: bold; color: #f44336;">Hardest ➡️</span>
-  </div>  
-<div class="cards-container" id="cardsContainer">
+  <span style="font-weight: bold; color: #4CAF50;">⬅️ Easiest</span>
+  <span style="font-weight: bold; color: #f44336;">Hardest ➡️</span>
 </div>
-
+<div class="cards-container" id="cardsContainer"></div>
 <div class="preview-area" id="previewArea"></div>
-
 <textarea id="reasoning" placeholder="Explain your reasoning..."></textarea>
 <button onclick="location.href='/phase1.html'" style="margin-bottom: 20px;">⬅️ Go Back to Phase 1</button>
 <button onclick="savePhase2State()">💾 Save Progress Locally</button>
 <button onclick="reviewAndConfirmPhase2Submission()">Review and Submit</button>
-
-<!-- Modal for reviewing submission -->
-<div id="feedback-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
-  background:#fff; color:#333; border:1px solid #ccc; padding:20px 30px; border-radius:10px;
-  box-shadow:0 6px 20px rgba(0,0,0,0.3); z-index:1000; width:500px; max-width:90%;
-  font-family:'Segoe UI', sans-serif; max-height: 90vh; overflow-y: auto;">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-    <h3 style="margin:0;">Review Your Submission</h3>
-    <button onclick="hideModal()" 
-    style="background:none; border:none; font-size:20px; font-weight:bold; cursor:pointer; color:#333;">
-    &times;
-    </button>
+<!-- Modals -->
+<div id="feedback-modal" class="modal">
+  <div class="modal-header">
+    <h3>Review Your Submission</h3>
+    <button onclick="hideModal()">&times;</button>
   </div>
-
-  <p><strong>Name:</strong> <span id="review-name"></span></p>
-
-  <p><strong>Ranking (Easiest to Hardest):</strong></p>
-  <ul id="review-ranking" style="margin-top:5px; padding-left:20px;"></ul>
-
-  <p><strong>Reasoning:</strong></p>
-  <div id="review-reasoning"
-  style="white-space:pre-wrap; background:#f8f8f8; padding:10px; border:1px solid #ddd;
-         border-radius:5px; margin-bottom:10px; max-height:250px; overflow-y:auto;">
-</div>
-
-  <p id="review-warning" style="color:red; font-weight:bold;">Please make sure you have included reasoning for all snippets.</p>
-
-  <div style="text-align:center; margin-top:20px;">
-    <button onclick="submitPhase2Final()" style="padding:10px 20px; background:#4CAF50; color:white; border:none; border-radius:5px; cursor:pointer;">✅ Submit Now</button>
-    <button onclick="hideModal()" style="padding:10px 20px; margin-left:10px; background:#ccc; color:black; border:none; border-radius:5px; cursor:pointer;">Cancel</button>
+  <div class="modal-content">
+    <p><strong>Name:</strong> <span id="review-name"></span></p>
+    <p><strong>Ranking (Easiest to Hardest):</strong></p>
+    <ul id="review-ranking" style="margin-top: 5px; padding-left: 20px;"></ul>
+    <p><strong>Reasoning:</strong></p>
+    <div id="review-reasoning" style="white-space: pre-wrap; background: #f8f8f8; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 10px;"></div>
+    <p id="review-warning" class="warning">Please make sure you have included reasoning for all snippets.</p>
+    <div style="text-align: center; margin-top: 20px;">
+      <button onclick="submitPhase2Final()" style="padding: 10px 20px; background: #4CAF50; color: white;">✅ Submit Now</button>
+      <button onclick="hideModal()" style="padding: 10px 20px; margin-left: 10px; background: #ccc; color: black;">Cancel</button>
+    </div>
   </div>
 </div>
-
-<div id="success-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; color:#333; border:1px solid #ccc; padding:20px 30px; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.3); z-index:1000; width:500px; max-width:90%; font-family:'Segoe UI', sans-serif;">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-    <h3 style="margin:0;">Submission Successful</h3>
-    <button onclick="document.getElementById('success-modal').style.display='none'" 
-            style="background:none; border:none; font-size:20px; font-weight:bold; cursor:pointer; color:#333;">
-      &times;
-    </button>
+<div id="success-modal" class="modal">
+  <div class="modal-header">
+    <h3>Submission Successful</h3>
+    <button onclick="hideModal()">&times;</button>
   </div>
-  <p style="font-size:16px; margin-top:10px;">
-    ✅ Submission successful! Thank you for your participation. We will contact you regarding the next steps.
-  </p>
-  <p>You may resubmit before the deadline if you change your mind about any part of your response.</p>
-</div>
-
-<div id="save-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; color:#333; border:1px solid #ccc; padding:20px 30px; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.3); z-index:1000; width:400px; max-width:90%; font-family:'Segoe UI', sans-serif;">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-    <h3 style="margin:0;">Progress Saved</h3>
-    <button onclick="hideSaveModal()" style="background:none; border:none; font-size:20px; font-weight:bold; cursor:pointer; color:#333;">&times;</button>
+  <div class="modal-content">
+    <p>✅ Submission successful! Thank you for your participation. We will contact you regarding the next steps.</p>
+    <p>You may resubmit before the deadline if you change your mind about any part of your response.</p>
   </div>
-  <p style="font-size:16px;">✅ Your progress has been saved locally in this browser.</p>
-  <p style="font-size:14px; color:#666;">You can safely continue later or revise before submission.</p>
 </div>
-
+<div id="save-modal" class="modal">
+  <div class="modal-header">
+    <h3>Progress Saved</h3>
+    <button onclick="hideModal()">&times;</button>
+  </div>
+  <div class="modal-content">
+    <p>✅ Your progress has been saved locally in this browser.</p>
+    <p>You can safely continue later or revise before submission.</p>
+  </div>
+</div>
+<footer>
+  Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
+</footer>
 <script>
-  function showSaveModal() {
-  document.getElementById('save-modal').style.display = 'block';
-}
 
-function hideSaveModal() {
-  document.getElementById('save-modal').style.display = 'none';
-}
-</script>
-
-<script>
-function showModal(message, isHTML = false) {
-  const modal = document.getElementById('feedback-modal');
-  const feedback = document.getElementById('review-name'); // Just to test modal is in review mode
-
-  if (!modal || !feedback) {
-    alert("Modal structure is missing from the HTML.");
-    return;
-  }
-
-  if (!isHTML) {
-    document.getElementById('review-reasoning').innerText = message;
-  }
-
-  modal.style.display = 'block';
-}
-
-</script>
-<script>
-    const snippets = [
+const snippets = [
       {
         id: 1,
         title: "Method1",
@@ -423,231 +411,72 @@ function showModal(message, isHTML = false) {
 `
       }
     ];
-</script>
-
-<script>
-
-window.onload = function () {
-  const container = document.getElementById('cardsContainer');
-
-  // 1. Build cards
-  snippets.forEach(snippet => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.draggable = true;
-    card.id = `snippet-${snippet.id}`;
-    card.innerHTML = `
-      <strong>${snippet.title}</strong><br>
-      <label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
-    `;
-    container.appendChild(card);
-  });
-
-  // Try to load name from Phase 1 cookie
-  const nameFromPhase1 = getCookie('phase_participant_name');
-  if (nameFromPhase1) {
-    document.getElementById('participantName').value = decodeURIComponent(nameFromPhase1);
-  }
-
-  // 2. Restore saved state (after cards exist)
-  const saved = JSON.parse(sessionStorage.getItem('phase2_state') || decodeURIComponent(getCookie('phase2_state') || '{}'));
-  if (saved) {
-    // Only overwrite name if saved.name is non-empty
-    if (saved.name) {
-      document.getElementById('participantName').value = saved.name;
-    }
-
-    document.getElementById('reasoning').value = saved.reasoning || '';
-
-    // Restore ranking
-    saved.ranking?.forEach(id => {
-      const el = document.getElementById(`snippet-${id}`);
-      if (el) container.appendChild(el);
-    });
-
-    // Restore checked comparisons
-    saved.selectedSnippets?.forEach(id => {
-      const checkbox = document.querySelector(`#snippet-${id} input[type=checkbox]`);
-      if (checkbox) {
-        checkbox.checked = true;
-        togglePreview(parseInt(id), checkbox);
-      }
-    });
-  }
-
-  enableDragAndDrop();
-};
 
 
-function togglePreview(id, checkbox) {
-  const previewArea = document.getElementById('previewArea');
-  const snippet = snippets.find(s => s.id === id);
-  const existing = document.getElementById(`preview-${id}`);
-
-  if (checkbox.checked && !existing) {
-    const box = document.createElement('div');
-    box.className = 'code-box';
-    box.id = `preview-${id}`;
-    box.innerHTML = snippet.code;
-    previewArea.appendChild(box);
-  } else if (!checkbox.checked && existing) {
-    previewArea.removeChild(existing);
-  }
+function showModalById(id) {
+  const modal = document.getElementById(id);
+  if (modal) modal.style.display = 'block';
 }
-
-function enableDragAndDrop() {
-  const container = document.getElementById('cardsContainer');
-  let draggedItem = null;
-
-  container.addEventListener('dragstart', (e) => {
-    draggedItem = e.target;
-    e.target.classList.add('dragging');
-  });
-
-  container.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    const afterElement = [...container.querySelectorAll('.card:not(.dragging)')]
-      .find(el => e.clientX < el.getBoundingClientRect().left + el.offsetWidth / 2);
-    if (afterElement) {
-      container.insertBefore(draggedItem, afterElement);
-    } else {
-      container.appendChild(draggedItem);
-    }
-  });
-
-  container.addEventListener('dragend', () => {
-    draggedItem.classList.remove('dragging');
-    draggedItem = null;
-  });
+function hideModalById(id) {
+  const modal = document.getElementById(id);
+  if (modal) modal.style.display = 'none';
 }
-
+function hideModal() {
+  document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
+}
+function savePhase2State() {
+  const name = document.getElementById('participantName').value.trim();
+  const reasoning = document.getElementById('reasoning').value.trim();
+  const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
+  const data = { name, reasoning, ranking };
+  sessionStorage.setItem('phase2_state', JSON.stringify(data));
+  document.cookie = `phase2_state=${encodeURIComponent(JSON.stringify(data))}; path=/; max-age=${60*60*24*30}`;
+  showModalById('save-modal');
+}
 function reviewAndConfirmPhase2Submission() {
   savePhase2State();
   const name = document.getElementById('participantName').value.trim();
   const reasoning = document.getElementById('reasoning').value.trim();
   const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
-
   if (!name || !reasoning || ranking.length !== 8) {
-    showModal("Please enter your name, rank all 8 snippets, and include your reasoning before submission.");
+    showModalById('feedback-modal');
+    document.getElementById('review-reasoning').innerText = "Please enter your name, rank all 8 snippets, and include your reasoning before submission.";
     return;
   }
-
   document.getElementById('review-name').innerText = name;
-
   const rankingList = document.getElementById('review-ranking');
   rankingList.innerHTML = "";
-  ranking.forEach((id, idx) => {
+  ranking.forEach(id => {
     const li = document.createElement("li");
     li.textContent = `Method ${id}`;
     rankingList.appendChild(li);
   });
-
   document.getElementById('review-reasoning').innerHTML = reasoning.replace(/\n/g, "<br>");
-
-  document.getElementById('feedback-modal').style.display = 'block';
+  showModalById('feedback-modal');
 }
-
-
 function submitPhase2Final() {
   const name = document.getElementById('participantName').value.trim();
   const reasoning = document.getElementById('reasoning').value.trim();
   const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
-
-  // Close review modal
   hideModal();
-
-  // Send data
   fetch("https://codecomprehensibility.site/submit_phase2", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name: name, ranking: ranking, reasoning: reasoning })
+    body: JSON.stringify({ name, ranking, reasoning })
   })
   .then(res => {
     if (res.ok) {
-      document.getElementById('success-modal').style.display = 'block';
+      showModalById('success-modal');
     } else {
-      showModal("❌ Submission failed. Please try again or contact us at ea442@njit.edu.");
+      showModalById('feedback-modal');
+      document.getElementById('review-reasoning').innerText = "❌ Submission failed. Please try again or contact us at ea442@njit.edu.";
     }
   })
-  .catch(err => {
-    console.error(err);
-    showModal("⚠️ An error occurred during submission. Please try again or contact us at ea442@njit.edu.");
+  .catch(() => {
+    showModalById('feedback-modal');
+    document.getElementById('review-reasoning').innerText = "⚠️ An error occurred during submission. Please try again or contact us at ea442@njit.edu.";
   });
 }
-
 </script>
-
-<script>
-    function savePhase2State() {
-  const name = document.getElementById('participantName').value.trim();
-  const reasoning = document.getElementById('reasoning').value.trim();
-  const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
-
-  // Store checkboxes
-  const selectedSnippets = [];
-  document.querySelectorAll('.cards-container input[type=checkbox]').forEach((cb, idx) => {
-    if (cb.checked) selectedSnippets.push(snippets[idx].id);
-  });
-
-  const data = {
-    name,
-    reasoning,
-    ranking,
-    selectedSnippets
-  };
-
-  sessionStorage.setItem('phase2_state', JSON.stringify(data));
-  setCookie('phase2_state', JSON.stringify(data), 30); // store for 30 days
-  showSaveModal();
-}
-
-
-const saved = JSON.parse(sessionStorage.getItem('phase2_state'));
-if (saved) {
-  document.getElementById('participantName').value = saved.name || '';
-  document.getElementById('reasoning').value = saved.reasoning || '';
-
-  // Restore ranking order
-  const container = document.getElementById('cardsContainer');
-  saved.ranking?.forEach(id => {
-    const el = document.getElementById(`snippet-${id}`);
-    if (el) container.appendChild(el);
-  });
-
-  // Restore checkboxes
-  saved.selectedSnippets?.forEach(id => {
-    const checkbox = document.querySelector(`#snippet-${id} input[type=checkbox]`);
-    if (checkbox) {
-      checkbox.checked = true;
-      togglePreview(parseInt(id), checkbox); // show preview
-    }
-  });
-}
-
-function setCookie(name, value, days) {
-  const expires = new Date(Date.now() + days*24*60*60*1000).toUTCString();
-  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
-}
-
-function getCookie(name) {
-  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-  return match ? decodeURIComponent(match[2]) : null;
-}
-
-</script>
-
-<script>
-  function hideModal() {
-    const modal = document.getElementById('feedback-modal');
-    if (modal) {
-      modal.style.display = 'none';
-    }
-  }
-  </script>  
-
-<footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
-  Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
-</footer>
-
 </body>
 </html>
