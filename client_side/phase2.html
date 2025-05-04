@@ -129,7 +129,7 @@
 <textarea id="reasoning" placeholder="Explain your reasoning..."></textarea>
 <button onclick="location.href='/phase1.html'" style="margin-bottom: 20px;">⬅️ Go Back to Phase 1</button>
 <button onclick="savePhase2State()">💾 Save Progress Locally</button>
-<button onclick="submitPhase2()">Submit and Finish</button>
+<button onclick="reviewAndConfirmPhase2Submission()">Review and Submit</button>
 
 <div id="feedback-modal" style="display:none; position:fixed; top:30%; left:50%; transform:translate(-50%,-50%); background:#fff; color:#333; border:1px solid #ccc; padding:20px; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1000; width:400px; text-align:center; font-family:Segoe UI, sans-serif;">
   <p id="feedback-message" style="margin-bottom:20px; font-size:16px;"></p>
@@ -446,15 +446,32 @@ function enableDragAndDrop() {
   });
 }
 
-function submitPhase2() {
+function reviewAndConfirmPhase2Submission() {
   const name = document.getElementById('participantName').value.trim();
   const reasoning = document.getElementById('reasoning').value.trim();
   const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
 
-  if (!name || !reasoning || ranking.length === 0) {
-    showModal("Please fill in your name, ranking, and reasoning.");
+  if (!name || !reasoning || ranking.length !== 8) {
+    showModal("Please enter your name, rank all 8 snippets, and include your reasoning before submission.");
     return;
   }
+
+  const reviewHTML = `
+    <h3>Review Your Submission</h3>
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Ranking (Easiest to Hardest):</strong><br>${ranking.map((id, i) => `${i + 1}. Method ${id}`).join("<br>")}</p>
+    <p><strong>Reasoning:</strong><br>${reasoning.replace(/\n/g, "<br>")}</p>
+    <p style="color:red; font-weight:bold;">Please make sure you have included reasoning for all snippets.</p>
+    <button onclick="submitPhase2Final()" style="margin-top: 10px;">✅ Submit Now</button>
+    <button onclick="hideModal()" style="margin-left: 10px;">Cancel</button>
+  `;
+  showModal(reviewHTML, true);
+}
+
+function submitPhase2Final() {
+  const name = document.getElementById('participantName').value.trim();
+  const reasoning = document.getElementById('reasoning').value.trim();
+  const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
 
   fetch("https://codecomprehensibility.site/submit_phase2", {
     method: "POST",
@@ -462,15 +479,18 @@ function submitPhase2() {
     body: JSON.stringify({ name: name, ranking: ranking, reasoning: reasoning })
   })
   .then(res => res.ok
-  ? showModal("Submission successful!\nThank you for your participation. We will contact you regarding potential next steps.")
-  : showModal("Submission failed. Please try again. If the issue persists, contact us at ea442@njit.edu.")
+    ? showModal("✅ Submission successful! Thank you for your participation. We will contact you regarding next steps.")
+    : showModal("❌ Submission failed. Please try again or contact us at ea442@njit.edu.")
   )
   .catch(err => {
     console.error(err);
-    showModal("An error occurred during submission. Please try again. If the issue persists, contact us at ea442@njit.edu.");
+    showModal("⚠️ An error occurred during submission. Please try again later.");
   });
 
+  hideModal();
 }
+
+
 </script>
 
 <script>
