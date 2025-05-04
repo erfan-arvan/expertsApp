@@ -545,9 +545,13 @@ function reviewAndConfirmPhase2Submission() {
   }
 
   if (errors.length > 0) {
-    showModal("❌ Submission Error:\n\n" + errors.join("\n"));
-    return;
+  showModal("❌ Submission Error:\n\n" + errors.join("\n"));
+  return;
+  } else {
+    // Clear any leftover messages from previous validation
+    document.getElementById('review-reasoning').innerText = '';
   }
+
 
 
   document.getElementById('review-name').innerText = name;
