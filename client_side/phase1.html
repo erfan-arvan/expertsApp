@@ -203,14 +203,18 @@ function loadSnippet(snippetNumber) {
 
 
 function saveSummary() {
-    const summary = document.getElementById('summary').value;
+    const summary = document.getElementById('summary').value.trim();
     const key = `summary${currentSnippet}`;
 
-    sessionStorage.setItem(key, summary);
-    setCookie(key, encodeURIComponent(summary), 30);  // store in cookie too
+    if (summary !== '') {
+        sessionStorage.setItem(key, summary);
+        setCookie(key, encodeURIComponent(summary), 30); // store in cookie too
 
-    if (getCookie('hideSaveWarning') !== 'true') {
-        document.getElementById('save-warning').style.display = 'block';
+        if (getCookie('hideSaveWarning') !== 'true') {
+            document.getElementById('save-warning').style.display = 'block';
+        }
+    } else {
+        alert("⚠️ Please enter a summary.");
     }
 }
 
