@@ -452,6 +452,7 @@ function enableDragAndDrop() {
 }
 
 function reviewAndConfirmPhase2Submission() {
+  savePhase2State();
   const name = document.getElementById('participantName').value.trim();
   const reasoning = document.getElementById('reasoning').value.trim();
   const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
