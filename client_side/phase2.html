@@ -101,36 +101,77 @@
     background: linear-gradient(to right, #eaffea, #fff5f5);
     padding: 10px;
     border-radius: 6px;
-}
+  }
 
-body.dark-mode {
-  background-color: #1e1e1e;
-  color: #e0e0e0;
-}
 
-.dark-mode .instructions,
-.dark-mode .card,
-.dark-mode .code-box,
-.dark-mode textarea {
-  background-color: #2e2e2e;
-  color: #ccc;
-  border-color: #555;
-}
+  /* Base style for code snippet area */
+  .snippet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #e6e6e6;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 8px 8px 0 0;
+    font-weight: bold;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+  }
 
-.light-mode .code-box {
-  background-color: #f0f0f0;
-  color: #333;
-}
+  /* Light theme for the snippet area */
+  .code-light .snippet-header {
+    background: #f8f8f8;
+    color: #222;
+    border-color: #ddd;
+  }
 
-.light-mode body {
-  background-color: #ffffff;
-  color: #222;
-}
+  .code-light .code-box {
+    background-color: #f9f9f9;
+    color: #333;
+  }
 
-.light-mode textarea {
-  background-color: #ffffff;
-  color: #000;
-}
+  /* Dark theme for the snippet area */
+  .code-dark .snippet-header {
+    background: #2d2d2d;
+    color: #ccc;
+    border-color: #444;
+  }
+
+  .code-dark .code-box {
+    background-color: #2d2d2d;
+    color: #ccc;
+  }
+
+  /* Common code box styling */
+  .code-box {
+    padding: 15px;
+    border-radius: 0 0 8px 8px;
+    overflow-x: auto;
+    flex: 1 1 45%;
+    min-width: 300px;
+    font-family: 'Courier New', Courier, monospace;
+    white-space: pre-wrap;
+    border: 1px solid #ccc;
+    border-top: none;
+    margin-bottom: 10px;
+  }
+
+  /* Toggle button inside snippet header */
+  #code-theme-toggle {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+  }
+
+  #code-theme-toggle:hover {
+    background-color: #45a049;
+  }
+
 
 
   </style>
@@ -159,6 +200,11 @@ body.dark-mode {
     <span style="font-weight: bold; color: #f44336;">Hardest ➡️</span>
   </div>  
 <div class="cards-container" id="cardsContainer">
+</div>
+
+<div class="snippet-header" id="snippetHeader">
+  Code Snippet Viewer
+  <button id="code-theme-toggle" onclick="toggleCodeTheme()">Toggle Code Theme</button>
 </div>
 
 <div class="preview-area" id="previewArea"></div>
@@ -736,23 +782,26 @@ function getCookie(name) {
 </script>  
 
 <script>
-  function toggleTheme() {
-    const body = document.body;
-    const isLight = body.classList.contains("light-mode");
-  
-    if (isLight) {
-      body.classList.remove("light-mode");
-      body.classList.add("dark-mode");
-      localStorage.setItem("theme", "dark");
-      document.getElementById('theme-toggle').textContent = "Switch to Light Mode";
+  function toggleCodeTheme() {
+    const container = document.body; // or a more specific wrapper if needed
+    if (container.classList.contains('code-light')) {
+      container.classList.remove('code-light');
+      container.classList.add('code-dark');
+      localStorage.setItem('codeTheme', 'dark');
     } else {
-      body.classList.add("light-mode");
-      body.classList.remove("dark-mode");
-      localStorage.setItem("theme", "light");
-      document.getElementById('theme-toggle').textContent = "Switch to Dark Mode";
+      container.classList.remove('code-dark');
+      container.classList.add('code-light');
+      localStorage.setItem('codeTheme', 'light');
     }
   }
-  </script>
+
+  // Load code theme preference on page load
+  window.addEventListener('DOMContentLoaded', () => {
+    const theme = localStorage.getItem('codeTheme') || 'dark';
+    document.body.classList.add(`code-${theme}`);
+  });
+  
+</script>
   
 
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
