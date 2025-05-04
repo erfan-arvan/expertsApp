@@ -131,7 +131,7 @@
 
 <textarea id="reasoning" placeholder="Explain your reasoning..."></textarea>
 <button onclick="location.href='/phase1.html'" style="margin-bottom: 20px;">⬅️ Go Back to Phase 1</button>
-<button onclick="savePhase2StateSilent()">💾 Save Progress Locally</button>
+<button onclick="savePhase2State()">💾 Save Progress Locally</button>
 <button onclick="reviewAndConfirmPhase2Submission()">Review and Submit</button>
 
 <!-- Modal for reviewing submission -->
@@ -522,7 +522,7 @@ function enableDragAndDrop() {
 }
 
 function reviewAndConfirmPhase2Submission() {
-  savePhase2State();
+  savePhase2StateSilent();
   const name = document.getElementById('participantName').value.trim();
   const reasoning = document.getElementById('reasoning').value.trim();
   const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
