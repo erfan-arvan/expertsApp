@@ -254,6 +254,21 @@ function saveSummarySilent() {
     setCookie(key, encodeURIComponent(summary), 30); // store in cookie too
 }
 
+function saveSummarySilentForPrev() {
+    const name = document.getElementById('participantName').value.trim();
+    const summary = document.getElementById('summary').value.trim();
+    const key = `summary${currentSnippet}`;
+
+    let messages = [];
+
+    if (!name || !summary) {
+        return;
+    }
+
+    sessionStorage.setItem(key, summary);
+    setCookie(key, encodeURIComponent(summary), 30); // store in cookie too
+}
+
 function nextSnippet() {
     const name = document.getElementById('participantName').value.trim();
     const summary = document.getElementById('summary').value.trim();
@@ -283,7 +298,7 @@ function nextSnippet() {
 
 function prevSnippet() {
     if (currentSnippet > 1) {
-        saveSummarySilent();
+        saveSummarySilentForPrev();
         currentSnippet--;
         loadSnippet(currentSnippet);
         updateButtons();
