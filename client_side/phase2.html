@@ -137,8 +137,13 @@
 </div>
 
 <script>
-  function showModal(message) {
-  document.getElementById('feedback-message').innerText = message;
+function showModal(message, isHTML = false) {
+  const feedback = document.getElementById('feedback-message');
+  if (isHTML) {
+    feedback.innerHTML = message; // This will render the HTML properly
+  } else {
+    feedback.innerText = message;
+  }
   document.getElementById('feedback-modal').style.display = 'block';
 }
 </script>
