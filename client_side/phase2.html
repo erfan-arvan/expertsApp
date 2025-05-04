@@ -174,6 +174,40 @@
   }
 
 
+  /* for preview area*/
+  .preview-area {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .snippet-preview-box {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 45%;
+    min-width: 300px;
+    background: #2d2d2d;
+    color: #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .snippet-header {
+    background: #444;
+    color: #fff;
+    padding: 10px;
+    font-weight: bold;
+    font-family: 'Segoe UI', sans-serif;
+    border-bottom: 1px solid #666;
+  }
+
+  .code-box {
+    padding: 15px;
+    font-family: 'Courier New', Courier, monospace;
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
 
   </style>
 </head>
@@ -568,11 +602,10 @@ function togglePreview(id, checkbox) {
   const existing = document.getElementById(`preview-${id}`);
 
   if (checkbox.checked && !existing) {
-    const container = document.createElement('div');
-    container.id = `preview-${id}`;
-    container.classList.add(document.body.classList.contains('code-light') ? 'code-light' : 'code-dark');
+    const wrapper = document.createElement('div');
+    wrapper.id = `preview-${id}`;
+    wrapper.className = 'snippet-preview-box';
 
-    // Use snippet.title instead of generic "Snippet X"
     const header = document.createElement('div');
     header.className = 'snippet-header';
     header.textContent = snippet.title;
@@ -581,9 +614,9 @@ function togglePreview(id, checkbox) {
     codeBox.className = 'code-box';
     codeBox.innerHTML = snippet.code;
 
-    container.appendChild(header);
-    container.appendChild(codeBox);
-    previewArea.appendChild(container);
+    wrapper.appendChild(header);
+    wrapper.appendChild(codeBox);
+    previewArea.appendChild(wrapper);
   } else if (!checkbox.checked && existing) {
     previewArea.removeChild(existing);
   }
