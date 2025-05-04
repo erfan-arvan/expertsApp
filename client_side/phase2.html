@@ -166,6 +166,18 @@
   </div>
 </div>
 
+<div id="success-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; color:#333; border:1px solid #ccc; padding:20px 30px; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.3); z-index:1000; width:500px; max-width:90%; font-family:'Segoe UI', sans-serif;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+    <h3 style="margin:0;">Submission Successful</h3>
+    <button onclick="document.getElementById('success-modal').style.display='none'" 
+            style="background:none; border:none; font-size:20px; font-weight:bold; cursor:pointer; color:#333;">
+      &times;
+    </button>
+  </div>
+  <p style="font-size:16px; margin-top:10px;">
+    ✅ Submission successful! Thank you for your participation. We will contact you regarding next steps.
+  </p>
+</div>
 
 
 
@@ -523,23 +535,27 @@ function submitPhase2Final() {
   const reasoning = document.getElementById('reasoning').value.trim();
   const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
 
+  // Close review modal
+  hideModal();
+
+  // Send data
   fetch("https://codecomprehensibility.site/submit_phase2", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name: name, ranking: ranking, reasoning: reasoning })
   })
-  .then(res => res.ok
-    ? showModal("✅ Submission successful! Thank you for your participation. We will contact you regarding next steps.")
-    : showModal("❌ Submission failed. Please try again or contact us at ea442@njit.edu.")
-  )
+  .then(res => {
+    if (res.ok) {
+      document.getElementById('success-modal').style.display = 'block';
+    } else {
+      showModal("❌ Submission failed. Please try again or contact us at ea442@njit.edu.");
+    }
+  })
   .catch(err => {
     console.error(err);
-    showModal("⚠️ An error occurred during submission. Please try again later.");
+    showModal("⚠️ An error occurred during submission. Please try again or contact us at ea442@njit.edu.");
   });
-
-  hideModal();
 }
-
 
 </script>
 
