@@ -527,33 +527,37 @@ function enableDragAndDrop() {
 }
 
 function reviewAndConfirmPhase2Submission() {
+  // Always read fresh values from the DOM
   const name = document.getElementById('participantName').value.trim();
   const reasoning = document.getElementById('reasoning').value.trim();
   const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
 
+  // Clear previous modal values (so no stale content is shown)
+  document.getElementById('review-name').innerText = '';
+  document.getElementById('review-reasoning').innerText = '';
+  document.getElementById('review-ranking').innerHTML = '';
+  document.getElementById('review-error').innerText = '';
+
   let errors = [];
 
+  // Run actual checks
   if (!name) errors.push("• Please enter your name.");
   if (!reasoning) errors.push("• Please include your reasoning.");
   if (ranking.length !== 8) errors.push("• Please rank all 8 snippets.");
 
+  // If any errors found, show modal only with error
   if (errors.length > 0) {
-    // Clear previously shown modal values to avoid confusion
-    document.getElementById('review-name').innerText = '';
-    document.getElementById('review-reasoning').innerText = '';
-    document.getElementById('review-ranking').innerHTML = '';
-    
     showModal("❌ Submission Error:\n\n" + errors.join("\n"));
     return;
   }
 
-  // If valid input, proceed to save and show modal
+  // ✅ Only now save state (because it’s valid)
   savePhase2StateSilent();
 
+  // ✅ Populate modal preview correctly
   document.getElementById('review-name').innerText = name;
 
   const rankingList = document.getElementById('review-ranking');
-  rankingList.innerHTML = "";
   ranking.forEach((id) => {
     const li = document.createElement("li");
     li.textContent = `Method ${id}`;
@@ -561,6 +565,8 @@ function reviewAndConfirmPhase2Submission() {
   });
 
   document.getElementById('review-reasoning').innerHTML = reasoning.replace(/\n/g, "<br>");
+
+  // Show modal
   document.getElementById('feedback-modal').style.display = 'block';
 }
 
