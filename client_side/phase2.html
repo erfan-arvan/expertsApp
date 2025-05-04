@@ -528,6 +528,7 @@ function enableDragAndDrop() {
 
 function reviewAndConfirmPhase2Submission() {
   savePhase2StateSilent();
+  document.getElementById('review-error').innerText = '';
   const name = document.getElementById('participantName').value.trim();
   const reasoning = document.getElementById('reasoning').value.trim();
   const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
