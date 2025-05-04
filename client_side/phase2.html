@@ -548,13 +548,9 @@ function reviewAndConfirmPhase2Submission() {
   if (errors.length > 0) {
   showModal("❌ Submission Error:\n\n" + errors.join("\n"));
   return;
-  } else {
-    // Clear any leftover messages from previous validation
-    document.getElementById('review-reasoning').innerText = '';
   }
 
-
-
+  // Only run this if there were NO errors
   document.getElementById('review-name').innerText = name;
 
   const rankingList = document.getElementById('review-ranking');
@@ -566,8 +562,8 @@ function reviewAndConfirmPhase2Submission() {
   });
 
   document.getElementById('review-reasoning').innerHTML = reasoning.replace(/\n/g, "<br>");
-
   document.getElementById('feedback-modal').style.display = 'block';
+
 }
 
 
