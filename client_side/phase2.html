@@ -189,10 +189,6 @@
   <p><strong>Provide Reasoning:</strong> Briefly explain your ranking decisions as you arrange the snippets. Include at least one reason for each snippet—such as clarity of logic, use of language constructs, naming, or structure. You should also provide comparison statements explaining why one snippet was easier or harder to understand than another.</p>
   <p>If you find two snippets equally comprehensible, please place them in any order, but indicate in the reasoning section that you consider them to have similar comprehensibility.</p>
   <p><strong>Prohibited:</strong> Please <span style="color:red;">do not</span> use any automated metrics or generative AI tools (e.g., ChatGPT) for this task. We are seeking your expert judgment as a critical component of our research.</p>
-
-  <button onclick="toggleTheme()" id="theme-toggle" style="float: right; margin-bottom: 10px; padding: 6px 12px; border-radius: 5px; border: none; background-color: #333; color: white; cursor: pointer;">
-    Switch to Light Mode
-  </button>  
 </div>
 
 <div style="display: flex; justify-content: space-between; margin: 10px 0 5px 0; padding: 0 5px;">
@@ -527,15 +523,6 @@ window.onload = function () {
     `;
     container.appendChild(card);
   });
-
-  //Restore theme preference on page load:
-    const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "light") {
-    document.body.classList.add("light-mode");
-    document.getElementById('theme-toggle').textContent = "Switch to Dark Mode";
-  } else {
-    document.body.classList.add("dark-mode");
-  }
 
   // Try to load name from Phase 1 cookie
   const nameFromPhase1 = getCookie('phase_participant_name');
