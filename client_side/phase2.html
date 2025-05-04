@@ -527,7 +527,6 @@ function enableDragAndDrop() {
 }
 
 function reviewAndConfirmPhase2Submission() {
-  document.getElementById('review-error').innerText = '';
   const name = document.getElementById('participantName').value.trim();
   const reasoning = document.getElementById('reasoning').value.trim();
   const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
@@ -539,15 +538,19 @@ function reviewAndConfirmPhase2Submission() {
   if (ranking.length !== 8) errors.push("• Please rank all 8 snippets.");
 
   if (errors.length > 0) {
+    // Clear previously shown modal values to avoid confusion
+    document.getElementById('review-name').innerText = '';
+    document.getElementById('review-reasoning').innerText = '';
+    document.getElementById('review-ranking').innerHTML = '';
+    
     showModal("❌ Submission Error:\n\n" + errors.join("\n"));
     return;
   }
 
-  // ✅ Only save and show review modal if input is valid
+  // If valid input, proceed to save and show modal
   savePhase2StateSilent();
 
   document.getElementById('review-name').innerText = name;
-  document.getElementById('review-reasoning').innerHTML = reasoning.replace(/\n/g, "<br>");
 
   const rankingList = document.getElementById('review-ranking');
   rankingList.innerHTML = "";
@@ -557,6 +560,7 @@ function reviewAndConfirmPhase2Submission() {
     rankingList.appendChild(li);
   });
 
+  document.getElementById('review-reasoning').innerHTML = reasoning.replace(/\n/g, "<br>");
   document.getElementById('feedback-modal').style.display = 'block';
 }
 
