@@ -135,7 +135,10 @@
 <button onclick="reviewAndConfirmPhase2Submission()">Review and Submit</button>
 
 <!-- Modal for reviewing submission -->
-<div id="feedback-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; color:#333; border:1px solid #ccc; padding:20px 30px; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.3); z-index:1000; width:500px; max-width:90%; font-family:'Segoe UI', sans-serif;">
+<div id="feedback-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
+  background:#fff; color:#333; border:1px solid #ccc; padding:20px 30px; border-radius:10px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.3); z-index:1000; width:500px; max-width:90%;
+  font-family:'Segoe UI', sans-serif; max-height: 90vh; overflow-y: auto;">
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
     <h3 style="margin:0;">Review Your Submission</h3>
     <button onclick="hideModal()" 
@@ -150,7 +153,10 @@
   <ul id="review-ranking" style="margin-top:5px; padding-left:20px;"></ul>
 
   <p><strong>Reasoning:</strong></p>
-  <div id="review-reasoning" style="white-space:pre-wrap; background:#f8f8f8; padding:10px; border:1px solid #ddd; border-radius:5px; margin-bottom:10px;"></div>
+  <div id="review-reasoning"
+  style="white-space:pre-wrap; background:#f8f8f8; padding:10px; border:1px solid #ddd;
+         border-radius:5px; margin-bottom:10px; max-height:250px; overflow-y:auto;">
+</div>
 
   <p id="review-warning" style="color:red; font-weight:bold;">Please make sure you have included reasoning for all snippets.</p>
 
