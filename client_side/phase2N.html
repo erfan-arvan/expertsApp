@@ -485,26 +485,31 @@ function enableDragAndDrop() {
   let draggedItem = null;
 
   container.addEventListener('dragstart', (e) => {
-    draggedItem = e.target;
-    e.target.classList.add('dragging');
+    const card = e.target.closest('.card');
+    if (!card) return;
+    draggedItem = card;
+    card.classList.add('dragging');
   });
 
   container.addEventListener('dragover', (e) => {
     e.preventDefault();
     const afterElement = [...container.querySelectorAll('.card:not(.dragging)')]
       .find(el => e.clientX < el.getBoundingClientRect().left + el.offsetWidth / 2);
-    if (afterElement) {
+    if (afterElement && draggedItem) {
       container.insertBefore(draggedItem, afterElement);
-    } else {
+    } else if (draggedItem) {
       container.appendChild(draggedItem);
     }
   });
 
   container.addEventListener('dragend', () => {
-    draggedItem.classList.remove('dragging');
-    draggedItem = null;
+    if (draggedItem) {
+      draggedItem.classList.remove('dragging');
+      draggedItem = null;
+    }
   });
 }
+
 
 
 function showModalById(id) {
