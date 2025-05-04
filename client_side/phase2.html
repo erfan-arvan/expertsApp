@@ -568,15 +568,27 @@ function togglePreview(id, checkbox) {
   const existing = document.getElementById(`preview-${id}`);
 
   if (checkbox.checked && !existing) {
-    const box = document.createElement('div');
-    box.className = 'code-box';
-    box.id = `preview-${id}`;
-    box.innerHTML = snippet.code;
-    previewArea.appendChild(box);
+    const container = document.createElement('div');
+    container.id = `preview-${id}`;
+    container.classList.add(document.body.classList.contains('code-light') ? 'code-light' : 'code-dark');
+
+    // Use snippet.title instead of generic "Snippet X"
+    const header = document.createElement('div');
+    header.className = 'snippet-header';
+    header.textContent = snippet.title;
+
+    const codeBox = document.createElement('div');
+    codeBox.className = 'code-box';
+    codeBox.innerHTML = snippet.code;
+
+    container.appendChild(header);
+    container.appendChild(codeBox);
+    previewArea.appendChild(container);
   } else if (!checkbox.checked && existing) {
     previewArea.removeChild(existing);
   }
 }
+
 
 function enableDragAndDrop() {
   const container = document.getElementById('cardsContainer');
