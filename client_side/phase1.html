@@ -230,7 +230,29 @@ function saveSummary() {
     }
 }
 
+function saveSummarySilent() {
+    const name = document.getElementById('participantName').value.trim();
+    const summary = document.getElementById('summary').value.trim();
+    const key = `summary${currentSnippet}`;
 
+    let messages = [];
+
+    if (!name) {
+        messages.push("• Please enter your name.");
+    }
+
+    if (!summary) {
+      messages.push("• Please enter a summary before continuing.");
+    }
+
+    if (messages.length > 0) {
+        showValidationMessage("⚠️ Missing Information:\n\n" + messages.join("\n"));
+        return;
+    }
+
+    sessionStorage.setItem(key, summary);
+    setCookie(key, encodeURIComponent(summary), 30); // store in cookie too
+}
 
 function nextSnippet() {
     const name = document.getElementById('participantName').value.trim();
@@ -249,7 +271,7 @@ function nextSnippet() {
         return; // Don't proceed
     }
 
-    saveSummary();
+    saveSummarySilent();
 
     if (currentSnippet < TOTAL_SNIPPETS) {
         currentSnippet++;
@@ -261,7 +283,7 @@ function nextSnippet() {
 
 function prevSnippet() {
     if (currentSnippet > 1) {
-        saveSummary();
+        saveSummarySilent();
         currentSnippet--;
         loadSnippet(currentSnippet);
         updateButtons();
