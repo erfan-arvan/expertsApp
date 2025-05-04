@@ -412,6 +412,100 @@ const snippets = [
       }
     ];
 
+    window.onload = function () {
+  const container = document.getElementById('cardsContainer');
+
+  // 1. Build cards
+  snippets.forEach(snippet => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.draggable = true;
+    card.id = `snippet-${snippet.id}`;
+    card.innerHTML = `
+      <strong>${snippet.title}</strong><br>
+      <label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
+    `;
+    container.appendChild(card);
+  });
+
+  // Try to load name from Phase 1 cookie
+  const nameFromPhase1 = getCookie('phase_participant_name');
+  if (nameFromPhase1) {
+    document.getElementById('participantName').value = decodeURIComponent(nameFromPhase1);
+  }
+
+  // 2. Restore saved state (after cards exist)
+  const saved = JSON.parse(sessionStorage.getItem('phase2_state') || decodeURIComponent(getCookie('phase2_state') || '{}'));
+  if (saved) {
+    // Only overwrite name if saved.name is non-empty
+    if (saved.name) {
+      document.getElementById('participantName').value = saved.name;
+    }
+
+    document.getElementById('reasoning').value = saved.reasoning || '';
+
+    // Restore ranking
+    saved.ranking?.forEach(id => {
+      const el = document.getElementById(`snippet-${id}`);
+      if (el) container.appendChild(el);
+    });
+
+    // Restore checked comparisons
+    saved.selectedSnippets?.forEach(id => {
+      const checkbox = document.querySelector(`#snippet-${id} input[type=checkbox]`);
+      if (checkbox) {
+        checkbox.checked = true;
+        togglePreview(parseInt(id), checkbox);
+      }
+    });
+  }
+
+  enableDragAndDrop();
+};
+
+
+function togglePreview(id, checkbox) {
+  const previewArea = document.getElementById('previewArea');
+  const snippet = snippets.find(s => s.id === id);
+  const existing = document.getElementById(`preview-${id}`);
+
+  if (checkbox.checked && !existing) {
+    const box = document.createElement('div');
+    box.className = 'code-box';
+    box.id = `preview-${id}`;
+    box.innerHTML = snippet.code;
+    previewArea.appendChild(box);
+  } else if (!checkbox.checked && existing) {
+    previewArea.removeChild(existing);
+  }
+}
+
+function enableDragAndDrop() {
+  const container = document.getElementById('cardsContainer');
+  let draggedItem = null;
+
+  container.addEventListener('dragstart', (e) => {
+    draggedItem = e.target;
+    e.target.classList.add('dragging');
+  });
+
+  container.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    const afterElement = [...container.querySelectorAll('.card:not(.dragging)')]
+      .find(el => e.clientX < el.getBoundingClientRect().left + el.offsetWidth / 2);
+    if (afterElement) {
+      container.insertBefore(draggedItem, afterElement);
+    } else {
+      container.appendChild(draggedItem);
+    }
+  });
+
+  container.addEventListener('dragend', () => {
+    draggedItem.classList.remove('dragging');
+    draggedItem = null;
+  });
+}
+
 
 function showModalById(id) {
   const modal = document.getElementById(id);
