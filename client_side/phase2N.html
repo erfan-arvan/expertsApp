@@ -547,7 +547,7 @@ function reviewAndConfirmPhase2Submission() {
   rankingList.innerHTML = "";
   ranking.forEach(id => {
     const li = document.createElement("li");
-    li.textContent = `Method ${id}`;
+    li.textContent = `Snippet ${id}`;
     rankingList.appendChild(li);
   });
   document.getElementById('review-reasoning').innerHTML = reasoning.replace(/\n/g, "<br>");
