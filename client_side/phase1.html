@@ -271,7 +271,7 @@ function submitAll() {
   })
   .then(response => {
     if (response.ok) {
-      showSubmissionModal('✅ Summaries submitted successfully. Click "Continue to Phase 2" to proceed.');
+      showSubmissionModal('✅ Summaries submitted successfully. Click “Continue to Phase 2” to proceed.\nYou may resubmit before the deadline if you change your mind about any part of your response.');
       document.getElementById('continueBtn').style.display = 'inline-block';
       sessionStorage.setItem('phase1_submitted', 'true');
       setCookie('phase1_submitted', 'true', 30);
