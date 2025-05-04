@@ -105,6 +105,7 @@
 
 
   /* Base style for code snippet area */
+    /* Snippet Header */
   .snippet-header {
     display: flex;
     justify-content: space-between;
@@ -119,7 +120,7 @@
     margin-top: 20px;
   }
 
-  /* Light theme for the snippet area */
+  /* Light Theme */
   .code-light .snippet-header {
     background: #f8f8f8;
     color: #222;
@@ -131,7 +132,7 @@
     color: #333;
   }
 
-  /* Dark theme for the snippet area */
+  /* Dark Theme */
   .code-dark .snippet-header {
     background: #2d2d2d;
     color: #ccc;
@@ -143,7 +144,7 @@
     color: #ccc;
   }
 
-  /* Common code box styling */
+  /* Shared Code Box Styling */
   .code-box {
     padding: 15px;
     border-radius: 0 0 8px 8px;
@@ -157,19 +158,19 @@
     margin-bottom: 10px;
   }
 
-  /* Toggle button inside snippet header */
+  /* Toggle Button Styled Like Phase 1 */
   #code-theme-toggle {
     padding: 6px 12px;
     font-size: 14px;
+    background-color: #333;
     border: none;
-    border-radius: 4px;
-    background-color: #4CAF50;
+    border-radius: 5px;
     color: white;
     cursor: pointer;
   }
 
   #code-theme-toggle:hover {
-    background-color: #45a049;
+    background-color: #555;
   }
 
 
@@ -198,10 +199,11 @@
 <div class="cards-container" id="cardsContainer">
 </div>
 
-<div class="snippet-header" id="snippetHeader">
+<div class="snippet-header">
   Code Snippet Viewer
-  <button id="code-theme-toggle" onclick="toggleCodeTheme()">Toggle Code Theme</button>
+  <button id="code-theme-toggle" onclick="toggleCodeTheme()">Switch to Light Mode</button>
 </div>
+
 
 <div class="preview-area" id="previewArea"></div>
 
@@ -770,25 +772,34 @@ function getCookie(name) {
 
 <script>
   function toggleCodeTheme() {
-    const container = document.body; // or a more specific wrapper if needed
-    if (container.classList.contains('code-light')) {
-      container.classList.remove('code-light');
-      container.classList.add('code-dark');
+    const body = document.body;
+    const button = document.getElementById('code-theme-toggle');
+    const isLight = body.classList.contains('code-light');
+
+    if (isLight) {
+      body.classList.remove('code-light');
+      body.classList.add('code-dark');
       localStorage.setItem('codeTheme', 'dark');
+      button.textContent = 'Switch to Light Mode';
     } else {
-      container.classList.remove('code-dark');
-      container.classList.add('code-light');
+      body.classList.remove('code-dark');
+      body.classList.add('code-light');
       localStorage.setItem('codeTheme', 'light');
+      button.textContent = 'Switch to Dark Mode';
     }
   }
 
-  // Load code theme preference on page load
+  // Load saved code theme preference on page load
   window.addEventListener('DOMContentLoaded', () => {
     const theme = localStorage.getItem('codeTheme') || 'dark';
     document.body.classList.add(`code-${theme}`);
+    document.getElementById('code-theme-toggle').textContent = theme === 'light'
+      ? 'Switch to Dark Mode'
+      : 'Switch to Light Mode';
   });
-  
 </script>
+
+  
   
 
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
