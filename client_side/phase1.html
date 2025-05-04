@@ -203,20 +203,33 @@ function loadSnippet(snippetNumber) {
 
 
 function saveSummary() {
+    const name = document.getElementById('participantName').value.trim();
     const summary = document.getElementById('summary').value.trim();
     const key = `summary${currentSnippet}`;
 
-    if (summary !== '') {
-        sessionStorage.setItem(key, summary);
-        setCookie(key, encodeURIComponent(summary), 30); // store in cookie too
+    let messages = [];
 
-        if (getCookie('hideSaveWarning') !== 'true') {
-            document.getElementById('save-warning').style.display = 'block';
-        }
-    } else {
-        alert("⚠️ Please enter a summary.");
+    if (!name) {
+        messages.push("• Please enter your name.");
+    }
+
+    if (!summary) {
+        messages.push("• Please enter a summary before saving.");
+    }
+
+    if (messages.length > 0) {
+        showValidationMessage("⚠️ Missing Information:\n\n" + messages.join("\n"));
+        return;
+    }
+
+    sessionStorage.setItem(key, summary);
+    setCookie(key, encodeURIComponent(summary), 30); // store in cookie too
+
+    if (getCookie('hideSaveWarning') !== 'true') {
+        document.getElementById('save-warning').style.display = 'block';
     }
 }
+
 
 
 function nextSnippet() {
