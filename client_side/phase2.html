@@ -527,7 +527,6 @@ function enableDragAndDrop() {
 }
 
 function reviewAndConfirmPhase2Submission() {
-  savePhase2StateSilent();
   document.getElementById('review-error').innerText = '';
   const name = document.getElementById('participantName').value.trim();
   const reasoning = document.getElementById('reasoning').value.trim();
@@ -549,6 +548,8 @@ function reviewAndConfirmPhase2Submission() {
   showModal("❌ Submission Error:\n\n" + errors.join("\n"));
   return;
   }
+
+  savePhase2StateSilent();
 
   // Only run this if there were NO errors
   document.getElementById('review-name').innerText = name;
