@@ -140,42 +140,62 @@
   background: #fff;
   color: #333;
   border: 1px solid #ccc;
-  padding: 20px 20px 30px 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
   z-index: 1000;
   width: 500px;
-  max-height: 80vh;
-  overflow-y: auto;
+  max-width: 90vw;
   font-family: 'Segoe UI', sans-serif;
-  text-align: left;
 ">
-
-  <!-- Close button (top-right X) -->
   <div style="text-align: right;">
     <button onclick="hideModal()" style="
       background: none;
       border: none;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: bold;
       cursor: pointer;
-      color: #999;
+      color: #888;
     ">&times;</button>
   </div>
 
-  <div id="feedback-message" style="font-size: 16px; margin-top: 10px;"></div>
+  <h3 style="margin-top: 0;">Review Your Submission</h3>
 
-  <div style="text-align: center; margin-top: 20px;">
-    <button onclick="hideModal()" style="
-      padding: 8px 16px;
-      background: #4CAF50;
-      color: white;
+  <p><strong>Name:</strong> <span id="review-name"></span></p>
+
+  <p><strong>Ranking (Easiest to Hardest):</strong></p>
+  <ul id="review-ranking" style="padding-left: 20px; margin-top: 5px;"></ul>
+
+  <p><strong>Reasoning:</strong></p>
+  <div id="review-reasoning" style="background: #f8f8f8; padding: 10px; border-radius: 5px; border: 1px solid #eee;"></div>
+
+  <p id="review-warning" style="color: red; font-weight: bold; margin-top: 15px;">
+    Please make sure you have included reasoning for all snippets.
+  </p>
+
+  <div style="margin-top: 20px; text-align: center;">
+    <button onclick="submitPhase2Final()" style="
+      padding: 10px 20px;
+      background-color: #4CAF50;
       border: none;
       border-radius: 5px;
+      color: white;
+      font-size: 16px;
       cursor: pointer;
-    ">OK</button>
+    ">✅ Submit Now</button>
+    
+    <button onclick="hideModal()" style="
+      margin-left: 10px;
+      padding: 10px 20px;
+      background-color: #ccc;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    ">Cancel</button>
   </div>
 </div>
+
 
 
 <script>
@@ -504,17 +524,21 @@ function reviewAndConfirmPhase2Submission() {
     return;
   }
 
-  const reviewHTML = `
-    <h3>Review Your Submission</h3>
-    <p><strong>Name:</strong> ${name}</p>
-    <p><strong>Ranking (Easiest to Hardest):</strong><br>${ranking.map((id, i) => `${i + 1}. Method ${id}`).join("<br>")}</p>
-    <p><strong>Reasoning:</strong><br>${reasoning.replace(/\n/g, "<br>")}</p>
-    <p style="color:red; font-weight:bold;">Please make sure you have included reasoning for all snippets.</p>
-    <button onclick="submitPhase2Final()" style="margin-top: 10px;">✅ Submit Now</button>
-    <button onclick="hideModal()" style="margin-left: 10px;">Cancel</button>
-  `;
-  showModal(reviewHTML, true);
+  document.getElementById('review-name').innerText = name;
+
+  const rankingList = document.getElementById('review-ranking');
+  rankingList.innerHTML = "";
+  ranking.forEach((id, idx) => {
+    const li = document.createElement("li");
+    li.textContent = `Method ${id}`;
+    rankingList.appendChild(li);
+  });
+
+  document.getElementById('review-reasoning').innerHTML = reasoning.replace(/\n/g, "<br>");
+
+  document.getElementById('feedback-modal').style.display = 'block';
 }
+
 
 function submitPhase2Final() {
   const name = document.getElementById('participantName').value.trim();
