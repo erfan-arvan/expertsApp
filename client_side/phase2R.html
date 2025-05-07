@@ -658,6 +658,7 @@ function togglePreview(id, checkbox) {
     reasoningBox.id = `reasoning-snippet-${id}`;
     reasoningBox.placeholder = `Explain your reasoning for ${snippet.title}...`;
     reasoningBox.style.marginTop = '10px';
+    reasoningBox.addEventListener('input', savePhase2StateSilent);
     wrapper.appendChild(reasoningBox);
     previewArea.appendChild(wrapper);
   } else if (!checkbox.checked && existing) {
@@ -689,6 +690,7 @@ function updateComparisonBox() {
       comparisonBox.style.padding = '10px';
       comparisonBox.style.borderRadius = '6px';
       comparisonBox.style.border = '1px solid #bbb';
+      reasoningBox.addEventListener('input', savePhase2StateSilent);
       previewArea.appendChild(comparisonBox);
     }
   } else if (existing) {
