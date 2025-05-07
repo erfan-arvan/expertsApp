@@ -605,7 +605,14 @@ window.onload = function () {
       document.getElementById('participantName').value = saved.name;
     }
 
-    document.getElementById(`reasoning-snippet-${id}`).value = saved.reasoning || '';
+    if (saved.reasoning) {
+        Object.entries(saved.reasoning).forEach(([id, text]) => {
+            const box = document.getElementById(`reasoning-snippet-${id}`);
+            if (box) {
+            box.value = text;
+            }
+        });
+    }
 
     // Restore ranking
     saved.ranking?.forEach(id => {
@@ -717,82 +724,97 @@ function enableDragAndDrop() {
 }
 
 function reviewAndConfirmPhase2Submission() {
-  // Always read fresh values from the DOM
   const name = document.getElementById('participantName').value.trim();
-  const reasoning = {};
-    snippets.forEach(s => {
-    const box = document.getElementById(`reasoning-snippet-${s.id}`);
-    if (box) reasoning[s.id] = box.value.trim();
-    });
 
-    let comparisonReasoning = "";
-    const comparisonBox = document.getElementById('comparison-reasoning-box');
-    if (comparisonBox) comparisonReasoning = comparisonBox.value.trim();
+  const reasoning = {};
+  document.querySelectorAll('[id^="reasoning-snippet-"]').forEach(textarea => {
+    const id = textarea.id.replace('reasoning-snippet-', '');
+    reasoning[id] = textarea.value.trim();
+  });
+
+  let comparisonReasoning = "";
+  const comparisonBox = document.getElementById('comparison-reasoning-box');
+  if (comparisonBox) comparisonReasoning = comparisonBox.value.trim();
 
   const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
 
-  // Clear previous modal values (so no stale content is shown)
+  // Clear previous modal content
   document.getElementById('review-name').innerText = '';
   document.getElementById('review-reasoning').innerText = '';
   document.getElementById('review-ranking').innerHTML = '';
   document.getElementById('review-error').innerText = '';
 
-  let errors = [];
+  const errors = [];
 
-  // Run actual checks
+  // Validation checks
   if (!name) errors.push("• Please enter your name.");
-  if (!reasoning) errors.push("• Please include your reasoning.");
   if (ranking.length !== 8) errors.push("• Please rank all 8 snippets.");
 
-  // If any errors found, show modal only with error
+  // Check each snippet has reasoning
+  const missingReasonings = Object.values(reasoning).filter(text => !text.trim()).length;
+  if (missingReasonings > 0) errors.push("• Please provide reasoning for each snippet.");
+
+  // If errors, show modal with error message
   if (errors.length > 0) {
     showModal("❌ Submission Error:\n\n" + errors.join("\n"));
     return;
   }
 
-  // ✅ Only now save state (because it’s valid)
+  // Save silently since it's valid
   savePhase2StateSilent();
 
-  // ✅ Populate modal preview correctly
+  // Populate review modal
   document.getElementById('review-name').innerText = name;
 
   const rankingList = document.getElementById('review-ranking');
-  ranking.forEach((id) => {
+  ranking.forEach(id => {
     const li = document.createElement("li");
     li.textContent = `Snippet ${id}`;
     rankingList.appendChild(li);
   });
 
-  document.getElementById('review-reasoning').innerHTML = reasoning.replace(/\n/g, "<br>");
+  let reasoningDisplay = "";
+  Object.entries(reasoning).forEach(([id, text]) => {
+    reasoningDisplay += `Snippet ${id}:\n${text.trim()}\n\n`;
+  });
 
-  // Show modal
+  if (comparisonReasoning) {
+    reasoningDisplay += `Comparison Reasoning:\n${comparisonReasoning.trim()}`;
+  }
+
+  document.getElementById('review-reasoning').innerText = reasoningDisplay.trim();
+
   document.getElementById('feedback-modal').style.display = 'block';
 }
 
 
-
 function submitPhase2Final() {
   const name = document.getElementById('participantName').value.trim();
+
   const reasoning = {};
-    snippets.forEach(s => {
-    const box = document.getElementById(`reasoning-snippet-${s.id}`);
-    if (box) reasoning[s.id] = box.value.trim();
-    });
+  document.querySelectorAll('[id^="reasoning-snippet-"]').forEach(textarea => {
+    const id = textarea.id.replace('reasoning-snippet-', '');
+    reasoning[id] = textarea.value.trim();
+  });
+
+  let comparisonReasoning = "";
+  const comparisonBox = document.getElementById('comparison-reasoning-box');
+  if (comparisonBox) comparisonReasoning = comparisonBox.value.trim();
 
   const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
 
   // Close review modal
   hideModal();
 
-  // Send data
+  // Send data to backend
   fetch("https://codecomprehensibility.site/submit_phase2", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-        name,
-        ranking,
-        reasoning,
-        comparisonReasoning
+      name,
+      ranking,
+      reasoning,
+      comparisonReasoning
     })
   })
   .then(res => {
@@ -808,67 +830,93 @@ function submitPhase2Final() {
   });
 }
 
+
 </script>
 
 <script>
-  function savePhase2State() {
-    const name = document.getElementById('participantName').value.trim();
-    const reasoning = document.getElementById(`reasoning-snippet-${id}`).value.trim();
-    const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
+function savePhase2State() {
+  const name = document.getElementById('participantName').value.trim();
 
-    // Store checkboxes
-    const selectedSnippets = [];
-    document.querySelectorAll('.cards-container input[type=checkbox]').forEach((cb, idx) => {
-      if (cb.checked) selectedSnippets.push(snippets[idx].id);
-    });
+  const reasoning = {};
+  document.querySelectorAll('[id^="reasoning-snippet-"]').forEach(textarea => {
+    const id = textarea.id.replace('reasoning-snippet-', '');
+    reasoning[id] = textarea.value.trim();
+  });
 
-    const data = {
-      name,
-      reasoning,
-      ranking,
-      selectedSnippets
-    };
+  let comparisonReasoning = "";
+  const comparisonBox = document.getElementById('comparison-reasoning-box');
+  if (comparisonBox) comparisonReasoning = comparisonBox.value.trim();
 
-    sessionStorage.setItem('phase2_state', JSON.stringify(data));
-    setCookie('phase2_state', JSON.stringify(data), 30); // store for 30 days
-    showSaveModal();
+  const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
+
+  const selectedSnippets = [];
+  document.querySelectorAll('.cards-container input[type=checkbox]').forEach(cb => {
+    const snippetId = cb.closest('.card')?.id?.replace('snippet-', '');
+    if (cb.checked && snippetId) selectedSnippets.push(snippetId);
+  });
+
+  const data = {
+    name,
+    reasoning,
+    comparisonReasoning,
+    ranking,
+    selectedSnippets
+  };
+
+  sessionStorage.setItem('phase2_state', JSON.stringify(data));
+  setCookie('phase2_state', JSON.stringify(data), 30); // store for 30 days
+  showSaveModal();
 }
+
 
 function savePhase2StateSilent() {
-    const name = document.getElementById('participantName').value.trim();
-    const reasoning = document.getElementById(`reasoning-snippet-${id}`).value.trim();
-    const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
+  const name = document.getElementById('participantName').value.trim();
 
-    // Store checkboxes
-    const selectedSnippets = [];
-    document.querySelectorAll('.cards-container input[type=checkbox]').forEach((cb, idx) => {
-      if (cb.checked) selectedSnippets.push(snippets[idx].id);
-    });
+  const reasoning = {};
+  document.querySelectorAll('[id^="reasoning-snippet-"]').forEach(textarea => {
+    const id = textarea.id.replace('reasoning-snippet-', '');
+    reasoning[id] = textarea.value.trim();
+  });
 
-    const data = {
-      name,
-      reasoning,
-      ranking,
-      selectedSnippets
-    };
+  let comparisonReasoning = "";
+  const comparisonBox = document.getElementById('comparison-reasoning-box');
+  if (comparisonBox) comparisonReasoning = comparisonBox.value.trim();
 
-    sessionStorage.setItem('phase2_state', JSON.stringify(data));
-    setCookie('phase2_state', JSON.stringify(data), 30); // store for 30 days
-    //showSaveModal();
+  const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
+
+  const selectedSnippets = [];
+  document.querySelectorAll('.cards-container input[type=checkbox]').forEach(cb => {
+    const snippetId = cb.closest('.card')?.id?.replace('snippet-', '');
+    if (cb.checked && snippetId) selectedSnippets.push(snippetId);
+  });
+
+  const data = {
+    name,
+    reasoning,
+    comparisonReasoning,
+    ranking,
+    selectedSnippets
+  };
+
+  sessionStorage.setItem('phase2_state', JSON.stringify(data));
+  setCookie('phase2_state', JSON.stringify(data), 30); // store for 30 days
 }
+
 
 
 const saved = JSON.parse(sessionStorage.getItem('phase2_state'));
 if (saved) {
   document.getElementById('participantName').value = saved.name || '';
+
   if (saved.reasoning) {
   Object.entries(saved.reasoning).forEach(([id, text]) => {
-        const box = document.getElementById(`reasoning-snippet-${id}`);
-        if (box) {
-        box.value = text;
-        }
-        });
+    const box = document.getElementById(`reasoning-snippet-${id}`);
+    if (box) {
+      box.value = text;
     }
+  });
+}
+
 
   // Restore ranking order
   const container = document.getElementById('cardsContainer');
