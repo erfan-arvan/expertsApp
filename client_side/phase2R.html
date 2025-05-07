@@ -605,7 +605,7 @@ window.onload = function () {
       document.getElementById('participantName').value = saved.name;
     }
 
-    document.getElementById('reasoning').value = saved.reasoning || '';
+    document.getElementById(`reasoning-snippet-${id}`).value = saved.reasoning || '';
 
     // Restore ranking
     saved.ranking?.forEach(id => {
@@ -773,7 +773,12 @@ function reviewAndConfirmPhase2Submission() {
 
 function submitPhase2Final() {
   const name = document.getElementById('participantName').value.trim();
-  const reasoning = document.getElementById('reasoning').value.trim();
+  const reasoning = {};
+    snippets.forEach(s => {
+    const box = document.getElementById(`reasoning-snippet-${s.id}`);
+    if (box) reasoning[s.id] = box.value.trim();
+    });
+
   const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
 
   // Close review modal
@@ -808,7 +813,7 @@ function submitPhase2Final() {
 <script>
   function savePhase2State() {
     const name = document.getElementById('participantName').value.trim();
-    const reasoning = document.getElementById('reasoning').value.trim();
+    const reasoning = document.getElementById(`reasoning-snippet-${id}`).value.trim();
     const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
 
     // Store checkboxes
@@ -831,7 +836,7 @@ function submitPhase2Final() {
 
 function savePhase2StateSilent() {
     const name = document.getElementById('participantName').value.trim();
-    const reasoning = document.getElementById('reasoning').value.trim();
+    const reasoning = document.getElementById(`reasoning-snippet-${id}`).value.trim();
     const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
 
     // Store checkboxes
@@ -856,7 +861,14 @@ function savePhase2StateSilent() {
 const saved = JSON.parse(sessionStorage.getItem('phase2_state'));
 if (saved) {
   document.getElementById('participantName').value = saved.name || '';
-  document.getElementById('reasoning').value = saved.reasoning || '';
+  if (saved.reasoning) {
+  Object.entries(saved.reasoning).forEach(([id, text]) => {
+        const box = document.getElementById(`reasoning-snippet-${id}`);
+        if (box) {
+        box.value = text;
+        }
+        });
+    }
 
   // Restore ranking order
   const container = document.getElementById('cardsContainer');
