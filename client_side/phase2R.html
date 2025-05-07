@@ -781,10 +781,12 @@ function reviewAndConfirmPhase2Submission() {
     rankingList.appendChild(li);
   });
 
-  let reasoningDisplay = "";
-  Object.entries(reasoning).forEach(([id, text]) => {
+  const saved = JSON.parse(sessionStorage.getItem('phase2_state') || '{}');
+    let reasoningDisplay = "";
+    Object.entries(saved.reasoning || {}).forEach(([id, text]) => {
     reasoningDisplay += `Snippet ${id}:\n${text.trim()}\n\n`;
-  });
+    });
+
 
   if (comparisonReasoning) {
     reasoningDisplay += `Comparison Reasoning:\n${comparisonReasoning.trim()}`;
