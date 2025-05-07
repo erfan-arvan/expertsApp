@@ -660,6 +660,12 @@ function togglePreview(id, checkbox) {
     reasoningBox.style.marginTop = '10px';
     reasoningBox.addEventListener('input', savePhase2StateSilent);
     wrapper.appendChild(reasoningBox);
+    // Restore saved value if it exists
+    const saved = JSON.parse(sessionStorage.getItem('phase2_state') || '{}');
+    if (saved.reasoning && saved.reasoning[id]) {
+    reasoningBox.value = saved.reasoning[id];
+    }
+
     previewArea.appendChild(wrapper);
   } else if (!checkbox.checked && existing) {
     previewArea.removeChild(existing);
