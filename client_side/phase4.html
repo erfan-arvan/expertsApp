@@ -67,7 +67,8 @@
     <div id="code-comparison"></div>
     <textarea id="answer-box" placeholder="Type your explanation here..."></textarea>
     <div class="buttons">
-      <button id="next-question" onclick="nextQuestion()">Next</button>
+      <button onclick="prevQuestion()">⬅️ Previous</button>
+      <button id="next-question" onclick="nextQuestion()">Next ➡️</button>
       <button id="submit-review" onclick="reviewAndSubmit()">Review and Submit All</button>
     </div>
   </div>
@@ -75,14 +76,11 @@
   <script>
     const snippets = [
       { id: 1, title: "Snippet 1", code: `... snippet 1 code here ...` },
-      { id: 2, title: "Snippet 2", code: `... snippet 2 code here ...` },
-      { id: 3, title: "Snippet 4", code: `... snippet 2 code here ...` },
-      { id: 4, title: "Snippet 4", code: `... snippet 2 code here ...` },
-      { id: 5, title: "Snippet 5", code: `... snippet 2 code here ...` }
+      { id: 2, title: "Snippet 2", code: `... snippet 2 code here ...` }
     ];
 
     const phase3Ranking = JSON.parse(sessionStorage.getItem('phase3_ranking') || decodeURIComponent(document.cookie.match(/(?:^|; )phase3_ranking=([^;]*)/)?.[1] || '{}'));
-    const reasoning = [];
+    let reasoning = JSON.parse(sessionStorage.getItem('phase4_reasoning') || '[]');
     let stepIndex = 0;
     const steps = [];
 
@@ -110,7 +108,9 @@
       const qText = document.getElementById('question-text');
       const comp = document.getElementById('code-comparison');
       const textarea = document.getElementById('answer-box');
-      textarea.value = '';
+      const saved = reasoning[stepIndex]?.answer || '';
+      textarea.value = saved;
+
 
       comp.innerHTML = '';
       if (step.type === 'grouping') {
@@ -134,7 +134,8 @@
     function nextQuestion() {
       const response = document.getElementById('answer-box').value.trim();
       if (!response) return alert('Please provide an explanation.');
-      reasoning.push({ step: steps[stepIndex], answer: response });
+      reasoning[stepIndex] = { step: steps[stepIndex], answer: response };
+      sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
       stepIndex++;
       if (stepIndex < steps.length) {
         showStep();
@@ -146,6 +147,16 @@
         document.getElementById('submit-review').style.display = 'inline-block';
         // Store Phase 4 data
         sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
+      }
+    }
+
+    function prevQuestion() {
+      const response = document.getElementById('answer-box').value.trim();
+      reasoning[stepIndex] = { step: steps[stepIndex], answer: response };
+      sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
+      if (stepIndex > 0) {
+        stepIndex--;
+        showStep();
       }
     }
 
