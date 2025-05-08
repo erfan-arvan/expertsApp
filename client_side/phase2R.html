@@ -80,8 +80,17 @@
     <p><strong>Instructions:</strong> In this phase, you will view one code snippet at a time. For each snippet, please assess its comprehensibility by describing what makes it easy or hard to understand. Consider aspects like naming, logic clarity, code structure, and use of language constructs. Your responses are saved automatically as you go.</p>
   </div>
 
-  <div id="snippetTitle" style="font-weight: bold; margin-bottom: 10px;"></div>
-  <div id="snippetBox" class="snippet-box code-dark"></div>
+  <div id="snippet-container">
+    <div style="background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid #ccc;">
+        <h3 id="snippetTitle" style="margin: 0;">Snippet Title</h3>
+        <button onclick="toggleTheme()" id="theme-toggle" style="padding: 6px 12px; border-radius: 5px; border: none; background-color: #333; color: white; cursor: pointer;">
+          Switch to Light Mode
+        </button>
+      </div>
+      <pre id="snippetBox" class="snippet-box code-dark" style="margin: 0;"><code>Loading snippet...</code></pre>
+    </div>
+  </div>
 
   <label for="reasoningBox">Tell us about how do you assess this snippet's comprehensibility? What features might make it easy to understand? What features make it hard to understand?</label>
   <textarea id="reasoningBox" placeholder="Write your explanation here..."></textarea>
@@ -93,7 +102,7 @@
 
   <button onclick="location.href='/phase1.html'" style="background-color: #ccc; color: black;">⬅️ Back to Phase 1</button>
 
-$1 onclick="goToPhase3()">Continue to Phase 3</button>
+<button id="continue-button" onclick="goToPhase3()">Continue to Phase 3</button>
 
   <div id="validation-modal" style="
     display: none;
