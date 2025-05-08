@@ -240,6 +240,11 @@
       document.getElementById('snippetBox').innerHTML = snippet.code;
       document.getElementById('reasoningBox').value = reasoningPerSnippet[snippet.id] || '';
 
+      const prevBtn = document.querySelector('button[onclick="prevSnippet()"]');
+      const nextBtn = document.querySelector('button[onclick="nextSnippet()"]');
+      if (prevBtn) prevBtn.disabled = index === 0;
+      if (nextBtn) nextBtn.disabled = index === snippets.length - 1;
+
       // Enable/disable navigation buttons based on position
       document.querySelector('button[onclick="prevSnippet()"]')?.setAttribute('disabled', index === 0);
       document.querySelector('button[onclick="nextSnippet()"]')?.setAttribute('disabled', index === snippets.length - 1);
