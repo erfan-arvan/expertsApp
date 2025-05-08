@@ -125,7 +125,10 @@
 
   <div class="preview-area" id="previewArea"></div>
 
-  
+  <div style="margin-top: 30px;">
+    <button onclick="location.href='/phase2.html'" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: #ccc; color: black; cursor: pointer; margin-right: 10px;">⬅️ Back to Phase 2</button>
+    <button onclick="goToPhase4()" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: #4CAF50; color: white; cursor: pointer;">Continue to Phase 4 ➡️</button>
+  </div>
 
 <script>
     const snippets = [
@@ -227,8 +230,8 @@
     }
 
     function goToPhase4() {
-      location.href = '/phase4.html';
-    }
+  location.href = '/phase4.html';
+}
 
     function applyTheme() {
       const theme = localStorage.getItem('codeTheme') || 'dark';
