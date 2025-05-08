@@ -139,7 +139,10 @@
       if (stepIndex < steps.length) {
         showStep();
       } else {
-        document.getElementById('question-container').style.display = 'none';
+        document.getElementById('question-text').innerHTML = '<strong>All questions answered.</strong> You may now review and submit your responses.';
+        document.getElementById('code-comparison').innerHTML = '';
+        document.getElementById('answer-box').style.display = 'none';
+        document.getElementById('next-question').style.display = 'none';
         document.getElementById('submit-review').style.display = 'inline-block';
         // Store Phase 4 data
         sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
