@@ -89,17 +89,48 @@
     ];
 
     window.onload = () => {
+      const saved = JSON.parse(sessionStorage.getItem('phase3_state') || '{}');
+      const name = saved.name || sessionStorage.getItem('participantName') || '';
+      const ranking = saved.ranking || [];
+
       const grid = document.getElementById('rankingGrid');
-      const firstColumn = grid.querySelector('[data-rank="1"]');
+      const columns = grid.querySelectorAll('.rank-column');
+
+      const placedIds = new Set();
+      if (ranking.length > 0) {
+        ranking.forEach((group, colIdx) => {
+          group.forEach(id => {
+            const card = createCard(id);
+            columns[colIdx].appendChild(card);
+            placedIds.add(id);
+          });
+        });
+      }
+
       snippets.forEach(snippet => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.draggable = true;
-        card.id = `snippet-${snippet.id}`;
-        card.textContent = snippet.title;
-        card.addEventListener('dragstart', () => card.classList.add('dragging'));
-        card.addEventListener('dragend', () => card.classList.remove('dragging'));
-        firstColumn.appendChild(card);
+        if (!placedIds.has(snippet.id)) {
+          const card = createCard(snippet.id, snippet.title);
+          columns[0].appendChild(card);
+        }
+      });
+
+      
+      });
+    };
+
+    function createCard(id, title = `Snippet ${id}`) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.draggable = true;
+      card.id = `snippet-${id}`;
+      card.textContent = title;
+      card.addEventListener('dragstart', () => card.classList.add('dragging'));
+      card.addEventListener('dragend', () => card.classList.remove('dragging'));
+      return card;
+    }
+      });
+    };
+        
       });
 
       grid.querySelectorAll('.rank-column').forEach(column => {
@@ -113,12 +144,18 @@
       });
     };
 
-    function goToPhase4() {
-      const name = sessionStorage.getItem('participantName') || '';
+    function saveState(name) {
       const ranking = Array.from(document.querySelectorAll('.rank-column')).map(col =>
         Array.from(col.querySelectorAll('.card')).map(card => parseInt(card.id.replace('snippet-', '')))
       );
-      sessionStorage.setItem('phase3_state', JSON.stringify({ name, ranking }));
+      const data = { name, ranking };
+      sessionStorage.setItem('phase3_state', JSON.stringify(data));
+      document.cookie = `phase3_state=${encodeURIComponent(JSON.stringify(data))}; path=/; max-age=${60*60*24*30}`;
+    }
+
+    function goToPhase4() {
+      const name = sessionStorage.getItem('participantName') || '';
+      saveState(name);
       location.href = '/phase4.html';
     }
   </script>
