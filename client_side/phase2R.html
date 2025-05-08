@@ -83,12 +83,17 @@
     background-color: #888;
     cursor: not-allowed;
   }
+    .keyword  { color: #569CD6; font-weight: bold; }
+    .type     { color: #4EC9B0; }
+    .function { color: #DCDCAA; }
+    .literal  { color: #B5CEA8; }
+    .string   { color: #CE9178; }
+    .comment  { color: #6A9955; font-style: italic; }
+    .number   { color: #B5CEA8; }
 </style>
 </head>
 <body>
   <h2>Phase 2: Individual Snippet Reasoning</h2>
-
-  <button id="theme-toggle" onclick="toggleTheme()">Switch to Dark Mode</button>
 
   <label for="participantName">Your Full Name:</label>
   <input type="text" id="participantName" style="width: 300px; padding: 8px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;" />
@@ -170,50 +175,15 @@
 
   <script>
     const snippets = [
-    {
+      {
         id: 1,
         title: "Snippet 1",
-        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method1</span>(<span class="type">String</span> name) {
-  <span class="keyword">if</span> (name == <span class="literal">null</span>) {
-    <span class="keyword">return</span> <span class="literal">false</span>;
-  }
-  <span class="keyword">if</span> (name.<span class="function">startsWith</span>(<span class="string">"."</span>)) {
-    <span class="keyword">return</span> <span class="literal">false</span>;
-  }
-  <span class="keyword">if</span> ((name.<span class="function">length</span>() < <span class="number">1</span>) || (name.<span class="function">length</span>() > MAX_NAME_LENGTH)) {
-    <span class="keyword">return</span> <span class="literal">false</span>;
-  }
-  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i < name.<span class="function">length</span>(); i++) {
-    <span class="type">char</span> c = name.<span class="function">charAt</span>(i);
-    <span class="keyword">if</span> (!Character.<span class="function">isLetterOrDigit</span>(c) && !VALID_NAME_SET.<span class="function">contains</span>(c)) {
-      <span class="keyword">return</span> <span class="literal">false</span>;
-    }
-  }
-  <span class="keyword">return</span> <span class="literal">true</span>;
-}
-`
+        code: `public static boolean method1(String name) {\n  if (name == null || name.startsWith(".")) return false;\n  if (name.length() < 1 || name.length() > MAX_NAME_LENGTH) return false;\n  for (int i = 0; i < name.length(); i++) {\n    char c = name.charAt(i);\n    if (!Character.isLetterOrDigit(c) && !VALID_NAME_SET.contains(c)) return false;\n  }\n  return true;\n}`
       },
       {
         id: 2,
         title: "Snippet 2",
-        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method2</span>(<span class="type">URI</span> uri) {
-  <span class="keyword">if</span> (<span class="function">isFilesystemPath</span>(uri)) {
-    <span class="keyword">return</span> <span class="literal">false</span>;
-  }
-  <span class="type">String</span> scheme = uri.<span class="function">getScheme</span>();
-  <span class="keyword">if</span> (scheme == <span class="literal">null</span>) {
-    <span class="keyword">return</span> <span class="literal">false</span>;
-  }
-  <span class="keyword">switch</span> (scheme) {
-    <span class="keyword">case</span> <span class="string">"file"</span>:
-    <span class="keyword">case</span> <span class="string">"jar"</span>:
-      <span class="keyword">return</span> <span class="literal">false</span>;
-    <span class="keyword">default</span>:
-      <span class="keyword">break</span>;
-  }
-  <span class="keyword">return</span> <span class="literal">true</span>;
-}
-`
+        code: `public static boolean method2(URI uri) {\n  if (isFilesystemPath(uri)) return false;\n  String scheme = uri.getScheme();\n  if (scheme == null) return false;\n  switch (scheme) {\n    case "file": case "jar": return false;\n    default: break;\n  }\n  return true;\n}`
       }
     ];
 
