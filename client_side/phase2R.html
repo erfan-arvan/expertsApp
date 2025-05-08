@@ -90,6 +90,20 @@
     .string   { color: #CE9178; }
     .comment  { color: #6A9955; font-style: italic; }
     .number   { color: #B5CEA8; }
+    .light-mode #snippetBox {
+      background-color: #f0f0f0;
+      color: #333;
+    }
+
+    .light-mode body {
+      background-color: #ffffff;
+      color: #222;
+    }
+
+    .light-mode textarea {
+      background-color: #ffffff;
+      color: #000;
+    }
 </style>
 </head>
 <body>
@@ -110,7 +124,7 @@
           Switch to Light Mode
         </button>
       </div>
-      <pre id="snippetBox" class="snippet-box code-dark" style="margin: 0;"><code>Loading snippet...</code></pre>
+      <pre id="snippetBox" class="snippet-box code-dark" style="margin: 0; background-color: #2d2d2d; color: #ccc; padding: 20px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; overflow-x: auto; font-family: 'Courier New', Courier, monospace; font-size: 15px; line-height: 1.5;"><code>Loading snippet...</code></pre>
     </div>
   </div>
 
