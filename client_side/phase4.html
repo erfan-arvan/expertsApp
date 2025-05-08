@@ -323,7 +323,7 @@
         });
       } else {
         qText.innerHTML = `<strong>Positions ${step.currentRank} vs ${step.nextRank}:</strong> Why are the snippets in Position ${step.currentRank} more comprehensible than those in Position ${step.nextRank}?`;
-        comp.innerHTML += `<div style='display:flex; gap:40px;'>`;
+        comp.innerHTML = `<div style='display:flex; gap:40px;'>`;
         comp.innerHTML += `<div style='flex: 1;'><h4>Position ${step.currentRank}</h4>`;
         step.currentSnippets.forEach(snippet => {
           comp.innerHTML += `<div class='code-box'><strong>${snippet.title}</strong><br>${snippet.code}</div>`;
@@ -335,7 +335,7 @@
         });
         comp.innerHTML += `</div></div>`;
         qText.innerHTML = `<strong>Positions ${step.currentRank} vs ${step.nextRank}:</strong> Why are the snippets in Position ${step.currentRank} more comprehensible than those in Position ${step.nextRank}?`;
-        comp.innerHTML += `<div style='display:flex; gap:40px;'>`;
+comp.innerHTML = `<div style='display:flex; gap:40px;'>`;
         comp.innerHTML += `<div style='flex: 1;'><h4>Position ${step.currentRank}</h4>`;
         
       }
