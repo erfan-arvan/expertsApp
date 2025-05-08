@@ -66,7 +66,24 @@
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-  </style>
+    #continue-button:hover, button[onclick*='phase1'] {
+    background-color: #45a049;
+  }
+
+  @keyframes glowPulse {
+    0% {
+      box-shadow: 0 0 10px #4CAF50;
+    }
+    100% {
+      box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+    }
+  }
+
+  button[disabled] {
+    background-color: #888;
+    cursor: not-allowed;
+  }
+</style>
 </head>
 <body>
   <h2>Phase 2: Individual Snippet Reasoning</h2>
@@ -100,9 +117,29 @@
     <button onclick="nextSnippet()" id="nextButton">Next ➡️</button>
   </div>
 
-  <button onclick="location.href='/phase1.html'" style="background-color: #ccc; color: black;">⬅️ Back to Phase 1</button>
+  <button onclick="location.href='/phase1.html'" style="
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #4CAF50;
+    animation: glowPulse 1.5s infinite alternate;
+  ">⬅️ Back to Phase 1</button>
 
-<button id="continue-button" onclick="goToPhase3()">Continue to Phase 3</button>
+<button id="continue-button" onclick="goToPhase3()" style="
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #4CAF50;
+    animation: glowPulse 1.5s infinite alternate;
+  ">Continue to Phase 3</button>
 
   <div id="validation-modal" style="
     display: none;
