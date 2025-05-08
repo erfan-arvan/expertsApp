@@ -2,149 +2,152 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Phase 4: Group & Comparative Reasoning</title>
+  <title>Phase 4: Explain Your Ranking Decisions</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 40px;
-      background-color: #f4f4f4;
-      color: #333;
+      background-color: #f9f9f9;
     }
-    .instructions {
-      background-color: #fff;
+    .step-box {
+      background: #fff;
       padding: 20px;
       border-radius: 8px;
-      margin-bottom: 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
     }
-    .snippet-box {
+    .code-box {
       background-color: #2d2d2d;
       color: #ccc;
-      padding: 15px;
+      padding: 20px;
       border-radius: 8px;
       overflow-x: auto;
       font-family: 'Courier New', Courier, monospace;
-      margin: 10px 0;
+      font-size: 15px;
+      margin-bottom: 20px;
+      white-space: pre-wrap;
     }
     textarea {
       width: 100%;
       height: 120px;
       font-size: 14px;
       padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #bbb;
       margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .buttons {
+      text-align: center;
+      margin-top: 30px;
     }
     button {
       padding: 10px 20px;
       font-size: 16px;
+      margin: 0 10px;
       border: none;
       border-radius: 5px;
+      cursor: pointer;
+    }
+    button#next-question {
       background-color: #4CAF50;
       color: white;
-      cursor: pointer;
-      margin-top: 20px;
     }
-    button:hover {
-      background-color: #45a049;
-    }
-    .question-block {
-      background: #fff;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 30px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .side-by-side {
-      display: flex;
-      gap: 30px;
-      flex-wrap: wrap;
-    }
-    .side {
-      flex: 1;
-      min-width: 300px;
+    button#submit-review {
+      background-color: #2196F3;
+      color: white;
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h2>Phase 4: Group and Comparative Reasoning</h2>
+  <h2>Phase 4: Explain Your Ranking Decisions</h2>
 
-  <div class="instructions">
-    <p>Based on your rankings, we will ask follow-up questions. First, for positions with multiple snippets, please explain why you grouped them. Then, compare consecutive ranks and tell us why snippets in one group are more comprehensible than the next.</p>
+  <div id="question-container" class="step-box">
+    <div id="question-text"></div>
+    <div id="code-comparison"></div>
+    <textarea id="answer-box" placeholder="Type your explanation here..."></textarea>
+    <div class="buttons">
+      <button id="next-question" onclick="nextQuestion()">Next</button>
+      <button id="submit-review" onclick="reviewAndSubmit()">Review and Submit All</button>
+    </div>
   </div>
 
-  <div id="questionContainer"></div>
-  <button onclick="goToReview()">Review and Submit All Responses</button>
+  <script>
+    const snippets = [
+      { id: 1, title: "Snippet 1", code: `... snippet 1 code here ...` },
+      { id: 2, title: "Snippet 2", code: `... snippet 2 code here ...` }
+    ];
 
-<script>
-  const snippets = [
-    { id: 1, title: "Snippet 1", code: `<span class='keyword'>public static</span> <span class='type'>boolean</span> <span class='function'>method1</span>(<span class='type'>String</span> name) { ... }` },
-    { id: 2, title: "Snippet 2", code: `<span class='keyword'>public static</span> <span class='type'>boolean</span> <span class='function'>method2</span>(<span class='type'>URI</span> uri) { ... }` }
-  ];
+    const phase3Ranking = JSON.parse(sessionStorage.getItem('phase3_ranking') || decodeURIComponent(document.cookie.match(/(?:^|; )phase3_ranking=([^;]*)/)?.[1] || '{}'));
+    const reasoning = [];
+    let stepIndex = 0;
+    const steps = [];
 
-  const rankingData = JSON.parse(sessionStorage.getItem('phase3_ranking') || '{}');
-  const reasoning = JSON.parse(sessionStorage.getItem('phase4_reasoning') || '{}');
-  const container = document.getElementById('questionContainer');
-
-  function renderSnippets(ids) {
-    return ids.map(id => {
-      const snippet = snippets.find(s => `snippet-${s.id}` === id);
-      return `<div class='snippet-box'>${snippet ? snippet.code : 'Snippet not found.'}</div>`;
-    }).join('');
-  }
-
-  function renderStep(step) {
-    container.innerHTML = '';
-    const current = rankingData[step] || [];
-    const next = rankingData[step + 1] || [];
-
-    if (current.length === 0) {
-      if (step < 8) renderStep(step + 1);
-      else container.innerHTML = '<p>All questions completed. You may proceed to review and submit.</p>';
-      return;
-    }
-
-    if (current.length > 1) {
-    container.innerHTML += `
-      <div class="question-block">
-        <h3>Position ${step}: Group Reasoning</h3>
-        ${renderSnippets(current)}
-        <textarea id="groupInput" placeholder="Why did you group these snippets together?">${reasoning[`group-${step}`] || ''}</textarea>
-      </div>`;
+    Object.entries(phase3Ranking).forEach(([rank, ids], i, arr) => {
+      if (ids.length > 1) {
+        steps.push({
+          type: 'grouping',
+          rank,
+          snippets: ids.map(id => snippets.find(s => `snippet-${s.id}` === id))
+        });
       }
+      if (i < arr.length - 1 && arr[i+1][1].length > 0) {
+        steps.push({
+          type: 'comparison',
+          currentRank: rank,
+          nextRank: arr[i+1][0],
+          currentSnippets: ids.map(id => snippets.find(s => `snippet-${s.id}` === id)),
+          nextSnippets: arr[i+1][1].map(id => snippets.find(s => `snippet-${s.id}` === id))
+        });
+      }
+    });
 
-      if (current.length > 0 && next.length > 0) {
-        container.innerHTML += `
-          <div class="question-block">
-            <h3>Position ${i} vs Position ${i + 1}</h3>
-            <div class="side-by-side">
-              <div class="side">
-                <h4>Position ${i}</h4>
-                ${renderSnippets(current)}
-              </div>
-              <div class="side">
-                <h4>Position ${i + 1}</h4>
-                ${renderSnippets(next)}
-              </div>
-            </div>
-            <textarea placeholder="Why is Position ${i} more comprehensible than Position ${i + 1}?" oninput="saveInput('compare-${i}-${i + 1}', this.value)">${reasoning[`compare-${i}-${i + 1}`] || ''}</textarea>
-          </div>`;
+    function showStep() {
+      const step = steps[stepIndex];
+      const qText = document.getElementById('question-text');
+      const comp = document.getElementById('code-comparison');
+      const textarea = document.getElementById('answer-box');
+      textarea.value = '';
+
+      comp.innerHTML = '';
+      if (step.type === 'grouping') {
+        qText.innerHTML = `<strong>Position ${step.rank}:</strong> Why did you group the following snippets together?`;
+        step.snippets.forEach(snippet => {
+          comp.innerHTML += `<div class='code-box'><strong>${snippet.title}</strong><br>${snippet.code}</div>`;
+        });
+      } else {
+        qText.innerHTML = `<strong>Positions ${step.currentRank} vs ${step.nextRank}:</strong> Why are the snippets in Position ${step.currentRank} more comprehensible than those in Position ${step.nextRank}?`;
+        comp.innerHTML += `<div style='display:flex; gap:10px;'>`;
+        step.currentSnippets.forEach(snippet => {
+          comp.innerHTML += `<div class='code-box'><strong>${snippet.title}</strong><br>${snippet.code}</div>`;
+        });
+        step.nextSnippets.forEach(snippet => {
+          comp.innerHTML += `<div class='code-box'><strong>${snippet.title}</strong><br>${snippet.code}</div>`;
+        });
+        comp.innerHTML += `</div>`;
       }
     }
-  }
 
-  function saveInput(key, value) {
-    reasoning[key] = value;
-    sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
-    document.cookie = `phase4_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=2592000`;
-  }
+    function nextQuestion() {
+      const response = document.getElementById('answer-box').value.trim();
+      if (!response) return alert('Please provide an explanation.');
+      reasoning.push({ step: steps[stepIndex], answer: response });
+      stepIndex++;
+      if (stepIndex < steps.length) {
+        showStep();
+      } else {
+        document.getElementById('question-container').style.display = 'none';
+        document.getElementById('submit-review').style.display = 'inline-block';
+        // Store Phase 4 data
+        sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
+      }
+    }
 
-  function goToReview() {
-    location.href = '/review.html';
-  }
+    function reviewAndSubmit() {
+      window.location.href = '/review.html';
+    }
 
-  let currentStep = 1;
-  renderStep(currentStep);
-</script>
+    showStep();
+  </script>
 </body>
 </html>
