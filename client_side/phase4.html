@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Phase 4: Group & Comparative Reasoning</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 40px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    .instructions {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .snippet-box {
+      background-color: #2d2d2d;
+      color: #ccc;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 10px 0;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      font-size: 14px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #bbb;
+      margin-top: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .question-block {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .side-by-side {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .side {
+      flex: 1;
+      min-width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Phase 4: Group and Comparative Reasoning</h2>
+
+  <div class="instructions">
+    <p>Based on your rankings, we will ask follow-up questions. First, for positions with multiple snippets, please explain why you grouped them. Then, compare consecutive ranks and tell us why snippets in one group are more comprehensible than the next.</p>
+  </div>
+
+  <div id="questionContainer"></div>
+  <button onclick="goToReview()">Review and Submit All Responses</button>
+
+<script>
+  const snippets = [
+    { id: 1, title: "Snippet 1", code: `<span class='keyword'>public static</span> <span class='type'>boolean</span> <span class='function'>method1</span>(<span class='type'>String</span> name) { ... }` },
+    { id: 2, title: "Snippet 2", code: `<span class='keyword'>public static</span> <span class='type'>boolean</span> <span class='function'>method2</span>(<span class='type'>URI</span> uri) { ... }` }
+  ];
+
+  const rankingData = JSON.parse(sessionStorage.getItem('phase3_ranking') || '{}');
+  const reasoning = JSON.parse(sessionStorage.getItem('phase4_reasoning') || '{}');
+  const container = document.getElementById('questionContainer');
+
+  function renderSnippets(ids) {
+    return ids.map(id => {
+      const snippet = snippets.find(s => `snippet-${s.id}` === id);
+      return `<div class='snippet-box'>${snippet ? snippet.code : 'Snippet not found.'}</div>`;
+    }).join('');
+  }
+
+  function renderPhase4Questions() {
+    for (let i = 1; i <= 8; i++) {
+      const current = rankingData[i] || [];
+      const next = rankingData[i + 1] || [];
+
+      if (current.length > 1) {
+        container.innerHTML += `
+          <div class="question-block">
+            <h3>Position ${i}: Group Reasoning</h3>
+            ${renderSnippets(current)}
+            <textarea placeholder="Why did you group these snippets together?" oninput="saveInput('group-${i}', this.value)">${reasoning[`group-${i}`] || ''}</textarea>
+          </div>`;
+      }
+
+      if (current.length > 0 && next.length > 0) {
+        container.innerHTML += `
+          <div class="question-block">
+            <h3>Position ${i} vs Position ${i + 1}</h3>
+            <div class="side-by-side">
+              <div class="side">
+                <h4>Position ${i}</h4>
+                ${renderSnippets(current)}
+              </div>
+              <div class="side">
+                <h4>Position ${i + 1}</h4>
+                ${renderSnippets(next)}
+              </div>
+            </div>
+            <textarea placeholder="Why is Position ${i} more comprehensible than Position ${i + 1}?" oninput="saveInput('compare-${i}-${i + 1}', this.value)">${reasoning[`compare-${i}-${i + 1}`] || ''}</textarea>
+          </div>`;
+      }
+    }
+  }
+
+  function saveInput(key, value) {
+    reasoning[key] = value;
+    sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
+    document.cookie = `phase4_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=2592000`;
+  }
+
+  function goToReview() {
+    location.href = '/review.html';
+  }
+
+  renderPhase4Questions();
+</script>
+</body>
+</html>
