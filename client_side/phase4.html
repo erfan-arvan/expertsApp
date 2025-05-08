@@ -93,18 +93,21 @@
     }).join('');
   }
 
-  function renderPhase4Questions() {
-    for (let i = 1; i <= 8; i++) {
-      const current = rankingData[i] || [];
-      const next = rankingData[i + 1] || [];
+  function renderStep(step) {
+    container.innerHTML = '';
+    const current = rankingData[step] || [];
+    const next = rankingData[step + 1] || [];
 
-      if (current.length > 1) {
-        container.innerHTML += `
-          <div class="question-block">
-            <h3>Position ${i}: Group Reasoning</h3>
-            ${renderSnippets(current)}
-            <textarea placeholder="Why did you group these snippets together?" oninput="saveInput('group-${i}', this.value)">${reasoning[`group-${i}`] || ''}</textarea>
-          </div>`;
+    if (current.length === 0) {
+      if (step < 8) renderStep(step + 1);
+      else container.innerHTML = '<p>All questions completed. You may proceed to review and submit.</p>';
+      return;
+    }
+
+    if (current.length > 1) {
+      container.innerHTML += `
+        <div class="question-block">
+          <h3>Position ${step
       }
 
       if (current.length > 0 && next.length > 0) {
@@ -137,7 +140,8 @@
     location.href = '/review.html';
   }
 
-  renderPhase4Questions();
+  let currentStep = 1;
+  renderStep(currentStep);
 </script>
 </body>
 </html>
