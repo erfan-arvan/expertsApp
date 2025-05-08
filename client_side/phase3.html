@@ -83,7 +83,23 @@
       cursor: pointer;
       margin-bottom: 20px;
     }
-  </style>
+      #continueBtn:hover {
+      background-color: #45a049;
+    }
+
+    @keyframes glowPulse {
+      0% {
+        box-shadow: 0 0 10px #4CAF50;
+      }
+      100% {
+        box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+      }
+    }
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 10px #4CAF50; }
+      100% { box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50; }
+    }
+</style>
 </head>
 <body>
   <h2>Phase 3: Rank Code Snippets</h2>
@@ -109,7 +125,37 @@
 
   <div class="preview-area" id="previewArea"></div>
 
-  <script>
+  <div class="buttons" style="margin-top: 30px;">
+    <button onclick="location.href='/phase2.html'" style="
+      background-color: #ccc;
+      color: black;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      margin-right: 10px;
+    ">⬅️ Back to Phase 2</button>
+
+    <button onclick="goToPhase4()" id="continueBtn" style="
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #4CAF50;
+      animation: glowPulse 1.5s infinite alternate;
+    ">Continue to Phase 4 ➡️</button>
+  </div>
+
+  <div class="buttons" style="margin-top: 30px;">
+    <button onclick="location.href='/phase2.html'" style="padding: 12px 24px; font-size: 16px; border-radius: 6px; background-color: #ccc; color: black; border: none; cursor: pointer;">⬅️ Back to Phase 2</button>
+    <button id="continueBtn" onclick="goToPhase4()" style="padding: 12px 24px; font-size: 16px; border-radius: 6px; background-color: #4CAF50; color: white; border: none; cursor: pointer; box-shadow: 0 0 10px #4CAF50; animation: glowPulse 1.5s infinite alternate;">Continue to Phase 4</button>
+  </div>
+
+<script>
     const snippets = [
       {
         id: 1,
@@ -119,11 +165,6 @@
       {
         id: 2,
         title: "Snippet 2",
-        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method2</span>(<span class="type">URI</span> uri) { ... }`
-      },
-      {
-        id: 3,
-        title: "Snippet 3",
         code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method2</span>(<span class="type">URI</span> uri) { ... }`
       }
     ];
@@ -213,11 +254,18 @@
       localStorage.setItem('codeTheme', isLight ? 'light' : 'dark');
     }
 
+    function goToPhase4() {
+      location.href = '/phase4.html';
+    }
+
     function applyTheme() {
       const theme = localStorage.getItem('codeTheme') || 'dark';
       if (theme === 'light') document.body.classList.add('light-mode');
       document.getElementById('theme-toggle').textContent = theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode';
     }
-  </script>
+    function goToPhase4() {
+    location.href = '/phase4.html';
+  }
+</script>
 </body>
 </html>
