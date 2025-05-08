@@ -7,7 +7,8 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 40px;
-      background-color: #f9f9f9;
+      background-color: #f4f4f4;
+      color: #333;
     }
     .instructions {
       background-color: #fff;
@@ -16,147 +17,201 @@
       margin-bottom: 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .ranking-grid {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
+    .ranking-row {
+      display: flex;
       gap: 10px;
-      margin-bottom: 30px;
+      overflow-x: auto;
+      margin-bottom: 20px;
     }
-    .rank-column {
-      background: #fff;
-      border: 1px solid #ccc;
+    .ranking-slot {
+      flex: 1 1 100px;
+      background: #e8f5e9;
+      border: 2px dashed #4CAF50;
       border-radius: 6px;
-      min-height: 100px;
       padding: 10px;
+      min-height: 80px;
       text-align: center;
     }
     .card {
-      padding: 6px;
-      margin: 5px 0;
-      background-color: #e6f4ea;
+      background: #fff;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 6px;
+      padding: 8px;
+      margin: 5px;
       cursor: grab;
     }
     .card.dragging {
       opacity: 0.5;
     }
-    button {
-      padding: 12px 24px;
+    .preview-area {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .snippet-preview-box {
+      flex: 1 1 45%;
+      min-width: 300px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+    }
+    .snippet-header {
+      background-color: #f5f5f5;
+      padding: 10px 15px;
+      font-weight: bold;
       font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      background-color: #4CAF50;
+      border-bottom: 1px solid #ccc;
+    }
+    .code-box {
+      font-family: 'Courier New', Courier, monospace;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      padding: 15px;
+      font-size: 14px;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+    #theme-toggle {
+      background-color: #333;
       color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 5px;
       cursor: pointer;
-      box-shadow: 0 0 10px #4CAF50;
-      animation: glowPulse 1.5s infinite alternate;
-    }
-    @keyframes glowPulse {
-      0% { box-shadow: 0 0 10px #4CAF50; }
-      100% { box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50; }
-    }
-    button:hover {
-      background-color: #45a049;
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
-  <h2>Phase 3: Rank Code Snippets from Most to Least Comprehensible</h2>
+  <h2>Phase 3: Rank Code Snippets</h2>
+  <button id="theme-toggle" onclick="toggleTheme()">Switch to Light Mode</button>
 
   <div class="instructions">
-    <p><strong>Instructions:</strong> Drag and drop the snippet cards into the 8 ranking columns from left (most comprehensible) to right (least comprehensible). You can place more than one snippet in the same column if you feel they have equal comprehensibility. Your progress is saved automatically.</p>
+    <p><strong>Instructions:</strong> Drag and drop the snippets into 8 ranking positions (left = easiest to understand, right = hardest). You can place multiple snippets in one slot if you feel they are equally comprehensible. You may also view and compare snippets below.</p>
   </div>
 
-  <div class="ranking-grid" id="rankingGrid">
-    <!-- 8 columns -->
-    <div class="rank-column" data-rank="1">1<br>(Most)</div>
-    <div class="rank-column" data-rank="2">2</div>
-    <div class="rank-column" data-rank="3">3</div>
-    <div class="rank-column" data-rank="4">4</div>
-    <div class="rank-column" data-rank="5">5</div>
-    <div class="rank-column" data-rank="6">6</div>
-    <div class="rank-column" data-rank="7">7</div>
-    <div class="rank-column" data-rank="8">8<br>(Least)</div>
+  <div class="ranking-row" id="rankingRow">
+    <!-- 8 drop zones -->
+    <div class="ranking-slot" data-rank="1"></div>
+    <div class="ranking-slot" data-rank="2"></div>
+    <div class="ranking-slot" data-rank="3"></div>
+    <div class="ranking-slot" data-rank="4"></div>
+    <div class="ranking-slot" data-rank="5"></div>
+    <div class="ranking-slot" data-rank="6"></div>
+    <div class="ranking-slot" data-rank="7"></div>
+    <div class="ranking-slot" data-rank="8"></div>
   </div>
 
-  <button onclick="goToPhase4()">Continue to Phase 4</button>
+  <div id="cards" style="margin-bottom: 20px;"></div>
+
+  <div class="preview-area" id="previewArea"></div>
 
   <script>
     const snippets = [
-      { id: 1, title: "Snippet 1" },
-      { id: 2, title: "Snippet 2" }
+      {
+        id: 1,
+        title: "Snippet 1",
+        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method1</span>(<span class="type">String</span> name) { ... }`
+      },
+      {
+        id: 2,
+        title: "Snippet 2",
+        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method2</span>(<span class="type">URI</span> uri) { ... }`
+      }
     ];
 
     window.onload = () => {
-      const saved = JSON.parse(sessionStorage.getItem('phase3_state') || '{}');
-      const name = saved.name || sessionStorage.getItem('participantName') || '';
-      const ranking = saved.ranking || [];
+      loadCards();
+      loadState();
+      applyTheme();
+    };
 
-      const grid = document.getElementById('rankingGrid');
-      const columns = grid.querySelectorAll('.rank-column');
-
-      const placedIds = new Set();
-      if (ranking.length > 0) {
-        ranking.forEach((group, colIdx) => {
-          group.forEach(id => {
-            const card = createCard(id);
-            columns[colIdx].appendChild(card);
-            placedIds.add(id);
-          });
-        });
-      }
-
+    function loadCards() {
+      const container = document.getElementById('cards');
       snippets.forEach(snippet => {
-        if (!placedIds.has(snippet.id)) {
-          const card = createCard(snippet.id, snippet.title);
-          columns[0].appendChild(card);
-        }
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.draggable = true;
+        card.id = `snippet-${snippet.id}`;
+        card.innerHTML = `
+          <strong>${snippet.title}</strong>
+          <label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
+        `;
+        card.addEventListener('dragstart', () => card.classList.add('dragging'));
+        card.addEventListener('dragend', () => card.classList.remove('dragging'));
+        container.appendChild(card);
       });
 
-      
-      });
-    };
-
-    function createCard(id, title = `Snippet ${id}`) {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.draggable = true;
-      card.id = `snippet-${id}`;
-      card.textContent = title;
-      card.addEventListener('dragstart', () => card.classList.add('dragging'));
-      card.addEventListener('dragend', () => card.classList.remove('dragging'));
-      return card;
-    }
-      });
-    };
-        
-      });
-
-      grid.querySelectorAll('.rank-column').forEach(column => {
-        column.addEventListener('dragover', e => {
+      document.querySelectorAll('.ranking-slot').forEach(slot => {
+        slot.addEventListener('dragover', e => {
           e.preventDefault();
           const dragging = document.querySelector('.dragging');
-          if (dragging && !column.contains(dragging)) {
-            column.appendChild(dragging);
-          }
+          if (dragging) slot.appendChild(dragging);
+          saveState();
         });
       });
-    };
-
-    function saveState(name) {
-      const ranking = Array.from(document.querySelectorAll('.rank-column')).map(col =>
-        Array.from(col.querySelectorAll('.card')).map(card => parseInt(card.id.replace('snippet-', '')))
-      );
-      const data = { name, ranking };
-      sessionStorage.setItem('phase3_state', JSON.stringify(data));
-      document.cookie = `phase3_state=${encodeURIComponent(JSON.stringify(data))}; path=/; max-age=${60*60*24*30}`;
     }
 
-    function goToPhase4() {
-      const name = sessionStorage.getItem('participantName') || '';
-      saveState(name);
-      location.href = '/phase4.html';
+    function togglePreview(id, checkbox) {
+      const previewArea = document.getElementById('previewArea');
+      const snippet = snippets.find(s => s.id === id);
+      const existing = document.getElementById(`preview-${id}`);
+
+      if (checkbox.checked && !existing) {
+        const wrapper = document.createElement('div');
+        wrapper.id = `preview-${id}`;
+        wrapper.className = 'snippet-preview-box';
+
+        const header = document.createElement('div');
+        header.className = 'snippet-header';
+        header.textContent = snippet.title;
+
+        const codeBox = document.createElement('div');
+        codeBox.className = 'code-box';
+        codeBox.innerHTML = snippet.code;
+
+        wrapper.appendChild(header);
+        wrapper.appendChild(codeBox);
+        previewArea.appendChild(wrapper);
+      } else if (!checkbox.checked && existing) {
+        previewArea.removeChild(existing);
+      }
+    }
+
+    function saveState() {
+      const positions = {};
+      document.querySelectorAll('.ranking-slot').forEach((slot, index) => {
+        positions[index + 1] = Array.from(slot.children).map(el => el.id);
+      });
+      sessionStorage.setItem('phase3_ranking', JSON.stringify(positions));
+    }
+
+    function loadState() {
+      const saved = JSON.parse(sessionStorage.getItem('phase3_ranking') || '{}');
+      Object.entries(saved).forEach(([rank, ids]) => {
+        const slot = document.querySelector(`.ranking-slot[data-rank='${rank}']`);
+        ids.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) slot.appendChild(el);
+        });
+      });
+    }
+
+    function toggleTheme() {
+      const body = document.body;
+      const btn = document.getElementById('theme-toggle');
+      const isLight = body.classList.toggle('light-mode');
+      btn.textContent = isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+      localStorage.setItem('codeTheme', isLight ? 'light' : 'dark');
+    }
+
+    function applyTheme() {
+      const theme = localStorage.getItem('codeTheme') || 'dark';
+      if (theme === 'light') document.body.classList.add('light-mode');
+      document.getElementById('theme-toggle').textContent = theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode';
     }
   </script>
 </body>
