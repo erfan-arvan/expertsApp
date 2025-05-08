@@ -140,15 +140,12 @@
     const reasoningPerSnippet = {};
 
     window.onload = function() {
-      const nameFromSession = sessionStorage.getItem('participantName');
-      const nameFromCookie = getCookie('participantName');
+      const nameFromCombined = sessionStorage.getItem('participantName') || decodeURIComponent(getCookie('participantName') || '');
       const saved = JSON.parse(sessionStorage.getItem('phase2_state') || '{}');
       if (saved.name) {
         document.getElementById('participantName').value = saved.name;
-      } else if (nameFromSession) {
-        document.getElementById('participantName').value = nameFromSession;
-      } else if (nameFromCookie) {
-        document.getElementById('participantName').value = nameFromCookie;
+      } else if (nameFromCombined) {
+        document.getElementById('participantName').value = nameFromCombined;
       }
       if (saved.reasoningMap) Object.assign(reasoningPerSnippet, saved.reasoningMap);
       loadSnippet(currentIndex);
