@@ -201,7 +201,7 @@
     function loadSnippet(index) {
       const snippet = snippets[index];
       document.getElementById('snippetTitle').innerText = snippet.title;
-      document.getElementById('snippetBox').innerText = snippet.code;
+      document.getElementById('snippetBox').innerHTML = snippet.code;
       document.getElementById('reasoningBox').value = reasoningPerSnippet[snippet.id] || '';
       checkNextButton();
     }
