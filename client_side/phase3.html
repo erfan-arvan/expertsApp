@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Phase 3: Rank Code Snippets</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+    }
+    .instructions {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .ranking-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+    .rank-column {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      min-height: 100px;
+      padding: 10px;
+      text-align: center;
+    }
+    .card {
+      padding: 6px;
+      margin: 5px 0;
+      background-color: #e6f4ea;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: grab;
+    }
+    .card.dragging {
+      opacity: 0.5;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 10px #4CAF50;
+      animation: glowPulse 1.5s infinite alternate;
+    }
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 10px #4CAF50; }
+      100% { box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50; }
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h2>Phase 3: Rank Code Snippets from Most to Least Comprehensible</h2>
+
+  <div class="instructions">
+    <p><strong>Instructions:</strong> Drag and drop the snippet cards into the 8 ranking columns from left (most comprehensible) to right (least comprehensible). You can place more than one snippet in the same column if you feel they have equal comprehensibility. Your progress is saved automatically.</p>
+  </div>
+
+  <div class="ranking-grid" id="rankingGrid">
+    <!-- 8 columns -->
+    <div class="rank-column" data-rank="1">1<br>(Most)</div>
+    <div class="rank-column" data-rank="2">2</div>
+    <div class="rank-column" data-rank="3">3</div>
+    <div class="rank-column" data-rank="4">4</div>
+    <div class="rank-column" data-rank="5">5</div>
+    <div class="rank-column" data-rank="6">6</div>
+    <div class="rank-column" data-rank="7">7</div>
+    <div class="rank-column" data-rank="8">8<br>(Least)</div>
+  </div>
+
+  <button onclick="goToPhase4()">Continue to Phase 4</button>
+
+  <script>
+    const snippets = [
+      { id: 1, title: "Snippet 1" },
+      { id: 2, title: "Snippet 2" }
+    ];
+
+    window.onload = () => {
+      const grid = document.getElementById('rankingGrid');
+      const firstColumn = grid.querySelector('[data-rank="1"]');
+      snippets.forEach(snippet => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.draggable = true;
+        card.id = `snippet-${snippet.id}`;
+        card.textContent = snippet.title;
+        card.addEventListener('dragstart', () => card.classList.add('dragging'));
+        card.addEventListener('dragend', () => card.classList.remove('dragging'));
+        firstColumn.appendChild(card);
+      });
+
+      grid.querySelectorAll('.rank-column').forEach(column => {
+        column.addEventListener('dragover', e => {
+          e.preventDefault();
+          const dragging = document.querySelector('.dragging');
+          if (dragging && !column.contains(dragging)) {
+            column.appendChild(dragging);
+          }
+        });
+      });
+    };
+
+    function goToPhase4() {
+      const name = sessionStorage.getItem('participantName') || '';
+      const ranking = Array.from(document.querySelectorAll('.rank-column')).map(col =>
+        Array.from(col.querySelectorAll('.card')).map(card => parseInt(card.id.replace('snippet-', '')))
+      );
+      sessionStorage.setItem('phase3_state', JSON.stringify({ name, ranking }));
+      location.href = '/phase4.html';
+    }
+  </script>
+</body>
+</html>
