@@ -140,8 +140,16 @@
     const reasoningPerSnippet = {};
 
     window.onload = function() {
+      const nameFromSession = sessionStorage.getItem('participantName');
+      const nameFromCookie = getCookie('participantName');
       const saved = JSON.parse(sessionStorage.getItem('phase2_state') || '{}');
-      if (saved.name) document.getElementById('participantName').value = saved.name;
+      if (saved.name) {
+        document.getElementById('participantName').value = saved.name;
+      } else if (nameFromSession) {
+        document.getElementById('participantName').value = nameFromSession;
+      } else if (nameFromCookie) {
+        document.getElementById('participantName').value = nameFromCookie;
+      }
       if (saved.reasoningMap) Object.assign(reasoningPerSnippet, saved.reasoningMap);
       loadSnippet(currentIndex);
       applySavedTheme();
@@ -209,6 +217,11 @@
       const theme = localStorage.getItem('codeBoxTheme') || 'dark';
       document.getElementById('snippetBox').classList.add(`code-${theme}`);
       document.getElementById('theme-toggle').textContent = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+    }
+
+    function getCookie(name) {
+      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      return match ? decodeURIComponent(match[2]) : null;
     }
 
     function checkNextButton() {
