@@ -139,14 +139,7 @@
         });
       });
     };
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.draggable = true;
-        card.id = `snippet-${snippet.id}`;
-        card.textContent = snippet.title;
-        card.addEventListener('dragstart', () => card.classList.add('dragging'));
-        card.addEventListener('dragend', () => card.classList.remove('dragging'));
-        firstColumn.appendChild(card);
+        
       });
 
       grid.querySelectorAll('.rank-column').forEach(column => {
