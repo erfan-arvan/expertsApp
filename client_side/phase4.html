@@ -104,6 +104,8 @@
     });
 
     function showStep() {
+      document.getElementById('answer-box').style.display = 'block';
+      document.getElementById('next-question').style.display = 'inline-block';
       const step = steps[stepIndex];
       const qText = document.getElementById('question-text');
       const comp = document.getElementById('code-comparison');
