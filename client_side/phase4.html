@@ -323,19 +323,29 @@
         });
       } else {
         qText.innerHTML = `<strong>Positions ${step.currentRank} vs ${step.nextRank}:</strong> Why are the snippets in Position ${step.currentRank} more comprehensible than those in Position ${step.nextRank}?`;
-        comp.innerHTML = `<div style='display: flex; gap: 40px; width: 100%;'>`;
+        comp.innerHTML = '';
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.gap = '40px';
+        row.style.width = '100%';
 
-        comp.innerHTML += `<div style='flex: 1;'><h4>Position ${step.currentRank}</h4>`;
+        const leftCol = document.createElement('div');
+        leftCol.style.flex = '1';
+        leftCol.innerHTML = `<h4>Position ${step.currentRank}</h4>`;
         step.currentSnippets.forEach(snippet => {
-          comp.innerHTML += `<div class='code-box'><strong>${snippet.title}</strong><br>${snippet.code}</div>`;
+          leftCol.innerHTML += `<div class='code-box'><strong>${snippet.title}</strong><br>${snippet.code}</div>`;
         });
         comp.innerHTML += `</div>`;
 
-        comp.innerHTML += `<div style='flex: 1;'><h4>Position ${step.nextRank}</h4>`;
+        const rightCol = document.createElement('div');
+        rightCol.style.flex = '1';
+        rightCol.innerHTML = `<h4>Position ${step.nextRank}</h4>`;
         step.nextSnippets.forEach(snippet => {
-          comp.innerHTML += `<div class='code-box'><strong>${snippet.title}</strong><br>${snippet.code}</div>`;
+          rightCol.innerHTML += `<div class='code-box'><strong>${snippet.title}</strong><br>${snippet.code}</div>`;
         });
-        comp.innerHTML += `</div></div>`;
+        row.appendChild(leftCol);
+        row.appendChild(rightCol);
+        comp.appendChild(row);
         
       }
     }
