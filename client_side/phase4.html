@@ -105,9 +105,12 @@
     }
 
     if (current.length > 1) {
-      container.innerHTML += `
-        <div class="question-block">
-          <h3>Position ${step
+    container.innerHTML += `
+      <div class="question-block">
+        <h3>Position ${step}: Group Reasoning</h3>
+        ${renderSnippets(current)}
+        <textarea id="groupInput" placeholder="Why did you group these snippets together?">${reasoning[`group-${step}`] || ''}</textarea>
+      </div>`;
       }
 
       if (current.length > 0 && next.length > 0) {
