@@ -9,13 +9,15 @@
       margin: 40px;
       background-color: #f9f9f9;
     }
-    body.dark-mode {
-      background-color: #1e1e1e;
+    .code-light {
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    .code-dark {
+      background-color: #2d2d2d;
       color: #ccc;
     }
     .snippet-box {
-      background-color: #2d2d2d;
-      color: #ccc;
       padding: 15px;
       border-radius: 8px;
       white-space: pre-wrap;
@@ -63,16 +65,12 @@
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    body.dark-mode .instructions {
-      background: #2c2c2c;
-      color: #ccc;
-    }
   </style>
 </head>
 <body>
   <h2>Phase 2: Individual Snippet Reasoning</h2>
 
-  <button id="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+  <button id="theme-toggle" onclick="toggleTheme()">Switch to Dark Mode</button>
 
   <label for="participantName">Your Full Name:</label>
   <input type="text" id="participantName" style="width: 300px; padding: 8px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;" />
@@ -82,7 +80,7 @@
   </div>
 
   <div id="snippetTitle" style="font-weight: bold; margin-bottom: 10px;"></div>
-  <div id="snippetBox" class="snippet-box"></div>
+  <div id="snippetBox" class="snippet-box code-dark"></div>
 
   <label for="reasoningBox">Tell us about how do you assess this snippet's comprehensibility? What features might make it easy to understand? What features make it hard to understand?</label>
   <textarea id="reasoningBox" placeholder="Write your explanation here..."></textarea>
@@ -93,6 +91,35 @@
   </div>
 
   <button id="continue-button" onclick="goToPhase3()">Continue to Phase 3</button>
+
+  <div id="validation-modal" style="
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff0f0;
+    color: #660000;
+    border: 1px solid #ff9999;
+    padding: 20px;
+    border-radius: 10px;
+    width: 440px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    z-index: 1002;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+  ">
+    <p id="validation-message" style="font-weight: bold;"></p>
+    <button onclick="document.getElementById('validation-modal').style.display = 'none';" style="
+      margin-top: 15px;
+      padding: 8px 14px;
+      background-color: #ff9999;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    ">OK</button>
+  </div>
 
   <script>
     const snippets = [
@@ -146,12 +173,20 @@
     }
 
     function nextSnippet() {
+      if (document.getElementById('reasoningBox').value.trim() === '') {
+        showValidation("Please provide your reasoning before moving to the next snippet.");
+        return;
+      }
       saveState();
-      if (document.getElementById('reasoningBox').value.trim() === '') return;
       if (currentIndex < snippets.length - 1) {
         currentIndex++;
         loadSnippet(currentIndex);
       }
+    }
+
+    function showValidation(message) {
+      document.getElementById('validation-message').innerText = message;
+      document.getElementById('validation-modal').style.display = 'block';
     }
 
     function goToPhase3() {
@@ -160,14 +195,19 @@
     }
 
     function toggleTheme() {
-      document.body.classList.toggle('dark-mode');
-      const isDark = document.body.classList.contains('dark-mode');
-      localStorage.setItem('codeTheme', isDark ? 'dark' : 'light');
+      const box = document.getElementById('snippetBox');
+      const toggleBtn = document.getElementById('theme-toggle');
+      const isDark = box.classList.contains('code-dark');
+      box.classList.remove(isDark ? 'code-dark' : 'code-light');
+      box.classList.add(isDark ? 'code-light' : 'code-dark');
+      toggleBtn.textContent = isDark ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+      localStorage.setItem('codeBoxTheme', isDark ? 'light' : 'dark');
     }
 
     function applySavedTheme() {
-      const theme = localStorage.getItem('codeTheme') || 'light';
-      if (theme === 'dark') document.body.classList.add('dark-mode');
+      const theme = localStorage.getItem('codeBoxTheme') || 'dark';
+      document.getElementById('snippetBox').classList.add(`code-${theme}`);
+      document.getElementById('theme-toggle').textContent = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
     }
 
     function checkNextButton() {
