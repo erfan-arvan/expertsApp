@@ -89,57 +89,17 @@
     ];
 
     window.onload = () => {
-      const saved = JSON.parse(sessionStorage.getItem('phase3_state') || '{}');
-      const name = saved.name || sessionStorage.getItem('participantName') || '';
-      const ranking = saved.ranking || [];
-
       const grid = document.getElementById('rankingGrid');
-      const columns = grid.querySelectorAll('.rank-column');
-
-      // Place cards based on saved ranking or all in rank 1
-      const placedIds = new Set();
-      if (ranking.length > 0) {
-        ranking.forEach((group, colIdx) => {
-          group.forEach(id => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.draggable = true;
-            card.id = `snippet-${id}`;
-            card.textContent = `Snippet ${id}`;
-            card.addEventListener('dragstart', () => card.classList.add('dragging'));
-            card.addEventListener('dragend', () => card.classList.remove('dragging'));
-            columns[colIdx].appendChild(card);
-            placedIds.add(id);
-          });
-        });
-      }
-
-      // Place unranked snippets in column 1
+      const firstColumn = grid.querySelector('[data-rank="1"]');
       snippets.forEach(snippet => {
-        if (!placedIds.has(snippet.id)) {
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.draggable = true;
-          card.id = `snippet-${snippet.id}`;
-          card.textContent = snippet.title;
-          card.addEventListener('dragstart', () => card.classList.add('dragging'));
-          card.addEventListener('dragend', () => card.classList.remove('dragging'));
-          columns[0].appendChild(card);
-        }
-      });
-
-      grid.querySelectorAll('.rank-column').forEach(column => {
-        column.addEventListener('dragover', e => {
-          e.preventDefault();
-          const dragging = document.querySelector('.dragging');
-          if (dragging && !column.contains(dragging)) {
-            column.appendChild(dragging);
-            saveState(name);
-          }
-        });
-      });
-    };
-        
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.draggable = true;
+        card.id = `snippet-${snippet.id}`;
+        card.textContent = snippet.title;
+        card.addEventListener('dragstart', () => card.classList.add('dragging'));
+        card.addEventListener('dragend', () => card.classList.remove('dragging'));
+        firstColumn.appendChild(card);
       });
 
       grid.querySelectorAll('.rank-column').forEach(column => {
@@ -152,19 +112,13 @@
         });
       });
     };
-
-    function saveState(name) {
-      const ranking = Array.from(document.querySelectorAll('.rank-column')).map(col =>
-        Array.from(col.querySelectorAll('.card')).map(card => parseInt(card.id.replace('snippet-', '')))
-      );
-      const data = { name, ranking };
-      sessionStorage.setItem('phase3_state', JSON.stringify(data));
-      document.cookie = `phase3_state=${encodeURIComponent(JSON.stringify(data))}; path=/; max-age=${60*60*24*30}`;
-    }
 
     function goToPhase4() {
       const name = sessionStorage.getItem('participantName') || '';
-      saveState(name);
+      const ranking = Array.from(document.querySelectorAll('.rank-column')).map(col =>
+        Array.from(col.querySelectorAll('.card')).map(card => parseInt(card.id.replace('snippet-', '')))
+      );
+      sessionStorage.setItem('phase3_state', JSON.stringify({ name, ranking }));
       location.href = '/phase4.html';
     }
   </script>
