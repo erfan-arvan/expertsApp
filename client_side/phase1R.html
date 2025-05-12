@@ -594,13 +594,13 @@ window.onload = function() {
     function validateCurrentSnippetInputs() {
         const name = document.getElementById('participantName').value.trim();
         const summary = document.getElementById('summary').value.trim();
-        const reasoning = document.getElementById('reasoning').value.trim();
+        const compSummary = document.getElementById('compSummary').value.trim();
 
         let messages = [];
 
         if (!name) messages.push("• Please enter your name.");
         if (!summary) messages.push(`• Please enter a summary for Snippet ${currentSnippet}.`);
-        if (!reasoning) messages.push(`• Please enter reasoning for Snippet ${currentSnippet}.`);
+        if (!compSummary) messages.push(`• Please enter comprehensibility summary for Snippet ${currentSnippet}.`);
 
         if (messages.length > 0) {
             showValidationMessage("⚠️ Missing Information:\n\n" + messages.join("\n"));
