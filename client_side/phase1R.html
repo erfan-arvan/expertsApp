@@ -169,10 +169,10 @@
     <!-- RIGHT: Questions -->
     <div id="question-box" style="flex: 1;">
       <label for="summary"><strong>What does this code snippet do? Summarize its main functionality and purpose (1–2 sentences):</strong></label>
-      <textarea id="summary"></textarea>
+      <textarea id="summary" oninput="saveSummary()"></textarea>
   
       <label for="compSummary"><strong>Tell us about how you assess this snippet's comprehensibility. What features might make it easy to understand? What features make it hard to understand?</strong></label>
-      <textarea id="compSummary"></textarea>
+      <textarea id="compSummary" oninput="saveSummary()"></textarea>
   
       <div class="buttons">
           <button id="prev" onclick="prevSnippet()">Previous</button>
