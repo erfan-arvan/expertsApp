@@ -153,32 +153,39 @@
     
 
 
-<div id="snippet-container">
-    <div style="background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid #ccc;">
-          <h3 id="snippet-title" style="margin: 0;">Snippet Title</h3>
-          <button onclick="toggleTheme()" id="theme-toggle" style="padding: 6px 12px; border-radius: 5px; border: none; background-color: #333; color: white; cursor: pointer;">
-            Switch to Light Mode
-          </button>
-        </div>
-        <pre id="code" style="margin: 0;"><code>Loading snippet...</code></pre>
-    </div>      
-
-    <label for="summary"><strong>What does this code snippet do? Summarize its main functionality and purpose (1–2 sentences):</strong></label>
-    <textarea id="summary""></textarea>
-    <label for="compSummary"><strong>Tell us about how you assess this snippet's comprehensibility. What features might make it easy to understand? What features make it hard to understand?</strong></label>
-    <textarea id="compSummary"></textarea>
-
-    <div class="buttons">
-        <button id="prev" onclick="prevSnippet()">Previous</button>
-        <button id="save" onclick="saveSummary()">💾 Save Progress Locally</button>
-        <button id="next" onclick="nextSnippet()">Next</button>
-        <button id="submit" onclick="reviewAndSubmit()">Review and Submit Phase 1</button>
-        <button id="continueBtn" onclick="goToPhase2()" style="display: none;">
-          Continue to Phase 2
-        </button>        
+<div id="snippet-container" style="display: flex; gap: 40px; align-items: flex-start;">
+  
+    <!-- LEFT: Snippet Display -->
+    <div id="snippet-box" style="flex: 1; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid #ccc;">
+        <h3 id="snippet-title" style="margin: 0;">Snippet Title</h3>
+        <button onclick="toggleTheme()" id="theme-toggle" style="padding: 6px 12px; border-radius: 5px; border: none; background-color: #333; color: white; cursor: pointer;">
+          Switch to Light Mode
+        </button>
+      </div>
+      <pre id="code" style="margin: 0;"><code>Loading snippet...</code></pre>
     </div>
-</div>
+  
+    <!-- RIGHT: Questions -->
+    <div id="question-box" style="flex: 1;">
+      <label for="summary"><strong>What does this code snippet do? Summarize its main functionality and purpose (1–2 sentences):</strong></label>
+      <textarea id="summary"></textarea>
+  
+      <label for="compSummary"><strong>Tell us about how you assess this snippet's comprehensibility. What features might make it easy to understand? What features make it hard to understand?</strong></label>
+      <textarea id="compSummary"></textarea>
+  
+      <div class="buttons">
+          <button id="prev" onclick="prevSnippet()">Previous</button>
+          <button id="save" onclick="saveSummary()">💾 Save Progress Locally</button>
+          <button id="next" onclick="nextSnippet()">Next</button>
+          <button id="submit" onclick="reviewAndSubmit()">Review and Submit Phase 1</button>
+          <button id="continueBtn" onclick="goToPhase2()" style="display: none;">
+            Continue to Phase 2
+          </button>        
+      </div>
+    </div>
+  </div>
+  
 
 <script>
 const TOTAL_SNIPPETS = 8;
