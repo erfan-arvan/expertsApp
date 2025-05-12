@@ -226,10 +226,6 @@ function saveSummary() {
   setCookie(keySummary, encodeURIComponent(summary), 30);
   setCookie(keyCompSummary, encodeURIComponent(compSummary), 30);
 
-  // Show save confirmation if warning not hidden
-  if (getCookie('hideSaveWarning') !== 'true') {
-    document.getElementById('save-warning').style.display = 'block';
-  }
 }
 
 
@@ -377,41 +373,7 @@ function submitAll() {
   ];
 </script>
 
-  
-  <div id="save-warning" style="
-    display: none;
-    position: fixed;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff8db;
-    color: #4c4a00;
-    border: 1px solid #ffe58f;
-    padding: 20px;
-    border-radius: 10px;
-    width: 440px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-    z-index: 1000;
-    text-align: center;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-  ">
-    <p style="font-weight: bold;">Summary saved locally!</p>
-    <p>Make sure to click <strong>Submit All Summaries</strong> at the end to submit your work.</p>
-    
-    <label style="display: block; margin-top: 15px;">
-        <input type="checkbox" id="hide-warning-checkbox" onchange="setCookie('hideSaveWarning', 'true', 30)">
-        Don’t show this message again
-    </label>
-    
-    <button onclick="hideSaveWarning()" style="
-        margin-top: 15px;
-        padding: 8px 14px;
-        background-color: #ffd666;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    ">OK</button>
-</div>
+
 
 <div id="submission-modal" style="
     display: none;
@@ -507,10 +469,6 @@ function submitAll() {
     return match ? decodeURIComponent(match[2]) : null;
   }
 
-    
-    function hideSaveWarning() {
-        document.getElementById('save-warning').style.display = 'none';
-    }
 </script>
 
 <script>
