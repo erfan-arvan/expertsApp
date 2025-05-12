@@ -265,7 +265,7 @@
 
   <div style="margin-top: 30px;">
     <button onclick="location.href='/phase2.html'" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: #ccc; color: black; cursor: pointer; margin-right: 10px;">⬅️ Back to Phase 2</button>
-    <button onclick="goToPhase4()" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: #4CAF50; color: white; cursor: pointer;">Continue to Phase 4 ➡️</button>
+    <button id="continueBtn" onclick="goToPhase4()" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: #4CAF50; color: white; cursor: pointer;">Continue to Phase 4 ➡️</button>
   </div>
 
 <script>
@@ -425,6 +425,17 @@
       const json = JSON.stringify(positions);
       sessionStorage.setItem('phase3_ranking', json);
       document.cookie = `phase3_ranking=${encodeURIComponent(json)}; path=/; max-age=${60 * 60 * 24 * 30}`;
+
+      /*Check if the phase is completed*/
+      if (areAllCardsRanked()) {
+        document.getElementById('continueBtn').style.display = 'inline-block';
+        sessionStorage.setItem('phase2Complete', 'true');
+        document.cookie = `phase2Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
+      } else {
+        document.getElementById('continueBtn').style.display = 'none';
+        sessionStorage.removeItem('phase2Complete');
+        document.cookie = `phase2Complete=; path=/; max-age=0`;
+      }
     }
 
     function loadState() {
@@ -502,6 +513,20 @@ function applyTheme() {
   function isComplete(key) {
     return sessionStorage.getItem(key) === 'true' || getCookie(key) === 'true';
   }
+
+  function areAllCardsRanked() {
+    const allCards = document.querySelectorAll('.card');
+    const assignedCardIds = new Set();
+
+    document.querySelectorAll('.ranking-slot').forEach(slot => {
+      slot.querySelectorAll('.card').forEach(card => {
+        assignedCardIds.add(card.id);
+      });
+    });
+
+    return allCards.length === assignedCardIds.size;
+  }
+
 
 </script>
 </body>
