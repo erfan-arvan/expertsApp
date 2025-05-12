@@ -636,6 +636,9 @@ function validateCurrentSnippetInputs() {
         return false;
     }
 
+    //update status bar if needed
+    if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
+
     return true;
 }
 
