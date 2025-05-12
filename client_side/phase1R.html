@@ -206,41 +206,27 @@ function loadSnippet(snippetNumber) {
 
 
 function saveSummary() {
-    const name = document.getElementById('participantName').value.trim();
-    const summary = document.getElementById('summary').value.trim();
-    const compSummary = document.getElementById('compSummary').value.trim();
-    const keySummary = `summary${currentSnippet}`;
-    const keyCompSummary = `summary${currentSnippet}`;
+  const name = document.getElementById('participantName').value.trim();
+  const summary = document.getElementById('summary').value.trim();
+  const compSummary = document.getElementById('compSummary').value.trim();
 
+  const keySummary = `summary${currentSnippet}`;
+  const keyCompSummary = `compSummary${currentSnippet}`;
 
-    let messages = [];
+  // Save to sessionStorage
+  sessionStorage.setItem(keySummary, summary);
+  sessionStorage.setItem(keyCompSummary, compSummary);
 
-    if (!name) {
-        messages.push("• Please enter your name.");
-    }
+  // Save to cookies
+  setCookie(keySummary, encodeURIComponent(summary), 30);
+  setCookie(keyCompSummary, encodeURIComponent(compSummary), 30);
 
-    if (!summary) {
-      messages.push("• Please enter a summary before continuing.");
-    }
-
-    if (!compSummary) messages.push("• Please provide your opinion about comprehensibility before continuing.");
-
-
-    if (messages.length > 0) {
-        showValidationMessage("⚠️ Missing Information:\n\n" + messages.join("\n"));
-        return;
-    }
-
-    sessionStorage.setItem(keySummary, summary);
-    setCookie(keySummary, encodeURIComponent(summary), 30); // store in cookie too
-
-    sessionStorage.setItem(compSummary, compSummary);
-    setCookie(compSummary, encodeURIComponent(compSummary), 30); // store in cookie too
-
-    if (getCookie('hideSaveWarning') !== 'true') {
-        document.getElementById('save-warning').style.display = 'block';
-    }
+  // Show save confirmation if warning not hidden
+  if (getCookie('hideSaveWarning') !== 'true') {
+    document.getElementById('save-warning').style.display = 'block';
+  }
 }
+
 
 function saveSummarySilentForPrev() {
     saveSummary();
@@ -591,24 +577,24 @@ window.onload = function() {
 </script>
 
 <script>
-    function validateCurrentSnippetInputs() {
-        const name = document.getElementById('participantName').value.trim();
-        const summary = document.getElementById('summary').value.trim();
-        const compSummary = document.getElementById('compSummary').value.trim();
+function validateCurrentSnippetInputs() {
+    const name = document.getElementById('participantName').value.trim();
+    const summary = document.getElementById('summary').value.trim();
+    const compSummary = document.getElementById('compSummary').value.trim();
 
-        let messages = [];
+    let messages = [];
 
-        if (!name) messages.push("• Please enter your name.");
-        if (!summary) messages.push(`• Please enter a summary for Snippet ${currentSnippet}.`);
-        if (!compSummary) messages.push(`• Please enter comprehensibility summary for Snippet ${currentSnippet}.`);
+    if (!name) messages.push("• Please enter your name.");
+    if (!summary) messages.push(`• Please enter a summary for Snippet ${currentSnippet}.`);
+    if (!compSummary) messages.push(`• Please enter comprehensibility summary for Snippet ${currentSnippet}.`);
 
-        if (messages.length > 0) {
-            showValidationMessage("⚠️ Missing Information:\n\n" + messages.join("\n"));
-            return false;
-        }
+    if (messages.length > 0) {
+        showValidationMessage("⚠️ Missing Information:\n\n" + messages.join("\n"));
+        return false;
+    }
 
     return true;
-    }
+}
 
 </script>
 <script>
