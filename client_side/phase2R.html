@@ -349,6 +349,12 @@
       loadState();
       applyTheme();
 
+      // ✅ Restore Continue button if phase2Complete is already set
+      const continueBtn = document.getElementById('continueBtn');
+      if (sessionStorage.getItem('phase2Complete') === 'true' || getCookie('phase2Complete') === 'true') {
+        if (continueBtn) continueBtn.style.display = 'inline-block';
+      }
+
       // Unlock and highlight status bar
       if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
       if (isComplete('phase2Complete')) document.getElementById('link-phase3').classList.remove('disabled');
@@ -426,16 +432,28 @@
       sessionStorage.setItem('phase3_ranking', json);
       document.cookie = `phase3_ranking=${encodeURIComponent(json)}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
-      /*Check if the phase is completed*/
+      /* Check if the phase is completed */
       if (areAllCardsRanked()) {
         document.getElementById('continueBtn').style.display = 'inline-block';
         sessionStorage.setItem('phase2Complete', 'true');
         document.cookie = `phase2Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
+
+        // ✅ Also update the status bar
+        const phase3Link = document.getElementById('link-phase3');
+        if (phase3Link) {
+          phase3Link.classList.remove('disabled');
+        }
       } else {
         document.getElementById('continueBtn').style.display = 'none';
         sessionStorage.removeItem('phase2Complete');
         document.cookie = `phase2Complete=; path=/; max-age=0`;
+
+        const phase3Link = document.getElementById('link-phase3');
+        if (phase3Link) {
+          phase3Link.classList.add('disabled');
+        }
       }
+
     }
 
     function loadState() {
