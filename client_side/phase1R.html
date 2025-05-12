@@ -291,7 +291,6 @@ function loadSnippet(snippetNumber) {
 
 
 function saveSummary() {
-  const name = document.getElementById('participantName').value.trim();
   const summary = document.getElementById('summary').value.trim();
   const compSummary = document.getElementById('compSummary').value.trim();
 
@@ -352,16 +351,6 @@ function updateButtons() {
 function submitAll() {
     saveSummary(); // save the current snippet
     const allSummaries = {};
-    const name = document.getElementById('participantName').value.trim();
-    if (!name) {
-        alert("Please enter your name.");
-        return;
-    }
-
-    // Save name explicitly again
-    sessionStorage.setItem('participantName', name);
-    setCookie('participantName', encodeURIComponent(name), 30);
-    allSummaries['name'] = name;
 
     // Pull all saved snippets from session or cookie
     for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
@@ -593,11 +582,6 @@ window.onload = function() {
         document.body.classList.add("dark-mode");
     }
 
-    const savedName = sessionStorage.getItem('participantName') || decodeURIComponent(getCookie('participantName') || '');
-    if (savedName) {
-        document.getElementById('participantName').value = savedName;
-    }
-
     loadSnippet(currentSnippet);
     updateButtons();
 
@@ -621,22 +605,12 @@ window.onload = function() {
 </script>
 
 <script>
-    function storeParticipantName() {
-    const name = document.getElementById('participantName').value.trim();
-    sessionStorage.setItem('participantName', name);
-    setCookie('participantName', encodeURIComponent(name), 30); // expires in 30 days
-}
-</script>
-
-<script>
 function validateCurrentSnippetInputs() {
-    const name = document.getElementById('participantName').value.trim();
     const summary = document.getElementById('summary').value.trim();
     const compSummary = document.getElementById('compSummary').value.trim();
 
     let messages = [];
 
-    if (!name) messages.push("• Please enter your name.");
     if (!summary) messages.push(`• Please enter a summary for Snippet ${currentSnippet}.`);
     if (!compSummary) messages.push(`• Please enter comprehensibility summary for Snippet ${currentSnippet}.`);
 
@@ -651,16 +625,6 @@ function validateCurrentSnippetInputs() {
 </script>
 <script>
   function goToPhase2() {
-    const name = document.getElementById('participantName').value.trim();
-    if (!name) {
-      alert("Please enter your name before proceeding.");
-      return;
-    }
-
-    // Save name to session and cookie
-    sessionStorage.setItem('phase_participant_name', name);
-    setCookie('phase_participant_name', name, 30);
-
     // Redirect
     window.location.href = 'phase2.html';
   }
@@ -676,11 +640,6 @@ function validateCurrentSnippetInputs() {
 <script>
   function openReviewModal() {
   saveSummary();
-  const name = document.getElementById('participantName').value.trim();
-  if (!name) {
-    alert("Please enter your name.");
-    return;
-  }
 
   let content = `Name: ${name}\n\n`;
   for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
@@ -703,11 +662,6 @@ function submitAndCloseModal() {
 <script>
   function reviewAndSubmit() {
   saveSummary();
-  const name = document.getElementById('participantName').value.trim();
-  if (!name) {
-    showValidationMessage("Please enter your name.");
-    return;
-  }
 
   let missing = [];
   let reviewText = `Name: ${name}\n\n`;
