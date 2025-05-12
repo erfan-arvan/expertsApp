@@ -242,63 +242,14 @@ function saveSummary() {
     }
 }
 
-function saveSummarySilent() {
-    const name = document.getElementById('participantName').value.trim();
-    const summary = document.getElementById('summary').value.trim();
-    const key = `summary${currentSnippet}`;
-
-    let messages = [];
-
-    if (!name) {
-        messages.push("• Please enter your name.");
-    }
-
-    if (!summary) {
-      messages.push("• Please enter a summary before continuing.");
-    }
-
-    if (messages.length > 0) {
-        showValidationMessage("⚠️ Missing Information:\n\n" + messages.join("\n"));
-        return;
-    }
-
-    sessionStorage.setItem(key, summary);
-    setCookie(key, encodeURIComponent(summary), 30); // store in cookie too
-}
-
 function saveSummarySilentForPrev() {
-    const name = document.getElementById('participantName').value.trim();
-    const summary = document.getElementById('summary').value.trim();
-    const key = `summary${currentSnippet}`;
-
-    let messages = [];
-
-    if (!name || !summary) {
-        return;
-    }
-
-    sessionStorage.setItem(key, summary);
-    setCookie(key, encodeURIComponent(summary), 30); // store in cookie too
+    saveSummary();
 }
 
 function nextSnippet() {
-    const name = document.getElementById('participantName').value.trim();
-    const summary = document.getElementById('summary').value.trim();
-    let messages = [];
+    if (!validateCurrentSnippetInputs()) return;
 
-    if (!name) {
-        messages.push("• Please enter your name.");
-    }
-    if (!summary) {
-        messages.push(`• Please enter a summary for Snippet ${currentSnippet}.`);
-    }
-
-    if (messages.length > 0) {
-        showValidationMessage("⚠️ Missing Information:\n\n" + messages.join("\n"));
-        return; // Don't proceed
-    }
-
-    saveSummarySilent();
+    saveSummary();
 
     if (currentSnippet < TOTAL_SNIPPETS) {
         currentSnippet++;
@@ -639,6 +590,27 @@ window.onload = function() {
 }
 </script>
 
+<script>
+    function validateCurrentSnippetInputs() {
+        const name = document.getElementById('participantName').value.trim();
+        const summary = document.getElementById('summary').value.trim();
+        const reasoning = document.getElementById('reasoning').value.trim();
+
+        let messages = [];
+
+        if (!name) messages.push("• Please enter your name.");
+        if (!summary) messages.push(`• Please enter a summary for Snippet ${currentSnippet}.`);
+        if (!reasoning) messages.push(`• Please enter reasoning for Snippet ${currentSnippet}.`);
+
+        if (messages.length > 0) {
+            showValidationMessage("⚠️ Missing Information:\n\n" + messages.join("\n"));
+            return false;
+        }
+
+    return true;
+    }
+
+</script>
 <script>
   function goToPhase2() {
     const name = document.getElementById('participantName').value.trim();
