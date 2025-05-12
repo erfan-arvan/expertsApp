@@ -195,6 +195,12 @@
 
   <div id="cards" style="margin-bottom: 20px;"></div>
 
+  <div id="snippet-bar" style="display: flex; justify-content: flex-end; align-items: center; padding: 10px 15px; background-color: #f5f5f5; border-radius: 6px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+    <button id="theme-toggle" onclick="toggleTheme()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #333; color: white; border: none; cursor: pointer;">
+      Switch to Light Mode
+    </button>
+  </div>
+  
   <div class="preview-area" id="previewArea"></div>
 
   <div style="margin-top: 30px;">
@@ -392,8 +398,13 @@
     function applyTheme() {
       const theme = localStorage.getItem('codeTheme') || 'dark';
       if (theme === 'light') document.body.classList.add('light-mode');
-      document.getElementById('theme-toggle').textContent = theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+
+      const toggleBtn = document.getElementById('theme-toggle');
+      if (toggleBtn) {
+        toggleBtn.textContent = theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+      }
     }
+
     function goToPhase4() {
     location.href = '/phase4.html';
   }
