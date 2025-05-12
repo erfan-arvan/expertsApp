@@ -226,6 +226,9 @@ function saveSummary() {
   setCookie(keySummary, encodeURIComponent(summary), 30);
   setCookie(keyCompSummary, encodeURIComponent(compSummary), 30);
 
+  if(areAllSnippetsFilled()){
+    document.getElementById('continueBtn').style.display = 'inline-block';
+  }
 }
 
 
@@ -307,9 +310,6 @@ function submitAll() {
   });
 
 }
-
-
-
 </script>
 
 <script>
@@ -372,7 +372,6 @@ function submitAll() {
     }
   ];
 </script>
-
 
 
 <div id="submission-modal" style="
@@ -468,7 +467,6 @@ function submitAll() {
     const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
     return match ? decodeURIComponent(match[2]) : null;
   }
-
 </script>
 
 <script>
@@ -524,8 +522,8 @@ window.onload = function() {
     if (getCookie('hideSaveWarning') === 'true') {
         document.getElementById('hide-warning-checkbox').checked = true;
     }
-      if (sessionStorage.getItem('phase1_submitted') === 'true' || getCookie('phase1_submitted') === 'true') {
-    document.getElementById('continueBtn').style.display = 'inline-block';
+      if (sessionStorage.getItem('phase1_submitted') === 'true') {
+        document.getElementById('continueBtn').style.display = 'inline-block';
   }
 };
 
@@ -647,6 +645,24 @@ function showValidationMessage(msg) {
   document.getElementById('validation-message').innerText = msg;
   document.getElementById('validation-modal').style.display = 'block';
 }
+</script>
+
+<script>
+    function areAllSnippetsFilled() {
+        for (let i = 1; i <= 8; i++) {
+            const summaryKey = `summary${i}`;
+            const compKey = `compSummary${i}`;
+
+            const summary = sessionStorage.getItem(summaryKey) || decodeURIComponent(getCookie(summaryKey) || '');
+            const compSummary = sessionStorage.getItem(compKey) || decodeURIComponent(getCookie(compKey) || '');
+
+            if (!summary.trim() || !compSummary.trim()) {
+            return false;
+            }
+        }
+        return true;
+    }
+
 </script>
     
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
