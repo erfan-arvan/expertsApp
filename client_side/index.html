@@ -87,14 +87,37 @@
   Please ensure you complete both phases by the deadline so your input can be included in the final analysis.</p>
 
   <h3>Next Step</h3>
-  <p>Please proceed to Phase 1 by clicking the button below:</p>
-  <button onclick="window.location.href='phase1.html'">Start Phase 1</button>
+  <p><strong>Please enter your full name before continuing:</strong></p>
+  <input type="text" id="participantName" placeholder="Enter your full name" style="padding: 8px; font-size: 16px; width: 300px; border-radius: 5px; border: 1px solid #ccc;">
+  
+  <p style="margin-top: 20px;">
+    <button onclick="proceedToPhase1()">Start Phase 1</button>
+  </p>
+
 </div>
 
 
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
   Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
 </footer>
+
+<script>
+  function proceedToPhase1() {
+    const name = document.getElementById('participantName').value.trim();
+
+    if (!name) {
+      alert("Please enter your name before proceeding.");
+      return;
+    }
+
+    // Save name to sessionStorage and cookie (30-day expiry)
+    sessionStorage.setItem('participantName', name);
+    document.cookie = `participantName=${encodeURIComponent(name)}; path=/; expires=${new Date(Date.now() + 30*24*60*60*1000).toUTCString()}`;
+
+    // Redirect to phase 1
+    window.location.href = 'phase1.html';
+  }
+</script>
 
 </body>
 </html>
