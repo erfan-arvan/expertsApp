@@ -310,6 +310,10 @@ function saveSummary() {
     document.getElementById('continueBtn').style.display = 'inline-block';
     sessionStorage.setItem('phase1Complete', 'true');
     setCookie('phase1Complete', 'true', 30);
+    
+    //update status bar if needed
+    if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
+
   }
 }
 
@@ -635,9 +639,6 @@ function validateCurrentSnippetInputs() {
         showValidationMessage("⚠️ Missing Information:\n\n" + messages.join("\n"));
         return false;
     }
-
-    //update status bar if needed
-    if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
 
     return true;
 }
