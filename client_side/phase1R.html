@@ -521,12 +521,9 @@ window.onload = function() {
     loadSnippet(currentSnippet);
     updateButtons();
 
-    if (getCookie('hideSaveWarning') === 'true') {
-        document.getElementById('hide-warning-checkbox').checked = true;
-    }
-      if (sessionStorage.getItem('phase1_submitted') === 'true' || getCookie('phase1_submitted') === 'true') {
+      if (sessionStorage.getItem('phase1Complete') === 'true' || getCookie('phase1Complete') === 'true') {
         document.getElementById('continueBtn').style.display = 'inline-block';
-  }
+    }
 };
 
 </script>
