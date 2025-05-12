@@ -130,42 +130,68 @@
       }
 
       /*for status bar*/
-      .status-bar {
-  background-color: #333;
-  color: white;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-}
+    .status-bar {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transition: top 0.3s;
+    }
 
-.phase-link {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
+    .status-links {
+    display: flex;
+    gap: 30px;
+    }
 
-.phase-link:hover:not(.disabled) {
-  background-color: #4CAF50;
-}
+    .phase-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    }
 
-.phase-link.active {
-  background-color: #4CAF50;
-}
+    .phase-link:hover:not(.disabled) {
+    background-color: #4CAF50;
+    }
 
-.phase-link.disabled {
-  pointer-events: none;
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+    .phase-link.active {
+    background-color: #4CAF50;
+    }
+
+    .phase-link.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+    }
+
+    #toggleBarBtn {
+    background: none;
+    color: #ccc;
+    border: 1px solid #777;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    }
+
+    body.without-status-bar {
+    padding-top: 0 !important;
+    }
+
+    .status-bar.hidden {
+    top: -60px;
+    }
+
 
 </style>
 
@@ -173,15 +199,19 @@
 </head>
 <body>
 
-<div class="status-bar">
-    <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
-    <a href="phase2.html" class="phase-link disabled" id="link-phase2">Phase 2</a>
-    <a href="phase3.html" class="phase-link disabled" id="link-phase3">Phase 3</a>
-    <a href="review.html" class="phase-link disabled" id="link-review">Review & Submit</a>
-</div>
+    <div class="status-bar" id="statusBar">
+        <div class="status-links">
+          <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
+          <a href="phase2.html" class="phase-link disabled" id="link-phase2">Phase 2</a>
+          <a href="phase3.html" class="phase-link disabled" id="link-phase3">Phase 3</a>
+          <a href="review.html" class="phase-link disabled" id="link-review">Review & Submit</a>
+        </div>
+        <button id="toggleBarBtn" onclick="toggleStatusBar()">↑ Hide</button>
+      </div>
+      
       
 
-<div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 50px;;">
+<div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 100px;">
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <h2 style="margin: 0;">Phase 1: Reading and Understanding All Code Snippets</h2>
         <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
@@ -583,6 +613,17 @@ function submitAll() {
 }
 
 window.onload = function() {
+    // 1. Restore status bar visibility preference
+    const isHidden = localStorage.getItem('statusBarHidden') === 'true';
+    const bar = document.getElementById('statusBar');
+    const btn = document.getElementById('toggleBarBtn');
+
+    if (isHidden && bar && btn) {
+        bar.classList.add('hidden');
+        btn.innerText = '↓ Show';
+    } else if (btn) {
+        btn.innerText = '↑ Hide';
+    }
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "light") {
         document.body.classList.add("light-mode");
@@ -753,6 +794,31 @@ function showValidationMessage(msg) {
     }
 
 </script>
+
+<script>
+    function toggleStatusBar() {
+      const bar = document.getElementById('statusBar');
+      const btn = document.getElementById('toggleBarBtn');
+  
+      const isHidden = bar.classList.toggle('hidden');
+      btn.innerText = isHidden ? '↓ Show' : '↑ Hide';
+  
+      localStorage.setItem('statusBarHidden', isHidden ? 'true' : 'false');
+    }
+  
+    // Restore previous toggle state on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const isHidden = localStorage.getItem('statusBarHidden') === 'true';
+      const bar = document.getElementById('statusBar');
+      const btn = document.getElementById('toggleBarBtn');
+  
+      if (isHidden) {
+        bar.classList.add('hidden');
+        btn.innerText = '↓ Show';
+      }
+    });
+  </script>
+  
     
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
   <div>
