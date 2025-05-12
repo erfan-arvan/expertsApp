@@ -157,12 +157,29 @@
     <a href="review.html" class="phase-link disabled" id="link-review">Review & Submit</a>
 </div>
 
-  <h2>Phase 3: Rank Code Snippets</h2>
-  <button id="theme-toggle" onclick="toggleTheme()">Switch to Light Mode</button>
-
-  <div class="instructions">
-    <p><strong>Instructions:</strong> Drag and drop the snippets into 8 ranking positions (left = easiest to understand, right = hardest). You can place multiple snippets in one slot if you feel they are equally comprehensible. You may also view and compare snippets below.</p>
+<div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2 style="margin: 0;">Phase 2: Ranking Code Snippets by Comprehensibility</h2>
+    <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
   </div>
+
+  <div id="instructions-content" style="margin-top: 15px;">
+    <p>In this phase, you will review all 8 code snippets and rank them based on how easy or difficult they are to understand.</p>
+    <ol>
+      <li><strong>Rank the snippets:</strong> Drag and drop each snippet into one of the 8 ranking positions below.</li>
+      <li><strong>Interpret the scale:</strong> 
+        <ul>
+          <li><strong>Position 1</strong> (leftmost): Most comprehensible snippet.</li>
+          <li><strong>Position 8</strong> (rightmost): Least comprehensible snippet.</li>
+        </ul>
+      </li>
+      <li><strong>Equal ranking:</strong> You may place multiple snippets in the same slot if they are equally comprehensible.</li>
+      <li><strong>Preview feature:</strong> Use the checkbox on each card to view the full code below.</li>
+    </ol>
+    <p><strong>Tip:</strong> You can revise your rankings at any time before proceeding to the next phase.</p>
+  </div>
+</div>
+
 
   <div class="ranking-row" id="rankingRow">
     <!-- 8 drop zones -->
