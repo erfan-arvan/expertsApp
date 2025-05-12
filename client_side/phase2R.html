@@ -149,38 +149,39 @@
 
     /*dark/light mode*/
     /* Light mode preview styles */
-    body.light-mode .snippet-preview-box {
-      background-color: #fefefe;
-      border-color: #bbb;
-    }
+  /* === Default (light mode) === */
+  .card {
+    background-color: #ffffff;
+    border-color: #ccc;
+    color: #333;
+  }
 
-    body.light-mode .code-box {
-      background-color: #f9f9f9;
-      color: #222;
-    }
+  .snippet-preview-box {
+    background-color: #fefefe;
+    border: 1px solid #bbb;
+  }
 
-    /* Dark mode default */
-    .code-box {
-      background-color: #2d2d2d;
-      color: #ddd;
-    }
+  .code-box {
+    background-color: #f9f9f9;
+    color: #222;
+  }
 
-    .snippet-preview-box {
-      background-color: #1e1e1e;
-      border: 1px solid #444;
-    }
+/* === Dark mode overrides === */
+  body.dark-mode .card {
+    background-color: #2a2a2a;
+    border-color: #555;
+    color: #ddd;
+  }
 
-    body.light-mode .card {
-      background-color: #ffffff;
-      border-color: #ccc;
-      color: #333;
-    }
+  body.dark-mode .snippet-preview-box {
+    background-color: #1e1e1e;
+    border: 1px solid #444;
+  }
 
-    .card {
-      background-color: #2a2a2a;
-      color: #ddd;
-      border-color: #555;
-    }
+  body.dark-mode .code-box {
+    background-color: #2d2d2d;
+    color: #ddd;
+  }
 
 
     /*code box*/
@@ -193,7 +194,7 @@
   .comment     { color: #6a9955; font-style: italic; }
   .number      { color: #098658; }
 
-          /* Dark mode overrides */
+    /* Dark mode overrides */
   .dark-mode .keyword  { color: #82aaff; }
   .dark-mode .type     { color: #89ddff; }
   .dark-mode .function { color: #c792ea; }
@@ -442,23 +443,34 @@
       });
     }
 
-    function toggleTheme() {
-      const body = document.body;
-      const btn = document.getElementById('theme-toggle');
-      const isLight = body.classList.toggle('light-mode');
-      btn.textContent = isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode';
-      localStorage.setItem('codeTheme', isLight ? 'light' : 'dark');
-    }
+  function toggleTheme() {
+    const body = document.body;
+    const isDark = body.classList.contains('dark-mode');
 
-    function applyTheme() {
-      const theme = localStorage.getItem('codeTheme') || 'dark';
-      if (theme === 'light') document.body.classList.add('light-mode');
-
-      const toggleBtn = document.getElementById('theme-toggle');
-      if (toggleBtn) {
-        toggleBtn.textContent = theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode';
-      }
+    if (isDark) {
+      body.classList.remove('dark-mode');
+      localStorage.setItem('codeTheme', 'light');
+      document.getElementById('theme-toggle').textContent = 'Switch to Dark Mode';
+    } else {
+      body.classList.add('dark-mode');
+      localStorage.setItem('codeTheme', 'dark');
+      document.getElementById('theme-toggle').textContent = 'Switch to Light Mode';
     }
+}
+
+function applyTheme() {
+  const theme = localStorage.getItem('codeTheme') || 'light';
+  const btn = document.getElementById('theme-toggle');
+
+  if (theme === 'dark') {
+    document.body.classList.add('dark-mode');
+    if (btn) btn.textContent = 'Switch to Light Mode';
+  } else {
+    document.body.classList.remove('dark-mode');
+    if (btn) btn.textContent = 'Switch to Dark Mode';
+  }
+}
+
 
     function goToPhase4() {
     location.href = '/phase4.html';
