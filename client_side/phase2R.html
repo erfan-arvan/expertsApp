@@ -148,14 +148,40 @@
     }
 
     /*dark/light mode*/
-    body.light-mode {
-      background-color: #ffffff;
+    /* Light mode preview styles */
+    body.light-mode .snippet-preview-box {
+      background-color: #fefefe;
+      border-color: #bbb;
+    }
+
+    body.light-mode .code-box {
+      background-color: #f9f9f9;
       color: #222;
     }
-    body.light-mode .card {
-      background-color: #fefefe;
-      border-color: #aaa;
+
+    /* Dark mode default */
+    .code-box {
+      background-color: #2d2d2d;
+      color: #ddd;
     }
+
+    .snippet-preview-box {
+      background-color: #1e1e1e;
+      border: 1px solid #444;
+    }
+
+    body.light-mode .card {
+      background-color: #ffffff;
+      border-color: #ccc;
+      color: #333;
+    }
+
+    .card {
+      background-color: #2a2a2a;
+      color: #ddd;
+      border-color: #555;
+    }
+
 
 
 </style>
