@@ -2,194 +2,209 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Phase 2: Individual Snippet Reasoning</title>
+  <title>Phase 3: Rank Code Snippets</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 40px;
-      background-color: #f9f9f9;
-    }
-    .code-light {
-      background-color: #f9f9f9;
+      background-color: #f4f4f4;
       color: #333;
     }
-    .code-dark {
-      background-color: #2d2d2d;
-      color: #ccc;
-    }
-    .snippet-box {
-      padding: 15px;
+    .instructions {
+      background-color: #fff;
+      padding: 20px;
       border-radius: 8px;
-      white-space: pre-wrap;
-      font-family: 'Courier New', monospace;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .ranking-row {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
       margin-bottom: 20px;
     }
-    .navigation-buttons button, #continue-button, #theme-toggle {
-      padding: 10px 20px;
-      margin: 10px 10px 10px 0;
+    .ranking-slot {
+      flex: 1 1 100px;
+      background: #e8f5e9;
+      border: 2px dashed #4CAF50;
+      border-radius: 6px;
+      padding: 10px;
+      min-height: 80px;
+      text-align: center;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px;
+      margin: 5px;
+      cursor: grab;
+    }
+    .card.dragging {
+      opacity: 0.5;
+    }
+    .preview-area {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .snippet-preview-box {
+      flex: 1 1 45%;
+      min-width: 300px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+    }
+    .snippet-header {
+      background-color: #f5f5f5;
+      padding: 10px 15px;
+      font-weight: bold;
       font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+      border-bottom: 1px solid #ccc;
     }
-    .navigation-buttons button {
-      background-color: #4CAF50;
-      color: white;
-    }
-    #continue-button {
-      background-color: #2196F3;
-      color: white;
-      display: none;
+    .code-box {
+      font-family: 'Courier New', Courier, monospace;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      padding: 15px;
+      font-size: 14px;
+      color: #333;
+      background-color: #f9f9f9;
     }
     #theme-toggle {
       background-color: #333;
       color: white;
-    }
-    #theme-toggle:hover {
-      background-color: #555;
-    }
-    textarea {
-      width: 100%;
-      height: 150px;
-      padding: 10px;
-      font-size: 14px;
+      border: none;
+      padding: 6px 12px;
       border-radius: 5px;
-      border: 1px solid #bbb;
-    }
-    label {
-      font-weight: bold;
-    }
-    .instructions {
+      cursor: pointer;
       margin-bottom: 20px;
-      padding: 20px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    #continue-button:hover, button[onclick*='phase1'] {
-    background-color: #45a049;
-  }
-
-  @keyframes glowPulse {
-    0% {
-      box-shadow: 0 0 10px #4CAF50;
-    }
-    100% {
-      box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
-    }
-  }
-
-  button[disabled] {
-    background-color: #888;
-    cursor: not-allowed;
-  }
-    .keyword  { color: #569CD6; font-weight: bold; }
-    .type     { color: #4EC9B0; }
-    .function { color: #DCDCAA; }
-    .literal  { color: #B5CEA8; }
-    .string   { color: #CE9178; }
-    .comment  { color: #6A9955; font-style: italic; }
-    .number   { color: #B5CEA8; }
-    .light-mode #snippetBox {
-      background-color: #f0f0f0;
-      color: #333;
+      #continueBtn:hover {
+      background-color: #45a049;
     }
 
-    .light-mode body {
-      background-color: #ffffff;
-      color: #222;
+    @keyframes glowPulse {
+      0% {
+        box-shadow: 0 0 10px #4CAF50;
+      }
+      100% {
+        box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+      }
+    }
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 10px #4CAF50; }
+      100% { box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50; }
     }
 
-    .light-mode textarea {
-      background-color: #ffffff;
-      color: #000;
+    /*for status bar*/
+    .status-bar {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
     }
+
+    .phase-link {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    .phase-link:hover:not(.disabled) {
+      background-color: #4CAF50;
+    }
+
+    .phase-link.active {
+      background-color: #4CAF50;
+    }
+
+    .phase-link.disabled {
+      pointer-events: none;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /*For snippet cards*/
+    #cards {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 10px 0;
+      flex-wrap: nowrap;
+    }
+
 </style>
 </head>
 <body>
-  <h2>Phase 2: Individual Snippet Reasoning</h2>
+  <div class="status-bar">
+    <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
+    <a href="phase2.html" class="phase-link disabled" id="link-phase2">Phase 2</a>
+    <a href="phase3.html" class="phase-link disabled" id="link-phase3">Phase 3</a>
+    <a href="review.html" class="phase-link disabled" id="link-review">Review & Submit</a>
+</div>
 
-  <label for="participantName">Your Full Name:</label>
-  <input type="text" id="participantName" style="width: 300px; padding: 8px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;" />
-
-  <div class="instructions">
-    <p><strong>Instructions:</strong> In this phase, you will view one code snippet at a time. For each snippet, please assess its comprehensibility by describing what makes it easy or hard to understand. Consider aspects like naming, logic clarity, code structure, and use of language constructs. Your responses are saved automatically as you go.</p>
+<div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2 style="margin: 0;">Phase 2: Ranking Code Snippets by Comprehensibility</h2>
+    <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
   </div>
 
-  <div id="snippet-container">
-    <div style="background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid #ccc;">
-        <h3 id="snippetTitle" style="margin: 0;">Snippet Title</h3>
-        <button onclick="toggleTheme()" id="theme-toggle" style="padding: 6px 12px; border-radius: 5px; border: none; background-color: #333; color: white; cursor: pointer;">
-          Switch to Light Mode
-        </button>
-      </div>
-      <pre id="snippetBox" class="snippet-box code-dark" style="margin: 0; background-color: #2d2d2d; color: #ccc; padding: 20px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; overflow-x: auto; font-family: 'Courier New', Courier, monospace; font-size: 15px; line-height: 1.5;"><code>Loading snippet...</code></pre>
-    </div>
+  <div id="instructions-content" style="margin-top: 15px;">
+    <p>In this phase, you will review all 8 code snippets and rank them based on how easy or difficult they are to understand.</p>
+    <ol>
+      <li><strong>Rank the snippets:</strong> Drag and drop each snippet into one of the 8 ranking positions below.</li>
+      <li><strong>Interpret the scale:</strong> 
+        <ul>
+          <li><strong>Position 1</strong> (leftmost): Most comprehensible snippet.</li>
+          <li><strong>Position 8</strong> (rightmost): Least comprehensible snippet.</li>
+        </ul>
+      </li>
+      <li><strong>Equal ranking:</strong> You may place multiple snippets in the same slot if they are equally comprehensible.</li>
+      <li><strong>Preview feature:</strong> Use the checkbox on each card to view the full code below.</li>
+    </ol>
+    <p><strong>Tip:</strong> You can revise your rankings at any time before proceeding to the next phase.</p>
+  </div>
+</div>
+
+
+  <div class="ranking-row" id="rankingRow">
+    <!-- 8 drop zones -->
+    <div class="ranking-slot" data-rank="1"></div>
+    <div class="ranking-slot" data-rank="2"></div>
+    <div class="ranking-slot" data-rank="3"></div>
+    <div class="ranking-slot" data-rank="4"></div>
+    <div class="ranking-slot" data-rank="5"></div>
+    <div class="ranking-slot" data-rank="6"></div>
+    <div class="ranking-slot" data-rank="7"></div>
+    <div class="ranking-slot" data-rank="8"></div>
   </div>
 
-  <label for="reasoningBox">Tell us about how do you assess this snippet's comprehensibility? What features might make it easy to understand? What features make it hard to understand?</label>
-  <textarea id="reasoningBox" placeholder="Write your explanation here..."></textarea>
+  <div id="cards" style="margin-bottom: 20px;"></div>
 
-  <div class="navigation-buttons">
-    <button onclick="prevSnippet()">⬅️ Previous</button>
-    <button onclick="nextSnippet()" id="nextButton">Next ➡️</button>
+  <div class="preview-area" id="previewArea"></div>
+
+  <div style="margin-top: 30px;">
+    <button onclick="location.href='/phase2.html'" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: #ccc; color: black; cursor: pointer; margin-right: 10px;">⬅️ Back to Phase 2</button>
+    <button onclick="goToPhase4()" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: #4CAF50; color: white; cursor: pointer;">Continue to Phase 4 ➡️</button>
   </div>
 
-  <button onclick="location.href='/phase1.html'" style="
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 16px;
-    border-radius: 6px;
-    cursor: pointer;
-  ">⬅️ Back to Phase 1</button>
-
-<button id="continue-button" onclick="goToPhase3()" style="
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    box-shadow: 0 0 10px #4CAF50;
-    animation: glowPulse 1.5s infinite alternate;
-  ">Continue to Phase 3</button>
-
-  <div id="validation-modal" style="
-    display: none;
-    position: fixed;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff0f0;
-    color: #660000;
-    border: 1px solid #ff9999;
-    padding: 20px;
-    border-radius: 10px;
-    width: 440px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-    z-index: 1002;
-    text-align: center;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-  ">
-    <p id="validation-message" style="font-weight: bold;"></p>
-    <button onclick="document.getElementById('validation-modal').style.display = 'none';" style="
-      margin-top: 15px;
-      padding: 8px 14px;
-      background-color: #ff9999;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    ">OK</button>
-  </div>
-
-  <script>
-    const snippets = [
-      {
+<script>
+  const snippets = [
+  {
         id: 1,
         title: "Snippet 1",
         code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method1</span>(<span class="type">String</span> name) {
@@ -212,292 +227,191 @@
 }
 `
       },
-      {
-        id: 2,
-        title: "Snippet 2",
-        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method2</span>(<span class="type">URI</span> uri) {
-  <span class="keyword">if</span> (<span class="function">isFilesystemPath</span>(uri)) {
-    <span class="keyword">return</span> <span class="literal">false</span>;
-  }
-  <span class="type">String</span> scheme = uri.<span class="function">getScheme</span>();
-  <span class="keyword">if</span> (scheme == <span class="literal">null</span>) {
-    <span class="keyword">return</span> <span class="literal">false</span>;
-  }
-  <span class="keyword">switch</span> (scheme) {
-    <span class="keyword">case</span> <span class="string">"file"</span>:
-    <span class="keyword">case</span> <span class="string">"jar"</span>:
-      <span class="keyword">return</span> <span class="literal">false</span>;
-    <span class="keyword">default</span>:
-      <span class="keyword">break</span>;
-  }
-  <span class="keyword">return</span> <span class="literal">true</span>;
-}
-`
-      },
-      {
-        id: 3,
-        title: "Snippet 3",
-        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method3</span>(<span class="type">short</span> type) {
-  <span class="keyword">if</span> (type == IMAGE_FILE_MACHINE_UNKNOWN) {
-    <span class="comment">// Unsupported machine type</span>
-    <span class="keyword">return</span> <span class="literal">false</span>;
-  }
-  <span class="keyword">for</span> (<span class="type">Field</span> field : CoffMachineType.<span class="function">class</span>.<span class="function">getDeclaredFields</span>()) {
-    <span class="keyword">if</span> (!field.<span class="function">isSynthetic</span>()) {
-      <span class="type">int</span> modifiers = field.<span class="function">getModifiers</span>();
-      <span class="keyword">if</span> (<span class="function">Modifier.isFinal</span>(modifiers) && <span class="function">Modifier.isStatic</span>(modifiers)) {
-        <span class="keyword">try</span> {
-          <span class="keyword">if</span> (field.<span class="function">getShort</span>(<span class="literal">null</span>) == type) {
-            <span class="keyword">return</span> <span class="literal">true</span>;
-          }
-        } <span class="keyword">catch</span> (<span class="type">IllegalAccessException</span> e) {
-          <span class="keyword">continue</span>;
-        }
+    {
+      id: 2,
+      title: "Snippet 2",
+      code: `<span class="keyword">public</span> <span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+        <span class="keyword">return</span> a + b;
+      }`
+    },
+    {
+      id: 3,
+      title: "Snippet 3",
+      code: `<span class="keyword">private static</span> <span class="type">String</span> <span class="function">greet</span>() {
+        <span class="keyword">return</span> <span class="literal">"Hello, world!"</span>;
+      }`
+    },
+    {
+      id: 4,
+      title: "Snippet 4",
+      code: `<span class="keyword">protected</span> <span class="type">void</span> <span class="function">log</span>(<span class="type">String</span> msg) {
+        System.<span class="function">out.println</span>(msg);
+      }`
+    },
+    {
+      id: 5,
+      title: "Snippet 5",
+      code: `<span class="keyword">public</span> <span class="type">boolean</span> <span class="function">isEmpty</span>(<span class="type">List</span>&lt;<span class="type">String</span>&gt; list) {
+        <span class="keyword">return</span> list.<span class="function">isEmpty</span>();
+      }`
+    },
+    {
+      id: 6,
+      title: "Snippet 6",
+      code: `<span class="keyword">static</span> <span class="type">double</span> <span class="function">multiply</span>(<span class="type">double</span> x, <span class="type">double</span> y) {
+        <span class="keyword">return</span> x * y;
+      }`
+    },
+    {
+      id: 7,
+      title: "Snippet 7",
+      code: `<span class="keyword">public</span> <span class="type">String</span> <span class="function">getName</span>() {
+        <span class="keyword">return</span> <span class="literal">"John Doe"</span>;
+      }`
+    },
+    {
+      id: 8,
+      title: "Snippet 8",
+      code: `<span class="keyword">private</span> <span class="type">int</span> <span class="function">square</span>(<span class="type">int</span> n) {
+        <span class="keyword">return</span> n * n;
+      }`
+    }
+  ];
+
+    window.onload = () => {
+      loadCards();
+      loadState();
+      applyTheme();
+
+      // Unlock and highlight status bar
+      if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
+      if (isComplete('phase2Complete')) document.getElementById('link-phase3').classList.remove('disabled');
+      if (isComplete('phase3Complete')) document.getElementById('link-review').classList.remove('disabled');
+
+      const current = window.location.pathname.split('/').pop();
+      if (current.includes('phase1')) document.getElementById('link-phase1').classList.add('active');
+      else if (current.includes('phase2')) document.getElementById('link-phase2').classList.add('active');
+      else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
+      else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
+
+      if (sessionStorage.getItem('phase2Complete') === 'true' || getCookie('phase2Complete') === 'true') {
+          document.getElementById('continueBtn').style.display = 'inline-block';
       }
-    }
-  }
-  <span class="keyword">return</span> <span class="literal">false</span>;
-}
-`
-      },
-      {
-        id: 4,
-        title: "Snippet 4",
-        code: `<span class="keyword">public static</span> <span class="type">int</span> <span class="function">method4</span>(<span class="type">CharSequence</span> str, <span class="type">CharSequence</span> searchStr, <span class="type">int</span> startPos) {
-  <span class="keyword">if</span> (str == <span class="literal">null</span> || searchStr == <span class="literal">null</span>) {
-    <span class="keyword">return</span> INDEX_NOT_FOUND;
-  }
-  <span class="keyword">if</span> (startPos < <span class="number">0</span>) {
-    startPos = <span class="number">0</span>;
-  }
-  <span class="type">int</span> searchStrLen = searchStr.<span class="function">length</span>();
-  <span class="type">int</span> endLimit = str.<span class="function">length</span>() - searchStrLen + <span class="number">1</span>;
-  <span class="keyword">if</span> (startPos > endLimit) {
-    <span class="keyword">return</span> INDEX_NOT_FOUND;
-  }
-  <span class="keyword">if</span> (searchStrLen == <span class="number">0</span>) {
-    <span class="keyword">return</span> startPos;
-  }
-  <span class="keyword">for</span> (<span class="type">int</span> i = startPos; i < endLimit; i++) {
-    <span class="keyword">if</span> (<span class="function">regionMatches</span>(str, <span class="literal">true</span>, i, searchStr, <span class="number">0</span>, searchStrLen)) {
-      <span class="keyword">return</span> i;
-    }
-  }
-  <span class="keyword">return</span> INDEX_NOT_FOUND;
-}
-`
-      },
-      {
-        id: 5,
-        title: "Snippet 5",
-        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method5</span>(@Nullable <span class="type">Path</span> root) <span class="keyword">throws</span> <span class="type">IOException</span> {
-  <span class="keyword">if</span> (root == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>;
-  <span class="keyword">if</span> (!Files.<span class="function">exists</span>(root)) <span class="keyword">return</span> <span class="literal">false</span>;
-
-  Files.<span class="function">walkFileTree</span>(root, <span class="keyword">new</span> <span class="type">SimpleFileVisitor</span>&lt;&gt;() {
-    @Override
-    <span class="keyword">public</span> <span class="type">FileVisitResult</span> <span class="function">visitFile</span>(<span class="type">Path</span> file, <span class="type">BasicFileAttributes</span> attrs) <span class="keyword">throws</span> <span class="type">IOException</span> {
-      Files.<span class="function">delete</span>(file);
-      <span class="keyword">return</span> FileVisitResult.CONTINUE;
-    }
-    @Override
-    <span class="keyword">public</span> <span class="type">FileVisitResult</span> <span class="function">postVisitDirectory</span>(<span class="type">Path</span> dir, <span class="type">IOException</span> exc) <span class="keyword">throws</span> <span class="type">IOException</span> {
-      Files.<span class="function">delete</span>(dir);
-      <span class="keyword">return</span> FileVisitResult.CONTINUE;
-    }
-  });
-
-  <span class="keyword">return</span> <span class="literal">true</span>;
-}
-    `
-      },
-      {
-        id: 6,
-        title: "Snippet 6",
-        code: `<span class="keyword">public static</span> <span class="type">int</span> <span class="function">method6</span>(<span class="type">CharSequence</span> sequence) {
-  <span class="comment">// Optimized implementation</span>
-  <span class="type">int</span> utf16Length = sequence.<span class="function">length</span>();
-  <span class="type">int</span> utf8Length = utf16Length;
-  <span class="type">int</span> i = <span class="number">0</span>;
-
-  <span class="keyword">while</span> (i < utf16Length && sequence.<span class="function">charAt</span>(i) < <span class="literal">0x80</span>) {
-    i++;
-  }
-
-  <span class="keyword">for</span> (; i < utf16Length; i++) {
-    <span class="type">char</span> c = sequence.<span class="function">charAt</span>(i);
-    <span class="keyword">if</span> (c < <span class="literal">0x800</span>) {
-      utf8Length += ((<span class="literal">0x7f</span> - c) >>> <span class="number">31</span>);
-    } <span class="keyword">else</span> {
-      utf8Length += <span class="function">encodedLengthGeneral</span>(sequence, i);
-      <span class="keyword">break</span>;
-    }
-  }
-
-  <span class="keyword">if</span> (utf8Length < utf16Length) {
-    <span class="keyword">throw new</span> <span class="type">IllegalArgumentException</span>(
-      <span class="string">"UTF-8 length does not fit in int: "</span> + (utf8Length + (<span class="literal">1L</span> << <span class="number">32</span>)));
-  }
-
-  <span class="keyword">return</span> utf8Length;
-}
-`
-      },
-      {
-        id: 7,
-        title: "Snippet 7",
-        code: `<span class="keyword">public static</span> <span class="type">float</span> <span class="function">method7</span>(<span class="type">float</span> a, <span class="type">float</span> b, <span class="type">float</span> c) {
-  <span class="type">float</span> det = b * b - <span class="number">4</span> * a * c;
-  <span class="keyword">if</span> (det < <span class="number">0</span>) <span class="keyword">return</span> <span class="type">Float</span>.NaN;
-
-  <span class="type">float</span> sqrtD = (<span class="type">float</span>)<span class="type">Math</span>.<span class="function">sqrt</span>(det);
-  <span class="type">float</span> invA = <span class="number">1</span> / (<span class="number">2</span> * a);
-  <span class="type">float</span> r1 = (-b - sqrtD) * invA;
-  <span class="type">float</span> r2 = (-b + sqrtD) * invA;
-
-  <span class="keyword">if</span> (r1 > r2) {
-    <span class="type">float</span> tmp = r2;
-    r2 = r1;
-    r1 = tmp;
-  }
-
-  <span class="keyword">if</span> (r1 > <span class="number">0</span>) <span class="keyword">return</span> r1;
-  <span class="keyword">if</span> (r2 > <span class="number">0</span>) <span class="keyword">return</span> r2;
-  <span class="keyword">return</span> <span class="type">Float</span>.NaN;
-}
-`
-      },
-      {
-        id: 8,
-        title: "Snippet 8",
-        code: `<span class="keyword">public static</span> <span class="type">float</span> <span class="function">method8</span>(<span class="type">float</span> y, <span class="type">float</span> x) {
-  <span class="type">float</span> n = y / x;
-
-  <span class="keyword">if</span> (n != n)
-    n = (y == x ? <span class="number">1f</span> : <span class="number">-1f</span>);
-  <span class="keyword">else if</span> (n - n != n - n)
-    x = <span class="number">0f</span>;
-
-  <span class="keyword">if</span> (x > <span class="number">0</span>)
-    <span class="keyword">return</span> <span class="function">atanUnchecked</span>(n);
-  <span class="keyword">else if</span> (x < <span class="number">0</span>) {
-    <span class="keyword">if</span> (y >= <span class="number">0</span>) <span class="keyword">return</span> <span class="function">atanUnchecked</span>(n) + PI;
-    <span class="keyword">return</span> <span class="function">atanUnchecked</span>(n) - PI;
-  } <span class="keyword">else if</span> (y > <span class="number">0</span>)
-    <span class="keyword">return</span> x + HALF_PI;
-  <span class="keyword">else if</span> (y < <span class="number">0</span>)
-    <span class="keyword">return</span> x - HALF_PI;
-
-  <span class="keyword">return</span> x + y;
-}
-`
-      }
-    ];
-
-    let currentIndex = 0;
-    const reasoningPerSnippet = {};
-
-    window.onload = function() {
-      const nameFromCombined = sessionStorage.getItem('participantName') || decodeURIComponent(getCookie('participantName') || '');
-      const saved = JSON.parse(sessionStorage.getItem('phase2_state') || '{}');
-      if (saved.name) {
-        document.getElementById('participantName').value = saved.name;
-      } else if (nameFromCombined) {
-        document.getElementById('participantName').value = nameFromCombined;
-      }
-      if (saved.reasoningMap) Object.assign(reasoningPerSnippet, saved.reasoningMap);
-      loadSnippet(currentIndex);
-      applySavedTheme();
     };
 
-    function loadSnippet(index) {
-      const snippet = snippets[index];
-      document.getElementById('snippetTitle').innerText = snippet.title;
-      document.getElementById('snippetBox').innerHTML = snippet.code;
-      document.getElementById('reasoningBox').value = reasoningPerSnippet[snippet.id] || '';
+    function loadCards() {
+      const container = document.getElementById('cards');
+      snippets.forEach(snippet => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.draggable = true;
+        card.id = `snippet-${snippet.id}`;
+        card.innerHTML = `
+          <strong>${snippet.title}</strong>
+          <label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
+        `;
+        card.addEventListener('dragstart', () => card.classList.add('dragging'));
+        card.addEventListener('dragend', () => card.classList.remove('dragging'));
+        container.appendChild(card);
+      });
 
-      const prevBtn = document.querySelector('button[onclick="prevSnippet()"]');
-      const nextBtn = document.querySelector('button[onclick="nextSnippet()"]');
-      if (prevBtn) prevBtn.disabled = index === 0;
-      if (nextBtn) nextBtn.disabled = index === snippets.length - 1;
+      document.querySelectorAll('.ranking-slot').forEach(slot => {
+        slot.addEventListener('dragover', e => {
+          e.preventDefault();
+          const dragging = document.querySelector('.dragging');
+          if (dragging) slot.appendChild(dragging);
+          saveState();
+        });
+      });
+    }
 
-      // Enable/disable navigation buttons based on position
-      if (prevBtn) prevBtn.disabled = index === 0;
-      if (nextBtn) nextBtn.disabled = index === snippets.length - 1;
-      document.querySelector('button[onclick="nextSnippet()"]')?.setAttribute('disabled', index === snippets.length - 1);
+    function togglePreview(id, checkbox) {
+      const previewArea = document.getElementById('previewArea');
+      const snippet = snippets.find(s => s.id === id);
+      const existing = document.getElementById(`preview-${id}`);
 
-      checkNextButton();
+      if (checkbox.checked && !existing) {
+        const wrapper = document.createElement('div');
+        wrapper.id = `preview-${id}`;
+        wrapper.className = 'snippet-preview-box';
+
+        const header = document.createElement('div');
+        header.className = 'snippet-header';
+        header.textContent = snippet.title;
+
+        const codeBox = document.createElement('div');
+        codeBox.className = 'code-box';
+        codeBox.innerHTML = snippet.code;
+
+        wrapper.appendChild(header);
+        wrapper.appendChild(codeBox);
+        previewArea.appendChild(wrapper);
+      } else if (!checkbox.checked && existing) {
+        previewArea.removeChild(existing);
+      }
     }
 
     function saveState() {
-      const name = document.getElementById('participantName').value.trim();
-      const reasoning = document.getElementById('reasoningBox').value.trim();
-      reasoningPerSnippet[snippets[currentIndex].id] = reasoning;
-      const data = { name, reasoningMap: reasoningPerSnippet };
-      sessionStorage.setItem('phase2_state', JSON.stringify(data));
-      document.cookie = `phase2_state=${encodeURIComponent(JSON.stringify(data))}; path=/; max-age=${60*60*24*30}`;
-      checkNextButton();
+      const positions = {};
+      document.querySelectorAll('.ranking-slot').forEach((slot, index) => {
+        positions[index + 1] = Array.from(slot.children).map(el => el.id);
+      });
+      const json = JSON.stringify(positions);
+      sessionStorage.setItem('phase3_ranking', json);
+      document.cookie = `phase3_ranking=${encodeURIComponent(json)}; path=/; max-age=${60 * 60 * 24 * 30}`;
     }
 
-    function prevSnippet() {
-      saveState();
-      if (currentIndex > 0) {
-        currentIndex--;
-        loadSnippet(currentIndex);
+    function loadState() {
+      let saved = sessionStorage.getItem('phase3_ranking');
+      if (!saved) {
+        const cookieMatch = document.cookie.match(/(?:^|; )phase3_ranking=([^;]*)/);
+        if (cookieMatch) {
+          saved = decodeURIComponent(cookieMatch[1]);
+          sessionStorage.setItem('phase3_ranking', saved);
+        }
       }
-    }
-
-    function nextSnippet() {
-      if (document.getElementById('reasoningBox').value.trim() === '') {
-        showValidation("Please provide your reasoning before moving to the next snippet.");
-        return;
-      }
-      saveState();
-      if (currentIndex < snippets.length - 1) {
-        currentIndex++;
-        loadSnippet(currentIndex);
-      }
-    }
-
-    function showValidation(message) {
-      document.getElementById('validation-message').innerText = message;
-      document.getElementById('validation-modal').style.display = 'block';
-    }
-
-    function goToPhase3() {
-      saveState();
-      location.href = '/phase3.html';
+      if (!saved) return;
+      const parsed = JSON.parse(saved);
+      Object.entries(parsed).forEach(([rank, ids]) => {
+        const slot = document.querySelector(`.ranking-slot[data-rank='${rank}']`);
+        ids.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) slot.appendChild(el);
+        });
+      });
     }
 
     function toggleTheme() {
-      const box = document.getElementById('snippetBox');
-      const toggleBtn = document.getElementById('theme-toggle');
-      const isDark = box.classList.contains('code-dark');
-      box.classList.remove(isDark ? 'code-dark' : 'code-light');
-      box.classList.add(isDark ? 'code-light' : 'code-dark');
-      toggleBtn.textContent = isDark ? 'Switch to Dark Mode' : 'Switch to Light Mode';
-      localStorage.setItem('codeBoxTheme', isDark ? 'light' : 'dark');
+      const body = document.body;
+      const btn = document.getElementById('theme-toggle');
+      const isLight = body.classList.toggle('light-mode');
+      btn.textContent = isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+      localStorage.setItem('codeTheme', isLight ? 'light' : 'dark');
     }
 
-    function applySavedTheme() {
-      const theme = localStorage.getItem('codeBoxTheme') || 'dark';
-      document.getElementById('snippetBox').classList.add(`code-${theme}`);
-      document.getElementById('theme-toggle').textContent = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+    function applyTheme() {
+      const theme = localStorage.getItem('codeTheme') || 'dark';
+      if (theme === 'light') document.body.classList.add('light-mode');
+      document.getElementById('theme-toggle').textContent = theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode';
     }
+    function goToPhase4() {
+    location.href = '/phase4.html';
+  }
 
-    function getCookie(name) {
-      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-      return match ? decodeURIComponent(match[2]) : null;
+  /*For the instructions section*/
+  function toggleInstructions() {
+    const content = document.getElementById("instructions-content");
+    const button = event.target;
+
+    if (content.style.display === "none") {
+      content.style.display = "block";
+      button.textContent = "Hide";
+    } else {
+      content.style.display = "none";
+      button.textContent = "Show";
     }
+  }
 
-    function checkNextButton() {
-      document.getElementById('nextButton').disabled = document.getElementById('reasoningBox').value.trim() === '';
-      const allFilled = snippets.every(snippet => reasoningPerSnippet[snippet.id] && reasoningPerSnippet[snippet.id].trim() !== '');
-      document.getElementById('continue-button').style.display = allFilled ? 'inline-block' : 'none';
-    }
-
-    document.getElementById('reasoningBox').addEventListener('input', saveState);
-    document.getElementById('participantName').addEventListener('input', saveState);
-  </script>
+</script>
 </body>
 </html>
