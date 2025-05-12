@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phase 1: Reading and Understanding Code Snippets</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .instructions {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        /* Code block themes */
+        #code {
+            background-color: #2d2d2d;
+            color: #ccc;
+            padding: 20px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .light-mode #code {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .light-mode body {
+            background-color: #ffffff;
+            color: #222;
+        }
+
+        .light-mode textarea {
+            background-color: #ffffff;
+            color: #000;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 15px;
+            font-size: 14px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #bbb;
+            resize: vertical;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button[disabled] {
+            background-color: #888;
+            cursor: not-allowed;
+        }
+
+                /* Basic syntax highlighting classes */
+        .keyword     { color: #0000ff; font-weight: bold; }
+        .type        { color: #007070; }
+        .function    { color: #7928a1; font-weight: bold; }
+        .literal     { color: #009999; }
+        .string      { color: #a31515; }
+        .comment     { color: #6a9955; font-style: italic; }
+        .number      { color: #098658; }
+
+                /* Dark mode overrides */
+        .dark-mode .keyword  { color: #82aaff; }
+        .dark-mode .type     { color: #89ddff; }
+        .dark-mode .function { color: #c792ea; }
+        .dark-mode .literal  { color: #ffcb6b; }
+        .dark-mode .string   { color: #c3e88d; }
+        .dark-mode .comment  { color: #7f848e; }
+        .dark-mode .number   { color: #f78c6c; }
+
+              #continueBtn {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        box-shadow: 0 0 10px #4CAF50;
+        animation: glowPulse 1.5s infinite alternate;
+      }
+
+      @keyframes glowPulse {
+        0% {
+          box-shadow: 0 0 10px #4CAF50;
+        }
+        100% {
+          box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+        }
+      }
+
+      #continueBtn:hover {
+        background-color: #45a049;
+      }
+</style>
+
+    
+</head>
+<body>
+
+<div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="margin: 0;">Phase 1: Reading and Understanding All Code Snippets</h2>
+        <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
+    </div>
+
+    <div id="instructions-content" style="margin-top: 15px;">
+        <p><strong>Enter your name below</strong></p>
+        <label for="participantName"><strong>Your Full Name:</strong></label>
+        <input type="text" id="participantName" placeholder="Enter your name" style="width: 300px; padding: 8px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;" oninput="storeParticipantName()"/>
+
+        <p><strong>Read Each Snippet:</strong> Carefully read each code snippet (provided below) to understand its functionality and purpose. Aim to spend around 1–5 minutes reading each snippet.</p>
+        <p><strong>Summarize:</strong> Write a brief summary of what each snippet does in the designated summary section. For example: “This method takes two numbers as input and returns their average.”</p>
+        <p><strong>Prohibited:</strong> Please <span style="color:red;">do not</span> use generative AI tools (e.g., ChatGPT)</p>
+    </div>
+</div>
+    
+
+
+<div id="snippet-container">
+    <div style="background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid #ccc;">
+          <h3 id="snippet-title" style="margin: 0;">Snippet Title</h3>
+          <button onclick="toggleTheme()" id="theme-toggle" style="padding: 6px 12px; border-radius: 5px; border: none; background-color: #333; color: white; cursor: pointer;">
+            Switch to Light Mode
+          </button>
+        </div>
+        <pre id="code" style="margin: 0;"><code>Loading snippet...</code></pre>
+    </div>      
+
+    <label for="summary"><strong>What does this code snippet do? Summarize its main functionality and purpose (1–2 sentences):</strong></label>
+    <textarea id="summary""></textarea>
+    <label for="compSummary"><strong>Tell us about how you assess this snippet's comprehensibility. What features might make it easy to understand? What features make it hard to understand?</strong></label>
+    <textarea id="compSummary"></textarea>
+
+    <div class="buttons">
+        <button id="prev" onclick="prevSnippet()">Previous</button>
+        <button id="save" onclick="saveSummary()">💾 Save Progress Locally</button>
+        <button id="next" onclick="nextSnippet()">Next</button>
+        <button id="submit" onclick="reviewAndSubmit()">Review and Submit Phase 1</button>
+        <button id="continueBtn" onclick="goToPhase2()" style="display: none;">
+          Continue to Phase 2
+        </button>        
+    </div>
+</div>
+
+<script>
+const TOTAL_SNIPPETS = 8;
+let currentSnippet = 1;
+
+
+
+function loadSnippet(snippetNumber) {
+  const snippet = snippets[snippetNumber - 1];
+  document.getElementById('snippet-title').innerText = snippet.title;
+  document.getElementById('code').innerHTML = snippet.code;
+
+  const keySummary = `summary${snippetNumber}`;
+  const keycompSummary = `compSummary${snippetNumber}`;
+  let savedSummary = sessionStorage.getItem(keySummary);
+  let savedcompSummary = sessionStorage.getItem(keycompSummary);
+
+  if (!savedSummary) savedSummary = decodeURIComponent(getCookie(keySummary) || '');
+  if (!savedcompSummary) savedcompSummary = decodeURIComponent(getCookie(keycompSummary) || '');
+
+  document.getElementById('summary').value = savedSummary;
+  document.getElementById('compSummary').value = savedcompSummary;
+}
+
+
+
+function saveSummary() {
+    const name = document.getElementById('participantName').value.trim();
+    const summary = document.getElementById('summary').value.trim();
+    const compSummary = document.getElementById('compSummary').value.trim();
+    const keySummary = `summary${currentSnippet}`;
+    const keyCompSummary = `summary${currentSnippet}`;
+
+
+    let messages = [];
+
+    if (!name) {
+        messages.push("• Please enter your name.");
+    }
+
+    if (!summary) {
+      messages.push("• Please enter a summary before continuing.");
+    }
+
+    if (!compSummary) messages.push("• Please provide your opinion about comprehensibility before continuing.");
+
+
+    if (messages.length > 0) {
+        showValidationMessage("⚠️ Missing Information:\n\n" + messages.join("\n"));
+        return;
+    }
+
+    sessionStorage.setItem(keySummary, summary);
+    setCookie(keySummary, encodeURIComponent(summary), 30); // store in cookie too
+
+    sessionStorage.setItem(compSummary, compSummary);
+    setCookie(compSummary, encodeURIComponent(compSummary), 30); // store in cookie too
+
+    if (getCookie('hideSaveWarning') !== 'true') {
+        document.getElementById('save-warning').style.display = 'block';
+    }
+}
+
+function saveSummarySilent() {
+    const name = document.getElementById('participantName').value.trim();
+    const summary = document.getElementById('summary').value.trim();
+    const key = `summary${currentSnippet}`;
+
+    let messages = [];
+
+    if (!name) {
+        messages.push("• Please enter your name.");
+    }
+
+    if (!summary) {
+      messages.push("• Please enter a summary before continuing.");
+    }
+
+    if (messages.length > 0) {
+        showValidationMessage("⚠️ Missing Information:\n\n" + messages.join("\n"));
+        return;
+    }
+
+    sessionStorage.setItem(key, summary);
+    setCookie(key, encodeURIComponent(summary), 30); // store in cookie too
+}
+
+function saveSummarySilentForPrev() {
+    const name = document.getElementById('participantName').value.trim();
+    const summary = document.getElementById('summary').value.trim();
+    const key = `summary${currentSnippet}`;
+
+    let messages = [];
+
+    if (!name || !summary) {
+        return;
+    }
+
+    sessionStorage.setItem(key, summary);
+    setCookie(key, encodeURIComponent(summary), 30); // store in cookie too
+}
+
+function nextSnippet() {
+    const name = document.getElementById('participantName').value.trim();
+    const summary = document.getElementById('summary').value.trim();
+    let messages = [];
+
+    if (!name) {
+        messages.push("• Please enter your name.");
+    }
+    if (!summary) {
+        messages.push(`• Please enter a summary for Snippet ${currentSnippet}.`);
+    }
+
+    if (messages.length > 0) {
+        showValidationMessage("⚠️ Missing Information:\n\n" + messages.join("\n"));
+        return; // Don't proceed
+    }
+
+    saveSummarySilent();
+
+    if (currentSnippet < TOTAL_SNIPPETS) {
+        currentSnippet++;
+        loadSnippet(currentSnippet);
+        updateButtons();
+    }
+}
+
+
+function prevSnippet() {
+    if (currentSnippet > 1) {
+        saveSummarySilentForPrev();
+        currentSnippet--;
+        loadSnippet(currentSnippet);
+        updateButtons();
+    } else {
+        // Prevent any default behavior like navigating back
+        return false;
+    }
+}
+
+
+function updateButtons() {
+    document.getElementById('prev').disabled = currentSnippet === 1;
+    document.getElementById('next').disabled = currentSnippet === TOTAL_SNIPPETS;
+}
+
+function submitAll() {
+    saveSummary(); // save the current snippet
+    const allSummaries = {};
+    const name = document.getElementById('participantName').value.trim();
+    if (!name) {
+        alert("Please enter your name.");
+        return;
+    }
+
+    // Save name explicitly again
+    sessionStorage.setItem('participantName', name);
+    setCookie('participantName', encodeURIComponent(name), 30);
+    allSummaries['name'] = name;
+
+    // Pull all saved snippets from session or cookie
+    for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
+        const key = `summary${i}`;
+        const sessionVal = sessionStorage.getItem(key);
+        const cookieVal = getCookie(key);
+        allSummaries[key] = sessionVal || decodeURIComponent(cookieVal || '');
+    }
+
+    fetch("https://codecomprehensibility.site/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(allSummaries)
+  })
+  .then(response => {
+    if (response.ok) {
+      showSubmissionModal('✅ Summaries submitted successfully. Click “Continue to Phase 2” to proceed.\nYou may resubmit before the deadline if you change your mind about any part of your response.');
+      document.getElementById('continueBtn').style.display = 'inline-block';
+      sessionStorage.setItem('phase1_submitted', 'true');
+      setCookie('phase1_submitted', 'true', 30);
+    } else {
+      showSubmissionModal('❌ Submission failed. Please try again.');
+    }
+  })
+  .catch(error => {
+    console.error("Submission error:", error);
+    showSubmissionModal('⚠️ Error occurred during submission.');
+  });
+
+}
+
+
+
+</script>
+
+<script>
+  const snippets = [
+    {
+      id: 1,
+      title: "Snippet 1",
+      code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method1</span>(<span class="type">String</span> name) {
+        <span class="keyword">return</span> name != <span class="literal">null</span>;
+      }`
+    },
+    {
+      id: 2,
+      title: "Snippet 2",
+      code: `<span class="keyword">public</span> <span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+        <span class="keyword">return</span> a + b;
+      }`
+    },
+    {
+      id: 3,
+      title: "Snippet 3",
+      code: `<span class="keyword">private static</span> <span class="type">String</span> <span class="function">greet</span>() {
+        <span class="keyword">return</span> <span class="literal">"Hello, world!"</span>;
+      }`
+    },
+    {
+      id: 4,
+      title: "Snippet 4",
+      code: `<span class="keyword">protected</span> <span class="type">void</span> <span class="function">log</span>(<span class="type">String</span> msg) {
+        System.<span class="function">out.println</span>(msg);
+      }`
+    },
+    {
+      id: 5,
+      title: "Snippet 5",
+      code: `<span class="keyword">public</span> <span class="type">boolean</span> <span class="function">isEmpty</span>(<span class="type">List</span>&lt;<span class="type">String</span>&gt; list) {
+        <span class="keyword">return</span> list.<span class="function">isEmpty</span>();
+      }`
+    },
+    {
+      id: 6,
+      title: "Snippet 6",
+      code: `<span class="keyword">static</span> <span class="type">double</span> <span class="function">multiply</span>(<span class="type">double</span> x, <span class="type">double</span> y) {
+        <span class="keyword">return</span> x * y;
+      }`
+    },
+    {
+      id: 7,
+      title: "Snippet 7",
+      code: `<span class="keyword">public</span> <span class="type">String</span> <span class="function">getName</span>() {
+        <span class="keyword">return</span> <span class="literal">"John Doe"</span>;
+      }`
+    },
+    {
+      id: 8,
+      title: "Snippet 8",
+      code: `<span class="keyword">private</span> <span class="type">int</span> <span class="function">square</span>(<span class="type">int</span> n) {
+        <span class="keyword">return</span> n * n;
+      }`
+    }
+  ];
+</script>
+
+  
+  <div id="save-warning" style="
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff8db;
+    color: #4c4a00;
+    border: 1px solid #ffe58f;
+    padding: 20px;
+    border-radius: 10px;
+    width: 440px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    z-index: 1000;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+  ">
+    <p style="font-weight: bold;">Summary saved locally!</p>
+    <p>Make sure to click <strong>Submit All Summaries</strong> at the end to submit your work.</p>
+    
+    <label style="display: block; margin-top: 15px;">
+        <input type="checkbox" id="hide-warning-checkbox" onchange="setCookie('hideSaveWarning', 'true', 30)">
+        Don’t show this message again
+    </label>
+    
+    <button onclick="hideSaveWarning()" style="
+        margin-top: 15px;
+        padding: 8px 14px;
+        background-color: #ffd666;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    ">OK</button>
+</div>
+
+<div id="submission-modal" style="
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e6fff2;
+    color: #003d2f;
+    border: 1px solid #7fdcbf;
+    padding: 20px;
+    border-radius: 10px;
+    width: 440px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    z-index: 1001;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+">
+    <p id="submission-message" style="font-weight: bold;">Phase 1 submitted successfully, please </p>
+    <button onclick="hideSubmissionModal()" style="
+        margin-top: 15px;
+        padding: 8px 14px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    ">OK</button>
+</div>
+
+<div id="review-modal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); width:80%; max-height:80%; overflow-y:auto; background:#fff; border:1px solid #ccc; padding:20px 20px 10px 20px; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002; font-family:'Segoe UI', sans-serif;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+    <h3 style="margin:0;">Review Your Summaries</h3>
+    <span onclick="document.getElementById('review-modal').style.display='none'" style="cursor:pointer; font-size:20px; font-weight:bold;">&times;</span>
+  </div>
+
+  <div id="review-content" style="white-space:pre-wrap; margin-bottom:20px; font-size:14px; color:#333;"></div>
+
+  <button onclick="submitAndCloseModal()">Submit Now</button>
+  <button onclick="document.getElementById('review-modal').style.display='none'" style="margin-left:10px;">Cancel</button>
+</div>
+
+<div id="validation-modal" style="
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff0f0;
+  color: #660000;
+  border: 1px solid #ff9999;
+  padding: 20px;
+  border-radius: 10px;
+  width: 440px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  z-index: 1002;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+">
+  <p id="validation-message" style="font-weight: bold;"></p>
+  <button onclick="document.getElementById('validation-modal').style.display = 'none';" style="
+    margin-top: 15px;
+    padding: 8px 14px;
+    background-color: #ff9999;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  ">OK</button>
+</div>
+
+
+
+<script>
+  function showSubmissionModal(message) {
+    document.getElementById('submission-message').innerText = message;
+    document.getElementById('submission-modal').style.display = 'block';
+  }
+  
+  function hideSubmissionModal() {
+    document.getElementById('submission-modal').style.display = 'none';
+  }
+  </script>  
+
+<script>
+    function setCookie(name, value, days) {
+        const expires = new Date(Date.now() + days*24*60*60*1000).toUTCString();
+        document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+    }
+    
+    function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : null;
+  }
+
+    
+    function hideSaveWarning() {
+        document.getElementById('save-warning').style.display = 'none';
+    }
+</script>
+
+<script>
+    function toggleInstructions() {
+        const content = document.getElementById("instructions-content");
+        const button = event.target;
+    
+        if (content.style.display === "none") {
+            content.style.display = "block";
+            button.textContent = "Hide";
+        } else {
+            content.style.display = "none";
+            button.textContent = "Show";
+        }
+    }
+</script>
+    
+<script>
+    function toggleTheme() {
+    const body = document.body;
+    const isLight = body.classList.contains("light-mode");
+
+    if (isLight) {
+        body.classList.remove("light-mode");
+        body.classList.add("dark-mode");
+        localStorage.setItem("theme", "dark");
+        document.getElementById('theme-toggle').textContent = "Switch to Light Mode";
+    } else {
+        body.classList.add("light-mode");
+        body.classList.remove("dark-mode");
+        localStorage.setItem("theme", "light");
+        document.getElementById('theme-toggle').textContent = "Switch to Dark Mode";
+    }
+}
+
+window.onload = function() {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+        document.body.classList.add("light-mode");
+        document.getElementById('theme-toggle').textContent = "Switch to Dark Mode";
+    } else {
+        document.body.classList.add("dark-mode");
+    }
+
+    const savedName = sessionStorage.getItem('participantName') || decodeURIComponent(getCookie('participantName') || '');
+    if (savedName) {
+        document.getElementById('participantName').value = savedName;
+    }
+
+    loadSnippet(currentSnippet);
+    updateButtons();
+
+    if (getCookie('hideSaveWarning') === 'true') {
+        document.getElementById('hide-warning-checkbox').checked = true;
+    }
+      if (sessionStorage.getItem('phase1_submitted') === 'true' || getCookie('phase1_submitted') === 'true') {
+    document.getElementById('continueBtn').style.display = 'inline-block';
+  }
+};
+
+</script>
+
+<script>
+    function storeParticipantName() {
+    const name = document.getElementById('participantName').value.trim();
+    sessionStorage.setItem('participantName', name);
+    setCookie('participantName', encodeURIComponent(name), 30); // expires in 30 days
+}
+</script>
+
+<script>
+  function goToPhase2() {
+    const name = document.getElementById('participantName').value.trim();
+    if (!name) {
+      alert("Please enter your name before proceeding.");
+      return;
+    }
+
+    // Save name to session and cookie
+    sessionStorage.setItem('phase_participant_name', name);
+    setCookie('phase_participant_name', name, 30);
+
+    // Redirect
+    window.location.href = 'phase2.html';
+  }
+
+
+  function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+  }
+
+</script>
+
+<script>
+  function openReviewModal() {
+  saveSummary();
+  const name = document.getElementById('participantName').value.trim();
+  if (!name) {
+    alert("Please enter your name.");
+    return;
+  }
+
+  let content = `Name: ${name}\n\n`;
+  for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
+    const key = `summary${i}`;
+    const val = sessionStorage.getItem(key) || decodeURIComponent(getCookie(key) || '');
+    content += `Snippet ${i}:\n${val.trim() || "(empty)"}\n\n`;
+  }
+
+  document.getElementById('review-content').innerText = content;
+  document.getElementById('review-modal').style.display = 'block';
+}
+
+function submitAndCloseModal() {
+  document.getElementById('review-modal').style.display = 'none';
+  submitAll();
+}
+
+</script>
+
+<script>
+  function reviewAndSubmit() {
+  saveSummary();
+  const name = document.getElementById('participantName').value.trim();
+  if (!name) {
+    showValidationMessage("Please enter your name.");
+    return;
+  }
+
+  let missing = [];
+  let reviewText = `Name: ${name}\n\n`;
+
+  for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
+    const key = `summary${i}`;
+    const text = sessionStorage.getItem(key) || decodeURIComponent(getCookie(key) || '');
+
+    if (!text.trim()) {
+      missing.push(`Snippet ${i}`);
+    } else {
+      reviewText += `Snippet ${i} Summary:\n${text.trim()}\n\n`;
+    }
+  }
+
+  if (missing.length > 0) {
+    showValidationMessage(`Please complete summaries for: ${missing.join(', ')}`);
+    return;
+  }
+
+  document.getElementById('review-content').innerText = reviewText;
+  document.getElementById('review-modal').style.display = 'block';
+}
+
+function showValidationMessage(msg) {
+  document.getElementById('validation-message').innerText = msg;
+  document.getElementById('validation-modal').style.display = 'block';
+}
+</script>
+    
+<footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
+  <div>
+    Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
+  </div>
+  <div style="margin-top: 10px;">
+    <a href="/index.html" style="color: #4CAF50; text-decoration: none;">🏠 Back to Home</a>
+  </div>
+</footer>
+
+</body>
+</html>
