@@ -323,8 +323,19 @@
     }
   ];
 
+  function generateKey(step) {
+  if (step.type === "grouping") {
+    const ids = step.snippets.map(s => s.id).sort((a, b) => a - b).join(',');
+    return `grouping:${step.rank}:${ids}`;
+  } else if (step.type === "comparison") {
+    const curr = step.currentSnippets.map(s => s.id).sort((a, b) => a - b).join(',');
+    const next = step.nextSnippets.map(s => s.id).sort((a, b) => a - b).join(',');
+    return `comparison:${step.currentRank}-${step.nextRank}:${curr}|${next}`;
+  }
+}
+
     const phase3Ranking = JSON.parse(sessionStorage.getItem('phase3_ranking') || decodeURIComponent(document.cookie.match(/(?:^|; )phase3_ranking=([^;]*)/)?.[1] || '{}'));
-    let reasoning = JSON.parse(sessionStorage.getItem('phase4_reasoning') || '[]');
+    let reasoning = JSON.parse(sessionStorage.getItem('phase4_reasoning') || '{}');
     let stepIndex = 0;
     const steps = [];
 
@@ -347,6 +358,17 @@
       }
     });
 
+    const newReasoning = {};
+    steps.forEach(step => {
+      const key = generateKey(step);
+      if (reasoning[key]) {
+        newReasoning[key] = reasoning[key];
+      }
+    });
+    reasoning = newReasoning;
+    sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
+
+
     function showStep() {
       document.getElementById('answer-box').style.display = 'block';
       document.getElementById('next-question').style.display = 'inline-block';
@@ -354,7 +376,8 @@
       const qText = document.getElementById('question-text');
       const comp = document.getElementById('code-comparison');
       const textarea = document.getElementById('answer-box');
-      const saved = reasoning[stepIndex]?.answer || '';
+      const key = generateKey(step);
+      const saved = reasoning[key] || '';
       textarea.value = saved;
 
 
@@ -408,7 +431,8 @@
     function nextQuestion() {
       const response = document.getElementById('answer-box').value.trim();
       if (!response) return alert('Please provide an explanation.');
-      reasoning[stepIndex] = { step: steps[stepIndex], answer: response };
+      const key = generateKey(steps[stepIndex]);
+      reasoning[key] = response;
       sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
       stepIndex++;
       if (stepIndex < steps.length) {
@@ -426,7 +450,8 @@
 
     function prevQuestion() {
       const response = document.getElementById('answer-box').value.trim();
-      reasoning[stepIndex] = { step: steps[stepIndex], answer: response };
+      const key = generateKey(steps[stepIndex]);
+      reasoning[key] = response;
       sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
       if (stepIndex > 0) {
         stepIndex--;
