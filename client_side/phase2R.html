@@ -101,15 +101,17 @@
     }
 
     .status-bar {
+      position: sticky;
+      top: 0;
       background-color: #333;
       color: white;
       padding: 10px 20px;
       display: flex;
       justify-content: center;
       gap: 30px;
-      /* Remove position fixed */
-      position: static;
+      z-index: 1000; /* optional but good to keep it above content */
     }
+
 
 
     .phase-link {
