@@ -57,9 +57,53 @@
       color: white;
       display: none;
     }
+
+    .status-bar {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 0;
+      position: static; /* or just remove this line */
+    }
+
+
+    .phase-link {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    .phase-link:hover:not(.disabled) {
+      background-color: #4CAF50;
+    }
+
+    .phase-link.active {
+      background-color: #4CAF50;
+    }
+
+    .phase-link.disabled {
+      pointer-events: none;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
+
+  <div class="status-bar">
+    <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
+    <a href="phase2.html" class="phase-link" id="link-phase2">Phase 2</a>
+    <a href="phase3.html" class="phase-link" id="link-phase3">Phase 3</a>
+    <a href="review.html" class="phase-link disabled" id="link-review">Review & Submit</a>
+  </div>
+
+  
   <h2>Phase 4: Explain Your Ranking Decisions</h2>
 
   <div id="question-container" class="step-box">
@@ -253,6 +297,27 @@
     }
 
     showStep();
+
+    window.onload = () => {
+  // Mark completed phases
+  if (sessionStorage.getItem('phase1Complete') === 'true' || document.cookie.includes('phase1Complete=true')) {
+    document.getElementById('link-phase2')?.classList.remove('disabled');
+  }
+  if (sessionStorage.getItem('phase2Complete') === 'true' || document.cookie.includes('phase2Complete=true')) {
+    document.getElementById('link-phase3')?.classList.remove('disabled');
+  }
+  if (sessionStorage.getItem('phase3Complete') === 'true' || document.cookie.includes('phase3Complete=true')) {
+    document.getElementById('link-review')?.classList.remove('disabled');
+  }
+
+  // Highlight current tab
+  const current = window.location.pathname.split('/').pop();
+  if (current.includes('phase1')) document.getElementById('link-phase1')?.classList.add('active');
+  else if (current.includes('phase2')) document.getElementById('link-phase2')?.classList.add('active');
+  else if (current.includes('phase3')) document.getElementById('link-phase3')?.classList.add('active');
+  else if (current.includes('review')) document.getElementById('link-review')?.classList.add('active');
+};
+
   </script>
 </body>
 </html>
