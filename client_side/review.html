@@ -51,6 +51,12 @@
   <h1>Final Review</h1>
 
   <div class="section">
+    <h2>Phase 1: Summary and Comprehensibility</h2>
+    <div id="phase1"></div>
+    <button class="nav-button" onclick="location.href='/phase1.html'">Update Phase 1</button>
+  </div>
+
+  <div class="section">
     <h2>Phase 2: Per-Snippet Reasoning</h2>
     <div id="phase2"></div>
     <button class="nav-button" onclick="location.href='/phase2.html'">Update Phase 2</button>
@@ -74,6 +80,18 @@
     function getCookie(name) {
       const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
       return match ? decodeURIComponent(match[2]) : null;
+    }
+
+    function renderPhase1() {
+      const data = JSON.parse(sessionStorage.getItem('phase1_state') || getCookie('phase1_state') || '{}');
+      const container = document.getElementById('phase1');
+      if (!data || Object.keys(data).length === 0) {
+        container.innerHTML = '<em>No data found.</em>';
+        return;
+      }
+      Object.entries(data).forEach(([id, content]) => {
+        container.innerHTML += `<p><strong>Snippet ${id}:</strong><br><em>Summary:</em> ${content.summary}<br><em>Comprehensibility:</em> ${content.comprehensibility}</p>`;
+      });
     }
 
     function renderPhase2() {
@@ -101,22 +119,23 @@
     }
 
     function renderPhase4() {
-      const data = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '[]');
+      const data = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
       const container = document.getElementById('phase4');
-      if (!data.length) {
+      if (!data || Object.keys(data).length === 0) {
         container.innerHTML = '<em>No data found.</em>';
         return;
       }
-      data.forEach((entry, i) => {
-        container.innerHTML += `<p><strong>Q${i + 1}:</strong> ${entry.answer}</p>`;
+      Object.entries(data).forEach(([key, answer], i) => {
+        container.innerHTML += `<p><strong>Q${i + 1}:</strong> ${answer}</p>`;
       });
     }
 
     function submitAll() {
+      const p1 = JSON.parse(sessionStorage.getItem('phase1_state') || '{}');
       const p2 = JSON.parse(sessionStorage.getItem('phase2_state') || '{}');
       const p3 = JSON.parse(sessionStorage.getItem('phase3_ranking') || '{}');
-      const p4 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '[]');
-      const payload = { phase2: p2, phase3: p3, phase4: p4 };
+      const p4 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
+      const payload = { phase1: p1, phase2: p2, phase3: p3, phase4: p4 };
       fetch('https://codecomprehensibility.site/submit_final', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -126,6 +145,7 @@
         .catch(() => alert('⚠️ Error during submission.'));
     }
 
+    renderPhase1();
     renderPhase2();
     renderPhase3();
     renderPhase4();
