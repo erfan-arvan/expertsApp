@@ -391,6 +391,9 @@ const snippets = [
     alert("Missing snippet order. Please complete Phase 1 first.");
     window.location.href = "phase1.html";
   }
+
+  console.log("Loaded snippet order:", snippets.map(s => s.title));
+
 </script>
 <script>
     window.onload = () => {
