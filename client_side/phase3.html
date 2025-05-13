@@ -446,6 +446,11 @@
       if (stepIndex < steps.length) {
         showStep();
       } else {
+        if(validateAllResponses){
+          // ✅ Mark phase 3 as complete
+          sessionStorage.setItem('phase3Complete', 'true');
+          document.cookie = `phase3Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
+        }
         document.getElementById('submit-review').style.display = 'inline-block';
         // Store Phase 3 data
         sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
@@ -470,25 +475,29 @@
     showStep();
 
     window.onload = () => {
+        applyTheme(); // Apply saved light/dark mode first
+        // Mark completed phases
+        if (sessionStorage.getItem('phase1Complete') === 'true' || document.cookie.includes('phase1Complete=true')) {
+          document.getElementById('link-phase2')?.classList.remove('disabled');
+        }
+        if (sessionStorage.getItem('phase2Complete') === 'true' || document.cookie.includes('phase2Complete=true')) {
+          document.getElementById('link-phase3')?.classList.remove('disabled');
+        }
+        if (sessionStorage.getItem('phase3Complete') === 'true' || document.cookie.includes('phase3Complete=true')) {
+          document.getElementById('link-review')?.classList.remove('disabled');
+        }
 
-  applyTheme(); // Apply saved light/dark mode first
-  // Mark completed phases
-  if (sessionStorage.getItem('phase1Complete') === 'true' || document.cookie.includes('phase1Complete=true')) {
-    document.getElementById('link-phase2')?.classList.remove('disabled');
-  }
-  if (sessionStorage.getItem('phase2Complete') === 'true' || document.cookie.includes('phase2Complete=true')) {
-    document.getElementById('link-phase3')?.classList.remove('disabled');
-  }
-  if (sessionStorage.getItem('phase3Complete') === 'true' || document.cookie.includes('phase3Complete=true')) {
-    document.getElementById('link-review')?.classList.remove('disabled');
-  }
+        // Highlight current tab
+        const current = window.location.pathname.split('/').pop();
+        if (current.includes('phase1')) document.getElementById('link-phase1')?.classList.add('active');
+        else if (current.includes('phase2')) document.getElementById('link-phase2')?.classList.add('active');
+        else if (current.includes('phase3')) document.getElementById('link-phase3')?.classList.add('active');
+        else if (current.includes('review')) document.getElementById('link-review')?.classList.add('active');
 
-  // Highlight current tab
-  const current = window.location.pathname.split('/').pop();
-  if (current.includes('phase1')) document.getElementById('link-phase1')?.classList.add('active');
-  else if (current.includes('phase2')) document.getElementById('link-phase2')?.classList.add('active');
-  else if (current.includes('phase3')) document.getElementById('link-phase3')?.classList.add('active');
-  else if (current.includes('review')) document.getElementById('link-review')?.classList.add('active');
+        if (sessionStorage.getItem('phase3Complete') === 'true' || document.cookie.includes('phase3Complete=true')) {
+        document.getElementById('submit-review').style.display = 'inline-block';
+      }
+
   };
 
   function toggleInstructions() {
@@ -520,6 +529,18 @@
     const btn = document.getElementById('theme-toggle');
     if (btn) btn.textContent = isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode';
   }
+
+
+  function validateAllResponses() {
+  for (const step of steps) {
+    const key = generateKey(step);
+    const response = reasoning[key]?.trim();
+    if (!response) {
+      return false;
+    }
+  }
+  return true;
+}
 
 
   </script>
