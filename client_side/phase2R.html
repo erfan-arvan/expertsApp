@@ -200,27 +200,31 @@
   .dark-mode .comment  { color: #7f848e; }
   .dark-mode .number   { color: #f78c6c; }
 
+  html {
+  scroll-behavior: smooth;
+  }
 
-  /*Scrolling*/
-.scroll-container {
+  .scroll-container {
   height: 100vh;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
 }
 
-/* Snap only on these sections */
-.status-bar,
-.snippet-bar {
+/* Only these elements should snap */
+#status-bar,
+#snippet-bar,
+#continue-wrapper {
   scroll-snap-align: start;
 }
+
 
 </style>
 </head>
 <body>
 
 <div class="scroll-container">
-  <div class="status-bar">
+<div class="status-bar">
     <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
     <a href="phase2.html" class="phase-link disabled" id="link-phase2">Phase 2</a>
     <a href="phase3.html" class="phase-link disabled" id="link-phase3">Phase 3</a>
@@ -281,7 +285,6 @@
     <button onclick="location.href='/phase2.html'" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: #ccc; color: black; cursor: pointer; margin-right: 10px;">⬅️ Back to Phase 2</button>
     <button id="continueBtn" onclick="goToPhase3()" style="display: none; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: #4CAF50; color: white; cursor: pointer;">Continue to Phase 3 ➡️</button>
   </div>
-
 </div>
 
 <script>
