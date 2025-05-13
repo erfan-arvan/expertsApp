@@ -347,13 +347,13 @@
   const order = getOrCreateSnippetOrder(originalSnippets.length);
   const shuffled = order.map(i => originalSnippets[i]);
 
-  shuffled.forEach((snippet, index) => {
-    snippet.id = index + 1; // Assign new display-based IDs
-  });
-
   snippets.length = 0;
   snippets.push(...shuffled);
 
+  shuffled.forEach((snippet, index) => {
+    snippet.id = index + 1; // Assign new display-based IDs
+  });
+  
   console.log("Final snippet order:", snippets.map(s => s.title));
   console.log("Final snippet order:", snippets.map(s => s.id));
 
