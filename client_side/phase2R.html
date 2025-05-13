@@ -100,7 +100,6 @@
       100% { box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50; }
     }
 
-    /*for status bar*/
     .status-bar {
       background-color: #333;
       color: white;
@@ -108,12 +107,10 @@
       display: flex;
       justify-content: center;
       gap: 30px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
+      /* Remove position fixed */
+      position: static;
     }
+
 
     .phase-link {
       color: white;
