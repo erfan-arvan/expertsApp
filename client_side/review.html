@@ -87,6 +87,7 @@
 <body>
 
   <div class="status-bar">
+    <div id="user-info" style="padding: 8px 12px; color: gainsboro; font-weight: bold;"></div>
     <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
     <a href="phase2.html" class="phase-link" id="link-phase2">Phase 2</a>
     <a href="phase3.html" class="phase-link" id="link-phase3">Phase 3</a>
@@ -204,7 +205,8 @@
   </script>
 
   <script>
-        window.onload = () => {
+    window.onload = () => {
+      displayUserName();
       if (sessionStorage.getItem('phase1Complete') === 'true') {
         document.getElementById('link-phase2')?.classList.remove('disabled');
       }
@@ -219,5 +221,14 @@
       document.getElementById('link-review')?.classList.add('active');
     };
   </script>
+
+<script>
+  function displayUserName() {
+    const name = sessionStorage.getItem('participantName') || getCookie('participantName');
+    if (name) {
+      document.getElementById('user-info').textContent = `👤 ${name}`;
+    }
+  }
+</script>
 </body>
 </html>

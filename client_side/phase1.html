@@ -174,6 +174,7 @@
 <body>
 
 <div class="status-bar">
+    <div id="user-info" style="padding: 8px 12px; color: gainsboro; font-weight: bold;"></div>
     <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
     <a href="phase2.html" class="phase-link disabled" id="link-phase2">Phase 2</a>
     <a href="phase3.html" class="phase-link disabled" id="link-phase3">Phase 3</a>
@@ -780,6 +781,15 @@ function showValidationMessage(msg) {
         return true;
     }
 
+</script>
+
+<script>
+  function displayUserName() {
+    const name = sessionStorage.getItem('participantName') || getCookie('participantName');
+    if (name) {
+      document.getElementById('user-info').textContent = `👤 ${name}`;
+    }
+  }
 </script>
     
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
