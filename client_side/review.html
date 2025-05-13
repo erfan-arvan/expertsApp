@@ -101,7 +101,7 @@
     }
 
     function renderPhase4() {
-      const data = JSON.parse(sessionStorage.getItem('phase4_reasoning') || '[]');
+      const data = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '[]');
       const container = document.getElementById('phase4');
       if (!data.length) {
         container.innerHTML = '<em>No data found.</em>';
@@ -115,7 +115,7 @@
     function submitAll() {
       const p2 = JSON.parse(sessionStorage.getItem('phase2_state') || '{}');
       const p3 = JSON.parse(sessionStorage.getItem('phase3_ranking') || '{}');
-      const p4 = JSON.parse(sessionStorage.getItem('phase4_reasoning') || '[]');
+      const p4 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '[]');
       const payload = { phase2: p2, phase3: p3, phase4: p4 };
       fetch('https://codecomprehensibility.site/submit_final', {
         method: 'POST',
