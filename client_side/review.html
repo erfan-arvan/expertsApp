@@ -45,9 +45,55 @@
       background-color: #4CAF50;
       color: white;
     }
+
+    /*status bar*/
+    .status-bar {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .phase-link {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    .phase-link:hover:not(.disabled) {
+      background-color: #4CAF50;
+    }
+
+    .phase-link.active {
+      background-color: #4CAF50;
+    }
+
+    .phase-link.disabled {
+      pointer-events: none;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
   </style>
 </head>
 <body>
+
+  <div class="status-bar">
+    <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
+    <a href="phase2.html" class="phase-link" id="link-phase2">Phase 2</a>
+    <a href="phase3.html" class="phase-link" id="link-phase3">Phase 3</a>
+    <a href="review.html" class="phase-link active" id="link-review">Review & Submit</a>
+  </div>
+
+  
   <h1>Final Review</h1>
 
   <div class="section">
@@ -57,7 +103,7 @@
   </div>  
 
   <div class="section">
-    <h2>Phase 2: Per-Snippet Reasoning</h2>
+    <h2>Phase 2: Snippet Ranking</h2>
     <div id="phase2"></div>
     <button class="nav-button" onclick="location.href='/phase2.html'">Update Phase 2</button>
   </div>
@@ -65,7 +111,7 @@
   <div class="section">
     <h2>Phase 3: Ranking Reasoning</h2>
     <div id="phase3"></div>
-    <button class="nav-button" onclick="location.href='/phase3.html'">Update Phase 4</button>
+    <button class="nav-button" onclick="location.href='/phase3.html'">Update Phase 3</button>
   </div>
 
   <button class="submit-button" onclick="submitAll()">✅ Submit All Responses</button>
@@ -76,49 +122,47 @@
       return match ? decodeURIComponent(match[2]) : null;
     }
 
-  function renderPhase1() {
-    const container = document.getElementById('phase1');
-    let foundAny = false;
+    function renderPhase1() {
+      const container = document.getElementById('phase1');
+      let foundAny = false;
 
-    for (let i = 1; i <= 8; i++) {
-      const summaryKey = `summary${i}`;
-      const compKey = `compSummary${i}`;
+      for (let i = 1; i <= 8; i++) {
+        const summaryKey = `summary${i}`;
+        const compKey = `compSummary${i}`;
 
-      const summary = sessionStorage.getItem(summaryKey) || decodeURIComponent(getCookie(summaryKey) || '');
-      const comp = sessionStorage.getItem(compKey) || decodeURIComponent(getCookie(compKey) || '');
+        const summary = sessionStorage.getItem(summaryKey) || decodeURIComponent(getCookie(summaryKey) || '');
+        const comp = sessionStorage.getItem(compKey) || decodeURIComponent(getCookie(compKey) || '');
 
-      if (summary || comp) {
-        foundAny = true;
-        container.innerHTML += `
-          <div style="margin-bottom: 15px;">
-            <strong>Snippet ${i}</strong><br>
-            <strong>Summary:</strong> ${summary || '<em>No summary</em>'}<br>
-            <strong>Comprehensibility:</strong> ${comp || '<em>No explanation</em>'}
-          </div>
-        `;
+        if (summary || comp) {
+          foundAny = true;
+          container.innerHTML += `
+            <div style="margin-bottom: 15px;">
+              <strong>Snippet ${i}</strong><br>
+              <strong>Summary:</strong> ${summary || '<em>No summary</em>'}<br>
+              <strong>Comprehensibility:</strong> ${comp || '<em>No explanation</em>'}
+            </div>
+          `;
+        }
+      }
+
+      if (!foundAny) {
+        container.innerHTML = '<em>No data found.</em>';
       }
     }
 
-    if (!foundAny) {
-      container.innerHTML = '<em>No data found.</em>';
-    }
-  }
-
-
-
     function renderPhase2() {
-      const data = JSON.parse(sessionStorage.getItem('phase2_state') || getCookie('phase2_state') || '{}');
+      const data = JSON.parse(sessionStorage.getItem('phase3_ranking') || getCookie('phase3_ranking') || '{}');
       const container = document.getElementById('phase2');
-      if (!data || !data.reasoningMap) {
+      if (!data || Object.keys(data).length === 0) {
         container.innerHTML = '<em>No data found.</em>';
         return;
       }
-      Object.entries(data.reasoningMap).forEach(([id, reason]) => {
-        container.innerHTML += `<p><strong>Snippet ${id}:</strong><br>${reason}</p>`;
+      Object.entries(data).forEach(([rank, ids]) => {
+        container.innerHTML += `<p><strong>Position ${rank}:</strong> ${ids.map(id => id.replace('snippet-', '')).join(', ')}</p>`;
       });
     }
 
-    function renderphase3() {
+    function renderPhase3() {
       const data = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
       const container = document.getElementById('phase3');
       if (!data || Object.keys(data).length === 0) {
@@ -131,11 +175,14 @@
     }
 
     function submitAll() {
-      const p1 = JSON.parse(sessionStorage.getItem('phase1_state') || '{}');
-      const p2 = JSON.parse(sessionStorage.getItem('phase2_state') || '{}');
-      const p3 = JSON.parse(sessionStorage.getItem('phase3_ranking') || '{}');
-      const p4 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
-      const payload = { phase1: p1, phase2: p2, phase3: p4 };
+      const summaries = {};
+      for (let i = 1; i <= 8; i++) {
+        summaries[`summary${i}`] = sessionStorage.getItem(`summary${i}`) || '';
+        summaries[`compSummary${i}`] = sessionStorage.getItem(`compSummary${i}`) || '';
+      }
+      const p2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || '{}');
+      const p3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
+      const payload = { phase1: summaries, phase2: p2, phase3: p3 };
       fetch('https://codecomprehensibility.site/submit_final', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -147,7 +194,24 @@
 
     renderPhase1();
     renderPhase2();
-    renderphase3();
+    renderPhase3();
+  </script>
+
+  <script>
+        window.onload = () => {
+      if (sessionStorage.getItem('phase1Complete') === 'true') {
+        document.getElementById('link-phase2')?.classList.remove('disabled');
+      }
+      if (sessionStorage.getItem('phase2Complete') === 'true') {
+        document.getElementById('link-phase3')?.classList.remove('disabled');
+      }
+      if (sessionStorage.getItem('phase3Complete') === 'true') {
+        document.getElementById('link-review')?.classList.remove('disabled');
+      }
+
+      // Mark current phase active
+      document.getElementById('link-review')?.classList.add('active');
+    };
   </script>
 </body>
 </html>
