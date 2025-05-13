@@ -2,373 +2,295 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Phase 2: Comprehensibility Ranking</title>
+  <title>Phase 3: Rank Code Snippets</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 40px;
-      background-color: #f9f9f9;
-    }
-
-    #feedback-modal button:hover {
-      color: #f44336;
+      margin: 0 40px 40px 40px; /* top right bottom left */
+      background-color: #f4f4f4;
+      color: #333;
     }
     .instructions {
-      margin-bottom: 20px;
+      background-color: #fff;
       padding: 20px;
-      background: #fff;
       border-radius: 8px;
+      margin-bottom: 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-
-    .cards-container {
+    .ranking-row {
       display: flex;
-      flex-wrap: nowrap;
-      overflow-x: auto;
       gap: 10px;
+      overflow-x: auto;
       margin-bottom: 20px;
     }
-
+    .ranking-slot {
+      flex: 1 1 100px;
+      background: #e8f5e9;
+      border: 2px dashed #4CAF50;
+      border-radius: 6px;
+      padding: 10px;
+      min-height: 80px;
+      text-align: center;
+    }
     .card {
-      min-width: 100px;
-      padding: 8px;
       background: #fff;
       border: 1px solid #ccc;
       border-radius: 6px;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 8px;
+      margin: 5px;
       cursor: grab;
-      font-size: 14px;
-      flex-shrink: 0;
     }
-
     .card.dragging {
       opacity: 0.5;
     }
-
     .preview-area {
       display: flex;
       gap: 20px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
+      margin-top: 20px;
     }
-
-    .code-box {
-      background: #2d2d2d;
-      color: #ccc;
-      padding: 15px;
-      border-radius: 8px;
-      overflow-x: auto;
+    .snippet-preview-box {
       flex: 1 1 45%;
       min-width: 300px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+    }
+    .snippet-header {
+      background-color: #f5f5f5;
+      padding: 10px 15px;
+      font-weight: bold;
+      font-size: 16px;
+      border-bottom: 1px solid #ccc;
+    }
+    .code-box {
       font-family: 'Courier New', Courier, monospace;
       white-space: pre-wrap;
-    }
-
-    .keyword  { color: #569CD6; font-weight: bold; }
-    .type     { color: #4EC9B0; }
-    .function { color: #DCDCAA; }
-    .literal  { color: #B5CEA8; }
-    .string   { color: #CE9178; }
-    .comment  { color: #6A9955; font-style: italic; }
-    .number   { color: #B5CEA8; }
-
-    textarea {
-      width: 100%;
-      height: 150px;
-      padding: 10px;
+      overflow-x: auto;
+      padding: 15px;
       font-size: 14px;
-      border-radius: 5px;
-      border: 1px solid #bbb;
+      color: #333;
+      background-color: #f9f9f9;
     }
-
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #4CAF50;
-      border: none;
-      border-radius: 5px;
+    #theme-toggle {
+      background-color: #333;
       color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 5px;
       cursor: pointer;
+      margin-bottom: 20px;
     }
-
-    button:hover {
+      #continueBtn:hover {
       background-color: #45a049;
     }
 
-    .cards-container {
-    background: linear-gradient(to right, #eaffea, #fff5f5);
-    padding: 10px;
-    border-radius: 6px;
+    @keyframes glowPulse {
+      0% {
+        box-shadow: 0 0 10px #4CAF50;
+      }
+      100% {
+        box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+      }
+    }
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 10px #4CAF50; }
+      100% { box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50; }
+    }
+
+    .status-bar {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 0;
+      position: static; /* or just remove this line */
+    }
+
+
+    .phase-link {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    .phase-link:hover:not(.disabled) {
+      background-color: #4CAF50;
+    }
+
+    .phase-link.active {
+      background-color: #4CAF50;
+    }
+
+    .phase-link.disabled {
+      pointer-events: none;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /*For snippet cards*/
+    #cards {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 10px 0;
+      flex-wrap: nowrap;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-right: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+  }
+  button:hover {
+      background-color: #45a049;
+  }
+  button[disabled] {
+      background-color: #888;
+      cursor: not-allowed;
   }
 
-
-  /* Base style for code snippet area */
-    /* Snippet Header */
-  .snippet-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #e6e6e6;
+    /*dark/light mode*/
+    /* Light mode preview styles */
+  /* === Default (light mode) === */
+  .card {
+    background-color: #ffffff;
+    border-color: #ccc;
     color: #333;
-    padding: 10px 15px;
-    border-radius: 8px 8px 0 0;
-    font-weight: bold;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    margin-top: 20px;
-  }
-
-  /* Light Theme */
-  .code-light .snippet-header {
-    background: #f8f8f8;
-    color: #222;
-    border-color: #ddd;
-  }
-
-  .code-light .code-box {
-    background-color: #f9f9f9;
-    color: #333;
-  }
-
-  /* Dark Theme */
-  .code-dark .snippet-header {
-    background: #2d2d2d;
-    color: #ccc;
-    border-color: #444;
-  }
-
-  .code-dark .code-box {
-    background-color: #2d2d2d;
-    color: #ccc;
-  }
-
-  /* Shared Code Box Styling */
-  .code-box {
-    padding: 15px;
-    border-radius: 0 0 8px 8px;
-    overflow-x: auto;
-    flex: 1 1 45%;
-    min-width: 300px;
-    font-family: 'Courier New', Courier, monospace;
-    white-space: pre-wrap;
-    border: 1px solid #ccc;
-    border-top: none;
-    margin-bottom: 10px;
-  }
-
-  /* Toggle Button Styled Like Phase 1 */
-  #code-theme-toggle {
-    padding: 6px 12px;
-    font-size: 14px;
-    background-color: #333;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-  }
-
-  #code-theme-toggle:hover {
-    background-color: #555;
-  }
-
-
-  /* for preview area*/
-/* === Code Snippet Preview Area === */
-
-  .preview-area {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
   }
 
   .snippet-preview-box {
-    flex: 1 1 45%;
-    min-width: 300px;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
-    border: 1px solid #ddd;
+    background-color: #fefefe;
+    border: 1px solid #bbb;
   }
 
-  /* Snippet header inside preview box */
-  .snippet-header {
-    background-color: #f5f5f5;
-    padding: 10px 15px;
-    font-weight: bold;
-    font-size: 16px;
-    border-bottom: 1px solid #ccc;
-  }
-
-  /* Code container */
   .code-box {
-    font-family: 'Courier New', Courier, monospace;
-    white-space: pre-wrap;
-    overflow-x: auto;
-    padding: 15px;
-    font-size: 14px;
-    color: #333;
     background-color: #f9f9f9;
+    color: #222;
   }
 
-  /* === Dark Mode Support === */
+/* === Dark mode overrides === */
+  body.dark-mode .card {
+    background-color: #2a2a2a;
+    border-color: #555;
+    color: #ddd;
+  }
 
   body.dark-mode .snippet-preview-box {
-    background-color: #2e2e2e;
-    border-color: #555;
-  }
-
-  body.dark-mode .snippet-header {
-    background-color: #1f1f1f;
-    color: #fff;
-    border-bottom: 1px solid #444;
+    background-color: #1e1e1e;
+    border: 1px solid #444;
   }
 
   body.dark-mode .code-box {
-    background-color: #1c1c1c;
-    color: #ccc;
-    border-color: #555;
-  }
-
-  /* Optional: light mode contrast improvement */
-  body.light-mode .code-box {
-    background-color: #f9f9f9;
-    color: #333;
+    background-color: #2d2d2d;
+    color: #ddd;
   }
 
 
+    /*code box*/
+  /* Basic syntax highlighting classes */
+  .keyword     { color: #0000ff; font-weight: bold; }
+  .type        { color: #007070; }
+  .function    { color: #7928a1; font-weight: bold; }
+  .literal     { color: #009999; }
+  .string      { color: #a31515; }
+  .comment     { color: #6a9955; font-style: italic; }
+  .number      { color: #098658; }
 
-  </style>
+    /* Dark mode overrides */
+  .dark-mode .keyword  { color: #82aaff; }
+  .dark-mode .type     { color: #89ddff; }
+  .dark-mode .function { color: #c792ea; }
+  .dark-mode .literal  { color: #ffcb6b; }
+  .dark-mode .string   { color: #c3e88d; }
+  .dark-mode .comment  { color: #7f848e; }
+  .dark-mode .number   { color: #f78c6c; }
+
+  html {
+  scroll-behavior: smooth;
+  }
+
+</style>
 </head>
 <body>
 
-<h2>Phase 2: Rank Code Snippets</h2>
-
-<label for="participantName"><strong>Your Full Name:</strong></label>
-<input type="text" id="participantName" placeholder="Enter your name" style="width: 300px; padding: 8px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;" />
-
-<div class="instructions">
-  <p><strong>Complete this on a PC, not a mobile phone.</strong></p>
-  <p><strong>Instructions:</strong> Drag and drop the cards below to rank the snippets from easiest to hardest. Use the "View" checkbox to display a code snippet, or select multiple checkboxes to compare snippets side by side.</p>
-  <p><strong>Provide Reasoning:</strong> Briefly explain your ranking decisions as you arrange the snippets. Include at least one reason for each snippet—such as clarity of logic, use of language constructs, naming, or structure. You should also provide comparison statements explaining why one snippet was easier or harder to understand than another.</p>
-  <p>If you find two snippets equally comprehensible, please place them in any order, but indicate in the reasoning section that you consider them to have similar comprehensibility.</p>
-  <p><strong>Prohibited:</strong> Please <span style="color:red;">do not</span> use any automated metrics or generative AI tools (e.g., ChatGPT) for this task. We are seeking your expert judgment as a critical component of our research.</p>
+<div class="status-bar">
+    <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
+    <a href="phase2.html" class="phase-link disabled" id="link-phase2">Phase 2</a>
+    <a href="phase3.html" class="phase-link disabled" id="link-phase3">Phase 3</a>
+    <a href="review.html" class="phase-link disabled" id="link-review">Review & Submit</a>
 </div>
 
-<div style="display: flex; justify-content: space-between; margin: 10px 0 5px 0; padding: 0 5px;">
-    <span style="font-weight: bold; color: #4CAF50;">⬅️ Easiest</span>
-    <span style="font-weight: bold; color: #f44336;">Hardest ➡️</span>
-  </div>  
-<div class="cards-container" id="cardsContainer">
+<div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2 style="margin: 0;">Phase 2: Ranking Code Snippets by Comprehensibility</h2>
+    <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
+  </div>
+
+  <div id="instructions-content" style="margin-top: 15px;">
+    <p>In this phase, you will review all 8 code snippets and rank them based on how easy or difficult they are to understand.</p>
+    <ol>
+      <li><strong>Rank the snippets:</strong> Drag and drop each snippet into one of the 8 ranking positions below.</li>
+      <li><strong>Interpret the scale:</strong> 
+        <ul>
+          <li><strong>Position 1</strong> (leftmost): Most comprehensible snippet.</li>
+          <li><strong>Position 8</strong> (rightmost): Least comprehensible snippet.</li>
+        </ul>
+      </li>
+      <li><strong>Equal ranking:</strong> You may place multiple snippets in the same slot if they are equally comprehensible.</li>
+      <li><strong>Preview feature:</strong> Use the checkbox on each card to view the full code below.</li>
+    </ol>
+    <p><strong>Tip:</strong> You can revise your rankings at any time before proceeding to the next phase.</p>
+  </div>
 </div>
 
-<div class="snippet-header">
-  Code Snippet Viewer
-  <button id="code-theme-toggle" onclick="toggleCodeTheme()">Switch to Light Mode</button>
-</div>
 
+  <div class="ranking-row" id="rankingRow">
+    <!-- 8 drop zones -->
+    <div class="ranking-slot" data-rank="1"></div>
+    <div class="ranking-slot" data-rank="2"></div>
+    <div class="ranking-slot" data-rank="3"></div>
+    <div class="ranking-slot" data-rank="4"></div>
+    <div class="ranking-slot" data-rank="5"></div>
+    <div class="ranking-slot" data-rank="6"></div>
+    <div class="ranking-slot" data-rank="7"></div>
+    <div class="ranking-slot" data-rank="8"></div>
+  </div>
 
-<div class="preview-area" id="previewArea"></div>
+  <div id="cards" style="margin-bottom: 20px;"></div>
 
-<textarea id="reasoning" placeholder="Explain your reasoning..."></textarea>
-<button onclick="location.href='/phase1.html'" style="margin-bottom: 20px;">⬅️ Go Back to Phase 1</button>
-<button onclick="savePhase2State()">💾 Save Progress Locally</button>
-<button onclick="reviewAndConfirmPhase2Submission()">Review and Submit</button>
-
-<!-- Modal for reviewing submission -->
-<div id="feedback-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
-  background:#fff; color:#333; border:1px solid #ccc; padding:20px 30px; border-radius:10px;
-  box-shadow:0 6px 20px rgba(0,0,0,0.3); z-index:1000; width:500px; max-width:90%;
-  font-family:'Segoe UI', sans-serif; max-height: 90vh; overflow-y: auto;">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-    <h3 style="margin:0;">Review Your Submission</h3>
-    <button onclick="hideModal()" 
-    style="background:none; border:none; font-size:20px; font-weight:bold; cursor:pointer; color:#333;">
-    &times;
+  <div id="snippet-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background-color: #f5f5f5; border-radius: 6px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+    <h3 style="margin: 0; font-size: 16px; color: #333;">
+      🔍 Snippet Preview & Compare <span style="font-weight: normal;">(click on view checkboxes to preview or compare snippets)</span>
+    </h3>
+        <button id="theme-toggle" onclick="toggleTheme()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #333; color: white; border: none; cursor: pointer;">
+      Switch to Dark Mode
     </button>
   </div>
+  
+  
+  <div class="preview-area" id="previewArea"></div>
 
-  <p><strong>Name:</strong> <span id="review-name"></span></p>
-
-  <p><strong>Ranking (Easiest to Hardest):</strong></p>
-  <ul id="review-ranking" style="margin-top:5px; padding-left:20px;"></ul>
-
-  <p><strong>Reasoning:</strong></p>
-  <div id="review-reasoning"
-  style="white-space:pre-wrap; background:#f8f8f8; padding:10px; border:1px solid #ddd;
-         border-radius:5px; margin-bottom:10px; max-height:250px; overflow-y:auto;">
-</div>
-
-  <p id="review-error" style="color:rgb(255, 13, 0); font-weight:bold;">
-  </p>
-
-  <p id="review-warning" style="color: rgb(255, 140, 0); font-weight: bold;">
-    ⚠️ Reminder: Please ensure you’ve provided reasoning for <u>each snippet</u> before submitting.
-  </p>  
-
-  <div style="text-align:center; margin-top:20px;">
-    <button onclick="submitPhase2Final()" style="padding:10px 20px; background:#4CAF50; color:white; border:none; border-radius:5px; cursor:pointer;">✅ Submit Now</button>
-    <button onclick="hideModal()" style="padding:10px 20px; margin-left:10px; background:#ccc; color:black; border:none; border-radius:5px; cursor:pointer;">Cancel</button>
+  <div style="margin-top: 30px;">
+    <button onclick="location.href='/phase2.html'" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: #ccc; color: black; cursor: pointer; margin-right: 10px;">⬅️ Back to Phase 2</button>
+    <button id="continueBtn" onclick="goToPhase3()" style="display: none; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: #4CAF50; color: white; cursor: pointer;">Continue to Phase 3 ➡️</button>
   </div>
-</div>
-
-<div id="success-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; color:#333; border:1px solid #ccc; padding:20px 30px; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.3); z-index:1000; width:500px; max-width:90%; font-family:'Segoe UI', sans-serif;">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-    <h3 style="margin:0;">Submission Successful</h3>
-    <button onclick="document.getElementById('success-modal').style.display='none'" 
-            style="background:none; border:none; font-size:20px; font-weight:bold; cursor:pointer; color:#333;">
-      &times;
-    </button>
-  </div>
-  <p style="font-size:16px; margin-top:10px;">
-    ✅ Submission successful! Thank you for your participation. We will contact you regarding the next steps.
-  </p>
-  <p>You may resubmit before the deadline if you change your mind about any part of your response.</p>
-</div>
-
-<div id="save-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; color:#333; border:1px solid #ccc; padding:20px 30px; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.3); z-index:1000; width:400px; max-width:90%; font-family:'Segoe UI', sans-serif;">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-    <h3 style="margin:0;">Progress Saved</h3>
-    <button onclick="hideSaveModal()" style="background:none; border:none; font-size:20px; font-weight:bold; cursor:pointer; color:#333;">&times;</button>
-  </div>
-  <p style="font-size:16px;">✅ Your progress has been saved locally in this browser.</p>
-  <p style="font-size:14px; color:#666;">You can safely continue later or revise before submission.</p>
-</div>
 
 <script>
-  function showSaveModal() {
-  document.getElementById('save-modal').style.display = 'block';
-}
-
-function hideSaveModal() {
-  document.getElementById('save-modal').style.display = 'none';
-}
-</script>
-
-<script>
-function showModal(message, isHTML = false) {
-  const modal = document.getElementById('feedback-modal');
-  const feedback = document.getElementById('review-name'); // Just to test modal is in review mode
-
-  if (!modal || !feedback) {
-    alert("Modal structure is missing from the HTML.");
-    return;
-  }
-
-  if (!isHTML) {
-    document.getElementById('review-error').innerText = message;
-  }
-
-  modal.style.display = 'block';
-}
-
-</script>
-<script>
-    const snippets = [
-      {
+  const snippets = [
+  {
         id: 1,
         title: "Snippet 1",
         code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method1</span>(<span class="type">String</span> name) {
@@ -391,502 +313,258 @@ function showModal(message, isHTML = false) {
 }
 `
       },
-      {
-        id: 2,
-        title: "Snippet 2",
-        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method2</span>(<span class="type">URI</span> uri) {
-  <span class="keyword">if</span> (<span class="function">isFilesystemPath</span>(uri)) {
-    <span class="keyword">return</span> <span class="literal">false</span>;
-  }
-  <span class="type">String</span> scheme = uri.<span class="function">getScheme</span>();
-  <span class="keyword">if</span> (scheme == <span class="literal">null</span>) {
-    <span class="keyword">return</span> <span class="literal">false</span>;
-  }
-  <span class="keyword">switch</span> (scheme) {
-    <span class="keyword">case</span> <span class="string">"file"</span>:
-    <span class="keyword">case</span> <span class="string">"jar"</span>:
-      <span class="keyword">return</span> <span class="literal">false</span>;
-    <span class="keyword">default</span>:
-      <span class="keyword">break</span>;
-  }
-  <span class="keyword">return</span> <span class="literal">true</span>;
-}
-`
-      },
-      {
-        id: 3,
-        title: "Snippet 3",
-        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method3</span>(<span class="type">short</span> type) {
-  <span class="keyword">if</span> (type == IMAGE_FILE_MACHINE_UNKNOWN) {
-    <span class="comment">// Unsupported machine type</span>
-    <span class="keyword">return</span> <span class="literal">false</span>;
-  }
-  <span class="keyword">for</span> (<span class="type">Field</span> field : CoffMachineType.<span class="function">class</span>.<span class="function">getDeclaredFields</span>()) {
-    <span class="keyword">if</span> (!field.<span class="function">isSynthetic</span>()) {
-      <span class="type">int</span> modifiers = field.<span class="function">getModifiers</span>();
-      <span class="keyword">if</span> (<span class="function">Modifier.isFinal</span>(modifiers) && <span class="function">Modifier.isStatic</span>(modifiers)) {
-        <span class="keyword">try</span> {
-          <span class="keyword">if</span> (field.<span class="function">getShort</span>(<span class="literal">null</span>) == type) {
-            <span class="keyword">return</span> <span class="literal">true</span>;
-          }
-        } <span class="keyword">catch</span> (<span class="type">IllegalAccessException</span> e) {
-          <span class="keyword">continue</span>;
+    {
+      id: 2,
+      title: "Snippet 2",
+      code: `<span class="keyword">public</span> <span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+        <span class="keyword">return</span> a + b;
+      }`
+    },
+    {
+      id: 3,
+      title: "Snippet 3",
+      code: `<span class="keyword">private static</span> <span class="type">String</span> <span class="function">greet</span>() {
+        <span class="keyword">return</span> <span class="literal">"Hello, world!"</span>;
+      }`
+    },
+    {
+      id: 4,
+      title: "Snippet 4",
+      code: `<span class="keyword">protected</span> <span class="type">void</span> <span class="function">log</span>(<span class="type">String</span> msg) {
+        System.<span class="function">out.println</span>(msg);
+      }`
+    },
+    {
+      id: 5,
+      title: "Snippet 5",
+      code: `<span class="keyword">public</span> <span class="type">boolean</span> <span class="function">isEmpty</span>(<span class="type">List</span>&lt;<span class="type">String</span>&gt; list) {
+        <span class="keyword">return</span> list.<span class="function">isEmpty</span>();
+      }`
+    },
+    {
+      id: 6,
+      title: "Snippet 6",
+      code: `<span class="keyword">static</span> <span class="type">double</span> <span class="function">multiply</span>(<span class="type">double</span> x, <span class="type">double</span> y) {
+        <span class="keyword">return</span> x * y;
+      }`
+    },
+    {
+      id: 7,
+      title: "Snippet 7",
+      code: `<span class="keyword">public</span> <span class="type">String</span> <span class="function">getName</span>() {
+        <span class="keyword">return</span> <span class="literal">"John Doe"</span>;
+      }`
+    },
+    {
+      id: 8,
+      title: "Snippet 8",
+      code: `<span class="keyword">private</span> <span class="type">int</span> <span class="function">square</span>(<span class="type">int</span> n) {
+        <span class="keyword">return</span> n * n;
+      }`
+    }
+  ];
+
+    window.onload = () => {
+      loadCards();
+      loadState();
+      applyTheme();
+
+      // ✅ Restore Continue button if phase2Complete is already set
+      const continueBtn = document.getElementById('continueBtn');
+      if (sessionStorage.getItem('phase2Complete') === 'true' || getCookie('phase2Complete') === 'true') {
+        if (continueBtn) continueBtn.style.display = 'inline-block';
+      }
+
+      // Unlock and highlight status bar
+      if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
+      if (isComplete('phase2Complete')) document.getElementById('link-phase3').classList.remove('disabled');
+      if (isComplete('phase3Complete')) document.getElementById('link-review').classList.remove('disabled');
+
+      const current = window.location.pathname.split('/').pop();
+      if (current.includes('phase1')) document.getElementById('link-phase1').classList.add('active');
+      else if (current.includes('phase2')) document.getElementById('link-phase2').classList.add('active');
+      else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
+      else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
+
+      if (sessionStorage.getItem('phase2Complete') === 'true' || getCookie('phase2Complete') === 'true') {
+          document.getElementById('continueBtn').style.display = 'inline-block';
+      }
+    };
+
+    function loadCards() {
+      const container = document.getElementById('cards');
+      snippets.forEach(snippet => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.draggable = true;
+        card.id = `snippet-${snippet.id}`;
+        card.innerHTML = `
+          <strong>${snippet.title}</strong>
+          <label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
+        `;
+        card.addEventListener('dragstart', () => card.classList.add('dragging'));
+        card.addEventListener('dragend', () => card.classList.remove('dragging'));
+        container.appendChild(card);
+      });
+
+      document.querySelectorAll('.ranking-slot').forEach(slot => {
+        slot.addEventListener('dragover', e => {
+          e.preventDefault();
+          const dragging = document.querySelector('.dragging');
+          if (dragging) slot.appendChild(dragging);
+          saveState();
+        });
+      });
+    }
+
+    function togglePreview(id, checkbox) {
+      const previewArea = document.getElementById('previewArea');
+      const snippet = snippets.find(s => s.id === id);
+      const existing = document.getElementById(`preview-${id}`);
+
+      if (checkbox.checked && !existing) {
+        const wrapper = document.createElement('div');
+        wrapper.id = `preview-${id}`;
+        wrapper.className = 'snippet-preview-box';
+
+        const header = document.createElement('div');
+        header.className = 'snippet-header';
+        header.textContent = snippet.title;
+
+        const codeBox = document.createElement('div');
+        codeBox.className = 'code-box';
+        codeBox.innerHTML = snippet.code;
+
+        wrapper.appendChild(header);
+        wrapper.appendChild(codeBox);
+        previewArea.appendChild(wrapper);
+      } else if (!checkbox.checked && existing) {
+        previewArea.removeChild(existing);
+      }
+    }
+
+    function saveState() {
+      const positions = {};
+      document.querySelectorAll('.ranking-slot').forEach((slot, index) => {
+        positions[index + 1] = Array.from(slot.children).map(el => el.id);
+      });
+      const json = JSON.stringify(positions);
+      sessionStorage.setItem('phase3_ranking', json);
+      document.cookie = `phase3_ranking=${encodeURIComponent(json)}; path=/; max-age=${60 * 60 * 24 * 30}`;
+
+      /* Check if the phase is completed */
+      if (areAllCardsRanked()) {
+        document.getElementById('continueBtn').style.display = 'inline-block';
+        sessionStorage.setItem('phase2Complete', 'true');
+        document.cookie = `phase2Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
+
+        // ✅ Also update the status bar
+        const phase3Link = document.getElementById('link-phase3');
+        if (phase3Link) {
+          phase3Link.classList.remove('disabled');
+        }
+      } else {
+        document.getElementById('continueBtn').style.display = 'none';
+        sessionStorage.removeItem('phase2Complete');
+        document.cookie = `phase2Complete=; path=/; max-age=0`;
+
+        const phase3Link = document.getElementById('link-phase3');
+        if (phase3Link) {
+          phase3Link.classList.add('disabled');
         }
       }
+
     }
-  }
-  <span class="keyword">return</span> <span class="literal">false</span>;
-}
-`
-      },
-      {
-        id: 4,
-        title: "Snippet 4",
-        code: `<span class="keyword">public static</span> <span class="type">int</span> <span class="function">method4</span>(<span class="type">CharSequence</span> str, <span class="type">CharSequence</span> searchStr, <span class="type">int</span> startPos) {
-  <span class="keyword">if</span> (str == <span class="literal">null</span> || searchStr == <span class="literal">null</span>) {
-    <span class="keyword">return</span> INDEX_NOT_FOUND;
-  }
-  <span class="keyword">if</span> (startPos < <span class="number">0</span>) {
-    startPos = <span class="number">0</span>;
-  }
-  <span class="type">int</span> searchStrLen = searchStr.<span class="function">length</span>();
-  <span class="type">int</span> endLimit = str.<span class="function">length</span>() - searchStrLen + <span class="number">1</span>;
-  <span class="keyword">if</span> (startPos > endLimit) {
-    <span class="keyword">return</span> INDEX_NOT_FOUND;
-  }
-  <span class="keyword">if</span> (searchStrLen == <span class="number">0</span>) {
-    <span class="keyword">return</span> startPos;
-  }
-  <span class="keyword">for</span> (<span class="type">int</span> i = startPos; i < endLimit; i++) {
-    <span class="keyword">if</span> (<span class="function">regionMatches</span>(str, <span class="literal">true</span>, i, searchStr, <span class="number">0</span>, searchStrLen)) {
-      <span class="keyword">return</span> i;
-    }
-  }
-  <span class="keyword">return</span> INDEX_NOT_FOUND;
-}
-`
-      },
-      {
-        id: 5,
-        title: "Snippet 5",
-        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method5</span>(@Nullable <span class="type">Path</span> root) <span class="keyword">throws</span> <span class="type">IOException</span> {
-  <span class="keyword">if</span> (root == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>;
-  <span class="keyword">if</span> (!Files.<span class="function">exists</span>(root)) <span class="keyword">return</span> <span class="literal">false</span>;
 
-  Files.<span class="function">walkFileTree</span>(root, <span class="keyword">new</span> <span class="type">SimpleFileVisitor</span>&lt;&gt;() {
-    @Override
-    <span class="keyword">public</span> <span class="type">FileVisitResult</span> <span class="function">visitFile</span>(<span class="type">Path</span> file, <span class="type">BasicFileAttributes</span> attrs) <span class="keyword">throws</span> <span class="type">IOException</span> {
-      Files.<span class="function">delete</span>(file);
-      <span class="keyword">return</span> FileVisitResult.CONTINUE;
-    }
-    @Override
-    <span class="keyword">public</span> <span class="type">FileVisitResult</span> <span class="function">postVisitDirectory</span>(<span class="type">Path</span> dir, <span class="type">IOException</span> exc) <span class="keyword">throws</span> <span class="type">IOException</span> {
-      Files.<span class="function">delete</span>(dir);
-      <span class="keyword">return</span> FileVisitResult.CONTINUE;
-    }
-  });
-
-  <span class="keyword">return</span> <span class="literal">true</span>;
-}
-    `
-      },
-      {
-        id: 6,
-        title: "Snippet 6",
-        code: `<span class="keyword">public static</span> <span class="type">int</span> <span class="function">method6</span>(<span class="type">CharSequence</span> sequence) {
-  <span class="comment">// Optimized implementation</span>
-  <span class="type">int</span> utf16Length = sequence.<span class="function">length</span>();
-  <span class="type">int</span> utf8Length = utf16Length;
-  <span class="type">int</span> i = <span class="number">0</span>;
-
-  <span class="keyword">while</span> (i < utf16Length && sequence.<span class="function">charAt</span>(i) < <span class="literal">0x80</span>) {
-    i++;
-  }
-
-  <span class="keyword">for</span> (; i < utf16Length; i++) {
-    <span class="type">char</span> c = sequence.<span class="function">charAt</span>(i);
-    <span class="keyword">if</span> (c < <span class="literal">0x800</span>) {
-      utf8Length += ((<span class="literal">0x7f</span> - c) >>> <span class="number">31</span>);
-    } <span class="keyword">else</span> {
-      utf8Length += <span class="function">encodedLengthGeneral</span>(sequence, i);
-      <span class="keyword">break</span>;
-    }
-  }
-
-  <span class="keyword">if</span> (utf8Length < utf16Length) {
-    <span class="keyword">throw new</span> <span class="type">IllegalArgumentException</span>(
-      <span class="string">"UTF-8 length does not fit in int: "</span> + (utf8Length + (<span class="literal">1L</span> << <span class="number">32</span>)));
-  }
-
-  <span class="keyword">return</span> utf8Length;
-}
-`
-      },
-      {
-        id: 7,
-        title: "Snippet 7",
-        code: `<span class="keyword">public static</span> <span class="type">float</span> <span class="function">method7</span>(<span class="type">float</span> a, <span class="type">float</span> b, <span class="type">float</span> c) {
-  <span class="type">float</span> det = b * b - <span class="number">4</span> * a * c;
-  <span class="keyword">if</span> (det < <span class="number">0</span>) <span class="keyword">return</span> <span class="type">Float</span>.NaN;
-
-  <span class="type">float</span> sqrtD = (<span class="type">float</span>)<span class="type">Math</span>.<span class="function">sqrt</span>(det);
-  <span class="type">float</span> invA = <span class="number">1</span> / (<span class="number">2</span> * a);
-  <span class="type">float</span> r1 = (-b - sqrtD) * invA;
-  <span class="type">float</span> r2 = (-b + sqrtD) * invA;
-
-  <span class="keyword">if</span> (r1 > r2) {
-    <span class="type">float</span> tmp = r2;
-    r2 = r1;
-    r1 = tmp;
-  }
-
-  <span class="keyword">if</span> (r1 > <span class="number">0</span>) <span class="keyword">return</span> r1;
-  <span class="keyword">if</span> (r2 > <span class="number">0</span>) <span class="keyword">return</span> r2;
-  <span class="keyword">return</span> <span class="type">Float</span>.NaN;
-}
-`
-      },
-      {
-        id: 8,
-        title: "Snippet 8",
-        code: `<span class="keyword">public static</span> <span class="type">float</span> <span class="function">method8</span>(<span class="type">float</span> y, <span class="type">float</span> x) {
-  <span class="type">float</span> n = y / x;
-
-  <span class="keyword">if</span> (n != n)
-    n = (y == x ? <span class="number">1f</span> : <span class="number">-1f</span>);
-  <span class="keyword">else if</span> (n - n != n - n)
-    x = <span class="number">0f</span>;
-
-  <span class="keyword">if</span> (x > <span class="number">0</span>)
-    <span class="keyword">return</span> <span class="function">atanUnchecked</span>(n);
-  <span class="keyword">else if</span> (x < <span class="number">0</span>) {
-    <span class="keyword">if</span> (y >= <span class="number">0</span>) <span class="keyword">return</span> <span class="function">atanUnchecked</span>(n) + PI;
-    <span class="keyword">return</span> <span class="function">atanUnchecked</span>(n) - PI;
-  } <span class="keyword">else if</span> (y > <span class="number">0</span>)
-    <span class="keyword">return</span> x + HALF_PI;
-  <span class="keyword">else if</span> (y < <span class="number">0</span>)
-    <span class="keyword">return</span> x - HALF_PI;
-
-  <span class="keyword">return</span> x + y;
-}
-`
+    function loadState() {
+      let saved = sessionStorage.getItem('phase3_ranking');
+      if (!saved) {
+        const cookieMatch = document.cookie.match(/(?:^|; )phase3_ranking=([^;]*)/);
+        if (cookieMatch) {
+          saved = decodeURIComponent(cookieMatch[1]);
+          sessionStorage.setItem('phase3_ranking', saved);
+        }
       }
-    ];
-</script>
-
-<script>
-
-window.onload = function () {
-  const container = document.getElementById('cardsContainer');
-
-  // 1. Build cards
-  snippets.forEach(snippet => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.draggable = true;
-    card.id = `snippet-${snippet.id}`;
-    card.innerHTML = `
-      <strong>${snippet.title}</strong><br>
-      <label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
-    `;
-    container.appendChild(card);
-  });
-
-  // Try to load name from Phase 1 cookie
-  const nameFromPhase1 = getCookie('phase_participant_name');
-  if (nameFromPhase1) {
-    document.getElementById('participantName').value = decodeURIComponent(nameFromPhase1);
-  }
-
-  // 2. Restore saved state (after cards exist)
-  const saved = JSON.parse(sessionStorage.getItem('phase2_state') || decodeURIComponent(getCookie('phase2_state') || '{}'));
-  if (saved) {
-    // Only overwrite name if saved.name is non-empty
-    if (saved.name) {
-      document.getElementById('participantName').value = saved.name;
+      if (!saved) return;
+      const parsed = JSON.parse(saved);
+      Object.entries(parsed).forEach(([rank, ids]) => {
+        const slot = document.querySelector(`.ranking-slot[data-rank='${rank}']`);
+        ids.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) slot.appendChild(el);
+        });
+      });
     }
 
-    document.getElementById('reasoning').value = saved.reasoning || '';
-
-    // Restore ranking
-    saved.ranking?.forEach(id => {
-      const el = document.getElementById(`snippet-${id}`);
-      if (el) container.appendChild(el);
-    });
-
-    // Restore checked comparisons
-    saved.selectedSnippets?.forEach(id => {
-      const checkbox = document.querySelector(`#snippet-${id} input[type=checkbox]`);
-      if (checkbox) {
-        checkbox.checked = true;
-        togglePreview(parseInt(id), checkbox);
-      }
-    });
-  }
-
-  enableDragAndDrop();
-};
-
-
-function togglePreview(id, checkbox) {
-  const previewArea = document.getElementById('previewArea');
-  const snippet = snippets.find(s => s.id === id);
-  const existing = document.getElementById(`preview-${id}`);
-
-  if (checkbox.checked && !existing) {
-    const wrapper = document.createElement('div');
-    wrapper.id = `preview-${id}`;
-    wrapper.className = 'snippet-preview-box';
-
-    const header = document.createElement('div');
-    header.className = 'snippet-header';
-    header.textContent = snippet.title;
-
-    const codeBox = document.createElement('div');
-    codeBox.className = 'code-box';
-    codeBox.innerHTML = snippet.code;
-
-    wrapper.appendChild(header);
-    wrapper.appendChild(codeBox);
-    previewArea.appendChild(wrapper);
-  } else if (!checkbox.checked && existing) {
-    previewArea.removeChild(existing);
-  }
-}
-
-
-function enableDragAndDrop() {
-  const container = document.getElementById('cardsContainer');
-  let draggedItem = null;
-
-  container.addEventListener('dragstart', (e) => {
-    draggedItem = e.target;
-    e.target.classList.add('dragging');
-  });
-
-  container.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    const afterElement = [...container.querySelectorAll('.card:not(.dragging)')]
-      .find(el => e.clientX < el.getBoundingClientRect().left + el.offsetWidth / 2);
-    if (afterElement) {
-      container.insertBefore(draggedItem, afterElement);
-    } else {
-      container.appendChild(draggedItem);
-    }
-  });
-
-  container.addEventListener('dragend', () => {
-    draggedItem.classList.remove('dragging');
-    draggedItem = null;
-  });
-}
-
-function reviewAndConfirmPhase2Submission() {
-  // Always read fresh values from the DOM
-  const name = document.getElementById('participantName').value.trim();
-  const reasoning = document.getElementById('reasoning').value.trim();
-  const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
-
-  // Clear previous modal values (so no stale content is shown)
-  document.getElementById('review-name').innerText = '';
-  document.getElementById('review-reasoning').innerText = '';
-  document.getElementById('review-ranking').innerHTML = '';
-  document.getElementById('review-error').innerText = '';
-
-  let errors = [];
-
-  // Run actual checks
-  if (!name) errors.push("• Please enter your name.");
-  if (!reasoning) errors.push("• Please include your reasoning.");
-  if (ranking.length !== 8) errors.push("• Please rank all 8 snippets.");
-
-  // If any errors found, show modal only with error
-  if (errors.length > 0) {
-    showModal("❌ Submission Error:\n\n" + errors.join("\n"));
-    return;
-  }
-
-  // ✅ Only now save state (because it’s valid)
-  savePhase2StateSilent();
-
-  // ✅ Populate modal preview correctly
-  document.getElementById('review-name').innerText = name;
-
-  const rankingList = document.getElementById('review-ranking');
-  ranking.forEach((id) => {
-    const li = document.createElement("li");
-    li.textContent = `Snippet ${id}`;
-    rankingList.appendChild(li);
-  });
-
-  document.getElementById('review-reasoning').innerHTML = reasoning.replace(/\n/g, "<br>");
-
-  // Show modal
-  document.getElementById('feedback-modal').style.display = 'block';
-}
-
-
-
-function submitPhase2Final() {
-  const name = document.getElementById('participantName').value.trim();
-  const reasoning = document.getElementById('reasoning').value.trim();
-  const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
-
-  // Close review modal
-  hideModal();
-
-  // Send data
-  fetch("https://codecomprehensibility.site/submit_phase2", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name: name, ranking: ranking, reasoning: reasoning })
-  })
-  .then(res => {
-    if (res.ok) {
-      document.getElementById('success-modal').style.display = 'block';
-    } else {
-      showModal("❌ Submission failed. Please try again or contact us at ea442@njit.edu.");
-    }
-  })
-  .catch(err => {
-    console.error(err);
-    showModal("⚠️ An error occurred during submission. Please try again or contact us at ea442@njit.edu.");
-  });
-}
-
-</script>
-
-<script>
-  function savePhase2State() {
-    const name = document.getElementById('participantName').value.trim();
-    const reasoning = document.getElementById('reasoning').value.trim();
-    const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
-
-    // Store checkboxes
-    const selectedSnippets = [];
-    document.querySelectorAll('.cards-container input[type=checkbox]').forEach((cb, idx) => {
-      if (cb.checked) selectedSnippets.push(snippets[idx].id);
-    });
-
-    const data = {
-      name,
-      reasoning,
-      ranking,
-      selectedSnippets
-    };
-
-    sessionStorage.setItem('phase2_state', JSON.stringify(data));
-    setCookie('phase2_state', JSON.stringify(data), 30); // store for 30 days
-    showSaveModal();
-}
-
-function savePhase2StateSilent() {
-    const name = document.getElementById('participantName').value.trim();
-    const reasoning = document.getElementById('reasoning').value.trim();
-    const ranking = Array.from(document.querySelectorAll('.card')).map(card => card.id.replace('snippet-', ''));
-
-    // Store checkboxes
-    const selectedSnippets = [];
-    document.querySelectorAll('.cards-container input[type=checkbox]').forEach((cb, idx) => {
-      if (cb.checked) selectedSnippets.push(snippets[idx].id);
-    });
-
-    const data = {
-      name,
-      reasoning,
-      ranking,
-      selectedSnippets
-    };
-
-    sessionStorage.setItem('phase2_state', JSON.stringify(data));
-    setCookie('phase2_state', JSON.stringify(data), 30); // store for 30 days
-    //showSaveModal();
-}
-
-
-const saved = JSON.parse(sessionStorage.getItem('phase2_state'));
-if (saved) {
-  document.getElementById('participantName').value = saved.name || '';
-  document.getElementById('reasoning').value = saved.reasoning || '';
-
-  // Restore ranking order
-  const container = document.getElementById('cardsContainer');
-  saved.ranking?.forEach(id => {
-    const el = document.getElementById(`snippet-${id}`);
-    if (el) container.appendChild(el);
-  });
-
-  // Restore checkboxes
-  saved.selectedSnippets?.forEach(id => {
-    const checkbox = document.querySelector(`#snippet-${id} input[type=checkbox]`);
-    if (checkbox) {
-      checkbox.checked = true;
-      togglePreview(parseInt(id), checkbox); // show preview
-    }
-  });
-}
-
-function setCookie(name, value, days) {
-  const expires = new Date(Date.now() + days*24*60*60*1000).toUTCString();
-  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
-}
-
-function getCookie(name) {
-  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-  return match ? decodeURIComponent(match[2]) : null;
-}
-
-</script>
-
-<script>
-  function hideModal() {
-    const modal = document.getElementById('feedback-modal');
-    if (modal) {
-      modal.style.display = 'none';
-    }
-  }
-</script>  
-
-<script>
-  function toggleCodeTheme() {
+  function toggleTheme() {
     const body = document.body;
-    const button = document.getElementById('code-theme-toggle');
-    const isLight = body.classList.contains('code-light');
+    const isDark = body.classList.contains('dark-mode');
 
-    if (isLight) {
-      body.classList.remove('code-light');
-      body.classList.add('code-dark');
-      localStorage.setItem('codeTheme', 'dark');
-      button.textContent = 'Switch to Light Mode';
-    } else {
-      body.classList.remove('code-dark');
-      body.classList.add('code-light');
+    if (isDark) {
+      body.classList.remove('dark-mode');
       localStorage.setItem('codeTheme', 'light');
-      button.textContent = 'Switch to Dark Mode';
+      document.getElementById('theme-toggle').textContent = 'Switch to Dark Mode';
+    } else {
+      body.classList.add('dark-mode');
+      localStorage.setItem('codeTheme', 'dark');
+      document.getElementById('theme-toggle').textContent = 'Switch to Light Mode';
+    }
+}
+
+function applyTheme() {
+  const theme = localStorage.getItem('codeTheme') || 'light';
+  const btn = document.getElementById('theme-toggle');
+
+  if (theme === 'dark') {
+    document.body.classList.add('dark-mode');
+    if (btn) btn.textContent = 'Switch to Light Mode';
+  } else {
+    document.body.classList.remove('dark-mode');
+    if (btn) btn.textContent = 'Switch to Dark Mode';
+  }
+}
+
+    function goToPhase3() {
+    location.href = '/phase3.html';
+  }
+
+  /*For the instructions section*/
+  function toggleInstructions() {
+    const content = document.getElementById("instructions-content");
+    const button = event.target;
+
+    if (content.style.display === "none") {
+      content.style.display = "block";
+      button.textContent = "Hide";
+    } else {
+      content.style.display = "none";
+      button.textContent = "Show";
     }
   }
 
-  // Load saved code theme preference on page load
-  window.addEventListener('DOMContentLoaded', () => {
-    const theme = localStorage.getItem('codeTheme') || 'dark';
-    document.body.classList.add(`code-${theme}`);
-    document.getElementById('code-theme-toggle').textContent = theme === 'light'
-      ? 'Switch to Dark Mode'
-      : 'Switch to Light Mode';
-  });
+  function getCookie(name) {
+      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      return match ? decodeURIComponent(match[2]) : null;
+  }
+
+  function isComplete(key) {
+    return sessionStorage.getItem(key) === 'true' || getCookie(key) === 'true';
+  }
+
+  function areAllCardsRanked() {
+    const allCards = document.querySelectorAll('.card');
+    const assignedCardIds = new Set();
+
+    document.querySelectorAll('.ranking-slot').forEach(slot => {
+      slot.querySelectorAll('.card').forEach(card => {
+        assignedCardIds.add(card.id);
+      });
+    });
+
+    return allCards.length === assignedCardIds.size;
+  }
+
+
 </script>
-
-  
-  
-
-<footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
-  <div>
-    Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
-  </div>
-  <div style="margin-top: 10px;">
-    <a href="/index.html" style="color: #4CAF50; text-decoration: none;">🏠 Back to Home</a>
-  </div>
-</footer>
-
 </body>
 </html>
