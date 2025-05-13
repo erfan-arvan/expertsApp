@@ -127,48 +127,51 @@
     document.cookie = `${name}=${encodeURIComponent(value)}; path=/; expires=${expires}`;
   }
   
-  async function loginAndProceed() {
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
-    const errorDiv = document.getElementById('login-error');
-    errorDiv.style.display = 'none';
-  
-    if (!username || !password) {
-      errorDiv.textContent = "Please enter both username and password.";
-      errorDiv.style.display = 'block';
-      return;
-    }
-  
-    try {
-      const response = await fetch('https://codecomprehensibility.site/get_snippet_order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-  
-      if (!response.ok) throw new Error("Invalid credentials");
-  
-      const data = await response.json();
-      const { participantName, snippetOrder } = data;
-  
-      if (!participantName || !snippetOrder) throw new Error("Incomplete response");
-  
-      sessionStorage.setItem('participantName', participantName);
-      sessionStorage.setItem('snippetOrder', JSON.stringify(snippetOrder));
-      sessionStorage.setItem('username', username);
-  
-      setCookie('participantName', participantName);
-      setCookie('snippetOrder', JSON.stringify(snippetOrder));
-      setCookie('username', username);
-  
-      window.location.href = 'phase1.html';
-  
-    } catch (err) {
-      console.error(err);
-      errorDiv.textContent = "Login failed. Please check your credentials.";
-      errorDiv.style.display = 'block';
-    }
+  async function loginAndProceed(event) {
+  event.preventDefault();
+
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const errorDiv = document.getElementById('login-error');
+  errorDiv.style.display = 'none';
+
+  if (!username || !password) {
+    errorDiv.textContent = "Please enter both username and password.";
+    errorDiv.style.display = 'block';
+    return;
   }
+
+  try {
+    const response = await fetch('https://codecomprehensibility.site/get_snippet_order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+
+    if (!response.ok) throw new Error("Invalid credentials");
+
+    const data = await response.json();
+    const { participantName, snippetOrder } = data;
+
+    if (!participantName || !snippetOrder) throw new Error("Incomplete response");
+
+    sessionStorage.setItem('participantName', participantName);
+    sessionStorage.setItem('snippetOrder', JSON.stringify(snippetOrder));
+    sessionStorage.setItem('username', username);
+
+    setCookie('participantName', participantName);
+    setCookie('snippetOrder', JSON.stringify(snippetOrder));
+    setCookie('username', username);
+
+    window.location.href = 'phase1.html';
+
+  } catch (err) {
+    console.error(err);
+    errorDiv.textContent = "Login failed. Please check your credentials.";
+    errorDiv.style.display = 'block';
+  }
+}
+
   </script>
   
 
