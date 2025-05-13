@@ -175,22 +175,28 @@
     }
 
     function submitAll() {
-      const summaries = {};
-      for (let i = 1; i <= 8; i++) {
-        summaries[`summary${i}`] = sessionStorage.getItem(`summary${i}`) || '';
-        summaries[`compSummary${i}`] = sessionStorage.getItem(`compSummary${i}`) || '';
-      }
-      const p2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || '{}');
-      const p3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
-      const payload = { phase1: summaries, phase2: p2, phase3: p3 };
-      fetch('https://codecomprehensibility.site/submit_final', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-        .then(res => res.ok ? alert('✅ Submission successful!') : alert('❌ Submission failed.'))
-        .catch(() => alert('⚠️ Error during submission.'));
-    }
+  const name = sessionStorage.getItem('participantName') || getCookie('participantName') || 'Anonymous';
+  const phase1 = {}; // Construct phase1 data from cookies/session
+  for (let i = 1; i <= 8; i++) {
+    const summary = sessionStorage.getItem(`summary${i}`) || getCookie(`summary${i}`) || '';
+    const comp = sessionStorage.getItem(`compSummary${i}`) || getCookie(`compSummary${i}`) || '';
+    phase1[`snippet${i}`] = { summary, comprehensibility: comp };
+  }
+
+  const phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || '{}');
+  const phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
+
+  const payload = { name, phase1, phase2, phase3 };
+
+  fetch('https://codecomprehensibility.site/submit_final', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+    .then(res => res.ok ? alert('✅ Submission successful!') : alert('❌ Submission failed.'))
+    .catch(() => alert('⚠️ Error during submission.'));
+}
+
 
     renderPhase1();
     renderPhase2();
