@@ -48,7 +48,12 @@ public class SubmissionController {
     @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
     @PostMapping("/submit_final")
     public String handleFinalSubmission(@RequestBody Map<String, Object> body) {
-        String participantName = (String) body.getOrDefault("participantName", "Anonymous");
+        Object nameObj = body.get("participantName");
+        String participantName = (nameObj instanceof String) ? (String) nameObj : "Anonymous";
+        //debugging
+        System.out.println("Received submission keys: " + body.keySet());
+        System.out.println("Raw participantName: " + body.get("participantName"));
+
 
         try (FileWriter writer = new FileWriter("final_submissions.txt", true)) {
             writer.write("=== Final Submission ===\n");
