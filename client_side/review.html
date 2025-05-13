@@ -205,7 +205,8 @@
 
     const phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || '{}');
     const phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
-
+    
+    console.log(name);
     const payload = { name, phase1, phase2, phase3 };
 
     fetch('https://codecomprehensibility.site/submit_final', {
