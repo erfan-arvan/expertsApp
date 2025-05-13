@@ -350,10 +350,11 @@
   snippets.length = 0;
   snippets.push(...shuffled);
 
-  shuffled.forEach((snippet, index) => {
-    snippet.id = index + 1; // Assign new display-based IDs
+  shuffled.forEach((snippet, newIndex) => {
+    snippet.id = newIndex + 1;                      // Update ID for session keys
+    snippet.title = `Snippet ${newIndex + 1}`;      // Update title shown in UI
   });
-  
+
   console.log("Final snippet order:", snippets.map(s => s.title));
   console.log("Final snippet order:", snippets.map(s => s.id));
 
