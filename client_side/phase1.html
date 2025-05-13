@@ -647,6 +647,7 @@ function submitAll() {
 }
 
 window.onload = function() {
+    displayUserName();
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "light") {
         document.body.classList.add("light-mode");
