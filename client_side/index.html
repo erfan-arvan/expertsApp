@@ -87,17 +87,31 @@
   Please ensure you complete both phases by the deadline so your input can be included in the final analysis.</p>
 
   <h3>Next Step</h3>
+<!-- Login Section -->
+<form id="login-box" onsubmit="return loginAndProceed(event)" autocomplete="on">
   <h3>Login to Begin</h3>
   <p><strong>Please enter your username and password to start the study:</strong></p>
-  
-  <input type="text" id="username" placeholder="Username" style="padding: 8px; font-size: 16px; width: 300px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
-  <input type="password" id="password" placeholder="Password" style="padding: 8px; font-size: 16px; width: 300px; border-radius: 5px; border: 1px solid #ccc;"><br>
-  
+
+  <input type="text" id="username" name="username" placeholder="Username" autocomplete="username"
+         style="padding: 8px; font-size: 16px; width: 300px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
+
+  <input type="password" id="password" name="password" placeholder="Password" autocomplete="current-password"
+         style="padding: 8px; font-size: 16px; width: 300px; border-radius: 5px; border: 1px solid #ccc;"><br>
+
   <p id="login-error" style="color: red; display: none;"></p>
-  
+
   <p style="margin-top: 20px;">
-    <button onclick="loginAndProceed()">Login and Start Phase 1</button>
+    <button type="submit">Login and Start Phase 1</button>
   </p>
+</form>
+
+
+<!-- Post-login Proceed Button -->
+<div id="proceed-box" style="display: none; margin-top: 20px;">
+  <p>Welcome back, <span id="participant-display-name" style="font-weight: bold;"></span>!</p>
+  <button onclick="proceedToPhase1()">Proceed to Phase 1</button>
+</div>
+
 
 </div>
 
@@ -157,20 +171,29 @@
   }
   </script>
   
+
 <script>
-  function proceedToPhase1() {
-    const name = document.getElementById('participantName').value.trim();
+  function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : null;
+  }
 
-    if (!name) {
-      alert("Please enter your name before proceeding.");
-      return;
+  function isLoggedIn() {
+    const name = sessionStorage.getItem('participantName') || getCookie('participantName');
+    const order = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
+    return name && order;
+  }
+
+  window.onload = () => {
+    if (isLoggedIn()) {
+      const name = sessionStorage.getItem('participantName') || getCookie('participantName');
+      document.getElementById('login-box').style.display = 'none';
+      document.getElementById('proceed-box').style.display = 'block';
+      document.getElementById('participant-display-name').textContent = name;
     }
+  };
 
-    // Save name to sessionStorage and cookie (30-day expiry)
-    sessionStorage.setItem('participantName', name);
-    document.cookie = `participantName=${encodeURIComponent(name)}; path=/; expires=${new Date(Date.now() + 30*24*60*60*1000).toUTCString()}`;
-
-    // Redirect to phase 1
+  function proceedToPhase1() {
     window.location.href = 'phase1.html';
   }
 </script>
