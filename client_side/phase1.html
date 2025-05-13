@@ -678,14 +678,6 @@ function toggleTheme() {
 window.onload = function() {
     displayUserName();
     applyTheme();
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "light") {
-        document.body.classList.add("light-mode");
-        document.getElementById('theme-toggle').textContent = "Switch to Dark Mode";
-    } else {
-        document.body.classList.add("dark-mode");
-    }
-
     loadSnippet(currentSnippet);
     updateButtons();
 
