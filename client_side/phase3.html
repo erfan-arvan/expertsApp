@@ -335,7 +335,7 @@
 }
 
     const phase3Ranking = JSON.parse(sessionStorage.getItem('phase3_ranking') || decodeURIComponent(document.cookie.match(/(?:^|; )phase3_ranking=([^;]*)/)?.[1] || '{}'));
-    let reasoning = JSON.parse(sessionStorage.getItem('phase4_reasoning') || '{}');
+    let reasoning = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
     let stepIndex = 0;
     const steps = [];
 
@@ -366,7 +366,7 @@
       }
     });
     reasoning = newReasoning;
-    sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
+    sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
 
 
     function showStep() {
@@ -433,18 +433,14 @@
       if (!response) return alert('Please provide an explanation.');
       const key = generateKey(steps[stepIndex]);
       reasoning[key] = response;
-      sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
+      sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
       stepIndex++;
       if (stepIndex < steps.length) {
         showStep();
       } else {
-        document.getElementById('question-text').innerHTML = '<strong>All questions answered.</strong> You may now review and submit your responses.';
-        document.getElementById('code-comparison').innerHTML = '';
-        document.getElementById('answer-box').style.display = 'none';
-        document.getElementById('next-question').style.display = 'none';
         document.getElementById('submit-review').style.display = 'inline-block';
-        // Store Phase 4 data
-        sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
+        // Store Phase 3 data
+        sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
       }
     }
 
@@ -452,7 +448,7 @@
       const response = document.getElementById('answer-box').value.trim();
       const key = generateKey(steps[stepIndex]);
       reasoning[key] = response;
-      sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
+      sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
       if (stepIndex > 0) {
         stepIndex--;
         showStep();
