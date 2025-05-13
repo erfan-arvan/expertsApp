@@ -357,6 +357,9 @@
 
   console.log("Final snippet order:", snippets.map(s => s.title));
   console.log("Final snippet order:", snippets.map(s => s.id));
+  const snippetOrder = getOrCreateSnippetOrder(snippets.length);
+  console.log("Generated snippetOrder:", snippetOrder);
+
 
 </script>
 
