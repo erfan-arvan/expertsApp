@@ -236,6 +236,118 @@
   
 
 <script>
+    const snippets = [
+    {
+          id: 1,
+          title: "Snippet 1",
+          code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method1</span>(<span class="type">String</span> name) {
+    <span class="keyword">if</span> (name == <span class="literal">null</span>) {
+      <span class="keyword">return</span> <span class="literal">false</span>;
+    }
+    <span class="keyword">if</span> (name.<span class="function">startsWith</span>(<span class="string">"."</span>)) {
+      <span class="keyword">return</span> <span class="literal">false</span>;
+    }
+    <span class="keyword">if</span> ((name.<span class="function">length</span>() < <span class="number">1</span>) || (name.<span class="function">length</span>() > MAX_NAME_LENGTH)) {
+      <span class="keyword">return</span> <span class="literal">false</span>;
+    }
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i < name.<span class="function">length</span>(); i++) {
+      <span class="type">char</span> c = name.<span class="function">charAt</span>(i);
+      <span class="keyword">if</span> (!Character.<span class="function">isLetterOrDigit</span>(c) && !VALID_NAME_SET.<span class="function">contains</span>(c)) {
+        <span class="keyword">return</span> <span class="literal">false</span>;
+      }
+    }
+    <span class="keyword">return</span> <span class="literal">true</span>;
+  }
+  `
+        },
+      {
+        id: 2,
+        title: "Snippet 2",
+        code: `<span class="keyword">public</span> <span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+          <span class="keyword">return</span> a + b;
+        }`
+      },
+      {
+        id: 3,
+        title: "Snippet 3",
+        code: `<span class="keyword">private static</span> <span class="type">String</span> <span class="function">greet</span>() {
+          <span class="keyword">return</span> <span class="literal">"Hello, world!"</span>;
+        }`
+      },
+      {
+        id: 4,
+        title: "Snippet 4",
+        code: `<span class="keyword">protected</span> <span class="type">void</span> <span class="function">log</span>(<span class="type">String</span> msg) {
+          System.<span class="function">out.println</span>(msg);
+        }`
+      },
+      {
+        id: 5,
+        title: "Snippet 5",
+        code: `<span class="keyword">public</span> <span class="type">boolean</span> <span class="function">isEmpty</span>(<span class="type">List</span>&lt;<span class="type">String</span>&gt; list) {
+          <span class="keyword">return</span> list.<span class="function">isEmpty</span>();
+        }`
+      },
+      {
+        id: 6,
+        title: "Snippet 6",
+        code: `<span class="keyword">static</span> <span class="type">double</span> <span class="function">multiply</span>(<span class="type">double</span> x, <span class="type">double</span> y) {
+          <span class="keyword">return</span> x * y;
+        }`
+      },
+      {
+        id: 7,
+        title: "Snippet 7",
+        code: `<span class="keyword">public</span> <span class="type">String</span> <span class="function">getName</span>() {
+          <span class="keyword">return</span> <span class="literal">"John Doe"</span>;
+        }`
+      },
+      {
+        id: 8,
+        title: "Snippet 8",
+        code: `<span class="keyword">private</span> <span class="type">int</span> <span class="function">square</span>(<span class="type">int</span> n) {
+          <span class="keyword">return</span> n * n;
+        }`
+      }
+    ];
+  
+  // Returns existing or creates a new randomized order of indices
+  function getOrCreateSnippetOrder(length) {
+    const key = 'snippetOrder';
+  
+    // Try to load from sessionStorage or cookie
+    let stored = sessionStorage.getItem(key) || getCookie(key);
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length === length) return parsed;
+      } catch {}
+    }
+  
+    // Generate new shuffled order of indices
+    const order = Array.from({ length }, (_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+  
+    // Store in sessionStorage and cookie
+    const serialized = JSON.stringify(order);
+    sessionStorage.setItem(key, serialized);
+    document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=2592000`; // 30 days
+  
+    return order;
+  }
+  
+  const order = getOrCreateSnippetOrder(snippets.length);
+  const originalSnippets = [...snippets]; // Save for mapping purposes if needed
+  
+  const shuffled = order.map(i => snippets[i]);
+  snippets.length = 0;
+  snippets.push(...shuffled); // Mutates original 'snippets' array in place
+  
+</script>
+<script>
     function getCookie(name) {
       const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
       return match ? decodeURIComponent(match[2]) : null;
@@ -386,83 +498,6 @@ function submitAll() {
   });
 
 }
-</script>
-
-<script>
-  const snippets = [
-  {
-        id: 1,
-        title: "Snippet 1",
-        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method1</span>(<span class="type">String</span> name) {
-  <span class="keyword">if</span> (name == <span class="literal">null</span>) {
-    <span class="keyword">return</span> <span class="literal">false</span>;
-  }
-  <span class="keyword">if</span> (name.<span class="function">startsWith</span>(<span class="string">"."</span>)) {
-    <span class="keyword">return</span> <span class="literal">false</span>;
-  }
-  <span class="keyword">if</span> ((name.<span class="function">length</span>() < <span class="number">1</span>) || (name.<span class="function">length</span>() > MAX_NAME_LENGTH)) {
-    <span class="keyword">return</span> <span class="literal">false</span>;
-  }
-  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i < name.<span class="function">length</span>(); i++) {
-    <span class="type">char</span> c = name.<span class="function">charAt</span>(i);
-    <span class="keyword">if</span> (!Character.<span class="function">isLetterOrDigit</span>(c) && !VALID_NAME_SET.<span class="function">contains</span>(c)) {
-      <span class="keyword">return</span> <span class="literal">false</span>;
-    }
-  }
-  <span class="keyword">return</span> <span class="literal">true</span>;
-}
-`
-      },
-    {
-      id: 2,
-      title: "Snippet 2",
-      code: `<span class="keyword">public</span> <span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
-        <span class="keyword">return</span> a + b;
-      }`
-    },
-    {
-      id: 3,
-      title: "Snippet 3",
-      code: `<span class="keyword">private static</span> <span class="type">String</span> <span class="function">greet</span>() {
-        <span class="keyword">return</span> <span class="literal">"Hello, world!"</span>;
-      }`
-    },
-    {
-      id: 4,
-      title: "Snippet 4",
-      code: `<span class="keyword">protected</span> <span class="type">void</span> <span class="function">log</span>(<span class="type">String</span> msg) {
-        System.<span class="function">out.println</span>(msg);
-      }`
-    },
-    {
-      id: 5,
-      title: "Snippet 5",
-      code: `<span class="keyword">public</span> <span class="type">boolean</span> <span class="function">isEmpty</span>(<span class="type">List</span>&lt;<span class="type">String</span>&gt; list) {
-        <span class="keyword">return</span> list.<span class="function">isEmpty</span>();
-      }`
-    },
-    {
-      id: 6,
-      title: "Snippet 6",
-      code: `<span class="keyword">static</span> <span class="type">double</span> <span class="function">multiply</span>(<span class="type">double</span> x, <span class="type">double</span> y) {
-        <span class="keyword">return</span> x * y;
-      }`
-    },
-    {
-      id: 7,
-      title: "Snippet 7",
-      code: `<span class="keyword">public</span> <span class="type">String</span> <span class="function">getName</span>() {
-        <span class="keyword">return</span> <span class="literal">"John Doe"</span>;
-      }`
-    },
-    {
-      id: 8,
-      title: "Snippet 8",
-      code: `<span class="keyword">private</span> <span class="type">int</span> <span class="function">square</span>(<span class="type">int</span> n) {
-        <span class="keyword">return</span> n * n;
-      }`
-    }
-  ];
 </script>
 
 
