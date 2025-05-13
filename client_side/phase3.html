@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Phase 4: Explain Your Ranking Decisions</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+    }
+    .step-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .code-box {
+      background-color: #2d2d2d;
+      color: #ccc;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 15px;
+      margin-bottom: 20px;
+      white-space: pre-wrap;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      font-size: 14px;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .buttons {
+      text-align: center;
+      margin-top: 30px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button#next-question {
+      background-color: #4CAF50;
+      color: white;
+    }
+    button#submit-review {
+      background-color: #2196F3;
+      color: white;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h2>Phase 4: Explain Your Ranking Decisions</h2>
+
+  <div id="question-container" class="step-box">
+    <div id="question-text"></div>
+    <div id="code-comparison"></div>
+    <textarea id="answer-box" placeholder="Type your explanation here..."></textarea>
+    <div class="buttons">
+      <button onclick="prevQuestion()">⬅️ Previous</button>
+      <button id="next-question" onclick="nextQuestion()">Next ➡️</button>
+      <button id="submit-review" onclick="reviewAndSubmit()">Review and Submit All</button>
+    </div>
+  </div>
+
+  <script>
+  const snippets = [
+  {
+        id: 1,
+        title: "Snippet 1",
+        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">method1</span>(<span class="type">String</span> name) {
+  <span class="keyword">if</span> (name == <span class="literal">null</span>) {
+    <span class="keyword">return</span> <span class="literal">false</span>;
+  }
+  <span class="keyword">if</span> (name.<span class="function">startsWith</span>(<span class="string">"."</span>)) {
+    <span class="keyword">return</span> <span class="literal">false</span>;
+  }
+  <span class="keyword">if</span> ((name.<span class="function">length</span>() < <span class="number">1</span>) || (name.<span class="function">length</span>() > MAX_NAME_LENGTH)) {
+    <span class="keyword">return</span> <span class="literal">false</span>;
+  }
+  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i < name.<span class="function">length</span>(); i++) {
+    <span class="type">char</span> c = name.<span class="function">charAt</span>(i);
+    <span class="keyword">if</span> (!Character.<span class="function">isLetterOrDigit</span>(c) && !VALID_NAME_SET.<span class="function">contains</span>(c)) {
+      <span class="keyword">return</span> <span class="literal">false</span>;
+    }
+  }
+  <span class="keyword">return</span> <span class="literal">true</span>;
+}
+`
+      },
+    {
+      id: 2,
+      title: "Snippet 2",
+      code: `<span class="keyword">public</span> <span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+        <span class="keyword">return</span> a + b;
+      }`
+    },
+    {
+      id: 3,
+      title: "Snippet 3",
+      code: `<span class="keyword">private static</span> <span class="type">String</span> <span class="function">greet</span>() {
+        <span class="keyword">return</span> <span class="literal">"Hello, world!"</span>;
+      }`
+    },
+    {
+      id: 4,
+      title: "Snippet 4",
+      code: `<span class="keyword">protected</span> <span class="type">void</span> <span class="function">log</span>(<span class="type">String</span> msg) {
+        System.<span class="function">out.println</span>(msg);
+      }`
+    },
+    {
+      id: 5,
+      title: "Snippet 5",
+      code: `<span class="keyword">public</span> <span class="type">boolean</span> <span class="function">isEmpty</span>(<span class="type">List</span>&lt;<span class="type">String</span>&gt; list) {
+        <span class="keyword">return</span> list.<span class="function">isEmpty</span>();
+      }`
+    },
+    {
+      id: 6,
+      title: "Snippet 6",
+      code: `<span class="keyword">static</span> <span class="type">double</span> <span class="function">multiply</span>(<span class="type">double</span> x, <span class="type">double</span> y) {
+        <span class="keyword">return</span> x * y;
+      }`
+    },
+    {
+      id: 7,
+      title: "Snippet 7",
+      code: `<span class="keyword">public</span> <span class="type">String</span> <span class="function">getName</span>() {
+        <span class="keyword">return</span> <span class="literal">"John Doe"</span>;
+      }`
+    },
+    {
+      id: 8,
+      title: "Snippet 8",
+      code: `<span class="keyword">private</span> <span class="type">int</span> <span class="function">square</span>(<span class="type">int</span> n) {
+        <span class="keyword">return</span> n * n;
+      }`
+    }
+  ];
+
+    const phase3Ranking = JSON.parse(sessionStorage.getItem('phase3_ranking') || decodeURIComponent(document.cookie.match(/(?:^|; )phase3_ranking=([^;]*)/)?.[1] || '{}'));
+    let reasoning = JSON.parse(sessionStorage.getItem('phase4_reasoning') || '[]');
+    let stepIndex = 0;
+    const steps = [];
+
+    Object.entries(phase3Ranking).forEach(([rank, ids], i, arr) => {
+      if (ids.length > 1) {
+        steps.push({
+          type: 'grouping',
+          rank,
+          snippets: ids.map(id => snippets.find(s => `snippet-${s.id}` === id))
+        });
+      }
+      if (i < arr.length - 1 && arr[i+1][1].length > 0) {
+        steps.push({
+          type: 'comparison',
+          currentRank: rank,
+          nextRank: arr[i+1][0],
+          currentSnippets: ids.map(id => snippets.find(s => `snippet-${s.id}` === id)),
+          nextSnippets: arr[i+1][1].map(id => snippets.find(s => `snippet-${s.id}` === id))
+        });
+      }
+    });
+
+    function showStep() {
+      document.getElementById('answer-box').style.display = 'block';
+      document.getElementById('next-question').style.display = 'inline-block';
+      const step = steps[stepIndex];
+      const qText = document.getElementById('question-text');
+      const comp = document.getElementById('code-comparison');
+      const textarea = document.getElementById('answer-box');
+      const saved = reasoning[stepIndex]?.answer || '';
+      textarea.value = saved;
+
+
+      comp.innerHTML = '';
+      if (step.type === 'grouping') {
+        qText.innerHTML = `<strong>Position ${step.rank}:</strong> Why did you group the following snippets together?`;
+        step.snippets.forEach(snippet => {
+          comp.innerHTML += `<div class='code-box'><strong>${snippet.title}</strong><br>${snippet.code}</div>`;
+        });
+      } else {
+        qText.innerHTML = `<strong>Positions ${step.currentRank} vs ${step.nextRank}:</strong> Why are the snippets in Position ${step.currentRank} more comprehensible than those in Position ${step.nextRank}?`;
+        comp.innerHTML = '';
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.gap = '40px';
+        row.style.width = '100%';
+
+        const leftCol = document.createElement('div');
+        leftCol.style.flex = '1';
+        leftCol.innerHTML = `<h4>Position ${step.currentRank}</h4>`;
+        step.currentSnippets.forEach(snippet => {
+          leftCol.innerHTML += `<div class='code-box'><strong>${snippet.title}</strong><br>${snippet.code}</div>`;
+        });
+        comp.innerHTML += `</div>`;
+
+        const rightCol = document.createElement('div');
+        rightCol.style.flex = '1';
+        rightCol.innerHTML = `<h4>Position ${step.nextRank}</h4>`;
+        step.nextSnippets.forEach(snippet => {
+          rightCol.innerHTML += `<div class='code-box'><strong>${snippet.title}</strong><br>${snippet.code}</div>`;
+        });
+        row.appendChild(leftCol);
+        row.appendChild(rightCol);
+        comp.appendChild(row);
+        
+      }
+    }
+
+    function nextQuestion() {
+      const response = document.getElementById('answer-box').value.trim();
+      if (!response) return alert('Please provide an explanation.');
+      reasoning[stepIndex] = { step: steps[stepIndex], answer: response };
+      sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
+      stepIndex++;
+      if (stepIndex < steps.length) {
+        showStep();
+      } else {
+        document.getElementById('question-text').innerHTML = '<strong>All questions answered.</strong> You may now review and submit your responses.';
+        document.getElementById('code-comparison').innerHTML = '';
+        document.getElementById('answer-box').style.display = 'none';
+        document.getElementById('next-question').style.display = 'none';
+        document.getElementById('submit-review').style.display = 'inline-block';
+        // Store Phase 4 data
+        sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
+      }
+    }
+
+    function prevQuestion() {
+      const response = document.getElementById('answer-box').value.trim();
+      reasoning[stepIndex] = { step: steps[stepIndex], answer: response };
+      sessionStorage.setItem('phase4_reasoning', JSON.stringify(reasoning));
+      if (stepIndex > 0) {
+        stepIndex--;
+        showStep();
+      }
+    }
+
+    function reviewAndSubmit() {
+      window.location.href = '/review.html';
+    }
+
+    showStep();
+  </script>
+</body>
+</html>
