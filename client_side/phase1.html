@@ -339,14 +339,14 @@
     return order;
   }
   
-  const order = getOrCreateSnippetOrder(snippets.length);
-  const originalSnippets = [...snippets]; // Save for mapping purposes if needed
-  
-  const shuffled = order.map(i => snippets[i]);
+  const originalSnippets = [...snippets]; // Clone BEFORE any mutation
+  const order = getOrCreateSnippetOrder(originalSnippets.length);
+  const shuffled = order.map(i => originalSnippets[i]);
+
   snippets.length = 0;
-  snippets.push(...shuffled); // Mutates original 'snippets' array in place
-  
+  snippets.push(...shuffled); // Now safe to mutate
 </script>
+
 <script>
     function getCookie(name) {
       const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
