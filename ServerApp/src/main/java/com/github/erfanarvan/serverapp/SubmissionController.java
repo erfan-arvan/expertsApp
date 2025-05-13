@@ -4,69 +4,84 @@ import org.springframework.web.bind.annotation.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class SubmissionController {
 
-    // ---- Phase 1: Receive Summaries ----
-    @CrossOrigin(origins = {
-        "http://localhost:8000",
-        "http://codecomprehensibility.site"
-    })
-    @PostMapping("/submit")
-    public String handlePhase1(@RequestBody Map<String, String> body) {
-        String name = body.getOrDefault("name", "Anonymous");
-        try (FileWriter writer = new FileWriter("phase1_submissions.txt", true)) {
-            writer.write("=== Phase 1 Submission ===\n");
+    private static final Map<String, String> userPasswords = Map.of(
+        "alice", "pass123",
+        "bob", "secure456",
+        "carol", "expert789"
+    );
+
+    private static final Map<String, String> userNames = Map.of(
+        "alice", "Dr. Alice Smith",
+        "bob", "Prof. Bob Johnson",
+        "carol", "Carol Expert"
+    );
+
+    private static final Map<String, List<Integer>> userSnippetOrders = Map.of(
+        "alice", List.of(2, 0, 3, 6, 7, 1, 5, 4),
+        "bob", List.of(0, 1, 2, 3, 4, 5, 6, 7),
+        "carol", List.of(5, 6, 7, 0, 1, 2, 3, 4)
+    );
+
+    @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+    @PostMapping("/get_snippet_order")
+    public Map<String, Object> getSnippetOrder(@RequestBody Map<String, String> credentials) {
+        String username = credentials.get("username");
+        String password = credentials.get("password");
+
+        if (!userPasswords.containsKey(username) || !userPasswords.get(username).equals(password)) {
+            throw new ResponseStatusException(org.springframework.http.HttpStatus.UNAUTHORIZED, "Invalid credentials");
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("participantName", userNames.get(username));
+        response.put("snippetOrder", userSnippetOrders.get(username));
+        return response;
+    }
+
+    @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+    @PostMapping("/submit_final")
+    public String handleFinalSubmission(@RequestBody Map<String, Object> body) {
+        String participantName = (String) body.getOrDefault("participantName", "Anonymous");
+
+        try (FileWriter writer = new FileWriter("final_submissions.txt", true)) {
+            writer.write("=== Final Submission ===\n");
             writer.write("Time: " + LocalDateTime.now() + "\n");
-            writer.write("Name: " + name + "\n");
-            for (Map.Entry<String, String> entry : body.entrySet()) {
-                if (!entry.getKey().equals("name")) {
-                    writer.write(entry.getKey() + ": " + entry.getValue() + "\n");
+            writer.write("Name: " + participantName + "\n");
+
+            writer.write("Phase 1:\n");
+            Map<String, Object> phase1 = (Map<String, Object>) body.get("phase1");
+            if (phase1 != null) {
+                for (Map.Entry<String, Object> entry : phase1.entrySet()) {
+                    writer.write("  " + entry.getKey() + ": " + entry.getValue() + "\n");
                 }
             }
+
+            writer.write("Phase 2 (Ranking):\n");
+            Map<String, Object> phase2 = (Map<String, Object>) body.get("phase2");
+            if (phase2 != null) {
+                for (Map.Entry<String, Object> entry : phase2.entrySet()) {
+                    writer.write("  " + entry.getKey() + ": " + entry.getValue() + "\n");
+                }
+            }
+
+            writer.write("Phase 3 (Reasoning):\n");
+            Map<String, Object> phase3 = (Map<String, Object>) body.get("phase3");
+            if (phase3 != null) {
+                for (Map.Entry<String, Object> entry : phase3.entrySet()) {
+                    writer.write("  " + entry.getKey() + ": " + entry.getValue() + "\n");
+                }
+            }
+
             writer.write("\n");
-            return "Submission received.";
+            return "All phases submitted.";
         } catch (IOException e) {
             e.printStackTrace();
-            return "Error writing submission.";
+            return "Error saving final data.";
         }
-    }
-
-        // ---- Phase 2: Receive Rankings + Reasoning ----
-    @CrossOrigin(origins = {
-        "http://localhost:8000",
-        "http://codecomprehensibility.site"
-    })
-    @PostMapping("/submit_phase2")
-    public String handlePhase2(@RequestBody Phase2Submission submission) {
-        try (FileWriter writer = new FileWriter("phase2_submissions.txt", true)) {
-            writer.write("=== Phase 2 Submission ===\n");
-            writer.write("Time: " + LocalDateTime.now() + "\n");
-            writer.write("Name: " + submission.getName() + "\n");
-            writer.write("Ranking: " + String.join(", ", submission.getRanking()) + "\n");
-            writer.write("Reasoning: " + submission.getReasoning() + "\n\n");
-            return "Phase 2 submission received.";
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Error saving Phase 2 data.";
-        }
-    }
-
-    // Inner class to deserialize Phase 2 JSON
-    public static class Phase2Submission {
-        private String name;
-        private String[] ranking;
-        private String reasoning;
-
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-
-        public String[] getRanking() { return ranking; }
-        public void setRanking(String[] ranking) { this.ranking = ranking; }
-
-        public String getReasoning() { return reasoning; }
-        public void setReasoning(String reasoning) { this.reasoning = reasoning; }
     }
 }
