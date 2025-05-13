@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Phase 1: Reading and Understanding Code Snippets</title>
-    <script defer src="shuffle.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -350,6 +349,9 @@
 
   snippets.length = 0;
   snippets.push(...shuffled);
+
+  console.log("Final snippet order:", snippets.map(s => s.title));
+  console.log("Final snippet order:", snippets.map(s => s.id));
 
 </script>
 
