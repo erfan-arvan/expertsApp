@@ -92,6 +92,97 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
+
+
+    /*Snippet preview*/
+    .snippet-preview-box {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+      margin-bottom: 20px;
+    }
+
+    .snippet-header {
+      background-color: #f5f5f5;
+      padding: 10px 15px;
+      font-weight: bold;
+      font-size: 16px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .code-box {
+      font-family: 'Courier New', Courier, monospace;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      padding: 15px;
+      font-size: 14px;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+
+    /*dark/light mode*/
+    /* Light mode preview styles */
+  /* === Default (light mode) === */
+  .card {
+    background-color: #ffffff;
+    border-color: #ccc;
+    color: #333;
+  }
+
+  .snippet-preview-box {
+    background-color: #fefefe;
+    border: 1px solid #bbb;
+  }
+
+  .code-box {
+    background-color: #f9f9f9;
+    color: #222;
+  }
+
+/* === Dark mode overrides === */
+  body.dark-mode .card {
+    background-color: #2a2a2a;
+    border-color: #555;
+    color: #ddd;
+  }
+
+  body.dark-mode .snippet-preview-box {
+    background-color: #1e1e1e;
+    border: 1px solid #444;
+  }
+
+  body.dark-mode .code-box {
+    background-color: #2d2d2d;
+    color: #ddd;
+  }
+
+
+    /*code box*/
+  /* Basic syntax highlighting classes */
+  .keyword     { color: #0000ff; font-weight: bold; }
+  .type        { color: #007070; }
+  .function    { color: #7928a1; font-weight: bold; }
+  .literal     { color: #009999; }
+  .string      { color: #a31515; }
+  .comment     { color: #6a9955; font-style: italic; }
+  .number      { color: #098658; }
+
+    /* Dark mode overrides */
+  .dark-mode .keyword  { color: #82aaff; }
+  .dark-mode .type     { color: #89ddff; }
+  .dark-mode .function { color: #c792ea; }
+  .dark-mode .literal  { color: #ffcb6b; }
+  .dark-mode .string   { color: #c3e88d; }
+  .dark-mode .comment  { color: #7f848e; }
+  .dark-mode .number   { color: #f78c6c; }
+
+  html {
+  scroll-behavior: smooth;
+  }
+
+
   </style>
 </head>
 <body>
@@ -247,7 +338,11 @@
       if (step.type === 'grouping') {
         qText.innerHTML = `<strong>Position ${step.rank}:</strong> Why did you group the following snippets together?`;
         step.snippets.forEach(snippet => {
-          comp.innerHTML += `<div class='code-box'><strong>${snippet.title}</strong><br>${snippet.code}</div>`;
+          comp.innerHTML += `
+            <div class="snippet-preview-box">
+              <div class="snippet-header">${snippet.title}</div>
+              <div class="code-box">${snippet.code}</div>
+            </div>`;
         });
       } else {
         qText.innerHTML = `<strong>Positions ${step.currentRank} vs ${step.nextRank}:</strong> Why are the snippets in Position ${step.currentRank} more comprehensible than those in Position ${step.nextRank}?`;
@@ -261,7 +356,11 @@
         leftCol.style.flex = '1';
         leftCol.innerHTML = `<h4>Position ${step.currentRank}</h4>`;
         step.currentSnippets.forEach(snippet => {
-          leftCol.innerHTML += `<div class='code-box'><strong>${snippet.title}</strong><br>${snippet.code}</div>`;
+          leftCol.innerHTML += `
+            <div class="snippet-preview-box">
+              <div class="snippet-header">${snippet.title}</div>
+              <div class="code-box">${snippet.code}</div>
+            </div>`;
         });
         comp.innerHTML += `</div>`;
 
@@ -269,7 +368,11 @@
         rightCol.style.flex = '1';
         rightCol.innerHTML = `<h4>Position ${step.nextRank}</h4>`;
         step.nextSnippets.forEach(snippet => {
-          rightCol.innerHTML += `<div class='code-box'><strong>${snippet.title}</strong><br>${snippet.code}</div>`;
+          rightCol.innerHTML += `
+            <div class="snippet-preview-box">
+              <div class="snippet-header">${snippet.title}</div>
+              <div class="code-box">${snippet.code}</div>
+            </div>`;
         });
         row.appendChild(leftCol);
         row.appendChild(rightCol);
