@@ -117,7 +117,7 @@
         <li><strong>Comparisons:</strong> Explain why snippets in one ranking position are more comprehensible than those in the next.</li>
       </ol>
       <p><strong>Tip:</strong> There are no right or wrong answers — we are interested in your perspective and reasoning.</p>
-      <p><strong>Time Expectation:</strong> Please spend around <u>30–60 seconds</u> per question.</p>
+      <p><strong>Time Expectation:</strong> Please spend around <u>1-2 minutes</u> per question.</p>
     </div>
   </div>
   
@@ -331,7 +331,22 @@
   else if (current.includes('phase2')) document.getElementById('link-phase2')?.classList.add('active');
   else if (current.includes('phase3')) document.getElementById('link-phase3')?.classList.add('active');
   else if (current.includes('review')) document.getElementById('link-review')?.classList.add('active');
-};
+  };
+
+  function toggleInstructions() {
+    const content = document.getElementById("instructions-content");
+    const button = event.target;
+
+    if (content.style.display === "none") {
+      content.style.display = "block";
+      button.textContent = "Hide";
+    } else {
+      content.style.display = "none";
+      button.textContent = "Show";
+    }
+  }
+
+
 
   </script>
 </body>
