@@ -364,6 +364,34 @@
     }
   ];
 
+    function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : null;
+  }
+
+  function getStoredSnippetOrder() {
+    const stored = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length === 8) return parsed;
+      } catch {}
+    }
+    return null;
+  }
+
+  const order = getStoredSnippetOrder();
+  if (order) {
+    const originalSnippets = [...snippets];
+    snippets.length = 0;
+    snippets.push(...order.map(i => originalSnippets[i]));
+  }
+
+  if (!order) {
+    alert("Missing snippet order. Please complete Phase 1 first.");
+    window.location.href = "phase1.html";
+  }
+
     window.onload = () => {
       loadCards();
       loadState();
