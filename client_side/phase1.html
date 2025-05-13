@@ -664,6 +664,14 @@ function submitAll() {
     if (btn) btn.textContent = isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode';
   }
 
+  // If Phase 1 had any extra initialization logic, you can hook it into window.onload:
+  window.onload = function () {
+    applyTheme();
+    // e.g. loadSnippet(1); or other phase-specific setup here
+  };
+</script>
+
+<script>
 window.onload = function() {
     displayUserName();
     applyTheme();
