@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Phase 3: Rank Code Snippets</title>
+  <title>Phase 2: Rank Code Snippets</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -85,6 +85,7 @@
     }
       #continueBtn:hover {
       background-color: #45a049;
+      animation: glowPulse 1.5s infinite alternate;
     }
 
     @keyframes glowPulse {
@@ -94,10 +95,6 @@
       100% {
         box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
       }
-    }
-    @keyframes glowPulse {
-      0% { box-shadow: 0 0 10px #4CAF50; }
-      100% { box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50; }
     }
 
     .status-bar {
@@ -221,6 +218,14 @@
   html {
   scroll-behavior: smooth;
   }
+  a {
+    color: #4CAF50;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
 
 </style>
 </head>
@@ -286,7 +291,6 @@
   <div class="preview-area" id="previewArea"></div>
 
   <div style="margin-top: 30px;">
-    <button onclick="location.href='/phase2.html'" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: #ccc; color: black; cursor: pointer; margin-right: 10px;">⬅️ Back to Phase 2</button>
     <button id="continueBtn" onclick="goToPhase3()" style="display: none; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: #4CAF50; color: white; cursor: pointer;">Continue to Phase 3 ➡️</button>
   </div>
 

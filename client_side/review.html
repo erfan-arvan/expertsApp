@@ -44,6 +44,7 @@
     .submit-button {
       background-color: #4CAF50;
       color: white;
+      animation: glowPulse 1.5s infinite alternate;
     }
 
     /*status bar*/
@@ -80,6 +81,23 @@
       pointer-events: none;
       opacity: 0.5;
       cursor: not-allowed;
+    }
+
+  a {
+    color: #4CAF50;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  @keyframes glowPulse {
+      0% {
+        box-shadow: 0 0 10px #4CAF50;
+      }
+      100% {
+        box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+      }
     }
 
   </style>
