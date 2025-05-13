@@ -385,6 +385,11 @@ const snippets = [
     const originalSnippets = [...snippets];
     snippets.length = 0;
     snippets.push(...order.map(i => originalSnippets[i]));
+    // Reassign new IDs based on shuffled order (1 to 8)
+    snippets.forEach((snippet, index) => {
+      snippet.id = index + 1;
+});
+
   }
 
   if (!order) {
@@ -393,6 +398,8 @@ const snippets = [
   }
 
   console.log("Loaded snippet order:", snippets.map(s => s.title));
+  console.log("Reassigned snippet IDs after shuffling:", snippets.map(s => s.id));
+
 
 </script>
 <script>
