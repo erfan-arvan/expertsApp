@@ -26,9 +26,10 @@ public class SubmissionController {
     );
 
     private static final Map<String, List<Integer>> userSnippetOrders = Map.of(
-        "alice", List.of(2, 0, 3, 6, 7, 1, 5, 4),
-        "bob", List.of(0, 1, 2, 3, 4, 5, 6, 7),
-        "carol", List.of(5, 6, 7, 0, 1, 2, 3, 4)
+        "martin", List.of(2, 0, 3, 6, 7, 1, 5, 4),
+        "oscar", List.of(0, 1, 2, 3, 4, 5, 6, 7),
+        "erfan", List.of(5, 6, 7, 0, 1, 2, 3, 4)
+        "nadeeshan", List.of(6, 5, 7, 0, 1, 2, 3, 4)
     );
 
     @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
