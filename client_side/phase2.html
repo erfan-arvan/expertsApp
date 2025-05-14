@@ -104,7 +104,6 @@
         border-radius: 6px;
         cursor: pointer;
         box-shadow: 0 0 10px #4CAF50;
-        animation: glowPulse 1.5s infinite alternate;
       }
 
       #continueBtn:hover {
@@ -448,7 +447,8 @@ const snippets = [
       if (sessionStorage.getItem('phase2Complete') === 'true' || getCookie('phase2Complete') === 'true') {
         if (continueBtn) {
           continueBtn.style.display = 'inline-block';
-          continueBtn.style.backgroundColor = '#4CAF50'; // Green background
+          continueBtn.style.backgroundColor = '#4CAF50'; 
+          continueBtn.style.animation = 'glowPulse 1.5s infinite alternate';
         }
       }
 
@@ -465,6 +465,8 @@ const snippets = [
 
       if (sessionStorage.getItem('phase2Complete') === 'true' || getCookie('phase2Complete') === 'true') {
           document.getElementById('continueBtn').style.display = 'inline-block';
+          document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
+          document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
       }
     };
 
@@ -533,6 +535,7 @@ const snippets = [
       if (areAllCardsRanked()) {
         document.getElementById('continueBtn').style.display = 'inline-block';
         document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
+        document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
         sessionStorage.setItem('phase2Complete', 'true');
         document.cookie = `phase2Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
 
