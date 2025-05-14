@@ -326,6 +326,42 @@
     <button id="continueBtn" onclick="goToPhase3()" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: gray; color: white; cursor: pointer;">Continue to Phase 3 ➡️</button>
   </div>
 
+  <div id="validation-modal" style="
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff0f0;
+  color: #660000;
+  border: 1px solid #ff9999;
+  padding: 20px;
+  border-radius: 10px;
+  width: 440px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  z-index: 1002;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  ">
+    <p id="validation-message" style="font-weight: bold;"></p>
+    <button onclick="document.getElementById('validation-modal').style.display = 'none';" style="
+      margin-top: 15px;
+      padding: 8px 14px;
+      background-color: #ff9999;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    ">OK</button>
+  </div>
+
+  <script>
+    function showValidationMessage(msg) {
+      document.getElementById('validation-message').innerText = msg;
+      document.getElementById('validation-modal').style.display = 'block';
+    }
+  </script>
+
 <script>
 const snippets = [
   {
@@ -426,8 +462,8 @@ const snippets = [
   }
 
   if (!order) {
-    alert("Missing snippet order. Please complete Phase 1 first.");
-    window.location.href = "phase1.html";
+    showValidationMessage("⚠️ Missing snippet order. Please login first.");
+    window.location.href = "/";
   }
 
   console.log("Loaded snippet order:", snippets.map(s => s.title));
@@ -607,7 +643,7 @@ function applyTheme() {
     function goToPhase3() {
     if(areAllCardsRanked()){
       location.href = '/phase3.html';
-    }else{alert("Please rank all snippets")};
+    }else{showValidationMessage("⚠️ Please rank all snippets")};
   }
 
   /*For the instructions section*/
