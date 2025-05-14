@@ -545,9 +545,6 @@ const snippets = [
           phase3Link.classList.remove('disabled');
         }
       } else {
-        document.getElementById('continueBtn').style.display = 'none';
-        document.getElementById('continueBtn').style.backgroundColor = 'gray';
-
         sessionStorage.removeItem('phase2Complete');
         document.cookie = `phase2Complete=; path=/; max-age=0`;
 
