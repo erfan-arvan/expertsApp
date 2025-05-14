@@ -12,16 +12,16 @@ import org.springframework.web.server.ResponseStatusException;
 public class SubmissionController {
 
     private static final Map<String, String> userPasswords = Map.of(
-        "martin", "kudXKSspt6QT"
-        "oscar", "NMgxVXWCn6D7"
-        "erfan", "fmtHu98Tz7rd"
+        "martin", "kudXKSspt6QT",
+        "oscar", "NMgxVXWCn6D7",
+        "erfan", "fmtHu98Tz7rd",
         "nadeeshan", "xGAXPnnLD3yH"
     );
 
     private static final Map<String, String> userNames = Map.of(
         "martin", "Martin Kellogg",
         "oscar", "Oscar Chaparro",
-        "erfan", "Erfan Arvan"
+        "erfan", "Erfan Arvan",
         "nadeeshan", "De Silva, Nadeeshan"
     );
 
