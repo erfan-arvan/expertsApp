@@ -474,7 +474,7 @@ const snippets = [
         card.id = `snippet-${snippet.id}`;
         card.innerHTML = `
           <strong>${snippet.title}</strong>
-          <label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
+          <br><label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
         `;
         card.addEventListener('dragstart', () => card.classList.add('dragging'));
         card.addEventListener('dragend', () => card.classList.remove('dragging'));
