@@ -293,9 +293,10 @@
       body: JSON.stringify(payload)
     })
     .then(res => res.ok
-        ? showSubmissionModal('✅ Submission successful!\nWe will notify you about the possible next steps.')
-        : showValidationMessage('❌ Submission failed. Please try again.')
-      )
+      ? showSubmissionModal('✅ Submission successful!\nWe will notify you about the possible next steps. You can still resubmit your responses before the deadline if needed.')
+      : showValidationMessage('❌ Submission failed. Please try again.')
+    )
+
       .catch(() => alert('⚠️ Error during submission.'));
   }
 
