@@ -120,7 +120,7 @@
       }
     }
 
-    .status-bar {
+    /*.status-bar {
       background-color: #333;
       color: white;
       padding: 10px 20px;
@@ -128,18 +128,31 @@
       justify-content: center;
       gap: 30px;
       margin-top: 0;
-      position: static; /* or just remove this line */
-    }
+      position: static; 
+    }*/
 
+.status-bar {
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
 
-    .phase-link {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      padding: 8px 12px;
-      border-radius: 4px;
-      transition: background-color 0.2s;
-    }
+.phase-link {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
 
     .phase-link:hover:not(.disabled) {
       background-color: #4CAF50;
