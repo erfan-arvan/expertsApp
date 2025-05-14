@@ -167,6 +167,46 @@
     ">OK</button>
   </div>
 
+  <div id="submission-modal" style="
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e6fff2;
+    color: #003d2f;
+    border: 1px solid #7fdcbf;
+    padding: 20px;
+    border-radius: 10px;
+    width: 440px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    z-index: 1001;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+">
+    <p id="submission-message" style="font-weight: bold;">Phase 1 submitted successfully, please </p>
+    <button onclick="hideSubmissionModal()" style="
+        margin-top: 15px;
+        padding: 8px 14px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    ">OK</button>
+</div>
+
+<script>
+  function showSubmissionModal(message) {
+    document.getElementById('submission-message').innerText = message;
+    document.getElementById('submission-modal').style.display = 'block';
+  }
+  
+  function hideSubmissionModal() {
+    document.getElementById('submission-modal').style.display = 'none';
+  }
+</script>  
+
   <script>
     function showValidationMessage(msg) {
       document.getElementById('validation-message').innerText = msg;
@@ -252,7 +292,7 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
-      .then(res => res.ok ? showValidationMessage('✅ Submission successful!') : showValidationMessage('❌ Submission failed.'))
+      .then(res => res.ok ? showSubmissionModal('✅ Submission successful!') : showValidationMessage('❌ Submission failed.'))
       .catch(() => alert('⚠️ Error during submission.'));
   }
 
