@@ -402,13 +402,25 @@
       comp.innerHTML = '';
       if (step.type === 'grouping') {
         qText.innerHTML = `<strong>Position ${step.rank}:</strong> Why did you group the following snippets together?`;
+
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.gap = '40px';
+        row.style.flexWrap = 'wrap';
+        row.style.width = '100%';
+
         step.snippets.forEach(snippet => {
-          comp.innerHTML += `
-            <div class="snippet-preview-box">
-              <div class="snippet-header">${snippet.title}</div>
-              <div class="code-box">${snippet.code}</div>
-            </div>`;
+          const box = document.createElement('div');
+          box.className = 'snippet-preview-box';
+          box.style.flex = '1 1 300px';  // allows wrapping on smaller screens
+          box.innerHTML = `
+            <div class="snippet-header">${snippet.title}</div>
+            <div class="code-box">${snippet.code}</div>
+          `;
+          row.appendChild(box);
         });
+
+        comp.appendChild(row);
       } else {
         qText.innerHTML = `<strong>Positions ${step.currentRank} vs ${step.nextRank}:</strong> Why are the snippets in Position ${step.currentRank} more comprehensible than those in Position ${step.nextRank}?`;
         comp.innerHTML = '';
