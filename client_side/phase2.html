@@ -324,7 +324,7 @@
   <div class="preview-area" id="previewArea"></div>
 
   <div style="margin-top: 30px;">
-    <button id="continueBtn" onclick="goToPhase3()" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: #4CAF50; color: white; cursor: pointer;">Continue to Phase 3 ➡️</button>
+    <button id="continueBtn" onclick="goToPhase3()" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: gray; color: white; cursor: pointer;">Continue to Phase 3 ➡️</button>
   </div>
 
 <script>
@@ -446,7 +446,10 @@ const snippets = [
       // ✅ Restore Continue button if phase2Complete is already set
       const continueBtn = document.getElementById('continueBtn');
       if (sessionStorage.getItem('phase2Complete') === 'true' || getCookie('phase2Complete') === 'true') {
-        if (continueBtn) continueBtn.style.display = 'inline-block';
+        if (continueBtn) {
+          continueBtn.style.display = 'inline-block';
+          continueBtn.style.backgroundColor = '#4CAF50'; // Green background
+        }
       }
 
       // Unlock and highlight status bar
@@ -529,6 +532,7 @@ const snippets = [
       /* Check if the phase is completed */
       if (areAllCardsRanked()) {
         document.getElementById('continueBtn').style.display = 'inline-block';
+        document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
         sessionStorage.setItem('phase2Complete', 'true');
         document.cookie = `phase2Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
 
@@ -539,6 +543,8 @@ const snippets = [
         }
       } else {
         document.getElementById('continueBtn').style.display = 'none';
+        document.getElementById('continueBtn').style.backgroundColor = 'gray';
+
         sessionStorage.removeItem('phase2Complete');
         document.cookie = `phase2Complete=; path=/; max-age=0`;
 
