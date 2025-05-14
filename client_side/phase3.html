@@ -265,6 +265,41 @@
   </div>
   
 
+  <div id="validation-modal" style="
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff0f0;
+  color: #660000;
+  border: 1px solid #ff9999;
+  padding: 20px;
+  border-radius: 10px;
+  width: 440px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  z-index: 1002;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  ">
+    <p id="validation-message" style="font-weight: bold;"></p>
+    <button onclick="document.getElementById('validation-modal').style.display = 'none';" style="
+      margin-top: 15px;
+      padding: 8px 14px;
+      background-color: #ff9999;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    ">OK</button>
+  </div>
+
+  <script>
+    function showValidationMessage(msg) {
+      document.getElementById('validation-message').innerText = msg;
+      document.getElementById('validation-modal').style.display = 'block';
+    }
+  </script>
   <script>
   const snippets = [
   {
@@ -472,7 +507,7 @@
 
     function nextQuestion() {
       const response = document.getElementById('answer-box').value.trim();
-      if (!response) return alert('Please provide an explanation.');
+      if (!response) {showValidationMessage("⚠️ Please provide an explanation."); return}
       const key = generateKey(steps[stepIndex]);
       reasoning[key] = response;
       sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
