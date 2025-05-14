@@ -292,7 +292,10 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
-      .then(res => res.ok ? showSubmissionModal('✅ Submission successful!') : showValidationMessage('❌ Submission failed.'))
+    .then(res => res.ok
+        ? showSubmissionModal('✅ Submission successful!\nWe will notify you about the possible next steps.')
+        : showValidationMessage('❌ Submission failed. Please try again.')
+      )
       .catch(() => alert('⚠️ Error during submission.'));
   }
 
