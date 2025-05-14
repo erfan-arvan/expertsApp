@@ -358,23 +358,35 @@
     const steps = [];
 
     Object.entries(phase3Ranking).forEach(([rank, ids], i, arr) => {
-      if (ids.length > 1) {
-        steps.push({
-          type: 'grouping',
-          rank,
-          snippets: ids.map(id => snippets.find(s => `snippet-${s.id}` === id))
-        });
-      }
-      if (i < arr.length - 1 && arr[i+1][1].length > 0) {
+  const currentSnippets = ids.map(id => snippets.find(s => `snippet-${s.id}` === id)).filter(Boolean);
+
+  // Add grouping step if more than one snippet in this rank
+  if (currentSnippets.length > 1) {
+    steps.push({
+      type: 'grouping',
+      rank,
+      snippets: currentSnippets
+    });
+    }
+
+    // Check and add comparison step only if both ranks have snippets
+    if (i < arr.length - 1) {
+      const nextRank = arr[i + 1][0];
+      const nextIds = arr[i + 1][1];
+      const nextSnippets = nextIds.map(id => snippets.find(s => `snippet-${s.id}` === id)).filter(Boolean);
+
+      if (currentSnippets.length > 0 && nextSnippets.length > 0) {
         steps.push({
           type: 'comparison',
           currentRank: rank,
-          nextRank: arr[i+1][0],
-          currentSnippets: ids.map(id => snippets.find(s => `snippet-${s.id}` === id)),
-          nextSnippets: arr[i+1][1].map(id => snippets.find(s => `snippet-${s.id}` === id))
+          nextRank,
+          currentSnippets,
+          nextSnippets
         });
       }
-    });
+    }
+  });
+
 
     const newReasoning = {};
     steps.forEach(step => {
