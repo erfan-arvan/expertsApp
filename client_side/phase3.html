@@ -265,14 +265,14 @@
       <div style="flex: 1; min-width: 300px;">
         <label for="answer-box" style="font-weight: bold;">Your Explanation</label>
         <textarea id="answer-box" placeholder="Type your explanation here..."></textarea>
+        <div class="buttons">
+          <button onclick="prevQuestion()">⬅️ Previous</button>
+          <button id="next-question" onclick="nextQuestion()">Next ➡️</button>
+          <button id="submit-review" onclick="reviewAndSubmit()">Review and Submit All</button>
+        </div>
       </div>
     </div>
 
-    <div class="buttons">
-      <button onclick="prevQuestion()">⬅️ Previous</button>
-      <button id="next-question" onclick="nextQuestion()">Next ➡️</button>
-      <button id="submit-review" onclick="reviewAndSubmit()">Review and Submit All</button>
-    </div>
   </div>
   
 
