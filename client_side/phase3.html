@@ -574,7 +574,7 @@
     });
     reasoning = newReasoning;
     sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
-
+    document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
     function showStep() {
       document.getElementById('answer-box').style.display = 'block';
@@ -705,6 +705,14 @@
     window.onload = () => {
         applyTheme(); // Apply saved light/dark mode first
         displayUserName();
+
+        // Restore reasoning from cookie if sessionStorage is empty
+        if (!sessionStorage.getItem('phase3_reasoning')) {
+          const cookieReasoning = getCookie('phase3_reasoning');
+          if (cookieReasoning) {
+            sessionStorage.setItem('phase3_reasoning', cookieReasoning);
+          }
+        }
         // Mark completed phases
         if (sessionStorage.getItem('phase1Complete') === 'true' || document.cookie.includes('phase1Complete=true')) {
           document.getElementById('link-phase2')?.classList.remove('disabled');
