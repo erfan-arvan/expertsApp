@@ -342,6 +342,7 @@
 
   function checkLogin() {
     if (!isLoggedIn()) {
+      alert('You must be logged in to access this page. Redirecting to the homepage.');
       window.location.href = 'https://codecomprehensibility.site/';
     }
   }
@@ -351,7 +352,7 @@
     const cookieVal = getCookie(phaseKey);
     return sessionVal === 'true' || cookieVal === 'true';
   }
-  
+
   function checkPhase3Completion() {
     if (!isPhaseComplete('phase3Complete') || !isPhaseComplete('phase2Complete') || !isPhaseComplete('phase1Complete')) {
       alert('Please complete Phase 3 before continuing.');
