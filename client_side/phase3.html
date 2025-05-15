@@ -519,15 +519,20 @@
       ];
 
   function generateKey(step) {
-  if (step.type === "grouping") {
-    const ids = step.snippets.map(s => s.id).sort((a, b) => a - b).join(',');
-    return `grouping:${step.rank}:${ids}`;
-  } else if (step.type === "comparison") {
-    const curr = step.currentSnippets.map(s => s.id).sort((a, b) => a - b).join(',');
-    const next = step.nextSnippets.map(s => s.id).sort((a, b) => a - b).join(',');
-    return `comparison:${step.currentRank}-${step.nextRank}:${curr}|${next}`;
+    if (step.type === "grouping") {
+      const ids = step.snippets.map(s => s.id).sort((a, b) => a - b).join(',');
+      return `grouping:${step.rank}:${ids}`;
+    } else if (step.type === "comparison") {
+      const curr = step.currentSnippets.map(s => s.id).sort((a, b) => a - b).join(',');
+      const next = step.nextSnippets.map(s => s.id).sort((a, b) => a - b).join(',');
+      return `comparison:${step.currentRank}-${step.nextRank}:${curr}|${next}`;
+    }
   }
-}
+
+  function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]*)'));
+    return match ? decodeURIComponent(match[2]) : null;
+  }
 
     const phase3Ranking = JSON.parse(sessionStorage.getItem('phase3_ranking') || decodeURIComponent(document.cookie.match(/(?:^|; )phase3_ranking=([^;]*)/)?.[1] || '{}'));
     // Try restoring from cookie first if sessionStorage is empty
