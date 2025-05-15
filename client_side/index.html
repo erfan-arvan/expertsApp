@@ -70,6 +70,36 @@
     border-radius: 6px;
     width: 80px;
   }
+
+  .tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+  border-bottom: 1px dotted #555;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 260px;
+  background-color: #333;
+  color: #fff;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Show above the word */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
   </style>
 </head>
 <body>
@@ -157,7 +187,14 @@
 
 <h2>Study Overview</h2>
 
-<p>Our goal is to develop an expert-determined ranking of code snippet comprehensibility. This ranking will serve as the ground truth for a larger study on software comprehension.</p>
+<p>Our goal is to develop an expert-determined ranking of 
+<span class="tooltip">code snippets
+  <span class="tooltip-text">A small, self-contained Java method from real-world open-source projects.</span>
+</span> and their 
+<span class="tooltip">comprehensibility
+  <span class="tooltip-text">How easy a snippet is to understand, as judged by experienced developers.</span>
+</span>.
+</p>
 
 <p>To reduce bias and improve reliability, we invited multiple experts — including you — to complete the same task set. We follow a structured protocol inspired by the <a href="https://en.wikipedia.org/wiki/Delphi_method" target="_blank">Delphi method</a>, which aggregates expert consensus through multiple rounds.</p>
 
