@@ -578,6 +578,9 @@
       const key = generateKey(step);
       const saved = reasoning[key] || '';
       textarea.value = saved;
+      
+      //Hide “Previous” on first step
+      document.querySelector('button[onclick="prevQuestion()"]').style.display = (stepIndex === 0) ? 'none' : 'inline-block';
 
 
       comp.innerHTML = '';
@@ -657,6 +660,7 @@
         document.getElementById('submit-review').style.display = 'inline-block';
         // Store Phase 3 data
         sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
+        document.getElementById('next-question').style.display = 'none';  // Hide next button
       }
     }
 
@@ -665,11 +669,13 @@
       const key = generateKey(steps[stepIndex]);
       reasoning[key] = response;
       sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
+      
       if (stepIndex > 0) {
         stepIndex--;
-        showStep();
+        showStep();  // ✅ This was missing
       }
     }
+
 
     function reviewAndSubmit() {
       window.location.href = '/review.html';
