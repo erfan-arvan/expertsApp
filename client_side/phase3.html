@@ -249,6 +249,7 @@
       <p><strong>Tip:</strong> There are no right or wrong answers — we’re interested in your reasoning.</p>
     <p><strong>Prohibited:</strong> Please <span style="color:red;">do not use generative AI tools</span> (e.g., ChatGPT, GitHub Copilot) during this phase. Your expert judgment is essential to the validity of our study </p>
     </div>
+  </div>
     
   
   <div id="question-container" class="step-box">
@@ -578,7 +579,7 @@
       const key = generateKey(step);
       const saved = reasoning[key] || '';
       textarea.value = saved;
-      
+
       //Hide “Previous” on first step
       document.querySelector('button[onclick="prevQuestion()"]').style.display = (stepIndex === 0) ? 'none' : 'inline-block';
 
