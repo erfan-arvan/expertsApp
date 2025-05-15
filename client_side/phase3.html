@@ -677,12 +677,16 @@
         // If already at the last step, do nothing further
       if (stepIndex === steps.length - 1) {
         document.getElementById('next-question').style.display = 'none';
-        document.getElementById('submit-review').style.display = 'inline-block';
         return;
       }
+
       stepIndex++;
       if (stepIndex < steps.length) {
         showStep();
+        // If next step is the final step, hide the next button
+        if (stepIndex === steps.length - 1) {
+          document.getElementById('next-question').style.display = 'none';
+        }
       } else {
         if(validateAllResponses){
           // ✅ Mark phase 3 as complete
