@@ -175,28 +175,35 @@
     text-decoration: underline;
   }
 
+  /*For line numbers*/
   .code-with-lines {
   font-family: 'Courier New', monospace;
   font-size: 14px;
-  background-color: #f9f9f9;
+  background-color: #1e1e1e;
+  color: #ddd;
+  padding: 12px 0;
   border-radius: 6px;
-  padding: 12px;
-  border: 1px solid #ddd;
-  white-space: pre-wrap;
-}
+  overflow-x: auto;
+  }
 
-.code-with-lines div {
-  display: flex;
-}
+  .code-with-lines div {
+    display: flex;
+    line-height: 1.4;
+    white-space: pre;
+  }
 
-.line-number {
-  display: inline-block;
-  width: 30px;
-  color: #999;
-  text-align: right;
-  margin-right: 10px;
-  user-select: none;
-}
+  .line-number {
+    width: 2em;
+    color: #888;
+    text-align: right;
+    padding-right: 12px;
+    user-select: none;
+    flex-shrink: 0;
+  }
+
+  .code-line {
+    flex-grow: 1;
+  }
 
 
 
