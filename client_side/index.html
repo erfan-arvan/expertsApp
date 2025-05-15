@@ -296,23 +296,28 @@
   <p><strong>Code Snippet</strong>: A small, self-contained Java method drawn from real-world open-source projects. All 8 snippets are independent and carefully selected.</p>
 </div>
 
-<!-- Login Section -->
-<form id="login-box" onsubmit="return loginAndProceed(event)" autocomplete="on">
-  <h3>Login to Begin</h3>
-  <p><strong>Please enter your username and password to start the study:</strong></p>
+<section id="next-step" style="margin-top: 40px; padding: 24px; background-color: #f9f9f9; border-top: 2px solid #ccc; border-radius: 8px;">
+  <h2>Next Step</h2>
 
-  <input type="text" id="username" name="username" placeholder="Username" autocomplete="username"
-         style="padding: 8px; font-size: 16px; width: 300px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
+  <!-- Login Section -->
+  <form id="login-box" onsubmit="return loginAndProceed(event)" autocomplete="on">
+    <h3>Login to Begin</h3>
+    <p><strong>Please enter your username and password to start the study:</strong></p>
 
-  <input type="password" id="password" name="password" placeholder="Password" autocomplete="current-password"
-         style="padding: 8px; font-size: 16px; width: 300px; border-radius: 5px; border: 1px solid #ccc;"><br>
+    <input type="text" id="username" name="username" placeholder="Username" autocomplete="username"
+          style="padding: 8px; font-size: 16px; width: 300px; border-radius: 5px; border: 1px solid #ccc;"><br><br>
 
-  <p id="login-error" style="color: red; display: none;"></p>
+    <input type="password" id="password" name="password" placeholder="Password" autocomplete="current-password"
+          style="padding: 8px; font-size: 16px; width: 300px; border-radius: 5px; border: 1px solid #ccc;"><br>
 
-  <p style="margin-top: 20px;">
-    <button type="submit">Login and Start Phase 1</button>
-  </p>
-</form>
+    <p id="login-error" style="color: red; display: none;"></p>
+
+    <p style="margin-top: 20px;">
+      <button type="submit">Login and Start Phase 1</button>
+    </p>
+  </form>
+</section>
+
 
 
 <!-- Post-login Proceed Button -->
