@@ -253,53 +253,54 @@
       {
         id: 1,
         title: "Snippet 1",
-                code:`
-<pre style="display: flex; font-family: 'Courier New', monospace; font-size: 14px; margin: 0; padding: 0; line-height: 1.4;">
-  <!-- Left: Line Numbers -->
-  <code style="text-align: right; padding-right: 10px; color: #888; user-select: none; margin: 0;">
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-  </code>
+        code: `
+<div style="display: flex; font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.4; margin: 0; padding: 0;">
+  <!-- Line Numbers Column -->
+  <div style="text-align: right; padding-right: 10px; color: #888; user-select: none;">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+    <div>10</div>
+    <div>11</div>
+    <div>12</div>
+    <div>13</div>
+    <div>14</div>
+    <div>15</div>
+    <div>16</div>
+    <div>17</div>
+    <div>18</div>
+  </div>
 
-          <!-- Right: Code -->
-  <code style="margin: 0; padding: 0;">
-        <span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">isValidProjectName</span>(<span class="type">String</span> name) {
-        <span class="keyword">if</span> (name == <span class="literal">null</span>) {
-          <span class="keyword">return</span> <span class="literal">false</span>;
-        }
-        <span class="keyword">if</span> (name.<span class="function">startsWith</span>(<span class="string">"."</span>)) {
-          <span class="keyword">return</span> <span class="literal">false</span>;
-        }
-        <span class="keyword">if</span> ((name.<span class="function">length</span>() < <span class="number">1</span>) || (name.<span class="function">length</span>() > MAX_NAME_LENGTH)) {
-          <span class="keyword">return</span> <span class="literal">false</span>;
-        }
-        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i < name.<span class="function">length</span>(); i++) {
-          <span class="type">char</span> c = name.<span class="function">charAt</span>(i);
-          <span class="keyword">if</span> (!Character.<span class="function">isLetterOrDigit</span>(c) && !VALID_NAME_SET.<span class="function">contains</span>(c)) {
-            <span class="keyword">return</span> <span class="literal">false</span>;
-          }
-        }
-        <span class="keyword">return</span> <span class="literal">true</span>;
-        }
-          </div>
-        </code>
-        `
+  <!-- Code Column -->
+  <div style="margin: 0; padding: 0;">
+    <div><span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">isValidProjectName</span>(<span class="type">String</span> name) {</div>
+    <div><span class="keyword">if</span> (name == <span class="literal">null</span>) {</div>
+    <div>  <span class="keyword">return</span> <span class="literal">false</span>;</div>
+    <div>}</div>
+    <div><span class="keyword">if</span> (name.<span class="function">startsWith</span>(<span class="string">"."</span>)) {</div>
+    <div>  <span class="keyword">return</span> <span class="literal">false</span>;</div>
+    <div>}</div>
+    <div><span class="keyword">if</span> ((name.<span class="function">length</span>() < <span class="number">1</span>) || (name.<span class="function">length</span>() > MAX_NAME_LENGTH)) {</div>
+    <div>  <span class="keyword">return</span> <span class="literal">false</span>;</div>
+    <div>}</div>
+    <div><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i < name.<span class="function">length</span>(); i++) {</div>
+    <div>  <span class="type">char</span> c = name.<span class="function">charAt</span>(i);</div>
+    <div>  <span class="keyword">if</span> (!Character.<span class="function">isLetterOrDigit</span>(c) && !VALID_NAME_SET.<span class="function">contains</span>(c)) {</div>
+    <div>    <span class="keyword">return</span> <span class="literal">false</span>;</div>
+    <div>  }</div>
+    <div>}</div>
+    <div><span class="keyword">return</span> <span class="literal">true</span>;</div>
+    <div>}</div>
+  </div>
+</div>
+`
+
             },
             {
               id: 2,
