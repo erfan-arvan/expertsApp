@@ -42,6 +42,34 @@
     a:hover {
       text-decoration: underline;
     }
+
+    .steps-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+  }
+  .steps-table td {
+    padding: 12px;
+    vertical-align: top;
+  }
+  .step-number {
+    background-color: #f4c542;
+    font-weight: bold;
+    width: 40px;
+    text-align: center;
+    border-radius: 6px;
+  }
+  .step-desc {
+    background-color: #fff7e6;
+  }
+  .step-time {
+    background-color: #f4c542;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 6px;
+    width: 80px;
+  }
   </style>
 </head>
 <body>
@@ -83,6 +111,45 @@
   <li>If full consensus is still not reached, we will use statistical aggregation to produce the final ground truth.</li>
   <li>We may revise or replace certain snippets if experts report difficulties in distinguishing them based on comprehensibility.</li>
 </ul>
+
+<h3>Step-by-Step Procedure</h3>
+<table class="steps-table">
+  <tr>
+    <td class="step-number">1</td>
+    <td class="step-desc">
+      Review 8 Java code snippets. For each, write a brief summary and explain how easy or difficult it was to understand.
+    </td>
+    <td class="step-time">20 mins</td>
+  </tr>
+  <tr>
+    <td class="step-number">2</td>
+    <td class="step-desc">
+      Rank all 8 snippets using a drag-and-drop interface. Snippets with similar comprehensibility may be grouped together.
+    </td>
+    <td class="step-time">15 mins</td>
+  </tr>
+  <tr>
+    <td class="step-number">3</td>
+    <td class="step-desc">
+      Provide reasoning for your rankings. Explain why snippets were grouped and why some were more comprehensible than others.
+    </td>
+    <td class="step-time">15 mins</td>
+  </tr>
+  <tr>
+    <td class="step-number">4</td>
+    <td class="step-desc">
+      After all experts submit, we will analyze responses. If no consensus is reached, follow-up rounds will be initiated with anonymous feedback for optional revisions.
+    </td>
+    <td class="step-time">10 mins (future)</td>
+  </tr>
+  <tr>
+    <td class="step-number">5</td>
+    <td class="step-desc">
+      If consensus is not reached after 3 rounds, final results will be statistically aggregated. We may revise or replace snippets if needed.
+    </td>
+    <td class="step-time">—</td>
+  </tr>
+</table>
 
 
   <h3>Submission Deadline</h3>
