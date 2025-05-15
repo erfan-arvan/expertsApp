@@ -76,29 +76,35 @@
   display: inline-block;
   cursor: help;
   border-bottom: 1px dotted #555;
-}
+  }
 
-.tooltip .tooltip-text {
-  visibility: hidden;
-  width: 260px;
-  background-color: #333;
-  color: #fff;
-  text-align: left;
-  padding: 8px 10px;
-  border-radius: 6px;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%; /* Show above the word */
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
+  .tooltip .tooltip-text {
+    visibility: hidden;
+    width: 260px;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    padding: 8px 10px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Show above the word */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
 
-.tooltip:hover .tooltip-text {
-  visibility: visible;
-  opacity: 1;
-}
+  .tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .table-container {
+    max-width: 900px;
+    margin: 0 auto;        /* centers the block horizontally */
+  }
+
 
   </style>
 </head>
@@ -121,41 +127,43 @@
 <h3>What You'll Do</h3>
 <p>The study consists of three main phases. Your total time commitment is approximately <strong>55 minutes</strong>.</p>
 
-<table class="steps-table">
-  <tr>
-    <th style="width: 100px;">Phase</th>
-    <th>Description</th>
-    <th style="width: 100px;">Time</th>
-  </tr>
-  <tr>
-    <td class="step-number">Phase 1</td>
-    <td class="step-desc">
-      Review each code snippet and provide a short summary along with your assessment of how understandable it is.
-    </td>
-    <td class="step-time">20 mins</td>
-  </tr>
-  <tr>
-    <td class="step-number">Phase 2</td>
-    <td class="step-desc">
-      Rank the snippets from most to least comprehensible. You can group snippets that feel equally understandable.
-    </td>
-    <td class="step-time">15 mins</td>
-  </tr>
-  <tr>
-    <td class="step-number">Phase 3</td>
-    <td class="step-desc">
-      Explain your reasoning behind the rankings. Describe why snippets were grouped and how you compared them.
-    </td>
-    <td class="step-time">15 mins</td>
-  </tr>
-  <tr>
-    <td class="step-number">Submission</td>
-    <td class="step-desc">
-      Review and submit your answers. You may revise and resubmit anytime before the deadline.
-    </td>
-    <td class="step-time">5 mins</td>
-  </tr>
-</table>
+<div class="table-container">
+  <table class="steps-table">
+    <tr>
+      <th style="width: 100px;">Phase</th>
+      <th>Description</th>
+      <th style="width: 100px;">Time</th>
+    </tr>
+    <tr>
+      <td class="step-number">Phase 1</td>
+      <td class="step-desc">
+        Review each code snippet and provide a short summary along with your assessment of how understandable it is.
+      </td>
+      <td class="step-time">20 mins</td>
+    </tr>
+    <tr>
+      <td class="step-number">Phase 2</td>
+      <td class="step-desc">
+        Rank the snippets from most to least comprehensible. You can group snippets that feel equally understandable.
+      </td>
+      <td class="step-time">15 mins</td>
+    </tr>
+    <tr>
+      <td class="step-number">Phase 3</td>
+      <td class="step-desc">
+        Explain your reasoning behind the rankings. Describe why snippets were grouped and how you compared them.
+      </td>
+      <td class="step-time">15 mins</td>
+    </tr>
+    <tr>
+      <td class="step-number">Submission</td>
+      <td class="step-desc">
+        Review and submit your answers. You may revise and resubmit anytime before the deadline.
+      </td>
+      <td class="step-time">5 mins</td>
+    </tr>
+  </table>
+</div>
 
 <h3>What Happens Next</h3>
 <ul>
