@@ -1,135 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Phase 1: Reading and Understanding Code Snippets</title>
-  <style>
-  body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 40px;
-      background-color: #f4f4f4;
-      color: #333;
-  }
-  .instructions {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
-  pre {
-      background-color: #2d2d2d;
-      color: #ccc;
-      padding: 20px;
-      border-radius: 8px;
-      overflow-x: auto;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 15px;
-      line-height: 1.5;
-  }
-  /* Code block themes */
-  #code {
-      background-color: #2d2d2d;
-      color: #ccc;
-      padding: 20px;
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px;
-      overflow-x: auto;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 15px;
-      line-height: 1.5;
-  }
+    <meta charset="UTF-8">
+    <title>Phase 1: Reading and Understanding Code Snippets</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .instructions {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        /* Code block themes */
+        #code {
+            background-color: #2d2d2d;
+            color: #ccc;
+            padding: 20px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            line-height: 1.5;
+        }
 
-  .light-mode #code {
-      background-color: #f0f0f0;
-      color: #333;
-  }
+        .light-mode #code {
+            background-color: #f0f0f0;
+            color: #333;
+        }
 
-  .light-mode body {
-      background-color: #ffffff;
-      color: #222;
-  }
+        .light-mode body {
+            background-color: #ffffff;
+            color: #222;
+        }
 
-  .light-mode textarea {
-      background-color: #ffffff;
-      color: #000;
-  }
+        .light-mode textarea {
+            background-color: #ffffff;
+            color: #000;
+        }
 
-  textarea {
-      width: 100%;
-      height: 100px;
-      margin-top: 15px;
-      font-size: 14px;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #bbb;
-      resize: vertical;
-  }
-  .buttons {
-      margin-top: 20px;
-  }
-  button {
-      padding: 10px 20px;
-      margin-right: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      background-color: #4CAF50;
-      color: white;
-      cursor: pointer;
-  }
-  button:hover {
-      background-color: #45a049;
-  }
-  button[disabled] {
-      background-color: #888;
-      cursor: not-allowed;
-  }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 15px;
+            font-size: 14px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #bbb;
+            resize: vertical;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button[disabled] {
+            background-color: #888;
+            cursor: not-allowed;
+        }
 
-          /* Basic syntax highlighting classes */
-  .keyword     { color: #0000ff; font-weight: bold; }
-  .type        { color: #007070; }
-  .function    { color: #7928a1; font-weight: bold; }
-  .literal     { color: #009999; }
-  .string      { color: #a31515; }
-  .comment     { color: #6a9955; font-style: italic; }
-  .number      { color: #098658; }
+                /* Basic syntax highlighting classes */
+        .keyword     { color: #0000ff; font-weight: bold; }
+        .type        { color: #007070; }
+        .function    { color: #7928a1; font-weight: bold; }
+        .literal     { color: #009999; }
+        .string      { color: #a31515; }
+        .comment     { color: #6a9955; font-style: italic; }
+        .number      { color: #098658; }
 
-          /* Dark mode overrides */
-  .dark-mode .keyword  { color: #82aaff; }
-  .dark-mode .type     { color: #89ddff; }
-  .dark-mode .function { color: #c792ea; }
-  .dark-mode .literal  { color: #ffcb6b; }
-  .dark-mode .string   { color: #c3e88d; }
-  .dark-mode .comment  { color: #7f848e; }
-  .dark-mode .number   { color: #f78c6c; }
+                /* Dark mode overrides */
+        .dark-mode .keyword  { color: #82aaff; }
+        .dark-mode .type     { color: #89ddff; }
+        .dark-mode .function { color: #c792ea; }
+        .dark-mode .literal  { color: #ffcb6b; }
+        .dark-mode .string   { color: #c3e88d; }
+        .dark-mode .comment  { color: #7f848e; }
+        .dark-mode .number   { color: #f78c6c; }
 
-#continueBtn {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  font-size: 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  box-shadow: 0 0 10px #4CAF50;
-  animation: glowPulse 1.5s infinite alternate;
-}
+      #continueBtn {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        box-shadow: 0 0 10px #4CAF50;
+        animation: glowPulse 1.5s infinite alternate;
+      }
 
-@keyframes glowPulse {
-  0% {
-    box-shadow: 0 0 10px #4CAF50;
-  }
-  100% {
-    box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
-  }
-}
+      @keyframes glowPulse {
+        0% {
+          box-shadow: 0 0 10px #4CAF50;
+        }
+        100% {
+          box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+        }
+      }
 
-#continueBtn:hover {
-  background-color: #45a049;
-}
+      #continueBtn:hover {
+        background-color: #45a049;
+      }
 
-/*for status bar*/
+      /*for status bar*/
 .status-bar {
   background-color: #333;
   color: white;
@@ -174,38 +174,6 @@
   a:hover {
     text-decoration: underline;
   }
-
-  /*For line numbers*/
-  .code-with-lines {
-    margin: 0;
-    padding: 0;
-  }
-
-  .code-with-lines div {
-    display: flex;
-    margin: 0;
-    padding: 0;
-  }
-
-  .line-number {
-    width: 2em;
-    color: #888;
-    text-align: right;
-    padding-right: 12px;
-    user-select: none;
-    flex-shrink: 0;
-  }
-
-  .code-with-lines > div {
-    display: flex;
-    line-height: 1.4;
-    white-space: pre;
-    margin: 0;
-    padding: 0;
-  }
-
-
-
 
 
 </style>
@@ -254,8 +222,7 @@
           Switch to Light Mode
         </button>
       </div>
-      <div id="code" class="code-with-lines" style="font-family: 'Courier New', monospace; white-space: pre; line-height: 1; margin: 0; padding: 0;">
-      </div>
+      <pre id="code" style="margin: 0;"><code>Loading snippet...</code></pre>
     </div>
   
     <!-- RIGHT: Questions -->
@@ -286,29 +253,25 @@
       {
         id: 1,
         title: "Snippet 1",
-        code: `<div class="code-with-lines">
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">1</span> <span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">isValidProjectName</span>(<span class="type">String</span> name) {</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">2</span> <span class="keyword">if</span> (name == <span class="literal">null</span>) {</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">3</span>   <span class="keyword">return</span> <span class="literal">false</span>;</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">4</span> }</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">5</span> <span class="keyword">if</span> (name.<span class="function">startsWith</span>(<span class="string">"."</span>)) {</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">6</span>   <span class="keyword">return</span> <span class="literal">false</span>;</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">7</span> }</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">8</span> <span class="keyword">if</span> ((name.<span class="function">length</span>() < <span class="number">1</span>) || (name.<span class="function">length</span>() > MAX_NAME_LENGTH)) {</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">9</span>   <span class="keyword">return</span> <span class="literal">false</span>;</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">10</span> }</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">11</span> <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i < name.<span class="function">length</span>(); i++) {</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">12</span>   <span class="type">char</span> c = name.<span class="function">charAt</span>(i);</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">13</span>   <span class="keyword">if</span> (!Character.<span class="function">isLetterOrDigit</span>(c) && !VALID_NAME_SET.<span class="function">contains</span>(c)) {</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">14</span>     <span class="keyword">return</span> <span class="literal">false</span>;</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">15</span>   }</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">16</span> }</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">17</span> <span class="keyword">return</span> <span class="literal">true</span>;</div>
-        <div style="margin:0; padding:0; line-height:1; display:block;"><span class="line-number">18</span> }</div>
-      </div>`
-
-
-
+        code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">isValidProjectName</span>(<span class="type">String</span> name) {
+        <span class="keyword">if</span> (name == <span class="literal">null</span>) {
+          <span class="keyword">return</span> <span class="literal">false</span>;
+        }
+        <span class="keyword">if</span> (name.<span class="function">startsWith</span>(<span class="string">"."</span>)) {
+          <span class="keyword">return</span> <span class="literal">false</span>;
+        }
+        <span class="keyword">if</span> ((name.<span class="function">length</span>() < <span class="number">1</span>) || (name.<span class="function">length</span>() > MAX_NAME_LENGTH)) {
+          <span class="keyword">return</span> <span class="literal">false</span>;
+        }
+        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i < name.<span class="function">length</span>(); i++) {
+          <span class="type">char</span> c = name.<span class="function">charAt</span>(i);
+          <span class="keyword">if</span> (!Character.<span class="function">isLetterOrDigit</span>(c) && !VALID_NAME_SET.<span class="function">contains</span>(c)) {
+            <span class="keyword">return</span> <span class="literal">false</span>;
+          }
+        }
+        <span class="keyword">return</span> <span class="literal">true</span>;
+      }
+      `
             },
             {
               id: 2,
