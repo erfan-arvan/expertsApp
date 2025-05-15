@@ -259,8 +259,15 @@
         Switch to Dark Mode
       </button>
     </div>
-    <div id="code-comparison"></div>
-    <textarea id="answer-box" placeholder="Type your explanation here..."></textarea>
+
+    <div style="display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap;">
+      <div id="code-comparison" style="flex: 2; min-width: 400px;"></div>
+      <div style="flex: 1; min-width: 300px;">
+        <label for="answer-box" style="font-weight: bold;">Your Explanation</label>
+        <textarea id="answer-box" placeholder="Type your explanation here..."></textarea>
+      </div>
+    </div>
+
     <div class="buttons">
       <button onclick="prevQuestion()">⬅️ Previous</button>
       <button id="next-question" onclick="nextQuestion()">Next ➡️</button>
