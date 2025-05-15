@@ -853,7 +853,21 @@ function applyTheme() {
     }
   }
 
+  function checkPhase1Completion() {
+    if (!isPhaseComplete('phase1Complete')) {
+      alert('Please complete Phase 1 before continuing.');
+      window.location.href = 'phase1.html';
+    }
+  }
+  
+  function isPhaseComplete(phaseKey) {
+    const sessionVal = sessionStorage.getItem(phaseKey);
+    const cookieVal = getCookie(phaseKey);
+    return sessionVal === 'true' || cookieVal === 'true';
+  }
+
   window.addEventListener('load', checkLogin);
+  window.addEventListener('load', checkPhase1Completion);
 </script>
 
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">

@@ -346,7 +346,21 @@
     }
   }
 
+  function isPhaseComplete(phaseKey) {
+    const sessionVal = sessionStorage.getItem(phaseKey);
+    const cookieVal = getCookie(phaseKey);
+    return sessionVal === 'true' || cookieVal === 'true';
+  }
+  
+  function checkPhase3Completion() {
+    if (!isPhaseComplete('phase3Complete') || !isPhaseComplete('phase2Complete') || !isPhaseComplete('phase1Complete')) {
+      alert('Please complete Phase 3 before continuing.');
+      window.location.href = 'phase3.html';
+    }
+  }
+
   window.addEventListener('load', checkLogin);
+  window.addEventListener('load', checkPhase3Completion);
 </script>
 
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
