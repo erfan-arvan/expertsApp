@@ -115,9 +115,20 @@
     <a href="review.html" class="phase-link active" id="link-review">Review & Submit</a>
   </div>
 
+  <div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h2 style="margin: 0;">Review and Submit</h2>
+      <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
+    </div>
   
-  <h1 style="margin-top: 80px;">Final Review</h1>
+    <div id="instructions-content" style="margin-top: 15px;">
+      <p>Please review your responses for all phases. If everything looks good, click the "Submit All Responses" button.</p>
+      <p>You can edit each phase by clicking on the corresponding "Edit" buttons.</p>
+    </div>
+  </div>
+  
 
+  
   <div class="section">
     <h2>Phase 1: Summary and Comprehensibility</h2>
     <div id="phase1"></div>
