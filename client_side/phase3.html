@@ -530,7 +530,17 @@
 }
 
     const phase3Ranking = JSON.parse(sessionStorage.getItem('phase3_ranking') || decodeURIComponent(document.cookie.match(/(?:^|; )phase3_ranking=([^;]*)/)?.[1] || '{}'));
+    // Try restoring from cookie first if sessionStorage is empty
+    if (!sessionStorage.getItem('phase3_reasoning')) {
+      const cookieReasoning = getCookie('phase3_reasoning');
+      if (cookieReasoning) {
+        sessionStorage.setItem('phase3_reasoning', cookieReasoning);
+      }
+    }
+
+    // Now safely parse it
     let reasoning = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
+
     let stepIndex = 0;
     const steps = [];
 
