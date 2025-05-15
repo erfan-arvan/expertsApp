@@ -123,9 +123,30 @@
     font-size: 24px;
   }
 
+  .deadline-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background-color: #fff3f3;
+  color: #a94442;
+  border-left: 6px solid #f44336;
+  padding: 14px 16px;
+  margin: 20px 0;
+  border-radius: 6px;
+  font-size: 16px;
+}
 
+.deadline-icon {
+  font-size: 28px;
+  line-height: 1;
+}
 
-  </style>
+.deadline-date {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+</style>
 </head>
 <body>
 
@@ -204,9 +225,14 @@
 </div>
 
 
-<h3>Submission Deadline</h3>
-<p><strong>All responses must be submitted by <span style="color: #d32f2f;">May 20, 2025</span>.</strong><br>
-Please ensure you complete all phases by the deadline so your input can be included in the final analysis.</p>
+<div class="deadline-box">
+  <span class="deadline-icon">📅</span>
+  <div class="deadline-text">
+    <strong>Submission Deadline:</strong><br>
+    All responses must be submitted by <span class="deadline-date">May 20, 2025</span>.<br>
+    Please complete all phases by this date to ensure your input is included in the final analysis.
+  </div>
+</div>
 
 <h3>Definitions</h3>
 <div style="background: #f0f8ff; border-left: 4px solid #4CAF50; padding: 15px; margin-bottom: 20px;">
