@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
 import java.util.*;
 import org.springframework.web.server.ResponseStatusException;
 
-
 @RestController
 public class SubmissionController {
-
+    
+    // TODO: Move Hard coding Passwords to a separate DB
     private static final Map<String, String> userPasswords = Map.of(
         "martin", "kudXKSspt6QT",
         "oscar", "NMgxVXWCn6D7",
@@ -32,7 +32,6 @@ public class SubmissionController {
         "nadeeshan", List.of(6, 5, 7, 0, 1, 2, 3, 4)
     );
 
-    @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
     @PostMapping("/get_snippet_order")
     public Map<String, Object> getSnippetOrder(@RequestBody Map<String, String> credentials) {
         String username = credentials.get("username");
@@ -48,7 +47,6 @@ public class SubmissionController {
         return response;
     }
 
-    @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
     @PostMapping("/submit_final")
     public String handleFinalSubmission(@RequestBody Map<String, Object> body) {
         Object nameObj = body.get("participantName");
