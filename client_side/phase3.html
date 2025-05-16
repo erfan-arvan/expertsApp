@@ -672,8 +672,7 @@
       reasoning[key] = response;
       sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
       document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
-
-      if (stepIndex != steps.length - 1) 
+      
         stepIndex++;
       if (stepIndex < steps.length) {
         showStep();
