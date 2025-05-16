@@ -677,10 +677,9 @@
         // If already at the last step, do nothing further
       if (stepIndex === steps.length - 1) {
         document.getElementById('next-question').style.display = 'none';
-        return;
       }
-
-      stepIndex++;
+      if (stepIndex != steps.length - 1) 
+        stepIndex++;
       if (stepIndex < steps.length) {
         showStep();
         // If next step is the final step, hide the next button
