@@ -674,10 +674,10 @@
       document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
 
-        // If already at the last step, do nothing further
-      if (stepIndex === steps.length - 1) {
-        document.getElementById('next-question').style.display = 'none';
-      }
+      //   // If already at the last step, do nothing further
+      // if (stepIndex === steps.length - 1) {
+      //   document.getElementById('next-question').style.display = 'none';
+      // }
       if (stepIndex != steps.length - 1) 
         stepIndex++;
       if (stepIndex < steps.length) {
