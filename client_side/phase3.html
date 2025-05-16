@@ -673,7 +673,8 @@
       sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
       document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
-        stepIndex++;
+      stepIndex++;
+      console.log(stepIndex);
       if (stepIndex < steps.length) {
         showStep();
       } else {
@@ -691,10 +692,6 @@
     }
 
     function prevQuestion() {
-      console.log(stepIndex);
-      if(stepIndex >= steps.length){
-        stepIndex = stepIndex.length-1;
-      }
       const response = document.getElementById('answer-box').value.trim();
       const key = generateKey(steps[stepIndex]);
       reasoning[key] = response;
