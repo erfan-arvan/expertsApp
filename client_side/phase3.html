@@ -674,7 +674,6 @@
       document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
       stepIndex++;
-      console.log(stepIndex);
       if (stepIndex < steps.length) {
         showStep();
       } else {
@@ -683,9 +682,12 @@
           sessionStorage.setItem('phase3Complete', 'true');
           document.cookie = `phase3Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
           document.getElementById('submit-review').style.display = 'inline-block';
+        } else{
+          sessionStorage.setItem('phase3Complete', 'false');
+          document.cookie = `phase3Complete=false; path=/; max-age=${60 * 60 * 24 * 30}`;
+          document.getElementById('submit-review').style.display = 'none';
         }
         // Store Phase 3 data
-        console.log("test");
         sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
         document.getElementById('next-question').style.display = 'none';  // Hide next button
         stepIndex--;

@@ -581,6 +581,15 @@ function saveSummary() {
     //update status bar if needed
     if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
 
+  }else{
+    document.getElementById('continueBtn').style.display = 'none';
+    sessionStorage.setItem('phase1Complete', 'false');
+    setCookie('phase1Complete', 'false', 30);
+    document.getElementById('link-phase2').classList.add('disabled');
+    document.getElementById('link-phase3').classList.add('disabled');
+    document.getElementById('link-review').classList.add('disabled');
+
+
   }
 }
 

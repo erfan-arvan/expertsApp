@@ -729,7 +729,7 @@
       } else {
         sessionStorage.removeItem('phase2Complete');
         document.cookie = `phase2Complete=; path=/; max-age=0`;
-
+        document.getElementById('continueBtn').style.display = 'none';
         const phase3Link = document.getElementById('link-phase3');
         if (phase3Link) {
           phase3Link.classList.add('disabled');
