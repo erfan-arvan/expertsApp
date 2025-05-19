@@ -376,9 +376,16 @@
       setCookie('participantName', participantName);
       setCookie('snippetOrder', JSON.stringify(snippetOrder));
       setCookie('username', username);
-      loadPreviousData();
+      loadPreviousData()
+        .then(() => {
+          window.location.href = 'phase1.html'; // only after data is fully loaded
+        })
+        .catch(() => {
+          alert("⚠️ Could not load previous data. Redirecting anyway.");
+          window.location.href = 'phase1.html';
+        });
 
-      //window.location.href = 'phase1.html';
+      window.location.href = 'phase1.html';
 
     } catch (err) {
       console.error(err);
@@ -391,10 +398,11 @@
     const username = sessionStorage.getItem('username') || getCookie('username');
     if (!username) {
       alert("Username not found.");
-      return;
+      return Promise.reject("No username");  // return a rejected promise
     }
 
-    fetch('https://codecomprehensibility.site/get_latest_submission', {
+    return fetch('https://codecomprehensibility.site/get_latest_submission', {
+
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username })  // ✅ Correct key
