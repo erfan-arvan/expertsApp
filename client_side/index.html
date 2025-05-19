@@ -319,7 +319,7 @@
   <div id="proceed-box" style="display: none; margin-top: 40px;">
     <p>Welcome back, <span id="participant-display-name" style="font-weight: bold;"></span>!</p>
     <button onclick="proceedToPhase1()">Proceed to Phase 1</button>
-    <div style="margin-top: 10px;">
+    <div style="margin-top: 20px;">
       <a href="#" onclick="logout()" style="cursor: pointer; text-decoration: underline;">Logout</a>
     </div>
   </div>
@@ -378,7 +378,7 @@
       setCookie('username', username);
       loadPreviousData();
 
-      window.location.href = 'phase1.html';
+      //window.location.href = 'phase1.html';
 
     } catch (err) {
       console.error(err);
