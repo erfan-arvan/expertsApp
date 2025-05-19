@@ -740,23 +740,31 @@
 
     function loadState() {
       let saved = sessionStorage.getItem('phase3_ranking');
+
       if (!saved) {
         const cookieMatch = document.cookie.match(/(?:^|; )phase3_ranking=([^;]*)/);
         if (cookieMatch) {
-          saved = decodeURIComponent(cookieMatch[1]);
+          saved = decodeURIComponent(cookieMatch[1]);  // ✅ decode before parsing
           sessionStorage.setItem('phase3_ranking', saved);
         }
       }
+
       if (!saved) return;
-      const parsed = JSON.parse(saved);
-      Object.entries(parsed).forEach(([rank, ids]) => {
-        const slot = document.querySelector(`.ranking-slot[data-rank='${rank}']`);
-        ids.forEach(id => {
-          const el = document.getElementById(id);
-          if (el) slot.appendChild(el);
+
+      try {
+        const parsed = JSON.parse(saved);  // now valid JSON
+        Object.entries(parsed).forEach(([rank, ids]) => {
+          const slot = document.querySelector(`.ranking-slot[data-rank='${rank}']`);
+          ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && slot) slot.appendChild(el);
+          });
         });
-      });
-    }
+      } catch (e) {
+        console.error('Failed to parse phase3_ranking JSON:', e);
+      }
+    } 
+
 
   function toggleTheme() {
     const body = document.body;
