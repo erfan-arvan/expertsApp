@@ -13,6 +13,10 @@ import java.time.LocalDateTime;
 import java.util.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 
 @RestController
 public class SubmissionController {
@@ -58,8 +62,8 @@ public class SubmissionController {
     @PostMapping("/submit_final")
     public synchronized String handleFinalSubmission(@RequestBody Map<String, Object> body) {
         String username = (String) body.getOrDefault("username", "anonymous");
-        String timestamp = LocalDateTime.now().toString();
-
+        String timestamp = ZonedDateTime.now(ZoneId.of("America/New_York"))
+                                        .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         // Ensure the directory exists
         File directory = new File("submissions");
         if (!directory.exists()) {
@@ -79,7 +83,9 @@ public class SubmissionController {
 
             Map<String, Object> wrapped = new HashMap<>();
             wrapped.put("timestamp", timestamp);
+            wrapped.put("isFinal", "1".equals(body.getOrDefault("submitted", "0")));
             wrapped.put("data", body);
+
 
             allData.computeIfAbsent(username, k -> new ArrayList<>()).add(wrapped);
             mapper.writeValue(file, allData);
