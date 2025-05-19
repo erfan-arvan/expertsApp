@@ -107,7 +107,12 @@
 <body>
 
   <div class="status-bar">
-    <div id="user-info" style="padding: 8px 12px; color: gainsboro; font-weight: bold;"></div>
+    <div class="user-dropdown" style="position: relative;">
+      <div id="user-info" style="padding: 8px 12px; color: gainsboro; font-weight: bold; cursor: pointer;"></div>
+      <div id="logout-menu" style="display: none; position: absolute; top: 100%; right: 0; background: #333; border: 1px solid #555; padding: 8px; z-index: 999;">
+        <button onclick="logout()" style="color: white; background: none; border: none; cursor: pointer;">🚪 Logout</button>
+      </div>
+    </div>
     <a href="index.html" class="phase-link" id="link-home">🏠 Home</a>
     <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
     <a href="phase2.html" class="phase-link" id="link-phase2">Phase 2</a>
@@ -392,6 +397,39 @@
 
   window.addEventListener('load', checkLogin);
   window.addEventListener('load', checkPhase3Completion);
+</script>
+
+
+<script>
+  // Toggle logout menu visibility
+document.addEventListener('DOMContentLoaded', () => {
+  const userInfo = document.getElementById('user-info');
+  const logoutMenu = document.getElementById('logout-menu');
+
+  userInfo.addEventListener('click', () => {
+    logoutMenu.style.display = logoutMenu.style.display === 'block' ? 'none' : 'block';
+  });
+
+  // Hide the menu if clicked outside
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.user-dropdown')) {
+      logoutMenu.style.display = 'none';
+    }
+  });
+});
+
+// Clear storage and redirect to login
+function logout() {
+  sessionStorage.clear();
+
+  // Clear all cookies
+  document.cookie.split(";").forEach(cookie => {
+    const name = cookie.split("=")[0].trim();
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  });
+
+  window.location.href = 'index.html';
+}
 </script>
 
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">

@@ -319,6 +319,7 @@
   <div id="proceed-box" style="display: none; margin-top: 40px;">
     <p>Welcome back, <span id="participant-display-name" style="font-weight: bold;"></span>!</p>
     <button onclick="proceedToPhase1()">Proceed to Phase 1</button>
+    <div style="margin-top: 5px;"><a onclick="logout()">Logout</a></div>
   </div>
 
 </section>
@@ -494,5 +495,19 @@
   }
 </script>
 
+<script>
+  // Clear storage and redirect to login
+function logout() {
+  sessionStorage.clear();
+
+  // Clear all cookies
+  document.cookie.split(";").forEach(cookie => {
+    const name = cookie.split("=")[0].trim();
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  });
+
+  window.location.href = 'index.html';
+}
+</script>
 </body>
 </html>
