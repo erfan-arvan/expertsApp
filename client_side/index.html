@@ -394,7 +394,7 @@
     fetch('https://codecomprehensibility.site/get_submission', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ participantName })
+      body: JSON.stringify({ username })
     })
     .then(res => res.ok ? res.json() : Promise.reject("Not found"))
     .then(data => {
