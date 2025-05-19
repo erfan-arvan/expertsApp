@@ -285,6 +285,8 @@
 
   function submitAll() {
     const name = sessionStorage.getItem('participantName') || getCookie('participantName') || 'Anonymous';
+    const username = getCookie('username') || 'anonymous';  // Set this based on login
+
     const phase1 = {}; // Construct phase1 data from cookies/session
     for (let i = 1; i <= 8; i++) {
       const summary = sessionStorage.getItem(`summary${i}`) || getCookie(`summary${i}`) || '';
@@ -295,8 +297,8 @@
     const phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || '{}');
     const phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
     
-    const payload = { participantName: name, phase1, phase2, phase3 };
-
+    const payload = { username, participantName: name, phase1, phase2, phase3 };
+    
     console.log(payload);
     fetch('https://codecomprehensibility.site/submit_final', {
       method: 'POST',
