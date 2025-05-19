@@ -375,7 +375,7 @@
       setCookie('username', username);
       loadPreviousData();
 
-      //window.location.href = 'phase1.html';
+      window.location.href = 'phase1.html';
 
     } catch (err) {
       console.error(err);
@@ -459,11 +459,9 @@
         sessionStorage.setItem('submitted', data.submitted);
         setCookie('submitted', data.submitted, 30);
       }
-
-
-      alert("✅ Previous data loaded successfully.");
+      console.log("Previous data loaded successfully.");
     })
-    .catch(() => alert("⚠️ Could not load previous submission."));
+    .catch(() => console.log("Could not load previous submission."));
   }
 
 
