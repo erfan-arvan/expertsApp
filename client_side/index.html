@@ -431,17 +431,41 @@
         setCookie('participantName', data.participantName, 30);
       }
 
-      // Snippet order if returned
+      // Snippet order
       if (data.snippetOrder) {
         const order = JSON.stringify(data.snippetOrder);
         sessionStorage.setItem('snippetOrder', order);
         setCookie('snippetOrder', order, 30);
       }
 
+      // ✅ Restore additional flags
+      if ('phase1Complete' in data) {
+        sessionStorage.setItem('phase1Complete', data.phase1Complete);
+        setCookie('phase1Complete', data.phase1Complete, 30);
+      }
+      if ('phase2Complete' in data) {
+        sessionStorage.setItem('phase2Complete', data.phase2Complete);
+        setCookie('phase2Complete', data.phase2Complete, 30);
+      }
+      if ('phase3Complete' in data) {
+        sessionStorage.setItem('phase3Complete', data.phase3Complete);
+        setCookie('phase3Complete', data.phase3Complete, 30);
+      }
+
+      if ('codeTheme' in data) {
+        localStorage.setItem('codeTheme', data.codeTheme); // No cookie needed
+      }
+      if ('submitted' in data) {
+        sessionStorage.setItem('submitted', data.submitted);
+        setCookie('submitted', data.submitted, 30);
+      }
+
+
       alert("✅ Previous data loaded successfully.");
     })
     .catch(() => alert("⚠️ Could not load previous submission."));
   }
+
 
   </script>
   

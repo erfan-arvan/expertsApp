@@ -283,35 +283,52 @@
       });
     }
 
-  function submitAll() {
-    const name = sessionStorage.getItem('participantName') || getCookie('participantName') || 'Anonymous';
-    const username = getCookie('username') || 'anonymous';  // Set this based on login
+    function submitAll() {
+      const name = sessionStorage.getItem('participantName') || getCookie('participantName') || 'Anonymous';
+      const username = getCookie('username') || 'anonymous';
 
-    const phase1 = {}; // Construct phase1 data from cookies/session
-    for (let i = 1; i <= 8; i++) {
-      const summary = sessionStorage.getItem(`summary${i}`) || getCookie(`summary${i}`) || '';
-      const comp = sessionStorage.getItem(`compSummary${i}`) || getCookie(`compSummary${i}`) || '';
-      phase1[`snippet${i}`] = { summary, comprehensibility: comp };
+      const phase1 = {};
+      for (let i = 1; i <= 8; i++) {
+        const summary = sessionStorage.getItem(`summary${i}`) || getCookie(`summary${i}`) || '';
+        const comp = sessionStorage.getItem(`compSummary${i}`) || getCookie(`compSummary${i}`) || '';
+        phase1[`snippet${i}`] = { summary, comprehensibility: comp };
+      }
+
+      const phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getCookie('phase3_ranking') || '{}');
+      const phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getCookie('phase3_reasoning') || '{}');
+
+      // Fetch completion flags and theme preference
+      const flags = {
+        phase1Complete: sessionStorage.getItem('phase1Complete') || getCookie('phase1Complete') || 'false',
+        phase2Complete: sessionStorage.getItem('phase2Complete') || getCookie('phase2Complete') || 'false',
+        phase3Complete: sessionStorage.getItem('phase3Complete') || getCookie('phase3Complete') || 'false',
+        codeTheme: localStorage.getItem('codeTheme') || 'light',
+        submitted: '1',
+      };
+
+      const payload = {
+        username,
+        participantName: name,
+        phase1,
+        phase2,
+        phase3,
+        ...flags  // Spread the flags into the top-level payload
+      };
+
+      console.log(payload);
+
+      fetch('https://codecomprehensibility.site/submit_final', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.ok
+        ? showSubmissionModal('✅ Submission successful!\n\nWe will notify you about the possible next steps. \n\nYou can still resubmit your responses before the deadline if needed.')
+        : showValidationMessage('❌ Submission failed. Please try again.')
+      )
+      .catch(() => alert('⚠️ Error during submission.'));
     }
 
-    const phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || '{}');
-    const phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
-    
-    const payload = { username, participantName: name, phase1, phase2, phase3 };
-    
-    console.log(payload);
-    fetch('https://codecomprehensibility.site/submit_final', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-    .then(res => res.ok
-      ? showSubmissionModal('✅ Submission successful!\n\nWe will notify you about the possible next steps. \n\nYou can still resubmit your responses before the deadline if needed.')
-      : showValidationMessage('❌ Submission failed. Please try again.')
-    )
-
-      .catch(() => alert('⚠️ Error during submission.'));
-  }
 
 
     renderPhase1(); 
