@@ -252,7 +252,7 @@
       const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
       return match ? decodeURIComponent(match[2]) : null;
   }
-  const originalSnippets = [
+  const snippets = [
       {
         id: 1,
         title: "Snippet 1",
@@ -487,24 +487,22 @@
     return order;
   }
   
+  const originalSnippets = [...snippets]; // Clone BEFORE any mutation
   const order = getOrCreateSnippetOrder(originalSnippets.length);
+  const shuffled = order.map(i => originalSnippets[i]);
 
-  const snippets = [];
+  snippets.length = 0;
+  snippets.push(...shuffled);
 
-  if (order) {
-    order.forEach((index, newId) => {
-      const snippet = { ...originalSnippets[index - 1] }; 
-      snippet.id = newId + 1;
-      snippet.title = `Snippet ${newId + 1}`;
-      snippets.push(snippet);
-    });
-  } else {
-    alert("⚠️ Missing snippet order. Please login again.");
-    window.location.href = '/';
-  }
+  shuffled.forEach((snippet, newIndex) => {
+    snippet.id = newIndex + 1;                      // Update ID for session keys
+    snippet.title = `Snippet ${newIndex + 1}`;      // Update title shown in UI
+  });
 
-  console.log("Applied snippet order:", snippets.map(s => s.title));
-
+  console.log("Final snippet order:", snippets.map(s => s.title));
+  console.log("Final snippet order:", snippets.map(s => s.id));
+  const snippetOrder = getOrCreateSnippetOrder(snippets.length);
+  console.log("Final snippet order:", snippetOrder.map(i => `Snippet ${i + 1}`));
 
 
 </script>
