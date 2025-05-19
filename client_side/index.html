@@ -385,8 +385,8 @@
   }
 
   function loadPreviousData() {
-    const participantName = sessionStorage.getItem('participantName') || getCookie('participantName');
-    if (!participantName) {
+    const username = sessionStorage.getItem('username') || getCookie('username');
+    if (!username) {
       alert("Participant name not found.");
       return;
     }
