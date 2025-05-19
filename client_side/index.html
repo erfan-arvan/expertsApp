@@ -339,49 +339,77 @@
   }
   
   async function loginAndProceed(event) {
-  event.preventDefault();
+    event.preventDefault();
 
-  const username = document.getElementById('username').value.trim().toLowerCase();
-  const password = document.getElementById('password').value.trim();
-  const errorDiv = document.getElementById('login-error');
-  errorDiv.style.display = 'none';
+    const username = document.getElementById('username').value.trim().toLowerCase();
+    const password = document.getElementById('password').value.trim();
+    const errorDiv = document.getElementById('login-error');
+    errorDiv.style.display = 'none';
 
-  if (!username || !password) {
-    errorDiv.textContent = "Please enter both username and password.";
-    errorDiv.style.display = 'block';
-    return;
+    if (!username || !password) {
+      errorDiv.textContent = "Please enter both username and password.";
+      errorDiv.style.display = 'block';
+      return;
+    }
+
+    try {
+      const response = await fetch('https://codecomprehensibility.site/get_snippet_order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      if (!response.ok) throw new Error("Invalid credentials");
+
+      const data = await response.json();
+      const { participantName, snippetOrder } = data;
+
+      if (!participantName || !snippetOrder) throw new Error("Incomplete response");
+
+      sessionStorage.setItem('participantName', participantName);
+      sessionStorage.setItem('snippetOrder', JSON.stringify(snippetOrder));
+      sessionStorage.setItem('username', username);
+
+      setCookie('participantName', participantName);
+      setCookie('snippetOrder', JSON.stringify(snippetOrder));
+      setCookie('username', username);
+      loadPreviousData();
+
+      window.location.href = 'phase1.html';
+
+    } catch (err) {
+      console.error(err);
+      errorDiv.textContent = "Login failed. Please check your credentials.";
+      errorDiv.style.display = 'block';
+    }
   }
 
-  try {
-    const response = await fetch('https://codecomprehensibility.site/get_snippet_order', {
+  function loadPreviousData() {
+    const participantName = sessionStorage.getItem('participantName') || getCookie('participantName');
+    if (!participantName) {
+      alert("Participant name not found.");
+      return;
+    }
+
+    fetch('https://codecomprehensibility.site/get_submission', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-
-    if (!response.ok) throw new Error("Invalid credentials");
-
-    const data = await response.json();
-    const { participantName, snippetOrder } = data;
-
-    if (!participantName || !snippetOrder) throw new Error("Incomplete response");
-
-    sessionStorage.setItem('participantName', participantName);
-    sessionStorage.setItem('snippetOrder', JSON.stringify(snippetOrder));
-    sessionStorage.setItem('username', username);
-
-    setCookie('participantName', participantName);
-    setCookie('snippetOrder', JSON.stringify(snippetOrder));
-    setCookie('username', username);
-
-    window.location.href = 'phase1.html';
-
-  } catch (err) {
-    console.error(err);
-    errorDiv.textContent = "Login failed. Please check your credentials.";
-    errorDiv.style.display = 'block';
+      body: JSON.stringify({ participantName })
+    })
+    .then(res => res.ok ? res.json() : Promise.reject("Not found"))
+    .then(data => {
+      console.log("Loaded data:", data);
+      // Restore to sessionStorage or directly to UI as needed
+      Object.entries(data.phase1 || {}).forEach(([key, value]) => {
+        sessionStorage.setItem(`summary${key.replace('snippet', '')}`, value.summary);
+        sessionStorage.setItem(`compSummary${key.replace('snippet', '')}`, value.comprehensibility);
+      });
+      if (data.phase2) sessionStorage.setItem('phase3_ranking', JSON.stringify(data.phase2));
+      if (data.phase3) sessionStorage.setItem('phase3_reasoning', JSON.stringify(data.phase3));
+      alert("✅ Previous data loaded successfully.");
+    })
+    .catch(() => alert("⚠️ Could not load previous submission."));
   }
-}
 
   </script>
   
