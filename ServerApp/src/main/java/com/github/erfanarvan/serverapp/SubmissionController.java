@@ -54,10 +54,17 @@ public class SubmissionController {
         return response;
     }
 
+    @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
     @PostMapping("/submit_final")
     public synchronized String handleFinalSubmission(@RequestBody Map<String, Object> body) {
         String username = (String) body.getOrDefault("username", "anonymous");
         String timestamp = LocalDateTime.now().toString();
+
+        // Ensure the directory exists
+        File directory = new File("submissions");
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
 
         File file = new File("submissions/all_submissions.json");
         ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
@@ -83,6 +90,7 @@ public class SubmissionController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save submission.");
         }
     }
+
 
     @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
     @PostMapping("/get_latest_submission")
