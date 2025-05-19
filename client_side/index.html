@@ -387,25 +387,57 @@
   function loadPreviousData() {
     const username = sessionStorage.getItem('username') || getCookie('username');
     if (!username) {
-      alert("Participant name not found.");
+      alert("Username not found.");
       return;
     }
 
     fetch('https://codecomprehensibility.site/get_latest_submission', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username })
+      body: JSON.stringify({ username })  // ✅ Correct key
     })
     .then(res => res.ok ? res.json() : Promise.reject("Not found"))
     .then(data => {
       console.log("Loaded data:", data);
-      // Restore to sessionStorage or directly to UI as needed
+
+      // Phase 1: restore summary + compSummary per snippet
       Object.entries(data.phase1 || {}).forEach(([key, value]) => {
-        sessionStorage.setItem(`summary${key.replace('snippet', '')}`, value.summary);
-        sessionStorage.setItem(`compSummary${key.replace('snippet', '')}`, value.comprehensibility);
+        const i = key.replace('snippet', '');
+        const summary = value.summary || '';
+        const comp = value.comprehensibility || '';
+
+        sessionStorage.setItem(`summary${i}`, summary);
+        sessionStorage.setItem(`compSummary${i}`, comp);
+        setCookie(`summary${i}`, encodeURIComponent(summary), 30);
+        setCookie(`compSummary${i}`, encodeURIComponent(comp), 30);
       });
-      if (data.phase2) sessionStorage.setItem('phase3_ranking', JSON.stringify(data.phase2));
-      if (data.phase3) sessionStorage.setItem('phase3_reasoning', JSON.stringify(data.phase3));
+
+      // Phase 2 and 3
+      if (data.phase2) {
+        const p2 = JSON.stringify(data.phase2);
+        sessionStorage.setItem('phase3_ranking', p2);
+        setCookie('phase3_ranking', p2, 30);
+      }
+
+      if (data.phase3) {
+        const p3 = JSON.stringify(data.phase3);
+        sessionStorage.setItem('phase3_reasoning', p3);
+        setCookie('phase3_reasoning', p3, 30);
+      }
+
+      // Participant name
+      if (data.participantName) {
+        sessionStorage.setItem('participantName', data.participantName);
+        setCookie('participantName', data.participantName, 30);
+      }
+
+      // Snippet order if returned
+      if (data.snippetOrder) {
+        const order = JSON.stringify(data.snippetOrder);
+        sessionStorage.setItem('snippetOrder', order);
+        setCookie('snippetOrder', order, 30);
+      }
+
       alert("✅ Previous data loaded successfully.");
     })
     .catch(() => alert("⚠️ Could not load previous submission."));
