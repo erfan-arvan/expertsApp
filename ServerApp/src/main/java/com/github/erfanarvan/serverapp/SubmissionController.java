@@ -33,11 +33,12 @@ public class SubmissionController {
     );
 
     private static final Map<String, List<Integer>> userSnippetOrders = Map.of(
-        "martin", List.of(2, 0, 3, 6, 7, 1, 5, 4),
-        "oscar", List.of(0, 1, 2, 3, 4, 5, 6, 7),
-        "erfan", List.of(5, 6, 7, 0, 1, 2, 3, 4),
-        "nadeeshan", List.of(6, 5, 7, 0, 1, 2, 3, 4)
+        "martin", List.of(3, 1, 4, 7, 8, 2, 6, 5),
+        "oscar", List.of(1, 2, 3, 4, 5, 6, 7, 8),
+        "erfan", List.of(6, 7, 8, 1, 2, 3, 4, 5),
+        "nadeeshan", List.of(7, 6, 8, 1, 2, 3, 4, 5)
     );
+
 
     @PostMapping("/get_snippet_order")
     public Map<String, Object> getSnippetOrder(@RequestBody Map<String, String> credentials) {
