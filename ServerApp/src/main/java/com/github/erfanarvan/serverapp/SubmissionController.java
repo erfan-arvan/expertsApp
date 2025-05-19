@@ -1,12 +1,16 @@
 package com.github.erfanarvan.serverapp;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import java.io.FileWriter;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
-import org.springframework.web.server.ResponseStatusException;
-
 
 @RestController
 public class SubmissionController {
@@ -39,7 +43,7 @@ public class SubmissionController {
         String password = credentials.get("password");
 
         if (!userPasswords.containsKey(username) || !userPasswords.get(username).equals(password)) {
-            throw new ResponseStatusException(org.springframework.http.HttpStatus.UNAUTHORIZED, "Invalid credentials");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
 
         Map<String, Object> response = new HashMap<>();
@@ -50,48 +54,58 @@ public class SubmissionController {
 
     @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
     @PostMapping("/submit_final")
-    public String handleFinalSubmission(@RequestBody Map<String, Object> body) {
-        Object nameObj = body.get("participantName");
-        String participantName = (nameObj instanceof String) ? (String) nameObj : "Anonymous";
-        //debugging
-        System.out.println("Received submission keys: " + body.keySet());
-        System.out.println("Raw participantName: " + body.get("participantName"));
+    public synchronized String handleFinalSubmission(@RequestBody Map<String, Object> body) {
+        String username = (String) body.getOrDefault("username", "anonymous");
+        String timestamp = LocalDateTime.now().toString();
 
+        File file = new File("submissions/all_submissions.json");
+        ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+        Map<String, List<Map<String, Object>>> allData;
 
-        try (FileWriter writer = new FileWriter("final_submissions.txt", true)) {
-            writer.write("=== Final Submission ===\n");
-            writer.write("Time: " + LocalDateTime.now() + "\n");
-            writer.write("Name: " + participantName + "\n");
-
-            writer.write("Phase 1:\n");
-            Map<String, Object> phase1 = (Map<String, Object>) body.get("phase1");
-            if (phase1 != null) {
-                for (Map.Entry<String, Object> entry : phase1.entrySet()) {
-                    writer.write("  " + entry.getKey() + ": " + entry.getValue() + "\n");
-                }
+        try {
+            if (file.exists()) {
+                allData = mapper.readValue(file, new TypeReference<>() {});
+            } else {
+                allData = new HashMap<>();
             }
 
-            writer.write("Phase 2 (Ranking):\n");
-            Map<String, Object> phase2 = (Map<String, Object>) body.get("phase2");
-            if (phase2 != null) {
-                for (Map.Entry<String, Object> entry : phase2.entrySet()) {
-                    writer.write("  " + entry.getKey() + ": " + entry.getValue() + "\n");
-                }
-            }
+            Map<String, Object> wrapped = new HashMap<>();
+            wrapped.put("timestamp", timestamp);
+            wrapped.put("data", body);
 
-            writer.write("Phase 3 (Reasoning):\n");
-            Map<String, Object> phase3 = (Map<String, Object>) body.get("phase3");
-            if (phase3 != null) {
-                for (Map.Entry<String, Object> entry : phase3.entrySet()) {
-                    writer.write("  " + entry.getKey() + ": " + entry.getValue() + "\n");
-                }
-            }
+            allData.computeIfAbsent(username, k -> new ArrayList<>()).add(wrapped);
+            mapper.writeValue(file, allData);
 
-            writer.write("\n");
-            return "All phases submitted.";
+            return "Submission saved.";
         } catch (IOException e) {
             e.printStackTrace();
-            return "Error saving final data.";
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save submission.");
+        }
+    }
+
+    @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+    @PostMapping("/get_latest_submission")
+    public Map<String, Object> getLatestSubmission(@RequestBody Map<String, String> request) {
+        String username = request.getOrDefault("username", "anonymous");
+        File file = new File("submissions/all_submissions.json");
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            if (!file.exists()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No submissions found.");
+            }
+
+            Map<String, List<Map<String, Object>>> allData = mapper.readValue(file, new TypeReference<>() {});
+            List<Map<String, Object>> userSubs = allData.get(username);
+            if (userSubs == null || userSubs.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No submission for user.");
+            }
+
+            return (Map<String, Object>) userSubs.get(userSubs.size() - 1).get("data");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read submission.");
         }
     }
 }
