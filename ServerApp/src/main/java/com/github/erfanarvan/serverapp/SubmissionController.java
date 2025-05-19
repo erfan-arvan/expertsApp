@@ -39,7 +39,6 @@ public class SubmissionController {
         "nadeeshan", List.of(7, 6, 8, 1, 2, 3, 4, 5)
     );
 
-
     @PostMapping("/get_snippet_order")
     public Map<String, Object> getSnippetOrder(@RequestBody Map<String, String> credentials) {
         String username = credentials.get("username");
