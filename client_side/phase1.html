@@ -487,23 +487,22 @@
     return order;
   }
   
-  const originalSnippets = [...snippets]; // Clone BEFORE any mutation
-  const order = getOrCreateSnippetOrder(originalSnippets.length);
-  const shuffled = order.map(i => originalSnippets[i]);
+  const originalSnippets = [...snippets]; // Clone BEFORE mutation
+  const order = getOrCreateSnippetOrder(originalSnippets.length); // 1-based [1..8]
+
+  const shuffled = order.map(i => originalSnippets[i - 1]); // ✅ Convert to 0-based
 
   snippets.length = 0;
   snippets.push(...shuffled);
 
   shuffled.forEach((snippet, newIndex) => {
-    snippet.id = newIndex + 1;                      // Update ID for session keys
-    snippet.title = `Snippet ${newIndex + 1}`;      // Update title shown in UI
+    snippet.id = newIndex + 1;                      // Maintain new 1-based IDs
+    snippet.title = `Snippet ${newIndex + 1}`;      // Display title
   });
 
-  console.log("Final snippet order:", snippets.map(s => s.title));
-  console.log("Final snippet order:", snippets.map(s => s.id));
-  const snippetOrder = getOrCreateSnippetOrder(snippets.length);
-  console.log("Final snippet order:", snippetOrder.map(i => `Snippet ${i + 1}`));
-
+  console.log("Final snippet order (titles):", snippets.map(s => s.title));
+  console.log("Final snippet order (ids):", snippets.map(s => s.id));
+  console.log("Server snippet order (1-based):", order.map(i => `Snippet ${i}`));
 
 </script>
 
