@@ -286,10 +286,12 @@
       </button>
     </div>
   
-    <div style="display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap; max-width: 1200px; margin: 0 auto;">
-      <div id="code-comparison" style="flex: 2; min-width: 400px; max-width: 800px;"></div>
-  
-      <div style="flex: 1; min-width: 300px; max-width: 400px;">
+    <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start; max-width: 1200px; margin: 0 auto; box-sizing: border-box;">
+      <div id="code-comparison" style="flex: 1 1 60%; min-width: 400px; max-width: 800px; box-sizing: border-box;">
+        <!-- Snippets inserted dynamically -->
+      </div>
+    
+      <div style="flex: 1 1 35%; min-width: 300px; max-width: 400px; box-sizing: border-box;">
         <label for="answer-box" style="font-weight: bold;">Your Explanation</label>
         <textarea id="answer-box" placeholder="Type your explanation here..." style="width: 100%; box-sizing: border-box;"></textarea>
         <div class="buttons">
@@ -300,6 +302,7 @@
         </div>
       </div>
     </div>
+    
   </div>
   
 
