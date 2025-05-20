@@ -314,24 +314,21 @@
   </script>
 
 <script>
-function renderCodeWithLineNumbers(highlightedCodeHtml) {
+  function renderCodeWithLineNumbers(highlightedCodeHtml) {
   const lines = highlightedCodeHtml.trim().split('\n');
+  const lineNumbers = lines.map((_, i) => i + 1).join('<br>');
+  const codeContent = lines.join('<br>');
 
-  const numberedLines = lines.map((line, i) => `
-    <div style="display: flex;">
-      <div style="width: 30px; text-align: right; padding-right: 12px; color: #999; border-right: 1px solid #ccc; user-select: none;">
-        ${i + 1}
-      </div>
-      <div style="padding-left: 12px; white-space: pre-wrap; word-break: break-word;">
-        ${line}
+
+  return `
+    <div class="code-box">
+      <div class="code-container">
+        <div class="line-numbers">${lineNumbers}</div>
+        <div class="code-content">${codeContent}</div>
       </div>
     </div>
-  `).join('');
-
-  return `<div class="code-box">${numberedLines}</div>`;
+  `;
 }
-
-
 </script>
 
 <script>
