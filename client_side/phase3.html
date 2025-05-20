@@ -6,9 +6,10 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0 40px 40px 40px; /* top right bottom left */
+      margin: 0 40px 40px 40px;
       background-color: #f9f9f9;
     }
+  
     .step-box {
       background: #fff;
       padding: 20px;
@@ -16,17 +17,99 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       margin-bottom: 20px;
     }
+  
+    .status-bar {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+  
+    .phase-link {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+  
+    .phase-link:hover:not(.disabled) {
+      background-color: #4CAF50;
+    }
+  
+    .phase-link.active {
+      background-color: #4CAF50;
+    }
+  
+    .phase-link.disabled {
+      pointer-events: none;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  
+    .snippet-preview-box {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background-color: #fefefe;
+      border: 1px solid #bbb;
+      margin-bottom: 20px;
+    }
+  
+    .snippet-header {
+      background-color: #f5f5f5;
+      padding: 10px 15px;
+      font-weight: bold;
+      font-size: 16px;
+      border-bottom: 1px solid #ccc;
+    }
+  
     .code-box {
-      background-color: #2d2d2d;
-      color: #ccc;
-      padding: 20px;
+      background-color: #f9f9f9;
+      color: #222;
+      padding: 0;
       border-radius: 8px;
       overflow-x: auto;
       font-family: 'Courier New', Courier, monospace;
-      font-size: 15px;
-      margin-bottom: 20px;
+      font-size: 14px;
       white-space: pre-wrap;
+      margin-bottom: 20px;
     }
+  
+    .code-container {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      background-color: inherit;
+      color: inherit;
+      overflow-x: auto;
+      padding: 0;
+    }
+  
+    .line-numbers {
+      text-align: right;
+      padding-right: 12px;
+      user-select: none;
+      color: #999;
+      border-right: 1px solid #ccc;
+    }
+  
+    .code-content {
+      padding-left: 12px;
+      white-space: pre;
+      word-break: break-word;
+    }
+  
     textarea {
       width: 100%;
       height: 120px;
@@ -36,103 +119,12 @@
       border-radius: 5px;
       border: 1px solid #ccc;
     }
+  
     .buttons {
       text-align: center;
       margin-top: 30px;
     }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin: 0 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button#next-question {
-      background-color: #4CAF50;
-      color: white;
-    }
-    button#submit-review {
-      display: none;
-      animation: glowPulse 1.5s infinite alternate;
-    }
-
-    @keyframes glowPulse {
-        0% {
-          box-shadow: 0 0 10px #4CAF50;
-        }
-        100% {
-          box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
-        }
-      }
-
-      .status-bar {
-  background-color: #333;
-  color: white;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-}
-
-
-    .phase-link {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      padding: 8px 12px;
-      border-radius: 4px;
-      transition: background-color 0.2s;
-    }
-
-    .phase-link:hover:not(.disabled) {
-      background-color: #4CAF50;
-    }
-
-    .phase-link.active {
-      background-color: #4CAF50;
-    }
-
-    .phase-link.disabled {
-      pointer-events: none;
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-
-    /*Snippet preview*/
-    .snippet-preview-box {
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      background-color: #ffffff;
-      border: 1px solid #ddd;
-      margin-bottom: 20px;
-    }
-
-    .snippet-header {
-      background-color: #f5f5f5;
-      padding: 10px 15px;
-      font-weight: bold;
-      font-size: 16px;
-      border-bottom: 1px solid #ccc;
-    }
-
-    .code-box {
-      font-family: 'Courier New', Courier, monospace;
-      white-space: pre-wrap;
-      overflow-x: auto;
-      padding: 15px;
-      font-size: 14px;
-      color: #333;
-      background-color: #f9f9f9;
-    }
-
+  
     button {
       padding: 10px 20px;
       margin-right: 10px;
@@ -142,111 +134,115 @@
       background-color: #4CAF50;
       color: white;
       cursor: pointer;
-  }
-  button:hover {
+    }
+  
+    button:hover {
       background-color: #45a049;
-  }
-  button[disabled] {
+    }
+  
+    button[disabled] {
       background-color: #888;
       cursor: not-allowed;
+    }
+  
+    button#submit-review {
+      display: none;
+      animation: glowPulse 1.5s infinite alternate;
+    }
+  
+    @keyframes glowPulse {
+      0% {
+        box-shadow: 0 0 10px #4CAF50;
+      }
+      100% {
+        box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+      }
+    }
+  
+    /* Light/Dark mode support */
+  
+    body.dark-mode .snippet-preview-box {
+      background-color: #1e1e1e;
+      border: 1px solid #444;
+    }
+  
+    body.dark-mode .code-box {
+      background-color: #2d2d2d;
+      color: #ddd;
+    }
+  
+    body.dark-mode .line-numbers {
+      color: #777;
+      border-right: 1px solid #555;
+    }
+  
+    body.dark-mode .card {
+      background-color: #2a2a2a;
+      border-color: #555;
+      color: #ddd;
+    }
+  
+    /* Syntax Highlighting */
+    .keyword     { color: #0000ff; font-weight: bold; }
+    .type        { color: #007070; }
+    .function    { color: #7928a1; font-weight: bold; }
+    .literal     { color: #009999; }
+    .string      { color: #a31515; }
+    .comment     { color: #6a9955; font-style: italic; }
+    .number      { color: #098658; }
+  
+    .dark-mode .keyword  { color: #82aaff; }
+    .dark-mode .type     { color: #89ddff; }
+    .dark-mode .function { color: #c792ea; }
+    .dark-mode .literal  { color: #ffcb6b; }
+    .dark-mode .string   { color: #c3e88d; }
+    .dark-mode .comment  { color: #7f848e; }
+    .dark-mode .number   { color: #f78c6c; }
+  
+    html {
+      scroll-behavior: smooth;
+    }
+  
+    a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+  
+    a:hover {
+      text-decoration: underline;
+    }
+
+
+    .comparison-container {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-sizing: border-box;
   }
 
-    /*dark/light mode*/
-    /* Light mode preview styles */
-  /* === Default (light mode) === */
-  .card {
-    background-color: #ffffff;
-    border-color: #ccc;
-    color: #333;
+  #code-comparison {
+    flex: 2;
+    min-width: 60%;
+    max-width: 80%;
+    box-sizing: border-box;
   }
 
-  .snippet-preview-box {
-    background-color: #fefefe;
-    border: 1px solid #bbb;
+  .explanation-box {
+    flex: 1;
+    min-width: 20%;
+    max-width: 40%;
+    box-sizing: border-box;
   }
 
-  .code-box {
-    background-color: #f9f9f9;
-    color: #222;
+  .explanation-box textarea {
+    width: 100%;
+    box-sizing: border-box;
   }
-
-/* === Dark mode overrides === */
-  body.dark-mode .card {
-    background-color: #2a2a2a;
-    border-color: #555;
-    color: #ddd;
-  }
-
-  body.dark-mode .snippet-preview-box {
-    background-color: #1e1e1e;
-    border: 1px solid #444;
-  }
-
-  body.dark-mode .code-box {
-    background-color: #2d2d2d;
-    color: #ddd;
-  }
-
-
-    /*code box*/
-  /* Basic syntax highlighting classes */
-  .keyword     { color: #0000ff; font-weight: bold; }
-  .type        { color: #007070; }
-  .function    { color: #7928a1; font-weight: bold; }
-  .literal     { color: #009999; }
-  .string      { color: #a31515; }
-  .comment     { color: #6a9955; font-style: italic; }
-  .number      { color: #098658; }
-
-    /* Dark mode overrides */
-  .dark-mode .keyword  { color: #82aaff; }
-  .dark-mode .type     { color: #89ddff; }
-  .dark-mode .function { color: #c792ea; }
-  .dark-mode .literal  { color: #ffcb6b; }
-  .dark-mode .string   { color: #c3e88d; }
-  .dark-mode .comment  { color: #7f848e; }
-  .dark-mode .number   { color: #f78c6c; }
-
-  html {
-  scroll-behavior: smooth;
-  }
-
-  a {
-    color: #4CAF50;
-    text-decoration: none;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
-
-  .code-container {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  background-color: inherit;
-  color: inherit;
-  overflow-x: auto;
-  padding: 15px;
-}
-
-.line-numbers {
-  text-align: right;
-  padding-right: 12px;
-  user-select: none;
-  color: #999;
-  border-right: 1px solid #ccc;
-}
-
-.code-content {
-  white-space: pre;
-  padding-left: 12px;
-}
-
-
-
   </style>
+  
 </head>
 <body>
 
@@ -282,28 +278,31 @@
     </div>
   </div>
     
-  
   <div id="question-container" class="step-box">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-      <div id="question-text" style="flex: 1;"></div>
+      <div id="question-text" style="flex: 1; min-height: 24px;"></div>
       <button id="theme-toggle" onclick="toggleTheme()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #333; color: white; border: none; cursor: pointer;">
         Switch to Dark Mode
       </button>
     </div>
-
-    <div style="display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap;">
-      <div id="code-comparison" style="flex: 2; min-width: 400px;"></div>
-      <div style="flex: 1; min-width: 300px;">
+  
+    <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start; max-width: 100%; margin: 0; box-sizing: border-box;">
+      <div id="code-comparison" style="flex: 1 1 60%; width: 80%; box-sizing: border-box;">
+        <!-- Snippets inserted dynamically -->
+      </div>
+    
+      <div style="flex: 1 1 35%; width: 20%; box-sizing: border-box;">
         <label for="answer-box" style="font-weight: bold;">Your Explanation</label>
-        <textarea id="answer-box" placeholder="Type your explanation here..."></textarea>
+        <textarea id="answer-box" placeholder="Type your explanation here..." style="width: 100%; box-sizing: border-box;"></textarea>
         <div class="buttons">
           <button onclick="prevQuestion()">⬅️ Previous</button>
           <button id="next-question" onclick="nextQuestion()">Next ➡️</button>
-          <p></p><button id="submit-review" onclick="reviewAndSubmit()">Review and Submit All</button>
+          <p></p>
+          <button id="submit-review" onclick="reviewAndSubmit()">Review and Submit All</button>
         </div>
       </div>
     </div>
-
+    
   </div>
   
 
@@ -342,6 +341,24 @@
       document.getElementById('validation-modal').style.display = 'block';
     }
   </script>
+
+<script>
+function renderCodeWithLineNumbers(highlightedCodeHtml) {
+  const codeLines = highlightedCodeHtml.trim().split('\n');
+  const numberedLines = codeLines.map((_, i) => i + 1).join('<br>');
+  const joinedCode = codeLines.join('\n');
+
+  return `
+    <div class="code-box">
+      <div class="code-container">
+        <div class="line-numbers">${numberedLines}</div>
+        <div class="code-content">${joinedCode}</div>
+      </div>
+    </div>
+  `;
+}
+
+</script>
 
 <script>
   const originalSnippets = [
@@ -662,78 +679,99 @@
     document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
     function showStep() {
-      document.getElementById('answer-box').style.display = 'block';
-      document.getElementById('next-question').style.display = 'inline-block';
-      const step = steps[stepIndex];
-      const qText = document.getElementById('question-text');
-      const comp = document.getElementById('code-comparison');
-      const textarea = document.getElementById('answer-box');
-      const key = generateKey(step);
-      const saved = reasoning[key] || '';
-      textarea.value = saved;
+  document.getElementById('answer-box').style.display = 'block';
+  document.getElementById('next-question').style.display = 'inline-block';
 
-      //Hide “Previous” on first step
-      document.querySelector('button[onclick="prevQuestion()"]').style.display = (stepIndex === 0) ? 'none' : 'inline-block';
+  const step = steps[stepIndex];
+  const qText = document.getElementById('question-text');
+  const comp = document.getElementById('code-comparison');
+  const textarea = document.getElementById('answer-box');
+  const key = generateKey(step);
+  const saved = reasoning[key] || '';
+  textarea.value = saved;
+
+  // Hide “Previous” on first step
+  document.querySelector('button[onclick="prevQuestion()"]').style.display =
+    stepIndex === 0 ? 'none' : 'inline-block';
+
+  comp.innerHTML = '';
+
+  if (step.type === 'grouping') {
+    qText.innerHTML = `
+      <div style="margin-bottom: 15px;">
+        <strong>Position ${step.rank}:</strong> Why did you group the following snippets together?
+      </div>
+    `;
+
+    const row = document.createElement('div');
+    row.style.display = 'flex';
+    row.style.gap = '40px';
+    row.style.flexWrap = 'wrap';
+    row.style.width = '100%';
+    row.style.boxSizing = 'border-box';
+
+    step.snippets.forEach(snippet => {
+      const box = document.createElement('div');
+      box.className = 'snippet-preview-box';
+      box.style.flex = '1 1 300px';
+      box.style.boxSizing = 'border-box';
+      box.innerHTML = `
+        <div class="snippet-header">${snippet.title}</div>
+        ${renderCodeWithLineNumbers(snippet.code)}
+      `;
+      row.appendChild(box);
+    });
+
+    comp.appendChild(row);
+
+  } else if (step.type === 'comparison') {
+    qText.innerHTML = `
+      <div style="margin-bottom: 15px;">
+        <strong>Positions ${step.currentRank} vs ${step.nextRank}:</strong>
+        Why are the snippets in Position ${step.currentRank} more comprehensible than those in Position ${step.nextRank}?
+      </div>
+    `;
+
+    const row = document.createElement('div');
+    row.style.display = 'flex';
+    row.style.flexWrap = 'nowrap';
+    row.style.width = '100%';
+    row.style.gap = '40px';
+    row.style.boxSizing = 'border-box';
+
+    const leftCol = document.createElement('div');
+    leftCol.style.flex = '1';
+    leftCol.style.minWidth = '0';
+    leftCol.style.boxSizing = 'border-box';
+    leftCol.innerHTML = `<h4>Position ${step.currentRank}</h4>`;
+    step.currentSnippets.forEach(snippet => {
+      leftCol.innerHTML += `
+        <div class="snippet-preview-box">
+          <div class="snippet-header">${snippet.title}</div>
+          ${renderCodeWithLineNumbers(snippet.code)}
+        </div>`;
+    });
+
+    const rightCol = document.createElement('div');
+    rightCol.style.flex = '1';
+    rightCol.style.minWidth = '0';
+    rightCol.style.boxSizing = 'border-box';
+    rightCol.innerHTML = `<h4>Position ${step.nextRank}</h4>`;
+    step.nextSnippets.forEach(snippet => {
+      rightCol.innerHTML += `
+        <div class="snippet-preview-box">
+          <div class="snippet-header">${snippet.title}</div>
+          ${renderCodeWithLineNumbers(snippet.code)}
+        </div>`;
+    });
+
+    row.appendChild(leftCol);
+    row.appendChild(rightCol);
+    comp.appendChild(row);
+  }
+}
 
 
-      comp.innerHTML = '';
-      if (step.type === 'grouping') {
-        qText.innerHTML = `<strong>Position ${step.rank}:</strong> Why did you group the following snippets together?`;
-
-        const row = document.createElement('div');
-        row.style.display = 'flex';
-        row.style.gap = '40px';
-        row.style.flexWrap = 'wrap';
-        row.style.width = '100%';
-
-        step.snippets.forEach(snippet => {
-          const box = document.createElement('div');
-          box.className = 'snippet-preview-box';
-          box.style.flex = '1 1 300px';  // allows wrapping on smaller screens
-          box.innerHTML = `
-            <div class="snippet-header">${snippet.title}</div>
-            <div class="code-box">${snippet.code}</div>
-          `;
-          row.appendChild(box);
-        });
-
-        comp.appendChild(row);
-      } else {
-        qText.innerHTML = `<strong>Positions ${step.currentRank} vs ${step.nextRank}:</strong> Why are the snippets in Position ${step.currentRank} more comprehensible than those in Position ${step.nextRank}?`;
-        comp.innerHTML = '';
-        const row = document.createElement('div');
-        row.style.display = 'flex';
-        row.style.gap = '40px';
-        row.style.width = '100%';
-
-        const leftCol = document.createElement('div');
-        leftCol.style.flex = '1';
-        leftCol.innerHTML = `<h4>Position ${step.currentRank}</h4>`;
-        step.currentSnippets.forEach(snippet => {
-          leftCol.innerHTML += `
-            <div class="snippet-preview-box">
-              <div class="snippet-header">${snippet.title}</div>
-              <div class="code-box">${snippet.code}</div>
-            </div>`;
-        });
-        comp.innerHTML += `</div>`;
-
-        const rightCol = document.createElement('div');
-        rightCol.style.flex = '1';
-        rightCol.innerHTML = `<h4>Position ${step.nextRank}</h4>`;
-        step.nextSnippets.forEach(snippet => {
-          rightCol.innerHTML += `
-            <div class="snippet-preview-box">
-              <div class="snippet-header">${snippet.title}</div>
-              <div class="code-box">${snippet.code}</div>
-            </div>`;
-        });
-        row.appendChild(leftCol);
-        row.appendChild(rightCol);
-        comp.appendChild(row);
-        
-      }
-    }
 
     function nextQuestion() {
       const response = document.getElementById('answer-box').value.trim();
@@ -869,8 +907,6 @@
   }
   return true;
 }
-
-
   </script>
 
   <script>
