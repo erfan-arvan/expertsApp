@@ -702,7 +702,11 @@
 
       comp.innerHTML = '';
       if (step.type === 'grouping') {
-        qText.innerHTML = `<strong>Position ${step.rank}:</strong> Why did you group the following snippets together?`;
+        qText.innerHTML = `
+        <div style="margin-bottom: 15px;">
+          <strong>Position ${step.rank}:</strong> Why did you group the following snippets together?
+        </div>
+      `;
 
         const row = document.createElement('div');
         row.style.display = 'flex';
@@ -724,7 +728,13 @@
 
         comp.appendChild(row);
       } else {
-        qText.innerHTML = `<strong>Positions ${step.currentRank} vs ${step.nextRank}:</strong> Why are the snippets in Position ${step.currentRank} more comprehensible than those in Position ${step.nextRank}?`;
+        qText.innerHTML = `
+        <div style="margin-bottom: 15px;">
+          <strong>Positions ${step.currentRank} vs ${step.nextRank}:</strong>
+          Why are the snippets in Position ${step.currentRank} more comprehensible than those in Position ${step.nextRank}?
+        </div>
+      `;
+
         comp.innerHTML = '';
         const row = document.createElement('div');
         row.style.display = 'flex';
