@@ -244,6 +244,12 @@
   padding-left: 12px;
 }
 
+.dark-mode .line-numbers {
+  color: #777;
+  border-right: 1px solid #555;
+}
+
+
 
 
   </style>
@@ -692,7 +698,17 @@
           box.style.flex = '1 1 300px';  // allows wrapping on smaller screens
           box.innerHTML = `
             <div class="snippet-header">${snippet.title}</div>
-            <div class="code-box">${snippet.code}</div>
+          <div class="code-box">
+            <div class="code-container">
+              <div class="line-numbers">
+                ${snippet.code.trim().split('\n').map((_, i) => i + 1).join('<br>')}
+              </div>
+              <div class="code-content">
+                ${snippet.code}
+              </div>
+            </div>
+          </div>
+
           `;
           row.appendChild(box);
         });
