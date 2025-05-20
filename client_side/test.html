@@ -174,6 +174,29 @@
   }
 
 
+  .code-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  background-color: inherit;
+  color: inherit;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.line-numbers {
+  text-align: right;
+  padding-right: 10px;
+  user-select: none;
+  color: #888;
+}
+
+.code-content {
+  white-space: pre;
+}
+
 </style>
 
     
@@ -225,7 +248,10 @@
           Switch to Light Mode
         </button>
       </div>
-      <pre id="code" style="margin: 0; padding-top: 0; padding-bottom: 0;"><code>Loading snippet...</code></pre>
+      <div class="code-container" id="code">
+        <div class="line-numbers" id="line-numbers"></div>
+        <div class="code-content" id="code-content"></div>
+      </div>      
     </div>
   
     <!-- RIGHT: Questions -->
@@ -546,7 +572,11 @@ let currentSnippet = 1;
 function loadSnippet(snippetNumber) {
   const snippet = snippets[snippetNumber - 1];
   document.getElementById('snippet-title').innerText = snippet.title;
-  document.getElementById('code').innerHTML = snippet.code;
+  const codeLines = snippet.code.trim().split('\n');
+  document.getElementById('code-content').innerHTML = codeLines.join('\n');
+
+const lineNumbersHtml = codeLines.map((_, i) => (i + 1)).join('<br>');
+document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
 
   const keySummary = `summary${snippetNumber}`;
   const keycompSummary = `compSummary${snippetNumber}`;
