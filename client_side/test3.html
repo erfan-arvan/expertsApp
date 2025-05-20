@@ -265,18 +265,27 @@
     </div>
     
 
-    <div style="display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap;">
-      <div id="code-comparison" style="flex: 2; min-width: 400px;"></div>
-      <div style="flex: 1; min-width: 300px;">
+    <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start;">
+
+      <!-- LEFT: Code comparison area (flex-grow 2) -->
+      <div id="code-comparison" style="flex: 2 1 600px; min-width: 400px;"></div>
+    
+      <!-- RIGHT: Explanation + buttons (flex-grow 1) -->
+      <div style="flex: 1 1 300px; min-width: 300px; max-width: 100%;">
         <label for="answer-box" style="font-weight: bold;">Your Explanation</label>
-        <textarea id="answer-box" placeholder="Type your explanation here..."></textarea>
-        <div class="buttons">
+        <textarea id="answer-box" placeholder="Type your explanation here..."
+                  style="width: 100%; box-sizing: border-box; resize: vertical; min-height: 150px;"></textarea>
+    
+        <div class="buttons" style="margin-top: 15px;">
           <button onclick="prevQuestion()">⬅️ Previous</button>
           <button id="next-question" onclick="nextQuestion()">Next ➡️</button>
-          <p></p><button id="submit-review" onclick="reviewAndSubmit()">Review and Submit All</button>
+          <p></p>
+          <button id="submit-review" onclick="reviewAndSubmit()">Review and Submit All</button>
         </div>
       </div>
+    
     </div>
+    
 
   </div>
   
