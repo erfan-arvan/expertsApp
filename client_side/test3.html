@@ -679,97 +679,98 @@ function renderCodeWithLineNumbers(highlightedCodeHtml) {
     document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
     function showStep() {
-      document.getElementById('answer-box').style.display = 'block';
-      document.getElementById('next-question').style.display = 'inline-block';
-      const step = steps[stepIndex];
-      const qText = document.getElementById('question-text');
-      const comp = document.getElementById('code-comparison');
-      const textarea = document.getElementById('answer-box');
-      const key = generateKey(step);
-      const saved = reasoning[key] || '';
-      textarea.value = saved;
+  document.getElementById('answer-box').style.display = 'block';
+  document.getElementById('next-question').style.display = 'inline-block';
 
-      //Hide “Previous” on first step
-      document.querySelector('button[onclick="prevQuestion()"]').style.display = (stepIndex === 0) ? 'none' : 'inline-block';
+  const step = steps[stepIndex];
+  const qText = document.getElementById('question-text');
+  const comp = document.getElementById('code-comparison');
+  const textarea = document.getElementById('answer-box');
+  const key = generateKey(step);
+  const saved = reasoning[key] || '';
+  textarea.value = saved;
 
+  // Hide “Previous” on first step
+  document.querySelector('button[onclick="prevQuestion()"]').style.display =
+    stepIndex === 0 ? 'none' : 'inline-block';
 
-      comp.innerHTML = '';
-      if (step.type === 'grouping') {
-        qText.innerHTML = `
-        <div style="margin-bottom: 15px;">
-          <strong>Position ${step.rank}:</strong> Why did you group the following snippets together?
-        </div>
+  comp.innerHTML = '';
+
+  if (step.type === 'grouping') {
+    qText.innerHTML = `
+      <div style="margin-bottom: 15px;">
+        <strong>Position ${step.rank}:</strong> Why did you group the following snippets together?
+      </div>
+    `;
+
+    const row = document.createElement('div');
+    row.style.display = 'flex';
+    row.style.gap = '40px';
+    row.style.flexWrap = 'wrap';
+    row.style.width = '100%';
+    row.style.boxSizing = 'border-box';
+
+    step.snippets.forEach(snippet => {
+      const box = document.createElement('div');
+      box.className = 'snippet-preview-box';
+      box.style.flex = '1 1 300px';
+      box.style.boxSizing = 'border-box';
+      box.innerHTML = `
+        <div class="snippet-header">${snippet.title}</div>
+        ${renderCodeWithLineNumbers(snippet.code)}
       `;
+      row.appendChild(box);
+    });
 
-        const row = document.createElement('div');
-        row.style.display = 'flex';
-        row.style.gap = '40px';
-        row.style.flexWrap = 'wrap';
-        row.style.width = '100%';
+    comp.appendChild(row);
 
-        step.snippets.forEach(snippet => {
-          const box = document.createElement('div');
-          box.className = 'snippet-preview-box';
-          box.style.flex = '1 1 300px';  // allows wrapping on smaller screens
-          box.innerHTML = `
+  } else if (step.type === 'comparison') {
+    qText.innerHTML = `
+      <div style="margin-bottom: 15px;">
+        <strong>Positions ${step.currentRank} vs ${step.nextRank}:</strong>
+        Why are the snippets in Position ${step.currentRank} more comprehensible than those in Position ${step.nextRank}?
+      </div>
+    `;
+
+    const row = document.createElement('div');
+    row.style.display = 'flex';
+    row.style.flexWrap = 'nowrap';
+    row.style.width = '100%';
+    row.style.gap = '40px';
+    row.style.boxSizing = 'border-box';
+
+    const leftCol = document.createElement('div');
+    leftCol.style.flex = '1';
+    leftCol.style.minWidth = '0';
+    leftCol.style.boxSizing = 'border-box';
+    leftCol.innerHTML = `<h4>Position ${step.currentRank}</h4>`;
+    step.currentSnippets.forEach(snippet => {
+      leftCol.innerHTML += `
+        <div class="snippet-preview-box">
           <div class="snippet-header">${snippet.title}</div>
           ${renderCodeWithLineNumbers(snippet.code)}
-        `;
+        </div>`;
+    });
 
-          row.appendChild(box);
-        });
+    const rightCol = document.createElement('div');
+    rightCol.style.flex = '1';
+    rightCol.style.minWidth = '0';
+    rightCol.style.boxSizing = 'border-box';
+    rightCol.innerHTML = `<h4>Position ${step.nextRank}</h4>`;
+    step.nextSnippets.forEach(snippet => {
+      rightCol.innerHTML += `
+        <div class="snippet-preview-box">
+          <div class="snippet-header">${snippet.title}</div>
+          ${renderCodeWithLineNumbers(snippet.code)}
+        </div>`;
+    });
 
-        comp.appendChild(row);
-      } else {
-        qText.innerHTML = `
-        <div style="margin-bottom: 15px;">
-          <strong>Positions ${step.currentRank} vs ${step.nextRank}:</strong>
-          Why are the snippets in Position ${step.currentRank} more comprehensible than those in Position ${step.nextRank}?
-        </div>
-      `;
+    row.appendChild(leftCol);
+    row.appendChild(rightCol);
+    comp.appendChild(row);
+  }
+}
 
-        comp.innerHTML = '';
-        const row = document.createElement('div');
-        row.style.display = 'flex';
-        row.style.gap = '40px';
-        row.style.width = '100%';
-
-        const leftCol = document.createElement('div');
-        leftCol.style.flex = '1 1 0';
-        leftCol.style.minWidth = '300px';
-        leftCol.style.maxWidth = '600px';
-        leftCol.style.boxSizing = 'border-box';
-        leftCol.innerHTML = `<h4>Position ${step.currentRank}</h4>`;
-        step.currentSnippets.forEach(snippet => {
-        leftCol.innerHTML += `
-          <div class="snippet-preview-box">
-            <div class="snippet-header">${snippet.title}</div>
-            ${renderCodeWithLineNumbers(snippet.code)}
-          </div>`;
-      });
-
-        comp.innerHTML += `</div>`;
-
-        const rightCol = document.createElement('div');
-        rightCol.style.flex = '1 1 0';
-        rightCol.style.minWidth = '300px';
-        rightCol.style.maxWidth = '600px';
-        rightCol.style.boxSizing = 'border-box';
-        rightCol.innerHTML = `<h4>Position ${step.nextRank}</h4>`;
-        step.nextSnippets.forEach(snippet => {
-          rightCol.innerHTML += `
-            <div class="snippet-preview-box">
-              <div class="snippet-header">${snippet.title}</div>
-              ${renderCodeWithLineNumbers(snippet.code)}
-            </div>`;
-        });
-
-        row.appendChild(leftCol);
-        row.appendChild(rightCol);
-        comp.appendChild(row);
-        
-      }
-    }
 
     function nextQuestion() {
       const response = document.getElementById('answer-box').value.trim();
