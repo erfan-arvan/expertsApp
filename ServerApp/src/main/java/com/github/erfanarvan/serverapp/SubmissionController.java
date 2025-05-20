@@ -64,31 +64,41 @@ public class SubmissionController {
         String username = (String) body.getOrDefault("username", "anonymous");
         String timestamp = ZonedDateTime.now(ZoneId.of("America/New_York"))
                                         .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+        boolean isFinal = "1".equals(body.getOrDefault("submitted", "0"));
+
         // Ensure the directory exists
         File directory = new File("submissions");
         if (!directory.exists()) {
             directory.mkdirs();
         }
 
-        File file = new File("submissions/all_submissions.json");
+        File allFile = new File("submissions/all_submissions.json");
+        File finalFile = new File("submissions/final_submissions.json");
         ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-        Map<String, List<Map<String, Object>>> allData;
 
         try {
-            if (file.exists()) {
-                allData = mapper.readValue(file, new TypeReference<>() {});
-            } else {
-                allData = new HashMap<>();
-            }
-
+            // Prepare wrapped data
             Map<String, Object> wrapped = new HashMap<>();
             wrapped.put("timestamp", timestamp);
-            wrapped.put("isFinal", "1".equals(body.getOrDefault("submitted", "0")));
+            wrapped.put("isFinal", isFinal);
             wrapped.put("data", body);
 
-
+            // Write to all_submissions.json
+            Map<String, List<Map<String, Object>>> allData = allFile.exists()
+                ? mapper.readValue(allFile, new TypeReference<>() {})
+                : new HashMap<>();
             allData.computeIfAbsent(username, k -> new ArrayList<>()).add(wrapped);
-            mapper.writeValue(file, allData);
+            mapper.writeValue(allFile, allData);
+
+            // Write to final_submissions.json if submitted == "1"
+            if (isFinal) {
+                Map<String, List<Map<String, Object>>> finalData = finalFile.exists()
+                    ? mapper.readValue(finalFile, new TypeReference<>() {})
+                    : new HashMap<>();
+                finalData.computeIfAbsent(username, k -> new ArrayList<>()).add(wrapped);
+                mapper.writeValue(finalFile, finalData);
+            }
 
             return "Submission saved.";
         } catch (IOException e) {
@@ -96,6 +106,7 @@ public class SubmissionController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save submission.");
         }
     }
+
 
 
     @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
