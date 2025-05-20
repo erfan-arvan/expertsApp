@@ -735,7 +735,10 @@ function renderCodeWithLineNumbers(highlightedCodeHtml) {
         row.style.width = '100%';
 
         const leftCol = document.createElement('div');
-        leftCol.style.flex = '1';
+        leftCol.style.flex = '1 1 0';
+        leftCol.style.minWidth = '300px';
+        leftCol.style.maxWidth = '600px';
+        leftCol.style.boxSizing = 'border-box';
         leftCol.innerHTML = `<h4>Position ${step.currentRank}</h4>`;
         step.currentSnippets.forEach(snippet => {
         leftCol.innerHTML += `
@@ -748,7 +751,10 @@ function renderCodeWithLineNumbers(highlightedCodeHtml) {
         comp.innerHTML += `</div>`;
 
         const rightCol = document.createElement('div');
-        rightCol.style.flex = '1';
+        rightCol.style.flex = '1 1 0';
+        rightCol.style.minWidth = '300px';
+        rightCol.style.maxWidth = '600px';
+        rightCol.style.boxSizing = 'border-box';
         rightCol.innerHTML = `<h4>Position ${step.nextRank}</h4>`;
         step.nextSnippets.forEach(snippet => {
           rightCol.innerHTML += `
