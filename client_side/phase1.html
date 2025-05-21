@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Phase 1: Reading and Understanding Code Snippets</title>
+    <title>Phase 1: Understanding the Code Snippets</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -220,19 +220,21 @@
 
 <div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2 style="margin: 0;">Phase 1: Reading and Understanding All Code Snippets</h2>
-        <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;color: #242424;">Hide</button>
+        <h2 style="margin: 0;">Phase 1: Understanding the Code Snippets</h2>
+        <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
     </div>
 
     <div id="instructions-content" style="margin-top: 15px;">
-        <p>In this phase, you will view one code snippet at a time. For each snippet,</p>
+        <p>In this phase, you will review and understand each of the 8 code snippets. For each snippet:</p>
         <ol>
-            <li><strong>Summarize the snippet's functionality:</strong> Briefly describe what the code does. <em>Example:</em> <span style="color:#444">“This method takes two numbers as input and returns their average.”</span></li>
+            <li><strong>Summarize the snippet's functionality:</strong> Briefly describe the task that the code is trying to achieve.
+               <!-- <em>Example:</em> <span style="color:#444">“This method takes two numbers as input and returns their average.”</span></li> -->
         
-            <li style="margin-top: 8px;"><strong>Assess the snippet's comprehensibility:</strong> Reflect on what made the snippet easy or difficult to understand. <em>Example:</em> <span style="color:#444">“The snippet was easy to follow due to its clear method name and a direct if-return structure. However, the use of a ternary operator inside a return statement added some cognitive load, and the absence of braces around conditionals made it harder to visually parse.”</span></li>
+            <li style="margin-top: 8px;"><strong>Assess the snippet's comprehensibility:</strong> Reflect on how you understood the snippet and what features made it easy or difficult to understand. 
+              <!-- <em>Example:</em> <span style="color:#444">“The snippet was easy to follow due to its clear method name and a direct if-return structure. However, the use of a ternary operator inside a return statement added some cognitive load, and the absence of braces around conditionals made it harder to visually parse.”</span></li> -->
         </ol>
                 
-          <p><strong>Prohibited:</strong> Please <span style="color:red;">do not use generative AI tools</span> (e.g., ChatGPT, GitHub Copilot) during this phase. Your expert judgment is essential to the validity of our study </p>
+          <p><strong>Please complete this phase using your own judgment</strong>. <span style="color:red;"><strong>Do not consult with anyone else or use generative AI tools (ChatGPT, GitHub Copilot, etc.), search engines, or external websites</strong></span>. Your judgment is essential to the validity of our study.</p>
     </div>
 </div>
     
@@ -256,10 +258,10 @@
   
     <!-- RIGHT: Questions -->
     <div id="question-box" style="flex: 1;">
-      <label for="summary"><strong>What does this code snippet do? Summarize its main functionality and purpose (1–2 sentences):</strong></label>
+      <label for="summary"><strong>What does this code snippet do? Briefly describe its main functionality.</strong></label>
       <textarea id="summary" oninput="saveSummary()"></textarea>
   
-      <label for="compSummary"><strong>Tell us about how you assess this snippet's comprehensibility. What features might make it easy to understand? What features make it hard to understand?</strong></label>
+      <label for="compSummary"><strong>How did you assess this snippet's comprehensibility? What features made it easy or hard to understand? Provide a brief explanation.</strong></label>
       <textarea id="compSummary" oninput="saveSummary()"></textarea>
   
       <div class="buttons">
