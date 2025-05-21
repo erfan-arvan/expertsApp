@@ -637,34 +637,40 @@ function renderCodeWithLineNumbers(highlightedCodeHtml) {
     const steps = [];
 
     Object.entries(phase3Ranking).forEach(([rank, ids], i, arr) => {
-  const currentSnippets = ids.map(id => snippets.find(s => `snippet-${s.id}` === id)).filter(Boolean);
+      const currentSnippets = ids.map(id => snippets.find(s => `snippet-${s.id}` === id)).filter(Boolean);
 
-  // Add grouping step if more than one snippet in this rank
-  if (currentSnippets.length > 1) {
-    steps.push({
-      type: 'grouping',
-      rank,
-      snippets: currentSnippets
-    });
-    }
-
-    // Check and add comparison step only if both ranks have snippets
-    if (i < arr.length - 1) {
-      const nextRank = arr[i + 1][0];
-      const nextIds = arr[i + 1][1];
-      const nextSnippets = nextIds.map(id => snippets.find(s => `snippet-${s.id}` === id)).filter(Boolean);
-
-      if (currentSnippets.length > 0 && nextSnippets.length > 0) {
+      // Add grouping step if more than one snippet in this rank
+      if (currentSnippets.length > 1) {
         steps.push({
-          type: 'comparison',
-          currentRank: rank,
-          nextRank,
-          currentSnippets,
-          nextSnippets
+          type: 'grouping',
+          rank,
+          snippets: currentSnippets
         });
       }
-    }
-  });
+
+      // Find the next non-empty rank
+      let j = i + 1;
+      while (j < arr.length && (!arr[j][1] || arr[j][1].length === 0)) {
+        j++;
+      }
+
+      if (j < arr.length) {
+        const nextRank = arr[j][0];
+        const nextIds = arr[j][1];
+        const nextSnippets = nextIds.map(id => snippets.find(s => `snippet-${s.id}` === id)).filter(Boolean);
+
+        if (currentSnippets.length > 0 && nextSnippets.length > 0) {
+          steps.push({
+            type: 'comparison',
+            currentRank: rank,
+            nextRank,
+            currentSnippets,
+            nextSnippets
+          });
+        }
+      }
+    });
+
 
 
     const newReasoning = {};
@@ -678,7 +684,7 @@ function renderCodeWithLineNumbers(highlightedCodeHtml) {
     sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
     document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
-    function showStep() {
+function showStep() {
   document.getElementById('answer-box').style.display = 'block';
   document.getElementById('next-question').style.display = 'inline-block';
 
