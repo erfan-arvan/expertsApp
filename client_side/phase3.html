@@ -1040,6 +1040,36 @@ window.addEventListener('beforeunload', saveToServer);
 
 </script>
 
+<script>
+  // Automatically save and validate on textarea change
+  document.addEventListener('DOMContentLoaded', () => {
+    const textarea = document.getElementById('answer-box');
+  
+    textarea.addEventListener('input', () => {
+      const step = steps[stepIndex];
+      const key = generateKey(step);
+      const value = textarea.value.trim();
+  
+      // Save to reasoning and storage
+      reasoning[key] = value;
+      sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
+      document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
+  
+      // Validate all responses
+      if (validateAllResponses()) {
+        sessionStorage.setItem('phase3Complete', 'true');
+        document.cookie = `phase3Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
+        document.getElementById('submit-review').style.display = 'inline-block';
+      } else {
+        sessionStorage.setItem('phase3Complete', 'false');
+        document.cookie = `phase3Complete=false; path=/; max-age=${60 * 60 * 24 * 30}`;
+        document.getElementById('submit-review').style.display = 'none';
+      }
+    });
+  });
+  </script>
+  
+
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
   Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
 </footer>
