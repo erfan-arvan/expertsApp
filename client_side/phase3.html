@@ -775,6 +775,14 @@ function showStep() {
     row.appendChild(rightCol);
     comp.appendChild(row);
   }
+
+    // Hide “Next” button if this is the last question
+  if (stepIndex === steps.length - 1) {
+    document.getElementById('next-question').style.display = 'none';
+  } else {
+    document.getElementById('next-question').style.display = 'inline-block';
+  }
+
 }
 
 
