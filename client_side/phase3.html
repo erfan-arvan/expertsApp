@@ -263,18 +263,18 @@
   
   <div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-      <h2 style="margin: 0;">Phase 3: Explain Your Ranking Decisions</h2>
+      <h2 style="margin: 0;">Phase 3: Explain Your Ranking</h2>
       <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
     </div>
   
     <div id="instructions-content" style="margin-top: 15px;">
-      <p>In this phase, you will explain the reasoning behind your rankings from the previous step. You’ll provide:</p>
+      <p>In this phase, you will explain the reasoning behind your ranking from the previous phase. </p>
       <ol>
-        <li><strong>Grouped Snippets:</strong> Why snippets placed in the same position are similarly comprehensible.</li>
-        <li><strong>Comparisons:</strong> Why snippets in one position are more comprehensible than those in the next.</li>
+        <li><strong>Grouped Snippets:</strong> explain why the snippets placed in the same position are similarly comprehensible.</li>
+        <li><strong>Comparisons:</strong> explain why the snippets placed in one position are easier to understand than those in the next position.</li>
       </ol>
-      <p><strong>Tip:</strong> There are no right or wrong answers — we’re interested in your reasoning.</p>
-    <p><strong>Prohibited:</strong> Please <span style="color:red;">do not use generative AI tools</span> (e.g., ChatGPT, GitHub Copilot) during this phase. Your expert judgment is essential to the validity of our study </p>
+      <p><strong>Tip:</strong> There are no right or wrong answers.</p>
+     <p><strong>Please complete this phase using your own judgment</strong>. <span style="color:red;"><strong>Do not consult with anyone else or use generative AI tools (ChatGPT, GitHub Copilot, etc.), search engines, or external websites</strong></span>. Your judgment is essential to the validity of our study.</p>
     </div>
   </div>
     
@@ -705,7 +705,7 @@ function showStep() {
   if (step.type === 'grouping') {
     qText.innerHTML = `
       <div style="margin-bottom: 15px;">
-        <strong>Position ${step.rank}:</strong> Why did you group the following snippets together?
+        <strong>Position ${step.rank}:</strong> Why do you think the following snippets are similarly comprehensible?
       </div>
     `;
 
@@ -735,7 +735,7 @@ function showStep() {
     qText.innerHTML = `
       <div style="margin-bottom: 15px;">
         <strong>Positions ${step.currentRank} vs ${step.nextRank}:</strong>
-        Why are the snippets in Position ${step.currentRank} more comprehensible than those in Position ${step.nextRank}?
+        Why are the snippets in Position ${step.currentRank} easier to understand than those in Position ${step.nextRank}?
       </div>
     `;
 
