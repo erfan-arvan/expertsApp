@@ -710,22 +710,23 @@ function showStep() {
     `;
 
     const row = document.createElement('div');
-    row.style.display = 'flex';
-    row.style.gap = '40px';
-    row.style.flexWrap = 'wrap';
-    row.style.width = '100%';
-    row.style.boxSizing = 'border-box';
+  // ✅ Use grid to show 2 snippets per row
+  row.style.display = 'grid';
+  row.style.gridTemplateColumns = 'repeat(2, 1fr)'; // Hard limit to 2 per row
+  row.style.gridAutoRows = 'auto';
+  row.style.gap = '30px';
+  row.style.boxSizing = 'border-box';
+  row.style.width = '100%';
 
-    step.snippets.forEach(snippet => {
-      const box = document.createElement('div');
-      box.className = 'snippet-preview-box';
-      box.style.flex = '1 1 300px';
-      box.style.boxSizing = 'border-box';
-      box.innerHTML = `
-        <div class="snippet-header">${snippet.title}</div>
-        ${renderCodeWithLineNumbers(snippet.code)}
-      `;
-      row.appendChild(box);
+  step.snippets.forEach(snippet => {
+    const box = document.createElement('div');
+    box.className = 'snippet-preview-box';
+    box.style.width = '100%';
+    box.innerHTML = `
+      <div class="snippet-header">${snippet.title}</div>
+      ${renderCodeWithLineNumbers(snippet.code)}
+    `;
+    row.appendChild(box);
     });
 
     comp.appendChild(row);
