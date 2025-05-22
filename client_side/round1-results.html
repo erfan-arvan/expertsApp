@@ -58,6 +58,7 @@
     <!-- Snippet 1 -->
     <div class="snippet">
       <h3>Snippet 1</h3>
+      <button onclick="show_snippet(1)">View Snippet 1</button>
       <div class="participant"><h4>Nadeeshan</h4>
         <p><strong>Summary:</strong> This method takes a project name and validates it based on several criteria.</p>
         <p><strong>Comprehensibility:</strong> Clear method/final variable names make it easier to understand. Also, the clear logic separation of the conditional statements makes it easier to follow.</p>
@@ -278,6 +279,65 @@
       <p>There are big gaps, though, that correspond to the blocks of texts above: my ranking looks something like this: 2 . 1 ... 4 7 . 5 ... 3 . 6 ... 8</p>
     </div>
   </div>
+
   
+  <div id="snippet-modal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); width:80%; max-height:80%; overflow-y:auto; background:#fff; border:1px solid #ccc; padding:20px; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+      <h3 id="modal-snippet-title" style="margin:0;">Snippet</h3>
+      <div>
+        <button onclick="toggleModalTheme()" id="modal-theme-toggle" style="margin-right: 10px; padding: 6px 12px; border-radius: 5px; border: none; background-color: #333; color: white; cursor: pointer;">Switch to Light Mode</button>
+        <span onclick="document.getElementById('snippet-modal').style.display='none'" style="cursor:pointer; font-size:20px; font-weight:bold;">&times;</span>
+      </div>
+    </div>
+  
+    <div class="code-container" id="modal-code">
+      <div class="line-numbers" id="modal-line-numbers"></div>
+      <div class="code-content" id="modal-code-content"></div>
+    </div>
+  </div>
+
+  <script>
+    function show_snippet(id) {
+      const snippet = snippets.find(s => s.id === id);
+      if (!snippet) return;
+    
+      document.getElementById('modal-snippet-title').innerText = snippet.title;
+    
+      const codeLines = snippet.code.trim().split('\n');
+      document.getElementById('modal-line-numbers').innerHTML = codeLines.map((_, i) => i + 1).join('<br>');
+      document.getElementById('modal-code-content').innerHTML = codeLines.join('\n');
+    
+      document.getElementById('snippet-modal').style.display = 'block';
+    
+      // Apply saved theme
+      applyModalTheme();
+    }
+    
+    function toggleModalTheme() {
+      const body = document.body;
+      const isLight = body.classList.contains("light-mode");
+    
+      if (isLight) {
+        body.classList.remove("light-mode");
+        body.classList.add("dark-mode");
+        localStorage.setItem("codeTheme", "dark");
+        document.getElementById('modal-theme-toggle').textContent = "Switch to Light Mode";
+      } else {
+        body.classList.remove("dark-mode");
+        body.classList.add("light-mode");
+        localStorage.setItem("codeTheme", "light");
+        document.getElementById('modal-theme-toggle').textContent = "Switch to Dark Mode";
+      }
+    }
+    
+    function applyModalTheme() {
+      const theme = localStorage.getItem('codeTheme') || 'light';
+      document.body.classList.remove('light-mode', 'dark-mode');
+      document.body.classList.add(theme + '-mode');
+      document.getElementById('modal-theme-toggle').textContent =
+        theme === 'light' ? "Switch to Dark Mode" : "Switch to Light Mode";
+    }
+    </script>
+    
 </body>
 </html>
