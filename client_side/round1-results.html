@@ -282,6 +282,23 @@ a:hover {
   display: block;
 }
 
+.snippet-box {
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-family: 'Courier New', monospace;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.code-content {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 4px;
+}
+
   </style>
 </head>
 <body>
@@ -455,7 +472,7 @@ a:hover {
       <div class="ranking-slot" style="position: relative;">
         <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
         <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
-        <div class="reasoning-point" style="position: absolute; top: -4px; right: 60px;"></div>
+        <div class="reasoning-point" onclick="compare([1], [2,3])" style="position: absolute; top: -4px; right: 60px;"></div>
         <div class="tooltip-box" style="position: absolute; top: 25px; right: 10px;">
            Because both of them are equally understandable to me. Has similar LOC, clear and simple logical separation.
         </div>
@@ -673,6 +690,19 @@ a:hover {
   </div>
 
   
+  <div id="compare-modal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); width:90%; max-height:80%; overflow-y:auto; background:#fff; border:1px solid #ccc; padding:20px; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+      <h3 style="margin:0;">Compare Snippets</h3>
+      <span onclick="document.getElementById('compare-modal').style.display='none'" style="cursor:pointer; font-size:20px; font-weight:bold;">&times;</span>
+    </div>
+  
+    <div id="compare-columns" style="display: flex; gap: 20px;">
+      <div id="compare-left" style="flex: 1;"></div>
+      <div id="compare-right" style="flex: 1;"></div>
+    </div>
+  </div>
+
+  
   <div id="snippet-modal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); width:80%; max-height:80%; overflow-y:auto; background:#fff; border:1px solid #ccc; padding:20px; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
       <h3 id="modal-snippet-title" style="margin:0;">Snippet</h3>
@@ -695,6 +725,41 @@ a:hover {
     }
   </script>
 
+<script>
+    function compare(leftIds, rightIds) {
+  const leftContainer = document.getElementById('compare-left');
+  const rightContainer = document.getElementById('compare-right');
+  leftContainer.innerHTML = '';
+  rightContainer.innerHTML = '';
+
+  const getSnippet = id => snippets.find(s => s.id === id);
+
+  // Left side: stacked
+  leftIds.forEach(id => {
+    const snippet = getSnippet(id);
+    if (snippet) {
+      const box = document.createElement('div');
+      box.className = 'snippet-box';
+      box.innerHTML = `<h4>${snippet.title}</h4><pre class="code-content">${snippet.code}</pre>`;
+      leftContainer.appendChild(box);
+    }
+  });
+
+  // Right side: stacked
+  rightIds.forEach(id => {
+    const snippet = getSnippet(id);
+    if (snippet) {
+      const box = document.createElement('div');
+      box.className = 'snippet-box';
+      box.innerHTML = `<h4>${snippet.title}</h4><pre class="code-content">${snippet.code}</pre>`;
+      rightContainer.appendChild(box);
+    }
+  });
+
+  document.getElementById('compare-modal').style.display = 'block';
+}
+
+</script>
   <script>
     function getCookie(name) {
         const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
