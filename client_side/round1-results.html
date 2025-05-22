@@ -629,6 +629,79 @@ a:hover {
       </div>
     </div>
   </div>
+
+  <!-- Participant: ChatGPT -->
+<div class="participant-section">
+    <h3>ChatGPT</h3>
+    <div class="ranking-row">
+      <!-- Position 1: Snippets 1 and 7 -->
+      <div class="ranking-slot" style="position: relative;">
+        <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+        <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
+        <div class="reasoning-point" onclick="compare([1], [7])" style="position: absolute; top: -4px; right: 60px;"></div>
+        <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">
+          Q1: Snippets 1 and 7 are structurally simple, with clear logic. Snippet 1 validates input; Snippet 7 uses the quadratic formula. No complex APIs or obscure logic.
+        </div>
+        <div class="reasoning-point" onclick="compare([1,7], [2,4])" style="position: absolute; top: 50px; right: -12px;"></div>
+        <div class="tooltip-box" style="position: absolute; top: 60px; right: -160px;">
+          Q2: Position 1 snippets use minimal branching and simple logic. Position 2 (2 and 4) involve more domain knowledge and control flow complexity.
+        </div>
+      </div>
+  
+      <!-- Position 2: Snippets 2 and 4 -->
+      <div class="ranking-slot" style="position: relative;">
+        <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
+        <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
+        <div class="reasoning-point" onclick="compare([2], [4])" style="position: absolute; top: -4px; right: 60px;"></div>
+        <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">
+          Q3: Both involve moderate complexity—URI schemes in Snippet 2, substring logic in Snippet 4—but are well-structured and readable.
+        </div>
+        <div class="reasoning-point" onclick="compare([2,4], [3])" style="position: absolute; top: 50px; right: -12px;"></div>
+        <div class="tooltip-box" style="position: absolute; top: 60px; right: -160px;">
+          Q4: Snippet 3 uses reflection and modifiers, which are more conceptually difficult than URI and string handling.
+        </div>
+      </div>
+  
+      <!-- Position 3: Snippet 3 -->
+      <div class="ranking-slot" style="position: relative;">
+        <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
+        <div class="reasoning-point" onclick="compare([3], [5])" style="position: absolute; top: 50px; right: -12px;"></div>
+        <div class="tooltip-box" style="position: absolute; top: 60px; right: -160px;">
+          Q5: Snippet 5 adds recursive file operations and anonymous classes on top of what Snippet 3 does, increasing difficulty.
+        </div>
+      </div>
+  
+      <!-- Position 4: Snippet 5 -->
+      <div class="ranking-slot" style="position: relative;">
+        <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
+        <div class="reasoning-point" onclick="compare([5], [8])" style="position: absolute; top: 50px; right: -12px;"></div>
+        <div class="tooltip-box" style="position: absolute; top: 60px; right: -160px;">
+          Q6: Snippet 8 includes complex math logic, NaN handling, and special float behavior—harder than recursive file deletion.
+        </div>
+      </div>
+  
+      <!-- Position 5: Snippet 8 -->
+      <div class="ranking-slot" style="position: relative;">
+        <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
+        <div class="reasoning-point" onclick="compare([8], [6])" style="position: absolute; top: 50px; right: -12px;"></div>
+        <div class="tooltip-box" style="position: absolute; top: 60px; right: -160px;">
+          Q8: Snippet 6 has lower-level bit logic, external dependencies, and UTF-specific optimizations. Snippet 8 is math-heavy but more understandable.
+        </div>
+      </div>
+  
+      <!-- Position 6 -->
+      <div class="ranking-slot"></div>
+  
+      <!-- Position 7: Snippet 3 (again, seems like a conflict; skipping to avoid repetition) -->
+      <div class="ranking-slot"></div>
+  
+      <!-- Position 8: Snippet 6 -->
+      <div class="ranking-slot" style="position: relative;">
+        <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
+      </div>
+    </div>
+  </div>
+  
   
 
   </div>
