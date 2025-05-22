@@ -563,6 +563,10 @@ a:hover {
     <div class="ranking-row">
       <div class="ranking-slot">
         <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
+        <div class="reasoning-point" style="position: absolute; top: -4px; right: 60px;"></div>
+        <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">
+            Snippets 1 and 2 both implement simple string validation logic. Snippet 2 has a shorter, simpler set of rules that it implements, so I ranked it lower. However, I don't think either of these are very difficult: both were pretty trivial to write a specification for. 
+        </div>
       </div>
       <div class="ranking-slot">
         <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
@@ -570,15 +574,37 @@ a:hover {
       <div class="ranking-slot">
         <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
         <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
+        <div class="reasoning-point" style="position: absolute; top: -4px; right: 60px;"></div>
+        <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">
+            Snippets 4, 5, and 7 are pretty similar, in the sense that each implements a well-known algorithm that I immediately recognized. However, all three are pretty complicated algorithms to get right. 
+        </div>
+
+        <div class="reasoning-point" style="top: 50px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 60px; right: -160px;">
+          💡 <strong>Reason:</strong><br>
+          I'm actually not even confident that Snippet 5 is correct, which is why I ranked it above the other two: the relevant Java APIs are quite confusing and easy to get wrong. Snippets 4 and 7 are moderately complex string and float algorithms, respectively. I don't differentiate between them.
+        </div>
       </div>
       <div class="ranking-slot">
         <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
       </div>
       <div class="ranking-slot">
         <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
+        <div class="reasoning-point" style="top: 50px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 60px; right: -160px;">
+          💡 <strong>Reason:</strong><br>
+          Then comes Snippet 3: it also required me to reason through it, since it wasn't clear what it was for just from reading through it once. However, it was noticeably easier to figure out what Snippet 3 is doing compared to Snippet 6.
+        </div>
       </div>
-      <div class="ranking-slot">
+      <div class="ranking-slot" style="position: relative;">
         <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
+        <div class="reasoning-point" style="top: 50px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 60px; right: -160px;">
+          💡 <strong>Reason:</strong><br>
+          Snippet 8 is the toughest: it was the only one where I couldn't follow why it was doing what it was doing.
+
+          Snippet 6 is next: it required me to reason through the code "bottom up" to figure out what it's doing.          
+        </div>
       </div>
       <div class="ranking-slot"></div>
       <div class="ranking-slot">
