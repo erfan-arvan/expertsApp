@@ -594,215 +594,215 @@
       ];
 
 
-        // Returns existing or creates a new randomized order of indices
-  function getOrCreateSnippetOrder(length) {
-    const key = 'snippetOrder';
+//         // Returns existing or creates a new randomized order of indices
+//   function getOrCreateSnippetOrder(length) {
+//     const key = 'snippetOrder';
   
-    // Try to load from sessionStorage or cookie
-    let stored = sessionStorage.getItem(key) || getCookie(key);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length === length) return parsed;
-      } catch {}
-    }
+//     // Try to load from sessionStorage or cookie
+//     let stored = sessionStorage.getItem(key) || getCookie(key);
+//     if (stored) {
+//       try {
+//         const parsed = JSON.parse(stored);
+//         if (Array.isArray(parsed) && parsed.length === length) return parsed;
+//       } catch {}
+//     }
   
-    // Generate new shuffled order of indices
-    const order = Array.from({ length }, (_, i) => i);
-    for (let i = order.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [order[i], order[j]] = [order[j], order[i]];
-    }
+//     // Generate new shuffled order of indices
+//     const order = Array.from({ length }, (_, i) => i);
+//     for (let i = order.length - 1; i > 0; i--) {
+//       const j = Math.floor(Math.random() * (i + 1));
+//       [order[i], order[j]] = [order[j], order[i]];
+//     }
   
-    // Store in sessionStorage and cookie
-    const serialized = JSON.stringify(order);
-    sessionStorage.setItem(key, serialized);
-    document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=2592000`; // 30 days
+//     // Store in sessionStorage and cookie
+//     const serialized = JSON.stringify(order);
+//     sessionStorage.setItem(key, serialized);
+//     document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=2592000`; // 30 days
   
-    return order;
-  }
+//     return order;
+//   }
   
-  const originalSnippets = [...snippets]; // Clone BEFORE mutation
-  const order = getOrCreateSnippetOrder(originalSnippets.length); // 1-based [1..8]
+//   const originalSnippets = [...snippets]; // Clone BEFORE mutation
+//   const order = getOrCreateSnippetOrder(originalSnippets.length); // 1-based [1..8]
 
-  const shuffled = order.map(i => originalSnippets[i - 1]); // ✅ Convert to 0-based
+//   const shuffled = order.map(i => originalSnippets[i - 1]); // ✅ Convert to 0-based
 
-  snippets.length = 0;
-  snippets.push(...shuffled);
+//   snippets.length = 0;
+//   snippets.push(...shuffled);
 
-  shuffled.forEach((snippet, newIndex) => {
-    snippet.id = newIndex + 1;                      // Maintain new 1-based IDs
-    snippet.title = `Snippet ${newIndex + 1}`;      // Display title
-  });
+//   shuffled.forEach((snippet, newIndex) => {
+//     snippet.id = newIndex + 1;                      // Maintain new 1-based IDs
+//     snippet.title = `Snippet ${newIndex + 1}`;      // Display title
+//   });
 
-  console.log("Final snippet order (titles):", snippets.map(s => s.title));
-  console.log("Final snippet order (ids):", snippets.map(s => s.id));
-  console.log("Server snippet order (1-based):", order.map(i => `Snippet ${i}`));
+//   console.log("Final snippet order (titles):", snippets.map(s => s.title));
+//   console.log("Final snippet order (ids):", snippets.map(s => s.id));
+//   console.log("Server snippet order (1-based):", order.map(i => `Snippet ${i}`));
 
-  </script>
-  <script>
-    function show_snippet(id) {
-    const snippet = snippets.find(s => s.id === id);
-    if (!snippet) return;
+//   </script>
+//   <script>
+//     function show_snippet(id) {
+//     const snippet = snippets.find(s => s.id === id);
+//     if (!snippet) return;
 
-    document.getElementById('modal-snippet-title').innerText = snippet.title;
+//     document.getElementById('modal-snippet-title').innerText = snippet.title;
 
-    const codeLines = snippet.code.trim().split('\n');
+//     const codeLines = snippet.code.trim().split('\n');
 
-    // ✅ Use innerHTML here to render styled spans correctly
-    document.getElementById('modal-code-content').innerHTML = codeLines.join('\n');
+//     // ✅ Use innerHTML here to render styled spans correctly
+//     document.getElementById('modal-code-content').innerHTML = codeLines.join('\n');
 
-    // ✅ Line numbers are just plain numbers
-    document.getElementById('modal-line-numbers').innerHTML = codeLines.map((_, i) => i + 1).join('<br>');
+//     // ✅ Line numbers are just plain numbers
+//     document.getElementById('modal-line-numbers').innerHTML = codeLines.map((_, i) => i + 1).join('<br>');
 
-    document.getElementById('snippet-modal').style.display = 'block';
+//     document.getElementById('snippet-modal').style.display = 'block';
 
-    applyModalTheme(); // Keep the theme consistent
-    }
+//     applyModalTheme(); // Keep the theme consistent
+//     }
 
     
-    function toggleModalTheme() {
-      const body = document.body;
-      const isLight = body.classList.contains("light-mode");
+//     function toggleModalTheme() {
+//       const body = document.body;
+//       const isLight = body.classList.contains("light-mode");
     
-      if (isLight) {
-        body.classList.remove("light-mode");
-        body.classList.add("dark-mode");
-        localStorage.setItem("codeTheme", "dark");
-        document.getElementById('modal-theme-toggle').textContent = "Switch to Light Mode";
-      } else {
-        body.classList.remove("dark-mode");
-        body.classList.add("light-mode");
-        localStorage.setItem("codeTheme", "light");
-        document.getElementById('modal-theme-toggle').textContent = "Switch to Dark Mode";
-      }
-    }
+//       if (isLight) {
+//         body.classList.remove("light-mode");
+//         body.classList.add("dark-mode");
+//         localStorage.setItem("codeTheme", "dark");
+//         document.getElementById('modal-theme-toggle').textContent = "Switch to Light Mode";
+//       } else {
+//         body.classList.remove("dark-mode");
+//         body.classList.add("light-mode");
+//         localStorage.setItem("codeTheme", "light");
+//         document.getElementById('modal-theme-toggle').textContent = "Switch to Dark Mode";
+//       }
+//     }
     
-    function applyModalTheme() {
-      const theme = localStorage.getItem('codeTheme') || 'light';
-      document.body.classList.remove('light-mode', 'dark-mode');
-      document.body.classList.add(theme + '-mode');
-      document.getElementById('modal-theme-toggle').textContent =
-        theme === 'light' ? "Switch to Dark Mode" : "Switch to Light Mode";
-    }
+//     function applyModalTheme() {
+//       const theme = localStorage.getItem('codeTheme') || 'light';
+//       document.body.classList.remove('light-mode', 'dark-mode');
+//       document.body.classList.add(theme + '-mode');
+//       document.getElementById('modal-theme-toggle').textContent =
+//         theme === 'light' ? "Switch to Dark Mode" : "Switch to Light Mode";
+//     }
 
 
-    // Maps from original snippet ID (1–8) to viewer snippet number (1–8)
-function getViewerSnippetNumber(originalId) {
-  const orderStr = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
-  if (!orderStr) return originalId;
+//     // Maps from original snippet ID (1–8) to viewer snippet number (1–8)
+// function getViewerSnippetNumber(originalId) {
+//   const orderStr = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
+//   if (!orderStr) return originalId;
 
-  const order = JSON.parse(orderStr); // 1-based order, like [3,1,4,...]
-  const index = order.indexOf(originalId);
-  return index === -1 ? `#${originalId}` : index + 1;
-}
+//   const order = JSON.parse(orderStr); // 1-based order, like [3,1,4,...]
+//   const index = order.indexOf(originalId);
+//   return index === -1 ? `#${originalId}` : index + 1;
+// }
 
-// Maps from viewer snippet number to original snippet ID
-function getOriginalSnippetId(viewerId) {
-  const orderStr = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
-  if (!orderStr) return viewerId;
+// // Maps from viewer snippet number to original snippet ID
+// function getOriginalSnippetId(viewerId) {
+//   const orderStr = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
+//   if (!orderStr) return viewerId;
 
-  const order = JSON.parse(orderStr); // 1-based
-  return order[viewerId - 1]; // returns original snippet ID
-}
+//   const order = JSON.parse(orderStr); // 1-based
+//   return order[viewerId - 1]; // returns original snippet ID
+// }
 
-    </script>
+</script>
     
 <script>
-fetch('responses.json')
-  .then(r => r.json())
-  .then(data => {
-    renderPhase1Responses(data);
-    renderPhase2Rankings(data);
-    renderPhase3(data);
-  });
+// fetch('responses.json')
+//   .then(r => r.json())
+//   .then(data => {
+//     renderPhase1Responses(data);
+//     renderPhase2Rankings(data);
+//     renderPhase3(data);
+//   });
 
 
-const snippetOrder = JSON.parse(sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder'));
+// const snippetOrder = JSON.parse(sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder'));
 
-function getViewerSnippetNumber(originalId) {
-  const order = JSON.parse(sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder') || '[]');
-  const index = order.indexOf(originalId);
-  return index === -1 ? `#${originalId}` : index + 1;
-}
+// function getViewerSnippetNumber(originalId) {
+//   const order = JSON.parse(sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder') || '[]');
+//   const index = order.indexOf(originalId);
+//   return index === -1 ? `#${originalId}` : index + 1;
+// }
 
-function renderPhase1Responses(data) {
-  const container = document.querySelector('.phase-section');
+// function renderPhase1Responses(data) {
+//   const container = document.querySelector('.phase-section');
 
-  for (let originalId = 1; originalId <= 8; originalId++) {
-    const viewerId = getViewerSnippetNumber(originalId);
+//   for (let originalId = 1; originalId <= 8; originalId++) {
+//     const viewerId = getViewerSnippetNumber(originalId);
 
-    const snippetDiv = document.createElement('div');
-    snippetDiv.className = 'snippet';
-    snippetDiv.innerHTML = `<h3>Snippet ${viewerId}</h3><button onclick="show_snippet(${viewerId})">View Snippet ${viewerId}</button>`;
+//     const snippetDiv = document.createElement('div');
+//     snippetDiv.className = 'snippet';
+//     snippetDiv.innerHTML = `<h3>Snippet ${viewerId}</h3><button onclick="show_snippet(${viewerId})">View Snippet ${viewerId}</button>`;
 
-    for (const participant of Object.keys(data.phase1)) {
-      const entry = data.phase1[participant][originalId];
-      if (entry) {
-        snippetDiv.innerHTML += `
-          <div class="participant">
-            <h4>${participant}</h4>
-            <p><strong>Summary:</strong> ${entry.summary}</p>
-            <p><strong>Comprehensibility:</strong> ${entry.comprehensibility || '(Not provided)'}</p>
-          </div>
-        `;
-      }
-    }
+//     for (const participant of Object.keys(data.phase1)) {
+//       const entry = data.phase1[participant][originalId];
+//       if (entry) {
+//         snippetDiv.innerHTML += `
+//           <div class="participant">
+//             <h4>${participant}</h4>
+//             <p><strong>Summary:</strong> ${entry.summary}</p>
+//             <p><strong>Comprehensibility:</strong> ${entry.comprehensibility || '(Not provided)'}</p>
+//           </div>
+//         `;
+//       }
+//     }
 
-    container.appendChild(snippetDiv);
-  }
-}
-function renderPhase2Rankings(data) {
-  const tbody = document.querySelector('.rank-table tbody');
-  tbody.innerHTML = '';
+//     container.appendChild(snippetDiv);
+//   }
+// }
+// function renderPhase2Rankings(data) {
+//   const tbody = document.querySelector('.rank-table tbody');
+//   tbody.innerHTML = '';
 
-  for (let pos = 1; pos <= 8; pos++) {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${pos}</td>`;
+//   for (let pos = 1; pos <= 8; pos++) {
+//     const tr = document.createElement('tr');
+//     tr.innerHTML = `<td>${pos}</td>`;
 
-    ['nadeeshan', 'oscar', 'martin'].forEach(p => {
-      const originalSnips = (data.phase2[p] || {})[pos] || [];
-      const viewerIds = originalSnips.map(getViewerSnippetNumber).join(', ') || '–';
-      tr.innerHTML += `<td>${viewerIds}</td>`;
-    });
+//     ['nadeeshan', 'oscar', 'martin'].forEach(p => {
+//       const originalSnips = (data.phase2[p] || {})[pos] || [];
+//       const viewerIds = originalSnips.map(getViewerSnippetNumber).join(', ') || '–';
+//       tr.innerHTML += `<td>${viewerIds}</td>`;
+//     });
 
-    tbody.appendChild(tr);
-  }
-}
-function renderPhase3(data) {
-  const section = document.querySelector('.phase-section:last-of-type');
+//     tbody.appendChild(tr);
+//   }
+// }
+// function renderPhase3(data) {
+//   const section = document.querySelector('.phase-section:last-of-type');
 
-  ['nadeeshan', 'oscar'].forEach(name => {
-    const info = data.phase3[name];
-    if (!info) return;
+//   ['nadeeshan', 'oscar'].forEach(name => {
+//     const info = data.phase3[name];
+//     if (!info) return;
 
-    const box = document.createElement('div');
-    box.className = 'reasoning-box';
-    box.innerHTML = `<h3>${name}</h3>`;
+//     const box = document.createElement('div');
+//     box.className = 'reasoning-box';
+//     box.innerHTML = `<h3>${name}</h3>`;
 
-    (info.groupings || []).forEach((g, i) => {
-      const ids = g.snippets.map(getViewerSnippetNumber).join(', ');
-      box.innerHTML += `<p><strong>Q${i + 1}: Grouping Snippets ${ids}</strong><br>${g.reason}</p>`;
-    });
+//     (info.groupings || []).forEach((g, i) => {
+//       const ids = g.snippets.map(getViewerSnippetNumber).join(', ');
+//       box.innerHTML += `<p><strong>Q${i + 1}: Grouping Snippets ${ids}</strong><br>${g.reason}</p>`;
+//     });
 
-    (info.comparisons || []).forEach((c, i) => {
-      const from = getViewerSnippetNumber(c.from);
-      const to = getViewerSnippetNumber(c.to);
-      box.innerHTML += `<p><strong>Q${i + 1 + (info.groupings?.length || 0)}: Comparison Snippet ${from} vs Snippet ${to}</strong><br>${c.reason}</p>`;
-    });
+//     (info.comparisons || []).forEach((c, i) => {
+//       const from = getViewerSnippetNumber(c.from);
+//       const to = getViewerSnippetNumber(c.to);
+//       box.innerHTML += `<p><strong>Q${i + 1 + (info.groupings?.length || 0)}: Comparison Snippet ${from} vs Snippet ${to}</strong><br>${c.reason}</p>`;
+//     });
 
-    section.appendChild(box);
-  });
+//     section.appendChild(box);
+//   });
 
-  // Martin's narrative
-  const martin = data.phase3.martin;
-  if (martin?.narrative) {
-    const box = document.createElement('div');
-    box.className = 'reasoning-box';
-    box.innerHTML = `<h3>Martin</h3><p><strong>General Reasoning:</strong></p><p>${martin.narrative}</p>`;
-    section.appendChild(box);
-  }
-}
+//   // Martin's narrative
+//   const martin = data.phase3.martin;
+//   if (martin?.narrative) {
+//     const box = document.createElement('div');
+//     box.className = 'reasoning-box';
+//     box.innerHTML = `<h3>Martin</h3><p><strong>General Reasoning:</strong></p><p>${martin.narrative}</p>`;
+//     section.appendChild(box);
+//   }
+// }
 
 </script>
 
