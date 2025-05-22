@@ -224,6 +224,15 @@ a:hover {
       color: red;
     }
 
+    .snippet-1 { background-color: #4CAF50; color: white; } /* Green */
+    .snippet-2 { background-color: #2196F3; color: white; } /* Blue */
+    .snippet-3 { background-color: #f44336; color: white; } /* Red */
+    .snippet-4 { background-color: #FF9800; color: white; } /* Orange */
+    .snippet-5 { background-color: #9C27B0; color: white; } /* Purple */
+    .snippet-6 { background-color: #3F51B5; color: white; } /* Indigo */
+    .snippet-7 { background-color: #009688; color: white; } /* Teal */
+    .snippet-8 { background-color: #795548; color: white; } /* Brown */
+
 
   </style>
 </head>
@@ -395,24 +404,24 @@ a:hover {
     <div class="ranking-row">
       <div class="ranking-slot"></div>
       <div class="ranking-slot">
-        <button onclick="show_snippet(1)">Snippet 1</button>
-        <button onclick="show_snippet(2)">Snippet 2</button>
+        <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+        <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
       </div>
       <div class="ranking-slot"></div>
       <div class="ranking-slot">
-        <button onclick="show_snippet(4)">Snippet 4</button>
+        <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
       </div>
       <div class="ranking-slot">
-        <button onclick="show_snippet(3)">Snippet 3</button>
+        <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
       </div>
       <div class="ranking-slot">
-        <button onclick="show_snippet(5)">Snippet 5</button>
+        <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
       </div>
       <div class="ranking-slot">
-        <button onclick="show_snippet(6)">Snippet 6</button>
+        <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
       </div>
       <div class="ranking-slot">
-        <button onclick="show_snippet(7)">Snippet 7</button>
+        <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
       </div>
     </div>
   </div>
@@ -432,26 +441,26 @@ a:hover {
     </div>
     <div class="ranking-row">
       <div class="ranking-slot">
-        <button onclick="show_snippet(1)">Snippet 1</button>
-        <button onclick="show_snippet(3)">Snippet 3</button>
-        <button onclick="show_snippet(5)">Snippet 5</button>
+        <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+        <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
+        <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
       </div>
       <div class="ranking-slot"></div>
       <div class="ranking-slot">
-        <button onclick="show_snippet(7)">Snippet 7</button>
+        <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
       </div>
       <div class="ranking-slot">
-        <button onclick="show_snippet(2)">Snippet 2</button>
+        <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
       </div>
       <div class="ranking-slot"></div>
       <div class="ranking-slot">
-        <button onclick="show_snippet(4)">Snippet 4</button>
+        <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
       </div>
       <div class="ranking-slot">
-        <button onclick="show_snippet(6)">Snippet 6</button>
+        <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
       </div>
       <div class="ranking-slot">
-        <button onclick="show_snippet(8)">Snippet 8</button>
+        <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
       </div>
     </div>
   </div>
@@ -471,25 +480,25 @@ a:hover {
     </div>
     <div class="ranking-row">
       <div class="ranking-slot">
-        <button onclick="show_snippet(2)">Snippet 2</button>
-        <button onclick="show_snippet(1)">Snippet 1</button>
+        <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
+        <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
       </div>
       <div class="ranking-slot"></div>
       <div class="ranking-slot">
-        <button onclick="show_snippet(4)">Snippet 4</button>
-        <button onclick="show_snippet(7)">Snippet 7</button>
+        <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
+        <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
       </div>
       <div class="ranking-slot">
-        <button onclick="show_snippet(5)">Snippet 5</button>
-      </div>
-      <div class="ranking-slot"></div>
-      <div class="ranking-slot">
-        <button onclick="show_snippet(3)">Snippet 3</button>
-        <button onclick="show_snippet(6)">Snippet 6</button>
+        <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
       </div>
       <div class="ranking-slot"></div>
       <div class="ranking-slot">
-        <button onclick="show_snippet(8)">Snippet 8</button>
+        <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
+        <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
+      </div>
+      <div class="ranking-slot"></div>
+      <div class="ranking-slot">
+        <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
       </div>
     </div>
   </div>
@@ -575,7 +584,7 @@ a:hover {
       // Replace with your modal logic or snippet display
     }
   </script>
-  
+
   <script>
     function getCookie(name) {
         const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
