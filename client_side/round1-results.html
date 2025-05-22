@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Delphi Study Feedback Summary</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 40px;
+      color: #333;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    .snippet, .phase-section, .reasoning-box {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .participant {
+      background: #f9f9f9;
+      border-left: 4px solid #aaa;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .participant h4 {
+      margin-top: 0;
+    }
+    .label {
+      font-weight: bold;
+    }
+    table.rank-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    table.rank-table th, table.rank-table td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+    .reasoning-box p {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧠 Delphi Study Pilot Feedback</h1>
+
+  <div class="phase-section">
+    <h2>Phase 1: Snippet Summaries and Comprehensibility</h2>
+  
+    <!-- Snippet 1 -->
+    <div class="snippet">
+      <h3>Snippet 1</h3>
+      <div class="participant"><h4>Nadeeshan</h4>
+        <p><strong>Summary:</strong> This method takes a project name and validates it based on several criteria.</p>
+        <p><strong>Comprehensibility:</strong> Clear method/final variable names make it easier to understand. Also, the clear logic separation of the conditional statements makes it easier to follow.</p>
+      </div>
+      <div class="participant"><h4>Oscar</h4>
+        <p><strong>Summary:</strong> Checks that the project name is valid: it is not null, does not start with ., is within length, is alphanumeric, and contains allowed characters.</p>
+        <p><strong>Comprehensibility:</strong> This one is easy to understand: the logic is simple and the identifiers helped me understand what the method is doing.</p>
+      </div>
+      <div class="participant"><h4>Martin</h4>
+        <p><strong>Summary:</strong> This is a string validation method implementing the follow rules:<br>
+        – the input must be nonnull<br>
+        – the input must not start with a dot<br>
+        – the input must not be the empty string<br>
+        – the input must be shorter than or equal to the MAX_NAME_LENGTH constant<br>
+        – each character must be a letter/digit or in VALID_NAME_SET</p>
+        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+      </div>
+    </div>
+  
+    <!-- Snippet 2 -->
+    <div class="snippet">
+      <h3>Snippet 2</h3>
+      <div class="participant"><h4>Nadeeshan</h4>
+        <p><strong>Summary:</strong> This method takes a URI and checks if it is a local reference or not.</p>
+        <p><strong>Comprehensibility:</strong> Meaningful method name (including clear internal method invocation names) and a switch statement with simple logic make it easier to understand.</p>
+      </div>
+      <div class="participant"><h4>Oscar</h4>
+        <p><strong>Summary:</strong> It checks that the given URI is remote. If the URI is a file system path, does not have a scheme, or the scheme is file/jar, it is not remote; otherwise it is.</p>
+        <p><strong>Comprehensibility:</strong> Easy to understand: easy logic, identifiers helped. It's harder than Snippet 1 due to unclear isFilesystemPath and URI scheme.</p>
+      </div>
+      <div class="participant"><h4>Martin</h4>
+        <p><strong>Summary:</strong> Validates a URI based on rules: not a file path, has a non-null scheme, and scheme is not "file"/"jar".</p>
+        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+      </div>
+    </div>
+  
+    <!-- Snippet 3 -->
+    <div class="snippet">
+      <h3>Snippet 3</h3>
+      <div class="participant"><h4>Nadeeshan</h4>
+        <p><strong>Summary:</strong> Checks whether a given machine type is a CoffMachineType.</p>
+        <p><strong>Comprehensibility:</strong> Relatively hard due to unfamiliarity with CoffMachineType. Weird usage of getter with argument.</p>
+      </div>
+      <div class="participant"><h4>Oscar</h4>
+        <p><strong>Summary:</strong> Verifies if machine type is defined and one of the CoffMachineType constants.</p>
+        <p><strong>Comprehensibility:</strong> Understandable via reflection, but unclear what a synthetic field is. Harder if unfamiliar with constants.</p>
+      </div>
+      <div class="participant"><h4>Martin</h4>
+        <p><strong>Summary:</strong> Searches CoffMachineType fields for matching short values. Returns true if found, false otherwise or if it matches IMAGE_FILE_MACHINE_UNKNOWN.</p>
+        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+      </div>
+    </div>
+  
+    <!-- Snippet 4 -->
+    <div class="snippet">
+      <h3>Snippet 4</h3>
+      <div class="participant"><h4>Nadeeshan</h4>
+        <p><strong>Summary:</strong> Finds the starting position of a query string inside a string, starting from a given index.</p>
+        <p><strong>Comprehensibility:</strong> Clear identifiers and simple conditionals make it easier.</p>
+      </div>
+      <div class="participant"><h4>Oscar</h4>
+        <p><strong>Summary:</strong> Searches for searchStr in str from startPos using case-insensitive comparison.</p>
+        <p><strong>Comprehensibility:</strong> Harder due to unfamiliarity with regionMatches; identifiers help.</p>
+      </div>
+      <div class="participant"><h4>Martin</h4>
+        <p><strong>Summary:</strong> Searches a string for a case-insensitive substring. Returns index or INDEX_NOT_FOUND.</p>
+        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+      </div>
+    </div>
+  
+    <!-- Snippet 5 -->
+    <div class="snippet">
+      <h3>Snippet 5</h3>
+      <div class="participant"><h4>Nadeeshan</h4>
+        <p><strong>Summary:</strong> Recursively deletes all files and directories under a given root path.</p>
+        <p><strong>Comprehensibility:</strong> Harder due to unclear postVisitDirectory. Assumes dir is Path object passed from FileVisitor.</p>
+      </div>
+      <div class="participant"><h4>Oscar</h4>
+        <p><strong>Summary:</strong> Recursively deletes a path using a visitor. Returns true if successful.</p>
+        <p><strong>Comprehensibility:</strong> Easy; familiar with visitor pattern; identifiers help clarify.</p>
+      </div>
+      <div class="participant"><h4>Martin</h4>
+        <p><strong>Summary:</strong> Force deletes the input Path like `rm -rf`. Returns true if the root exists.</p>
+        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+      </div>
+    </div>
+  
+    <!-- Snippet 6 -->
+    <div class="snippet">
+      <h3>Snippet 6</h3>
+      <div class="participant"><h4>Nadeeshan</h4>
+        <p><strong>Summary:</strong> Returns UTF-8 encoded length of a character sequence.</p>
+        <p><strong>Comprehensibility:</strong> Easy to follow due to identifier names and separated logic.</p>
+      </div>
+      <div class="participant"><h4>Oscar</h4>
+        <p><strong>Summary:</strong> Calculates UTF8 length of a sequence.</p>
+        <p><strong>Comprehensibility:</strong> Hard due to encoding/bits; needed to Google concepts.</p>
+      </div>
+      <div class="participant"><h4>Martin</h4>
+        <p><strong>Summary:</strong> Optimized UTF-8 length computation; includes overflow check based on UTF-16 assumption.</p>
+        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+      </div>
+    </div>
+  
+    <!-- Snippet 7 -->
+    <div class="snippet">
+      <h3>Snippet 7</h3>
+      <div class="participant"><h4>Nadeeshan</h4>
+        <p><strong>Summary:</strong> Takes three floats and returns the lowest positive root.</p>
+        <p><strong>Comprehensibility:</strong> Misleading method name; unclear logic despite trying dummy values.</p>
+      </div>
+      <div class="participant"><h4>Oscar</h4>
+        <p><strong>Summary:</strong> Uses quadratic formula to return smallest positive root.</p>
+        <p><strong>Comprehensibility:</strong> Easy after remembering formula; logic is clear with basic math review.</p>
+      </div>
+      <div class="participant"><h4>Martin</h4>
+        <p><strong>Summary:</strong> Implements quadratic formula and returns Float.NaN if it fails.</p>
+        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+      </div>
+    </div>
+  
+    <!-- Snippet 8 -->
+    <div class="snippet">
+      <h3>Snippet 8</h3>
+      <div class="participant"><h4>Nadeeshan</h4>
+        <p><strong>Summary:</strong> Computes the arctangent (atan) of two float inputs.</p>
+        <p><strong>Comprehensibility:</strong> Difficult due to math background required and unclear method purpose.</p>
+      </div>
+      <div class="participant"><h4>Oscar</h4>
+        <p><strong>Summary:</strong> Possibly computes arctangent of x and y using trig functions.</p>
+        <p><strong>Comprehensibility:</strong> Cryptic math logic; doesn’t recall arctangent well.</p>
+      </div>
+      <div class="participant"><h4>Martin</h4>
+        <p><strong>Summary:</strong> Trig function of x/y; complex due to floating point edge case handling (`n != n`).</p>
+        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+      </div>
+    </div>
+  
+  </div>
+  
+
+  <div class="phase-section">
+    <h2>Phase 2: Rankings</h2>
+    <table class="rank-table">
+      <thead>
+        <tr>
+          <th>Position</th>
+          <th>Nadeeshan</th>
+          <th>Oscar</th>
+          <th>Martin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>1, 2</td><td>1, 3, 5</td><td>2, 1</td></tr>
+        <tr><td>2</td><td>–</td><td>–</td><td>–</td></tr>
+        <tr><td>3</td><td>4</td><td>7</td><td>4, 7</td></tr>
+        <tr><td>4</td><td>3</td><td>2</td><td>5</td></tr>
+        <tr><td>5</td><td>8</td><td>–</td><td>–</td></tr>
+        <tr><td>6</td><td>5</td><td>4</td><td>3, 6</td></tr>
+        <tr><td>7</td><td>6</td><td>6</td><td>–</td></tr>
+        <tr><td>8</td><td>7</td><td>8</td><td>8</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="phase-section">
+    <h2>Phase 3: Reasoning</h2>
+
+    <div class="reasoning-box">
+      <h3>Nadeeshan</h3>
+      <p><strong>Q1:</strong> Grouped 1 and 2 for equal understandability and clear logic.</p>
+      <p><strong>Q2:</strong> Snippet 3 needs more context (weird getter use).</p>
+      <p><strong>Q3:</strong> Snippet 8 is harder due to math (atan).</p>
+      <p><strong>Q4:</strong> Snippet 5 is clearer and doesn’t need math knowledge.</p>
+      <p><strong>Q5:</strong> Snippet 6’s encoding logic is hard (hex/bits).</p>
+      <p><strong>Q6:</strong> Snippet 7 contradicts its name (not lowest root?).</p>
+    </div>
+
+    <div class="reasoning-box">
+      <h3>Oscar</h3>
+      <p><strong>Q1:</strong> Grouped 1, 3, 5 as equally simple logic.</p>
+      <p><strong>Q2:</strong> Snippet 2 unfamiliar due to URI scheme logic.</p>
+      <p><strong>Q3:</strong> Bit shifts in Snippet 6 make it hard vs. Snippet 4.</p>
+      <p><strong>Q4:</strong> Same comparison as Q3 repeated.</p>
+    </div>
+
+    <div class="reasoning-box">
+      <h3>Martin</h3>
+      <p>Snippet 8: Hardest – unclear intent.</p>
+      <p>Snippet 6: Required “bottom-up” reasoning.</p>
+      <p>Snippet 3: Reflection-based reasoning.</p>
+      <p>Snippets 4, 5, 7: Known algorithms, but tricky APIs.</p>
+      <p>Snippets 1, 2: Simple string validations.</p>
+    </div>
+  </div>
+
+</body>
+</html>
