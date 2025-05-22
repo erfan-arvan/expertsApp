@@ -634,17 +634,20 @@ a:hover {
 <div class="participant-section">
     <h3>ChatGPT</h3>
     <div class="ranking-row">
+  
       <!-- Position 1: Snippets 1 and 7 -->
       <div class="ranking-slot" style="position: relative;">
         <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
         <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
         <div class="reasoning-point" onclick="compare([1], [7])" style="position: absolute; top: -4px; right: 60px;"></div>
         <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">
-          Q1: Snippets 1 and 7 are structurally simple, with clear logic. Snippet 1 validates input; Snippet 7 uses the quadratic formula. No complex APIs or obscure logic.
+          Q1: Snippets 1 and 7 are procedural, self-contained, and use familiar logic.<br><br>
+          Snippet 1 validates a string using simple checks. Snippet 7 implements the quadratic formula clearly.<br><br>
+          Both are linear, intuitive, and involve no external APIs or abstractions.
         </div>
-        <div class="reasoning-point" onclick="compare([1,7], [2,4])" style="position: absolute; top: 50px; right: -12px;"></div>
+        <div class="reasoning-point" onclick="compare([1, 7], [2, 4])" style="position: absolute; top: 50px; right: -12px;"></div>
         <div class="tooltip-box" style="position: absolute; top: 60px; right: -160px;">
-          Q2: Position 1 snippets use minimal branching and simple logic. Position 2 (2 and 4) involve more domain knowledge and control flow complexity.
+          Q2: Position 1 snippets use basic logic. Position 2 introduces switch statements, index manipulation, or undefined helpers like <code>isFilesystemPath</code> and <code>regionMatches</code>.
         </div>
       </div>
   
@@ -654,11 +657,14 @@ a:hover {
         <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
         <div class="reasoning-point" onclick="compare([2], [4])" style="position: absolute; top: -4px; right: 60px;"></div>
         <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">
-          Q3: Both involve moderate complexity—URI schemes in Snippet 2, substring logic in Snippet 4—but are well-structured and readable.
+          Q3: Both snippets are logically structured but rely on external or undefined methods.<br><br>
+          Snippet 2: needs understanding of URI schemes.<br>
+          Snippet 4: uses string search logic with <code>regionMatches</code>.<br><br>
+          Slightly more effort to understand, but still readable.
         </div>
-        <div class="reasoning-point" onclick="compare([2,4], [3])" style="position: absolute; top: 50px; right: -12px;"></div>
+        <div class="reasoning-point" onclick="compare([2, 4], [3])" style="position: absolute; top: 50px; right: -12px;"></div>
         <div class="tooltip-box" style="position: absolute; top: 60px; right: -160px;">
-          Q4: Snippet 3 uses reflection and modifiers, which are more conceptually difficult than URI and string handling.
+          Q4: Snippet 3 (reflection, field modifiers, exceptions) is conceptually more demanding than the procedural structure of 2 and 4.
         </div>
       </div>
   
@@ -667,33 +673,33 @@ a:hover {
         <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
         <div class="reasoning-point" onclick="compare([3], [5])" style="position: absolute; top: 50px; right: -12px;"></div>
         <div class="tooltip-box" style="position: absolute; top: 60px; right: -160px;">
-          Q5: Snippet 5 adds recursive file operations and anonymous classes on top of what Snippet 3 does, increasing difficulty.
+          Q5: Snippet 3 uses reflection but is linear. Snippet 5 uses <code>Files.walkFileTree</code>, anonymous classes, and callbacks—making it harder to follow.
         </div>
       </div>
   
-      <!-- Position 4: Snippet 5 -->
+      <!-- Position 4: Empty -->
+      <div class="ranking-slot"></div>
+  
+      <!-- Position 5: Snippet 5 -->
       <div class="ranking-slot" style="position: relative;">
         <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
         <div class="reasoning-point" onclick="compare([5], [8])" style="position: absolute; top: 50px; right: -12px;"></div>
         <div class="tooltip-box" style="position: absolute; top: 60px; right: -160px;">
-          Q6: Snippet 8 includes complex math logic, NaN handling, and special float behavior—harder than recursive file deletion.
+          Q6: Snippet 5 is harder than reflection, but still structured. Snippet 6 uses bitwise hacks and undefined helpers—less readable.
         </div>
       </div>
   
-      <!-- Position 5: Snippet 8 -->
+      <!-- Position 6: Empty -->
+      <div class="ranking-slot"></div>
+  
+      <!-- Position 7: Snippet 8 -->
       <div class="ranking-slot" style="position: relative;">
         <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
         <div class="reasoning-point" onclick="compare([8], [6])" style="position: absolute; top: 50px; right: -12px;"></div>
         <div class="tooltip-box" style="position: absolute; top: 60px; right: -160px;">
-          Q8: Snippet 6 has lower-level bit logic, external dependencies, and UTF-specific optimizations. Snippet 8 is math-heavy but more understandable.
+          Q7: Snippet 6 is hard but scoped. Snippet 8 has cryptic math, fallback logic like <code>x + y</code>, and is more error-prone—therefore harder to follow.
         </div>
       </div>
-  
-      <!-- Position 6 -->
-      <div class="ranking-slot"></div>
-  
-      <!-- Position 7: Snippet 3 (again, seems like a conflict; skipping to avoid repetition) -->
-      <div class="ranking-slot"></div>
   
       <!-- Position 8: Snippet 6 -->
       <div class="ranking-slot" style="position: relative;">
