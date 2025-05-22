@@ -517,20 +517,24 @@
   </script>
   <script>
     function show_snippet(id) {
-      const snippet = snippets.find(s => s.id === id);
-      if (!snippet) return;
-    
-      document.getElementById('modal-snippet-title').innerText = snippet.title;
-    
-      const codeLines = snippet.code.trim().split('\n');
-      document.getElementById('modal-line-numbers').innerHTML = codeLines.map((_, i) => i + 1).join('<br>');
-      document.getElementById('modal-code-content').innerHTML = codeLines.join('\n');
-    
-      document.getElementById('snippet-modal').style.display = 'block';
-    
-      // Apply saved theme
-      applyModalTheme();
+    const snippet = snippets.find(s => s.id === id);
+    if (!snippet) return;
+
+    document.getElementById('modal-snippet-title').innerText = snippet.title;
+
+    const codeLines = snippet.code.trim().split('\n');
+
+    // ✅ Use innerHTML here to render styled spans correctly
+    document.getElementById('modal-code-content').innerHTML = codeLines.join('\n');
+
+    // ✅ Line numbers are just plain numbers
+    document.getElementById('modal-line-numbers').innerHTML = codeLines.map((_, i) => i + 1).join('<br>');
+
+    document.getElementById('snippet-modal').style.display = 'block';
+
+    applyModalTheme(); // Keep the theme consistent
     }
+
     
     function toggleModalTheme() {
       const body = document.body;
