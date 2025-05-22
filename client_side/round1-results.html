@@ -336,16 +336,79 @@ a:hover {
         </tr>
       </thead>
       <tbody>
-        <tr><td>1</td><td>1, 2</td><td>1, 3, 5</td><td>2, 1</td></tr>
+        <tr><td>1</td><td>1 (isValidProjectName), 2 (isRemote)</td><td>1(isValidProjectName), 3 (isMachineTypeDefined), 5 (deleteRecursively)</td><td>2 (isRemote), 1 (isValidProjectName)</td></tr>
         <tr><td>2</td><td>–</td><td>–</td><td>–</td></tr>
-        <tr><td>3</td><td>4</td><td>7</td><td>4, 7</td></tr>
-        <tr><td>4</td><td>3</td><td>2</td><td>5</td></tr>
-        <tr><td>5</td><td>8</td><td>–</td><td>–</td></tr>
-        <tr><td>6</td><td>5</td><td>4</td><td>3, 6</td></tr>
-        <tr><td>7</td><td>6</td><td>6</td><td>–</td></tr>
-        <tr><td>8</td><td>7</td><td>8</td><td>8</td></tr>
+        <tr><td>3</td><td>4 (indexOfIgnoreCase)</td><td>7 (lowestPositiveRoot)</td><td>4 (indexOfIgnoreCase), 7 (lowestPositiveRoot)</td></tr>
+        <tr><td>4</td><td>3 (isMachineTypeDefined)</td><td>2 (isRemote)</td><td>5 (deleteRecursively)</td></tr>
+        <tr><td>5</td><td>8 (atan2)</td><td>–</td><td>–</td></tr>
+        <tr><td>6 (encodedLength)</td><td>5 (deleteRecursively)</td><td>4 (indexOfIgnoreCase)</td><td>3 (isMachineTypeDefined), 6 (encodedLength)</td></tr>
+        <tr><td>7 (lowestPositiveRoot)</td><td>6</td><td>6 (encodedLength)</td><td>–</td></tr>
+        <tr><td>8</td><td>7</td><td>8 (atan2)</td><td>8 (atan2)</td></tr>
       </tbody>
     </table>
+
+    <tbody>
+        <tr>
+          <td>1</td>
+          <td>
+            <a href="javascript:void(0)" onclick="show_snippet(1)">1 (isValidProjectName)</a>,
+            <a href="javascript:void(0)" onclick="show_snippet(2)">2 (isRemote)</a>
+          </td>
+          <td>
+            <a href="javascript:void(0)" onclick="show_snippet(1)">1 (isValidProjectName)</a>,
+            <a href="javascript:void(0)" onclick="show_snippet(3)">3 (isMachineTypeDefined)</a>,
+            <a href="javascript:void(0)" onclick="show_snippet(5)">5 (deleteRecursively)</a>
+          </td>
+          <td>
+            <a href="javascript:void(0)" onclick="show_snippet(2)">2 (isRemote)</a>,
+            <a href="javascript:void(0)" onclick="show_snippet(1)">1 (isValidProjectName)</a>
+          </td>
+        </tr>
+        <tr><td>2</td><td>–</td><td>–</td><td>–</td></tr>
+        <tr>
+          <td>3</td>
+          <td><a href="javascript:void(0)" onclick="show_snippet(4)">4 (indexOfIgnoreCase)</a></td>
+          <td><a href="javascript:void(0)" onclick="show_snippet(7)">7 (lowestPositiveRoot)</a></td>
+          <td>
+            <a href="javascript:void(0)" onclick="show_snippet(4)">4 (indexOfIgnoreCase)</a>,
+            <a href="javascript:void(0)" onclick="show_snippet(7)">7 (lowestPositiveRoot)</a>
+          </td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><a href="javascript:void(0)" onclick="show_snippet(3)">3 (isMachineTypeDefined)</a></td>
+          <td><a href="javascript:void(0)" onclick="show_snippet(2)">2 (isRemote)</a></td>
+          <td><a href="javascript:void(0)" onclick="show_snippet(5)">5 (deleteRecursively)</a></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><a href="javascript:void(0)" onclick="show_snippet(8)">8 (atan2)</a></td>
+          <td>–</td>
+          <td>–</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><a href="javascript:void(0)" onclick="show_snippet(5)">5 (deleteRecursively)</a></td>
+          <td><a href="javascript:void(0)" onclick="show_snippet(4)">4 (indexOfIgnoreCase)</a></td>
+          <td>
+            <a href="javascript:void(0)" onclick="show_snippet(3)">3 (isMachineTypeDefined)</a>,
+            <a href="javascript:void(0)" onclick="show_snippet(6)">6 (encodedLength)</a>
+          </td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><a href="javascript:void(0)" onclick="show_snippet(6)">6 (encodedLength)</a></td>
+          <td><a href="javascript:void(0)" onclick="show_snippet(6)">6 (encodedLength)</a></td>
+          <td>–</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><a href="javascript:void(0)" onclick="show_snippet(7)">7 (lowestPositiveRoot)</a></td>
+          <td><a href="javascript:void(0)" onclick="show_snippet(8)">8 (atan2)</a></td>
+          <td><a href="javascript:void(0)" onclick="show_snippet(8)">8 (atan2)</a></td>
+        </tr>
+      </tbody>
+      
   </div>
 
   <div class="phase-section">
