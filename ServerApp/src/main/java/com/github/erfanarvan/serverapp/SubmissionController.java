@@ -65,14 +65,16 @@ public class SubmissionController {
         String timestamp = ZonedDateTime.now(ZoneId.of("America/New_York"))
                                         .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
-        boolean isFinal = "1".equals(body.getOrDefault("submitted", "0"));
+        Object submittedObj = body.get("submitted");
+        boolean isFinal = "1".equals(submittedObj) || Boolean.TRUE.equals(submittedObj);
 
         System.out.println(">>> [submit_final] Received submission:");
         System.out.println(">>> Username: " + username);
         System.out.println(">>> Timestamp: " + timestamp);
-        System.out.println(">>> Is Final: " + isFinal);
+        System.out.println(">>> raw 'submitted' value: " + submittedObj);
+        System.out.println(">>> Parsed isFinal: " + isFinal);
         System.out.println(">>> Body Keys: " + body.keySet());
-        System.out.println(">>> Raw Body Preview: " + truncateJson(body, 1000)); // Truncate long output
+        System.out.println(">>> Raw Body Preview: " + truncateJson(body, 1000));
 
         File directory = new File("submissions");
         if (!directory.exists()) {
@@ -82,6 +84,9 @@ public class SubmissionController {
 
         File allFile = new File("submissions/all_submissions.json");
         File finalFile = new File("submissions/final_submissions.json");
+        System.out.println(">>> allFile path: " + allFile.getAbsolutePath());
+        System.out.println(">>> finalFile path: " + finalFile.getAbsolutePath());
+
         ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
         try {
@@ -113,8 +118,6 @@ public class SubmissionController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save submission.");
         }
     }
-
-
 
 
     @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
