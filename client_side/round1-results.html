@@ -171,6 +171,60 @@ a:hover {
 }
 
 
+.participant-section {
+      margin-bottom: 60px;
+    }
+
+    .ranking-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .ranking-labels {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+
+    .ranking-label {
+      flex: 1;
+      text-align: center;
+      font-weight: bold;
+      color: #009999;
+    }
+
+    .ranking-slot {
+      flex: 1;
+      min-height: 100px;
+      border: 2px dashed #4CAF50;
+      background-color: #e8f5e9;
+      border-radius: 6px;
+      padding: 10px;
+    }
+
+    .ranking-slot button {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      padding: 6px;
+      border: none;
+      border-radius: 4px;
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .ranking-slot button:hover {
+      background-color: #45a049;
+    }
+
+    .ranking-label:last-child {
+      color: red;
+    }
+
+
   </style>
 </head>
 <body>
@@ -325,79 +379,121 @@ a:hover {
   
 
   <div class="phase-section">
-    <h2>Phase 2: Rankings</h2>
-    <table class="rank-table">
-      <thead>
-        <tr>
-          <th>Position</th>
-          <th>Nadeeshan</th>
-          <th>Oscar</th>
-          <th>Martin</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>
-            <a href="javascript:void(0)" onclick="show_snippet(1)">1 (isValidProjectName)</a>,
-            <a href="javascript:void(0)" onclick="show_snippet(2)">2 (isRemote)</a>
-          </td>
-          <td>
-            <a href="javascript:void(0)" onclick="show_snippet(1)">1 (isValidProjectName)</a>,
-            <a href="javascript:void(0)" onclick="show_snippet(3)">3 (isMachineTypeDefined)</a>,
-            <a href="javascript:void(0)" onclick="show_snippet(5)">5 (deleteRecursively)</a>
-          </td>
-          <td>
-            <a href="javascript:void(0)" onclick="show_snippet(2)">2 (isRemote)</a>,
-            <a href="javascript:void(0)" onclick="show_snippet(1)">1 (isValidProjectName)</a>
-          </td>
-        </tr>
-        <tr><td>2</td><td>–</td><td>–</td><td>–</td></tr>
-        <tr>
-          <td>3</td>
-          <td><a href="javascript:void(0)" onclick="show_snippet(4)">4 (indexOfIgnoreCase)</a></td>
-          <td><a href="javascript:void(0)" onclick="show_snippet(7)">7 (lowestPositiveRoot)</a></td>
-          <td>
-            <a href="javascript:void(0)" onclick="show_snippet(4)">4 (indexOfIgnoreCase)</a>,
-            <a href="javascript:void(0)" onclick="show_snippet(7)">7 (lowestPositiveRoot)</a>
-          </td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td><a href="javascript:void(0)" onclick="show_snippet(3)">3 (isMachineTypeDefined)</a></td>
-          <td><a href="javascript:void(0)" onclick="show_snippet(2)">2 (isRemote)</a></td>
-          <td><a href="javascript:void(0)" onclick="show_snippet(5)">5 (deleteRecursively)</a></td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td><a href="javascript:void(0)" onclick="show_snippet(8)">8 (atan2)</a></td>
-          <td>–</td>
-          <td>–</td>
-        </tr>
-        <tr>
-          <td>6</td>
-          <td><a href="javascript:void(0)" onclick="show_snippet(5)">5 (deleteRecursively)</a></td>
-          <td><a href="javascript:void(0)" onclick="show_snippet(4)">4 (indexOfIgnoreCase)</a></td>
-          <td>
-            <a href="javascript:void(0)" onclick="show_snippet(3)">3 (isMachineTypeDefined)</a>,
-            <a href="javascript:void(0)" onclick="show_snippet(6)">6 (encodedLength)</a>
-          </td>
-        </tr>
-        <tr>
-          <td>7</td>
-          <td><a href="javascript:void(0)" onclick="show_snippet(6)">6 (encodedLength)</a></td>
-          <td><a href="javascript:void(0)" onclick="show_snippet(6)">6 (encodedLength)</a></td>
-          <td>–</td>
-        </tr>
-        <tr>
-          <td>8</td>
-          <td><a href="javascript:void(0)" onclick="show_snippet(7)">7 (lowestPositiveRoot)</a></td>
-          <td><a href="javascript:void(0)" onclick="show_snippet(8)">8 (atan2)</a></td>
-          <td><a href="javascript:void(0)" onclick="show_snippet(8)">8 (atan2)</a></td>
-        </tr>
-      </tbody>
-      
-    </table>
+ <!-- Participant: Nadeeshan -->
+<div class="participant-section">
+    <h3>Nadeeshan</h3>
+    <div class="ranking-labels">
+      <div class="ranking-label">1 (easiest)</div>
+      <div class="ranking-label">2</div>
+      <div class="ranking-label">3</div>
+      <div class="ranking-label">4</div>
+      <div class="ranking-label">5</div>
+      <div class="ranking-label">6</div>
+      <div class="ranking-label">7</div>
+      <div class="ranking-label">8 (hardest)</div>
+    </div>
+    <div class="ranking-row">
+      <div class="ranking-slot"></div>
+      <div class="ranking-slot">
+        <button onclick="show_snippet(1)">Snippet 1</button>
+        <button onclick="show_snippet(2)">Snippet 2</button>
+      </div>
+      <div class="ranking-slot"></div>
+      <div class="ranking-slot">
+        <button onclick="show_snippet(4)">Snippet 4</button>
+      </div>
+      <div class="ranking-slot">
+        <button onclick="show_snippet(3)">Snippet 3</button>
+      </div>
+      <div class="ranking-slot">
+        <button onclick="show_snippet(5)">Snippet 5</button>
+      </div>
+      <div class="ranking-slot">
+        <button onclick="show_snippet(6)">Snippet 6</button>
+      </div>
+      <div class="ranking-slot">
+        <button onclick="show_snippet(7)">Snippet 7</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Participant: Oscar -->
+  <div class="participant-section">
+    <h3>Oscar</h3>
+    <div class="ranking-labels">
+      <div class="ranking-label">1 (easiest)</div>
+      <div class="ranking-label">2</div>
+      <div class="ranking-label">3</div>
+      <div class="ranking-label">4</div>
+      <div class="ranking-label">5</div>
+      <div class="ranking-label">6</div>
+      <div class="ranking-label">7</div>
+      <div class="ranking-label">8 (hardest)</div>
+    </div>
+    <div class="ranking-row">
+      <div class="ranking-slot">
+        <button onclick="show_snippet(1)">Snippet 1</button>
+        <button onclick="show_snippet(3)">Snippet 3</button>
+        <button onclick="show_snippet(5)">Snippet 5</button>
+      </div>
+      <div class="ranking-slot"></div>
+      <div class="ranking-slot">
+        <button onclick="show_snippet(7)">Snippet 7</button>
+      </div>
+      <div class="ranking-slot">
+        <button onclick="show_snippet(2)">Snippet 2</button>
+      </div>
+      <div class="ranking-slot"></div>
+      <div class="ranking-slot">
+        <button onclick="show_snippet(4)">Snippet 4</button>
+      </div>
+      <div class="ranking-slot">
+        <button onclick="show_snippet(6)">Snippet 6</button>
+      </div>
+      <div class="ranking-slot">
+        <button onclick="show_snippet(8)">Snippet 8</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Participant: Martin -->
+  <div class="participant-section">
+    <h3>Martin</h3>
+    <div class="ranking-labels">
+      <div class="ranking-label">1 (easiest)</div>
+      <div class="ranking-label">2</div>
+      <div class="ranking-label">3</div>
+      <div class="ranking-label">4</div>
+      <div class="ranking-label">5</div>
+      <div class="ranking-label">6</div>
+      <div class="ranking-label">7</div>
+      <div class="ranking-label">8 (hardest)</div>
+    </div>
+    <div class="ranking-row">
+      <div class="ranking-slot">
+        <button onclick="show_snippet(2)">Snippet 2</button>
+        <button onclick="show_snippet(1)">Snippet 1</button>
+      </div>
+      <div class="ranking-slot"></div>
+      <div class="ranking-slot">
+        <button onclick="show_snippet(4)">Snippet 4</button>
+        <button onclick="show_snippet(7)">Snippet 7</button>
+      </div>
+      <div class="ranking-slot">
+        <button onclick="show_snippet(5)">Snippet 5</button>
+      </div>
+      <div class="ranking-slot"></div>
+      <div class="ranking-slot">
+        <button onclick="show_snippet(3)">Snippet 3</button>
+        <button onclick="show_snippet(6)">Snippet 6</button>
+      </div>
+      <div class="ranking-slot"></div>
+      <div class="ranking-slot">
+        <button onclick="show_snippet(8)">Snippet 8</button>
+      </div>
+    </div>
+  </div>
+  
 
   </div>
 
@@ -473,6 +569,13 @@ a:hover {
     </div>
   </div>
 
+  <script>
+    function show_snippet(id) {
+      alert("Showing Snippet " + id);
+      // Replace with your modal logic or snippet display
+    }
+  </script>
+  
   <script>
     function getCookie(name) {
         const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
