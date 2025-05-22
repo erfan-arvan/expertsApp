@@ -224,35 +224,60 @@
   </div>
 
   <div class="phase-section">
-    <h2>Phase 3: Reasoning</h2>
-
+    <h2>Phase 3: Reasoning Behind Rankings and Groupings</h2>
+  
+    <!-- Nadeeshan -->
     <div class="reasoning-box">
       <h3>Nadeeshan</h3>
-      <p><strong>Q1:</strong> Grouped 1 and 2 for equal understandability and clear logic.</p>
-      <p><strong>Q2:</strong> Snippet 3 needs more context (weird getter use).</p>
-      <p><strong>Q3:</strong> Snippet 8 is harder due to math (atan).</p>
-      <p><strong>Q4:</strong> Snippet 5 is clearer and doesn’t need math knowledge.</p>
-      <p><strong>Q5:</strong> Snippet 6’s encoding logic is hard (hex/bits).</p>
-      <p><strong>Q6:</strong> Snippet 7 contradicts its name (not lowest root?).</p>
+      <p><strong>Q1: Grouping Snippet 1 and 2:</strong><br>
+        Because both of them are equally understandable to me. Has similar LOC, clear and simple logical separation.
+      </p>
+      <p><strong>Q2: Comparison Position 3 and 4 (Snippet 3 vs Snippet 4):</strong><br>
+        Snippet 3 requires more context understanding than Snippet 4. Also, there is weird syntax in Snippet 3; line 11 takes an argument in a getter, which is not common and passing null looks unnecessary.
+      </p>
+      <p><strong>Q3: Comparison Position 4 and 5 (Snippet 8 vs Snippet 3):</strong><br>
+        Snippet 8 requires the mathematical definition of "atan".
+      </p>
+      <p><strong>Q4: Comparison Position 5 and 6 (Snippet 5 vs Snippet 8):</strong><br>
+        Snippet 5 has a clear logic: delete files/directories recursively. It does not need to have a specific mathematical definition to understand the logic like in Snippet 8.
+      </p>
+      <p><strong>Q5: Comparison Position 6 and 7 (Snippet 6 vs Snippet 5):</strong><br>
+        The logic used in Snippet 6's encoding is hard to understand. I do not remember the hexadecimal meaning of 0x8 and 0x7.
+      </p>
+      <p><strong>Q6: Comparison Position 7 and 8 (Snippet 7 vs Snippet 6):</strong><br>
+        Snippet 7 logic is in contradiction with the method name. I thought it returns the lowest positive root from three numbers, but line 2 is unclear.
+      </p>
     </div>
-
+  
+    <!-- Oscar -->
     <div class="reasoning-box">
       <h3>Oscar</h3>
-      <p><strong>Q1:</strong> Grouped 1, 3, 5 as equally simple logic.</p>
-      <p><strong>Q2:</strong> Snippet 2 unfamiliar due to URI scheme logic.</p>
-      <p><strong>Q3:</strong> Bit shifts in Snippet 6 make it hard vs. Snippet 4.</p>
-      <p><strong>Q4:</strong> Same comparison as Q3 repeated.</p>
+      <p><strong>Q1: Grouping Snippet 1, 3, and 5:</strong><br>
+        It is hard for me to distinguish which one is easier/harder to understand. They have straightforward logic that I am familiar with, and I don't think the usage of a visitor or nested ifs or loops makes one harder/easier to understand than the others.
+      </p>
+      <p><strong>Q2: Comparison Position 3 and 4 (Snippet 2 vs Snippet 7):</strong><br>
+        The reason I ranked Snippet 2 after Snippet 7 is that I am not familiar with a URI's scheme and why implementing that logic (in Snippet 2) is enough to check if it is remote. Snippet 7 is straightforward to understand if we remember/know the quadratic formula.
+      </p>
+      <p><strong>Q3: Comparison Position 6 and 7 (Snippet 6 vs Snippet 4):</strong><br>
+        Snippet 6 is harder to understand for me because I don't know what the bit shifts are doing to check or determine the sequence length in UTF-8. Snippet 4 is easier to understand, despite it being unclear what regionMatches is doing — overall, I understand what the method is doing.
+      </p>
+      <p><strong>Q4: Comparison Position 7 and 8 (Snippet 6 vs Snippet 8):</strong><br>
+        Snippet 6 is harder to understand for me because I don't know what the bit shifts are doing to check or determine the sequence length in UTF-8. Snippet 4 is easier to understand, despite it being unclear what regionMatches is doing — overall, I understand what the method is doing.
+      </p>
     </div>
-
+  
+    <!-- Martin -->
     <div class="reasoning-box">
       <h3>Martin</h3>
-      <p>Snippet 8: Hardest – unclear intent.</p>
-      <p>Snippet 6: Required “bottom-up” reasoning.</p>
-      <p>Snippet 3: Reflection-based reasoning.</p>
-      <p>Snippets 4, 5, 7: Known algorithms, but tricky APIs.</p>
-      <p>Snippets 1, 2: Simple string validations.</p>
+      <p><strong>General Reasoning:</strong></p>
+      <p>Snippet 8 is the toughest: it was the only one where I couldn't follow <em>why</em> it was doing what it was doing.</p>
+      <p>Snippet 6 is next: it required me to reason through the code "bottom up" to figure out what it's doing.</p>
+      <p>Then comes Snippet 3: it also required me to reason through it, since it wasn't clear what it was for just from reading through it once. However, it was noticeably easier to figure out what Snippet 3 is doing compared to Snippet 6.</p>
+      <p>Snippets 4, 5, and 7 are pretty similar, in the sense that each implements a well-known algorithm that I immediately recognized. However, all three are pretty complicated algorithms to get right. I'm actually not even confident that Snippet 5 is correct, which is why I ranked it above the other two: the relevant Java APIs are quite confusing and easy to get wrong. Snippets 4 and 7 are moderately complex string and float algorithms, respectively. I don't differentiate between them.</p>
+      <p>Snippets 1 and 2 both implement simple string validation logic. Snippet 2 has a shorter, simpler set of rules that it implements, so I ranked it lower. However, I don't think either of these are very difficult: both were pretty trivial to write a specification for.</p>
+      <p>There are big gaps, though, that correspond to the blocks of texts above: my ranking looks something like this: 2 . 1 ... 4 7 . 5 ... 3 . 6 ... 8</p>
     </div>
   </div>
-
+  
 </body>
 </html>
