@@ -138,6 +138,36 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+.sticky-menu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 10px 20px;
+  border-top: 1px solid #ccc;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+}
+
+.sticky-menu button {
+  background: #f0f0f0;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.sticky-menu button:hover {
+  background: #e0e0e0;
+}
+
   </style>
 </head>
 <body>
@@ -150,7 +180,6 @@ a:hover {
     <!-- Snippet 1 -->
     <div class="snippet">
       <h3>Snippet 1</h3>
-      <button onclick="show_snippet(1)">View Snippet 1</button>
       <div class="participant"><h4>Nadeeshan</h4>
         <p><strong>Summary:</strong> This method takes a project name and validates it based on several criteria.</p>
         <p><strong>Comprehensibility:</strong> Clear method/final variable names make it easier to understand. Also, the clear logic separation of the conditional statements makes it easier to follow.</p>
@@ -646,8 +675,8 @@ a:hover {
 //   console.log("Final snippet order (ids):", snippets.map(s => s.id));
 //   console.log("Server snippet order (1-based):", order.map(i => `Snippet ${i}`));
 
-//   </script>
-//   <script>
+ </script>
+  <script>
 //     function show_snippet(id) {
 //     const snippet = snippets.find(s => s.id === id);
 //     if (!snippet) return;
@@ -813,5 +842,16 @@ a:hover {
 
 </script>
 
+<div id="snippet-menu" class="sticky-menu">
+    <button onclick="show_snippet(1)">Snippet 1</button>
+    <button onclick="show_snippet(2)">Snippet 2</button>
+    <button onclick="show_snippet(3)">Snippet 3</button>
+    <button onclick="show_snippet(4)">Snippet 4</button>
+    <button onclick="show_snippet(5)">Snippet 5</button>
+    <button onclick="show_snippet(6)">Snippet 6</button>
+    <button onclick="show_snippet(7)">Snippet 7</button>
+    <button onclick="show_snippet(8)">Snippet 8</button>
+  </div>
+  
 </body>
 </html>
