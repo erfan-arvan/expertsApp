@@ -327,10 +327,16 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       })
-      .then(res => res.ok
-        ? showSubmissionModal('✅ Submission successful!\n\nWe will notify you about the possible next steps. \n\nYou can still resubmit your responses before the deadline if needed.')
-        : showValidationMessage('❌ Submission failed. Please try again.')
-      )
+      .then(async res => {
+        const text = await res.text();
+        console.log("🟢 Server response:", res.status, text);
+
+        if (res.ok) {
+          showSubmissionModal('✅ Submission successful!\n\nWe will notify you about the possible next steps. \n\nYou can still resubmit your responses before the deadline if needed.');
+        } else {
+          showValidationMessage('❌ Submission failed. Server responded: ' + text);
+        }
+      })
       .catch(() => alert('⚠️ Error during submission.'));
     }
 
