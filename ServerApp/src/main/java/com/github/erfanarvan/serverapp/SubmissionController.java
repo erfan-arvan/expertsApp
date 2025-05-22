@@ -67,10 +67,17 @@ public class SubmissionController {
 
         boolean isFinal = "1".equals(body.getOrDefault("submitted", "0"));
 
-        // Ensure the directory exists
+        System.out.println(">>> [submit_final] Received submission:");
+        System.out.println(">>> Username: " + username);
+        System.out.println(">>> Timestamp: " + timestamp);
+        System.out.println(">>> Is Final: " + isFinal);
+        System.out.println(">>> Body Keys: " + body.keySet());
+        System.out.println(">>> Raw Body Preview: " + truncateJson(body, 1000)); // Truncate long output
+
         File directory = new File("submissions");
         if (!directory.exists()) {
             directory.mkdirs();
+            System.out.println(">>> Created 'submissions' directory.");
         }
 
         File allFile = new File("submissions/all_submissions.json");
@@ -78,34 +85,35 @@ public class SubmissionController {
         ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
         try {
-            // Prepare wrapped data
             Map<String, Object> wrapped = new HashMap<>();
             wrapped.put("timestamp", timestamp);
             wrapped.put("isFinal", isFinal);
             wrapped.put("data", body);
 
-            // Write to all_submissions.json
             Map<String, List<Map<String, Object>>> allData = allFile.exists()
                 ? mapper.readValue(allFile, new TypeReference<>() {})
                 : new HashMap<>();
             allData.computeIfAbsent(username, k -> new ArrayList<>()).add(wrapped);
             mapper.writeValue(allFile, allData);
+            System.out.println(">>> Saved to all_submissions.json");
 
-            // Write to final_submissions.json if submitted == "1"
             if (isFinal) {
                 Map<String, List<Map<String, Object>>> finalData = finalFile.exists()
                     ? mapper.readValue(finalFile, new TypeReference<>() {})
                     : new HashMap<>();
                 finalData.computeIfAbsent(username, k -> new ArrayList<>()).add(wrapped);
                 mapper.writeValue(finalFile, finalData);
+                System.out.println(">>> Saved to final_submissions.json");
             }
 
             return "Submission saved.";
         } catch (IOException e) {
+            System.err.println(">>> ERROR while saving submission for: " + username);
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save submission.");
         }
     }
+
 
 
 
@@ -134,4 +142,15 @@ public class SubmissionController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read submission.");
         }
     }
+
+    private String truncateJson(Map<String, Object> body, int maxLen) {
+    try {
+        ObjectMapper previewMapper = new ObjectMapper();
+        String full = previewMapper.writeValueAsString(body);
+        return full.length() > maxLen ? full.substring(0, maxLen) + "... [truncated]" : full;
+    } catch (Exception e) {
+        return "[error printing JSON]";
+    }
+}
+
 }
