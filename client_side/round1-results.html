@@ -326,7 +326,8 @@ a:hover {
         – the input must not be the empty string<br>
         – the input must be shorter than or equal to the MAX_NAME_LENGTH constant<br>
         – each character must be a letter/digit or in VALID_NAME_SET</p>
-        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+        <p><strong>Comprehensibility:</strong> The method is a straightforward set of tests against the string. These kinds of tests are common in validation logic. The name `VALID_NAME_EST` and the method name, combined with the string operations being performed, make the purpose obvious. The method uses simple string conditions to check most of the properties; the only ones that are more complex are the character properties, which are contained in a simple loop. So, structurally, the method is also easy to understand
+        </p>
       </div>
     </div>
   
@@ -342,8 +343,8 @@ a:hover {
         <p><strong>Comprehensibility:</strong> Easy to understand: easy logic, identifiers helped. It's harder than Snippet 1 due to unclear isFilesystemPath and URI scheme.</p>
       </div>
       <div class="participant"><h4>Martin</h4>
-        <p><strong>Summary:</strong> Validates a URI based on rules: not a file path, has a non-null scheme, and scheme is not "file"/"jar".</p>
-        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+        <p><strong>Summary:</strong> This method validates a URI according to a set of rules. The URI is valid (and the method returns true) iff:\n* the uri isn't a filesystem path\n* the uri has a nonnull `Scheme`\n* the uri's scheme is something other than \"file\" or \"jar\"\n\nBased on the method name, I think that means that the goal of the method is to check if the URI requires network access to reach.</p>
+        <p><strong>Comprehensibility:</strong> It's pretty easy to understand. `isRemote` and `isFilesystemPath` have pretty obvious meanings, and the `scheme` check later on is also simple enough. There are some subtleties here (how do we know that \"jar\" and \"file\" are the only URI schemes that are not remote? I think that's domain knowledge...), but overall the purpose is clear and easy to understand from the code's structure</p>
       </div>
     </div>
   
@@ -359,8 +360,8 @@ a:hover {
         <p><strong>Comprehensibility:</strong> Understandable via reflection, but unclear what a synthetic field is. Harder if unfamiliar with constants.</p>
       </div>
       <div class="participant"><h4>Martin</h4>
-        <p><strong>Summary:</strong> Searches CoffMachineType fields for matching short values. Returns true if found, false otherwise or if it matches IMAGE_FILE_MACHINE_UNKNOWN.</p>
-        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+        <p><strong>Summary:</strong> This snippet searches the fields of the `CoffMachineType` class for one whose `getShort` method returns a value equal to the input short. If any such value is found, the snippet returns true; otherwise, it returns false. It also returns false if the input matches a constant (`IMAGE_FILE_MACHINE_UNKNOWN`). These shorts seem to represent something specific, but it's not clear what from the snippet itself.</p>
+        <p><strong>Comprehensibility:</strong> The use of Java's reflective features to read the class literal of `CoffMachineType` is relatively complex, and makes it a bit hard to understand the purpose of the method. I also don't really understand what `type` is actually supposed to represent - it seems to be a fake enumeration of some kind, but the actual specification can't be discerned from what we can see. So, I think this snippet is fairly difficult to understand.</p>
       </div>
     </div>
   
@@ -376,8 +377,8 @@ a:hover {
         <p><strong>Comprehensibility:</strong> Harder due to unfamiliarity with regionMatches; identifiers help.</p>
       </div>
       <div class="participant"><h4>Martin</h4>
-        <p><strong>Summary:</strong> Searches a string for a case-insensitive substring. Returns index or INDEX_NOT_FOUND.</p>
-        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+        <p><strong>Summary:</strong> This snippet searches a given string for a substring that matches a \"search string\", starting at a fixed start position and going to the end. If it finds such a substring, it returns the index where it starts; if not, it returns the `INDEX_NOT_FOUND` constant. The `startPos` is assumed to be zero if a negative `startPos` is provided.\n\nThe name suggests that it ignores case, but I don't see anything in the logic that obvious implements that part. However, the `true` being passed to `regionMatches` isn't explained at all, so that might control it?"</p>
+        <p><strong>Comprehensibility:</strong> The structure is mostly easy to follow: there is some validation logic (lines 2 to 15) followed by the main search (lines 16-18). This method is basically a wrapper around `regionMatches`, which I'm not intimately familiar with. However, I gather just from looking at how it's used here that it 1) takes a surprisingly large number of parameters, and 2) doesn't check that its parameters are valid. That suggests that it's an optimized implementation, and so this wrapper exists to make sure that it's not misused. The validation logic is easy to understand, but figuring out _why_ is a bit trickier: I had to do some thinking about why `regionMatches` is being called the way that it is.</p>
       </div>
     </div>
   
@@ -393,8 +394,8 @@ a:hover {
         <p><strong>Comprehensibility:</strong> Easy; familiar with visitor pattern; identifiers help clarify.</p>
       </div>
       <div class="participant"><h4>Martin</h4>
-        <p><strong>Summary:</strong> Force deletes the input Path like `rm -rf`. Returns true if the root exists.</p>
-        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+        <p><strong>Summary:</strong> This snippet implements recursive deletion with force (`rm -rf`) on the input `Path`. It returns true if the root is nonnull and exists, regardless of the outcome of the deletion.</p>
+        <p><strong>Comprehensibility:</strong> This was easy _for me_ to understand, but it required domain-specific knowledge of how Java handles file system operations that I _do_ have: I immediately recognized the structure of the `walkFileTree` call with the anonymous visitor, and knew that I only needed to look at the names of the overridden methods and their bodies (i.e., lines 8 and 13) to figure out what the method does.</p>
       </div>
     </div>
   
@@ -410,8 +411,8 @@ a:hover {
         <p><strong>Comprehensibility:</strong> Hard due to encoding/bits; needed to Google concepts.</p>
       </div>
       <div class="participant"><h4>Martin</h4>
-        <p><strong>Summary:</strong> Optimized UTF-8 length computation; includes overflow check based on UTF-16 assumption.</p>
-        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+        <p><strong>Summary:</strong> This snippet seems to be an optimized implementation of computing the length of a character sequence if it were to be represented as UTF-8. It also contains a check for overflow that causes it to fail if the resulting answer doesn't make sense, that enforces the following invariant: UTF-8 lengths are always longer than or equal to UTF-16 lengths (which is assumed to be the input encoding).</p>
+        <p><strong>Comprehensibility:</strong> This snippet is a bit tricky for me to understand, because it requires some domain knowledge of UTF-8 vs UTF-16 that I don't have, and because it performs some operations that are tough to decipher based on that domain knowledge (e.g., the shift on line 14). That said, the _overall_ purpose is pretty clear. But, I am not confident that I understand _why_ each line must be the way that it is: I would need to go have a look at the difference between how Java represents UTF-8 vs UTF-16 encodings to actually understand this code line-by-line.</p>
       </div>
     </div>
   
@@ -427,8 +428,8 @@ a:hover {
         <p><strong>Comprehensibility:</strong> Easy after remembering formula; logic is clear with basic math review.</p>
       </div>
       <div class="participant"><h4>Martin</h4>
-        <p><strong>Summary:</strong> Implements quadratic formula and returns Float.NaN if it fails.</p>
-        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+        <p><strong>Summary:</strong> Quadratic formula; returns `Float.NaN` if it fails. If there are two roots, only returns the positive one. If both roots are positive, it returns the smaller of the two.</p>
+        <p><strong>Comprehensibility:</strong> The snippet calls back to grade school math pretty aggressively (e.g., through naming its parameters `a`, `b`, and `c`), and that makes it easier to understand the overall purpose by recognizing the quadratic formula. The swap block (lines 10-14) is also an easily-recognizable pattern to swap via a temporary variable. Overall, then, this is a relatively straightfor</p>
       </div>
     </div>
   
@@ -444,8 +445,8 @@ a:hover {
         <p><strong>Comprehensibility:</strong> Cryptic math logic; doesn’t recall arctangent well.</p>
       </div>
       <div class="participant"><h4>Martin</h4>
-        <p><strong>Summary:</strong> Trig function of x/y; complex due to floating point edge case handling (`n != n`).</p>
-        <p><strong>Comprehensibility:</strong> (Not provided)</p>
+        <p><strong>Summary:</strong> An implementation of some trigonometric function of x and y? Pretty tough for me to reason about what it's doing, given that I last thought about this kind of trigonometry in like 10th grade. There's some kind of floating point defense going on at the beginning (`n != n`? wtf), which I think is there to deal with the singularity when `x` is near zero.</p>
+        <p><strong>Comprehensibility:</strong> This snippet is hard to understand. It does some floating point singularity defense (hard to understand unless you're intimately familiar with numerical methods!) in lines 4-7, followed by some kind of trigonometric math in lines 9-19. Its purpose isn't even clear to me, because I don't remember how atan actually works (trig was a long time ago!) or the relevant identities (why is it adding or subtracting pi or pi/2? I don't know). In other words, this snippet requires two kinds of domain-specific expertise to understand that I don't have: numerical methods for floating point and trigonometry.</p>
       </div>
     </div>
   
