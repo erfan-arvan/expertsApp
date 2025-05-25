@@ -190,6 +190,16 @@ This suggests that while he found it conceptually challenging, he still viewed i
     }
 
 
+    function getRound2Response(i) {
+        const key = `round2_response_${i}`;
+        const raw = sessionStorage.getItem(key) || getCookie(key);
+        try {
+            return raw ? JSON.parse(raw) : {};
+        } catch {
+            return {};
+        }
+    }
+
 
     function render() {
         const container = document.getElementById('disagreement-box');
@@ -219,7 +229,7 @@ This suggests that while he found it conceptually challenging, he still viewed i
         `;
 
         // Restore saved answers
-        const saved = round2Responses[index] || {};
+        const saved = getRound2Response(index);
         document.getElementById('q1').value = saved.q1 || '';
         document.getElementById('q2').value = saved.q2 || '';
         document.getElementById('q3').value = saved.q3 || '';
