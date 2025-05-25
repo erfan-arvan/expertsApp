@@ -133,6 +133,33 @@ This suggests that while he found it conceptually challenging, he still viewed i
         .replace(/\b(Oscar|Martin|Nadeeshan)\b/g, name => name.toLowerCase() === username.toLowerCase() ? 'you' : name);
     }
 
+
+    function personalize(text, username, snippetMap) {
+    const nameMap = {
+        'Oscar': 'Oscar',
+        'Martin': 'Martin',
+        'Nadeeshan': 'Nadeeshan'
+    };
+
+    // Replace name with "you" if username matches
+    Object.keys(nameMap).forEach(name => {
+        const regex = new RegExp(`\\b${name}\\b`, 'g');
+        if (username.toLowerCase() === name.toLowerCase()) {
+        text = text.replace(regex, 'you');
+        }
+    });
+
+    // Replace "Snippet X" with local snippet number
+    for (let originalId = 1; originalId <= 8; originalId++) {
+        const localId = snippetMap[originalId];
+        const regex = new RegExp(`Snippet ${originalId}\\b`, 'g');
+        text = text.replace(regex, `Snippet ${localId}`);
+    }
+
+    return text;
+    }
+
+
     function getLocalSnippetMapping() {
         const stored = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
         if (!stored) return null;
@@ -155,10 +182,11 @@ This suggests that while he found it conceptually challenging, he still viewed i
         const container = document.getElementById('disagreement-box');
         const entry = disagreements[index];
         const localSnippets = getLocalSnippetMapping();
+        const username = getParticipantName();
 
         container.innerHTML = `
             <div class="disagreement-text" style="margin-bottom: 20px;">
-            ${personalize(entry.text, localSnippets)}
+            ${personalize(entry.text, username, localSnippets)}
             </div>
 
             <div>
@@ -182,7 +210,8 @@ This suggests that while he found it conceptually challenging, he still viewed i
         document.getElementById('q1').value = saved.q1 || '';
         document.getElementById('q2').value = saved.q2 || '';
         document.getElementById('q3').value = saved.q3 || '';
-        }
+    }
+
 
 
     function next() {
