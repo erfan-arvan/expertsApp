@@ -59,7 +59,7 @@
 <body>
   <div class="status-bar">Round 2: Reflect on Expert Disagreements</div>
 
-  <div id="content"></div>
+  <div id="disagreement-box" class="disagreement-box"></div>
 
   <div class="navigation">
     <button onclick="prev()" id="prevBtn" style="display: none;">⬅️ Previous</button>
@@ -134,6 +134,18 @@ This suggests that while he found it conceptually challenging, he still viewed i
     }
 
 
+    const round2Responses = disagreements.map((_, i) => {
+    const key = `round2_response_${i}`;
+    const raw = sessionStorage.getItem(key) || getCookie(key);
+    try {
+        return raw ? JSON.parse(raw) : {};
+    } catch {
+        return {};
+    }
+    });
+
+
+
     function personalize(text, username, snippetMap) {
     const nameMap = {
         'Oscar': 'Oscar',
@@ -182,7 +194,7 @@ This suggests that while he found it conceptually challenging, he still viewed i
         const container = document.getElementById('disagreement-box');
         const entry = disagreements[index];
         const localSnippets = getLocalSnippetMapping();
-        const username = getParticipantName();
+        const username = sessionStorage.getItem('participantName') || getCookie('participantName') || 'anonymous';
 
         container.innerHTML = `
             <div class="disagreement-text" style="margin-bottom: 20px;">
@@ -258,16 +270,13 @@ This suggests that while he found it conceptually challenging, he still viewed i
     window.onload = render;
   </script>
   <script>
-    function saveRound2Response(stepIndex, responseText) {
+    function saveRound2Response(stepIndex, responseObj) {
         const key = `round2_response_${stepIndex}`;
-        const trimmed = responseText.trim();
+        const json = JSON.stringify(responseObj);
 
-        // Save to sessionStorage
-        sessionStorage.setItem(key, trimmed);
-
-        // Save to cookie (expires in 30 days)
-        document.cookie = `${key}=${encodeURIComponent(trimmed)}; path=/; max-age=${60 * 60 * 24 * 30}`;
-        }
+        sessionStorage.setItem(key, json);
+        document.cookie = `${key}=${encodeURIComponent(json)}; path=/; max-age=${60 * 60 * 24 * 30}`;
+    }
   </script>
 </body>
 </html>
