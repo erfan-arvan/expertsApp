@@ -195,7 +195,7 @@ This suggests that while he found it conceptually challenging, he still viewed i
         const container = document.getElementById('disagreement-box');
         const entry = disagreements[index];
         const localSnippets = getLocalSnippetMapping();
-        const username = sessionStorage.getItem('participantName') || getCookie('participantName') || 'anonymous';
+        const username = getParticipantName();  // Or use: sessionStorage.getItem('participantName')
 
         container.innerHTML = `
             <div class="disagreement-text" style="margin-bottom: 20px;">
@@ -218,12 +218,16 @@ This suggests that while he found it conceptually challenging, he still viewed i
             </div>
         `;
 
-        // Restore saved answers if any
+        // Restore saved answers
         const saved = round2Responses[index] || {};
         document.getElementById('q1').value = saved.q1 || '';
         document.getElementById('q2').value = saved.q2 || '';
         document.getElementById('q3').value = saved.q3 || '';
-    }
+
+        // ✅ Show/hide previous button
+        document.getElementById('prevBtn').style.display = index === 0 ? 'none' : 'inline-block';
+        }
+
 
 
 
