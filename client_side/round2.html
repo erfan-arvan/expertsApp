@@ -133,6 +133,24 @@ This suggests that while he found it conceptually challenging, he still viewed i
         .replace(/\b(Oscar|Martin|Nadeeshan)\b/g, name => name.toLowerCase() === username.toLowerCase() ? 'you' : name);
     }
 
+    function getLocalSnippetMapping() {
+        const stored = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
+        if (!stored) return null;
+
+        try {
+            const parsed = JSON.parse(stored); // e.g., [3,1,4,7,8,2,6,5]
+            const mapping = {};
+            parsed.forEach((originalId, localIndex) => {
+            mapping[originalId] = localIndex + 1; // original ID -> local snippet number
+            });
+            return mapping;
+        } catch (e) {
+            console.error("Failed to parse snippetOrder:", e);
+            return null;
+        }
+    }
+
+
     function render() {
         const container = document.getElementById('disagreement-box');
         const entry = disagreements[index];
