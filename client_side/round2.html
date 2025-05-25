@@ -195,7 +195,7 @@ This suggests that while he found it conceptually challenging, he still viewed i
         const container = document.getElementById('disagreement-box');
         const entry = disagreements[index];
         const localSnippets = getLocalSnippetMapping();
-        const username = getParticipantName();  // Or use: sessionStorage.getItem('participantName')
+        const username = sessionStorage.getItem('participantName') || getCookie('participantName') || 'anonymous';
 
         container.innerHTML = `
             <div class="disagreement-text" style="margin-bottom: 20px;">
