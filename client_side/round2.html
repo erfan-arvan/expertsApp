@@ -134,40 +134,74 @@ This suggests that while he found it conceptually challenging, he still viewed i
     }
 
     function render() {
-      const d = disagreements[index];
-      const box = document.getElementById('content');
-      box.innerHTML = `
-        <div class="disagreement-box">
-          <h3>Disagreement on Snippet ${snippetOrder.indexOf(d.snippet) + 1}</h3>
-          <p style="white-space: pre-line">${personalizeText(d.text, d.snippet)}</p>
-          <h4>We’d like to invite your thoughts:</h4>
-          <p>
-          • Do any of your fellow experts' concerns resonate with you?<br>
-          • Has their feedback changed or clarified your understanding of the snippet?<br>
-          • Would you consider changing your ranking for this snippet after reviewing all the feedback?
-          </p>
-          <textarea placeholder="Write your thoughts here..."></textarea>
-        </div>
-      `;
-      document.getElementById('prevBtn').style.display = index === 0 ? 'none' : 'inline-block';
-      document.getElementById('nextBtn').textContent = index === disagreements.length - 1 ? 'Continue to Ranking ➡️' : 'Next ➡️';
-    }
+        const container = document.getElementById('disagreement-box');
+        const entry = disagreements[index];
+        const localSnippets = getLocalSnippetMapping();
+
+        container.innerHTML = `
+            <div class="disagreement-text" style="margin-bottom: 20px;">
+            ${personalize(entry.text, localSnippets)}
+            </div>
+
+            <div>
+            <label><strong>1. Do any of your fellow experts' concerns resonate with you?</strong></label><br>
+            <textarea id="q1" placeholder="Your response..."></textarea>
+            </div>
+
+            <div>
+            <label><strong>2. Has their feedback changed or clarified your understanding of the snippet?</strong></label><br>
+            <textarea id="q2" placeholder="Your response..."></textarea>
+            </div>
+
+            <div>
+            <label><strong>3. Would you consider changing your ranking for this snippet after reviewing all the feedback?</strong></label><br>
+            <textarea id="q3" placeholder="Your response..."></textarea>
+            </div>
+        `;
+
+        // Restore saved answers if any
+        const saved = round2Responses[index] || {};
+        document.getElementById('q1').value = saved.q1 || '';
+        document.getElementById('q2').value = saved.q2 || '';
+        document.getElementById('q3').value = saved.q3 || '';
+        }
+
 
     function next() {
-      if (index < disagreements.length - 1) {
-        index++;
-        render();
-      } else {
-        window.location.href = 'phase2.html'; // or round2_phase2.html if separate
-      }
+        const q1 = document.getElementById('q1').value.trim();
+        const q2 = document.getElementById('q2').value.trim();
+        const q3 = document.getElementById('q3').value.trim();
+
+        if (!q1 || !q2 || !q3) {
+            showValidationMessage("⚠️ Please answer all three questions before continuing.");
+            return;
+        }
+
+        saveRound2Response(index, { q1, q2, q3 });
+
+        if (index < disagreements.length - 1) {
+            index++;
+            render();
+        } else {
+            window.location.href = 'phase2.html';
+        }
     }
 
+
     function prev() {
-      if (index > 0) {
-        index--;
-        render();
-      }
+        const q1 = document.getElementById('q1').value.trim();
+        const q2 = document.getElementById('q2').value.trim();
+        const q3 = document.getElementById('q3').value.trim();
+
+        // Save current responses before moving back
+        saveRound2Response(index, { q1, q2, q3 });
+
+        if (index > 0) {
+            index--;
+            render();
+        }
     }
+
 
     function getCookie(name) {
       const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
@@ -175,6 +209,18 @@ This suggests that while he found it conceptually challenging, he still viewed i
     }
 
     window.onload = render;
+  </script>
+  <script>
+    function saveRound2Response(stepIndex, responseText) {
+        const key = `round2_response_${stepIndex}`;
+        const trimmed = responseText.trim();
+
+        // Save to sessionStorage
+        sessionStorage.setItem(key, trimmed);
+
+        // Save to cookie (expires in 30 days)
+        document.cookie = `${key}=${encodeURIComponent(trimmed)}; path=/; max-age=${60 * 60 * 24 * 30}`;
+        }
   </script>
 </body>
 </html>
