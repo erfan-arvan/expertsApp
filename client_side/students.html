@@ -1091,53 +1091,25 @@ window.addEventListener('beforeunload', saveToServer);
     let currentQuestionIndex = 0;
 
     function loadQuestion() {
-  const snippetQuestions = questionsPerSnippet[currentSnippet];
-  const question = snippetQuestions[currentQuestionIndex];
+  const snippetSpecific = questionsPerSnippet[currentSnippet];
+  const allQuestions = [...snippetSpecific, ...general_questions];
+  const question = allQuestions[currentQuestionIndex];
 
   const container = document.getElementById('question-area');
-  container.innerHTML = ''; // Clear previous
+  container.innerHTML = ''; // Clear the previous content
 
-  renderQuestion(container, question, currentSnippet); // Render specific question
+  // Render the current question
+  renderQuestion(container, question, currentSnippet);
 
-  // If it's the last snippet-specific question, append general questions
-  if (currentQuestionIndex === snippetQuestions.length - 1) {
-    for (const q of general_questions) {
-      // First part
-      const label1 = document.createElement('label');
-      label1.innerHTML = `<strong>${q.prompt}</strong>`;
-      container.appendChild(label1);
-
-      if (q.type === 'scale') {
-        renderLikertScale(container, `answer-${currentSnippet}-${q.id}`, q.labels);
-      } else if (q.type === 'function') {
-        const input1 = document.createElement('textarea');
-        input1.rows = 5;
-        input1.id = `answer-${currentSnippet}-${q.id}`;
-        input1.value = sessionStorage.getItem(input1.id) || '';
-        input1.oninput = () => sessionStorage.setItem(input1.id, input1.value);
-        container.appendChild(input1);
-      }
-
-      // Second part (if any)
-      if (q.type2 && q.id2 && q.question2) {
-        const label2 = document.createElement('label');
-        label2.innerHTML = `<strong style="display:block; margin-top:15px;">${q.question2}</strong>`;
-        container.appendChild(label2);
-
-        if (q.type2 === 'scale') {
-          renderLikertScale(container, `answer-${currentSnippet}-${q.id2}`, q.labels2);
-        } else if (q.type2 === 'function') {
-          const input2 = document.createElement('textarea');
-          input2.rows = 5;
-          input2.id = `answer-${currentSnippet}-${q.id2}`;
-          input2.value = sessionStorage.getItem(input2.id) || '';
-          input2.oninput = () => sessionStorage.setItem(input2.id, input2.value);
-          container.appendChild(input2);
-        }
-      }
-    }
-  }
+  // Optionally, show progress (e.g., "Question 3 of 7")
+  const progressText = document.createElement('div');
+  progressText.style.marginTop = '10px';
+  progressText.style.fontSize = '14px';
+  progressText.style.color = '#777';
+  progressText.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
+  container.appendChild(progressText);
 }
+
 
 function renderQuestion(container, question, snippetNum) {
   // Create label for the first prompt
@@ -1216,16 +1188,18 @@ function renderLikertScale(container, storageKey, labels) {
 
 
 
+
 function nextQuestion() {
-  const questions = questionsPerSnippet[currentSnippet];
-  if (currentQuestionIndex < questions.length - 1) {
+  const total = questionsPerSnippet[currentSnippet].length + general_questions.length;
+  if (currentQuestionIndex < total - 1) {
     currentQuestionIndex++;
     loadQuestion();
   } else {
-    // Done with questions → go to next snippet
-    nextSnippet();
+    currentSnippet++;
     currentQuestionIndex = 0;
-    loadQuestion();
+    if (currentSnippet <= TOTAL_SNIPPETS) {
+      loadSnippet(currentSnippet);
+    }
   }
 }
 
@@ -1234,11 +1208,12 @@ function prevQuestion() {
     currentQuestionIndex--;
     loadQuestion();
   } else if (currentSnippet > 1) {
-    prevSnippet();
-    currentQuestionIndex = questionsPerSnippet[currentSnippet - 1].length - 1;
-    loadQuestion();
+    currentSnippet--;
+    currentQuestionIndex = questionsPerSnippet[currentSnippet].length + general_questions.length - 1;
+    loadSnippet(currentSnippet);
   }
 }
+
 
 
 </script>
