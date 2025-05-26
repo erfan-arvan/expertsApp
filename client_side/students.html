@@ -905,17 +905,25 @@ function toggleTimer() {
 
 function startTimer() {
   const timerEl = document.getElementById('timer');
-  let seconds = 0;
 
+  // Get or initialize start time
+  let startTime = localStorage.getItem('snippetTimerStart');
+  if (!startTime) {
+    startTime = Date.now();
+    localStorage.setItem('snippetTimerStart', startTime);
+  } else {
+    startTime = parseInt(startTime);
+  }
+
+  // Update the timer every second
   setInterval(() => {
-    seconds++;
-
-    const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
-    const secs = String(seconds % 60).padStart(2, '0');
-
+    const elapsed = Math.floor((Date.now() - startTime) / 1000); // in seconds
+    const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    const secs = String(elapsed % 60).padStart(2, '0');
     timerEl.textContent = `⏱️ ${mins}:${secs}`;
   }, 1000);
 }
+
 
 window.onload = function() {
     syncAnswersFromCookies();
@@ -931,6 +939,7 @@ window.onload = function() {
         document.getElementById('timer').style.display = 'none';
         document.querySelector('#timer-wrapper button').textContent = 'Show';
     }
+    //For later: localStorage.removeItem('snippetTimerStart');
 
 
     // Unlock and highlight status bar
