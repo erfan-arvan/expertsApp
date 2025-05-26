@@ -1218,17 +1218,17 @@ function renderLikertScale(container, id, labels, saved = '') {
 
 function nextQuestion() {
   const total = questionsPerSnippet[currentSnippet].length + general_questions.length;
+
   if (currentQuestionIndex < total - 1) {
     currentQuestionIndex++;
     loadQuestion();
-  } else {
+  } else if (currentSnippet < TOTAL_SNIPPETS) {
     currentSnippet++;
-    currentQuestionIndex = 0;
-    if (currentSnippet <= TOTAL_SNIPPETS) {
-      loadSnippet(currentSnippet);
-    }
+    currentQuestionIndex = 0;         // reset for new snippet
+    loadSnippet(currentSnippet);    
   }
 }
+
 
 function prevQuestion() {
   if (currentQuestionIndex > 0) {
@@ -1240,6 +1240,7 @@ function prevQuestion() {
     loadSnippet(currentSnippet);
   }
 }
+
 
 
 
