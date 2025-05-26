@@ -197,27 +197,6 @@
   white-space: pre;
 }
 
-.binary-button {
-  padding: 8px 18px;
-  font-size: 14px;
-  border: 1px solid #aaa;
-  background-color: #eee;
-  color: #333;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.binary-button:hover {
-  background-color: #ddd;
-}
-
-.binary-button.selected {
-  background-color: #4CAF50;
-  color: white;
-  font-weight: bold;
-  border-color: #4CAF50;
-}
-
 </style>
 
     
@@ -1113,36 +1092,31 @@ function renderQuestion(container, question, snippetNum) {
 } else if (question.type === 'binary' || question.type === 'bin') {
   const saved = sessionStorage.getItem(key1) || '';
 
-  const buttonGroup = document.createElement('div');
-  buttonGroup.style.display = 'flex';
-  buttonGroup.style.gap = '10px';
-  buttonGroup.style.margin = '10px 0';
+  const radioWrapper = document.createElement('div');
+  radioWrapper.style.display = 'flex';
+  radioWrapper.style.flexDirection = 'column';
+  radioWrapper.style.gap = '8px';
+  radioWrapper.style.margin = '10px 0';
 
   ['Yes', 'No'].forEach(choice => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.textContent = choice;
-    btn.className = 'binary-button';
-    btn.dataset.value = choice;
+    const label = document.createElement('label');
+    label.style.display = 'flex';
+    label.style.alignItems = 'center';
+    label.style.gap = '6px';
 
-    // Style for selection
-    if (saved === choice) {
-      btn.classList.add('selected');
-    }
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = key1;
+    radio.value = choice;
+    radio.checked = saved === choice;
+    radio.onchange = () => sessionStorage.setItem(key1, choice);
 
-    btn.onclick = () => {
-      // Save selection
-      sessionStorage.setItem(key1, choice);
-
-      // Toggle styles
-      [...buttonGroup.children].forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-    };
-
-    buttonGroup.appendChild(btn);
+    label.appendChild(radio);
+    label.appendChild(document.createTextNode(choice));
+    radioWrapper.appendChild(label);
   });
 
-  container.appendChild(buttonGroup);
+  container.appendChild(radioWrapper);
 } else if (question.type === 'scale') {
     const saved = sessionStorage.getItem(key1) || '';
     renderLikertScale(container, key1, question.labels, saved);
