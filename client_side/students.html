@@ -1051,33 +1051,39 @@ window.addEventListener('beforeunload', saveToServer);
 <script>
 
 
-  //save answer
-
-  function saveAnswer(snippetId, questionId, value) {
+//save answer
+function saveAnswer(snippetId, questionId, value) {
     const key = `answer-${snippetId}-${questionId}`;
+
+    // Save to sessionStorage
     sessionStorage.setItem(key, value);
-    }
 
-    let currentQuestionIndex = 0;
+    // Save to cookies (expires in 30 days)
+    const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    document.cookie = `${key}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+}
 
-    function loadQuestion() {
-  const snippetSpecific = questionsPerSnippet[currentSnippet];
-  const allQuestions = [...snippetSpecific, ...general_questions];
-  const question = allQuestions[currentQuestionIndex];
 
-  const container = document.getElementById('question-area');
-  container.innerHTML = ''; // Clear the previous content
+let currentQuestionIndex = 0;
 
-  // Render the current question
-  renderQuestion(container, question, currentSnippet);
+function loadQuestion() {
+    const snippetSpecific = questionsPerSnippet[currentSnippet];
+    const allQuestions = [...snippetSpecific, ...general_questions];
+    const question = allQuestions[currentQuestionIndex];
 
-  // Optionally, show progress (e.g., "Question 3 of 7")
-  const progressText = document.createElement('div');
-  progressText.style.marginTop = '10px';
-  progressText.style.fontSize = '14px';
-  progressText.style.color = '#777';
-  progressText.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
-  container.appendChild(progressText);
+    const container = document.getElementById('question-area');
+    container.innerHTML = ''; // Clear the previous content
+
+    // Render the current question
+    renderQuestion(container, question, currentSnippet);
+
+    // Optionally, show progress (e.g., "Question 3 of 7")
+    const progressText = document.createElement('div');
+    progressText.style.marginTop = '10px';
+    progressText.style.fontSize = '14px';
+    progressText.style.color = '#777';
+    progressText.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
+    container.appendChild(progressText);
 
     const totalQuestions = questionsPerSnippet[currentSnippet].length + general_questions.length;
     const nextBtn = document.getElementById('next-question');
@@ -1087,7 +1093,6 @@ window.addEventListener('beforeunload', saveToServer);
     } else {
     nextBtn.textContent = 'Next Question';
     }
-
 }
 
 
