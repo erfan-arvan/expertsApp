@@ -884,6 +884,25 @@ function syncAnswersFromCookies() {
   });
 }
 
+function toggleTimer() {
+  const timerEl = document.getElementById('timer');
+  const btn = event.target;
+
+  const isHidden = timerEl.style.display === 'none';
+
+  if (isHidden) {
+    timerEl.style.display = 'inline';
+    btn.textContent = 'Hide';
+    localStorage.setItem('timerHidden', 'false');
+  } else {
+    timerEl.style.display = 'none';
+    btn.textContent = 'Show';
+    localStorage.setItem('timerHidden', 'true');
+  }
+}
+
+
+
 function startTimer() {
   const timerEl = document.getElementById('timer');
   let seconds = 0;
@@ -905,7 +924,13 @@ window.onload = function() {
     loadSnippet(currentSnippet);
     //updateButtons();
 
+    //Handle Timer
     startTimer();
+    const hidden = localStorage.getItem('timerHidden') === 'true';
+    if (hidden) {
+        document.getElementById('timer').style.display = 'none';
+        document.querySelector('#timer-wrapper button').textContent = 'Show';
+    }
 
 
     // Unlock and highlight status bar
