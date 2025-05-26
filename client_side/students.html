@@ -205,6 +205,7 @@
 
     <div class="status-bar">
         <div class="user-dropdown" style="position: relative;">
+          <div id="timer" style="font-weight: bold;">⏱️ 00:00</div>
           <div id="user-info" style="padding: 8px 12px; color: gainsboro; font-weight: bold; cursor: pointer;"></div>
           <div id="logout-menu" style="display: none; position: absolute; top: 100%; right: 0; background: #333; border: 1px solid #555; padding: 8px; z-index: 999;">
             <button onclick="logout()" style="color: white; background: none; border: none; cursor: pointer;">🚪 Logout</button>
@@ -880,6 +881,19 @@ function syncAnswersFromCookies() {
   });
 }
 
+function startTimer() {
+  const timerEl = document.getElementById('timer');
+  let seconds = 0;
+
+  setInterval(() => {
+    seconds++;
+
+    const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const secs = String(seconds % 60).padStart(2, '0');
+
+    timerEl.textContent = `⏱️ ${mins}:${secs}`;
+  }, 1000);
+}
 
 window.onload = function() {
     syncAnswersFromCookies();
@@ -887,6 +901,8 @@ window.onload = function() {
     applyTheme();
     loadSnippet(currentSnippet);
     updateButtons();
+
+    startTimer();
 
 
     // Unlock and highlight status bar
