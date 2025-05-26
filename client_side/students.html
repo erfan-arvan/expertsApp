@@ -197,6 +197,27 @@
   white-space: pre;
 }
 
+.binary-button {
+  padding: 8px 18px;
+  font-size: 14px;
+  border: 1px solid #aaa;
+  background-color: #eee;
+  color: #333;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.binary-button:hover {
+  background-color: #ddd;
+}
+
+.binary-button.selected {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  border-color: #4CAF50;
+}
+
 </style>
 
     
@@ -1089,19 +1110,40 @@ function renderQuestion(container, question, snippetNum) {
     input1.oninput = () => sessionStorage.setItem(key1, input1.value);
     container.appendChild(input1);
 
-  } else if (question.type === 'binary' || question.type === 'bin') {
-    input1 = document.createElement('select');
-    input1.id = key1;
-    input1.innerHTML = `
-      <option value="">--Select--</option>
-      <option value="Yes">Yes</option>
-      <option value="No">No</option>
-    `;
-    input1.value = sessionStorage.getItem(key1) || '';
-    input1.oninput = () => sessionStorage.setItem(key1, input1.value);
-    container.appendChild(input1);
+} else if (question.type === 'binary' || question.type === 'bin') {
+  const saved = sessionStorage.getItem(key1) || '';
 
-  } else if (question.type === 'scale') {
+  const buttonGroup = document.createElement('div');
+  buttonGroup.style.display = 'flex';
+  buttonGroup.style.gap = '10px';
+  buttonGroup.style.margin = '10px 0';
+
+  ['Yes', 'No'].forEach(choice => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = choice;
+    btn.className = 'binary-button';
+    btn.dataset.value = choice;
+
+    // Style for selection
+    if (saved === choice) {
+      btn.classList.add('selected');
+    }
+
+    btn.onclick = () => {
+      // Save selection
+      sessionStorage.setItem(key1, choice);
+
+      // Toggle styles
+      [...buttonGroup.children].forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    };
+
+    buttonGroup.appendChild(btn);
+  });
+
+  container.appendChild(buttonGroup);
+} else if (question.type === 'scale') {
     const saved = sessionStorage.getItem(key1) || '';
     renderLikertScale(container, key1, question.labels, saved);
   }
