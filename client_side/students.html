@@ -1108,7 +1108,11 @@ function renderQuestion(container, question, snippetNum) {
     radio.type = 'radio';
     radio.name = key1;
     radio.value = choice;
-    radio.checked = saved === choice;
+
+    if (saved === choice) {
+      radio.checked = true;
+    }
+
     radio.onchange = () => sessionStorage.setItem(key1, choice);
 
     label.appendChild(radio);
