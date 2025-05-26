@@ -865,8 +865,24 @@ function toggleTheme() {
   }
 }
 
+function syncAnswersFromCookies() {
+  const cookies = document.cookie.split(';');
+
+  cookies.forEach(cookie => {
+    const [rawKey, rawValue] = cookie.split('=');
+    const key = rawKey.trim();
+    const value = decodeURIComponent(rawValue || '');
+
+    // Only copy keys that match answer-* pattern
+    if (key.startsWith('answer-') && !sessionStorage.getItem(key)) {
+      sessionStorage.setItem(key, value);
+    }
+  });
+}
+
 
 window.onload = function() {
+    syncAnswersFromCookies();
     displayUserName();
     applyTheme();
     loadSnippet(currentSnippet);
