@@ -1139,6 +1139,55 @@ window.addEventListener('beforeunload', saveToServer);
   }
 }
 
+function renderQuestion(container, question, snippetNum) {
+  // Create label for the first prompt
+  const label1 = document.createElement('label');
+  label1.innerHTML = `<strong>${question.prompt}</strong>`;
+  container.appendChild(label1);
+
+  let input1;
+  if (question.type === 'open' || question.type === 'short') {
+    input1 = document.createElement('textarea');
+    input1.rows = question.type === 'short' ? 2 : 5;
+  } else if (question.type === 'binary' || question.type === 'bin') {
+    input1 = document.createElement('select');
+    input1.innerHTML = `
+      <option value="">--Select--</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    `;
+  }
+
+  input1.id = `answer-${snippetNum}-${question.id}`;
+  input1.value = sessionStorage.getItem(input1.id) || '';
+  input1.oninput = () => sessionStorage.setItem(input1.id, input1.value);
+  container.appendChild(input1);
+
+  // If question2 exists
+  if (question.question2 && question.id2) {
+    const label2 = document.createElement('label');
+    label2.innerHTML = `<strong style="display:block; margin-top:15px;">${question.question2}</strong>`;
+    container.appendChild(label2);
+
+    let input2;
+    if (question.type2 === 'open' || question.type2 === 'short') {
+      input2 = document.createElement('textarea');
+      input2.rows = question.type2 === 'short' ? 2 : 5;
+    } else if (question.type2 === 'binary' || question.type2 === 'bin') {
+      input2 = document.createElement('select');
+      input2.innerHTML = `
+        <option value="">--Select--</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      `;
+    }
+
+    input2.id = `answer-${snippetNum}-${question.id2}`;
+    input2.value = sessionStorage.getItem(input2.id) || '';
+    input2.oninput = () => sessionStorage.setItem(input2.id, input2.value);
+    container.appendChild(input2);
+  }
+}
 
 function renderLikertScale(container, storageKey, labels) {
   const scaleDiv = document.createElement('div');
