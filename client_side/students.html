@@ -653,16 +653,6 @@ function loadSnippet(snippetNumber) {
 const lineNumbersHtml = codeLines.map((_, i) => (i + 1)).join('<br>');
 document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
 
-  const keySummary = `summary${snippetNumber}`;
-  const keycompSummary = `compSummary${snippetNumber}`;
-  let savedSummary = sessionStorage.getItem(keySummary);
-  let savedcompSummary = sessionStorage.getItem(keycompSummary);
-
-  if (!savedSummary) savedSummary = decodeURIComponent(getCookie(keySummary) || '');
-  if (!savedcompSummary) savedcompSummary = decodeURIComponent(getCookie(keycompSummary) || '');
-
-  document.getElementById('summary').value = savedSummary;
-  document.getElementById('compSummary').value = savedcompSummary;
 
   loadQuestion();
 }
@@ -1044,20 +1034,22 @@ function showValidationMessage(msg) {
 </script>
 
 <script>
-    function areAllSnippetsFilled() {
-        for (let i = 1; i <= 8; i++) {
-            const summaryKey = `summary${i}`;
-            const compKey = `compSummary${i}`;
+function areAllSnippetsFilled() {
+  for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
+    const questions = questionsPerSnippet[i];
+    for (const q of questions) {
+      const mainVal = sessionStorage.getItem(`answer-${i}-${q.id}`) || '';
+      if (!mainVal.trim()) return false;
 
-            const summary = sessionStorage.getItem(summaryKey) || decodeURIComponent(getCookie(summaryKey) || '');
-            const compSummary = sessionStorage.getItem(compKey) || decodeURIComponent(getCookie(compKey) || '');
-
-            if (!summary.trim() || !compSummary.trim()) {
-            return false;
-            }
-        }
-        return true;
+      if (q.id2) {
+        const secondVal = sessionStorage.getItem(`answer-${i}-${q.id2}`) || '';
+        if (!secondVal.trim()) return false;
+      }
     }
+  }
+  return true;
+}
+
 
 </script>
 
