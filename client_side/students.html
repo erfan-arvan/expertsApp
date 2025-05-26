@@ -277,6 +277,283 @@
   
   <script src="js/data.js"></script>
 
+  <script>
+const questionsPerSnippet = {
+  "1": [
+    {
+      "type": "open",
+      "id": "semanticsSlicing",
+      "prompt": "Does the character at position i (i.e., name.charAt(i)) affect whether the loop continues to the next iteration?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "output",
+      "prompt": "What is the return value of the method for the input \"abc123___\"?",
+      "type2": "short",
+      "id2": "output2",
+      "question2": "What is the value of i immediately after the for loop completes?"
+    },
+    {
+      "type": "bin",
+      "id": "syntaxW",
+      "prompt": "Is subtraction (-) used in an expression?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "syntaxB",
+      "prompt": "How many exit points does the for loop have?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    }
+  ],
+  "2": [
+    {
+      "type": "open",
+      "id": "semanticsSlicing",
+      "prompt": "Does the result of isFilesystemPath(uri) affect whether uri.getScheme() is evaluated?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "output",
+      "prompt": "What is the return value of the method for a URI with scheme = \"jar\" and isFilesystemPath(uri) = false?",
+      "type2": "bin",
+      "id2": "output2",
+      "question2": "Is the method uri.getScheme() called for this input?"
+    },
+    {
+      "type": "bin",
+      "id": "syntaxW",
+      "prompt": "Are all local variables immediately initialized as part of their declaration?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "syntaxB",
+      "prompt": "How many case labels are in the switch statement?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    }
+  ],
+  "3": [
+    {
+      "type": "open",
+      "id": "semanticsSlicing",
+      "prompt": "Does the result of field.isSynthetic() affect the value of modifiers?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "output",
+      "prompt": "What is the return value of the method for input type = -1?",
+      "type2": "bin",
+      "id2": "output2",
+      "question2": "Is the for loop over getDeclaredFields() entered for this input?"
+    },
+    {
+      "type": "bin",
+      "id": "syntaxW",
+      "prompt": "Is there a top-level loop that appears after some code containing a return statement?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "syntaxB",
+      "prompt": "How many if conditions must be satisfied before field.getShort(null) == type is evaluated?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    }
+  ],
+  "4": [
+    {
+      "type": "open",
+      "id": "semanticsSlicing",
+      "prompt": "Does the result of searchStr.length() affect whether str == null?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "output",
+      "prompt": "What is the return value of the method for input str = \"abcdefg\", searchStr = \"xyz\", startPos = 0?",
+      "type2": "short",
+      "id2": "output2",
+      "question2": "How many times is the loop body executed?"
+    },
+    {
+      "type": "bin",
+      "id": "syntaxW",
+      "prompt": "Are all local variables immediately initialized as part of their declaration?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "syntaxB",
+      "prompt": "How many local variables are declared before the for loop begins?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    }
+  ],
+  "5": [
+    {
+      "type": "open",
+      "id": "semanticsSlicing",
+      "prompt": "Does the value of root affect whether the method returns true?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "output",
+      "prompt": "What is the return value of the method if root refers to a path that does not exist on disk?",
+      "type2": "short",
+      "id2": "output2",
+      "question2": "Is Files.walkFileTree(...) ever called?"
+    },
+    {
+      "type": "bin",
+      "id": "syntaxW",
+      "prompt": "Is the type of the second method parameter int?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "syntaxB",
+      "prompt": "How many method calls occur inside the visitFile method?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    }
+  ],
+  "6": [
+    {
+      "type": "open",
+      "id": "semanticsSlicing",
+      "prompt": "Does setting i = 0 affect whether the exception is thrown at the end?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "output",
+      "prompt": "What value is returned by the method for input \"ABCDEF\"?",
+      "type2": "bin",
+      "id2": "output2",
+      "question2": "Is encodedLengthGeneral(...) called for this input?"
+    },
+    {
+      "type": "bin",
+      "id": "syntaxW",
+      "prompt": "Is subtraction (-) used in an expression?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "syntaxB",
+      "prompt": "How many loops appear in this method?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    }
+  ],
+  "7": [
+    {
+      "type": "open",
+      "id": "semanticsSlicing",
+      "prompt": "Does the value of a affect whether r1 and r2 are finite values or NaN?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "output",
+      "prompt": "What is the return value of the method for input a = 1, b = -5, c = 6?",
+      "type2": "short",
+      "id2": "output2",
+      "question2": "After the swap check (if (r1 > r2)), what is the relationship between r1 and r2?"
+    },
+    {
+      "type": "bin",
+      "id": "syntaxW",
+      "prompt": "Does the method use an explicit type cast?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "syntaxB",
+      "prompt": "How many if statements may cause early return from this method?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    }
+  ],
+  "8": [
+    {
+      "type": "open",
+      "id": "semanticsSlicing",
+      "prompt": "Does the expression x + HALF_PI affect the value of n?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "output",
+      "prompt": "What is the return path taken for input x = -1, y = 1?",
+      "type2": "bin",
+      "id2": "output2",
+      "question2": "Does the line x = 0f; execute for this input?"
+    },
+    {
+      "type": "bin",
+      "id": "syntaxW",
+      "prompt": "Does the method catch any exceptions?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    },
+    {
+      "type": "short",
+      "id": "syntaxB",
+      "prompt": "How many different return statements are present in this method?",
+      "type2": "",
+      "id2": "",
+      "question2": ""
+    }
+  ]
+};
+</script>
+
 <script>
   function getCookie(name) {
       const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
@@ -894,31 +1171,53 @@ window.addEventListener('beforeunload', saveToServer);
     let currentQuestionIndex = 0;
 
     function loadQuestion() {
-  const snippetQuestions = questionsPerSnippet[currentSnippet];
-  const question = snippetQuestions[currentQuestionIndex];
+        const snippetQuestions = questionsPerSnippet[currentSnippet];
+        const question = snippetQuestions[currentQuestionIndex];
 
-  const container = document.getElementById('question-area');
-  container.innerHTML = ''; // Clear previous
+        const container = document.getElementById('question-area');
+        container.innerHTML = ''; // Clear previous
 
-  const label = document.createElement('label');
-  label.innerHTML = `<strong>${question.prompt}</strong>`;
-  container.appendChild(label);
+        // First Question
+        const label1 = document.createElement('label');
+        label1.innerHTML = `<strong>${question.prompt}</strong>`;
+        container.appendChild(label1);
 
-  let input;
-  if (question.type === 'open' || question.type === 'short') {
-    input = document.createElement('textarea');
-    input.rows = question.type === 'short' ? 2 : 6;
-  } else if (question.type === 'binary') {
-    input = document.createElement('select');
-    input.innerHTML = `<option value="">--Select--</option><option value="Yes">Yes</option><option value="No">No</option>`;
-  }
+        let input1;
+        if (question.type === 'open' || question.type === 'short') {
+            input1 = document.createElement('textarea');
+            input1.rows = question.type === 'short' ? 2 : 6;
+        } else if (question.type === 'bin') {
+            input1 = document.createElement('select');
+            input1.innerHTML = `<option value="">--Select--</option><option value="Yes">Yes</option><option value="No">No</option>`;
+        }
 
-  input.id = `answer-${currentSnippet}-${question.id}`;
-  input.value = sessionStorage.getItem(input.id) || '';
-  input.oninput = () => sessionStorage.setItem(input.id, input.value);
+        input1.id = `answer-${currentSnippet}-${question.id}`;
+        input1.value = sessionStorage.getItem(input1.id) || '';
+        input1.oninput = () => sessionStorage.setItem(input1.id, input1.value);
+        container.appendChild(input1);
 
-  container.appendChild(input);
-}
+        // Second Question (if exists)
+        if (question.question2 && question.id2 && question.type2) {
+            const label2 = document.createElement('label');
+            label2.innerHTML = `<strong style="display:block; margin-top:15px;">${question.question2}</strong>`;
+            container.appendChild(label2);
+
+            let input2;
+            if (question.type2 === 'open' || question.type2 === 'short') {
+            input2 = document.createElement('textarea');
+            input2.rows = question.type2 === 'short' ? 2 : 6;
+            } else if (question.type2 === 'bin') {
+            input2 = document.createElement('select');
+            input2.innerHTML = `<option value="">--Select--</option><option value="Yes">Yes</option><option value="No">No</option>`;
+            }
+
+            input2.id = `answer-${currentSnippet}-${question.id2}`;
+            input2.value = sessionStorage.getItem(input2.id) || '';
+            input2.oninput = () => sessionStorage.setItem(input2.id, input2.value);
+            container.appendChild(input2);
+        }
+        }
+
 
 function nextQuestion() {
   const questions = questionsPerSnippet[currentSnippet];
