@@ -1112,79 +1112,106 @@ window.addEventListener('beforeunload', saveToServer);
 
 
 function renderQuestion(container, question, snippetNum) {
-  // Create label for the first prompt
+  // First prompt
   const label1 = document.createElement('label');
   label1.innerHTML = `<strong>${question.prompt}</strong>`;
   container.appendChild(label1);
 
+  const key1 = `answer-${snippetNum}-${question.id}`;
   let input1;
+
   if (question.type === 'open' || question.type === 'short') {
     input1 = document.createElement('textarea');
     input1.rows = question.type === 'short' ? 2 : 5;
+    input1.id = key1;
+    input1.value = sessionStorage.getItem(key1) || '';
+    input1.oninput = () => sessionStorage.setItem(key1, input1.value);
+    container.appendChild(input1);
+
   } else if (question.type === 'binary' || question.type === 'bin') {
     input1 = document.createElement('select');
+    input1.id = key1;
     input1.innerHTML = `
       <option value="">--Select--</option>
       <option value="Yes">Yes</option>
       <option value="No">No</option>
     `;
+    input1.value = sessionStorage.getItem(key1) || '';
+    input1.oninput = () => sessionStorage.setItem(key1, input1.value);
+    container.appendChild(input1);
+
+  } else if (question.type === 'scale') {
+    const saved = sessionStorage.getItem(key1) || '';
+    renderLikertScale(container, key1, question.labels, saved);
   }
 
-  input1.id = `answer-${snippetNum}-${question.id}`;
-  input1.value = sessionStorage.getItem(input1.id) || '';
-  input1.oninput = () => sessionStorage.setItem(input1.id, input1.value);
-  container.appendChild(input1);
-
-  // If question2 exists
+  // Optional second part (type2)
   if (question.question2 && question.id2) {
     const label2 = document.createElement('label');
     label2.innerHTML = `<strong style="display:block; margin-top:15px;">${question.question2}</strong>`;
     container.appendChild(label2);
 
+    const key2 = `answer-${snippetNum}-${question.id2}`;
     let input2;
+
     if (question.type2 === 'open' || question.type2 === 'short') {
       input2 = document.createElement('textarea');
       input2.rows = question.type2 === 'short' ? 2 : 5;
+      input2.id = key2;
+      input2.value = sessionStorage.getItem(key2) || '';
+      input2.oninput = () => sessionStorage.setItem(key2, input2.value);
+      container.appendChild(input2);
+
     } else if (question.type2 === 'binary' || question.type2 === 'bin') {
       input2 = document.createElement('select');
+      input2.id = key2;
       input2.innerHTML = `
         <option value="">--Select--</option>
         <option value="Yes">Yes</option>
         <option value="No">No</option>
       `;
-    }
+      input2.value = sessionStorage.getItem(key2) || '';
+      input2.oninput = () => sessionStorage.setItem(key2, input2.value);
+      container.appendChild(input2);
 
-    input2.id = `answer-${snippetNum}-${question.id2}`;
-    input2.value = sessionStorage.getItem(input2.id) || '';
-    input2.oninput = () => sessionStorage.setItem(input2.id, input2.value);
-    container.appendChild(input2);
+    } else if (question.type2 === 'scale') {
+      const saved2 = sessionStorage.getItem(key2) || '';
+      renderLikertScale(container, key2, question.labels2, saved2);
+    }
   }
 }
 
-function renderLikertScale(container, storageKey, labels) {
-  const scaleDiv = document.createElement('div');
-  scaleDiv.classList.add('likert-scale');
 
-  const currentValue = sessionStorage.getItem(storageKey) || '';
 
-  for (let i = 1; i <= 5; i++) {
-    const label = document.createElement('label');
-    label.style.marginRight = '12px';
+
+function renderLikertScale(container, id, labels, saved = '') {
+  const wrapper = document.createElement('div');
+  wrapper.style.display = 'flex';
+  wrapper.style.gap = '10px';
+  wrapper.style.margin = '8px 0 20px 0';
+  wrapper.style.flexWrap = 'wrap';
+
+  labels.forEach(label => {
+    const labelEl = document.createElement('label');
+    labelEl.style.display = 'flex';
+    labelEl.style.alignItems = 'center';
+    labelEl.style.gap = '5px';
 
     const radio = document.createElement('input');
     radio.type = 'radio';
-    radio.name = storageKey;
-    radio.value = i;
-    radio.checked = (String(i) === currentValue);
-    radio.onchange = () => sessionStorage.setItem(storageKey, radio.value);
+    radio.name = id;
+    radio.value = label;
+    radio.checked = saved === label;
+    radio.onchange = () => sessionStorage.setItem(id, radio.value);
 
-    label.appendChild(radio);
-    label.append(` ${labels[i - 1]}`);
-    scaleDiv.appendChild(label);
-  }
+    labelEl.appendChild(radio);
+    labelEl.appendChild(document.createTextNode(label));
+    wrapper.appendChild(labelEl);
+  });
 
-  container.appendChild(scaleDiv);
+  container.appendChild(wrapper);
 }
+
 
 
 
