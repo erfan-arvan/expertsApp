@@ -660,36 +660,7 @@ document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
 
 
 function saveSummary() {
-  const summary = document.getElementById('summary').value.trim();
-  const compSummary = document.getElementById('compSummary').value.trim();
 
-  const keySummary = `summary${currentSnippet}`;
-  const keyCompSummary = `compSummary${currentSnippet}`;
-
-  // Save to sessionStorage
-  sessionStorage.setItem(keySummary, summary);
-  sessionStorage.setItem(keyCompSummary, compSummary);
-
-  // Save to cookies
-  setCookie(keySummary, encodeURIComponent(summary), 30);
-  setCookie(keyCompSummary, encodeURIComponent(compSummary), 30);
-
-  if(areAllSnippetsFilled()){
-    document.getElementById('continueBtn').style.display = 'inline-block';
-    sessionStorage.setItem('phase1Complete', 'true');
-    setCookie('phase1Complete', 'true', 30);
-    
-    //update status bar if needed
-    if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
-
-  }else{
-    document.getElementById('continueBtn').style.display = 'none';
-    sessionStorage.setItem('phase1Complete', 'false');
-    setCookie('phase1Complete', 'false', 30);
-    document.getElementById('link-phase2').classList.add('disabled');
-    document.getElementById('link-phase3').classList.add('disabled');
-    document.getElementById('link-review').classList.add('disabled');
-  }
 }
 
 
@@ -947,18 +918,6 @@ window.onload = function() {
 
 <script>
 function validateCurrentSnippetInputs() {
-    const summary = document.getElementById('summary').value.trim();
-    const compSummary = document.getElementById('compSummary').value.trim();
-
-    let messages = [];
-
-    if (!summary) messages.push(`• Please enter a summary for Snippet ${currentSnippet}.`);
-    if (!compSummary) messages.push(`• Please enter comprehensibility summary for Snippet ${currentSnippet}.`);
-
-    if (messages.length > 0) {
-        showValidationMessage("⚠️ Missing Information:\n\n" + messages.join("\n"));
-        return false;
-    }
 
     return true;
 }
@@ -978,60 +937,6 @@ function validateCurrentSnippetInputs() {
 
 </script>
 
-<script>
-  function openReviewModal() {
-  saveSummary();
-
-  let content = `Name: ${name}\n\n`;
-  for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
-    const key = `summary${i}`;
-    const val = sessionStorage.getItem(key) || decodeURIComponent(getCookie(key) || '');
-    content += `Snippet ${i}:\n${val.trim() || "(empty)"}\n\n`;
-  }
-
-  document.getElementById('review-content').innerText = content;
-  document.getElementById('review-modal').style.display = 'block';
-}
-
-function submitAndCloseModal() {
-  document.getElementById('review-modal').style.display = 'none';
-  submitAll();
-}
-
-</script>
-
-<script>
-  function reviewAndSubmit() {
-  saveSummary();
-
-  let missing = [];
-  let reviewText = `Name: ${name}\n\n`;
-
-  for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
-    const key = `summary${i}`;
-    const text = sessionStorage.getItem(key) || decodeURIComponent(getCookie(key) || '');
-
-    if (!text.trim()) {
-      missing.push(`Snippet ${i}`);
-    } else {
-      reviewText += `Snippet ${i} Summary:\n${text.trim()}\n\n`;
-    }
-  }
-
-  if (missing.length > 0) {
-    showValidationMessage(`Please complete summaries for: ${missing.join(', ')}`);
-    return;
-  }
-
-  document.getElementById('review-content').innerText = reviewText;
-  document.getElementById('review-modal').style.display = 'block';
-}
-
-function showValidationMessage(msg) {
-  document.getElementById('validation-message').innerText = msg;
-  document.getElementById('validation-modal').style.display = 'block';
-}
-</script>
 
 <script>
 function areAllSnippetsFilled() {
