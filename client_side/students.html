@@ -1069,6 +1069,16 @@ window.addEventListener('beforeunload', saveToServer);
   progressText.style.color = '#777';
   progressText.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
   container.appendChild(progressText);
+
+    const totalQuestions = questionsPerSnippet[currentSnippet].length + general_questions.length;
+    const nextBtn = document.getElementById('next-question');
+
+    if (currentQuestionIndex === totalQuestions - 1) {
+    nextBtn.textContent = 'Go to next snippet';
+    } else {
+    nextBtn.textContent = 'Next Question';
+    }
+
 }
 
 
