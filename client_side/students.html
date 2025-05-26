@@ -278,6 +278,29 @@
   <script src="js/data.js"></script>
 
   <script>
+
+const general_questions = [
+  {
+    type: "scale",
+    id: "scaleST",
+    prompt: "How easy or difficult were the tasks you performed for this snippet?",
+    labels: ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
+    type2: "scale",
+    id2: "scaleSM",
+    question2: "How easy or difficult was this snippet to understand?",
+    labels2: ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
+  },
+  {
+    type: "function",
+    id: "function",
+    prompt: "What does this code snippet do? Briefly describe its main functionality.",
+    type2: "",
+    id2: "",
+    question2: ""
+  }
+];
+
+
 const questionsPerSnippet = {
   "1": [
     {
@@ -1068,52 +1091,80 @@ window.addEventListener('beforeunload', saveToServer);
     let currentQuestionIndex = 0;
 
     function loadQuestion() {
-        const snippetQuestions = questionsPerSnippet[currentSnippet];
-        const question = snippetQuestions[currentQuestionIndex];
+  const snippetQuestions = questionsPerSnippet[currentSnippet];
+  const question = snippetQuestions[currentQuestionIndex];
 
-        const container = document.getElementById('question-area');
-        container.innerHTML = ''; // Clear previous
+  const container = document.getElementById('question-area');
+  container.innerHTML = ''; // Clear previous
 
-        // First Question
-        const label1 = document.createElement('label');
-        label1.innerHTML = `<strong>${question.prompt}</strong>`;
-        container.appendChild(label1);
+  renderQuestion(container, question, currentSnippet); // Render specific question
 
-        let input1;
-        if (question.type === 'open' || question.type === 'short') {
-            input1 = document.createElement('textarea');
-            input1.rows = question.type === 'short' ? 2 : 6;
-        } else if (question.type === 'bin') {
-            input1 = document.createElement('select');
-            input1.innerHTML = `<option value="">--Select--</option><option value="Yes">Yes</option><option value="No">No</option>`;
-        }
+  // If it's the last snippet-specific question, append general questions
+  if (currentQuestionIndex === snippetQuestions.length - 1) {
+    for (const q of general_questions) {
+      // First part
+      const label1 = document.createElement('label');
+      label1.innerHTML = `<strong>${q.prompt}</strong>`;
+      container.appendChild(label1);
 
-        input1.id = `answer-${currentSnippet}-${question.id}`;
+      if (q.type === 'scale') {
+        renderLikertScale(container, `answer-${currentSnippet}-${q.id}`, q.labels);
+      } else if (q.type === 'function') {
+        const input1 = document.createElement('textarea');
+        input1.rows = 5;
+        input1.id = `answer-${currentSnippet}-${q.id}`;
         input1.value = sessionStorage.getItem(input1.id) || '';
         input1.oninput = () => sessionStorage.setItem(input1.id, input1.value);
         container.appendChild(input1);
+      }
 
-        // Second Question (if exists)
-        if (question.question2 && question.id2 && question.type2) {
-            const label2 = document.createElement('label');
-            label2.innerHTML = `<strong style="display:block; margin-top:15px;">${question.question2}</strong>`;
-            container.appendChild(label2);
+      // Second part (if any)
+      if (q.type2 && q.id2 && q.question2) {
+        const label2 = document.createElement('label');
+        label2.innerHTML = `<strong style="display:block; margin-top:15px;">${q.question2}</strong>`;
+        container.appendChild(label2);
 
-            let input2;
-            if (question.type2 === 'open' || question.type2 === 'short') {
-            input2 = document.createElement('textarea');
-            input2.rows = question.type2 === 'short' ? 2 : 6;
-            } else if (question.type2 === 'bin') {
-            input2 = document.createElement('select');
-            input2.innerHTML = `<option value="">--Select--</option><option value="Yes">Yes</option><option value="No">No</option>`;
-            }
-
-            input2.id = `answer-${currentSnippet}-${question.id2}`;
-            input2.value = sessionStorage.getItem(input2.id) || '';
-            input2.oninput = () => sessionStorage.setItem(input2.id, input2.value);
-            container.appendChild(input2);
+        if (q.type2 === 'scale') {
+          renderLikertScale(container, `answer-${currentSnippet}-${q.id2}`, q.labels2);
+        } else if (q.type2 === 'function') {
+          const input2 = document.createElement('textarea');
+          input2.rows = 5;
+          input2.id = `answer-${currentSnippet}-${q.id2}`;
+          input2.value = sessionStorage.getItem(input2.id) || '';
+          input2.oninput = () => sessionStorage.setItem(input2.id, input2.value);
+          container.appendChild(input2);
         }
-        }
+      }
+    }
+  }
+}
+
+
+function renderLikertScale(container, storageKey, labels) {
+  const scaleDiv = document.createElement('div');
+  scaleDiv.classList.add('likert-scale');
+
+  const currentValue = sessionStorage.getItem(storageKey) || '';
+
+  for (let i = 1; i <= 5; i++) {
+    const label = document.createElement('label');
+    label.style.marginRight = '12px';
+
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = storageKey;
+    radio.value = i;
+    radio.checked = (String(i) === currentValue);
+    radio.onchange = () => sessionStorage.setItem(storageKey, radio.value);
+
+    label.appendChild(radio);
+    label.append(` ${labels[i - 1]}`);
+    scaleDiv.appendChild(label);
+  }
+
+  container.appendChild(scaleDiv);
+}
+
 
 
 function nextQuestion() {
