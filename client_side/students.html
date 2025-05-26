@@ -265,13 +265,13 @@
         </div>
         
   
-      <div class="buttons">
+      <!-- <div class="buttons">
           <button id="prev" onclick="prevSnippet()">Previous</button>
           <button id="next" onclick="nextSnippet()">Next</button>
           <p></p><button id="continueBtn" onclick="goToPhase2()" style="display: none;margin-top: 10px;">
             Continue to Phase 2
           </button>        
-      </div>
+      </div> -->
     </div>
   </div>
   
@@ -913,19 +913,19 @@ window.onload = function() {
 
 
     // Unlock and highlight status bar
-    if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
-    if (isComplete('phase2Complete')) document.getElementById('link-phase3').classList.remove('disabled');
-    if (isComplete('phase3Complete')) document.getElementById('link-review').classList.remove('disabled');
+    // if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
+    // if (isComplete('phase2Complete')) document.getElementById('link-phase3').classList.remove('disabled');
+    // if (isComplete('phase3Complete')) document.getElementById('link-review').classList.remove('disabled');
 
-    const current = window.location.pathname.split('/').pop();
-    if (current.includes('phase1')) document.getElementById('link-phase1').classList.add('active');
-    else if (current.includes('phase2')) document.getElementById('link-phase2').classList.add('active');
-    else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
-    else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
+    // const current = window.location.pathname.split('/').pop();
+    // if (current.includes('phase1')) document.getElementById('link-phase1').classList.add('active');
+    // else if (current.includes('phase2')) document.getElementById('link-phase2').classList.add('active');
+    // else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
+    // else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
 
-    if (sessionStorage.getItem('phase1Complete') === 'true' || getCookie('phase1Complete') === 'true') {
-        document.getElementById('continueBtn').style.display = 'inline-block';
-    }
+    // if (sessionStorage.getItem('phase1Complete') === 'true' || getCookie('phase1Complete') === 'true') {
+    //     document.getElementById('continueBtn').style.display = 'inline-block';
+    // }
 
     setInterval(() => {
       try {
@@ -1041,46 +1041,46 @@ function logout() {
 
 <script>
 function saveToServer() {
-  const name = sessionStorage.getItem('participantName') || getCookie('participantName') || 'Anonymous';
-  const username = getCookie('username') || 'anonymous';
+//   const name = sessionStorage.getItem('participantName') || getCookie('participantName') || 'Anonymous';
+//   const username = getCookie('username') || 'anonymous';
 
-  // Phase 1 data
-  const phase1 = {};
-  for (let i = 1; i <= 8; i++) {
-    const summary = sessionStorage.getItem(`summary${i}`) || getCookie(`summary${i}`) || '';
-    const comp = sessionStorage.getItem(`compSummary${i}`) || getCookie(`compSummary${i}`) || '';
-    phase1[`snippet${i}`] = { summary, comprehensibility: comp };
-  }
+//   // Phase 1 data
+//   const phase1 = {};
+//   for (let i = 1; i <= 8; i++) {
+//     const summary = sessionStorage.getItem(`summary${i}`) || getCookie(`summary${i}`) || '';
+//     const comp = sessionStorage.getItem(`compSummary${i}`) || getCookie(`compSummary${i}`) || '';
+//     phase1[`snippet${i}`] = { summary, comprehensibility: comp };
+//   }
 
-  // Phase 2 & 3 data
-  let phase2 = {}, phase3 = {};
-  try {
-    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getCookie('phase3_ranking') || '{}');
-    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getCookie('phase3_reasoning') || '{}');
-  } catch (e) {
-    console.warn("Error parsing phase2 or phase3 data", e);
-  }
+//   // Phase 2 & 3 data
+//   let phase2 = {}, phase3 = {};
+//   try {
+//     phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getCookie('phase3_ranking') || '{}');
+//     phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getCookie('phase3_reasoning') || '{}');
+//   } catch (e) {
+//     console.warn("Error parsing phase2 or phase3 data", e);
+//   }
 
-  // Completion flags and theme
-  const flags = {
-    phase1Complete: sessionStorage.getItem('phase1Complete') || getCookie('phase1Complete') || 'false',
-    phase2Complete: sessionStorage.getItem('phase2Complete') || getCookie('phase2Complete') || 'false',
-    phase3Complete: sessionStorage.getItem('phase3Complete') || getCookie('phase3Complete') || 'false',
-    codeTheme: localStorage.getItem('codeTheme') || 'light',
-    submitted: '0',
-  };
+//   // Completion flags and theme
+//   const flags = {
+//     phase1Complete: sessionStorage.getItem('phase1Complete') || getCookie('phase1Complete') || 'false',
+//     phase2Complete: sessionStorage.getItem('phase2Complete') || getCookie('phase2Complete') || 'false',
+//     phase3Complete: sessionStorage.getItem('phase3Complete') || getCookie('phase3Complete') || 'false',
+//     codeTheme: localStorage.getItem('codeTheme') || 'light',
+//     submitted: '0',
+//   };
 
-  const payload = {
-    username,
-    participantName: name,
-    phase1,
-    phase2,
-    phase3,
-    ...flags
-  };
+//   const payload = {
+//     username,
+//     participantName: name,
+//     phase1,
+//     phase2,
+//     phase3,
+//     ...flags
+//   };
 
-  const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-  navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+//   const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+//   navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
 }
 
 window.addEventListener('beforeunload', saveToServer);
