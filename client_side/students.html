@@ -1049,6 +1049,15 @@ window.addEventListener('beforeunload', saveToServer);
 </script>
 
 <script>
+
+
+  //save answer
+
+  function saveAnswer(snippetId, questionId, value) {
+    const key = `answer-${snippetId}-${questionId}`;
+    sessionStorage.setItem(key, value);
+    }
+
     let currentQuestionIndex = 0;
 
     function loadQuestion() {
@@ -1089,71 +1098,17 @@ function renderQuestion(container, question, snippetNum) {
   container.appendChild(label1);
 
   const key1 = `answer-${snippetNum}-${question.id}`;
-  let input1;
+  const saved1 = sessionStorage.getItem(key1) || '';
 
   if (question.type === 'open' || question.type === 'short') {
-    input1 = document.createElement('textarea');
+    const input1 = document.createElement('textarea');
     input1.rows = question.type === 'short' ? 2 : 5;
     input1.id = key1;
-    input1.value = sessionStorage.getItem(key1) || '';
-    input1.oninput = () => sessionStorage.setItem(key1, input1.value);
+    input1.value = saved1;
+    input1.oninput = () => saveAnswer(snippetNum, question.id, input1.value);
     container.appendChild(input1);
 
-} else if (question.type === 'binary' || question.type === 'bin') {
-  const saved = sessionStorage.getItem(key1) || '';
-
-  const radioWrapper = document.createElement('div');
-  radioWrapper.style.display = 'flex';
-  radioWrapper.style.flexDirection = 'column';
-  radioWrapper.style.gap = '8px';
-  radioWrapper.style.margin = '10px 0';
-
-  ['Yes', 'No'].forEach(choice => {
-    const label = document.createElement('label');
-    label.style.display = 'flex';
-    label.style.alignItems = 'center';
-    label.style.gap = '6px';
-
-    const radio = document.createElement('input');
-    radio.type = 'radio';
-    radio.name = key1;
-    radio.value = choice;
-
-    if (saved === choice) {
-      radio.checked = true;
-    }
-
-    radio.onchange = () => sessionStorage.setItem(key1, choice);
-
-    label.appendChild(radio);
-    label.appendChild(document.createTextNode(choice));
-    radioWrapper.appendChild(label);
-  });
-
-  container.appendChild(radioWrapper);
-} else if (question.type === 'scale') {
-    const saved = sessionStorage.getItem(key1) || '';
-    renderLikertScale(container, key1, question.labels, saved);
-  }
-
-  // Optional second part (type2)
-  if (question.question2 && question.id2) {
-  const label2 = document.createElement('label');
-  label2.innerHTML = `<strong style="display:block; margin-top:15px;">${question.question2}</strong>`;
-  container.appendChild(label2);
-
-  const key2 = `answer-${snippetNum}-${question.id2}`;
-  const saved2 = sessionStorage.getItem(key2) || '';
-
-  if (question.type2 === 'open' || question.type2 === 'short') {
-    const input2 = document.createElement('textarea');
-    input2.rows = question.type2 === 'short' ? 2 : 5;
-    input2.id = key2;
-    input2.value = saved2;
-    input2.oninput = () => sessionStorage.setItem(key2, input2.value);
-    container.appendChild(input2);
-
-  } else if (question.type2 === 'binary' || question.type2 === 'bin') {
+  } else if (question.type === 'binary' || question.type === 'bin') {
     const radioWrapper = document.createElement('div');
     radioWrapper.style.display = 'flex';
     radioWrapper.style.flexDirection = 'column';
@@ -1168,13 +1123,13 @@ function renderQuestion(container, question, snippetNum) {
 
       const radio = document.createElement('input');
       radio.type = 'radio';
-      radio.name = key2;
+      radio.name = key1;
       radio.value = choice;
-      if (saved2 === choice) {
+      if (saved1 === choice) {
         radio.checked = true;
       }
 
-      radio.onchange = () => sessionStorage.setItem(key2, choice);
+      radio.onchange = () => saveAnswer(snippetNum, question.id, choice);
 
       label.appendChild(radio);
       label.appendChild(document.createTextNode(choice));
@@ -1183,12 +1138,63 @@ function renderQuestion(container, question, snippetNum) {
 
     container.appendChild(radioWrapper);
 
-  } else if (question.type2 === 'scale') {
-    renderLikertScale(container, key2, question.labels2, saved2);
+  } else if (question.type === 'scale') {
+    renderLikertScale(container, key1, question.labels, saved1);
+  }
+
+  // Optional second question
+  if (question.question2 && question.id2) {
+    const label2 = document.createElement('label');
+    label2.innerHTML = `<strong style="display:block; margin-top:15px;">${question.question2}</strong>`;
+    container.appendChild(label2);
+
+    const key2 = `answer-${snippetNum}-${question.id2}`;
+    const saved2 = sessionStorage.getItem(key2) || '';
+
+    if (question.type2 === 'open' || question.type2 === 'short') {
+      const input2 = document.createElement('textarea');
+      input2.rows = question.type2 === 'short' ? 2 : 5;
+      input2.id = key2;
+      input2.value = saved2;
+      input2.oninput = () => saveAnswer(snippetNum, question.id2, input2.value);
+      container.appendChild(input2);
+
+    } else if (question.type2 === 'binary' || question.type2 === 'bin') {
+      const radioWrapper = document.createElement('div');
+      radioWrapper.style.display = 'flex';
+      radioWrapper.style.flexDirection = 'column';
+      radioWrapper.style.gap = '8px';
+      radioWrapper.style.margin = '10px 0';
+
+      ['Yes', 'No'].forEach(choice => {
+        const label = document.createElement('label');
+        label.style.display = 'flex';
+        label.style.alignItems = 'center';
+        label.style.gap = '6px';
+
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = key2;
+        radio.value = choice;
+        if (saved2 === choice) {
+          radio.checked = true;
+        }
+
+        radio.onchange = () => saveAnswer(snippetNum, question.id2, choice);
+
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(choice));
+        radioWrapper.appendChild(label);
+      });
+
+      container.appendChild(radioWrapper);
+
+    } else if (question.type2 === 'scale') {
+      renderLikertScale(container, key2, question.labels2, saved2);
+    }
   }
 }
 
-}
 
 
 
