@@ -1,4 +1,4 @@
-const snippets = [
+const snippetsOriginal = [
     {
       id: 1,
       title: "Snippet 1",
