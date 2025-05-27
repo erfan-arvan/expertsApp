@@ -1213,6 +1213,10 @@ function renderLikertScale(container, id, labels, saved = '') {
 
 
 function nextQuestion() {
+    if (!isCurrentQuestionAnswered()) {
+    alert("Please answer the current question before proceeding.");
+    return;
+  }
   recordQuestionTime(currentSnippet, currentQuestionIndex);
   const total = allQuestions.length;
 
@@ -1391,6 +1395,30 @@ function showAnswerReview() {
   document.getElementById('answer-review-modal').style.display = 'block';
 }
 
+
+</script>
+
+
+<script>
+    function isCurrentQuestionAnswered() {
+  const snippetId = currentSnippet;
+  const question = allQuestions[currentQuestionIndex];
+
+  // First part of the question
+  const key1 = `answer-${snippetId}-${question.id}`;
+  const answer1 = sessionStorage.getItem(key1) || '';
+
+  if (!answer1.trim()) return false;
+
+  // If second part exists, validate it too
+  if (question.id2) {
+    const key2 = `answer-${snippetId}-${question.id2}`;
+    const answer2 = sessionStorage.getItem(key2) || '';
+    if (!answer2.trim()) return false;
+  }
+
+  return true; // Both parts answered (if applicable)
+}
 
 </script>
     
