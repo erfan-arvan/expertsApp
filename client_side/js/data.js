@@ -207,4 +207,299 @@ const snippets = [
 
 
 
-    
+    const general_questions = [
+        {
+          type: "scale",
+          id: "scaleST",
+          prompt: "How easy or difficult were the tasks you performed for this snippet?",
+          labels: ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
+          type2: "scale",
+          id2: "scaleSM",
+          question2: "How easy or difficult was this snippet to understand?",
+          labels2: ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
+        },
+        {
+          type: "open",
+          id: "function",
+          prompt: "What does this code snippet do? Briefly describe its main functionality.",
+          type2: "",
+          id2: "",
+          question2: ""
+        }
+      ];
+      
+      
+      const questionsPerSnippet = {
+        "1": [
+          {
+            "type": "open",
+            "id": "semanticsSlicing",
+            "prompt": "Does the character at position i (i.e., name.charAt(i)) affect whether the loop continues to the next iteration?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "output",
+            "prompt": "What is the return value of the method for the input \"abc123___\"?",
+            "type2": "short",
+            "id2": "output2",
+            "question2": "What is the value of i immediately after the for loop completes?"
+          },
+          {
+            "type": "bin",
+            "id": "syntaxW",
+            "prompt": "Is subtraction (-) used in an expression?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "syntaxB",
+            "prompt": "How many exit points does the for loop have?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }
+        ],
+        "2": [
+          {
+            "type": "open",
+            "id": "semanticsSlicing",
+            "prompt": "Does the result of isFilesystemPath(uri) affect whether uri.getScheme() is evaluated?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "output",
+            "prompt": "What is the return value of the method for a URI with scheme = \"jar\" and isFilesystemPath(uri) = false?",
+            "type2": "bin",
+            "id2": "output2",
+            "question2": "Is the method uri.getScheme() called for this input?"
+          },
+          {
+            "type": "bin",
+            "id": "syntaxW",
+            "prompt": "Are all local variables immediately initialized as part of their declaration?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "syntaxB",
+            "prompt": "How many case labels are in the switch statement?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }
+        ],
+        "3": [
+          {
+            "type": "open",
+            "id": "semanticsSlicing",
+            "prompt": "Does the result of field.isSynthetic() affect the value of modifiers?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "output",
+            "prompt": "What is the return value of the method for input type = -1?",
+            "type2": "bin",
+            "id2": "output2",
+            "question2": "Is the for loop over getDeclaredFields() entered for this input?"
+          },
+          {
+            "type": "bin",
+            "id": "syntaxW",
+            "prompt": "Is there a top-level loop that appears after some code containing a return statement?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "syntaxB",
+            "prompt": "How many if conditions must be satisfied before field.getShort(null) == type is evaluated?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }
+        ],
+        "4": [
+          {
+            "type": "open",
+            "id": "semanticsSlicing",
+            "prompt": "Does the result of searchStr.length() affect whether str == null?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "output",
+            "prompt": "What is the return value of the method for input str = \"abcdefg\", searchStr = \"xyz\", startPos = 0?",
+            "type2": "short",
+            "id2": "output2",
+            "question2": "How many times is the loop body executed?"
+          },
+          {
+            "type": "bin",
+            "id": "syntaxW",
+            "prompt": "Are all local variables immediately initialized as part of their declaration?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "syntaxB",
+            "prompt": "How many local variables are declared before the for loop begins?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }
+        ],
+        "5": [
+          {
+            "type": "open",
+            "id": "semanticsSlicing",
+            "prompt": "Does the value of root affect whether the method returns true?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "output",
+            "prompt": "What is the return value of the method if root refers to a path that does not exist on disk?",
+            "type2": "short",
+            "id2": "output2",
+            "question2": "Is Files.walkFileTree(...) ever called?"
+          },
+          {
+            "type": "bin",
+            "id": "syntaxW",
+            "prompt": "Is the type of the second method parameter int?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "syntaxB",
+            "prompt": "How many method calls occur inside the visitFile method?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }
+        ],
+        "6": [
+          {
+            "type": "open",
+            "id": "semanticsSlicing",
+            "prompt": "Does setting i = 0 affect whether the exception is thrown at the end?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "output",
+            "prompt": "What value is returned by the method for input \"ABCDEF\"?",
+            "type2": "bin",
+            "id2": "output2",
+            "question2": "Is encodedLengthGeneral(...) called for this input?"
+          },
+          {
+            "type": "bin",
+            "id": "syntaxW",
+            "prompt": "Is subtraction (-) used in an expression?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "syntaxB",
+            "prompt": "How many loops appear in this method?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }
+        ],
+        "7": [
+          {
+            "type": "open",
+            "id": "semanticsSlicing",
+            "prompt": "Does the value of a affect whether r1 and r2 are finite values or NaN?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "output",
+            "prompt": "What is the return value of the method for input a = 1, b = -5, c = 6?",
+            "type2": "short",
+            "id2": "output2",
+            "question2": "After the swap check (if (r1 > r2)), what is the relationship between r1 and r2?"
+          },
+          {
+            "type": "bin",
+            "id": "syntaxW",
+            "prompt": "Does the method use an explicit type cast?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "syntaxB",
+            "prompt": "How many if statements may cause early return from this method?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }
+        ],
+        "8": [
+          {
+            "type": "open",
+            "id": "semanticsSlicing",
+            "prompt": "Does the expression x + HALF_PI affect the value of n?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "output",
+            "prompt": "What is the return path taken for input x = -1, y = 1?",
+            "type2": "bin",
+            "id2": "output2",
+            "question2": "Does the line x = 0f; execute for this input?"
+          },
+          {
+            "type": "bin",
+            "id": "syntaxW",
+            "prompt": "Does the method catch any exceptions?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          },
+          {
+            "type": "short",
+            "id": "syntaxB",
+            "prompt": "How many different return statements are present in this method?",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }
+        ]
+      };
