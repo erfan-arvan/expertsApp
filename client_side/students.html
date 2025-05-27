@@ -787,6 +787,8 @@ function resumeStudy() {
 
 
 window.onload = function () {
+    syncAnswersFromCookies();
+
     console.log("📦 Unload was triggered at:", new Date(parseInt(localStorage.getItem('lastUnloadTriggeredAt') || 0)).toLocaleTimeString());
 
     console.log("🚀 Page load");
@@ -841,7 +843,6 @@ window.onload = function () {
 
   }
 
-  syncAnswersFromCookies();
 
   loadSnippet(currentSnippet);
 
