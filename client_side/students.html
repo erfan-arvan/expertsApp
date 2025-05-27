@@ -1159,7 +1159,6 @@ function renderLikertScale(container, id, labels, saved = '') {
 
 
 
-
 function nextQuestion() {
   recordQuestionTime(currentSnippet, currentQuestionIndex);
   const total = allQuestions.length;
@@ -1178,12 +1177,6 @@ function nextQuestion() {
   console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex+1} at ${new Date(questionStartTime).toLocaleTimeString()}`);
 }
 
-
-  // Start timing the new question
-  questionStartTime = Date.now();
-  localStorage.setItem('currentQuestionStartTime', questionStartTime);
-  console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex+1} at ${new Date(questionStartTime).toLocaleTimeString()}`);
-}
 
 function prevQuestion() {
   recordQuestionTime(currentSnippet, currentQuestionIndex);
