@@ -1328,18 +1328,19 @@ window.addEventListener('beforeunload', () => {
   const now = Date.now();
 
   if (pausedAt) {
-    // If user was paused, keep pausedAt value
+    // If the user is paused, do NOT add time, just save pausedAt
     localStorage.setItem('pausedAt', pausedAt);
   } else {
-    // ⚠️ Only update totalPausedTime once per active session
+    // If the user is ACTIVE, calculate the time since last resume and add it to pausedTotal
     const lastResume = parseInt(localStorage.getItem('lastResumeTime') || startTime, 10);
-    const additionalPause = now - lastResume;
     const currentPaused = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
-    const newPaused = currentPaused + additionalPause;
+    const extraTime = now - lastResume;
+
+    const newPaused = currentPaused + extraTime;
 
     localStorage.setItem('pausedTotal', newPaused);
     localStorage.setItem('lastResumeTime', now);
-    localStorage.removeItem('pausedAt');
+    localStorage.removeItem('pausedAt'); // user is not paused
   }
 
   localStorage.setItem('startTime', startTime);
