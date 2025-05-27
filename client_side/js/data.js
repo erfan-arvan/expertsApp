@@ -504,12 +504,13 @@ const snippetsOriginal = [
         ]
       };
 
-      const StartingQuestions = {
+      const StartingQuestions = [{
         "type": "none",
         "id": "Read",
         "prompt": "Please read the code snippet and form an overall impression. This should take no more than 2 minutes. Click 'Next' when you feel ready to answer the questions. (You will still see the snippet while answering the questions.)",
         "type2": "",
         "id2": "",
         "question2": ""
-      };
+      }];
+      
       
