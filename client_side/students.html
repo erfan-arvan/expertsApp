@@ -786,15 +786,15 @@ function resumeStudy() {
 
 
 window.onload = function () {
-    syncAnswersFromCookies();
+    //syncAnswersFromCookies();
 
     console.log("📦 Unload was triggered at:", new Date(parseInt(localStorage.getItem('lastUnloadTriggeredAt') || 0)).toLocaleTimeString());
 
     console.log("🚀 Page load");
-console.log("Loaded startTime:", localStorage.getItem('startTime'));
-console.log("Loaded pausedTotal:", localStorage.getItem('pausedTotal'));
-console.log("Loaded pausedAt:", localStorage.getItem('pausedAt'));
-console.log("Loaded lastResumeTime:", localStorage.getItem('lastResumeTime'));
+    console.log("Loaded startTime:", localStorage.getItem('startTime'));
+    console.log("Loaded pausedTotal:", localStorage.getItem('pausedTotal'));
+    console.log("Loaded pausedAt:", localStorage.getItem('pausedAt'));
+    console.log("Loaded lastResumeTime:", localStorage.getItem('lastResumeTime'));
 
   applyTheme();
 
