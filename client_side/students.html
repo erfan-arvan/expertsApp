@@ -1271,7 +1271,10 @@ function saveAnswer(snippetId, questionId, value) {
 let currentQuestionIndex = 0;
 
 function recordQuestionTime(snippetId, questionIndex) {
-  if (questionStartTime === null) return;
+  if (questionStartTime === null) {
+    console.log(`[⏱️ Debug] Skipping time record: no start time for Snippet ${snippetId}, Question ${questionIndex}`);
+    return;
+  }
 
   const elapsedMs = Date.now() - questionStartTime;
   const elapsedSec = Math.round(elapsedMs / 1000);
@@ -1286,6 +1289,8 @@ function recordQuestionTime(snippetId, questionIndex) {
   // Optional: also store in cookies
   const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
   document.cookie = `${key}=${total}; expires=${expires}; path=/`;
+
+  console.log(`[⏱️ Debug] Recorded time for ${key}: +${elapsedSec}s → total ${total}s`);
 
   questionStartTime = null;
 }
