@@ -1173,8 +1173,8 @@ function nextQuestion() {
     loadQuestion();
   } else if (currentSnippet < TOTAL_SNIPPETS) {
     currentSnippet++;
-    loadSnippet(currentSnippet);  // ⬅️ call first
-    currentQuestionIndex = 0;     // ⬅️ reset AFTER load
+    currentQuestionIndex = 0;
+    loadSnippet(currentSnippet); 
   }
 
   questionStartTime = Date.now();
