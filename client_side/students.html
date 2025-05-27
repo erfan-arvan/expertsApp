@@ -796,11 +796,26 @@ function submitAll() {
 
 
 <!-- Start Modal -->
-<div id="start-modal">
+<div id="start-modal" style="
+  display: none;  /* or 'none' by default, set to 'block' on load */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  display: none;  /* important: toggle this from JS */
+  justify-content: center;
+  align-items: center;
+">
+  <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
     <h2>Ready to Begin?</h2>
     <p>Click the button below to start the study. A timer will begin.</p>
     <button onclick="startStudy()">Start</button>
   </div>
+</div>
+
   
   <!-- Pause Modal -->
   <div id="pause-modal" style="display:none;">
@@ -978,13 +993,14 @@ window.onload = function() {
         document.querySelector('#timer-wrapper button').textContent = 'Show';
     }
 
-    // Show start modal only if not started
-    if (!localStorage.getItem('studyStarted')) {
-        document.getElementById('start-modal').style.display = 'block';
+    const started = localStorage.getItem('studyStarted');
+    if (!started) {
+    document.getElementById('start-modal').style.display = 'flex';
     } else {
-        startTime = parseInt(localStorage.getItem('startTime'));
-        totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0');
-        startTimer();
+    // Resume ongoing timer
+    startTime = parseInt(localStorage.getItem('startTime'));
+    totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0');
+    startTimer();
     }
     //For later: localStorage.removeItem('snippetTimerStart');
 
