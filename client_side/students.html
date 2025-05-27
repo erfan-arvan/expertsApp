@@ -722,7 +722,6 @@ function startTimer() {
 
   timerInterval = setInterval(() => {
     const elapsed = Math.floor((Date.now() - startTime - totalPausedTime) / 1000);
-    console.log("⏱️ [Debug] startTime =", startTime, "pausedTotal =", totalPausedTime, "→ elapsed =", elapsed);
     const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
     const secs = String(elapsed % 60).padStart(2, '0');
     timerEl.textContent = `⏱️ ${mins}:${secs}`;
