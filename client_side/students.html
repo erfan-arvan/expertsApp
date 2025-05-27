@@ -797,16 +797,15 @@ function resumeStudy() {
 
 
 window.onload = function () {
-    setTimeout(syncAnswersFromCookies, 100);
-    syncAnswersFromCookies();
+  setTimeout(syncAnswersFromCookies, 100);
+  syncAnswersFromCookies();
 
-    console.log("📦 Unload was triggered at:", new Date(parseInt(localStorage.getItem('lastUnloadTriggeredAt') || 0)).toLocaleTimeString());
-
-    console.log("🚀 Page load");
-    console.log("Loaded startTime:", localStorage.getItem('startTime'));
-    console.log("Loaded pausedTotal:", localStorage.getItem('pausedTotal'));
-    console.log("Loaded pausedAt:", localStorage.getItem('pausedAt'));
-    console.log("Loaded lastResumeTime:", localStorage.getItem('lastResumeTime'));
+  console.log("📦 Unload was triggered at:", new Date(parseInt(localStorage.getItem('lastUnloadTriggeredAt') || 0)).toLocaleTimeString());
+  console.log("🚀 Page load");
+  console.log("Loaded startTime:", localStorage.getItem('startTime'));
+  console.log("Loaded pausedTotal:", localStorage.getItem('pausedTotal'));
+  console.log("Loaded pausedAt:", localStorage.getItem('pausedAt'));
+  console.log("Loaded lastResumeTime:", localStorage.getItem('lastResumeTime'));
 
   applyTheme();
 
@@ -817,34 +816,41 @@ window.onload = function () {
   }
 
   const started = localStorage.getItem('studyStarted') === 'true';
-if (!started) {
-  document.getElementById('start-modal').style.display = 'flex';
-} else {
-  startTime = parseInt(localStorage.getItem('startTime') || `${Date.now()}`, 10);
-  totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
-  pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
+  if (!started) {
+    document.getElementById('start-modal').style.display = 'flex';
+  } else {
+    startTime = parseInt(localStorage.getItem('startTime') || `${Date.now()}`, 10);
+    totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
+    pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
 
-  if (!isNaN(pausedAt) && pausedAt > 0) {
-    // Calculate how long the page was closed
-    const resumeDelta = Date.now() - pausedAt;
-    totalPausedTime += resumeDelta;
-    pausedAt = null;
+    if (!isNaN(pausedAt) && pausedAt > 0) {
+      const resumeDelta = Date.now() - pausedAt;
+      totalPausedTime += resumeDelta;
+      pausedAt = null;
 
-    // Update localStorage
-    localStorage.setItem('pausedTotal', totalPausedTime);
-    localStorage.removeItem('pausedAt');
-    localStorage.setItem('lastResumeTime', Date.now());
+      localStorage.setItem('pausedTotal', totalPausedTime);
+      localStorage.removeItem('pausedAt');
+      localStorage.setItem('lastResumeTime', Date.now());
+    }
+
+    startTimer();
+
+    document.getElementById('pause-btn').style.display = 'inline';
+    document.getElementById('resume-btn').style.display = 'none';
   }
 
-  // Apply state and start timer
-  startTimer();
+  loadSnippet(currentSnippet);
 
-  document.getElementById('pause-btn').style.display = 'inline';
-  document.getElementById('resume-btn').style.display = 'none';
-}
+  setInterval(() => {
+    try {
+      saveToServer();
+      console.log("[Auto-Save] Progress saved to server.");
+    } catch (e) {
+      console.warn("[Auto-Save] Failed to save:", e);
+    }
+  }, 120000);
+};
 
-
-  }
 
 
   loadSnippet(currentSnippet);
