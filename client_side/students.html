@@ -1317,21 +1317,26 @@ window.addEventListener('beforeunload', () => {
   if (!startTime) return;
 
   const now = Date.now();
+  const lastResume = parseInt(localStorage.getItem('lastResumeTime') || startTime, 10);
+  const currentPausedTotal = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
+  const delta = now - lastResume;
 
-  if (!pausedAt) {
-    // Auto-pause the study
-    pausedAt = now;
-    localStorage.setItem('pausedAt', pausedAt);
+  const newPausedTotal = currentPausedTotal + delta;
 
-    const lastResume = parseInt(localStorage.getItem('lastResumeTime') || startTime, 10);
-    const pausedTotal = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
-    const delta = now - lastResume;
-    localStorage.setItem('pausedTotal', pausedTotal + delta);
-    localStorage.setItem('lastResumeTime', now);
-  }
+  // 🔥 Do the same things as pauseStudy()
+  localStorage.setItem('pausedAt', now);
+  localStorage.setItem('pausedTotal', newPausedTotal);
+  localStorage.setItem('lastResumeTime', now);
+  pausedAt = now;
+  totalPausedTime = newPausedTotal;
 
   localStorage.setItem('startTime', startTime);
+
+  console.log("🧠 Simulated pause on unload:", {
+    now, lastResume, currentPausedTotal, delta, newPausedTotal
+  });
 });
+
 
 
 
