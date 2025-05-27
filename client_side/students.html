@@ -347,7 +347,13 @@ console.log("snippetsOriginal:", snippetsOriginal);
 
 
 // Create shuffled snippets using 1-based indices
-const snippets = snippetOrder.map(i => snippetsOriginal[i - 1]);
+const snippets = snippetOrder.map((i, idx) => {
+  const s = { ...snippetsOriginal[i - 1] }; // Clone
+  s.id = idx + 1;                           // New display ID
+  s.title = `Snippet ${idx + 1}`;          // Updated title
+  s.originalId = i;                        // 🔥 Save original ID
+  return s;
+});
 
 // Assign new display ids and titles
 snippets.forEach((snippet, idx) => {
@@ -877,10 +883,16 @@ function getOrCreateQuestionOrder(snippetId, numQuestions) {
 
 const questionsPerSnippet = {};
 
-for (const [snippetId, originalQs] of Object.entries(questionsPerSnippetOriginal)) {
-  const order = getOrCreateQuestionOrder(snippetId, originalQs.length);
-  questionsPerSnippet[snippetId] = order.map(i => structuredClone(originalQs[i - 1]));
-}
+// `snippets` is already randomized, and each has `.originalId`
+snippets.forEach((snippet, newIndex) => {
+  const newSnippetId = newIndex + 1; // 1-based for current session
+  const originalId = snippet.originalId; // You must store this during shuffling
+
+  const originalQs = questionsPerSnippetOriginal[String(originalId)];
+  const order = getOrCreateQuestionOrder(newSnippetId, originalQs.length);
+  questionsPerSnippet[newSnippetId] = order.map(i => structuredClone(originalQs[i]));
+});
+
 
 </script>
 <script>
