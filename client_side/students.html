@@ -954,19 +954,20 @@ function startTimer() {
   startTime = parseInt(localStorage.getItem('startTime') || '0');
   if (!startTime) {
     startTime = Date.now();
-    localStorage.setItem('snippetTimerStart', startTime);
-  } else {
-    startTime = parseInt(startTime);
+    localStorage.setItem('startTime', startTime);
   }
 
-  // Update the timer every second
-  setInterval(() => {
-    const elapsed = Math.floor((Date.now() - startTime) / 1000); // in seconds
+  // Clear any existing interval before starting a new one
+  if (timerInterval) clearInterval(timerInterval);
+
+  timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startTime - totalPausedTime) / 1000);
     const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
     const secs = String(elapsed % 60).padStart(2, '0');
     timerEl.textContent = `⏱️ ${mins}:${secs}`;
   }, 1000);
 }
+
 
 function startStudy() {
   startTime = Date.now();
