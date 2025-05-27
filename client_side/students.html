@@ -565,6 +565,9 @@ function submitAll() {
 </div>
 
   
+<script>
+    let allQuestions = [];
+</script>
 
 <script>
   function showSubmissionModal(message) {
@@ -980,8 +983,6 @@ function recordQuestionTime(snippetId, questionIndex) {
   // Debug
   console.log(`[⏱️ Debug] Recorded time for ${key}: +${elapsedSec}s → total ${newTotal}s`);
 }
-
-let allQuestions = [];
 
 function loadQuestion() {
     questionStartTime = Date.now();
