@@ -1271,33 +1271,39 @@ function saveAnswer(snippetId, questionId, value) {
 let currentQuestionIndex = 0;
 
 function recordQuestionTime(snippetId, questionIndex) {
-  if (questionStartTime === null) {
-    console.log(`[⏱️ Debug] Skipping time record: no start time for Snippet ${snippetId}, Question ${questionIndex}`);
-    return;
-  }
+  if (questionStartTime === null) return;
 
   const elapsedMs = Date.now() - questionStartTime;
   const elapsedSec = Math.round(elapsedMs / 1000);
 
   const key = `time-q-${snippetId}-${questionIndex}`;
-  const existing = parseInt(sessionStorage.getItem(key) || '0');
-  const total = existing + elapsedSec;
 
-  questionTimers[key] = total;
-  sessionStorage.setItem(key, total);
+  // Get current total from memory, localStorage, or cookies
+  const sessionVal = questionTimers[key] || 0;
+  const localVal = parseInt(localStorage.getItem(key) || '0');
+  const cookieVal = parseInt(getCookie(key) || '0');
 
-  // Optional: also store in cookies
-  const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-  document.cookie = `${key}=${total}; expires=${expires}; path=/`;
+  const currentTotal = Math.max(sessionVal, localVal, cookieVal); // pick most up-to-date
+  const newTotal = currentTotal + elapsedSec;
 
-  console.log(`[⏱️ Debug] Recorded time for ${key}: +${elapsedSec}s → total ${total}s`);
+  // Update all sources
+  questionTimers[key] = newTotal;
+  localStorage.setItem(key, newTotal);
+  setCookie(key, newTotal, 30); // keep for 30 days
 
+  // Clear start timestamp
   questionStartTime = null;
+  localStorage.removeItem('currentQuestionStartTime');
+
+  // Debug
+  console.log(`[⏱️ Debug] Recorded time for ${key}: +${elapsedSec}s → total ${newTotal}s`);
 }
+
 
 
 function loadQuestion() {
     questionStartTime = Date.now();
+    localStorage.setItem('currentQuestionStartTime', questionStartTime);
     const snippetSpecific = questionsPerSnippet[currentSnippet];
     const allQuestions = [...snippetSpecific, ...general_questions];
     const question = allQuestions[currentQuestionIndex];
