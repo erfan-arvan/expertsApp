@@ -1214,7 +1214,7 @@ function renderLikertScale(container, id, labels, saved = '') {
 
 function nextQuestion() {
     if (currentQuestionIndex !== 0 && !isCurrentQuestionAnswered()) {
-        alert("Please answer the current question before proceeding.");
+        showValidationMessage("⚠️ Please answer the question before proceeding.");
         return;
     }
 
@@ -1401,6 +1401,11 @@ function showAnswerReview() {
 
 
 <script>
+function showValidationMessage(message) {
+  document.getElementById('validation-message').innerText = message;
+  document.getElementById('validation-modal').style.display = 'block';
+}
+
 function isCurrentQuestionAnswered() {
   const snippetId = currentSnippet;
   const question = allQuestions[currentQuestionIndex];
