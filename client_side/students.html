@@ -824,9 +824,12 @@ console.log("Loaded lastResumeTime:", localStorage.getItem('lastResumeTime'));
     pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
 
     if (pausedAt && !isNaN(pausedAt)) {
-        document.getElementById('pause-modal').style.display = 'flex';
-        pauseTimer();
-    }
+  document.getElementById('pause-modal').style.display = 'flex';
+  pauseTimer();
+} else {
+  startTimer(); // ✅ Just start the ticking, don't mess with totalPausedTime
+}
+
     }
 
   }
