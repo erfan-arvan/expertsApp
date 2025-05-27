@@ -1321,6 +1321,7 @@ function resetTimer() {
 
     updateTimerDisplay();
     startTimer(); // restart interval
+    clearAllStoredData();
   }
 }
 
@@ -1447,6 +1448,25 @@ function isCurrentQuestionAnswered() {
 
 </script>
     
+<script>
+    function clearAllStoredData() {
+  // 🧹 Clear all cookies
+  document.cookie.split(";").forEach(cookie => {
+    const eqPos = cookie.indexOf("=");
+    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+    document.cookie = name.trim() + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
+  });
+
+  // 🧹 Clear localStorage
+  localStorage.clear();
+
+  // 🧹 Clear sessionStorage
+  sessionStorage.clear();
+
+  console.log("✅ All cookies, localStorage, and sessionStorage have been cleared.");
+}
+
+</script>
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
   Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
 </footer>
