@@ -1029,7 +1029,7 @@ function resumeStudy() {
 
     // ⬇️ Restart snippet/question timer
     questionStartTime = Date.now();
-    console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex} at ${new Date().toLocaleTimeString()}`);
+    console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex+1} at ${new Date().toLocaleTimeString()}`);
 
   updateTimerDisplay();
   startTimer();
@@ -1219,7 +1219,7 @@ function recordQuestionTime(snippetId, questionIndex) {
   const elapsedMs = Date.now() - questionStartTime;
   const elapsedSec = Math.round(elapsedMs / 1000);
 
-  const key = `time-q-${snippetId}-${questionIndex}`;
+  const key = `time-q-${snippetId}-${questionIndex + 1}`;
 
   // Get current total from memory, localStorage, or cookies
   const sessionVal = questionTimers[key] || 0;
@@ -1432,7 +1432,7 @@ function nextQuestion() {
   // Start timing the new question
   questionStartTime = Date.now();
   localStorage.setItem('currentQuestionStartTime', questionStartTime);
-  console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex} at ${new Date(questionStartTime).toLocaleTimeString()}`);
+  console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex+1} at ${new Date(questionStartTime).toLocaleTimeString()}`);
 }
 
 function prevQuestion() {
@@ -1450,7 +1450,7 @@ function prevQuestion() {
   // Start timing the new question
   questionStartTime = Date.now();
   localStorage.setItem('currentQuestionStartTime', questionStartTime);
-  console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex} at ${new Date(questionStartTime).toLocaleTimeString()}`);
+  console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex+1} at ${new Date(questionStartTime).toLocaleTimeString()}`);
 }
 
 
