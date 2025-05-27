@@ -817,12 +817,24 @@ function submitAll() {
 </div>
 
   
-  <!-- Pause Modal -->
-  <div id="pause-modal" style="display:none;">
+<!-- Pause Modal -->
+<div id="pause-modal" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+">
+  <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
     <h2>Study Paused</h2>
     <p>The timer is paused. Click below to resume.</p>
     <button onclick="resumeStudy()">Resume</button>
   </div>
+</div>
+
   
 
 <script>
@@ -966,17 +978,23 @@ function startStudy() {
 }
 
 function pauseStudy() {
-  pauseTimer();
+  pauseTimer(); // stops interval
   localStorage.setItem('pausedAt', Date.now());
-  document.getElementById('pause-modal').style.display = 'block';
+  document.getElementById('pause-modal').style.display = 'flex';
 }
+
 
 function resumeStudy() {
   document.getElementById('pause-modal').style.display = 'none';
+  const pausedAt = parseInt(localStorage.getItem('pausedAt') || '0');
+  if (pausedAt) {
+    totalPausedTime += Date.now() - pausedAt;
+    localStorage.setItem('pausedTotal', totalPausedTime);
+    localStorage.removeItem('pausedAt');
+  }
   resumeTimer();
-  localStorage.removeItem('pausedAt');
-  localStorage.setItem('pausedTotal', totalPausedTime);
 }
+
 
 
 window.onload = function() {
