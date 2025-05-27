@@ -817,7 +817,38 @@ function validateCurrentSnippetInputs() {
 
 </script>
 
+<script>
+function getOrCreateQuestionOrder(snippetId, numQuestions) {
+  const key = `qOrder-${snippetId}`;
+  const stored = sessionStorage.getItem(key) || getCookie(key);
 
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length === numQuestions) return parsed;
+    } catch {}
+  }
+
+  const order = Array.from({ length: numQuestions }, (_, i) => i);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+
+  const serialized = JSON.stringify(order);
+  sessionStorage.setItem(key, serialized);
+  document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=2592000`;
+  return order;
+}
+
+const questionsPerSnippet = {};
+
+for (const [snippetId, originalQs] of Object.entries(questionsPerSnippetOriginal)) {
+  const order = getOrCreateQuestionOrder(snippetId, originalQs.length);
+  questionsPerSnippet[snippetId] = order.map(i => structuredClone(originalQs[i]));
+}
+
+</script>
 <script>
 function areAllSnippetsFilled() {
   for (let i = 1; i <= TOTAL_SNIPPETS; i++) {

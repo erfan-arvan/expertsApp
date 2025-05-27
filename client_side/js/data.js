@@ -229,7 +229,7 @@ const snippets = [
       ];
       
       
-      const questionsPerSnippet = {
+      const questionsPerSnippetOriginal = {
         "1": [
           {
             "type": "open",
