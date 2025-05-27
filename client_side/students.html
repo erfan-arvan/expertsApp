@@ -972,6 +972,7 @@ function startStudy() {
   startTime = Date.now();
   localStorage.setItem('studyStarted', 'true');
   localStorage.setItem('startTime', startTime);
+  localStorage.setItem('lastResumeTime', startTime);
   localStorage.setItem('pausedTotal', '0');
   totalPausedTime = 0;
 
@@ -997,6 +998,7 @@ function resumeStudy() {
     totalPausedTime += Date.now() - pausedAtStored;
     localStorage.setItem('pausedTotal', totalPausedTime);
     localStorage.removeItem('pausedAt');
+    localStorage.setItem('lastResumeTime', Date.now());
     pausedAt = null;
   }
   updateTimerDisplay(); // add this to fix the jump
@@ -1482,6 +1484,24 @@ function resetTimer() {
     startTimer(); // restart interval
   }
 }
+
+window.addEventListener('beforeunload', () => {
+  if (startTime) {
+    const now = Date.now();
+
+    // If user was actively paused, keep pausedAt
+    if (!pausedAt) {
+      pausedAt = now;
+      localStorage.setItem('pausedAt', pausedAt);
+      totalPausedTime += now - (localStorage.getItem('lastResumeTime') || startTime);
+    }
+
+    // Save state
+    localStorage.setItem('pausedTotal', totalPausedTime);
+    localStorage.setItem('startTime', startTime);
+    clearInterval(timerInterval);
+  }
+});
 
 </script>
     
