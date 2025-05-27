@@ -232,7 +232,7 @@ const snippets = [
       const questionsPerSnippetOriginal = {
         "1": [
           {
-            "type": "open",
+            "type": "bin",
             "id": "semanticsSlicing",
             "prompt": "Does the character at position i (i.e., name.charAt(i)) affect whether the loop continues to the next iteration?",
             "type2": "",
