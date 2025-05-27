@@ -1033,10 +1033,10 @@ window.onload = function() {
     pausedAt = parseInt(localStorage.getItem('pausedAt') || '0');
 
     if (pausedAt) {
-    document.getElementById('pause-modal').style.display = 'flex';
-    pauseTimer();
+        //document.getElementById('pause-modal').style.display = 'flex';
+        pauseTimer();
     } else {
-    resumeTimer();
+        resumeTimer();
     }
 
     startTimer();
