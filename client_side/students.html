@@ -1042,12 +1042,10 @@ function resumeStudy() {
 
 
 window.onload = function () {
-  syncAnswersFromCookies();
   displayUserName();
   applyTheme();
-  loadSnippet(currentSnippet);
 
-  // Handle Timer visibility toggle state
+  // Handle Timer visibility
   const hidden = localStorage.getItem('timerHidden') === 'true';
   if (hidden) {
     document.getElementById('timer').style.display = 'none';
@@ -1056,10 +1054,8 @@ window.onload = function () {
 
   const started = localStorage.getItem('studyStarted');
   if (!started) {
-    // First time visit
     document.getElementById('start-modal').style.display = 'flex';
   } else {
-    // Restore previous timing session
     startTime = parseInt(localStorage.getItem('startTime'));
     if (isNaN(startTime) || startTime <= 0) {
       startTime = Date.now();
@@ -1070,15 +1066,20 @@ window.onload = function () {
     pausedAt = parseInt(localStorage.getItem('pausedAt') || '0');
 
     if (pausedAt) {
-      // Still paused when tab was closed
       document.getElementById('pause-modal').style.display = 'flex';
-      pauseTimer(); // don't resume, just freeze
+      pauseTimer();
     } else {
-      resumeTimer(); // will call startTimer()
+      resumeTimer();
     }
   }
 
-  // Periodic auto-save to server
+  // Ensure stored answers are loaded before questions render
+  syncAnswersFromCookies();
+
+  // Only after syncing, render first snippet/question
+  loadSnippet(currentSnippet);
+
+  // Auto-save every 2 minutes
   setInterval(() => {
     try {
       saveToServer();
@@ -1088,6 +1089,7 @@ window.onload = function () {
     }
   }, 120000);
 };
+
 
 
 </script>
