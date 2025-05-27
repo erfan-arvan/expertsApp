@@ -267,7 +267,8 @@
           <button id="prev-question" onclick="prevQuestion()">Previous</button>
           <button id="next-question" onclick="nextQuestion()">Next</button>
         </div>
-        
+        <button onclick="showAnswerReview()" style="margin-top: 20px;">Review All Responses</button>
+
   
       <!-- <div class="buttons">
           <button id="prev" onclick="prevSnippet()">Previous</button>
@@ -278,6 +279,28 @@
       </div> -->
     </div>
   </div>
+
+  <div id="answer-review-modal" style="
+  display: none;
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-height: 80%;
+  overflow-y: auto;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 1000;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+">
+  <h2 style="margin-top: 0;">📝 Review All Responses</h2>
+  <div id="answer-review-content" style="white-space: pre-wrap; font-size: 14px; color: #333;"></div>
+  <button onclick="document.getElementById('answer-review-modal').style.display='none'" style="margin-top: 15px;">Close</button>
+</div>
+
   
   <script src="js/data.js"></script>
 
@@ -1277,6 +1300,60 @@ window.addEventListener('beforeunload', () => {
     clearInterval(timerInterval);
   }
 });
+
+</script>
+
+<script>
+    function showAnswerReview() {
+  const reviewDiv = document.getElementById('answer-review-content');
+  let output = '';
+
+  for (let snippet = 1; snippet <= TOTAL_SNIPPETS; snippet++) {
+    const questions = questionsPerSnippet[snippet];
+    output += `\n🔹 Snippet ${snippet}\n`;
+
+    questions.forEach((q, i) => {
+      const key1 = `answer-${snippet}-${q.id}`;
+      const val1 = sessionStorage.getItem(key1) || getCookie(key1) || '[No answer]';
+
+      const timeKey = `time-q-${snippet}-${i + 1}`;
+      const timeSec = parseInt(sessionStorage.getItem(timeKey) || localStorage.getItem(timeKey) || getCookie(timeKey) || '0');
+      const timeFormatted = `${timeSec}s`;
+
+      output += `  ${i + 1}. ${q.prompt}\n     → Answer: ${val1}\n     🕒 Time: ${timeFormatted}\n`;
+
+      if (q.id2 && q.question2) {
+        const key2 = `answer-${snippet}-${q.id2}`;
+        const val2 = sessionStorage.getItem(key2) || getCookie(key2) || '[No answer]';
+        output += `     ↪ ${q.question2}\n        → Answer: ${val2}\n`;
+      }
+
+      output += '\n';
+    });
+
+    // General questions
+    general_questions.forEach((gq, j) => {
+      const key1 = `answer-${snippet}-${gq.id}`;
+      const val1 = sessionStorage.getItem(key1) || getCookie(key1) || '[No answer]';
+      const timeKey = `time-q-${snippet}-${questions.length + j + 1}`;
+      const timeSec = parseInt(sessionStorage.getItem(timeKey) || localStorage.getItem(timeKey) || getCookie(timeKey) || '0');
+      const timeFormatted = `${timeSec}s`;
+
+      output += `  Gen ${j + 1}. ${gq.prompt}\n     → Answer: ${val1}\n     🕒 Time: ${timeFormatted}\n`;
+
+      if (gq.id2 && gq.question2) {
+        const key2 = `answer-${snippet}-${gq.id2}`;
+        const val2 = sessionStorage.getItem(key2) || getCookie(key2) || '[No answer]';
+        output += `     ↪ ${gq.question2}\n        → Answer: ${val2}\n`;
+      }
+
+      output += '\n';
+    });
+  }
+
+  reviewDiv.textContent = output.trim();
+  document.getElementById('answer-review-modal').style.display = 'block';
+}
 
 </script>
     
