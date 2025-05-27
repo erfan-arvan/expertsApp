@@ -675,21 +675,27 @@ function toggleTheme() {
 
 function syncAnswersFromCookies() {
   const cookies = document.cookie.split(';');
+  let synced = false;
 
   cookies.forEach(cookie => {
     const [rawKey, rawValue] = cookie.split('=');
     const key = rawKey.trim();
     const value = decodeURIComponent(rawValue || '');
 
-    if (key.startsWith('answer-')) {
+    if (key.startsWith('answer-') && !sessionStorage.getItem(key)) {
       console.log(`✅ Syncing: ${key} = ${value}`);
-      sessionStorage.setItem(key, value); // 💥 This populates sessionStorage before render
+      sessionStorage.setItem(key, value);
+      synced = true;
     }
-
   });
-  location.reload();
 
+  // Only reload ONCE per session
+  if (synced && !sessionStorage.getItem('alreadyReloaded')) {
+    sessionStorage.setItem('alreadyReloaded', 'true');
+    location.reload();
+  }
 }
+
 
 
 
