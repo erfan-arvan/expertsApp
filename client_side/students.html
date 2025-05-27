@@ -840,19 +840,19 @@ window.onload = function () {
     pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
 
     if (pausedAt && !isNaN(pausedAt)) {
-        const resumeDelta = Date.now() - pausedAt;
-        totalPausedTime += resumeDelta;
-        localStorage.setItem('pausedTotal', totalPausedTime);
-        localStorage.removeItem('pausedAt');
-        pausedAt = null;
+    const resumeDelta = Date.now() - pausedAt;
+    totalPausedTime += resumeDelta;
+    localStorage.setItem('pausedTotal', totalPausedTime);
+    localStorage.removeItem('pausedAt');
+    pausedAt = null;
 
-        startTimer(); // restart interval with correct time
-        document.getElementById('pause-btn').style.display = 'inline';
-        document.getElementById('resume-btn').style.display = 'none';
-    } else {
-        startTimer();
-        localStorage.setItem('lastResumeTime', Date.now());
-    }
+    localStorage.setItem('lastResumeTime', Date.now());
+}
+
+startTimer(); // Always start timer after handling pause state
+document.getElementById('pause-btn').style.display = 'inline';
+document.getElementById('resume-btn').style.display = 'none';
+
 
     if (!pausedAt || isNaN(pausedAt)) {
     localStorage.setItem('lastResumeTime', Date.now());
