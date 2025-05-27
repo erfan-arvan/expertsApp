@@ -369,7 +369,7 @@ function loadSnippet(snippetNumber) {
     document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
 
 
-    const snippetSpecific = questionsPerSnippet[currentSnippet];
+    const snippetSpecific = questionsPerSnippet[snippetNumber];
     allQuestions = [StartingQuestions, ...snippetSpecific, ...general_questions];
     loadQuestion();
 
