@@ -360,16 +360,19 @@ let currentSnippet = 1;
 
 
 function loadSnippet(snippetNumber) {
-  const snippet = snippets[snippetNumber - 1];
-  document.getElementById('snippet-title').innerText = snippet.title;
-  const codeLines = snippet.code.trim().split('\n');
-  document.getElementById('code-content').innerHTML = codeLines.join('\n');
+    const snippet = snippets[snippetNumber - 1];
+    document.getElementById('snippet-title').innerText = snippet.title;
+    const codeLines = snippet.code.trim().split('\n');
+    document.getElementById('code-content').innerHTML = codeLines.join('\n');
 
-const lineNumbersHtml = codeLines.map((_, i) => (i + 1)).join('<br>');
-document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
+    const lineNumbersHtml = codeLines.map((_, i) => (i + 1)).join('<br>');
+    document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
 
 
-  loadQuestion();
+    const snippetSpecific = questionsPerSnippet[currentSnippet];
+    allQuestions = [StartingQuestions, ...snippetSpecific, ...general_questions];
+    loadQuestion();
+
 }
 
 
