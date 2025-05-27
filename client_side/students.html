@@ -317,22 +317,23 @@
 }
 
   
-  const originalSnippets = [...snippets]; // Clone BEFORE mutation
-  const order = getOrCreateSnippetOrder(originalSnippets.length); // 1-based [1..8]
+// Create randomized snippets based on snippetsOriginal
+const snippetOrder = getOrCreateSnippetOrder(snippetsOriginal.length);
 
-  const shuffled = order.map(i => originalSnippets[i - 1]); // ✅ Convert to 0-based
+// Create shuffled snippets using 1-based indices
+const snippets = snippetOrder.map(i => snippetsOriginal[i - 1]);
 
-  snippets.length = 0;
-  snippets.push(...shuffled);
+// Assign new display ids and titles
+snippets.forEach((snippet, idx) => {
+  snippet.id = idx + 1;
+  snippet.title = `Snippet ${idx + 1}`;
+});
 
-  shuffled.forEach((snippet, newIndex) => {
-    snippet.id = newIndex + 1;                      // Maintain new 1-based IDs
-    snippet.title = `Snippet ${newIndex + 1}`;      // Display title
-  });
-
-  console.log("Final snippet order (titles):", snippets.map(s => s.title));
-  console.log("Final snippet order (ids):", snippets.map(s => s.id));
-  console.log("Server snippet order (1-based):", order.map(i => `Snippet ${i}`));
+// Debug
+console.log("🔀 New randomized snippet order (1-based):", order);
+console.log("Final snippet order (titles):", snippets.map(s => s.title));
+console.log("Final snippet order (ids):", snippets.map(s => s.id));
+console.log("Mapping from original (1-based):", snippetOrder.map(i => `Original Snippet ${i}`))
 
 </script>
 
