@@ -920,9 +920,7 @@ snippets.forEach((snippet, newIndex) => {
   const newSnippetId = newIndex + 1; // 1-based for current session
   const originalId = snippet.originalId; // You must store this during shuffling
 
-  console.log("✅ newSnippetId:", newSnippetId);
-console.log("📦 questionsPerSnippetOriginal keys:", Object.keys(questionsPerSnippetOriginal));
-console.log("📋 originalQs:", originalQs);
+
 
   const originalQs = questionsPerSnippetOriginal[String(originalId)];
   const order = getOrCreateQuestionOrder(newSnippetId, originalQs.length);
