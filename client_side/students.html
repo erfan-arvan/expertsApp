@@ -283,33 +283,39 @@
 
 
 <script>
+  function getCookie(name) {
+      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      return match ? decodeURIComponent(match[2]) : null;
+  }
+  
   // Returns existing or creates a new randomized order of indices
   function getOrCreateSnippetOrder(length) {
-    const key = 'snippetOrder';
-  
-    // Try to load from sessionStorage or cookie
-    let stored = sessionStorage.getItem(key) || getCookie(key);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length === length) return parsed;
-      } catch {}
-    }
-  
-    // Generate new shuffled order of indices
-    const order = Array.from({ length }, (_, i) => i);
-    for (let i = order.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [order[i], order[j]] = [order[j], order[i]];
-    }
-  
-    // Store in sessionStorage and cookie
-    const serialized = JSON.stringify(order);
-    sessionStorage.setItem(key, serialized);
-    document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=2592000`; // 30 days
-  
-    return order;
+  const key = 'snippetOrder';
+
+  // Try to load from sessionStorage or cookie
+  let stored = sessionStorage.getItem(key) || getCookie(key);
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length === length) return parsed;
+    } catch {}
   }
+
+  // Generate new shuffled 1-based order: [1, 2, ..., length]
+  const order = Array.from({ length }, (_, i) => i + 1);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+
+  // Store in sessionStorage and cookie
+  const serialized = JSON.stringify(order);
+  sessionStorage.setItem(key, serialized);
+  document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=2592000`; // 30 days
+
+  return order;
+}
+
   
   const originalSnippets = [...snippets]; // Clone BEFORE mutation
   const order = getOrCreateSnippetOrder(originalSnippets.length); // 1-based [1..8]
@@ -799,47 +805,42 @@ function validateCurrentSnippetInputs() {
 
 </script>
 <script>
+  function goToPhase2() {
+    // Redirect
+    window.location.href = 'phase2.html';
+  }
+
 
   function setCookie(name, value, days) {
     const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
     document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
   }
 
-  function getCookie(name) {
-      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-      return match ? decodeURIComponent(match[2]) : null;
-  }
-  
 </script>
 
 <script>
-function getOrCreateSnippetOrder(length) {
-  const key = 'snippetOrder';
+function getOrCreateQuestionOrder(snippetId, numQuestions) {
+  const key = `qOrder-${snippetId}`;
+  const stored = sessionStorage.getItem(key) || getCookie(key);
 
-  // Try to load from sessionStorage or cookie
-  let stored = sessionStorage.getItem(key) || getCookie(key);
   if (stored) {
     try {
       const parsed = JSON.parse(stored);
-      if (Array.isArray(parsed) && parsed.length === length) return parsed;
+      if (Array.isArray(parsed) && parsed.length === numQuestions) return parsed;
     } catch {}
   }
 
-  // Generate new shuffled 1-based order: [1, 2, ..., length]
-  const order = Array.from({ length }, (_, i) => i + 1);
+  const order = Array.from({ length: numQuestions }, (_, i) => i);
   for (let i = order.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [order[i], order[j]] = [order[j], order[i]];
   }
 
-  // Store in sessionStorage and cookie
   const serialized = JSON.stringify(order);
   sessionStorage.setItem(key, serialized);
-  document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=2592000`; // 30 days
-
+  document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=2592000`;
   return order;
 }
-
 
 const questionsPerSnippet = {};
 
