@@ -951,29 +951,25 @@ function syncAnswersFromCookies() {
   });
 }
 
-
 function toggleTimer() {
-  const timerWrapper = document.getElementById('timer-wrapper');
-  const timer = document.getElementById('timer');
-  const toggleBtn = event.target;
+  const timerEl = document.getElementById('timer');
+  const toggleBtn = document.getElementById('toggle-timer-btn'); // Make sure the button has this ID
+  const pauseBtn = document.getElementById('pause-btn');
+  const resetBtn = document.getElementById('reset-btn');
 
-  const isHidden = timer.style.display === 'none';
+  const isHidden = timerEl.style.display === 'none';
 
   if (isHidden) {
-    // Show timer and buttons
-    timer.style.display = 'inline';
-    const children = timerWrapper.querySelectorAll('button:not(#toggle-timer-btn)');
-    children.forEach(btn => btn.style.display = 'inline-block');
-
-    toggleBtn.innerHTML = '🙈 Hide Timer';
+    timerEl.style.display = 'inline';
+    pauseBtn.style.display = 'inline-block';
+    resetBtn.style.display = 'inline-block';
+    toggleBtn.innerHTML = 'Hide Timer';
     localStorage.setItem('timerHidden', 'false');
   } else {
-    // Hide timer and buttons except toggle
-    timer.style.display = 'none';
-    const children = timerWrapper.querySelectorAll('button:not(#toggle-timer-btn)');
-    children.forEach(btn => btn.style.display = 'none');
-
-    toggleBtn.innerHTML = '👁️ Show Timer';
+    timerEl.style.display = 'none';
+    pauseBtn.style.display = 'none';
+    resetBtn.style.display = 'none';
+    toggleBtn.innerHTML = 'Show Timer';
     localStorage.setItem('timerHidden', 'true');
   }
 }
