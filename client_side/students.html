@@ -760,26 +760,28 @@ function pauseStudy() {
 
 function resumeStudy() {
   document.getElementById('pause-modal').style.display = 'none';
-  const pausedAtStored = parseInt(localStorage.getItem('pausedAt') || '0');
-  if (pausedAtStored) {
-    totalPausedTime += Date.now() - pausedAtStored;
+
+  const pausedAtStored = parseInt(localStorage.getItem('pausedAt') || '0', 10);
+  if (pausedAtStored && !isNaN(pausedAtStored)) {
+    const resumeDelta = Date.now() - pausedAtStored;
+    totalPausedTime += resumeDelta;
+
+    // ⛔️ CRITICAL: CLEAR pausedAt RIGHT AFTER USING IT
     localStorage.setItem('pausedTotal', totalPausedTime);
     localStorage.removeItem('pausedAt');
-    localStorage.setItem('lastResumeTime', Date.now());
+
     pausedAt = null;
+    localStorage.setItem('lastResumeTime', Date.now());
   }
 
-    // ⬇️ Restart snippet/question timer
-    questionStartTime = Date.now();
-    console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex+1} at ${new Date().toLocaleTimeString()}`);
-
+  questionStartTime = Date.now();
   updateTimerDisplay();
   startTimer();
 
-  // Add this to toggle buttons
   document.getElementById('pause-btn').style.display = 'inline';
   document.getElementById('resume-btn').style.display = 'none';
 }
+
 
 
 
