@@ -794,8 +794,6 @@ function resumeStudy() {
 
 
 
-
-
 window.onload = function () {
   setTimeout(syncAnswersFromCookies, 100);
   syncAnswersFromCookies();
@@ -851,19 +849,6 @@ window.onload = function () {
   }, 120000);
 };
 
-
-
-  loadSnippet(currentSnippet);
-
-  setInterval(() => {
-    try {
-      saveToServer();
-      console.log("[Auto-Save] Progress saved to server.");
-    } catch (e) {
-      console.warn("[Auto-Save] Failed to save:", e);
-    }
-  }, 120000);
-};
 
 
 
