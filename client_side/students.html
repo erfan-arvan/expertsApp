@@ -1038,13 +1038,16 @@ function resumeStudy() {
 }
 
 
+
+
+
 window.onload = function () {
   syncAnswersFromCookies();
   displayUserName();
   applyTheme();
   loadSnippet(currentSnippet);
 
-  // Handle Timer visibility (eye toggle)
+  // Handle Timer visibility toggle state
   const hidden = localStorage.getItem('timerHidden') === 'true';
   if (hidden) {
     document.getElementById('timer').style.display = 'none';
@@ -1053,9 +1056,10 @@ window.onload = function () {
 
   const started = localStorage.getItem('studyStarted');
   if (!started) {
+    // First time visit
     document.getElementById('start-modal').style.display = 'flex';
   } else {
-    // Resume or pause based on stored state
+    // Restore previous timing session
     startTime = parseInt(localStorage.getItem('startTime'));
     if (isNaN(startTime) || startTime <= 0) {
       startTime = Date.now();
@@ -1065,11 +1069,12 @@ window.onload = function () {
     totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0');
     pausedAt = parseInt(localStorage.getItem('pausedAt') || '0');
 
-    if (pausedAt && !isNaN(pausedAt)) {
+    if (pausedAt) {
+      // Still paused when tab was closed
       document.getElementById('pause-modal').style.display = 'flex';
-      pauseTimer(); // pause, but don't count elapsed time
+      pauseTimer(); // don't resume, just freeze
     } else {
-      resumeTimer(); // resumes and calls startTimer
+      resumeTimer(); // will call startTimer()
     }
   }
 
@@ -1081,7 +1086,7 @@ window.onload = function () {
     } catch (e) {
       console.warn("[Auto-Save] Failed to save:", e);
     }
-  }, 120000); // every 2 minutes
+  }, 120000);
 };
 
 
