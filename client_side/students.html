@@ -920,8 +920,15 @@ snippets.forEach((snippet, newIndex) => {
   const newSnippetId = newIndex + 1; // 1-based for current session
   const originalId = snippet.originalId; // You must store this during shuffling
 
-  const originalQs = questionsPerSnippetOriginal[String(originalId)];
-  const order = getOrCreateQuestionOrder(newSnippetId, originalQs.length);
+  const originalQs = questionsPerSnippetOriginal[newSnippetId];
+
+    if (!originalQs || !Array.isArray(originalQs)) {
+    console.error(`❌ originalQs missing or not an array for snippet ID: ${newSnippetId}`);
+    return; // Or handle the fallback gracefully
+    }
+
+    const order = getOrCreateQuestionOrder(newSnippetId, originalQs.length);
+
   questionsPerSnippet[newSnippetId] = order.map(i => structuredClone(originalQs[i - 1]));
 });
 
