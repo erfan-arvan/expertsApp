@@ -1006,7 +1006,7 @@ function loadQuestion() {
     progressText.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
     container.appendChild(progressText);
 
-    const totalQuestions = questionsPerSnippet[currentSnippet].length + general_questions.length;
+    const totalQuestions = allQuestions.length;
     const nextBtn = document.getElementById('next-question');
 
     if (currentQuestionIndex === totalQuestions - 1) {
