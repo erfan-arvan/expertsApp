@@ -926,6 +926,7 @@ function syncAnswersFromCookies() {
   });
 }
 
+
 function toggleTimer() {
   const timerEl = document.getElementById('timer');
   const btn = event.target;
@@ -949,7 +950,7 @@ function startTimer() {
   const timerEl = document.getElementById('timer');
 
   // Get or initialize start time
-  let startTime = localStorage.getItem('snippetTimerStart');
+  startTime = parseInt(localStorage.getItem('startTime') || '0');
   if (!startTime) {
     startTime = Date.now();
     localStorage.setItem('snippetTimerStart', startTime);
@@ -978,6 +979,7 @@ function startStudy() {
 }
 
 function pauseStudy() {
+  localStorage.setItem('pausedAt', Date.now());
   updateTimerDisplay(); // ensure last moment is rendered before freezing
   pauseTimer();         // clears the interval
   pausedAt = Date.now();
@@ -989,14 +991,17 @@ function pauseStudy() {
 
 function resumeStudy() {
   document.getElementById('pause-modal').style.display = 'none';
-  const pausedAt = parseInt(localStorage.getItem('pausedAt') || '0');
-  if (pausedAt) {
-    totalPausedTime += Date.now() - pausedAt;
+  const pausedAtStored = parseInt(localStorage.getItem('pausedAt') || '0');
+  if (pausedAtStored) {
+    totalPausedTime += Date.now() - pausedAtStored;
     localStorage.setItem('pausedTotal', totalPausedTime);
     localStorage.removeItem('pausedAt');
+    pausedAt = null;
   }
-  resumeTimer();
+  updateTimerDisplay(); // add this to fix the jump
+  startTimer();
 }
+
 
 
 
@@ -1019,8 +1024,10 @@ window.onload = function() {
     document.getElementById('start-modal').style.display = 'flex';
     } else {
     // Resume ongoing timer
-    startTime = parseInt(localStorage.getItem('startTime'));
+    startTime = parseInt(localStorage.getItem('startTime') || '0');
     totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0');
+    pausedAt = parseInt(localStorage.getItem('pausedAt') || '0');
+
     startTimer();
     }
     //For later: localStorage.removeItem('snippetTimerStart');
@@ -1432,6 +1439,7 @@ function formatTime(seconds) {
 
 function updateTimerDisplay() {
   const timerEl = document.getElementById('timer');
+  localStorage.setItem('pausedTotal', totalPausedTime);
   if (!startTime) return;
   const now = Date.now();
   const elapsed = Math.floor((now - startTime - totalPausedTime) / 1000);
@@ -1439,8 +1447,10 @@ function updateTimerDisplay() {
 }
 
 function startTimer() {
+  updateTimerDisplay(); // show instantly
   timerInterval = setInterval(updateTimerDisplay, 1000);
 }
+
 
 function pauseTimer() {
   clearInterval(timerInterval);
