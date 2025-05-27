@@ -822,14 +822,24 @@ window.onload = function () {
     pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
 
     if (!isNaN(pausedAt) && pausedAt > 0) {
-      const resumeDelta = Date.now() - pausedAt;
-      totalPausedTime += resumeDelta;
-      pausedAt = null;
+  const lastResume = parseInt(localStorage.getItem('lastResumeTime') || startTime, 10);
 
-      localStorage.setItem('pausedTotal', totalPausedTime);
-      localStorage.removeItem('pausedAt');
-      localStorage.setItem('lastResumeTime', Date.now());
-    }
+  if (pausedAt > lastResume) {
+    // Legit paused state
+    const resumeDelta = Date.now() - pausedAt;
+    totalPausedTime += resumeDelta;
+
+    localStorage.setItem('pausedTotal', totalPausedTime);
+    localStorage.removeItem('pausedAt');
+    localStorage.setItem('lastResumeTime', Date.now());
+    pausedAt = null;
+  } else {
+    // Probably a stale pausedAt — ignore it
+    pausedAt = null;
+    localStorage.removeItem('pausedAt');
+  }
+}
+
 
     startTimer();
 
