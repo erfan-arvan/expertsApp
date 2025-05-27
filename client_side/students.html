@@ -960,14 +960,15 @@ function toggleTimer() {
 
   if (isHidden) {
     timerEl.style.display = 'inline';
-    btn.textContent = 'Hide';
+    btn.innerHTML = '👁️'; // Show "eye" icon again
     localStorage.setItem('timerHidden', 'false');
   } else {
     timerEl.style.display = 'none';
-    btn.textContent = 'Show';
+    btn.innerHTML = '🙈'; // Hidden eye icon
     localStorage.setItem('timerHidden', 'true');
   }
 }
+
 
 
 
