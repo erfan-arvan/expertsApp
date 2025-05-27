@@ -810,12 +810,22 @@ window.onload = function () {
     totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
     pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
 
-    if (pausedAt && !isNaN(pausedAt)) {
-      document.getElementById('pause-modal').style.display = 'flex';
-      pauseTimer();
+    if (!localStorage.getItem('startTime')) {
+    startTime = null;
+    document.getElementById('start-modal').style.display = 'flex';
     } else {
-      resumeStudy(); // ✅ starts both global and question timer
+    startTime = parseInt(localStorage.getItem('startTime'), 10);
+    totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
+    pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
+
+    if (pausedAt && !isNaN(pausedAt)) {
+        document.getElementById('pause-modal').style.display = 'flex';
+        pauseTimer();
+    } else {
+        resumeTimer();  // ✅ Just resume the timer, not the whole study state
     }
+    }
+
   }
 
   syncAnswersFromCookies();
