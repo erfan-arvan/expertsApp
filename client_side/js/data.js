@@ -209,23 +209,23 @@ const snippets = [
 
     const general_questions = [
         {
-          type: "scale",
-          id: "scaleST",
-          prompt: "How easy or difficult were the tasks you performed for this snippet?",
-          labels: ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
-          type2: "scale",
-          id2: "scaleSM",
-          question2: "How easy or difficult was this snippet to understand?",
-          labels2: ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
-        },
-        {
           type: "open",
           id: "function",
           prompt: "What does this code snippet do? Briefly describe its main functionality.",
           type2: "",
           id2: "",
           question2: ""
-        }
+        }, 
+        {
+            type: "scale",
+            id: "scaleST",
+            prompt: "How easy or difficult were the tasks you performed for this snippet?",
+            labels: ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
+            type2: "scale",
+            id2: "scaleSM",
+            question2: "How easy or difficult was this snippet to understand?",
+            labels2: ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
+          }
       ];
       
       
