@@ -1001,10 +1001,13 @@ function loadQuestion() {
     const nextBtn = document.getElementById('next-question');
 
     if (currentQuestionIndex === totalQuestions - 1) {
-    nextBtn.textContent = 'Go to next snippet';
+        nextBtn.textContent = 'Go to next snippet';
     } else {
-    nextBtn.textContent = 'Next';
+        nextBtn.textContent = 'Next';
     }
+    // ✅ Disable previous button if on first question
+    const prevBtn = document.getElementById('prev-question');
+    prevBtn.disabled = (currentQuestionIndex === 0);
 }
 
 
