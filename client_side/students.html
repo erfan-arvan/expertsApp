@@ -1213,10 +1213,11 @@ function renderLikertScale(container, id, labels, saved = '') {
 
 
 function nextQuestion() {
-    if (!isCurrentQuestionAnswered()) {
-    alert("Please answer the current question before proceeding.");
-    return;
-  }
+    if (currentQuestionIndex !== 0 && !isCurrentQuestionAnswered()) {
+        alert("Please answer the current question before proceeding.");
+        return;
+    }
+
   recordQuestionTime(currentSnippet, currentQuestionIndex);
   const total = allQuestions.length;
 
