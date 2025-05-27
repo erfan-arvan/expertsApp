@@ -1157,7 +1157,7 @@ function renderLikertScale(container, id, labels, saved = '') {
 
 function nextQuestion() {
   recordQuestionTime(currentSnippet, currentQuestionIndex);
-  const total = questionsPerSnippet[currentSnippet].length + general_questions.length;
+  const total = questionsPerSnippet[currentSnippet].length + general_questions.length + 1;
 
   if (currentQuestionIndex < total - 1) {
     currentQuestionIndex++;
