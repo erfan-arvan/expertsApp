@@ -1323,38 +1323,44 @@ window.addEventListener('beforeunload', () => {
 </script>
 
 <script>
-    function showAnswerReview() {
+function showAnswerReview() {
   const reviewDiv = document.getElementById('answer-review-content');
   let output = '';
 
   for (let snippet = 1; snippet <= TOTAL_SNIPPETS; snippet++) {
-    const questions = questionsPerSnippet[snippet];
     output += `\n🔹 Snippet ${snippet}\n`;
 
-    questions.forEach((q, i) => {
-      const key1 = `answer-${snippet}-${q.id}`;
-      const val1 = sessionStorage.getItem(key1) || getCookie(key1) || '[No answer]';
+    const questions = questionsPerSnippet[snippet];
 
-      const timeKey = `time-q-${snippet}-${i + 1}`;
-      const timeSec = parseInt(sessionStorage.getItem(timeKey) || localStorage.getItem(timeKey) || getCookie(timeKey) || '0');
-      const timeFormatted = `${timeSec}s`;
+    if (!questions || !Array.isArray(questions)) {
+      output += '  ⚠️ No questions found for this snippet.\n\n';
+    } else {
+      questions.forEach((q, i) => {
+        const key1 = `answer-${snippet}-${q?.id}`;
+        const val1 = sessionStorage.getItem(key1) || getCookie(key1) || '[No answer]';
 
-      output += `  ${i + 1}. ${q.prompt}\n     → Answer: ${val1}\n     🕒 Time: ${timeFormatted}\n`;
+        const timeKey = `time-q-${snippet}-${i + 1}`;
+        const timeSec = parseInt(sessionStorage.getItem(timeKey) || localStorage.getItem(timeKey) || getCookie(timeKey) || '0');
+        const timeFormatted = `${timeSec}s`;
 
-      if (q.id2 && q.question2) {
-        const key2 = `answer-${snippet}-${q.id2}`;
-        const val2 = sessionStorage.getItem(key2) || getCookie(key2) || '[No answer]';
-        output += `     ↪ ${q.question2}\n        → Answer: ${val2}\n`;
-      }
+        output += `  ${i + 1}. ${q?.prompt || '[Missing prompt]'}\n     → Answer: ${val1}\n     🕒 Time: ${timeFormatted}\n`;
 
-      output += '\n';
-    });
+        if (q?.id2 && q?.question2) {
+          const key2 = `answer-${snippet}-${q.id2}`;
+          const val2 = sessionStorage.getItem(key2) || getCookie(key2) || '[No answer]';
+          output += `     ↪ ${q.question2}\n        → Answer: ${val2}\n`;
+        }
 
-    // General questions
+        output += '\n';
+      });
+    }
+
+    // General questions (always)
     general_questions.forEach((gq, j) => {
       const key1 = `answer-${snippet}-${gq.id}`;
       const val1 = sessionStorage.getItem(key1) || getCookie(key1) || '[No answer]';
-      const timeKey = `time-q-${snippet}-${questions.length + j + 1}`;
+
+      const timeKey = `time-q-${snippet}-${questions?.length + j + 1 || j + 1}`;
       const timeSec = parseInt(sessionStorage.getItem(timeKey) || localStorage.getItem(timeKey) || getCookie(timeKey) || '0');
       const timeFormatted = `${timeSec}s`;
 
@@ -1373,6 +1379,7 @@ window.addEventListener('beforeunload', () => {
   reviewDiv.textContent = output.trim();
   document.getElementById('answer-review-modal').style.display = 'block';
 }
+
 
 </script>
     
