@@ -1314,7 +1314,7 @@ function resetTimer() {
   }
 }
 
-wwindow.addEventListener('beforeunload', () => {
+window.addEventListener('beforeunload', () => {
   if (!startTime) return;
 
   // 1. Record time spent on the current question
