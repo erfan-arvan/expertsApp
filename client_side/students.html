@@ -978,10 +978,13 @@ function startStudy() {
 }
 
 function pauseStudy() {
-  pauseTimer(); // stops interval
-  localStorage.setItem('pausedAt', Date.now());
+  updateTimerDisplay(); // ensure last moment is rendered before freezing
+  pauseTimer();         // clears the interval
+  pausedAt = Date.now();
+  localStorage.setItem('pausedAt', pausedAt);
   document.getElementById('pause-modal').style.display = 'flex';
 }
+
 
 
 function resumeStudy() {
@@ -1441,8 +1444,8 @@ function startTimer() {
 
 function pauseTimer() {
   clearInterval(timerInterval);
-  pausedAt = Date.now();
 }
+
 
 function resumeTimer() {
   if (pausedAt) {
