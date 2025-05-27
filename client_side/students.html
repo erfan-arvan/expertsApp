@@ -1031,6 +1031,12 @@ window.onload = function() {
     totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0');
     pausedAt = parseInt(localStorage.getItem('pausedAt') || '0');
 
+    if (pausedAt) {
+    document.getElementById('pause-modal').style.display = 'flex';
+    } else {
+    resumeTimer();
+    }
+
     startTimer();
     }
     //For later: localStorage.removeItem('snippetTimerStart');
