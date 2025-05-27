@@ -674,6 +674,7 @@ function toggleTheme() {
 }
 
 function syncAnswersFromCookies() {
+    console.log("hhhhhhhhhhhh");
   const cookies = document.cookie.split(';');
 
   cookies.forEach(cookie => {
@@ -685,6 +686,9 @@ function syncAnswersFromCookies() {
       console.log(`✅ Syncing: ${key} = ${value}`);
       sessionStorage.setItem(key, value); // 💥 This populates sessionStorage before render
     }
+
+    console.log("byeeeeeeeeeeee");
+
   });
 }
 
