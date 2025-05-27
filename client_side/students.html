@@ -789,7 +789,6 @@ window.onload = function () {
 
   applyTheme();
 
-  // Handle Timer visibility
   const hidden = localStorage.getItem('timerHidden') === 'true';
   if (hidden) {
     document.getElementById('timer').style.display = 'none';
@@ -806,7 +805,6 @@ window.onload = function () {
       localStorage.setItem('startTime', startTime);
     }
 
-    // ✅ Restore paused data BEFORE resuming timer
     totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
     pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
 
@@ -814,17 +812,13 @@ window.onload = function () {
       document.getElementById('pause-modal').style.display = 'flex';
       pauseTimer();
     } else {
-      resumeTimer();  // ✅ This will use the correct `totalPausedTime`
+      resumeStudy(); // ✅ use resumeStudy, which will call startTimer() correctly
     }
   }
 
-  // Ensure stored answers are loaded before questions render
   syncAnswersFromCookies();
-
-  // Only after syncing, render first snippet/question
   loadSnippet(currentSnippet);
 
-  // Auto-save every 2 minutes
   setInterval(() => {
     try {
       saveToServer();
@@ -834,6 +828,7 @@ window.onload = function () {
     }
   }, 120000);
 };
+
 
 
 
@@ -1278,9 +1273,16 @@ function resumeTimer() {
   if (pausedAt) {
     totalPausedTime += Date.now() - pausedAt;
     pausedAt = null;
+    localStorage.removeItem('pausedAt');
+    localStorage.setItem('pausedTotal', totalPausedTime);
   }
-  startTimer();
+
+  updateTimerDisplay();
+
+  // DO NOT call startTimer() here!
+  // The interval should only be started ONCE from window.onload or resumeStudy
 }
+
 
 function resetTimer() {
   if (confirm("Are you sure you want to reset the timer?")) {
