@@ -1022,6 +1022,11 @@ function loadQuestion() {
 
 function renderQuestion(container, question, snippetNum) {
   // First prompt
+  console.log("currentSnippet:", currentSnippet);
+    console.log("currentQuestionIndex:", currentQuestionIndex);
+    console.log("allQuestions:", allQuestions);
+    console.log("question at index:", allQuestions[currentQuestionIndex]);
+
   const label1 = document.createElement('label');
   label1.innerHTML = `<strong>${question.prompt}</strong>`;
   container.appendChild(label1);
