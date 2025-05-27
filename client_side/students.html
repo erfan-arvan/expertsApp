@@ -1482,14 +1482,19 @@ function nextQuestion() {
     loadQuestion();
   } else if (currentSnippet < TOTAL_SNIPPETS) {
     currentSnippet++;
-    currentQuestionIndex = 0;         // reset for new snippet
-    loadSnippet(currentSnippet);    
+    currentQuestionIndex = 0;
+    loadSnippet(currentSnippet);
   }
-}
 
+  // Start timing the new question
+  questionStartTime = Date.now();
+  localStorage.setItem('currentQuestionStartTime', questionStartTime);
+  console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex} at ${new Date(questionStartTime).toLocaleTimeString()}`);
+}
 
 function prevQuestion() {
   recordQuestionTime(currentSnippet, currentQuestionIndex);
+
   if (currentQuestionIndex > 0) {
     currentQuestionIndex--;
     loadQuestion();
@@ -1498,7 +1503,13 @@ function prevQuestion() {
     currentQuestionIndex = questionsPerSnippet[currentSnippet].length + general_questions.length - 1;
     loadSnippet(currentSnippet);
   }
+
+  // Start timing the new question
+  questionStartTime = Date.now();
+  localStorage.setItem('currentQuestionStartTime', questionStartTime);
+  console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex} at ${new Date(questionStartTime).toLocaleTimeString()}`);
 }
+
 
 
 </script>
