@@ -1401,25 +1401,25 @@ function showAnswerReview() {
 
 
 <script>
-    function isCurrentQuestionAnswered() {
+function isCurrentQuestionAnswered() {
   const snippetId = currentSnippet;
   const question = allQuestions[currentQuestionIndex];
 
-  // First part of the question
+  // First sub-question is always required
   const key1 = `answer-${snippetId}-${question.id}`;
   const answer1 = sessionStorage.getItem(key1) || '';
-
   if (!answer1.trim()) return false;
 
-  // If second part exists, validate it too
-  if (question.id2) {
+  // If second sub-question exists, it is also required
+  if (question.id2 && question.question2) {
     const key2 = `answer-${snippetId}-${question.id2}`;
     const answer2 = sessionStorage.getItem(key2) || '';
     if (!answer2.trim()) return false;
   }
 
-  return true; // Both parts answered (if applicable)
+  return true;
 }
+
 
 </script>
     
