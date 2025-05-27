@@ -817,49 +817,32 @@ window.onload = function () {
   }
 
   const started = localStorage.getItem('studyStarted') === 'true';
-  if (!started) {
-    document.getElementById('start-modal').style.display = 'flex';
-  } else {
-    // ✅ FIXED: Don't overwrite startTime if already exists
-    if (!localStorage.getItem('startTime')) {
-      startTime = Date.now();
-      localStorage.setItem('startTime', startTime);
-    } else {
-      startTime = parseInt(localStorage.getItem('startTime'), 10);
-    }
+if (!started) {
+  document.getElementById('start-modal').style.display = 'flex';
+} else {
+  startTime = parseInt(localStorage.getItem('startTime') || `${Date.now()}`, 10);
+  totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
+  pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
 
-    totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
-    pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
-
-    if (!localStorage.getItem('startTime')) {
-    startTime = null;
-    document.getElementById('start-modal').style.display = 'flex';
-    } else {
-    startTime = parseInt(localStorage.getItem('startTime'), 10);
-    totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
-    pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
-
-    if (pausedAt && !isNaN(pausedAt)) {
+  if (!isNaN(pausedAt) && pausedAt > 0) {
+    // Calculate how long the page was closed
     const resumeDelta = Date.now() - pausedAt;
     totalPausedTime += resumeDelta;
-    localStorage.setItem('pausedTotal', totalPausedTime);
-    localStorage.removeItem('pausedAt');
     pausedAt = null;
 
+    // Update localStorage
+    localStorage.setItem('pausedTotal', totalPausedTime);
+    localStorage.removeItem('pausedAt');
     localStorage.setItem('lastResumeTime', Date.now());
+  }
+
+  // Apply state and start timer
+  startTimer();
+
+  document.getElementById('pause-btn').style.display = 'inline';
+  document.getElementById('resume-btn').style.display = 'none';
 }
 
-startTimer(); // Always start timer after handling pause state
-document.getElementById('pause-btn').style.display = 'inline';
-document.getElementById('resume-btn').style.display = 'none';
-
-
-    if (!pausedAt || isNaN(pausedAt)) {
-    localStorage.setItem('lastResumeTime', Date.now());
-    }
-
-
-    }
 
   }
 
