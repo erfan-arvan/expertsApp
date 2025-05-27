@@ -856,7 +856,7 @@ const questionsPerSnippet = {};
 
 for (const [snippetId, originalQs] of Object.entries(questionsPerSnippetOriginal)) {
   const order = getOrCreateQuestionOrder(snippetId, originalQs.length);
-  questionsPerSnippet[snippetId] = order.map(i => structuredClone(originalQs[i]));
+  questionsPerSnippet[snippetId] = order.map(i => structuredClone(originalQs[i - 1]));
 }
 
 </script>
