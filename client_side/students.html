@@ -369,8 +369,8 @@ function loadSnippet(snippetNumber) {
   document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
 
   // ✅ FIXED: use the correct snippetNumber
-  const snippetSpecific = questionsPerSnippet[snippetNumber];
-  allQuestions = [StartingQuestions, ...snippetSpecific, ...general_questions];
+//   const snippetSpecific = questionsPerSnippet[snippetNumber];
+//   allQuestions = [...StartingQuestions, ...snippetSpecific, ...general_questions];
 
   loadQuestion();
 }
@@ -989,7 +989,7 @@ function loadQuestion() {
     questionStartTime = Date.now();
     localStorage.setItem('currentQuestionStartTime', questionStartTime);
     const snippetSpecific = questionsPerSnippet[currentSnippet];
-    allQuestions = [StartingQuestions, ...snippetSpecific, ...general_questions];
+    allQuestions = [...StartingQuestions, ...snippetSpecific, ...general_questions];
     const question = allQuestions[currentQuestionIndex];
 
     const container = document.getElementById('question-area');
