@@ -689,6 +689,7 @@ function syncAnswersFromCookies() {
 }
 
 
+
 function toggleTimer() {
   const timerEl = document.getElementById('timer');
   const btn = event.target;
@@ -785,6 +786,8 @@ function resumeStudy() {
 
 
 window.onload = function () {
+    syncAnswersFromCookies();
+
     console.log("📦 Unload was triggered at:", new Date(parseInt(localStorage.getItem('lastUnloadTriggeredAt') || 0)).toLocaleTimeString());
 
     console.log("🚀 Page load");
@@ -839,7 +842,6 @@ console.log("Loaded lastResumeTime:", localStorage.getItem('lastResumeTime'));
 
   }
 
-  syncAnswersFromCookies();
   loadSnippet(currentSnippet);
 
   setInterval(() => {
