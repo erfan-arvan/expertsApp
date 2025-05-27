@@ -231,7 +231,7 @@
                 <button id="pause-btn" onclick="pauseStudy()" title="Pause Timer" style="font-size: 16px; padding: 2px 6px;">⏸️</button>
                 <button id="resume-btn" onclick="resumeStudy()" title="Resume Timer" style="font-size: 16px; padding: 2px 6px; display: none;">▶️</button>
                 
-                <button onclick="toggleTimer()" title="Show/Hide Timer" style="font-size: 16px; padding: 2px 6px;">👁️</button>
+                <button onclick="toggleTimer()" title="Show/Hide Timer" style="font-size: 16px; padding: 2px 6px;">Hide Timer</button>
                 <button onclick="resetTimer()" title="Reset Timer" style="font-size: 16px; padding: 2px 6px;">🔁</button>
               </div>
                        
@@ -953,21 +953,31 @@ function syncAnswersFromCookies() {
 
 
 function toggleTimer() {
-  const timerEl = document.getElementById('timer');
-  const btn = event.target;
+  const timerWrapper = document.getElementById('timer-wrapper');
+  const timer = document.getElementById('timer');
+  const toggleBtn = event.target;
 
-  const isHidden = timerEl.style.display === 'none';
+  const isHidden = timer.style.display === 'none';
 
   if (isHidden) {
-    timerEl.style.display = 'inline';
-    btn.innerHTML = 'hide👁️'; // Show "eye" icon again
+    // Show timer and buttons
+    timer.style.display = 'inline';
+    const children = timerWrapper.querySelectorAll('button:not(#toggle-timer-btn)');
+    children.forEach(btn => btn.style.display = 'inline-block');
+
+    toggleBtn.innerHTML = '🙈 Hide Timer';
     localStorage.setItem('timerHidden', 'false');
   } else {
-    timerEl.style.display = 'none';
-    btn.innerHTML = '🙈'; // Hidden eye icon
+    // Hide timer and buttons except toggle
+    timer.style.display = 'none';
+    const children = timerWrapper.querySelectorAll('button:not(#toggle-timer-btn)');
+    children.forEach(btn => btn.style.display = 'none');
+
+    toggleBtn.innerHTML = '👁️ Show Timer';
     localStorage.setItem('timerHidden', 'true');
   }
 }
+
 
 
 
