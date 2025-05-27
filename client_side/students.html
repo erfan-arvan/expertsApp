@@ -1169,9 +1169,15 @@ function nextQuestion() {
     loadQuestion();
   } else if (currentSnippet < TOTAL_SNIPPETS) {
     currentSnippet++;
-    currentQuestionIndex = 0;
-    loadSnippet(currentSnippet);
+    loadSnippet(currentSnippet);  // ⬅️ call first
+    currentQuestionIndex = 0;     // ⬅️ reset AFTER load
   }
+
+  questionStartTime = Date.now();
+  localStorage.setItem('currentQuestionStartTime', questionStartTime);
+  console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex+1} at ${new Date(questionStartTime).toLocaleTimeString()}`);
+}
+
 
   // Start timing the new question
   questionStartTime = Date.now();
