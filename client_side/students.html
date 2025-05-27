@@ -231,7 +231,7 @@
                 <button id="pause-btn" onclick="pauseStudy()" title="Pause Timer" style="font-size: 16px; padding: 2px 6px;">⏸️</button>
                 <button id="resume-btn" onclick="resumeStudy()" title="Resume Timer" style="font-size: 16px; padding: 2px 6px; display: none;">▶️</button>
                 
-                <button onclick="toggleTimer()" title="Show/Hide Timer" style="font-size: 16px; padding: 2px 6px;">Hide</button>
+                <button onclick="toggleTimer()" title="Show/Hide Timer" style="font-size: 16px; padding: 2px 6px;">👁️</button>
                 <button onclick="resetTimer()" title="Reset Timer" style="font-size: 16px; padding: 2px 6px;">🔁</button>
               </div>
                        
@@ -960,11 +960,11 @@ function toggleTimer() {
 
   if (isHidden) {
     timerEl.style.display = 'inline';
-    btn.innerHTML = 'Hide'; // Show "eye" icon again
+    btn.innerHTML = 'hide👁️'; // Show "eye" icon again
     localStorage.setItem('timerHidden', 'false');
   } else {
     timerEl.style.display = 'none';
-    btn.innerHTML = 'Show Timer👁️'; // Hidden eye icon
+    btn.innerHTML = '🙈'; // Hidden eye icon
     localStorage.setItem('timerHidden', 'true');
   }
 }
@@ -1043,7 +1043,7 @@ function resumeStudy() {
 
 window.onload = function() {
     syncAnswersFromCookies();
-    //displayUserName();
+    displayUserName();
     applyTheme();
     loadSnippet(currentSnippet);
     //updateButtons();
