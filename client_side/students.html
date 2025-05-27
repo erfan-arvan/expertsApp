@@ -712,14 +712,12 @@ function toggleTimer() {
 function startTimer() {
   const timerEl = document.getElementById('timer');
 
-  // Get or initialize start time
-  startTime = parseInt(localStorage.getItem('startTime') || '0');
-  if (!startTime) {
+  startTime = parseInt(localStorage.getItem('startTime'), 10);
+  if (isNaN(startTime) || startTime <= 0) {
     startTime = Date.now();
     localStorage.setItem('startTime', startTime);
   }
 
-  // Clear any existing interval before starting a new one
   if (timerInterval) clearInterval(timerInterval);
 
   timerInterval = setInterval(() => {
@@ -729,6 +727,7 @@ function startTimer() {
     timerEl.textContent = `⏱️ ${mins}:${secs}`;
   }, 1000);
 }
+
 
 
 function startStudy() {
@@ -785,6 +784,8 @@ function resumeStudy() {
 
 
 window.onload = function () {
+    console.log("startTime from storage:", localStorage.getItem('startTime'));
+
   applyTheme();
 
   // Handle Timer visibility
@@ -798,30 +799,26 @@ window.onload = function () {
   if (!started) {
     document.getElementById('start-modal').style.display = 'flex';
   } else {
-    startTime = parseInt(localStorage.getItem('startTime') || '0');
-    if (!startTime || isNaN(startTime)) {
+    startTime = parseInt(localStorage.getItem('startTime'), 10);
+    if (isNaN(startTime) || startTime <= 0) {
       startTime = Date.now();
       localStorage.setItem('startTime', startTime);
     }
 
-    totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0');
-    pausedAt = parseInt(localStorage.getItem('pausedAt') || '0');
+    totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
+    pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
 
     if (pausedAt) {
       document.getElementById('pause-modal').style.display = 'flex';
       pauseTimer();
     } else {
-      resumeTimer();
+      resumeTimer();  // 👈 start the ticking timer
     }
   }
 
-  // Ensure stored answers are loaded before questions render
   syncAnswersFromCookies();
-
-  // Only after syncing, render first snippet/question
   loadSnippet(currentSnippet);
 
-  // Auto-save every 2 minutes
   setInterval(() => {
     try {
       saveToServer();
