@@ -207,6 +207,7 @@
         <div class="user-dropdown" style="position: relative;">
             <div id="timer-wrapper" style="display: flex; align-items: center; gap: 10px;">
                 <div id="timer" style="font-weight: bold;">⏱️ 00:00</div>
+                <button onclick="pauseStudy()" style="font-size: 12px; padding: 2px 6px;">Pause</button>
                 <button onclick="toggleTimer()" style="padding: 2px 6px; font-size: 12px;">Hide</button>
               </div>              
           <div id="user-info" style="padding: 8px 12px; color: gainsboro; font-weight: bold; cursor: pointer;"></div>
@@ -794,6 +795,20 @@ function submitAll() {
 </div>
 
 
+<!-- Start Modal -->
+<div id="start-modal">
+    <h2>Ready to Begin?</h2>
+    <p>Click the button below to start the study. A timer will begin.</p>
+    <button onclick="startStudy()">Start</button>
+  </div>
+  
+  <!-- Pause Modal -->
+  <div id="pause-modal" style="display:none;">
+    <h2>Study Paused</h2>
+    <p>The timer is paused. Click below to resume.</p>
+    <button onclick="resumeStudy()">Resume</button>
+  </div>
+  
 
 <script>
   function showSubmissionModal(message) {
@@ -924,6 +939,30 @@ function startTimer() {
   }, 1000);
 }
 
+function startStudy() {
+  startTime = Date.now();
+  localStorage.setItem('studyStarted', 'true');
+  localStorage.setItem('startTime', startTime);
+  localStorage.setItem('pausedTotal', '0');
+  totalPausedTime = 0;
+
+  document.getElementById('start-modal').style.display = 'none';
+  startTimer();
+}
+
+function pauseStudy() {
+  pauseTimer();
+  localStorage.setItem('pausedAt', Date.now());
+  document.getElementById('pause-modal').style.display = 'block';
+}
+
+function resumeStudy() {
+  document.getElementById('pause-modal').style.display = 'none';
+  resumeTimer();
+  localStorage.removeItem('pausedAt');
+  localStorage.setItem('pausedTotal', totalPausedTime);
+}
+
 
 window.onload = function() {
     syncAnswersFromCookies();
@@ -933,13 +972,22 @@ window.onload = function() {
     //updateButtons();
 
     //Handle Timer
-    startTimer();
     const hidden = localStorage.getItem('timerHidden') === 'true';
     if (hidden) {
         document.getElementById('timer').style.display = 'none';
         document.querySelector('#timer-wrapper button').textContent = 'Show';
     }
+
+    // Show start modal only if not started
+    if (!localStorage.getItem('studyStarted')) {
+        document.getElementById('start-modal').style.display = 'block';
+    } else {
+        startTime = parseInt(localStorage.getItem('startTime'));
+        totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0');
+        startTimer();
+    }
     //For later: localStorage.removeItem('snippetTimerStart');
+
 
 
     // Unlock and highlight status bar
@@ -1330,6 +1378,45 @@ function prevQuestion() {
   }
 }
 
+
+</script>
+
+<script>
+let timerInterval = null;
+let startTime = null;
+let pausedAt = null;
+let totalPausedTime = 0;
+
+function formatTime(seconds) {
+  const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+  const secs = String(seconds % 60).padStart(2, '0');
+  return `${mins}:${secs}`;
+}
+
+function updateTimerDisplay() {
+  const timerEl = document.getElementById('timer');
+  if (!startTime) return;
+  const now = Date.now();
+  const elapsed = Math.floor((now - startTime - totalPausedTime) / 1000);
+  timerEl.textContent = `⏱️ ${formatTime(elapsed)}`;
+}
+
+function startTimer() {
+  timerInterval = setInterval(updateTimerDisplay, 1000);
+}
+
+function pauseTimer() {
+  clearInterval(timerInterval);
+  pausedAt = Date.now();
+}
+
+function resumeTimer() {
+  if (pausedAt) {
+    totalPausedTime += Date.now() - pausedAt;
+    pausedAt = null;
+  }
+  startTimer();
+}
 
 </script>
     
