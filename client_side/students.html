@@ -921,8 +921,9 @@ snippets.forEach((snippet, newIndex) => {
   const originalId = snippet.originalId; // You must store this during shuffling
 
   console.log("✅ newSnippetId:", newSnippetId);
-    console.log("📦 questionsPerSnippetOriginal keys:", Object.keys(questionsPerSnippetOriginal));
-    console.log("📋 originalQs:", originalQs);
+console.log("📦 questionsPerSnippetOriginal keys:", Object.keys(questionsPerSnippetOriginal));
+console.log("📋 originalQs:", originalQs);
+
   const originalQs = questionsPerSnippetOriginal[String(originalId)];
   const order = getOrCreateQuestionOrder(newSnippetId, originalQs.length);
   questionsPerSnippet[newSnippetId] = order.map(i => structuredClone(originalQs[i - 1]));
