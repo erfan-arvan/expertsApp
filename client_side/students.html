@@ -916,7 +916,7 @@ snippets.forEach((snippet, newIndex) => {
 
   const originalQs = questionsPerSnippetOriginal[String(originalId)];
   const order = getOrCreateQuestionOrder(newSnippetId, originalQs.length);
-  questionsPerSnippet[newSnippetId] = order.map(i => structuredClone(originalQs[i]));
+  questionsPerSnippet[newSnippetId] = order.map(i => structuredClone(originalQs[i - 1]));
 });
 
 
