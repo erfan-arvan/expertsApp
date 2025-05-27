@@ -1039,12 +1039,12 @@ window.onload = function() {
         resumeTimer();
     }
 
-    startTimer();
+    if (!pausedAt) {
+        startTimer();
     }
+    }
+    
     //For later: localStorage.removeItem('snippetTimerStart');
-
-
-
     // Unlock and highlight status bar
     // if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
     // if (isComplete('phase2Complete')) document.getElementById('link-phase3').classList.remove('disabled');
