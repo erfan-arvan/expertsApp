@@ -1038,69 +1038,52 @@ function resumeStudy() {
 }
 
 
+window.onload = function () {
+  syncAnswersFromCookies();
+  displayUserName();
+  applyTheme();
+  loadSnippet(currentSnippet);
 
+  // Handle Timer visibility (eye toggle)
+  const hidden = localStorage.getItem('timerHidden') === 'true';
+  if (hidden) {
+    document.getElementById('timer').style.display = 'none';
+    document.querySelector('#timer-wrapper button').textContent = 'Show';
+  }
 
-
-window.onload = function() {
-    syncAnswersFromCookies();
-    displayUserName();
-    applyTheme();
-    loadSnippet(currentSnippet);
-    //updateButtons();
-
-    //Handle Timer
-    const hidden = localStorage.getItem('timerHidden') === 'true';
-    if (hidden) {
-        document.getElementById('timer').style.display = 'none';
-        document.querySelector('#timer-wrapper button').textContent = 'Show';
+  const started = localStorage.getItem('studyStarted');
+  if (!started) {
+    document.getElementById('start-modal').style.display = 'flex';
+  } else {
+    // Resume or pause based on stored state
+    startTime = parseInt(localStorage.getItem('startTime'));
+    if (isNaN(startTime) || startTime <= 0) {
+      startTime = Date.now();
+      localStorage.setItem('startTime', startTime);
     }
 
-    const started = localStorage.getItem('studyStarted');
-    if (!started) {
-    document.getElementById('start-modal').style.display = 'flex';
-    } else {
-    // Resume ongoing timer
-    startTime = parseInt(localStorage.getItem('startTime') || '0');
     totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0');
     pausedAt = parseInt(localStorage.getItem('pausedAt') || '0');
 
-    if (pausedAt) {
-        document.getElementById('pause-modal').style.display = 'flex';
-        pauseTimer();
+    if (pausedAt && !isNaN(pausedAt)) {
+      document.getElementById('pause-modal').style.display = 'flex';
+      pauseTimer(); // pause, but don't count elapsed time
     } else {
-        resumeTimer();
+      resumeTimer(); // resumes and calls startTimer
     }
+  }
 
-    if (!pausedAt) {
-        startTimer();
+  // Periodic auto-save to server
+  setInterval(() => {
+    try {
+      saveToServer();
+      console.log("[Auto-Save] Progress saved to server.");
+    } catch (e) {
+      console.warn("[Auto-Save] Failed to save:", e);
     }
-    }
-
-    //For later: localStorage.removeItem('snippetTimerStart');
-    // Unlock and highlight status bar
-    // if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
-    // if (isComplete('phase2Complete')) document.getElementById('link-phase3').classList.remove('disabled');
-    // if (isComplete('phase3Complete')) document.getElementById('link-review').classList.remove('disabled');
-
-    // const current = window.location.pathname.split('/').pop();
-    // if (current.includes('phase1')) document.getElementById('link-phase1').classList.add('active');
-    // else if (current.includes('phase2')) document.getElementById('link-phase2').classList.add('active');
-    // else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
-    // else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
-
-    // if (sessionStorage.getItem('phase1Complete') === 'true' || getCookie('phase1Complete') === 'true') {
-    //     document.getElementById('continueBtn').style.display = 'inline-block';
-    // }
-
-    setInterval(() => {
-      try {
-        saveToServer();
-        console.log("[Auto-Save] Progress saved to server.");
-      } catch (e) {
-        console.warn("[Auto-Save] Failed to save:", e);
-      }
-    }, 120000); // every 2 minutes
+  }, 120000); // every 2 minutes
 };
+
 
 </script>
 
