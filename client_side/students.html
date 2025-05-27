@@ -978,7 +978,7 @@ function recordQuestionTime(snippetId, questionIndex) {
   console.log(`[⏱️ Debug] Recorded time for ${key}: +${elapsedSec}s → total ${newTotal}s`);
 }
 
-
+let allQuestions = [];
 
 function loadQuestion() {
     questionStartTime = Date.now();
