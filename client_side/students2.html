@@ -916,11 +916,13 @@ console.log("🧪 questionsPerSnippetOriginal =", questionsPerSnippetOriginal);
 // `snippets` is already randomized, and each has `.originalId`
 snippets.forEach((snippet, newIndex) => {
   const newSnippetId = newIndex + 1; // 1-based for current session
-  const originalId = snippet.originalId; // You must store this during shuffling
-
-
+  const originalId = snippet.originalId; 
 
   const originalQs = questionsPerSnippetOriginal[String(originalId)];
+  console.log("💥 originalId =", originalId);
+  console.log("💥 questionsPerSnippetOriginal =", questionsPerSnippetOriginal);
+  console.log("💥 originalQs =", questionsPerSnippetOriginal?.[String(originalId)]);
+
   const order = getOrCreateQuestionOrder(newSnippetId, originalQs.length);
   questionsPerSnippet[newSnippetId] = order.map(i => structuredClone(originalQs[i - 1]));
 });
