@@ -1456,11 +1456,6 @@ function updateTimerDisplay() {
   timerEl.textContent = `⏱️ ${formatTime(elapsed)}`;
 }
 
-function startTimer() {
-  updateTimerDisplay(); // show instantly
-  timerInterval = setInterval(updateTimerDisplay, 1000);
-}
-
 
 function pauseTimer() {
   clearInterval(timerInterval);
