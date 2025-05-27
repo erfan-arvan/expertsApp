@@ -787,7 +787,11 @@ function resumeStudy() {
 
 
 window.onload = function () {
-  console.log("startTime from storage:", localStorage.getItem('startTime'));
+    console.log("🚀 Page load");
+console.log("Loaded startTime:", localStorage.getItem('startTime'));
+console.log("Loaded pausedTotal:", localStorage.getItem('pausedTotal'));
+console.log("Loaded pausedAt:", localStorage.getItem('pausedAt'));
+console.log("Loaded lastResumeTime:", localStorage.getItem('lastResumeTime'));
 
   applyTheme();
 
