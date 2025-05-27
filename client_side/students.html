@@ -722,6 +722,7 @@ function startTimer() {
 
   timerInterval = setInterval(() => {
     const elapsed = Math.floor((Date.now() - startTime - totalPausedTime) / 1000);
+    console.log("⏱️ [Debug] startTime =", startTime, "pausedTotal =", totalPausedTime, "→ elapsed =", elapsed);
     const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
     const secs = String(elapsed % 60).padStart(2, '0');
     timerEl.textContent = `⏱️ ${mins}:${secs}`;
@@ -765,22 +766,20 @@ function resumeStudy() {
   if (pausedAtStored && !isNaN(pausedAtStored)) {
     const resumeDelta = Date.now() - pausedAtStored;
     totalPausedTime += resumeDelta;
-
-    // ⛔️ CRITICAL: CLEAR pausedAt RIGHT AFTER USING IT
     localStorage.setItem('pausedTotal', totalPausedTime);
     localStorage.removeItem('pausedAt');
-
     pausedAt = null;
-    localStorage.setItem('lastResumeTime', Date.now());
   }
 
-  questionStartTime = Date.now();
+  localStorage.setItem('lastResumeTime', Date.now());
+
   updateTimerDisplay();
   startTimer();
 
   document.getElementById('pause-btn').style.display = 'inline';
   document.getElementById('resume-btn').style.display = 'none';
 }
+
 
 
 
@@ -827,8 +826,6 @@ console.log("Loaded lastResumeTime:", localStorage.getItem('lastResumeTime'));
     if (pausedAt && !isNaN(pausedAt)) {
         document.getElementById('pause-modal').style.display = 'flex';
         pauseTimer();
-    } else {
-        resumeTimer();  // ✅ Just resume the timer, not the whole study state
     }
     }
 
@@ -1292,17 +1289,6 @@ function pauseTimer() {
 }
 
 
-function resumeTimer() {
-  if (pausedAt) {
-    totalPausedTime += Date.now() - pausedAt;
-    pausedAt = null;
-    localStorage.removeItem('pausedAt');
-    localStorage.setItem('pausedTotal', totalPausedTime);
-  }
-
-  updateTimerDisplay();
-  startTimer(); // ← IMPORTANT: start interval here
-}
 
 
 function resetTimer() {
