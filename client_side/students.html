@@ -789,7 +789,6 @@ window.onload = function () {
 
   applyTheme();
 
-  // Timer visibility
   const hidden = localStorage.getItem('timerHidden') === 'true';
   if (hidden) {
     document.getElementById('timer').style.display = 'none';
@@ -800,8 +799,13 @@ window.onload = function () {
   if (!started) {
     document.getElementById('start-modal').style.display = 'flex';
   } else {
-    startTime = parseInt(localStorage.getItem('startTime'), 10) || Date.now();
-    localStorage.setItem('startTime', startTime);
+    // ✅ FIXED: Don't overwrite startTime if already exists
+    if (!localStorage.getItem('startTime')) {
+      startTime = Date.now();
+      localStorage.setItem('startTime', startTime);
+    } else {
+      startTime = parseInt(localStorage.getItem('startTime'), 10);
+    }
 
     totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
     pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
@@ -810,7 +814,7 @@ window.onload = function () {
       document.getElementById('pause-modal').style.display = 'flex';
       pauseTimer();
     } else {
-      resumeStudy();  // ✅ THIS is the right function, not resumeTimer()
+      resumeStudy(); // ✅ starts both global and question timer
     }
   }
 
@@ -826,8 +830,6 @@ window.onload = function () {
     }
   }, 120000);
 };
-
-
 
 
 
