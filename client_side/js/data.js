@@ -503,3 +503,13 @@ const snippets = [
           }
         ]
       };
+
+      const StartingQuestions = {
+        "type": "none",
+        "id": "Read",
+        "prompt": "Please read and understand this code snippet, and click on next when you feel you are ready to answer questions about it.",
+        "type2": "",
+        "id2": "",
+        "question2": ""
+      };
+      

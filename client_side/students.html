@@ -980,7 +980,7 @@ function loadQuestion() {
     questionStartTime = Date.now();
     localStorage.setItem('currentQuestionStartTime', questionStartTime);
     const snippetSpecific = questionsPerSnippet[currentSnippet];
-    const allQuestions = [...snippetSpecific, ...general_questions];
+    const allQuestions = [StartingQuestions, ...snippetSpecific, ...general_questions];
     const question = allQuestions[currentQuestionIndex];
 
     const container = document.getElementById('question-area');
