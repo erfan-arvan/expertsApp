@@ -674,7 +674,6 @@ function toggleTheme() {
 }
 
 function syncAnswersFromCookies() {
-    console.log("hhhhhhhhhhhh");
   const cookies = document.cookie.split(';');
 
   cookies.forEach(cookie => {
@@ -686,8 +685,8 @@ function syncAnswersFromCookies() {
       console.log(`✅ Syncing: ${key} = ${value}`);
       sessionStorage.setItem(key, value); // 💥 This populates sessionStorage before render
     }
+    location.reload();
 
-    console.log("byeeeeeeeeeeee");
 
   });
 }
@@ -792,7 +791,6 @@ function resumeStudy() {
 
 
 window.onload = function () {
-    console.log("hiiii");
     syncAnswersFromCookies();
 
     console.log("📦 Unload was triggered at:", new Date(parseInt(localStorage.getItem('lastUnloadTriggeredAt') || 0)).toLocaleTimeString());
