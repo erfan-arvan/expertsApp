@@ -824,11 +824,15 @@ console.log("Loaded lastResumeTime:", localStorage.getItem('lastResumeTime'));
     pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
 
     if (pausedAt && !isNaN(pausedAt)) {
-  document.getElementById('pause-modal').style.display = 'flex';
-  pauseTimer();
-} else {
-  startTimer(); // ✅ Just start the ticking, don't mess with totalPausedTime
-}
+    document.getElementById('pause-modal').style.display = 'flex';
+    pauseTimer();
+    } else {
+    startTimer(); // ✅ Just start the ticking, don't mess with totalPausedTime
+    }
+    if (!pausedAt || isNaN(pausedAt)) {
+    localStorage.setItem('lastResumeTime', Date.now());
+    }
+
 
     }
 
@@ -985,8 +989,6 @@ function saveToServer() {
 //   const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
 //   navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
 }
-
-window.addEventListener('beforeunload', saveToServer);
 
 </script>
 
@@ -1316,20 +1318,16 @@ window.addEventListener('beforeunload', () => {
 
   const now = Date.now();
 
-  if (pausedAt) {
-    // If the user is paused, do NOT add time, just save pausedAt
+  if (!pausedAt) {
+    // Auto-pause the study
+    pausedAt = now;
     localStorage.setItem('pausedAt', pausedAt);
-  } else {
-    // If the user is ACTIVE, calculate the time since last resume and add it to pausedTotal
+
     const lastResume = parseInt(localStorage.getItem('lastResumeTime') || startTime, 10);
-    const currentPaused = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
-    const extraTime = now - lastResume;
-
-    const newPaused = currentPaused + extraTime;
-
-    localStorage.setItem('pausedTotal', newPaused);
+    const pausedTotal = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
+    const delta = now - lastResume;
+    localStorage.setItem('pausedTotal', pausedTotal + delta);
     localStorage.setItem('lastResumeTime', now);
-    localStorage.removeItem('pausedAt'); // user is not paused
   }
 
   localStorage.setItem('startTime', startTime);
