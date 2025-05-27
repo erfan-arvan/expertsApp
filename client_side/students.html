@@ -786,7 +786,7 @@ function resumeStudy() {
 
 
 window.onload = function () {
-    //syncAnswersFromCookies();
+    syncAnswersFromCookies();
 
     console.log("📦 Unload was triggered at:", new Date(parseInt(localStorage.getItem('lastUnloadTriggeredAt') || 0)).toLocaleTimeString());
 
@@ -906,6 +906,8 @@ function getOrCreateQuestionOrder(snippetId, numQuestions) {
 }
 
 const questionsPerSnippet = {};
+
+console.log("🧪 questionsPerSnippetOriginal =", questionsPerSnippetOriginal);
 
 // `snippets` is already randomized, and each has `.originalId`
 snippets.forEach((snippet, newIndex) => {
