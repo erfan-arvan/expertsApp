@@ -1319,22 +1319,27 @@ function resetTimer() {
 }
 
 window.addEventListener('beforeunload', () => {
-  if (startTime) {
-    const now = Date.now();
+  const now = Date.now();
 
-    // If user was actively paused, keep pausedAt
-    if (!pausedAt) {
-      pausedAt = now;
-      localStorage.setItem('pausedAt', pausedAt);
-      totalPausedTime += now - (localStorage.getItem('lastResumeTime') || startTime);
-    }
+  if (!startTime) return;
 
-    // Save state
-    localStorage.setItem('pausedTotal', totalPausedTime);
-    localStorage.setItem('startTime', startTime);
-    clearInterval(timerInterval);
+  if (!pausedAt) {
+    // User is NOT paused → accumulate the currently running session time
+    const lastResume = parseInt(localStorage.getItem('lastResumeTime') || startTime, 10);
+    const extraTime = now - lastResume;
+    totalPausedTime += extraTime;
+  }
+
+  // Save everything
+  localStorage.setItem('startTime', startTime);
+  localStorage.setItem('pausedTotal', totalPausedTime);
+  if (pausedAt) {
+    localStorage.setItem('pausedAt', pausedAt);
+  } else {
+    localStorage.removeItem('pausedAt');
   }
 });
+
 
 </script>
 
