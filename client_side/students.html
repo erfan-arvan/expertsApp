@@ -1270,7 +1270,29 @@ function saveAnswer(snippetId, questionId, value) {
 
 let currentQuestionIndex = 0;
 
+function recordQuestionTime(snippetId, questionIndex) {
+  if (questionStartTime === null) return;
+
+  const elapsedMs = Date.now() - questionStartTime;
+  const elapsedSec = Math.round(elapsedMs / 1000);
+
+  const key = `time-q-${snippetId}-${questionIndex}`;
+  const existing = parseInt(sessionStorage.getItem(key) || '0');
+  const total = existing + elapsedSec;
+
+  questionTimers[key] = total;
+  sessionStorage.setItem(key, total);
+
+  // Optional: also store in cookies
+  const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+  document.cookie = `${key}=${total}; expires=${expires}; path=/`;
+
+  questionStartTime = null;
+}
+
+
 function loadQuestion() {
+    questionStartTime = Date.now();
     const snippetSpecific = questionsPerSnippet[currentSnippet];
     const allQuestions = [...snippetSpecific, ...general_questions];
     const question = allQuestions[currentQuestionIndex];
@@ -1441,6 +1463,7 @@ function renderLikertScale(container, id, labels, saved = '') {
 
 
 function nextQuestion() {
+  recordQuestionTime(currentSnippet, currentQuestionIndex);
   const total = questionsPerSnippet[currentSnippet].length + general_questions.length;
 
   if (currentQuestionIndex < total - 1) {
@@ -1455,6 +1478,7 @@ function nextQuestion() {
 
 
 function prevQuestion() {
+  recordQuestionTime(currentSnippet, currentQuestionIndex);
   if (currentQuestionIndex > 0) {
     currentQuestionIndex--;
     loadQuestion();
@@ -1473,6 +1497,9 @@ let timerInterval = null;
 let startTime = null;
 let pausedAt = null;
 let totalPausedTime = 0;
+let questionStartTime = null;
+let questionTimers = {}; // key: `q-{snippetId}-{questionIndex}`, value: seconds
+
 
 function formatTime(seconds) {
   const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
