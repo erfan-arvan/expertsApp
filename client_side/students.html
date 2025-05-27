@@ -951,29 +951,23 @@ function syncAnswersFromCookies() {
   });
 }
 
+
 function toggleTimer() {
   const timerEl = document.getElementById('timer');
-  const toggleBtn = document.getElementById('toggle-timer-btn'); // Make sure the button has this ID
-  const pauseBtn = document.getElementById('pause-btn');
-  const resetBtn = document.getElementById('reset-btn');
+  const btn = event.target;
 
   const isHidden = timerEl.style.display === 'none';
 
   if (isHidden) {
     timerEl.style.display = 'inline';
-    pauseBtn.style.display = 'inline-block';
-    resetBtn.style.display = 'inline-block';
-    toggleBtn.innerHTML = 'Hide Timer';
+    btn.innerHTML = 'Hide Timer'; // Show "eye" icon again
     localStorage.setItem('timerHidden', 'false');
   } else {
     timerEl.style.display = 'none';
-    pauseBtn.style.display = 'none';
-    resetBtn.style.display = 'none';
-    toggleBtn.innerHTML = 'Show Timer';
+    btn.innerHTML = 'Show Timer'; // Hidden eye icon
     localStorage.setItem('timerHidden', 'true');
   }
 }
-
 
 
 
