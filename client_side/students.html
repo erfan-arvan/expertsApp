@@ -681,12 +681,13 @@ function syncAnswersFromCookies() {
     const key = rawKey.trim();
     const value = decodeURIComponent(rawValue || '');
 
-    // Only copy keys that match answer-* pattern
-    if (key.startsWith('answer-') && !sessionStorage.getItem(key)) {
-      sessionStorage.setItem(key, value);
+    if (key.startsWith('answer-')) {
+      console.log(`✅ Syncing: ${key} = ${value}`);
+      sessionStorage.setItem(key, value); // 💥 This populates sessionStorage before render
     }
   });
 }
+
 
 
 
