@@ -685,10 +685,10 @@ function syncAnswersFromCookies() {
       console.log(`✅ Syncing: ${key} = ${value}`);
       sessionStorage.setItem(key, value); // 💥 This populates sessionStorage before render
     }
-    location.reload();
-
 
   });
+  location.reload();
+
 }
 
 
