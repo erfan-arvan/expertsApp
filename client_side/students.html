@@ -207,10 +207,14 @@
         <div class="user-dropdown" style="position: relative;">
             <div id="timer-wrapper" style="display: flex; align-items: center; gap: 10px;">
                 <div id="timer" style="font-weight: bold;">⏱️ 00:00</div>
-                <button onclick="pauseStudy()" style="font-size: 12px; padding: 2px 6px;">Pause</button>
-                <button onclick="toggleTimer()" style="padding: 2px 6px; font-size: 12px;">Hide</button>
-                <button onclick="resetTimer()" style="font-size: 12px; padding: 2px 6px;">Reset</button>
-              </div>              
+              
+                <button id="pause-btn" onclick="pauseStudy()" title="Pause Timer" style="font-size: 16px; padding: 2px 6px;">⏸️</button>
+                <button id="resume-btn" onclick="resumeStudy()" title="Resume Timer" style="font-size: 16px; padding: 2px 6px; display: none;">▶️</button>
+                
+                <button onclick="toggleTimer()" title="Show/Hide Timer" style="font-size: 16px; padding: 2px 6px;">👁️</button>
+                <button onclick="resetTimer()" title="Reset Timer" style="font-size: 16px; padding: 2px 6px;">🔁</button>
+              </div>
+                       
           <div id="user-info" style="padding: 8px 12px; color: gainsboro; font-weight: bold; cursor: pointer;"></div>
           <div id="logout-menu" style="display: none; position: absolute; top: 100%; right: 0; background: #333; border: 1px solid #555; padding: 8px; z-index: 999;">
             <button onclick="logout()" style="color: white; background: none; border: none; cursor: pointer;">🚪 Logout</button>
@@ -988,9 +992,11 @@ function pauseStudy() {
   pausedAt = Date.now();
   localStorage.setItem('pausedAt', pausedAt);
   document.getElementById('pause-modal').style.display = 'flex';
+
+  // 👇 Add this to toggle buttons
+  document.getElementById('pause-btn').style.display = 'none';
+  document.getElementById('resume-btn').style.display = 'inline';
 }
-
-
 
 function resumeStudy() {
   document.getElementById('pause-modal').style.display = 'none';
@@ -1002,9 +1008,14 @@ function resumeStudy() {
     localStorage.setItem('lastResumeTime', Date.now());
     pausedAt = null;
   }
-  updateTimerDisplay(); // add this to fix the jump
+  updateTimerDisplay();
   startTimer();
+
+  // 👇 Add this to toggle buttons
+  document.getElementById('pause-btn').style.display = 'inline';
+  document.getElementById('resume-btn').style.display = 'none';
 }
+
 
 
 
@@ -1043,7 +1054,7 @@ window.onload = function() {
         startTimer();
     }
     }
-    
+
     //For later: localStorage.removeItem('snippetTimerStart');
     // Unlock and highlight status bar
     // if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
