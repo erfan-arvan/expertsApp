@@ -1335,6 +1335,7 @@ function resetTimer() {
     updateTimerDisplay();
     startTimer(); // restart interval
     clearAllStoredData();
+    sessionStorage.setItem('isReset','true');
     location.reload();
   }
 }
@@ -1368,11 +1369,14 @@ window.addEventListener('beforeunload', () => {
   // // ✅ DO NOT try to show pause modal or touch DOM
 
     // 1. Record time spent on the current question
-  // try {
-  //   recordQuestionTime(currentSnippet, currentQuestionIndex);
-  // } catch (e) {
-  //   console.warn("recordQuestionTime failed", e);
-  // }
+  try {
+    const isReset = sessionStorage.getItem('isReset') === 'true';
+    if (isReset) {
+      recordQuestionTime(currentSnippet, currentQuestionIndex);
+    } 
+  } catch (e) {
+    console.warn("recordQuestionTime failed", e);
+  }
   localStorage.setItem('pausedUnload', 'true');
   //pauseStudy();
 });
