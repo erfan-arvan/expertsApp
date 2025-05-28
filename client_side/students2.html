@@ -1378,7 +1378,7 @@ function showAnswerReview() {
     output += `\n🔹 Snippet ${snippet}\n`;
     let readTimeKey = `time-q-${snippet}-1`;
     const timeSecRead = parseInt(sessionStorage.getItem(readTimeKey) || localStorage.getItem(readTimeKey) || getCookie(readTimeKey) || '0');
-    output+=`Read Time: ${timeSecRead}s\n`;
+    output+=`     Read Time: ${timeSecRead}s\n\n`;
 
     const questions = questionsPerSnippet[snippet];
 
