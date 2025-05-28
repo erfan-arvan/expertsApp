@@ -1415,27 +1415,26 @@ function showAnswerReview() {
         output += '\n';
       });
     }
+    
 
     // General questions (always)
-    general_questions.forEach((gq, j) => {
-      const key1 = `answer-${snippet}-${gq.id}`;
-      const val1 = sessionStorage.getItem(key1) || getCookie(key1) || '[No answer]';
 
-      const timeKey = `time-q-${snippet}-${questions?.length + j + 1 || j + 1}`;
-      const timeSec = parseInt(sessionStorage.getItem(timeKey) || localStorage.getItem(timeKey) || getCookie(timeKey) || '0');
-      const timeFormatted = `${timeSec}s`;
+    const timeKeyGen1 = `time-q-${snippet}-6`;
+    const timeKeyGen2 = `time-q-${snippet}-7`;
+    const timeSecGen1 = parseInt(sessionStorage.getItem(timeKeyGen1) || localStorage.getItem(timeKeyGen1) || getCookie(timeKeyGen1) || '0');
+    const timeSecGen2 = parseInt(sessionStorage.getItem(timeKeyGen2) || localStorage.getItem(timeKeyGen2) || getCookie(timeKeyGen2) || '0');
 
-      output += `  Gen ${j + 1}. ${gq.prompt}\n     → Answer: ${val1}\n     🕒 Time: ${timeFormatted}\n`;
+    const key1Gen1 = `answer-${snippet}-function`;
+    const key1Gen2 = `answer-${snippet}-output`;
+    const key2Gen2 = `answer-${snippet}-output2`;
 
-      if (gq.id2 && gq.question2) {
-        const key2 = `answer-${snippet}-${gq.id2}`;
-        const val2 = sessionStorage.getItem(key2) || getCookie(key2) || '[No answer]';
-        output += `     ↪ ${gq.question2}\n        → Answer: ${val2}\n`;
-      }
 
-      output += '\n';
-    });
-  }
+    val1Gen1 = parseInt(sessionStorage.getItem(key1Gen1) || localStorage.getItem(key1Gen1) || getCookie(key1Gen1) || '0');
+    val1Gen2 = parseInt(sessionStorage.getItem(key1Gen2) || localStorage.getItem(key1Gen2) || getCookie(key1Gen2) || '0');
+    val2Gen2 = parseInt(sessionStorage.getItem(key2Gen2) || localStorage.getItem(key2Gen2) || getCookie(key2Gen2) || '0');
+
+    output+= `\n  function: ${val1Gen1}\n  time=${timeSecGen1}`;
+    output+= `\n  output: ${val1Gen2}\n  output: ${val2Gen2}\n  time=${timeSecGen2}`;
 
   reviewDiv.textContent = output.trim();
   document.getElementById('answer-review-modal').style.display = 'block';
