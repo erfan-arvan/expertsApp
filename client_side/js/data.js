@@ -266,7 +266,7 @@ const snippetsOriginal = [
         ],
         "2": [
           {
-            "type": "open",
+            "type": "bin",
             "id": "semanticsSlicing",
             "prompt": "Does the result of isFilesystemPath(uri) affect whether uri.getScheme() is evaluated?",
             "type2": "",
@@ -300,7 +300,7 @@ const snippetsOriginal = [
         ],
         "3": [
           {
-            "type": "open",
+            "type": "bin",
             "id": "semanticsSlicing",
             "prompt": "Does the result of field.isSynthetic() affect the value of modifiers?",
             "type2": "",
@@ -334,7 +334,7 @@ const snippetsOriginal = [
         ],
         "4": [
           {
-            "type": "open",
+            "type": "bin",
             "id": "semanticsSlicing",
             "prompt": "Does the result of searchStr.length() affect whether str == null?",
             "type2": "",
@@ -368,7 +368,7 @@ const snippetsOriginal = [
         ],
         "5": [
           {
-            "type": "open",
+            "type": "bin",
             "id": "semanticsSlicing",
             "prompt": "Does the value of root affect whether the method returns true?",
             "type2": "",
@@ -402,7 +402,7 @@ const snippetsOriginal = [
         ],
         "6": [
           {
-            "type": "open",
+            "type": "bin",
             "id": "semanticsSlicing",
             "prompt": "Does setting i = 0 affect whether the exception is thrown at the end?",
             "type2": "",
@@ -436,7 +436,7 @@ const snippetsOriginal = [
         ],
         "7": [
           {
-            "type": "open",
+            "type": "bin",
             "id": "semanticsSlicing",
             "prompt": "Does the value of a affect whether r1 and r2 are finite values or NaN?",
             "type2": "",
@@ -470,7 +470,7 @@ const snippetsOriginal = [
         ],
         "8": [
           {
-            "type": "open",
+            "type": "bin",
             "id": "semanticsSlicing",
             "prompt": "Does the expression x + HALF_PI affect the value of n?",
             "type2": "",
