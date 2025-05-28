@@ -1448,7 +1448,7 @@ function showAnswerReview() {
     output += `     🕒 Time: ${timeSecGen2}s\n\n`;
   }
 
-  reviewDiv.textContent = output.trim();
+  reviewDiv.innerHTML = output.trim();
   document.getElementById('answer-review-modal').style.display = 'block';
 }
 

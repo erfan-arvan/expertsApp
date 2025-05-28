@@ -292,7 +292,7 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "syntaxB",
-            "prompt": "How many case labels are in the switch statement?",
+            "prompt": "How many case labels are in the <span class=\"qcode\">switch</span> statement?",
             "type2": "",
             "id2": "",
             "question2": ""
