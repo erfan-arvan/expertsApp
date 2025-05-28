@@ -1432,12 +1432,13 @@ function showAnswerReview() {
     const val1Gen2 = sessionStorage.getItem(key1Gen2) || localStorage.getItem(key1Gen2) || getCookie(key1Gen2) || '[No answer]';
     const val2Gen2 = sessionStorage.getItem(key2Gen2) || localStorage.getItem(key2Gen2) || getCookie(key2Gen2) || '[No answer]';
 
-    output += `  ${(questions?.length || 0) + 1}. What does this code snippet do?\n`;
+    output += `  ${(questions?.length || 0) + 1}. What does this code snippet do? Briefly describe its main functionality.\n`;
     output += `     → Answer: ${val1Gen1}\n`;
     output += `     🕒 Time: ${timeSecGen1}s\n\n`;
 
-    output += `  ${(questions?.length || 0) + 2}. How easy or difficult was it to understand this code?\n`;
+    output += `  ${(questions?.length || 0) + 2}. How easy or difficult were the tasks you performed for this snippet?\n`;
     output += `     → Structural Mapping: ${val1Gen2}\n`;
+    output += `  ${(questions?.length || 0) + 2}. How easy or difficult was this snippet to understand?\n`;
     output += `     → Semantic Transparency: ${val2Gen2}\n`;
     output += `     🕒 Time: ${timeSecGen2}s\n\n`;
   }
