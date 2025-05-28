@@ -841,8 +841,8 @@ window.onload = function () {
   const Ispaused = sessionStorage.getItem('pausedUnload') === 'true';
   if(Ispaused){
     sessionStorage.setItem('pausedUnload', 'false');
-    pauseStudy();
-  } else{resumeStudy();}
+    pauseTimer();
+  }
 
 }
 
