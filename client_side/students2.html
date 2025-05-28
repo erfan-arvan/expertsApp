@@ -1547,7 +1547,7 @@ function showAnswerReview() {
 </script>
 
 <script>
-  async function submitFinalAnswersToServer() {
+async function submitFinalAnswersToServer() {
   const username = getStoredUsername();
   const payload = {
     username: username,
@@ -1564,11 +1564,12 @@ function showAnswerReview() {
 
     const questions = questionsPerSnippet[snippet] || [];
 
-    // Add custom questions
+    // Custom questions
     questions.forEach((q, i) => {
       const answer = localStorage.getItem(`answer-${snippet}-${q.id}`) || getCookie(`answer-${snippet}-${q.id}`) || '[No answer]';
       const time = parseInt(localStorage.getItem(`time-q-${snippet}-${i + 2}`) || getCookie(`time-q-${snippet}-${i + 2}`) || '0');
       const entry = {
+        id: q.id,
         prompt: q.prompt || '[Missing prompt]',
         answer: answer,
         timeSec: time
@@ -1577,6 +1578,7 @@ function showAnswerReview() {
       if (q.id2 && q.question2) {
         const secondAnswer = localStorage.getItem(`answer-${snippet}-${q.id2}`) || getCookie(`answer-${snippet}-${q.id2}`) || '[No answer]';
         entry.followUp = {
+          id: q.id2,
           prompt: q.question2,
           answer: secondAnswer
         };
@@ -1585,30 +1587,31 @@ function showAnswerReview() {
       payload.answers[snippetKey].questions.push(entry);
     });
 
-    // Add general questions as if they were regular ones
-    const qIndexOffset = questions.length;
-
-    // Q5: Function description
+    // General Q5: Function description
     const answer5 = localStorage.getItem(`answer-${snippet}-function`) || getCookie(`answer-${snippet}-function`) || '[No answer]';
     const time5 = parseInt(localStorage.getItem(`time-q-${snippet}-6`) || getCookie(`time-q-${snippet}-6`) || '0');
     payload.answers[snippetKey].questions.push({
+      id: 'function',
       prompt: "What does this code snippet do? Briefly describe its main functionality.",
       answer: answer5,
       timeSec: time5
     });
 
-    // Q6.1: Self-assessed difficulty
+    // General Q6.1: Self-assessed difficulty
     const answer6_1 = localStorage.getItem(`answer-${snippet}-scaleSM`) || getCookie(`answer-${snippet}-scaleSM`) || '[No answer]';
 
-    // Q6.2: Perceived snippet difficulty
+    // General Q6.2: Perceived difficulty
     const answer6_2 = localStorage.getItem(`answer-${snippet}-scaleST`) || getCookie(`answer-${snippet}-scaleST`) || '[No answer]';
     const time6 = parseInt(localStorage.getItem(`time-q-${snippet}-7`) || getCookie(`time-q-${snippet}-7`) || '0');
 
     payload.answers[snippetKey].questions.push({
+      id: 'scaleSM',
       prompt: "How easy or difficult were the tasks you performed for this snippet?",
       answer: answer6_1
     });
+
     payload.answers[snippetKey].questions.push({
+      id: 'scaleST',
       prompt: "How easy or difficult was this snippet to understand?",
       answer: answer6_2,
       timeSec: time6
@@ -1633,6 +1636,7 @@ function showAnswerReview() {
     alert("❌ Submission error: " + err.message);
   }
 }
+
 
 </script>
 <script>
