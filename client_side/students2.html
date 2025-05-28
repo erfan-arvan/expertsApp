@@ -1387,7 +1387,7 @@ function showAnswerReview() {
         const key1 = `answer-${snippet}-${q?.id}`;
         const val1 = sessionStorage.getItem(key1) || getCookie(key1) || '[No answer]';
 
-        const timeKey = `time-q-${snippet}-${i + 1}`;
+        const timeKey = `time-q-${snippet}-${i + 2}`;
         const timeSec = parseInt(sessionStorage.getItem(timeKey) || localStorage.getItem(timeKey) || getCookie(timeKey) || '0');
         const timeFormatted = `${timeSec}s`;
 
