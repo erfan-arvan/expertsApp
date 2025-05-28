@@ -322,8 +322,8 @@
   function getOrCreateSnippetOrder(length) {
   const key = 'snippetOrder';
 
-  // Try to load from sessionStorage or cookie
-  let stored = getCookie(key) || sessionStorage.getItem(key);
+  // Try to load from localStorage or cookie
+  let stored = getCookie(key) || localStorage.getItem(key);
   if (stored) {
     try {
       const parsed = JSON.parse(stored);
@@ -338,9 +338,9 @@
     [order[i], order[j]] = [order[j], order[i]];
   }
 
-  // Store in sessionStorage and cookie
+  // Store in localStorage and cookie
   const serialized = JSON.stringify(order);
-  sessionStorage.setItem(key, serialized);
+  localStorage.setItem(key, serialized);
   document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=2592000`; // 30 days
 
   return order;
@@ -384,7 +384,7 @@ console.log("Mapping from original (1-based):", snippetOrder.map(i => `Original 
     }
   
     function isComplete(key) {
-      return sessionStorage.getItem(key) === 'true' || getCookie(key) === 'true';
+      return localStorage.getItem(key) === 'true' || getCookie(key) === 'true';
     }
   
 </script>
@@ -463,7 +463,7 @@ function submitAll() {
     // Pull all saved snippets from session or cookie
     for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
         const key = `summary${i}`;
-        const sessionVal = sessionStorage.getItem(key);
+        const sessionVal = localStorage.getItem(key);
         const cookieVal = getCookie(key);
         allSummaries[key] = sessionVal || decodeURIComponent(cookieVal || '');
     }
@@ -477,7 +477,7 @@ function submitAll() {
     if (response.ok) {
       showSubmissionModal('✅ Summaries submitted successfully. Click “Continue to Phase 2” to proceed.\nYou may resubmit before the deadline if you change your mind about any part of your response.');
       document.getElementById('continueBtn').style.display = 'inline-block';
-      sessionStorage.setItem('phase1_submitted', 'true');
+      localStorage.setItem('phase1_submitted', 'true');
       setCookie('phase1_submitted', 'true', 30);
     } else {
       showSubmissionModal('❌ Submission failed. Please try again.');
@@ -691,16 +691,16 @@ function syncAnswersFromCookies() {
     const key = rawKey.trim();
     const value = decodeURIComponent(rawValue || '');
 
-    if (key.startsWith('answer-') && !sessionStorage.getItem(key)) {
+    if (key.startsWith('answer-') && !localStorage.getItem(key)) {
       console.log(`✅ Syncing: ${key} = ${value}`);
-      sessionStorage.setItem(key, value);
+      localStorage.setItem(key, value);
       synced = true;
     }
   });
 
   // Only reload ONCE per session
-//   if (synced && !sessionStorage.getItem('alreadyReloaded')) {
-//     sessionStorage.setItem('alreadyReloaded', 'true');
+//   if (synced && !localStorage.getItem('alreadyReloaded')) {
+//     localStorage.setItem('alreadyReloaded', 'true');
 //     location.reload();
 //   }
 }
@@ -906,7 +906,7 @@ function validateCurrentSnippetInputs() {
 <script>
 function getOrCreateQuestionOrder(snippetId, numQuestions) {
   const key = `qOrder-${snippetId}`;
-  const stored = sessionStorage.getItem(key) || getCookie(key);
+  const stored = localStorage.getItem(key) || getCookie(key);
 
   if (stored) {
     try {
@@ -922,7 +922,7 @@ function getOrCreateQuestionOrder(snippetId, numQuestions) {
   }
 
   const serialized = JSON.stringify(order);
-  sessionStorage.setItem(key, serialized);
+  localStorage.setItem(key, serialized);
   document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=2592000`;
   return order;
 }
@@ -952,11 +952,11 @@ function areAllSnippetsFilled() {
   for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
     const questions = questionsPerSnippet[i];
     for (const q of questions) {
-      const mainVal = sessionStorage.getItem(`answer-${i}-${q.id}`) || '';
+      const mainVal = localStorage.getItem(`answer-${i}-${q.id}`) || '';
       if (!mainVal.trim()) return false;
 
       if (q.id2) {
-        const secondVal = sessionStorage.getItem(`answer-${i}-${q.id2}`) || '';
+        const secondVal = localStorage.getItem(`answer-${i}-${q.id2}`) || '';
         if (!secondVal.trim()) return false;
       }
     }
@@ -969,7 +969,7 @@ function areAllSnippetsFilled() {
 
 <!-- <script>
   function displayUserName() {
-    const name = sessionStorage.getItem('participantName') || getCookie('participantName');
+    const name = localStorage.getItem('participantName') || getCookie('participantName');
     if (name) {
       document.getElementById('user-info').textContent = `👤 ${name}`;
     }
@@ -979,31 +979,31 @@ function areAllSnippetsFilled() {
 
 <script>
 function saveToServer() {
-//   const name = sessionStorage.getItem('participantName') || getCookie('participantName') || 'Anonymous';
+//   const name = localStorage.getItem('participantName') || getCookie('participantName') || 'Anonymous';
 //   const username = getCookie('username') || 'anonymous';
 
 //   // Phase 1 data
 //   const phase1 = {};
 //   for (let i = 1; i <= 8; i++) {
-//     const summary = sessionStorage.getItem(`summary${i}`) || getCookie(`summary${i}`) || '';
-//     const comp = sessionStorage.getItem(`compSummary${i}`) || getCookie(`compSummary${i}`) || '';
+//     const summary = localStorage.getItem(`summary${i}`) || getCookie(`summary${i}`) || '';
+//     const comp = localStorage.getItem(`compSummary${i}`) || getCookie(`compSummary${i}`) || '';
 //     phase1[`snippet${i}`] = { summary, comprehensibility: comp };
 //   }
 
 //   // Phase 2 & 3 data
 //   let phase2 = {}, phase3 = {};
 //   try {
-//     phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getCookie('phase3_ranking') || '{}');
-//     phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getCookie('phase3_reasoning') || '{}');
+//     phase2 = JSON.parse(localStorage.getItem('phase3_ranking') || getCookie('phase3_ranking') || '{}');
+//     phase3 = JSON.parse(localStorage.getItem('phase3_reasoning') || getCookie('phase3_reasoning') || '{}');
 //   } catch (e) {
 //     console.warn("Error parsing phase2 or phase3 data", e);
 //   }
 
 //   // Completion flags and theme
 //   const flags = {
-//     phase1Complete: sessionStorage.getItem('phase1Complete') || getCookie('phase1Complete') || 'false',
-//     phase2Complete: sessionStorage.getItem('phase2Complete') || getCookie('phase2Complete') || 'false',
-//     phase3Complete: sessionStorage.getItem('phase3Complete') || getCookie('phase3Complete') || 'false',
+//     phase1Complete: localStorage.getItem('phase1Complete') || getCookie('phase1Complete') || 'false',
+//     phase2Complete: localStorage.getItem('phase2Complete') || getCookie('phase2Complete') || 'false',
+//     phase3Complete: localStorage.getItem('phase3Complete') || getCookie('phase3Complete') || 'false',
 //     codeTheme: localStorage.getItem('codeTheme') || 'light',
 //     submitted: '0',
 //   };
@@ -1030,8 +1030,8 @@ function saveToServer() {
 function saveAnswer(snippetId, questionId, value) {
     const key = `answer-${snippetId}-${questionId}`;
 
-    // Save to sessionStorage
-    sessionStorage.setItem(key, value);
+    // Save to localStorage
+    localStorage.setItem(key, value);
 
     // Save to cookies (expires in 30 days)
     const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
@@ -1117,7 +1117,7 @@ function renderQuestion(container, question, snippetNum) {
   container.appendChild(label1);
 
   const key1 = `answer-${snippetNum}-${question.id}`;
-  const saved1 = sessionStorage.getItem(key1) || '';
+  const saved1 = localStorage.getItem(key1) || '';
 
   if (question.type === 'open' || question.type === 'short') {
     const input1 = document.createElement('textarea');
@@ -1168,7 +1168,7 @@ function renderQuestion(container, question, snippetNum) {
     container.appendChild(label2);
 
     const key2 = `answer-${snippetNum}-${question.id2}`;
-    const saved2 = sessionStorage.getItem(key2) || '';
+    const saved2 = localStorage.getItem(key2) || '';
 
     if (question.type2 === 'open' || question.type2 === 'short') {
       const input2 = document.createElement('textarea');
@@ -1236,7 +1236,7 @@ function renderLikertScale(container, id, labels, saved = '') {
     radio.name = id;
     radio.value = label;
     radio.checked = saved === label;
-    radio.onchange = () => sessionStorage.setItem(id, radio.value);
+    radio.onchange = () => localStorage.setItem(id, radio.value);
 
     labelEl.appendChild(radio);
     labelEl.appendChild(document.createTextNode(label));
@@ -1342,7 +1342,7 @@ function resetTimer() {
     updateTimerDisplay();
     startTimer(); // restart interval
     clearAllStoredData();
-    sessionStorage.setItem('isReset','true');
+    localStorage.setItem('isReset','true');
     location.reload();
   }
 }
@@ -1377,9 +1377,9 @@ window.addEventListener('beforeunload', () => {
 
     // 1. Record time spent on the current question
   try {
-    const isReset = sessionStorage.getItem('isReset') === 'true';
+    const isReset = localStorage.getItem('isReset') === 'true';
     if (isReset) {
-      sessionStorage.removeItem('isReset');
+      localStorage.removeItem('isReset');
       recordQuestionTime(currentSnippet, currentQuestionIndex);
     } 
   } catch (e) {
@@ -1400,7 +1400,7 @@ function showAnswerReview() {
   for (let snippet = 1; snippet <= TOTAL_SNIPPETS; snippet++) {
     output += `\n🔹 Snippet ${snippet}\n`;
     let readTimeKey = `time-q-${snippet}-1`;
-    const timeSecRead = parseInt(sessionStorage.getItem(readTimeKey) || localStorage.getItem(readTimeKey) || getCookie(readTimeKey) || '0');
+    const timeSecRead = parseInt(localStorage.getItem(readTimeKey) || localStorage.getItem(readTimeKey) || getCookie(readTimeKey) || '0');
     output+=`     Read Time: ${timeSecRead}s\n\n`;
 
     const questions = questionsPerSnippet[snippet];
@@ -1410,17 +1410,17 @@ function showAnswerReview() {
     } else {
       questions.forEach((q, i) => {
         const key1 = `answer-${snippet}-${q?.id}`;
-        const val1 = sessionStorage.getItem(key1) || getCookie(key1) || '[No answer]';
+        const val1 = localStorage.getItem(key1) || getCookie(key1) || '[No answer]';
 
         const timeKey = `time-q-${snippet}-${i + 2}`;
-        const timeSec = parseInt(sessionStorage.getItem(timeKey) || localStorage.getItem(timeKey) || getCookie(timeKey) || '0');
+        const timeSec = parseInt(localStorage.getItem(timeKey) || localStorage.getItem(timeKey) || getCookie(timeKey) || '0');
         const timeFormatted = `${timeSec}s`;
 
         output += `  ${i + 1}. ${q?.prompt || '[Missing prompt]'}\n     → Answer: ${val1}\n     🕒 Time: ${timeFormatted}\n`;
 
         if (q?.id2 && q?.question2) {
           const key2 = `answer-${snippet}-${q.id2}`;
-          const val2 = sessionStorage.getItem(key2) || getCookie(key2) || '[No answer]';
+          const val2 = localStorage.getItem(key2) || getCookie(key2) || '[No answer]';
           output += `     ↪ ${q.question2}\n        → Answer: ${val2}\n`;
         }
 
@@ -1433,16 +1433,16 @@ function showAnswerReview() {
     const timeKeyGen1 = `time-q-${snippet}-6`;
     const timeKeyGen2 = `time-q-${snippet}-7`;
 
-    const timeSecGen1 = parseInt(sessionStorage.getItem(timeKeyGen1) || localStorage.getItem(timeKeyGen1) || getCookie(timeKeyGen1) || '0');
-    const timeSecGen2 = parseInt(sessionStorage.getItem(timeKeyGen2) || localStorage.getItem(timeKeyGen2) || getCookie(timeKeyGen2) || '0');
+    const timeSecGen1 = parseInt(localStorage.getItem(timeKeyGen1) || localStorage.getItem(timeKeyGen1) || getCookie(timeKeyGen1) || '0');
+    const timeSecGen2 = parseInt(localStorage.getItem(timeKeyGen2) || localStorage.getItem(timeKeyGen2) || getCookie(timeKeyGen2) || '0');
 
     const key1Gen1 = `answer-${snippet}-function`;
     const key1Gen2 = `answer-${snippet}-scaleSM`;
     const key2Gen2 = `answer-${snippet}-scaleST`;
 
-    const val1Gen1 = sessionStorage.getItem(key1Gen1) || localStorage.getItem(key1Gen1) || getCookie(key1Gen1) || '[No answer]';
-    const val1Gen2 = sessionStorage.getItem(key1Gen2) || localStorage.getItem(key1Gen2) || getCookie(key1Gen2) || '[No answer]';
-    const val2Gen2 = sessionStorage.getItem(key2Gen2) || localStorage.getItem(key2Gen2) || getCookie(key2Gen2) || '[No answer]';
+    const val1Gen1 = localStorage.getItem(key1Gen1) || localStorage.getItem(key1Gen1) || getCookie(key1Gen1) || '[No answer]';
+    const val1Gen2 = localStorage.getItem(key1Gen2) || localStorage.getItem(key1Gen2) || getCookie(key1Gen2) || '[No answer]';
+    const val2Gen2 = localStorage.getItem(key2Gen2) || localStorage.getItem(key2Gen2) || getCookie(key2Gen2) || '[No answer]';
 
     output += `  ${(questions?.length || 0) + 1}. What does this code snippet do? Briefly describe its main functionality.\n`;
     output += `     → Answer: ${val1Gen1}\n`;
@@ -1475,13 +1475,13 @@ function isCurrentQuestionAnswered() {
 
   // First sub-question is always required
   const key1 = `answer-${snippetId}-${question.id}`;
-  const answer1 = sessionStorage.getItem(key1) || '';
+  const answer1 = localStorage.getItem(key1) || '';
   if (!answer1.trim()) return false;
 
   // If second sub-question exists, it is also required
   if (question.id2 && question.question2) {
     const key2 = `answer-${snippetId}-${question.id2}`;
-    const answer2 = sessionStorage.getItem(key2) || '';
+    const answer2 = localStorage.getItem(key2) || '';
     if (!answer2.trim()) return false;
   }
 
@@ -1503,10 +1503,10 @@ function isCurrentQuestionAnswered() {
   // 🧹 Clear localStorage
   localStorage.clear();
 
-  // 🧹 Clear sessionStorage
-  sessionStorage.clear();
+  // 🧹 Clear localStorage
+  localStorage.clear();
 
-  console.log("✅ All cookies, localStorage, and sessionStorage have been cleared.");
+  console.log("✅ All cookies, localStorage, and localStorage have been cleared.");
 }
 
 </script>
