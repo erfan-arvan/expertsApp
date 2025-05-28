@@ -840,7 +840,7 @@ window.onload = function () {
   }
   const Ispaused = localStorage.getItem('pausedUnload') === 'true';
   if(Ispaused){
-    alarm(paused);
+    alert(paused);
     localStorage.setItem('pausedUnload', 'false');
   }
 
