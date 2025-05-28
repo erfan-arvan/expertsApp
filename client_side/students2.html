@@ -749,6 +749,20 @@ function startTimer() {
 
 
 
+function generateAndStoreUsername() {
+    const randomNumber = Math.floor(Math.random() * 100_000_000);
+    const username = 'student' + randomNumber.toString().padStart(8, '0');
+
+    // Save to localStorage
+    localStorage.setItem('usernameS', username);
+
+    // Save to cookies (expires in 30 days)
+    const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    document.cookie = `usernameS=${username}; expires=${expires}; path=/`;
+
+    console.log("Generated and stored username:", username);
+    return username;
+}
 
 
 function startStudy() {
@@ -759,6 +773,7 @@ function startStudy() {
   localStorage.setItem('pausedTotal', '0');
   totalPausedTime = 0;
 
+  generateAndStoreUsername();
   document.getElementById('start-modal').style.display = 'none';
   loadSnippet(currentSnippet);
   startTimer();
@@ -1394,9 +1409,34 @@ window.addEventListener('beforeunload', () => {
 </script>
 
 <script>
+  function getStoredUsername() {
+    // 1. Try localStorage
+    let username = localStorage.getItem('usernameS');
+    if (username) return username;
+
+    // 2. Try cookies
+    const cookieMatch = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('usernameS='));
+    
+    if (cookieMatch) {
+        username = cookieMatch.split('=')[1];
+        // Optional: sync back to localStorage if only found in cookies
+        localStorage.setItem('usernameS', username);
+        return username;
+    }
+
+    // Not found
+    return null;
+}
+</script>
+<script>
 function showAnswerReview() {
   const reviewDiv = document.getElementById('answer-review-content');
   let output = '';
+  const username = getStoredUsername();
+
+  output+=`\n USERNAME: ${username}`;
   for (let snippet = 1; snippet <= TOTAL_SNIPPETS; snippet++) {
     output += `\n🔹 Snippet ${snippet}\n`;
     let readTimeKey = `time-q-${snippet}-1`;
