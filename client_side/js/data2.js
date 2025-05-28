@@ -313,7 +313,7 @@ const snippetsOriginal = [
             "prompt": "What is the return value of the method for input <span class=\"qcode\">type = -1</span>?",
             "type2": "bin",
             "id2": "output2",
-            "question2": "Is the for loop over getDeclaredFields() entered for this input?"
+            "question2": "Is the for loop over <span class=\"qcode\">getDeclaredFields()</span> entered for this input?"
           },
           {
             "type": "bin",
@@ -378,7 +378,7 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "output",
-            "prompt": "What is the return value of the method if root refers to a path that does not exist on disk?",
+            "prompt": "What is the return value of the method if <span class=\"qcode\">root</span> refers to a path that does not exist on disk?",
             "type2": "short",
             "id2": "output2",
             "question2": "Is <span class=\"qcode\">Files.walkFileTree(...)</span> ever called?"
@@ -472,7 +472,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "semanticsSlicing",
-            "prompt": "Does the expression <span class=\"qcode\">x + HALF_PI affect</span> the value of <span class=\"qcode\">n</span>?",
+            "prompt": "Does the expression <span class=\"qcode\">x + HALF_PI</span> affect the value of <span class=\"qcode\">n</span>?",
             "type2": "",
             "id2": "",
             "question2": ""
