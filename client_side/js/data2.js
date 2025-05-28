@@ -438,7 +438,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "semanticsSlicing",
-            "prompt": "Does the value of a affect whether <span class=\"qcode\">r1</span> and <span class=\"qcode\">r2</span> are finite values or <span class=\"qcode\">NaN</span>?",
+            "prompt": "Does the value of <span class=\"qcode\">a</span> affect whether <span class=\"qcode\">r1</span> and <span class=\"qcode\">r2</span> are finite values or <span class=\"qcode\">NaN</span>?",
             "type2": "",
             "id2": "",
             "question2": ""
