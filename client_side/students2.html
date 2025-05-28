@@ -752,9 +752,9 @@ function startStudy() {
   localStorage.setItem('pausedTotal', '0');
   localStorage.setItem('currentQuestionStartTime', startTime);
   totalPausedTime = 0;
-  loadSnippet(currentSnippet);
 
   document.getElementById('start-modal').style.display = 'none';
+  loadSnippet(currentSnippet);
   startTimer();
 }
 
@@ -853,6 +853,11 @@ const Ispaused = localStorage.getItem('pausedUnload') === 'true';
     document.getElementById('pause-btn').style.display = 'inline';
     document.getElementById('resume-btn').style.display = 'none';
   }
+
+  if (localStorage.getItem('studyStarted') === 'true') {
+    loadSnippet(currentSnippet);
+  }
+
 
   setInterval(() => {
     try {
