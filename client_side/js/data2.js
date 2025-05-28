@@ -318,7 +318,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "syntaxW",
-            "prompt": "Is there a top-level loop that appears after some code containing a return statement?",
+            "prompt": "Is there a top-level loop that appears after some code containing a <span class=\"qcode\">return</span> statement?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -326,7 +326,7 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "syntaxB",
-            "prompt": "How many if conditions must be satisfied before <span class=\"qcode\">field.getShort(null) == type</span> is evaluated?",
+            "prompt": "How many <span class=\"qcode\">if</span> conditions must be satisfied before <span class=\"qcode\">field.getShort(null) == type</span> is evaluated?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -462,7 +462,7 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "syntaxB",
-            "prompt": "How many if statements may cause early return from this method?",
+            "prompt": "How many <span class=\"qcode\">if</span> statements may cause early return from this method?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -496,7 +496,7 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "syntaxB",
-            "prompt": "How many different return statements are present in this method?",
+            "prompt": "How many different <span class=\"qcode\">return</span> statements are present in this method?",
             "type2": "",
             "id2": "",
             "question2": ""
