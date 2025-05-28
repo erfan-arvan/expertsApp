@@ -1374,9 +1374,11 @@ window.addEventListener('beforeunload', () => {
 function showAnswerReview() {
   const reviewDiv = document.getElementById('answer-review-content');
   let output = '';
-
   for (let snippet = 1; snippet <= TOTAL_SNIPPETS; snippet++) {
     output += `\n🔹 Snippet ${snippet}\n`;
+    let readTimeKey = `time-q-${snippet}-0`;
+    const timeSecRead = parseInt(sessionStorage.getItem(readTimeKey) || localStorage.getItem(readTimeKey) || getCookie(readTimeKey) || '0');
+    output+=`Read Time: ${timeSecRead}s\n`;
 
     const questions = questionsPerSnippet[snippet];
 
