@@ -287,26 +287,69 @@
     </div>
   </div>
 
-  <div id="answer-review-modal" style="
+  <div id="review-modal" style="
   display: none;
   position: fixed;
-  top: 5%;
+  top: 10%;
   left: 50%;
   transform: translateX(-50%);
   width: 80%;
   max-height: 80%;
   overflow-y: auto;
-  background-color: #fff;
+  background: #fff;
   border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 10px;
-  z-index: 1000;
+  padding: 20px 20px 10px 20px;
+  border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  z-index: 1002;
+  font-family: 'Segoe UI', sans-serif;
 ">
-  <h2 style="margin-top: 0;">📝 Review All Responses</h2>
-  <div id="answer-review-content" style="white-space: pre-wrap; font-size: 14px; color: #333;"></div>
-  <button onclick="document.getElementById('answer-review-modal').style.display='none'" style="margin-top: 15px;">Close</button>
+
+  <!-- Header: Title + Close Button -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+    <h3 style="margin: 0;">Review Your Answers</h3>
+    <button onclick="document.getElementById('review-modal').style.display='none'" style="
+      background: none;
+      border: none;
+      font-size: 20px;
+      font-weight: bold;
+      color: #444;
+      cursor: pointer;
+    " title="Close">&times;</button>
+  </div>
+
+  <!-- Review Content -->
+  <div id="review-content" style="
+    white-space: pre-wrap;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #333;
+  "></div>
+
+  <!-- Action Buttons -->
+  <div style="text-align: right; margin-top: 10px;">
+    <button onclick="submitAndCloseModal()" style="
+      padding: 10px 18px;
+      background-color: #007acc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    ">Submit Now</button>
+
+    <button onclick="document.getElementById('review-modal').style.display='none'" style="
+      margin-left: 10px;
+      padding: 10px 18px;
+      background-color: #ccc;
+      color: #333;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    ">Cancel</button>
+  </div>
 </div>
+
 
   
   <script src="js/data.js"></script>
@@ -542,45 +585,25 @@ function submitAll() {
   background-color: #fff0f0;
   color: #660000;
   border: 1px solid #ff9999;
-  padding: 20px 20px 30px 20px;
+  padding: 20px;
   border-radius: 10px;
   width: 440px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.2);
   z-index: 1002;
   text-align: center;
   font-family: 'Segoe UI', Tahoma, sans-serif;
-  position: fixed;
 ">
-  <!-- Top-right close button -->
+  <p id="validation-message" style="font-weight: bold;"></p>
   <button onclick="document.getElementById('validation-modal').style.display = 'none';" style="
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    font-weight: bold;
-    color: #990000;
-    cursor: pointer;
-  " title="Close">&times;</button>
-
-  <!-- Modal message -->
-  <p id="validation-message" style="font-weight: bold; margin-top: 10px;"></p>
-
-  <!-- Submit button -->
-  <button onclick="submitFinalAnswersToServer();" style="
-    margin-top: 20px;
-    padding: 10px 18px;
-    background-color: #cc0000;
+    margin-top: 15px;
+    padding: 8px 14px;
+    background-color: #ff9999;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
-    font-weight: bold;
-    font-size: 14px;
-  ">Submit Answers</button>
+  ">OK</button>
 </div>
-
 
 
 <!-- Start Modal -->
