@@ -1418,9 +1418,9 @@ function showAnswerReview() {
     
 
     // General questions (always)
-
     const timeKeyGen1 = `time-q-${snippet}-6`;
     const timeKeyGen2 = `time-q-${snippet}-7`;
+
     const timeSecGen1 = parseInt(sessionStorage.getItem(timeKeyGen1) || localStorage.getItem(timeKeyGen1) || getCookie(timeKeyGen1) || '0');
     const timeSecGen2 = parseInt(sessionStorage.getItem(timeKeyGen2) || localStorage.getItem(timeKeyGen2) || getCookie(timeKeyGen2) || '0');
 
@@ -1428,14 +1428,18 @@ function showAnswerReview() {
     const key1Gen2 = `answer-${snippet}-scaleSM`;
     const key2Gen2 = `answer-${snippet}-scaleST`;
 
+    const val1Gen1 = sessionStorage.getItem(key1Gen1) || localStorage.getItem(key1Gen1) || getCookie(key1Gen1) || '[No answer]';
+    const val1Gen2 = sessionStorage.getItem(key1Gen2) || localStorage.getItem(key1Gen2) || getCookie(key1Gen2) || '[No answer]';
+    const val2Gen2 = sessionStorage.getItem(key2Gen2) || localStorage.getItem(key2Gen2) || getCookie(key2Gen2) || '[No answer]';
 
-    val1Gen1 = sessionStorage.getItem(key1Gen1) || localStorage.getItem(key1Gen1) || getCookie(key1Gen1) || '0';
-    val1Gen2 = sessionStorage.getItem(key1Gen2) || localStorage.getItem(key1Gen2) || getCookie(key1Gen2) || '0';
-    val2Gen2 = sessionStorage.getItem(key2Gen2) || localStorage.getItem(key2Gen2) || getCookie(key2Gen2) || '0';
+    output += `  ${(questions?.length || 0) + 1}. What does this code snippet do?\n`;
+    output += `     → Answer: ${val1Gen1}\n`;
+    output += `     🕒 Time: ${timeSecGen1}s\n\n`;
 
-    output+= `\n  function: ${val1Gen1}\n  time=${timeSecGen1}`;
-    output+= `\n  output: ${val1Gen2}\n  output: ${val2Gen2}\n  time=${timeSecGen2}`;
-
+    output += `  ${(questions?.length || 0) + 2}. How easy or difficult was it to understand this code?\n`;
+    output += `     → Structural Mapping: ${val1Gen2}\n`;
+    output += `     → Semantic Transparency: ${val2Gen2}\n`;
+    output += `     🕒 Time: ${timeSecGen2}s\n\n`;
   }
 
   reviewDiv.textContent = output.trim();
