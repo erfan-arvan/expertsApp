@@ -69,12 +69,12 @@ public class SubmissionController {
         boolean isFinal = "1".equals(submittedObj) || Boolean.TRUE.equals(submittedObj);
 
         System.out.println(">>> [submit_final] Received submission:");
-        System.out.println(">>> Username: " + username);
-        System.out.println(">>> Timestamp: " + timestamp);
-        System.out.println(">>> raw 'submitted' value: " + submittedObj);
-        System.out.println(">>> Parsed isFinal: " + isFinal);
-        System.out.println(">>> Body Keys: " + body.keySet());
-        System.out.println(">>> Raw Body Preview: " + truncateJson(body, 1000));
+        // System.out.println(">>> Username: " + username);
+        // System.out.println(">>> Timestamp: " + timestamp);
+        // System.out.println(">>> raw 'submitted' value: " + submittedObj);
+        // System.out.println(">>> Parsed isFinal: " + isFinal);
+        // System.out.println(">>> Body Keys: " + body.keySet());
+        // System.out.println(">>> Raw Body Preview: " + truncateJson(body, 1000));
 
         File directory = new File("submissions");
         if (!directory.exists()) {
@@ -158,8 +158,8 @@ public class SubmissionController {
 
         System.out.println(">>> [submit_students_part] Submission received from: " + username);
         System.out.println(">>> Timestamp: " + timestamp);
-        System.out.println(">>> Final flag: " + isFinal);
-        System.out.println(">>> Body Preview: " + truncateJson(body, 1000));
+        // System.out.println(">>> Final flag: " + isFinal);
+        // System.out.println(">>> Body Preview: " + truncateJson(body, 1000));
 
         File directory = new File("submissions");
         if (!directory.exists()) {
