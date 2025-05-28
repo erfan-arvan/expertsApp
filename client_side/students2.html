@@ -838,6 +838,12 @@ window.onload = function () {
     pausedAt = null;
     localStorage.removeItem('pausedAt');
   }
+  const Ispaused = sessionStorage.getItem('pausedUnload') === 'true';
+  if(Ispaused){
+    sessionStorage.setItem('pausedUnload', 'false');
+    pauseStudy();
+  }
+
 }
 
 
@@ -1357,7 +1363,7 @@ window.addEventListener('beforeunload', () => {
 
   // // ✅ DO NOT try to show pause modal or touch DOM
 
-
+  sessionStorage.setItem('pausedUnload', 'true');
   pauseStudy();
 });
 
