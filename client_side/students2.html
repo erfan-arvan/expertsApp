@@ -542,25 +542,45 @@ function submitAll() {
   background-color: #fff0f0;
   color: #660000;
   border: 1px solid #ff9999;
-  padding: 20px;
+  padding: 20px 20px 30px 20px;
   border-radius: 10px;
   width: 440px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.2);
   z-index: 1002;
   text-align: center;
   font-family: 'Segoe UI', Tahoma, sans-serif;
+  position: fixed;
 ">
-  <p id="validation-message" style="font-weight: bold;"></p>
+  <!-- Top-right close button -->
   <button onclick="document.getElementById('validation-modal').style.display = 'none';" style="
-    margin-top: 15px;
-    padding: 8px 14px;
-    background-color: #ff9999;
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #990000;
+    cursor: pointer;
+  " title="Close">&times;</button>
+
+  <!-- Modal message -->
+  <p id="validation-message" style="font-weight: bold; margin-top: 10px;"></p>
+
+  <!-- Submit button -->
+  <button onclick="submitFinalAnswersToServer();" style="
+    margin-top: 20px;
+    padding: 10px 18px;
+    background-color: #cc0000;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
-  ">OK</button>
+    font-weight: bold;
+    font-size: 14px;
+  ">Submit Answers</button>
 </div>
+
 
 
 <!-- Start Modal -->
@@ -1502,7 +1522,95 @@ function showAnswerReview() {
 
 </script>
 
+<script>
+  async function submitFinalAnswersToServer() {
+  const username = getStoredUsername();
+  const payload = {
+    username: username,
+    submitted: 1,
+    answers: {}
+  };
 
+  for (let snippet = 1; snippet <= TOTAL_SNIPPETS; snippet++) {
+    const snippetKey = `snippet-${snippet}`;
+    payload.answers[snippetKey] = {
+      readTime: parseInt(localStorage.getItem(`time-q-${snippet}-1`) || getCookie(`time-q-${snippet}-1`) || '0'),
+      questions: []
+    };
+
+    const questions = questionsPerSnippet[snippet] || [];
+
+    // Add custom questions
+    questions.forEach((q, i) => {
+      const answer = localStorage.getItem(`answer-${snippet}-${q.id}`) || getCookie(`answer-${snippet}-${q.id}`) || '[No answer]';
+      const time = parseInt(localStorage.getItem(`time-q-${snippet}-${i + 2}`) || getCookie(`time-q-${snippet}-${i + 2}`) || '0');
+      const entry = {
+        prompt: q.prompt || '[Missing prompt]',
+        answer: answer,
+        timeSec: time
+      };
+
+      if (q.id2 && q.question2) {
+        const secondAnswer = localStorage.getItem(`answer-${snippet}-${q.id2}`) || getCookie(`answer-${snippet}-${q.id2}`) || '[No answer]';
+        entry.followUp = {
+          prompt: q.question2,
+          answer: secondAnswer
+        };
+      }
+
+      payload.answers[snippetKey].questions.push(entry);
+    });
+
+    // Add general questions as if they were regular ones
+    const qIndexOffset = questions.length;
+
+    // Q5: Function description
+    const answer5 = localStorage.getItem(`answer-${snippet}-function`) || getCookie(`answer-${snippet}-function`) || '[No answer]';
+    const time5 = parseInt(localStorage.getItem(`time-q-${snippet}-6`) || getCookie(`time-q-${snippet}-6`) || '0');
+    payload.answers[snippetKey].questions.push({
+      prompt: "What does this code snippet do? Briefly describe its main functionality.",
+      answer: answer5,
+      timeSec: time5
+    });
+
+    // Q6.1: Self-assessed difficulty
+    const answer6_1 = localStorage.getItem(`answer-${snippet}-scaleSM`) || getCookie(`answer-${snippet}-scaleSM`) || '[No answer]';
+
+    // Q6.2: Perceived snippet difficulty
+    const answer6_2 = localStorage.getItem(`answer-${snippet}-scaleST`) || getCookie(`answer-${snippet}-scaleST`) || '[No answer]';
+    const time6 = parseInt(localStorage.getItem(`time-q-${snippet}-7`) || getCookie(`time-q-${snippet}-7`) || '0');
+
+    payload.answers[snippetKey].questions.push({
+      prompt: "How easy or difficult were the tasks you performed for this snippet?",
+      answer: answer6_1
+    });
+    payload.answers[snippetKey].questions.push({
+      prompt: "How easy or difficult was this snippet to understand?",
+      answer: answer6_2,
+      timeSec: time6
+    });
+  }
+
+  try {
+    const response = await fetch('/submit_students_part', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      alert("✅ Final answers submitted successfully.");
+    } else {
+      const error = await response.text();
+      alert("❌ Submission failed:\n" + error);
+    }
+  } catch (err) {
+    console.error("Submission error:", err);
+    alert("❌ Submission error: " + err.message);
+  }
+}
+
+</script>
 <script>
 function showValidationMessage(message) {
   document.getElementById('validation-message').innerText = message;
