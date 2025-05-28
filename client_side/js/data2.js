@@ -211,7 +211,7 @@ const snippetsOriginal = [
         {
           type: "open",
           id: "function",
-          prompt: "What does this code snippet do? Briefly describe its main functionality. What is the return value of the method for a URI with <span class=\"qcode\">scheme = \"jar\"</span> and <span class=\"qcode\">isFilesystemPath(uri) = false</span>?",
+          prompt: "What does this code snippet do? Briefly describe its main functionality.",
           type2: "",
           id2: "",
           question2: ""
@@ -279,7 +279,7 @@ const snippetsOriginal = [
             "prompt": "What is the return value of the method for a URI with <span class=\"qcode\">scheme = \"jar\"</span> and <span class=\"qcode\">isFilesystemPath(uri) = false</span>?",
             "type2": "bin",
             "id2": "output2",
-            "question2": "Is the method uri.getScheme() called for this input?"
+            "question2": "Is the method <span class=\"qcode\">uri.getScheme()</span> called for this input?"
           },
           {
             "type": "bin",
@@ -302,7 +302,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "semanticsSlicing",
-            "prompt": "Does the result of field.isSynthetic() affect the value of modifiers?",
+            "prompt": "Does the result of <span class=\"qcode\">field.isSynthetic()</span> affect the value of <span class=\"qcode\">modifiers</span>?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -310,7 +310,7 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "output",
-            "prompt": "What is the return value of the method for input type = -1?",
+            "prompt": "What is the return value of the method for input <span class=\"qcode\">type = -1</span>?",
             "type2": "bin",
             "id2": "output2",
             "question2": "Is the for loop over getDeclaredFields() entered for this input?"
@@ -326,7 +326,7 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "syntaxB",
-            "prompt": "How many if conditions must be satisfied before field.getShort(null) == type is evaluated?",
+            "prompt": "How many if conditions must be satisfied before <span class=\"qcode\">field.getShort(null) == type</span> is evaluated?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -336,7 +336,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "semanticsSlicing",
-            "prompt": "Does the result of searchStr.length() affect whether str == null?",
+            "prompt": "Does the result of <span class=\"qcode\">searchStr.length()</span> affect whether <span class=\"qcode\">str == null</span>?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -344,7 +344,7 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "output",
-            "prompt": "What is the return value of the method for input str = \"abcdefg\", searchStr = \"xyz\", startPos = 0?",
+            "prompt": "What is the return value of the method for input <span class=\"qcode\">str = \"abcdefg\", searchStr = \"xyz\", startPos = 0</span>?",
             "type2": "short",
             "id2": "output2",
             "question2": "How many times is the loop body executed?"
@@ -370,7 +370,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "semanticsSlicing",
-            "prompt": "Does the value of root affect whether the method returns true?",
+            "prompt": "Does the value of <span class=\"qcode\">root</span> affect whether the method returns <span class=\"qcode\">true</span>?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -381,12 +381,12 @@ const snippetsOriginal = [
             "prompt": "What is the return value of the method if root refers to a path that does not exist on disk?",
             "type2": "short",
             "id2": "output2",
-            "question2": "Is Files.walkFileTree(...) ever called?"
+            "question2": "Is <span class=\"qcode\">Files.walkFileTree(...)</span> ever called?"
           },
           {
             "type": "bin",
             "id": "syntaxW",
-            "prompt": "Is the type of the second method parameter int?",
+            "prompt": "Is the type of the second method parameter <span class=\"qcode\">int</span>?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -394,7 +394,7 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "syntaxB",
-            "prompt": "How many method calls occur inside the visitFile method?",
+            "prompt": "How many method calls occur inside the <span class=\"qcode\">visitFile</span> method?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -404,7 +404,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "semanticsSlicing",
-            "prompt": "Does setting i = 0 affect whether the exception is thrown at the end?",
+            "prompt": "Does setting <span class=\"qcode\">i = 0</span> affect whether the exception is thrown at the end?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -412,10 +412,10 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "output",
-            "prompt": "What value is returned by the method for input \"ABCDEF\"?",
+            "prompt": "What value is returned by the method for input <span class=\"qcode\">\"ABCDEF\"</span>?",
             "type2": "bin",
             "id2": "output2",
-            "question2": "Is encodedLengthGeneral(...) called for this input?"
+            "question2": "Is <span class=\"qcode\">encodedLengthGeneral(...)</span> called for this input?"
           },
           {
             "type": "bin",
@@ -438,7 +438,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "semanticsSlicing",
-            "prompt": "Does the value of a affect whether r1 and r2 are finite values or NaN?",
+            "prompt": "Does the value of a affect whether <span class=\"qcode\">r1</span> and <span class=\"qcode\">r2</span> are finite values or <span class=\"qcode\">NaN</span>?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -446,10 +446,10 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "output",
-            "prompt": "What is the return value of the method for input a = 1, b = -5, c = 6?",
+            "prompt": "What is the return value of the method for input <span class=\"qcode\">a = 1, b = -5, c = 6</span>?",
             "type2": "short",
             "id2": "output2",
-            "question2": "After the swap check (if (r1 > r2)), what is the relationship between r1 and r2?"
+            "question2": "After the swap check (<span class=\"qcode\">if (r1 > r2)</span>), what is the relationship between <span class=\"qcode\">r1</span> and <span class=\"qcode\">r2</span>?"
           },
           {
             "type": "bin",
@@ -472,7 +472,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "semanticsSlicing",
-            "prompt": "Does the expression x + HALF_PI affect the value of n?",
+            "prompt": "Does the expression <span class=\"qcode\">x + HALF_PI affect</span> the value of <span class=\"qcode\">n</span>?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -480,10 +480,10 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "output",
-            "prompt": "What is the return path taken for input x = -1, y = 1?",
+            "prompt": "What is the return path taken for input <span class=\"qcode\">x = -1, y = 1</span>?",
             "type2": "bin",
             "id2": "output2",
-            "question2": "Does the line x = 0f; execute for this input?"
+            "question2": "Does the line <span class=\"qcode\">x = 0f</span>; execute for this input?"
           },
           {
             "type": "bin",
