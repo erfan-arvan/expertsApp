@@ -845,9 +845,8 @@ const Ispaused = localStorage.getItem('pausedUnload') === 'true';
   if(Ispaused){
     pauseStudy();
     localStorage.setItem('pausedUnload', 'false');
-  }
+  } else{startTimer();}
 
-    startTimer();
 
     document.getElementById('pause-btn').style.display = 'inline';
     document.getElementById('resume-btn').style.display = 'none';
