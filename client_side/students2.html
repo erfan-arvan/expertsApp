@@ -751,7 +751,7 @@ function startTimer() {
 
 function generateAndStoreUsername() {
     const randomNumber = Math.floor(Math.random() * 1_000_000_000);
-    const username = 'student' + randomNumber.toString().padStart(8, '0');
+    const username = 'student' + randomNumber.toString().padStart(9, '0');
 
     // Save to localStorage
     localStorage.setItem('usernameS', username);
