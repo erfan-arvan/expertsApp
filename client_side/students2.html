@@ -843,7 +843,7 @@ window.onload = function () {
 
 const Ispaused = localStorage.getItem('pausedUnload') === 'true';
   if(Ispaused){
-    pauseStudy();
+    setTimeout(pauseStudy, 100);
     localStorage.setItem('pausedUnload', 'false');
   } else{startTimer();}
 
