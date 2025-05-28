@@ -1436,6 +1436,8 @@ function showAnswerReview() {
     output+= `\n  function: ${val1Gen1}\n  time=${timeSecGen1}`;
     output+= `\n  output: ${val1Gen2}\n  output: ${val2Gen2}\n  time=${timeSecGen2}`;
 
+  }
+
   reviewDiv.textContent = output.trim();
   document.getElementById('answer-review-modal').style.display = 'block';
 }
