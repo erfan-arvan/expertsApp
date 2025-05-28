@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Phase 1: Understanding the Code Snippets</title>
+    <title>Study</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -354,6 +354,8 @@ const snippets = snippetOrder.map((i, idx) => {
   s.originalId = i;                        // 🔥 Save original ID
   return s;
 });
+
+
 
 // Assign new display ids and titles
 snippets.forEach((snippet, idx) => {
@@ -719,8 +721,6 @@ function toggleTimer() {
 }
 
 
-
-
 function startTimer() {
   const timerEl = document.getElementById('timer');
 
@@ -753,6 +753,7 @@ function startStudy() {
   totalPausedTime = 0;
 
   document.getElementById('start-modal').style.display = 'none';
+  loadSnippet(currentSnippet);
   startTimer();
 }
 
@@ -822,32 +823,40 @@ window.onload = function () {
     pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
 
     if (!isNaN(pausedAt) && pausedAt > 0) {
-  const lastResume = parseInt(localStorage.getItem('lastResumeTime') || startTime, 10);
+      const lastResume = parseInt(localStorage.getItem('lastResumeTime') || startTime, 10);
 
-  if (pausedAt > lastResume) {
-    // Legit paused state
-    const resumeDelta = Date.now() - pausedAt;
-    totalPausedTime += resumeDelta;
+      if (pausedAt > lastResume) {
+        // Legit paused state
+        const resumeDelta = Date.now() - pausedAt;
+        totalPausedTime += resumeDelta;
 
-    localStorage.setItem('pausedTotal', totalPausedTime);
-    localStorage.removeItem('pausedAt');
-    localStorage.setItem('lastResumeTime', Date.now());
-    pausedAt = null;
-  } else {
-    // Probably a stale pausedAt — ignore it
-    pausedAt = null;
-    localStorage.removeItem('pausedAt');
-  }
-}
+        localStorage.setItem('pausedTotal', totalPausedTime);
+        localStorage.removeItem('pausedAt');
+        localStorage.setItem('lastResumeTime', Date.now());
+        pausedAt = null;
+      } else {
+        // Probably a stale pausedAt — ignore it
+        pausedAt = null;
+        localStorage.removeItem('pausedAt');
+      }
 
+    }
 
-    startTimer();
+const Ispaused = localStorage.getItem('pausedUnload') === 'true';
+  if(Ispaused){
+    setTimeout(pauseStudy, 100);
+    localStorage.setItem('pausedUnload', 'false');
+  } else{startTimer();}
+
 
     document.getElementById('pause-btn').style.display = 'inline';
     document.getElementById('resume-btn').style.display = 'none';
   }
 
-  loadSnippet(currentSnippet);
+  if (localStorage.getItem('studyStarted') === 'true') {
+    loadSnippet(currentSnippet);
+  }
+
 
   setInterval(() => {
     try {
@@ -918,11 +927,13 @@ console.log("🧪 questionsPerSnippetOriginal =", questionsPerSnippetOriginal);
 // `snippets` is already randomized, and each has `.originalId`
 snippets.forEach((snippet, newIndex) => {
   const newSnippetId = newIndex + 1; // 1-based for current session
-  const originalId = snippet.originalId; // You must store this during shuffling
-
-
+  const originalId = snippet.originalId; 
 
   const originalQs = questionsPerSnippetOriginal[String(originalId)];
+  console.log("💥 originalId =", originalId);
+  console.log("💥 questionsPerSnippetOriginal =", questionsPerSnippetOriginal);
+  console.log("💥 originalQs =", questionsPerSnippetOriginal?.[String(originalId)]);
+
   const order = getOrCreateQuestionOrder(newSnippetId, originalQs.length);
   questionsPerSnippet[newSnippetId] = order.map(i => structuredClone(originalQs[i - 1]));
 });
@@ -1354,7 +1365,16 @@ window.addEventListener('beforeunload', () => {
   // pausedAt = now;
   // totalPausedTime = newPausedTotal;
 
-  // ✅ DO NOT try to show pause modal or touch DOM
+  // // ✅ DO NOT try to show pause modal or touch DOM
+
+    // 1. Record time spent on the current question
+  try {
+    recordQuestionTime(currentSnippet, currentQuestionIndex);
+  } catch (e) {
+    console.warn("recordQuestionTime failed", e);
+  }
+  localStorage.setItem('pausedUnload', 'true');
+  //pauseStudy();
 });
 
 
@@ -1365,9 +1385,11 @@ window.addEventListener('beforeunload', () => {
 function showAnswerReview() {
   const reviewDiv = document.getElementById('answer-review-content');
   let output = '';
-
   for (let snippet = 1; snippet <= TOTAL_SNIPPETS; snippet++) {
     output += `\n🔹 Snippet ${snippet}\n`;
+    let readTimeKey = `time-q-${snippet}-1`;
+    const timeSecRead = parseInt(sessionStorage.getItem(readTimeKey) || localStorage.getItem(readTimeKey) || getCookie(readTimeKey) || '0');
+    output+=`     Read Time: ${timeSecRead}s\n\n`;
 
     const questions = questionsPerSnippet[snippet];
 
@@ -1378,7 +1400,7 @@ function showAnswerReview() {
         const key1 = `answer-${snippet}-${q?.id}`;
         const val1 = sessionStorage.getItem(key1) || getCookie(key1) || '[No answer]';
 
-        const timeKey = `time-q-${snippet}-${i + 1}`;
+        const timeKey = `time-q-${snippet}-${i + 2}`;
         const timeSec = parseInt(sessionStorage.getItem(timeKey) || localStorage.getItem(timeKey) || getCookie(timeKey) || '0');
         const timeFormatted = `${timeSec}s`;
 
