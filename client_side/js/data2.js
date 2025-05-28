@@ -211,7 +211,7 @@ const snippetsOriginal = [
         {
           type: "open",
           id: "function",
-          prompt: "What does this code snippet do? Briefly describe its main functionality.",
+          prompt: "What does this code snippet do? Briefly describe its main functionality. What is the return value of the method for a URI with <span class=\"qcode\">scheme = \"jar\"</span> and <span class=\"qcode\">isFilesystemPath(uri) = false</span>?",
           type2: "",
           id2: "",
           question2: ""
@@ -234,7 +234,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "semanticsSlicing",
-            "prompt": "Does the character at position i (i.e., name.charAt(i)) affect whether the loop continues to the next iteration?",
+            "prompt": "Does the character at position <span class=\"qcode\">i</span> (i.e., <span class=\"qcode\">name.charAt(i))</span> affect whether the loop continues to the next iteration?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -242,10 +242,10 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "output",
-            "prompt": "What is the return value of the method for the input \"abc123___\"?",
+            "prompt": "What is the return value of the method for the input <span class=\"qcode\">\"abc123___\"</span>?",
             "type2": "short",
             "id2": "output2",
-            "question2": "What is the value of i immediately after the for loop completes?"
+            "question2": "What is the value of <span class=\"qcode\">i</span> immediately after the for loop completes?"
           },
           {
             "type": "bin",
@@ -268,7 +268,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "semanticsSlicing",
-            "prompt": "Does the result of isFilesystemPath(uri) affect whether uri.getScheme() is evaluated?",
+            "prompt": "Does the result of <span class=\"qcode\">isFilesystemPath(uri)</span> affect whether <span class=\"qcode\">uri.getScheme()</span> is evaluated?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -276,7 +276,7 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "output",
-            "prompt": "What is the return value of the method for a URI with scheme = \"jar\" and isFilesystemPath(uri) = false?",
+            "prompt": "What is the return value of the method for a URI with <span class=\"qcode\">scheme = \"jar\"</span> and <span class=\"qcode\">isFilesystemPath(uri) = false</span>?",
             "type2": "bin",
             "id2": "output2",
             "question2": "Is the method uri.getScheme() called for this input?"
@@ -507,7 +507,7 @@ const snippetsOriginal = [
       const StartingQuestions = [{
         "type": "none",
         "id": "Read",
-        "prompt": "Please read the code snippet and form an overall impression. This should take no more than 2 minutes. Click 'Next' when you feel ready to answer the questions. (You will still see the snippet while answering the questions.) <span class=\"qcode\">i</span>",
+        "prompt": "Please read the code snippet and form an overall impression. This should take no more than 2 minutes. Click 'Next' when you feel ready to answer the questions. (You will still see the snippet while answering the questions.)",
         "type2": "",
         "id2": "",
         "question2": ""
