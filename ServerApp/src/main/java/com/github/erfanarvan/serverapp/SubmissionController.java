@@ -146,6 +146,65 @@ public class SubmissionController {
         }
     }
 
+    @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+    @PostMapping("/submit_students_part")
+    public synchronized String handleStudentSubmission(@RequestBody Map<String, Object> body, HttpServletRequest request) {
+        String username = (String) body.getOrDefault("username", "anonymous");
+        String timestamp = ZonedDateTime.now(ZoneId.of("America/New_York"))
+                                        .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+        Object submittedObj = body.get("submitted");
+        boolean isFinal = "1".equals(submittedObj) || Boolean.TRUE.equals(submittedObj);
+
+        System.out.println(">>> [submit_students_part] Submission received from: " + username);
+        System.out.println(">>> Timestamp: " + timestamp);
+        System.out.println(">>> Final flag: " + isFinal);
+        System.out.println(">>> Body Preview: " + truncateJson(body, 1000));
+
+        File directory = new File("submissions");
+        if (!directory.exists()) {
+            directory.mkdirs();
+            System.out.println(">>> Created 'submissions' directory.");
+        }
+
+        File allFile = new File("submissions/students.json");
+        File finalFile = new File("submissions/studentsFinal.json");
+
+        ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
+        try {
+            Map<String, Object> wrapped = new HashMap<>();
+            wrapped.put("timestamp", timestamp);
+            wrapped.put("isFinal", isFinal);
+            wrapped.put("data", body);
+
+            // ⬇ Append to students.json
+            List<Map<String, Object>> allData = allFile.exists()
+                ? mapper.readValue(allFile, new TypeReference<>() {})
+                : new ArrayList<>();
+            allData.add(wrapped);
+            mapper.writeValue(allFile, allData);
+            System.out.println(">>> Saved to students.json");
+
+            // ⬇ Append to studentsFinal.json if final
+            if (isFinal) {
+                List<Map<String, Object>> finalData = finalFile.exists()
+                    ? mapper.readValue(finalFile, new TypeReference<>() {})
+                    : new ArrayList<>();
+                finalData.add(wrapped);
+                mapper.writeValue(finalFile, finalData);
+                System.out.println(">>> Saved to studentsFinal.json");
+            }
+
+            return "Student submission saved.";
+        } catch (IOException e) {
+            System.err.println(">>> ERROR saving student submission for: " + username);
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save student submission.");
+        }
+    }
+
+
     private String truncateJson(Map<String, Object> body, int maxLen) {
     try {
         ObjectMapper previewMapper = new ObjectMapper();
