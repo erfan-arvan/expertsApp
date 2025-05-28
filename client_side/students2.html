@@ -1372,6 +1372,7 @@ window.addEventListener('beforeunload', () => {
   try {
     const isReset = sessionStorage.getItem('isReset') === 'true';
     if (isReset) {
+      sessionStorage.removeItem('isReset');
       recordQuestionTime(currentSnippet, currentQuestionIndex);
     } 
   } catch (e) {
