@@ -1329,30 +1329,30 @@ function resetTimer() {
 }
 
 window.addEventListener('beforeunload', () => {
-  if (!startTime) return;
+  // if (!startTime) return;
 
-  // 1. Record time spent on the current question
-  try {
-    recordQuestionTime(currentSnippet, currentQuestionIndex);
-  } catch (e) {
-    console.warn("recordQuestionTime failed", e);
-  }
+  // // 1. Record time spent on the current question
+  // try {
+  //   recordQuestionTime(currentSnippet, currentQuestionIndex);
+  // } catch (e) {
+  //   console.warn("recordQuestionTime failed", e);
+  // }
 
-  const now = Date.now();
-  const lastResume = parseInt(localStorage.getItem('lastResumeTime') || startTime, 10);
-  const currentPausedTotal = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
-  const delta = now - lastResume;
-  const newPausedTotal = currentPausedTotal + delta;
+  // const now = Date.now();
+  // const lastResume = parseInt(localStorage.getItem('lastResumeTime') || startTime, 10);
+  // const currentPausedTotal = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
+  // const delta = now - lastResume;
+  // const newPausedTotal = currentPausedTotal + delta;
 
-  // 2. Save pause state
-  localStorage.setItem('pausedAt', now);
-  localStorage.setItem('pausedTotal', newPausedTotal);
-  localStorage.setItem('lastResumeTime', now);
-  localStorage.setItem('startTime', startTime);
+  // // 2. Save pause state
+  // localStorage.setItem('pausedAt', now);
+  // localStorage.setItem('pausedTotal', newPausedTotal);
+  // localStorage.setItem('lastResumeTime', now);
+  // localStorage.setItem('startTime', startTime);
 
-  // 3. Sync in-memory state
-  pausedAt = now;
-  totalPausedTime = newPausedTotal;
+  // // 3. Sync in-memory state
+  // pausedAt = now;
+  // totalPausedTime = newPausedTotal;
 
   // ✅ DO NOT try to show pause modal or touch DOM
 });
