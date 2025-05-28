@@ -1425,8 +1425,8 @@ function showAnswerReview() {
     const timeSecGen2 = parseInt(sessionStorage.getItem(timeKeyGen2) || localStorage.getItem(timeKeyGen2) || getCookie(timeKeyGen2) || '0');
 
     const key1Gen1 = `answer-${snippet}-function`;
-    const key1Gen2 = `answer-${snippet}-output`;
-    const key2Gen2 = `answer-${snippet}-output2`;
+    const key1Gen2 = `answer-${snippet}-scaleSM`;
+    const key2Gen2 = `answer-${snippet}-scaleST`;
 
 
     val1Gen1 = sessionStorage.getItem(key1Gen1) || localStorage.getItem(key1Gen1) || getCookie(key1Gen1) || '0';
