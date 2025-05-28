@@ -1335,6 +1335,7 @@ function resetTimer() {
     updateTimerDisplay();
     startTimer(); // restart interval
     clearAllStoredData();
+    sessionStorage.setItem('isReset','true');
     location.reload();
   }
 }
@@ -1369,7 +1370,10 @@ window.addEventListener('beforeunload', () => {
 
     // 1. Record time spent on the current question
   try {
-    recordQuestionTime(currentSnippet, currentQuestionIndex);
+    const isReset = sessionStorage.getItem('isReset') === 'true';
+    if (isReset) {
+      recordQuestionTime(currentSnippet, currentQuestionIndex);
+    } 
   } catch (e) {
     console.warn("recordQuestionTime failed", e);
   }
