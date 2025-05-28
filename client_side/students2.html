@@ -1037,49 +1037,94 @@ function areAllSnippetsFilled() {
 
 
 <script>
-function saveToServer() {
-//   const name = localStorage.getItem('participantName') || getCookie('participantName') || 'Anonymous';
-//   const username = getCookie('username') || 'anonymous';
+async function saveToServer() {
+  const username = getStoredUsername();
+  const payload = {
+    username: username,
+    submitted: '0',
+    answers: {}
+  };
 
-//   // Phase 1 data
-//   const phase1 = {};
-//   for (let i = 1; i <= 8; i++) {
-//     const summary = localStorage.getItem(`summary${i}`) || getCookie(`summary${i}`) || '';
-//     const comp = localStorage.getItem(`compSummary${i}`) || getCookie(`compSummary${i}`) || '';
-//     phase1[`snippet${i}`] = { summary, comprehensibility: comp };
-//   }
+  for (let snippet = 1; snippet <= TOTAL_SNIPPETS; snippet++) {
+    const snippetKey = `snippet-${snippet}`;
+    payload.answers[snippetKey] = {
+      readTime: parseInt(localStorage.getItem(`time-q-${snippet}-1`) || getCookie(`time-q-${snippet}-1`) || '0'),
+      questions: []
+    };
 
-//   // Phase 2 & 3 data
-//   let phase2 = {}, phase3 = {};
-//   try {
-//     phase2 = JSON.parse(localStorage.getItem('phase3_ranking') || getCookie('phase3_ranking') || '{}');
-//     phase3 = JSON.parse(localStorage.getItem('phase3_reasoning') || getCookie('phase3_reasoning') || '{}');
-//   } catch (e) {
-//     console.warn("Error parsing phase2 or phase3 data", e);
-//   }
+    const questions = questionsPerSnippet[snippet] || [];
 
-//   // Completion flags and theme
-//   const flags = {
-//     phase1Complete: localStorage.getItem('phase1Complete') || getCookie('phase1Complete') || 'false',
-//     phase2Complete: localStorage.getItem('phase2Complete') || getCookie('phase2Complete') || 'false',
-//     phase3Complete: localStorage.getItem('phase3Complete') || getCookie('phase3Complete') || 'false',
-//     codeTheme: localStorage.getItem('codeTheme') || 'light',
-//     submitted: '0',
-//   };
+    // Custom questions
+    questions.forEach((q, i) => {
+      const answer = localStorage.getItem(`answer-${snippet}-${q.id}`) || getCookie(`answer-${snippet}-${q.id}`) || '[No answer]';
+      const time = parseInt(localStorage.getItem(`time-q-${snippet}-${i + 2}`) || getCookie(`time-q-${snippet}-${i + 2}`) || '0');
+      const entry = {
+        id: q.id,
+        prompt: q.prompt || '[Missing prompt]',
+        answer: answer,
+        timeSec: time
+      };
 
-//   const payload = {
-//     username,
-//     participantName: name,
-//     phase1,
-//     phase2,
-//     phase3,
-//     ...flags
-//   };
+      if (q.id2 && q.question2) {
+        const secondAnswer = localStorage.getItem(`answer-${snippet}-${q.id2}`) || getCookie(`answer-${snippet}-${q.id2}`) || '[No answer]';
+        entry.followUp = {
+          id: q.id2,
+          prompt: q.question2,
+          answer: secondAnswer
+        };
+      }
 
-//   const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-//   navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+      payload.answers[snippetKey].questions.push(entry);
+    });
+
+    // General Q5: Function description
+    const answer5 = localStorage.getItem(`answer-${snippet}-function`) || getCookie(`answer-${snippet}-function`) || '[No answer]';
+    const time5 = parseInt(localStorage.getItem(`time-q-${snippet}-6`) || getCookie(`time-q-${snippet}-6`) || '0');
+    payload.answers[snippetKey].questions.push({
+      id: 'function',
+      prompt: "What does this code snippet do? Briefly describe its main functionality.",
+      answer: answer5,
+      timeSec: time5
+    });
+
+    // General Q6.1: Self-assessed difficulty
+    const answer6_1 = localStorage.getItem(`answer-${snippet}-scaleSM`) || getCookie(`answer-${snippet}-scaleSM`) || '[No answer]';
+
+    // General Q6.2: Perceived difficulty
+    const answer6_2 = localStorage.getItem(`answer-${snippet}-scaleST`) || getCookie(`answer-${snippet}-scaleST`) || '[No answer]';
+    const time6 = parseInt(localStorage.getItem(`time-q-${snippet}-7`) || getCookie(`time-q-${snippet}-7`) || '0');
+
+    payload.answers[snippetKey].questions.push({
+      id: 'scaleSM',
+      prompt: "How easy or difficult were the tasks you performed for this snippet?",
+      answer: answer6_1
+    });
+
+    payload.answers[snippetKey].questions.push({
+      id: 'scaleST',
+      prompt: "How easy or difficult was this snippet to understand?",
+      answer: answer6_2,
+      timeSec: time6
+    });
+  }
+
+  try {
+    const response = await fetch('/submit_students_part', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      console.log("✅ Draft answers saved to server.");
+    } else {
+      const error = await response.text();
+      console.error("❌ Save failed:", error);
+    }
+  } catch (err) {
+    console.error("❌ Network error during save:", err.message);
+  }
 }
-
 </script>
 
 <script>
@@ -1636,7 +1681,6 @@ async function submitFinalAnswersToServer() {
     alert("❌ Submission error: " + err.message);
   }
 }
-
 
 </script>
 <script>
