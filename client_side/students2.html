@@ -822,31 +822,30 @@ window.onload = function () {
     pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
 
     if (!isNaN(pausedAt) && pausedAt > 0) {
-  const lastResume = parseInt(localStorage.getItem('lastResumeTime') || startTime, 10);
+      const lastResume = parseInt(localStorage.getItem('lastResumeTime') || startTime, 10);
 
-  if (pausedAt > lastResume) {
-    // Legit paused state
-    const resumeDelta = Date.now() - pausedAt;
-    totalPausedTime += resumeDelta;
+      if (pausedAt > lastResume) {
+        // Legit paused state
+        const resumeDelta = Date.now() - pausedAt;
+        totalPausedTime += resumeDelta;
 
-    localStorage.setItem('pausedTotal', totalPausedTime);
-    localStorage.removeItem('pausedAt');
-    localStorage.setItem('lastResumeTime', Date.now());
-    pausedAt = null;
-  } else {
-    // Probably a stale pausedAt — ignore it
-    pausedAt = null;
-    localStorage.removeItem('pausedAt');
-  }
-  const Ispaused = localStorage.getItem('pausedUnload') === 'true';
+        localStorage.setItem('pausedTotal', totalPausedTime);
+        localStorage.removeItem('pausedAt');
+        localStorage.setItem('lastResumeTime', Date.now());
+        pausedAt = null;
+      } else {
+        // Probably a stale pausedAt — ignore it
+        pausedAt = null;
+        localStorage.removeItem('pausedAt');
+      }
+
+    }
+
+const Ispaused = localStorage.getItem('pausedUnload') === 'true';
   if(Ispaused){
     pauseStudy();
-    alert("paused");
     localStorage.setItem('pausedUnload', 'false');
   }
-
-}
-
 
     startTimer();
 
