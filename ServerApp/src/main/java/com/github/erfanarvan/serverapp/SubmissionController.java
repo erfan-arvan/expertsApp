@@ -148,7 +148,7 @@ public class SubmissionController {
 
     @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
     @PostMapping("/submit_students_part")
-    public synchronized String handleStudentSubmission(@RequestBody Map<String, Object> body, HttpServletRequest request) {
+    public synchronized String handleStudentSubmission(@RequestBody Map<String, Object> body) {
         String username = (String) body.getOrDefault("username", "anonymous");
         String timestamp = ZonedDateTime.now(ZoneId.of("America/New_York"))
                                         .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
@@ -178,7 +178,7 @@ public class SubmissionController {
             wrapped.put("isFinal", isFinal);
             wrapped.put("data", body);
 
-            // ⬇ Append to students.json
+            // Save to students.json
             List<Map<String, Object>> allData = allFile.exists()
                 ? mapper.readValue(allFile, new TypeReference<>() {})
                 : new ArrayList<>();
@@ -186,7 +186,7 @@ public class SubmissionController {
             mapper.writeValue(allFile, allData);
             System.out.println(">>> Saved to students.json");
 
-            // ⬇ Append to studentsFinal.json if final
+            // If final, also save to studentsFinal.json
             if (isFinal) {
                 List<Map<String, Object>> finalData = finalFile.exists()
                     ? mapper.readValue(finalFile, new TypeReference<>() {})
