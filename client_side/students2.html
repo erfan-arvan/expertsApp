@@ -1245,7 +1245,7 @@ function renderQuestion(container, question, snippetNum) {
     input1.value = saved1;
     input1.classList.add('short-answer-input');
 
-    input1.placeholder = 'Enter a brief answer...';
+    input1.placeholder = '';
 
     input1.addEventListener('input', () => {
       saveAnswer(snippetNum, question.id, input1.value);
