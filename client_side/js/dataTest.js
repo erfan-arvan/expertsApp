@@ -379,7 +379,7 @@ const snippetsOriginal = [
       const StartingQuestions = [{
         "type": "none",
         "id": "Read",
-        "prompt": "Please read the code snippet and form an overall impression. This should take no more than 2 minutes. Click 'Next' when you feel ready to answer the questions. (You will still see the snippet while answering the questions.)",
+        "prompt": "<p class=\"instruction\">Please read the code snippet and form an overall impression. <span class=\"emphasis\">This should take no more than 2 minutes.</span></p><p class=\"instruction\">When you're ready, click <strong>'Next'</strong> to proceed to the questions. <em>(You will still be able to see the snippet while answering.)</em></p>",
         "type2": "",
         "id2": "",
         "question2": ""
