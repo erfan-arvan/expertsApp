@@ -211,7 +211,7 @@ const snippetsOriginal = [
         {
           type: "open",
           id: "function",
-          prompt: "What value is returned when the following code is executed with this input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">\\\"ab$\\\"</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">MAX_NAME_LENGTH</span> is defined as <span class=\"qcode\">10</span></li>\n    <li><span class=\"qcode\">VALID_NAME_SET</span> is a Set&lt;Character&gt; that contains: <code>'_'</code>, <code>'-'</code>, and <code>'.'</code></li>\n  </ul>\n</div>",
+          prompt: "What does this code snippet do? Briefly describe its main functionality.",
           type2: "",
           id2: "",
           question2: ""
@@ -232,33 +232,17 @@ const snippetsOriginal = [
       const questionsPerSnippetOriginal = {
         "1": [
           {
-            "type": "bin",
-            "id": "semanticsSlicing",
-            "prompt": "What value is returned when the following code is executed with this input?<br><br>Input:",
-            "type2": "",
-            "id2": "",
-            "question2": ""
-          },
-          {
             "type": "short",
             "id": "output",
-            "prompt": "What is the return value of the method for the input <span class=\"qcode\">\"abc123___\"</span>?",
-            "type2": "short",
-            "id2": "output2",
-            "question2": "What is the value of <span class=\"qcode\">i</span> immediately after the for loop completes?"
-          },
-          {
-            "type": "bin",
-            "id": "syntaxW",
-            "prompt": "Is subtraction (-) used in an expression?",
+            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">\\\"a1_$\\\"</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">MAX_NAME_LENGTH</span> is defined as <span class=\"qcode\">10</span></li>\n    <li><span class=\"qcode\">VALID_NAME_SET</span> is a Set&lt;Character&gt; that contains: <code>'_'</code>, <code>'-'</code>, and <code>'.'</code></li>\n  </ul>\n</div>",
             "type2": "",
             "id2": "",
             "question2": ""
           },
           {
-            "type": "short",
-            "id": "syntaxB",
-            "prompt": "How many exit points does the for loop have?",
+            "type": "bin",
+            "id": "output",
+            "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -266,33 +250,17 @@ const snippetsOriginal = [
         ],
         "2": [
           {
-            "type": "bin",
-            "id": "semanticsSlicing",
-            "prompt": "Does the result of <span class=\"qcode\">isFilesystemPath(uri)</span> affect whether <span class=\"qcode\">uri.getScheme()</span> is evaluated?",
-            "type2": "",
-            "id2": "",
-            "question2": ""
-          },
-          {
             "type": "short",
             "id": "output",
-            "prompt": "What is the return value of the method for a URI with <span class=\"qcode\">scheme = \"jar\"</span> and <span class=\"qcode\">isFilesystemPath(uri) = false</span>?",
-            "type2": "bin",
-            "id2": "output2",
-            "question2": "Is the method <span class=\"qcode\">uri.getScheme()</span> called for this input?"
-          },
-          {
-            "type": "bin",
-            "id": "syntaxW",
-            "prompt": "Are all local variables immediately initialized as part of their declaration?",
+            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">isRemote(URI.create(\\\"http://example.com\\\"))</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li>The method <span class=\"qcode\">isFilesystemPath(uri)</span> returns <span class=\"qcode\">false</span> for this input.</li>\n  </ul>\n</div>",
             "type2": "",
             "id2": "",
             "question2": ""
           },
           {
-            "type": "short",
-            "id": "syntaxB",
-            "prompt": "How many case labels are in the <span class=\"qcode\">switch</span> statement?",
+            "type": "bin",
+            "id": "syntaxBL",
+            "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -300,33 +268,17 @@ const snippetsOriginal = [
         ],
         "3": [
           {
-            "type": "bin",
-            "id": "semanticsSlicing",
-            "prompt": "Does the result of <span class=\"qcode\">field.isSynthetic()</span> affect the value of <span class=\"qcode\">modifiers</span>?",
-            "type2": "",
-            "id2": "",
-            "question2": ""
-          },
-          {
             "type": "short",
             "id": "output",
-            "prompt": "What is the return value of the method for input <span class=\"qcode\">type = -1</span>?",
-            "type2": "bin",
-            "id2": "output2",
-            "question2": "Is the for loop over <span class=\"qcode\">getDeclaredFields()</span> entered for this input?"
-          },
-          {
-            "type": "bin",
-            "id": "syntaxW",
-            "prompt": "Is there a top-level loop that appears after some code containing a <span class=\"qcode\">return</span> statement?",
+            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">(short) 448</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">IMAGE_FILE_MACHINE_UNKNOWN</span> = <span class=\"qcode\">0</span></li>\n    <li><span class=\"qcode\">CoffMachineType</span> has exactly three declared <code>public static final short</code> fields:</li>\n    <ul>\n      <li><span class=\"qcode\">IMAGE_FILE_MACHINE_AMD64 = (short) 34404</span></li>\n      <li><span class=\"qcode\">IMAGE_FILE_MACHINE_ARM = (short) 448</span></li>\n      <li><span class=\"qcode\">IMAGE_FILE_MACHINE_I386 = (short) 332</span></li>\n    </ul>\n    <li><span class=\"qcode\">getDeclaredFields()</span> returns the fields in the order listed above.</li>\n    <li>No <span class=\"qcode\">IllegalAccessException</span> is thrown during execution.</li>\n  </ul>\n</div>",
             "type2": "",
             "id2": "",
             "question2": ""
           },
           {
-            "type": "short",
-            "id": "syntaxB",
-            "prompt": "How many <span class=\"qcode\">if</span> conditions must be satisfied before <span class=\"qcode\">field.getShort(null) == type</span> is evaluated?",
+            "type": "bin",
+            "id": "syntaxBL",
+            "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -334,33 +286,17 @@ const snippetsOriginal = [
         ],
         "4": [
           {
-            "type": "bin",
-            "id": "semanticsSlicing",
-            "prompt": "Does the result of <span class=\"qcode\">searchStr.length()</span> affect whether <span class=\"qcode\">str == null</span>?",
-            "type2": "",
-            "id2": "",
-            "question2": ""
-          },
-          {
             "type": "short",
             "id": "output",
-            "prompt": "What is the return value of the method for input <span class=\"qcode\">str = \"abcdefg\", searchStr = \"xyz\", startPos = 0</span>?",
-            "type2": "short",
-            "id2": "output2",
-            "question2": "How many times is the loop body executed?"
-          },
-          {
-            "type": "bin",
-            "id": "syntaxW",
-            "prompt": "Are all local variables immediately initialized as part of their declaration?",
+            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">Str = \\\"AbcXabc\\\", searchStr = \\\"ABC\\\", startPos = 1</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">INDEX_NOT_FOUND</span> = <span class=\"qcode\">-1</span></li>\n    <li><span class=\"qcode\">regionMatches(CharSequence cs, boolean ignoreCase, int thisStart, CharSequence substring, int start, int length)</span> behaves like <code>String.regionMatches(...)</code> in Java, but works on <code>CharSequence</code>.</li>\n    <li>All inputs are standard Java <code>String</code> objects (which implement <code>CharSequence</code>).</li>\n  </ul>\n</div>",
             "type2": "",
             "id2": "",
             "question2": ""
           },
           {
-            "type": "short",
-            "id": "syntaxB",
-            "prompt": "How many local variables are declared before the for loop begins?",
+            "type": "bin",
+            "id": "syntaxBL",
+            "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -368,33 +304,17 @@ const snippetsOriginal = [
         ],
         "5": [
           {
-            "type": "bin",
-            "id": "semanticsSlicing",
-            "prompt": "Does the value of <span class=\"qcode\">root</span> affect whether the method returns <span class=\"qcode\">true</span>?",
-            "type2": "",
-            "id2": "",
-            "question2": ""
-          },
-          {
             "type": "short",
             "id": "output",
-            "prompt": "What is the return value of the method if <span class=\"qcode\">root</span> refers to a path that does not exist on disk?",
-            "type2": "short",
-            "id2": "output2",
-            "question2": "Is <span class=\"qcode\">Files.walkFileTree(...)</span> ever called?"
-          },
-          {
-            "type": "bin",
-            "id": "syntaxW",
-            "prompt": "Is the type of the second method parameter <span class=\"qcode\">int</span>?",
+            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">Paths.get(\\\"/tmp/example\\\")</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><code>/tmp/example</code> is a directory that exists and contains a single file: <code>/tmp/example/foo.txt</code>.</li>\n    <li><span class=\"qcode\">Files.exists(...)</span> returns <span class=\"qcode\">true</span> for <code>/tmp/example</code>.</li>\n    <li><span class=\"qcode\">Files.walkFileTree(...)</span> visits the file before the directory.</li>\n    <li>All <span class=\"qcode\">Files.delete(...)</span> calls succeed and no exceptions are thrown.</li>\n  </ul>\n</div>",
             "type2": "",
             "id2": "",
             "question2": ""
           },
           {
-            "type": "short",
-            "id": "syntaxB",
-            "prompt": "How many method calls occur inside the <span class=\"qcode\">visitFile</span> method?",
+            "type": "bin",
+            "id": "syntaxBL",
+            "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -403,32 +323,16 @@ const snippetsOriginal = [
         "6": [
           {
             "type": "bin",
-            "id": "semanticsSlicing",
-            "prompt": "Does setting <span class=\"qcode\">i = 0</span> affect whether the exception is thrown at the end?",
+            "id": "output",
+            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">\\\"abऩd\\\"</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">encodedLengthGeneral(...)</span> returns <span class=\"qcode\">2</span> when called.</li>\n    <li><code>'ऩ'</code> has code point <span class=\"qcode\">0x929</span> ≥ <span class=\"qcode\">0x800</span>.</li>\n    <li>No exception is thrown.</li>\n  </ul>\n</div>",
             "type2": "",
             "id2": "",
             "question2": ""
-          },
-          {
-            "type": "short",
-            "id": "output",
-            "prompt": "What value is returned by the method for input <span class=\"qcode\">\"ABCDEF\"</span>?",
-            "type2": "bin",
-            "id2": "output2",
-            "question2": "Is <span class=\"qcode\">encodedLengthGeneral(...)</span> called for this input?"
           },
           {
             "type": "bin",
-            "id": "syntaxW",
-            "prompt": "Is subtraction (-) used in an expression?",
-            "type2": "",
-            "id2": "",
-            "question2": ""
-          },
-          {
-            "type": "short",
-            "id": "syntaxB",
-            "prompt": "How many loops appear in this method?",
+            "id": "syntaxBL",
+            "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -437,32 +341,16 @@ const snippetsOriginal = [
         "7": [
           {
             "type": "bin",
-            "id": "semanticsSlicing",
-            "prompt": "Does the value of <span class=\"qcode\">a</span> affect whether <span class=\"qcode\">r1</span> and <span class=\"qcode\">r2</span> are finite values or <span class=\"qcode\">NaN</span>?",
+            "id": "output",
+            "prompt": "What value does the method return when called with the following input?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">a = 1f, b = 2f, c = -3f</span>\n</div>",
             "type2": "",
             "id2": "",
             "question2": ""
-          },
-          {
-            "type": "short",
-            "id": "output",
-            "prompt": "What is the return value of the method for input <span class=\"qcode\">a = 1, b = -5, c = 6</span>?",
-            "type2": "short",
-            "id2": "output2",
-            "question2": "After the swap check (<span class=\"qcode\">if (r1 > r2)</span>), what is the relationship between <span class=\"qcode\">r1</span> and <span class=\"qcode\">r2</span>?"
           },
           {
             "type": "bin",
-            "id": "syntaxW",
-            "prompt": "Does the method use an explicit type cast?",
-            "type2": "",
-            "id2": "",
-            "question2": ""
-          },
-          {
-            "type": "short",
-            "id": "syntaxB",
-            "prompt": "How many <span class=\"qcode\">if</span> statements may cause early return from this method?",
+            "id": "syntaxBL",
+            "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -471,32 +359,16 @@ const snippetsOriginal = [
         "8": [
           {
             "type": "bin",
-            "id": "semanticsSlicing",
-            "prompt": "Does the expression <span class=\"qcode\">x + HALF_PI</span> affect the value of <span class=\"qcode\">n</span>?",
+            "id": "output",
+            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">x = -1f, y = -1f</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">atanUnchecked(1.0f)</span> = <span class=\"qcode\">0.7853982f</span></li>\n    <li><span class=\"qcode\">PI</span> = <span class=\"qcode\">3.1415927f</span></li>\n    <li><span class=\"qcode\">HALF_PI</span> = <span class=\"qcode\">1.5707964f</span></li>\n  </ul>\n</div>",
             "type2": "",
             "id2": "",
             "question2": ""
-          },
-          {
-            "type": "short",
-            "id": "output",
-            "prompt": "What is the return path taken for input <span class=\"qcode\">x = -1, y = 1</span>?",
-            "type2": "bin",
-            "id2": "output2",
-            "question2": "Does the line <span class=\"qcode\">x = 0f</span>; execute for this input?"
           },
           {
             "type": "bin",
-            "id": "syntaxW",
-            "prompt": "Does the method catch any exceptions?",
-            "type2": "",
-            "id2": "",
-            "question2": ""
-          },
-          {
-            "type": "short",
-            "id": "syntaxB",
-            "prompt": "How many different <span class=\"qcode\">return</span> statements are present in this method?",
+            "id": "syntaxBL",
+            "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
             "type2": "",
             "id2": "",
             "question2": ""
