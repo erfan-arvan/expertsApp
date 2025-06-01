@@ -234,7 +234,7 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "output",
-            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">\\\"a1_$\\\"</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">MAX_NAME_LENGTH</span> is defined as <span class=\"qcode\">10</span></li>\n    <li><span class=\"qcode\">VALID_NAME_SET</span> is a Set&lt;Character&gt; that contains: <code>'_'</code>, <code>'-'</code>, and <code>'.'</code></li>\n  </ul>\n</div>",
+            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">&quot;a1_$&quot;</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">MAX_NAME_LENGTH</span> is defined as <span class=\"qcode\">10</span></li>\n    <li><span class=\"qcode\">VALID_NAME_SET</span> is a Set&lt;Character&gt; that contains: <code>'_'</code>, <code>'-'</code>, and <code>'.'</code></li>\n  </ul>\n</div>",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -252,7 +252,7 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "output",
-            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">isRemote(URI.create(\\\"http://example.com\\\"))</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li>The method <span class=\"qcode\">isFilesystemPath(uri)</span> returns <span class=\"qcode\">false</span> for this input.</li>\n  </ul>\n</div>",
+            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">isRemote(URI.create(&quot;http://example.com&quot;))</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li>The method <span class=\"qcode\">isFilesystemPath(uri)</span> returns <span class=\"qcode\">false</span> for this input.</li>\n  </ul>\n</div>",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -288,7 +288,7 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "output",
-            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">Str = \\\"AbcXabc\\\", searchStr = \\\"ABC\\\", startPos = 1</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">INDEX_NOT_FOUND</span> = <span class=\"qcode\">-1</span></li>\n    <li><span class=\"qcode\">regionMatches(CharSequence cs, boolean ignoreCase, int thisStart, CharSequence substring, int start, int length)</span> behaves like <code>String.regionMatches(...)</code> in Java, but works on <code>CharSequence</code>.</li>\n    <li>All inputs are standard Java <code>String</code> objects (which implement <code>CharSequence</code>).</li>\n  </ul>\n</div>",
+            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">Str = &quot;AbcXabc&quot;, searchStr = &quot;ABC&quot;, startPos = 1</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">INDEX_NOT_FOUND</span> = <span class=\"qcode\">-1</span></li>\n    <li><span class=\"qcode\">regionMatches(CharSequence cs, boolean ignoreCase, int thisStart, CharSequence substring, int start, int length)</span> behaves like <code>String.regionMatches(...)</code> in Java, but works on <code>CharSequence</code>.</li>\n    <li>All inputs are standard Java <code>String</code> objects (which implement <code>CharSequence</code>).</li>\n  </ul>\n</div>",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -324,7 +324,7 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "output",
-            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">\\\"abऩd\\\"</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">encodedLengthGeneral(...)</span> returns <span class=\"qcode\">2</span> when called.</li>\n    <li><code>'ऩ'</code> has code point <span class=\"qcode\">0x929</span> ≥ <span class=\"qcode\">0x800</span>.</li>\n    <li>No exception is thrown.</li>\n  </ul>\n</div>",
+            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">&quot;abऩd&quot;</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">encodedLengthGeneral(...)</span> returns <span class=\"qcode\">2</span> when called.</li>\n    <li><code>'ऩ'</code> has code point <span class=\"qcode\">0x929</span> ≥ <span class=\"qcode\">0x800</span>.</li>\n    <li>No exception is thrown.</li>\n  </ul>\n</div>",
             "type2": "",
             "id2": "",
             "question2": ""
