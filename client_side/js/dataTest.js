@@ -211,7 +211,7 @@ const snippetsOriginal = [
         {
           type: "open",
           id: "function",
-          prompt: "What value is returned when the following code is executed with this input?<br><br>Input: <span class=\"qcode\">\"ab$\"</span><div class=\"qassumption\"><p><span class=\"qcode\">MAX_NAME_LENGTH</span> is defined as <span class=\"qcode\">10</span></p><p>VALID_NAME_SET is a Set<Character> that contains: '_', '-', and '.'</p></div>",
+          prompt: "What value is returned when the following code is executed with this input?<br><br>Input: <span class=\"qcode\">\"ab$\"</span><div class=\"qassumption\"><p>Assumptions: <span class=\"qcode\">MAX_NAME_LENGTH</span> is defined as <span class=\"qcode\">10</span></p><p>VALID_NAME_SET is a Set<Character> that contains: '_', '-', and '.'</p></div>",
           type2: "",
           id2: "",
           question2: ""
