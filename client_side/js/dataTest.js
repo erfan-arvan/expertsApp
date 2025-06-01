@@ -368,7 +368,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "syntaxBL",
-            "prompt": "Is the variable <span class=\"qcode\">n</span> declared inside a conditional block?",
+            "prompt": "Is <span class=\"qcode\">atanUnchecked</span> called more than once in this method?",
             "type2": "",
             "id2": "",
             "question2": ""
