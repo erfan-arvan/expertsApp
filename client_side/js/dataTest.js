@@ -260,7 +260,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "syntaxBL",
-            "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
+            "prompt": "Does the <span class=\"qcode\">switch</span> statement include more than two <span class=\"qcode\">case</span> labels?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -278,7 +278,7 @@ const snippetsOriginal = [
           { 
             "type": "bin",
             "id": "syntaxBL",
-            "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
+            "prompt": "Is the variable <span class=\"qcode\">modifiers</span> initialized using a method call?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -296,7 +296,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "syntaxBL",
-            "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
+            "prompt": "Is the variable <span class=\"qcode\">endLimit</span> declared inside the <span class=\"qcode\">for</span> loop?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -314,7 +314,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "syntaxBL",
-            "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
+            "prompt": "Is the method <span class=\"qcode\">walkFileTree</span> passed exactly two arguments?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -322,7 +322,7 @@ const snippetsOriginal = [
         ],
         "6": [
           {
-            "type": "bin",
+            "type": "short",
             "id": "output",
             "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">\\\"abऩd\\\"</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">encodedLengthGeneral(...)</span> returns <span class=\"qcode\">2</span> when called.</li>\n    <li><code>'ऩ'</code> has code point <span class=\"qcode\">0x929</span> ≥ <span class=\"qcode\">0x800</span>.</li>\n    <li>No exception is thrown.</li>\n  </ul>\n</div>",
             "type2": "",
@@ -332,7 +332,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "syntaxBL",
-            "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
+            "prompt": "Is the operator <span class=\"qcode\">&gt;&gt;&gt;</span> used in a conditional expression?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -340,7 +340,7 @@ const snippetsOriginal = [
         ],
         "7": [
           {
-            "type": "bin",
+            "type": "short",
             "id": "output",
             "prompt": "What value does the method return when called with the following input?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">a = 1f, b = 2f, c = -3f</span>\n</div>",
             "type2": "",
@@ -350,7 +350,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "syntaxBL",
-            "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
+            "prompt": "Does the <span class=\"qcode\">if (r1 &gt; r2)</span> block contain a variable declaration?",
             "type2": "",
             "id2": "",
             "question2": ""
@@ -358,7 +358,7 @@ const snippetsOriginal = [
         ],
         "8": [
           {
-            "type": "bin",
+            "type": "short",
             "id": "output",
             "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">x = -1f, y = -1f</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">atanUnchecked(1.0f)</span> = <span class=\"qcode\">0.7853982f</span></li>\n    <li><span class=\"qcode\">PI</span> = <span class=\"qcode\">3.1415927f</span></li>\n    <li><span class=\"qcode\">HALF_PI</span> = <span class=\"qcode\">1.5707964f</span></li>\n  </ul>\n</div>",
             "type2": "",
@@ -368,7 +368,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "syntaxBL",
-            "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
+            "prompt": "Is the variable <span class=\"qcode\">n</span> declared inside a conditional block?",
             "type2": "",
             "id2": "",
             "question2": ""
