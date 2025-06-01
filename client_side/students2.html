@@ -1261,7 +1261,7 @@ function renderQuestion(container, question, snippetNum) {
     console.log("question at index:", allQuestions[currentQuestionIndex]);
 
   const label1 = document.createElement('label');
-  label1.innerHTML = `<strong>${question.prompt}</strong>`;
+  label1.innerHTML = `${question.prompt}`;
   container.appendChild(label1);
 
   const key1 = `answer-${snippetNum}-${question.id}`;
