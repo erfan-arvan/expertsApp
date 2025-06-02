@@ -446,10 +446,16 @@
 </div>
 
 <!-- JavaDoc Modal -->
-<div style="background:#f0f0f0; padding:6px; display:flex; gap:10px; align-items:center;">
-  <button onclick="javadocFrameReload()">⟳ Reload</button>
-  <button style="margin-left:auto;" onclick="closeJavadocModal()">✖ Close</button>
+<div id="javadocModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.6); z-index:1000;">
+  <div style="position:relative; width:85%; height:85%; margin:3% auto; background:white; border-radius:8px; display:flex; flex-direction:column;">
+    <div style="background:#f0f0f0; padding:6px; display:flex; gap:10px; align-items:center;">
+      <button onclick="javadocFrameReload()">⟳ Reload</button>
+      <button style="margin-left:auto;" onclick="closeJavadocModal()">✖ Close</button>
+    </div>
+    <iframe id="javadocFrame" src="" style="flex-grow:1; border:none;"></iframe>
+  </div>
 </div>
+
 
 
 
