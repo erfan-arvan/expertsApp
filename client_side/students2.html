@@ -278,6 +278,38 @@
   color: #d97706; /* amber-600 or a highlight color */
 }
 
+
+    /* Modal styles */
+    #javadocModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      z-index: 1000;
+    }
+
+    #javadocModalContent {
+      position: relative;
+      width: 80%; height: 80%;
+      margin: 5% auto;
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    #javadocModalContent button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    #javadocFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
 </style>
 
     
@@ -405,7 +437,26 @@
   </div>
 </div>
 
+<!-- JavaDoc Modal -->
+<div id="javadocModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.6); z-index:1000;">
+  <div style="position:relative; width:80%; height:80%; margin:5% auto; background:white; padding:1rem; border-radius:8px;">
+    <button onclick="closeJavadocModal()" style="position:absolute; top:10px; right:10px;">✖</button>
+    <iframe id="javadocFrame" src="" style="width:100%; height:100%; border:none;"></iframe>
+  </div>
+</div>
 
+<script>
+  function openJavadocModal(url) {
+    document.getElementById("javadocFrame").src = url;
+    document.getElementById("javadocModal").style.display = "block";
+  }
+  
+  function closeJavadocModal() {
+    document.getElementById("javadocModal").style.display = "none";
+    document.getElementById("javadocFrame").src = ""; // optional cleanup
+  }
+  </script>
+  
    
 <script src="js/dataTest.js?v=1.0.0"></script>
 
