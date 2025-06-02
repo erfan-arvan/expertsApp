@@ -241,7 +241,7 @@ const snippetsOriginal = [
           },
           {
             "type": "bin",
-            "id": "output",
+            "id": "syntaxBL",
             "prompt": "Is <span class=\"qcode\">MAX_NAME_LENGTH</span> used in a conditional expression?",
             "type2": "",
             "id2": "",
