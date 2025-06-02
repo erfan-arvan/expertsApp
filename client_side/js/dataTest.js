@@ -204,29 +204,6 @@ const snippetsOriginal = [
 `
       }
     ];
-
-
-
-    const general_questions = [
-        {
-          type: "open",
-          id: "function",
-          prompt: "What does this code snippet do? Briefly describe its main functionality.",
-          type2: "",
-          id2: "",
-          question2: ""
-        }, 
-        {
-            type: "scale",
-            id: "scaleST",
-            prompt: "How easy or difficult were the tasks you performed for this snippet?",
-            labels: ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
-            type2: "scale",
-            id2: "scaleSM",
-            question2: "How easy or difficult was this snippet to understand?",
-            labels2: ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
-          }
-      ];
       
       
       const questionsPerSnippetOriginal = {
@@ -247,6 +224,24 @@ const snippetsOriginal = [
             "id2": "",
             "question2": ""
           }
+          {
+            "type": "open",
+            "id": "function",
+            "prompt": "What does this code snippet do? Briefly describe its main functionality.",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }, 
+          {
+              "type": "scale",
+              "id": "scaleST",
+              "prompt": "How easy or difficult were the tasks you performed for this snippet?",
+              "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
+              "type2": "scale",
+              "id2": "scaleSM",
+              "question2": "How easy or difficult was this snippet to understand?",
+              "labels2": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
+            }
         ],
         "2": [
           {
@@ -264,7 +259,24 @@ const snippetsOriginal = [
             "type2": "",
             "id2": "",
             "question2": ""
-          }
+          }        {
+            "type": "open",
+            "id": "function",
+            "prompt": "What does this code snippet do? Briefly describe its main functionality.",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }, 
+          {
+              "type": "scale",
+              "id": "scaleST",
+              "prompt": "How easy or difficult were the tasks you performed for this snippet?",
+              "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
+              "type2": "scale",
+              "id2": "scaleSM",
+              "question2": "How easy or difficult was this snippet to understand?",
+              "labels2": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
+            }
         ],
         "3": [
           {
@@ -282,7 +294,24 @@ const snippetsOriginal = [
             "type2": "",
             "id2": "",
             "question2": ""
-          }
+          }        {
+            "type": "open",
+            "id": "function",
+            "prompt": "What does this code snippet do? Briefly describe its main functionality.",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }, 
+          {
+              "type": "scale",
+              "id": "scaleST",
+              "prompt": "How easy or difficult were the tasks you performed for this snippet?",
+              "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
+              "type2": "scale",
+              "id2": "scaleSM",
+              "question2": "How easy or difficult was this snippet to understand?",
+              "labels2": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
+            }
         ],
         "4": [
           {
@@ -300,7 +329,24 @@ const snippetsOriginal = [
             "type2": "",
             "id2": "",
             "question2": ""
-          }
+          }        {
+            "type": "open",
+            "id": "function",
+            "prompt": "What does this code snippet do? Briefly describe its main functionality.",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }, 
+          {
+              "type": "scale",
+              "id": "scaleST",
+              "prompt": "How easy or difficult were the tasks you performed for this snippet?",
+              "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
+              "type2": "scale",
+              "id2": "scaleSM",
+              "question2": "How easy or difficult was this snippet to understand?",
+              "labels2": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
+            }
         ],
         "5": [
           {
@@ -318,7 +364,24 @@ const snippetsOriginal = [
             "type2": "",
             "id2": "",
             "question2": ""
-          }
+          }        {
+            "type": "open",
+            "id": "function",
+            "prompt": "What does this code snippet do? Briefly describe its main functionality.",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }, 
+          {
+              "type": "scale",
+              "id": "scaleST",
+              "prompt": "How easy or difficult were the tasks you performed for this snippet?",
+              "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
+              "type2": "scale",
+              "id2": "scaleSM",
+              "question2": "How easy or difficult was this snippet to understand?",
+              "labels2": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
+            }
         ],
         "6": [
           {
@@ -336,7 +399,24 @@ const snippetsOriginal = [
             "type2": "",
             "id2": "",
             "question2": ""
-          }
+          }        {
+            "type": "open",
+            "id": "function",
+            "prompt": "What does this code snippet do? Briefly describe its main functionality.",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }, 
+          {
+              "type": "scale",
+              "id": "scaleST",
+              "prompt": "How easy or difficult were the tasks you performed for this snippet?",
+              "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
+              "type2": "scale",
+              "id2": "scaleSM",
+              "question2": "How easy or difficult was this snippet to understand?",
+              "labels2": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
+            }
         ],
         "7": [
           {
@@ -354,7 +434,24 @@ const snippetsOriginal = [
             "type2": "",
             "id2": "",
             "question2": ""
-          }
+          }        {
+            "type": "open",
+            "id": "function",
+            "prompt": "What does this code snippet do? Briefly describe its main functionality.",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }, 
+          {
+              "type": "scale",
+              "id": "scaleST",
+              "prompt": "How easy or difficult were the tasks you performed for this snippet?",
+              "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
+              "type2": "scale",
+              "id2": "scaleSM",
+              "question2": "How easy or difficult was this snippet to understand?",
+              "labels2": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
+            }
         ],
         "8": [
           {
@@ -372,7 +469,24 @@ const snippetsOriginal = [
             "type2": "",
             "id2": "",
             "question2": ""
-          }
+          }        {
+            "type": "open",
+            "id": "function",
+            "prompt": "What does this code snippet do? Briefly describe its main functionality.",
+            "type2": "",
+            "id2": "",
+            "question2": ""
+          }, 
+          {
+              "type": "scale",
+              "id": "scaleST",
+              "prompt": "How easy or difficult were the tasks you performed for this snippet?",
+              "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
+              "type2": "scale",
+              "id2": "scaleSM",
+              "question2": "How easy or difficult was this snippet to understand?",
+              "labels2": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
+            }
         ]
       };
 
