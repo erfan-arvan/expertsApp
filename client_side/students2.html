@@ -506,7 +506,7 @@ function loadSnippet(snippetNumber) {
 
   // ✅ FIXED: use the correct snippetNumber
 //   const snippetSpecific = questionsPerSnippet[snippetNumber];
-//   allQuestions = [...StartingQuestions, ...snippetSpecific, ...general_questions];
+//   allQuestions = [...StartingQuestions, ...snippetSpecific];
 
   loadQuestion();
 }
@@ -1232,7 +1232,7 @@ function loadQuestion() {
     questionStartTime = Date.now();
     localStorage.setItem('currentQuestionStartTime', questionStartTime);
     const snippetSpecific = questionsPerSnippet[currentSnippet];
-    allQuestions = [...StartingQuestions, ...snippetSpecific, ...general_questions];
+    allQuestions = [...StartingQuestions, ...snippetSpecific];
     const question = allQuestions[currentQuestionIndex];
 
     const container = document.getElementById('question-area');
@@ -1477,7 +1477,7 @@ function prevQuestion() {
     loadQuestion();
   } else if (currentSnippet > 1) {
     currentSnippet--;
-    currentQuestionIndex = questionsPerSnippet[currentSnippet].length + general_questions.length - 1;
+    currentQuestionIndex = questionsPerSnippet[currentSnippet].length - 1;
     loadSnippet(currentSnippet);
   }
 
