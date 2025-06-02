@@ -234,7 +234,7 @@ const snippetsOriginal = [
           {
             "type": "short",
             "id": "output",
-            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">&quot;a1_$&quot;</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">MAX_NAME_LENGTH</span> is defined as <span class=\"qcode\">10</span></li>\n    <li><span class=\"qcode\">VALID_NAME_SET</span> is a Set&lt;Character&gt; that contains: <code>'_'</code>, <code>'-'</code>, and <code>'.'</code></li>\n  </ul>\n</div>",
+            "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">&quot;a1_&quot;</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">MAX_NAME_LENGTH</span> is defined as <span class=\"qcode\">10</span></li>\n    <li><span class=\"qcode\">VALID_NAME_SET</span> is a Set&lt;Character&gt; that contains: <code>'_'</code>, <code>'-'</code>, and <code>'.'</code></li>\n  </ul>\n</div>",
             "type2": "",
             "id2": "",
             "question2": ""
