@@ -286,7 +286,7 @@ const snippetsOriginal = [
       ],
       "4": [
         {
-          "type": "short", 
+          "type": "short",
           "id": "output",
           "prompt": "What value does the method return when called with the following input, considering the following assumptions?<br><br><div class=\"input-block\">\n  <strong>Input:</strong> <span class=\"qcode\">Str = &quot;AbcXabc&quot;, searchStr = &quot;ABC&quot;, startPos = 1</span>\n</div>\n\n<div class=\"assumptions\">\n  <p><strong>Assumptions:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">INDEX_NOT_FOUND</span> = <span class=\"qcode\">-1</span></li>\n    <li><span class=\"qcode\">regionMatches(CharSequence cs, boolean ignoreCase, int thisStart, CharSequence substring, int start, int length)</span> behaves like <code>String.regionMatches(...)</code> in Java, but works on <code>CharSequence</code>.</li>\n    <li>All inputs are standard Java <code>String</code> objects (which implement <code>CharSequence</code>).</li>\n  </ul>\n</div>",
           "type2": "",
