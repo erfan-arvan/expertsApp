@@ -3,7 +3,7 @@ const snippetsOriginal = [
       id: 1,
       title: "Snippet 1",
               code:`
-<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">isValidProjectName</span>(<span class="type">String</span> name) {
+<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">methodA</span>(<span class="type">String</span> name) {
       <span class="keyword">if</span> (name == <span class="literal">null</span>) {
         <span class="keyword">return</span> <span class="literal">false</span>;
       }
@@ -26,7 +26,7 @@ const snippetsOriginal = [
           {
             id: 2,
             title: "Snippet 2",
-            code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">isRemote</span>(<span class="type">URI</span> uri) {
+            code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">methodB</span>(<span class="type">URI</span> uri) {
       <span class="keyword">if</span> (<span class="function">isFilesystemPath</span>(uri)) {
         <span class="keyword">return</span> <span class="literal">false</span>;
       }
@@ -48,7 +48,7 @@ const snippetsOriginal = [
           {
             id: 3,
             title: "Snippet 3",
-            code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">isMachineTypeDefined</span>(<span class="type">short</span> type) {
+            code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">methodC</span>(<span class="type">short</span> type) {
       <span class="keyword">if</span> (type == IMAGE_FILE_MACHINE_UNKNOWN) {
         <span class="comment">// Unsupported machine type</span>
         <span class="keyword">return</span> <span class="literal">false</span>;
@@ -74,7 +74,7 @@ const snippetsOriginal = [
           {
             id: 4,
             title: "Snippet 4",
-            code: `<span class="keyword">public static</span> <span class="type">int</span> <span class="function">indexOfIgnoreCase</span>(<span class="type">CharSequence</span> str, <span class="type">CharSequence</span> searchStr, <span class="type">int</span> startPos) {
+            code: `<span class="keyword">public static</span> <span class="type">int</span> <span class="function">methodD</span>(<span class="type">CharSequence</span> str, <span class="type">CharSequence</span> searchStr, <span class="type">int</span> startPos) {
       <span class="keyword">if</span> (str == <span class="literal">null</span> || searchStr == <span class="literal">null</span>) {
         <span class="keyword">return</span> INDEX_NOT_FOUND;
       }
@@ -101,7 +101,7 @@ const snippetsOriginal = [
           {
             id: 5,
             title: "Snippet 5",
-            code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">deleteRecursively</span>(@Nullable <span class="type">Path</span> root) <span class="keyword">throws</span> <span class="type">IOException</span> {
+            code: `<span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">methodE</span>(@Nullable <span class="type">Path</span> root) <span class="keyword">throws</span> <span class="type">IOException</span> {
       <span class="keyword">if</span> (root == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>;
       <span class="keyword">if</span> (!Files.<span class="function">exists</span>(root)) <span class="keyword">return</span> <span class="literal">false</span>;
 
@@ -125,7 +125,7 @@ const snippetsOriginal = [
       {
         id: 6,
         title: "Snippet 6",
-        code: `<span class="keyword">public static</span> <span class="type">int</span> <span class="function">encodedLength</span>(<span class="type">CharSequence</span> sequence) {
+        code: `<span class="keyword">public static</span> <span class="type">int</span> <span class="function">methodF</span>(<span class="type">CharSequence</span> sequence) {
   <span class="comment">// Optimized implementation</span>
   <span class="type">int</span> utf16Length = sequence.<span class="function">length</span>();
   <span class="type">int</span> utf8Length = utf16Length;
@@ -157,7 +157,7 @@ const snippetsOriginal = [
       {
         id: 7,
         title: "Snippet 7",
-        code: `<span class="keyword">public static</span> <span class="type">float</span> <span class="function">lowestPositiveRoot</span>(<span class="type">float</span> a, <span class="type">float</span> b, <span class="type">float</span> c) {
+        code: `<span class="keyword">public static</span> <span class="type">float</span> <span class="function">methodG</span>(<span class="type">float</span> a, <span class="type">float</span> b, <span class="type">float</span> c) {
   <span class="type">float</span> det = b * b - <span class="number">4</span> * a * c;
   <span class="keyword">if</span> (det < <span class="number">0</span>) <span class="keyword">return</span> <span class="type">Float</span>.NaN;
 
@@ -181,7 +181,7 @@ const snippetsOriginal = [
       {
         id: 8,
         title: "Snippet 8",
-        code: `<span class="keyword">public static</span> <span class="type">float</span> <span class="function">atan2</span>(<span class="type">float</span> y, <span class="type">float</span> x) {
+        code: `<span class="keyword">public static</span> <span class="type">float</span> <span class="function">methodH</span>(<span class="type">float</span> y, <span class="type">float</span> x) {
   <span class="type">float</span> n = y / x;
 
   <span class="keyword">if</span> (n != n)
