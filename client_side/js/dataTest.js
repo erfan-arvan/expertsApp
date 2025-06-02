@@ -295,7 +295,8 @@ const snippetsOriginal = [
             "type2": "",
             "id2": "",
             "question2": ""
-          }        {
+          },
+          {
             "type": "open",
             "id": "function",
             "prompt": "What does this code snippet do? Briefly describe its main functionality.",
@@ -402,7 +403,8 @@ const snippetsOriginal = [
             "type2": "",
             "id2": "",
             "question2": ""
-          }        {
+          },
+          {
             "type": "open",
             "id": "function",
             "prompt": "What does this code snippet do? Briefly describe its main functionality.",
@@ -437,7 +439,8 @@ const snippetsOriginal = [
             "type2": "",
             "id2": "",
             "question2": ""
-          }        {
+          },
+          {
             "type": "open",
             "id": "function",
             "prompt": "What does this code snippet do? Briefly describe its main functionality.",
