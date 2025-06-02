@@ -278,6 +278,79 @@
   color: #d97706; /* amber-600 or a highlight color */
 }
 
+
+    /* Modal styles */
+    #javadocModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      z-index: 1000;
+    }
+
+    #javadocModalContent {
+      position: relative;
+      width: 80%; height: 80%;
+      margin: 5% auto;
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    #javadocModalContent button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    #javadocFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* New style for standard Java methods */
+.standard-method {
+  font-weight: bold;
+  text-decoration: underline dotted;
+  cursor: pointer;
+}
+
+#javadocModalHeader {
+  background:#f0f0f0;
+  padding:6px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+#javadocModalHeader button {
+  background-color: transparent;
+  border: 2px solid #4CAF50;
+  color: #4CAF50;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.underline-dotted-pointer {
+  text-decoration: underline dotted;
+  cursor: pointer;
+}
+
+a.underline-dotted-pointer {
+  text-decoration: underline dotted !important;
+  cursor: pointer !important;
+  color: inherit !important; /* or set to your preferred color */
+}
+
+
 </style>
 
     
@@ -405,9 +478,41 @@
   </div>
 </div>
 
+<!-- JavaDoc Modal -->
+<div id="javadocModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.6); z-index:1000;">
+  <div style="position:relative; width:85%; height:85%; margin:3% auto; background:white; border-radius:8px; display:flex; flex-direction:column;">
+    <div id="javadocModalHeader">
+      <button onclick="javadocFrameReload()" style="font-size: 16px; padding: 2px 6px;">🔁 Reload</button>
+      <button style="margin-left:auto;" onclick="closeJavadocModal()">X</button>
+    </div>
+    <iframe id="javadocFrame" src="" style="flex-grow:1; border:none;"></iframe>
+  </div>
+</div>
 
+
+
+
+<script>
+  function openJavadocModal(url) {
+    const iframe = document.getElementById("javadocFrame");
+    iframe.src = url;
+    document.getElementById("javadocModal").style.display = "block";
+  }
+  
+  function closeJavadocModal() {
+    document.getElementById("javadocModal").style.display = "none";
+    document.getElementById("javadocFrame").src = "";
+  }
+  
+  function javadocFrameReload() {
+    const iframe = document.getElementById("javadocFrame");
+    iframe.src = iframe.src;
+  }
+  </script>
+  
+  
    
-<script src="js/data.js"></script>
+<script src="js/dataTest.js?v=1.0.0"></script>
 
 
 <script>
@@ -506,7 +611,7 @@ function loadSnippet(snippetNumber) {
 
   // ✅ FIXED: use the correct snippetNumber
 //   const snippetSpecific = questionsPerSnippet[snippetNumber];
-//   allQuestions = [...StartingQuestions, ...snippetSpecific, ...general_questions];
+//   allQuestions = [...StartingQuestions, ...snippetSpecific];
 
   loadQuestion();
 }
@@ -1131,35 +1236,35 @@ async function saveToServer() {
       payload.answers[snippetKey].questions.push(entry);
     });
 
-    // General Q5: Function description
-    const answer5 = localStorage.getItem(`answer-${snippet}-function`) || getCookie(`answer-${snippet}-function`) || '[No answer]';
-    const time5 = parseInt(localStorage.getItem(`time-q-${snippet}-6`) || getCookie(`time-q-${snippet}-6`) || '0');
-    payload.answers[snippetKey].questions.push({
-      id: 'function',
-      prompt: "What does this code snippet do? Briefly describe its main functionality.",
-      answer: answer5,
-      timeSec: time5
-    });
+    // // General Q5: Function description
+    // const answer5 = localStorage.getItem(`answer-${snippet}-function`) || getCookie(`answer-${snippet}-function`) || '[No answer]';
+    // const time5 = parseInt(localStorage.getItem(`time-q-${snippet}-6`) || getCookie(`time-q-${snippet}-6`) || '0');
+    // payload.answers[snippetKey].questions.push({
+    //   id: 'function',
+    //   prompt: "What does this code snippet do? Briefly describe its main functionality.",
+    //   answer: answer5,
+    //   timeSec: time5
+    // });
 
-    // General Q6.1: Self-assessed difficulty
-    const answer6_1 = localStorage.getItem(`answer-${snippet}-scaleSM`) || getCookie(`answer-${snippet}-scaleSM`) || '[No answer]';
+    // // General Q6.1: Self-assessed difficulty
+    // const answer6_1 = localStorage.getItem(`answer-${snippet}-scaleSM`) || getCookie(`answer-${snippet}-scaleSM`) || '[No answer]';
 
-    // General Q6.2: Perceived difficulty
-    const answer6_2 = localStorage.getItem(`answer-${snippet}-scaleST`) || getCookie(`answer-${snippet}-scaleST`) || '[No answer]';
-    const time6 = parseInt(localStorage.getItem(`time-q-${snippet}-7`) || getCookie(`time-q-${snippet}-7`) || '0');
+    // // General Q6.2: Perceived difficulty
+    // const answer6_2 = localStorage.getItem(`answer-${snippet}-scaleST`) || getCookie(`answer-${snippet}-scaleST`) || '[No answer]';
+    // const time6 = parseInt(localStorage.getItem(`time-q-${snippet}-7`) || getCookie(`time-q-${snippet}-7`) || '0');
 
-    payload.answers[snippetKey].questions.push({
-      id: 'scaleSM',
-      prompt: "How easy or difficult were the tasks you performed for this snippet?",
-      answer: answer6_1
-    });
+    // payload.answers[snippetKey].questions.push({
+    //   id: 'scaleSM',
+    //   prompt: "How easy or difficult were the tasks you performed for this snippet?",
+    //   answer: answer6_1
+    // });
 
-    payload.answers[snippetKey].questions.push({
-      id: 'scaleST',
-      prompt: "How easy or difficult was this snippet to understand?",
-      answer: answer6_2,
-      timeSec: time6
-    });
+    // payload.answers[snippetKey].questions.push({
+    //   id: 'scaleST',
+    //   prompt: "How easy or difficult was this snippet to understand?",
+    //   answer: answer6_2,
+    //   timeSec: time6
+    // });
   }
 
   try {
@@ -1232,7 +1337,7 @@ function loadQuestion() {
     questionStartTime = Date.now();
     localStorage.setItem('currentQuestionStartTime', questionStartTime);
     const snippetSpecific = questionsPerSnippet[currentSnippet];
-    allQuestions = [...StartingQuestions, ...snippetSpecific, ...general_questions];
+    allQuestions = [...StartingQuestions, ...snippetSpecific];
     const question = allQuestions[currentQuestionIndex];
 
     const container = document.getElementById('question-area');
@@ -1477,7 +1582,7 @@ function prevQuestion() {
     loadQuestion();
   } else if (currentSnippet > 1) {
     currentSnippet--;
-    currentQuestionIndex = questionsPerSnippet[currentSnippet].length + general_questions.length - 1;
+    currentQuestionIndex = questionsPerSnippet[currentSnippet].length - 1;
     loadSnippet(currentSnippet);
   }
 
@@ -1651,29 +1756,29 @@ function showAnswerReview() {
     
 
     // General questions (always)
-    const timeKeyGen1 = `time-q-${snippet}-6`;
-    const timeKeyGen2 = `time-q-${snippet}-7`;
+    // const timeKeyGen1 = `time-q-${snippet}-6`;
+    // const timeKeyGen2 = `time-q-${snippet}-7`;
 
-    const timeSecGen1 = parseInt(localStorage.getItem(timeKeyGen1) || localStorage.getItem(timeKeyGen1) || getCookie(timeKeyGen1) || '0');
-    const timeSecGen2 = parseInt(localStorage.getItem(timeKeyGen2) || localStorage.getItem(timeKeyGen2) || getCookie(timeKeyGen2) || '0');
+    // const timeSecGen1 = parseInt(localStorage.getItem(timeKeyGen1) || localStorage.getItem(timeKeyGen1) || getCookie(timeKeyGen1) || '0');
+    // const timeSecGen2 = parseInt(localStorage.getItem(timeKeyGen2) || localStorage.getItem(timeKeyGen2) || getCookie(timeKeyGen2) || '0');
 
-    const key1Gen1 = `answer-${snippet}-function`;
-    const key1Gen2 = `answer-${snippet}-scaleSM`;
-    const key2Gen2 = `answer-${snippet}-scaleST`;
+    // const key1Gen1 = `answer-${snippet}-function`;
+    // const key1Gen2 = `answer-${snippet}-scaleSM`;
+    // const key2Gen2 = `answer-${snippet}-scaleST`;
 
-    const val1Gen1 = localStorage.getItem(key1Gen1) || localStorage.getItem(key1Gen1) || getCookie(key1Gen1) || '[No answer]';
-    const val1Gen2 = localStorage.getItem(key1Gen2) || localStorage.getItem(key1Gen2) || getCookie(key1Gen2) || '[No answer]';
-    const val2Gen2 = localStorage.getItem(key2Gen2) || localStorage.getItem(key2Gen2) || getCookie(key2Gen2) || '[No answer]';
+    // const val1Gen1 = localStorage.getItem(key1Gen1) || localStorage.getItem(key1Gen1) || getCookie(key1Gen1) || '[No answer]';
+    // const val1Gen2 = localStorage.getItem(key1Gen2) || localStorage.getItem(key1Gen2) || getCookie(key1Gen2) || '[No answer]';
+    // const val2Gen2 = localStorage.getItem(key2Gen2) || localStorage.getItem(key2Gen2) || getCookie(key2Gen2) || '[No answer]';
 
-    output += `  ${(questions?.length || 0) + 1}. What does this code snippet do? Briefly describe its main functionality.\n`;
-    output += `     → Answer: ${val1Gen1}\n`;
-    output += `     🕒 Time: ${timeSecGen1}s\n\n`;
+    // output += `  ${(questions?.length || 0) + 1}. What does this code snippet do? Briefly describe its main functionality.\n`;
+    // output += `     → Answer: ${val1Gen1}\n`;
+    // output += `     🕒 Time: ${timeSecGen1}s\n\n`;
 
-    output += `  ${(questions?.length || 0) + 2}.1. How easy or difficult were the tasks you performed for this snippet?\n`;
-    output += `     → Answer: ${val1Gen2}\n`;
-    output += `  ${(questions?.length || 0) + 2}.2. How easy or difficult was this snippet to understand?\n`;
-    output += `     → Answer: ${val2Gen2}\n`;
-    output += `     🕒 Time: ${timeSecGen2}s\n\n`;
+    // output += `  ${(questions?.length || 0) + 2}.1. How easy or difficult were the tasks you performed for this snippet?\n`;
+    // output += `     → Answer: ${val1Gen2}\n`;
+    // output += `  ${(questions?.length || 0) + 2}.2. How easy or difficult was this snippet to understand?\n`;
+    // output += `     → Answer: ${val2Gen2}\n`;
+    // output += `     🕒 Time: ${timeSecGen2}s\n\n`;
   }
 
   reviewDiv.innerHTML = output.trim();
@@ -1724,35 +1829,35 @@ async function submitFinalAnswersToServer() {
       payload.answers[snippetKey].questions.push(entry);
     });
 
-    // General Q5: Function description
-    const answer5 = localStorage.getItem(`answer-${snippet}-function`) || getCookie(`answer-${snippet}-function`) || '[No answer]';
-    const time5 = parseInt(localStorage.getItem(`time-q-${snippet}-6`) || getCookie(`time-q-${snippet}-6`) || '0');
-    payload.answers[snippetKey].questions.push({
-      id: 'function',
-      prompt: "What does this code snippet do? Briefly describe its main functionality.",
-      answer: answer5,
-      timeSec: time5
-    });
+    // // General Q5: Function description
+    // const answer5 = localStorage.getItem(`answer-${snippet}-function`) || getCookie(`answer-${snippet}-function`) || '[No answer]';
+    // const time5 = parseInt(localStorage.getItem(`time-q-${snippet}-6`) || getCookie(`time-q-${snippet}-6`) || '0');
+    // payload.answers[snippetKey].questions.push({
+    //   id: 'function',
+    //   prompt: "What does this code snippet do? Briefly describe its main functionality.",
+    //   answer: answer5,
+    //   timeSec: time5
+    // });
 
-    // General Q6.1: Self-assessed difficulty
-    const answer6_1 = localStorage.getItem(`answer-${snippet}-scaleSM`) || getCookie(`answer-${snippet}-scaleSM`) || '[No answer]';
+    // // General Q6.1: Self-assessed difficulty
+    // const answer6_1 = localStorage.getItem(`answer-${snippet}-scaleSM`) || getCookie(`answer-${snippet}-scaleSM`) || '[No answer]';
 
-    // General Q6.2: Perceived difficulty
-    const answer6_2 = localStorage.getItem(`answer-${snippet}-scaleST`) || getCookie(`answer-${snippet}-scaleST`) || '[No answer]';
-    const time6 = parseInt(localStorage.getItem(`time-q-${snippet}-7`) || getCookie(`time-q-${snippet}-7`) || '0');
+    // // General Q6.2: Perceived difficulty
+    // const answer6_2 = localStorage.getItem(`answer-${snippet}-scaleST`) || getCookie(`answer-${snippet}-scaleST`) || '[No answer]';
+    // const time6 = parseInt(localStorage.getItem(`time-q-${snippet}-7`) || getCookie(`time-q-${snippet}-7`) || '0');
 
-    payload.answers[snippetKey].questions.push({
-      id: 'scaleSM',
-      prompt: "How easy or difficult were the tasks you performed for this snippet?",
-      answer: answer6_1
-    });
+    // payload.answers[snippetKey].questions.push({
+    //   id: 'scaleSM',
+    //   prompt: "How easy or difficult were the tasks you performed for this snippet?",
+    //   answer: answer6_1
+    // });
 
-    payload.answers[snippetKey].questions.push({
-      id: 'scaleST',
-      prompt: "How easy or difficult was this snippet to understand?",
-      answer: answer6_2,
-      timeSec: time6
-    });
+    // payload.answers[snippetKey].questions.push({
+    //   id: 'scaleST',
+    //   prompt: "How easy or difficult was this snippet to understand?",
+    //   answer: answer6_2,
+    //   timeSec: time6
+    // });
   }
 
   try {
