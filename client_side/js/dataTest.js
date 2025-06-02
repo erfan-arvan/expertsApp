@@ -332,7 +332,7 @@ const snippetsOriginal = [
           {
             "type": "bin",
             "id": "syntaxBL",
-            "prompt": "Is the operator <span class=\"qcode\">&gt;&gt;&gt;</span> used in a conditional expression?",
+            "prompt": "Is the variable <span class=\"qcode\">c</span> declared inside the body of the for loop?",
             "type2": "",
             "id2": "",
             "question2": ""
