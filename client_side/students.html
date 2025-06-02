@@ -222,7 +222,61 @@
   color: #333;
 }
 
+.short-answer-input {
+  font-size: 0.95em;
+  padding: 6px 10px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
 
+.short-answer-label {
+  font-size: 0.85em;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.assumptions {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f9fafb; /* light gray-blue */
+  border-left: 4px solid #3b82f6; /* blue accent bar */
+  font-size: 14px;
+}
+
+.assumptions ul {
+  margin: 5px 0;
+  padding-left: 20px;
+}
+
+.input-block {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  background-color: #f9fafb;
+  border-left: 4px solid #10b981; /* green accent bar */
+  font-size: 14px;
+}
+
+.qcode {
+  font-family: monospace;
+  background-color: #e5e7eb;
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.instruction {
+  font-size: 15px;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.emphasis {
+  font-weight: bold;
+  color: #d97706; /* amber-600 or a highlight color */
+}
 
 </style>
 
@@ -352,8 +406,8 @@
 </div>
 
 
-  
-  <script src="js/data.js"></script>
+   
+<script src="js/data.js?v=1.0.0"></script>
 
 
 <script>
@@ -1217,13 +1271,32 @@ function renderQuestion(container, question, snippetNum) {
     console.log("question at index:", allQuestions[currentQuestionIndex]);
 
   const label1 = document.createElement('label');
-  label1.innerHTML = `<strong>${question.prompt}</strong>`;
+  label1.innerHTML = `${question.prompt}`;
   container.appendChild(label1);
 
   const key1 = `answer-${snippetNum}-${question.id}`;
   const saved1 = localStorage.getItem(key1) || '';
 
-  if (question.type === 'open' || question.type === 'short') {
+  if (question.type === 'short') {
+    const input1 = document.createElement('input');
+    input1.type = 'text';
+    input1.id = key1;
+    input1.value = saved1;
+    input1.classList.add('short-answer-input');
+
+    input1.placeholder = '';
+
+    input1.addEventListener('input', () => {
+      saveAnswer(snippetNum, question.id, input1.value);
+    });
+
+    const shortLabel = document.createElement('div');
+    shortLabel.textContent = 'Short Answer';
+    shortLabel.classList.add('short-answer-label');
+
+    container.appendChild(shortLabel);
+    container.appendChild(input1);
+} else if (question.type === 'open') {
     const input1 = document.createElement('textarea');
     input1.rows = question.type === 'short' ? 2 : 5;
     input1.id = key1;
@@ -1274,7 +1347,26 @@ function renderQuestion(container, question, snippetNum) {
     const key2 = `answer-${snippetNum}-${question.id2}`;
     const saved2 = localStorage.getItem(key2) || '';
 
-    if (question.type2 === 'open' || question.type2 === 'short') {
+    if (question.type2 === 'short') {
+      const input2 = document.createElement('input');
+      input2.type = 'text';
+      input2.id = key2;
+      input2.value = saved2;
+      input2.classList.add('short-answer-input');
+
+      input2.placeholder = '';
+
+      input2.addEventListener('input', () => {
+        saveAnswer(snippetNum, question.id2, input2.value);
+      });
+
+      const shortLabel2 = document.createElement('div');
+      shortLabel2.textContent = 'Short Answer';
+      shortLabel2.classList.add('short-answer-label');
+
+      container.appendChild(shortLabel2);
+      container.appendChild(input2);
+    } else if (question.type2 === 'open' || question.type2 === 'short') {
       const input2 = document.createElement('textarea');
       input2.rows = question.type2 === 'short' ? 2 : 5;
       input2.id = key2;
