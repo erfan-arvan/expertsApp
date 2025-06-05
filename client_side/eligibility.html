@@ -98,15 +98,53 @@
         box-shadow: 0 0 4px rgba(76, 175, 80, 0.4);
         }
 
+        .input-field {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-top: 10px;
+            margin-bottom: 16px;
+            background-color: #fff;
+            color: #333;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            }
+
+            .input-field:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 4px rgba(76, 175, 80, 0.4);
+            }
+
+            .full-width-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            }
+
+            .full-width-btn:hover {
+            background-color: #45a049;
+            }
+
+
   </style>
 </head>
 <body>
 
 <div class="email-box" id="email-box">
-  <h2>Check Your Eligibility</h2>
-  <input type="email" id="email" placeholder="Enter your email" style="width: 100px; padding: 10px; margin-top: 10px;">
-  <button onclick="startSurvey()">Check My Eligibility</button>
+    <h2>Check Your Eligibility</h2>
+    <input type="email" id="email" placeholder="Enter your email" class="input-field">
+    <button onclick="startSurvey()" class="full-width-btn">Check My Eligibility</button>
 </div>
+      
 
 <div class="instructions">
   <div style="display: flex; justify-content: space-between; align-items: center;">
