@@ -138,6 +138,18 @@
                 display: none !important;
             }
 
+            .success-message {
+                background-color: #e6f9ec;
+                color: #2e7d32;
+                border: 1px solid #2e7d32;
+                padding: 15px 20px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                font-size: 16px;
+                font-weight: 500;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            }
+
   </style>
 </head>
 <body>
@@ -168,6 +180,10 @@
   </div>
 </div>
 
+<div id="eligibility-success" class="success-message hidden">
+    🎉 Congrats! You are eligible to participate in this study. Please select a time slot for your session.
+  </div>
+  
 <div class="slots-box hidden" id="slots-box">
   <h3>Select a Time Slot</h3>
   <div class="day-card">
@@ -304,8 +320,10 @@ function checkEligibility() {
     }
   }
   document.getElementById('survey-box').classList.add('hidden');
+  document.getElementById('eligibility-success').classList.remove('hidden');
   document.getElementById('slots-box').classList.remove('hidden');
 }
+
 
 function selectSlot(el) {
   document.querySelectorAll('.time-slot').forEach(e => e.classList.remove('selected'));
