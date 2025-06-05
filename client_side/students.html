@@ -526,7 +526,7 @@ a.underline-dotted-pointer {
   const key = 'snippetOrder';
 
   // Try to load from localStorage or cookie
-  let stored = getCookie(key) || localStorage.getItem(key);
+  let stored = localStorage.getItem(key);
   if (stored) {
     try {
       const parsed = JSON.parse(stored);
@@ -587,7 +587,7 @@ console.log("Mapping from original (1-based):", snippetOrder.map(i => `Original 
     }
   
     function isComplete(key) {
-      return localStorage.getItem(key) === 'true' || getCookie(key) === 'true';
+      return localStorage.getItem(key) === 'true' ;
     }
   
 </script>
@@ -659,39 +659,6 @@ function updateButtons() {
     document.getElementById('next').disabled = currentSnippet === TOTAL_SNIPPETS;
 }
 
-function submitAll() {
-    saveSummary(); // save the current snippet
-    const allSummaries = {};
-
-    // Pull all saved snippets from session or cookie
-    for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
-        const key = `summary${i}`;
-        const sessionVal = localStorage.getItem(key);
-        const cookieVal = getCookie(key);
-        allSummaries[key] = sessionVal || decodeURIComponent(cookieVal || '');
-    }
-
-    fetch("https://codecomprehensibility.site/submit", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(allSummaries)
-  })
-  .then(response => {
-    if (response.ok) {
-      showSubmissionModal('✅ Summaries submitted successfully. Click “Continue to Phase 2” to proceed.\nYou may resubmit before the deadline if you change your mind about any part of your response.');
-      document.getElementById('continueBtn').style.display = 'inline-block';
-      localStorage.setItem('phase1_submitted', 'true');
-      setCookie('phase1_submitted', 'true', 30);
-    } else {
-      showSubmissionModal('❌ Submission failed. Please try again.');
-    }
-  })
-  .catch(error => {
-    console.error("Submission error:", error);
-    showSubmissionModal('⚠️ Error occurred during submission.');
-  });
-
-}
 </script>
 
 
@@ -822,17 +789,7 @@ function submitAll() {
   }
   </script>  
 
-<script>
-    function setCookie(name, value, days) {
-        const expires = new Date(Date.now() + days*24*60*60*1000).toUTCString();
-        document.cookie = `${name}=${value}; expires=${expires}; path=/`;
-    }
-    
-    function getCookie(name) {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return match ? decodeURIComponent(match[2]) : null;
-  }
-</script>
+
 
 <script>
     function toggleInstructions() {
@@ -1124,7 +1081,7 @@ function validateCurrentSnippetInputs() {
 <script>
 function getOrCreateQuestionOrder(snippetId, numQuestions) {
   const key = `qOrder-${snippetId}`;
-  const stored = localStorage.getItem(key) || getCookie(key);
+  const stored = localStorage.getItem(key);
 
   if (stored) {
     try {
@@ -1207,7 +1164,7 @@ async function saveToServer() {
   for (let snippet = 1; snippet <= TOTAL_SNIPPETS; snippet++) {
     const snippetKey = `snippet-${snippet}`;
     payload.answers[snippetKey] = {
-      readTime: parseInt(localStorage.getItem(`time-q-${snippet}-1`) || getCookie(`time-q-${snippet}-1`) || '0'),
+      readTime: parseInt(localStorage.getItem(`time-q-${snippet}-1`) || '0'),
       questions: []
     };
 
@@ -1215,8 +1172,8 @@ async function saveToServer() {
 
     // Custom questions
     questions.forEach((q, i) => {
-      const answer = localStorage.getItem(`answer-${snippet}-${q.id}`) || getCookie(`answer-${snippet}-${q.id}`) || '[No answer]';
-      const time = parseInt(localStorage.getItem(`time-q-${snippet}-${i + 2}`) || getCookie(`time-q-${snippet}-${i + 2}`) || '0');
+      const answer = localStorage.getItem(`answer-${snippet}-${q.id}`) || '[No answer]';
+      const time = parseInt(localStorage.getItem(`time-q-${snippet}-${i + 2}`) || '0');
       const entry = {
         id: q.id,
         prompt: q.prompt || '[Missing prompt]',
@@ -1225,7 +1182,7 @@ async function saveToServer() {
       };
 
       if (q.id2 && q.question2) {
-        const secondAnswer = localStorage.getItem(`answer-${snippet}-${q.id2}`) || getCookie(`answer-${snippet}-${q.id2}`) || '[No answer]';
+        const secondAnswer = localStorage.getItem(`answer-${snippet}-${q.id2}`) || '[No answer]';
         entry.followUp = {
           id: q.id2,
           prompt: q.question2,
@@ -1323,7 +1280,6 @@ function recordQuestionTime(snippetId, questionIndex) {
   // Update all sources
   questionTimers[key] = newTotal;
   localStorage.setItem(key, newTotal);
-  setCookie(key, newTotal, 30); // keep for 30 days
 
   // Clear start timestamp
   questionStartTime = null;
@@ -1733,7 +1689,7 @@ function showAnswerReview() {
   for (let snippet = 1; snippet <= TOTAL_SNIPPETS; snippet++) {
     output += `\n🔹 Snippet ${snippet}\n`;
     let readTimeKey = `time-q-${snippet}-1`;
-    const timeSecRead = parseInt(localStorage.getItem(readTimeKey) || localStorage.getItem(readTimeKey) || getCookie(readTimeKey) || '0');
+    const timeSecRead = parseInt(localStorage.getItem(readTimeKey) || localStorage.getItem(readTimeKey) || '0');
     output+=`     Read Time: ${timeSecRead}s\n\n`;
 
     const questions = questionsPerSnippet[snippet];
@@ -1743,17 +1699,17 @@ function showAnswerReview() {
     } else {
       questions.forEach((q, i) => {
         const key1 = `answer-${snippet}-${q?.id}`;
-        const val1 = localStorage.getItem(key1) || getCookie(key1) || '[No answer]';
+        const val1 = localStorage.getItem(key1) || '[No answer]';
 
         const timeKey = `time-q-${snippet}-${i + 2}`;
-        const timeSec = parseInt(localStorage.getItem(timeKey) || localStorage.getItem(timeKey) || getCookie(timeKey) || '0');
+        const timeSec = parseInt(localStorage.getItem(timeKey) || localStorage.getItem(timeKey) || '0');
         const timeFormatted = `${timeSec}s`;
 
         output += `  ${i + 1}. ${q?.prompt || '[Missing prompt]'}\n     → Answer: ${val1}\n     🕒 Time: ${timeFormatted}\n`;
 
         if (q?.id2 && q?.question2) {
           const key2 = `answer-${snippet}-${q.id2}`;
-          const val2 = localStorage.getItem(key2) || getCookie(key2) || '[No answer]';
+          const val2 = localStorage.getItem(key2)  || '[No answer]';
           output += `     ↪ ${q.question2}\n        → Answer: ${val2}\n`;
         }
 
@@ -1807,7 +1763,7 @@ async function submitFinalAnswersToServer() {
   for (let snippet = 1; snippet <= TOTAL_SNIPPETS; snippet++) {
     const snippetKey = `snippet-${snippet}`;
     payload.answers[snippetKey] = {
-      readTime: parseInt(localStorage.getItem(`time-q-${snippet}-1`) || getCookie(`time-q-${snippet}-1`) || '0'),
+      readTime: parseInt(localStorage.getItem(`time-q-${snippet}-1`) || '0'),
       questions: []
     };
 
@@ -1815,8 +1771,8 @@ async function submitFinalAnswersToServer() {
 
     // Custom questions
     questions.forEach((q, i) => {
-      const answer = localStorage.getItem(`answer-${snippet}-${q.id}`) || getCookie(`answer-${snippet}-${q.id}`) || '[No answer]';
-      const time = parseInt(localStorage.getItem(`time-q-${snippet}-${i + 2}`) || getCookie(`time-q-${snippet}-${i + 2}`) || '0');
+      const answer = localStorage.getItem(`answer-${snippet}-${q.id}`) || '[No answer]';
+      const time = parseInt(localStorage.getItem(`time-q-${snippet}-${i + 2}`) || '0');
       const entry = {
         id: q.id,
         prompt: q.prompt || '[Missing prompt]',
@@ -1825,7 +1781,7 @@ async function submitFinalAnswersToServer() {
       };
 
       if (q.id2 && q.question2) {
-        const secondAnswer = localStorage.getItem(`answer-${snippet}-${q.id2}`) || getCookie(`answer-${snippet}-${q.id2}`) || '[No answer]';
+        const secondAnswer = localStorage.getItem(`answer-${snippet}-${q.id2}`) || '[No answer]';
         entry.followUp = {
           id: q.id2,
           prompt: q.question2,
