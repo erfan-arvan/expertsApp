@@ -204,6 +204,46 @@ public class SubmissionController {
         }
     }
 
+    @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+    @PostMapping("/register_student")
+    public synchronized String handleStudentRegistration(@RequestBody Map<String, Object> body) {
+        String email = (String) body.getOrDefault("email", "unknown");
+        String timestamp = ZonedDateTime.now(ZoneId.of("America/New_York"))
+                                        .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+        System.out.println(">>> [register_student] Registration received from: " + email);
+        System.out.println(">>> Timestamp: " + timestamp);
+
+        File directory = new File("submissions");
+        if (!directory.exists()) {
+            directory.mkdirs();
+            System.out.println(">>> Created 'submissions' directory.");
+        }
+
+        File registrationFile = new File("submissions/registration.json");
+        ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
+        try {
+            Map<String, Object> wrapped = new HashMap<>();
+            wrapped.put("timestamp", timestamp);
+            wrapped.put("data", body);
+
+            List<Map<String, Object>> allData = registrationFile.exists()
+                ? mapper.readValue(registrationFile, new TypeReference<>() {})
+                : new ArrayList<>();
+            allData.add(wrapped);
+            mapper.writeValue(registrationFile, allData);
+            System.out.println(">>> Saved to registration.json");
+
+            return "Registration saved.";
+        } catch (IOException e) {
+            System.err.println(">>> ERROR saving registration for: " + email);
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save registration.");
+        }
+    }
+
+
 
     private String truncateJson(Map<String, Object> body, int maxLen) {
     try {
