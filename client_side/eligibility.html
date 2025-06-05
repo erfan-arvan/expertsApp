@@ -169,6 +169,29 @@
                 color: #1b5e20;
                 }
 
+                .confirm-box, .final-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.confirm-box a {
+  color: #4CAF50;
+  margin-left: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.confirm-box a:hover {
+  text-decoration: underline;
+}
+
+.final-box button {
+  margin-top: 10px;
+}
 
   </style>
 </head>
@@ -225,6 +248,27 @@
     </div>
   </div>
 </div>
+
+<!-- Confirmation Section -->
+<div class="confirm-box hidden" id="confirm-box">
+    <p><strong>You selected:</strong> <span id="selected-slot-info"></span>
+      <a href="#" onclick="changeSlot()">Change date</a>
+    </p>
+    <label style="display: block; margin: 15px 0;">
+      <input type="checkbox" id="notify-checkbox" checked>
+      I want to receive notifications about this session through my email "<span id="notify-email"></span>"
+    </label>
+    <button onclick="finalizeRegistration()">Finalize My Registration</button>
+  </div>
+  
+  <!-- Final Success Section -->
+  <div class="final-box hidden" id="final-box">
+    <h3>✅ Registration Complete</h3>
+    <p>Thank you! We'll follow up with the exact room location. It will be in one of the rooms at <strong>GITC, NJIT</strong>.</p>
+    <p>You can add the session to your Google Calendar:</p>
+    <button onclick="addToGoogleCalendar()">📅 Add to Google Calendar</button>
+  </div>
+  
 
 <div class="modal hidden" id="ineligible-modal">
   <div class="modal-content">
@@ -350,8 +394,66 @@ function checkEligibility() {
 function selectSlot(el) {
   document.querySelectorAll('.time-slot').forEach(e => e.classList.remove('selected'));
   el.classList.add('selected');
-  localStorage.setItem("selected_slot", el.innerText);
+
+  const slotText = el.innerText;
+  const dayText = el.closest('.day-card').querySelector('h4').innerText;
+  const fullText = `${dayText} at ${slotText}`;
+
+  localStorage.setItem("selected_slot", fullText);
+
+  // Hide slot box and show confirmation
+  document.getElementById('slots-box').classList.add('hidden');
+  document.getElementById('selected-slot-info').innerText = fullText;
+  document.getElementById('notify-email').innerText = localStorage.getItem("student_email");
+  document.getElementById('confirm-box').classList.remove('hidden');
 }
+
+function finalizeRegistration() {
+  const notify = document.getElementById('notify-checkbox').checked;
+  localStorage.setItem("notify_opt_in", notify);
+  document.getElementById('confirm-box').classList.add('hidden');
+  document.getElementById('final-box').classList.remove('hidden');
+}
+
+function addToGoogleCalendar() {
+  const selected = localStorage.getItem("selected_slot"); // e.g., "Monday, June 10 at 10:00 AM"
+  if (!selected) return alert("No time slot selected.");
+
+  const [dayText, timeText] = selected.split(" at ");
+  const dateMap = {
+    "Monday, June 10": "20250610",
+    "Tuesday, June 11": "20250611"
+  };
+  const baseDate = dateMap[dayText.trim()];
+  if (!baseDate) return alert("Invalid date.");
+
+  // Parse time (e.g., "1:00 PM")
+  const [hourPart, minutePartWithSuffix] = timeText.trim().split(":");
+  const minutes = minutePartWithSuffix.slice(0, 2);
+  const suffix = minutePartWithSuffix.trim().slice(-2); // AM or PM
+  let hour = parseInt(hourPart);
+
+  if (suffix === "PM" && hour !== 12) hour += 12;
+  if (suffix === "AM" && hour === 12) hour = 0;
+
+  const startHourStr = hour.toString().padStart(2, '0');
+  const startMinuteStr = minutes.padStart(2, '0');
+  const startTime = `${baseDate}T${startHourStr}${startMinuteStr}00`;
+
+  // Add 90 minutes for end time
+  const startDate = new Date(`${baseDate.slice(0, 4)}-${baseDate.slice(4, 6)}-${baseDate.slice(6)}T${startHourStr}:${startMinuteStr}:00`);
+  const endDate = new Date(startDate.getTime() + 90 * 60 * 1000); // 90 min in ms
+  const endTime = `${endDate.getFullYear()}${(endDate.getMonth() + 1).toString().padStart(2, '0')}${endDate.getDate().toString().padStart(2, '0')}T${endDate.getHours().toString().padStart(2, '0')}${endDate.getMinutes().toString().padStart(2, '0')}00`;
+
+  // Build Google Calendar URL
+  const title = encodeURIComponent("Code Comprehension Session");
+  const location = encodeURIComponent("To be declared");
+  const details = encodeURIComponent("You registered for a code comprehension session. We'll contact you with the exact room. It will be in GITC at NJIT.");
+  const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startTime}/${endTime}&details=${details}&location=${location}`;
+
+  window.open(calendarUrl, "_blank");
+}
+
 
 function toggleInfo(btn) {
   const info = document.getElementById('study-info');
