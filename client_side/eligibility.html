@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Eligibility Check</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 40px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    .instructions, .email-box, .survey-box, .slots-box {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .day-card {
+      background-color: #eaeaea;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+
+    .time-slot {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      background-color: #ccc;
+      cursor: pointer;
+    }
+
+    .time-slot.selected {
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 400px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="email-box" id="email-box">
+  <h2>Check Your Eligibility</h2>
+  <input type="email" id="email" placeholder="Enter your email" style="width: 100%; padding: 10px; margin-top: 10px;">
+  <button onclick="startSurvey()">Check My Eligibility</button>
+</div>
+
+<div class="instructions">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h3>About This Study</h3>
+    <button onclick="toggleInfo(this)">Hide</button>
+  </div>
+  <div id="study-info">
+    <p>This study evaluates how students comprehend Java code. You’ll answer a few short questions to determine your eligibility, and if eligible, select a time to participate.</p>
+  </div>
+</div>
+
+<div class="survey-box hidden" id="survey-box">
+  <h3>Eligibility Questions</h3>
+  <div id="question-container"></div>
+  <div style="margin-top: 20px;">
+    <button onclick="prevQuestion()" id="prevBtn" disabled>Previous</button>
+    <button onclick="nextQuestion()" id="nextBtn">Next</button>
+  </div>
+</div>
+
+<div class="slots-box hidden" id="slots-box">
+  <h3>Select a Time Slot</h3>
+  <div class="day-card">
+    <h4>Monday, June 10</h4>
+    <div>
+      <div class="time-slot" onclick="selectSlot(this)">10:00 AM</div>
+      <div class="time-slot" onclick="selectSlot(this)">1:00 PM</div>
+      <div class="time-slot" onclick="selectSlot(this)">4:00 PM</div>
+    </div>
+  </div>
+  <div class="day-card">
+    <h4>Tuesday, June 11</h4>
+    <div>
+      <div class="time-slot" onclick="selectSlot(this)">9:00 AM</div>
+      <div class="time-slot" onclick="selectSlot(this)">12:00 PM</div>
+      <div class="time-slot" onclick="selectSlot(this)">3:00 PM</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal hidden" id="ineligible-modal">
+  <div class="modal-content">
+    <h3>Not Eligible</h3>
+    <p>Unfortunately, you are not eligible to participate in this study. Thank you for your interest.</p>
+    <button onclick="document.getElementById('ineligible-modal').classList.add('hidden')">Close</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    text: "What is your age?",
+    options: [
+      { label: "Under 18", ineligible: true },
+      { label: "18–20" }, { label: "21–24" }, { label: "25–30" },
+      { label: "31–40" }, { label: "Over 40" }
+    ]
+  },
+  {
+    text: "Have you taken CS 288: Intensive Programming?",
+    options: [
+      { label: "Yes, I have completed the course" },
+      { label: "I am currently enrolled in the course" },
+      { label: "Neither", ineligible: true }
+    ]
+  },
+  {
+    text: "Have you been diagnosed with a reading disability or any condition that affects your ability to read code or instructions?",
+    options: [
+      { label: "Yes", ineligible: true },
+      { label: "No" }
+    ]
+  },
+  {
+    text: "How comfortable are you with reading English-language text and programming instructions?",
+    options: [
+      { label: "Not comfortable", ineligible: true },
+      { label: "Slightly comfortable" },
+      { label: "Moderately comfortable" },
+      { label: "Very comfortable" },
+      { label: "Native speaker / fluent" }
+    ]
+  },
+  {
+    text: "Do you have access to a personal laptop you can bring to the session?",
+    options: [
+      { label: "Yes" },
+      { label: "No", ineligible: true }
+    ]
+  },
+  {
+    text: "How many years have you been programming in Java?",
+    options: [
+      { label: "I am not familiar with Java", ineligible: true },
+      { label: "Less than 1 year" },
+      { label: "1–2 years" },
+      { label: "3–4 years" },
+      { label: "5+ years" },
+      { label: "Prefer not to say", ineligible: true }
+    ]
+  }
+];
+
+let currentQuestion = 0;
+let answers = [];
+
+function startSurvey() {
+  const email = document.getElementById('email').value.trim();
+  if (!email) return alert("Please enter a valid email.");
+  localStorage.setItem("student_email", email);
+  document.getElementById('email-box').classList.add('hidden');
+  document.getElementById('survey-box').classList.remove('hidden');
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[currentQuestion];
+  const container = document.getElementById('question-container');
+  let html = `<p><strong>${q.text}</strong></p>`;
+  q.options.forEach((opt, i) => {
+    const checked = answers[currentQuestion] === i ? 'checked' : '';
+    html += `<label><input type="radio" name="q${currentQuestion}" value="${i}" ${checked}> ${opt.label}</label><br>`;
+  });
+  container.innerHTML = html;
+
+  document.getElementById('prevBtn').disabled = currentQuestion === 0;
+  document.getElementById('nextBtn').innerText = currentQuestion === questions.length - 1 ? 'Check Eligibility' : 'Next';
+}
+
+function nextQuestion() {
+  const selected = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
+  if (!selected) return alert("Please select an option.");
+  answers[currentQuestion] = parseInt(selected.value);
+  if (currentQuestion === questions.length - 1) {
+    checkEligibility();
+  } else {
+    currentQuestion++;
+    showQuestion();
+  }
+}
+
+function prevQuestion() {
+  if (currentQuestion > 0) currentQuestion--;
+  showQuestion();
+}
+
+function checkEligibility() {
+  for (let i = 0; i < answers.length; i++) {
+    const opt = questions[i].options[answers[i]];
+    if (opt.ineligible) {
+      document.getElementById('survey-box').classList.add('hidden');
+      document.getElementById('ineligible-modal').classList.remove('hidden');
+      return;
+    }
+  }
+  document.getElementById('survey-box').classList.add('hidden');
+  document.getElementById('slots-box').classList.remove('hidden');
+}
+
+function selectSlot(el) {
+  document.querySelectorAll('.time-slot').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  localStorage.setItem("selected_slot", el.innerText);
+}
+
+function toggleInfo(btn) {
+  const info = document.getElementById('study-info');
+  if (info.classList.contains('hidden')) {
+    info.classList.remove('hidden');
+    btn.innerText = "Hide";
+  } else {
+    info.classList.add('hidden');
+    btn.innerText = "Show";
+  }
+}
+</script>
+</body>
+</html>
