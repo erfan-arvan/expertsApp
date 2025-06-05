@@ -392,6 +392,7 @@ function checkEligibility() {
 
 
 function selectSlot(el) {
+  document.getElementById('eligibility-success').classList.add('hidden');
   document.querySelectorAll('.time-slot').forEach(e => e.classList.remove('selected'));
   el.classList.add('selected');
 
