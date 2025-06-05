@@ -412,9 +412,18 @@ function selectSlot(el) {
 function finalizeRegistration() {
   const notify = document.getElementById('notify-checkbox').checked;
   localStorage.setItem("notify_opt_in", notify);
-  document.getElementById('confirm-box').classList.add('hidden');
-  document.getElementById('final-box').classList.remove('hidden');
+
+  // Call registration submit before showing final confirmation
+  submitRegistrationData().then(success => {
+    if (success) {
+      document.getElementById('confirm-box').classList.add('hidden');
+      document.getElementById('final-box').classList.remove('hidden');
+    } else {
+      alert("❌ Something went wrong while registering. Please try again or contact the research team.");
+    }
+  });
 }
+
 
 function addToGoogleCalendar() {
   const selected = localStorage.getItem("selected_slot"); // e.g., "Monday, June 10 at 10:00 AM"
@@ -466,6 +475,43 @@ function toggleInfo(btn) {
     btn.innerText = "Show";
   }
 }
+
+function submitRegistrationData() {
+  const email = localStorage.getItem("student_email") || "unknown";
+  const notify = localStorage.getItem("notify_opt_in") === "true";
+  const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
+
+  const eligibilityResponses = questions.map((q, index) => {
+    const selectedIndex = answers[index];
+    return {
+      question: q.text,
+      selectedOption: q.options[selectedIndex]?.label || "No answer"
+    };
+  });
+
+  const payload = {
+    email: email,
+    notify: notify,
+    selectedSlot: selectedSlot,
+    eligibilityResponses: eligibilityResponses,
+    submitted: true
+  };
+
+  return fetch("https://codecomprehensibility.site/register_student", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(res => res.ok)
+  .catch(err => {
+    console.error("❌ Network error:", err);
+    return false;
+  });
+}
+
+
 </script>
 </body>
 </html>
