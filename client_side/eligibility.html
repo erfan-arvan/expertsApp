@@ -218,6 +218,17 @@ input.input-error {
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
+@keyframes glowPulse {
+        0% {
+          box-shadow: 0 0 10px #4CAF50;
+        }
+        100% {
+          box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+        }
+      }
+
+      #email {        animation: glowPulse 1.5s infinite alternate;
+      }
   </style>
 </head>
 <body>
