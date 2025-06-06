@@ -746,14 +746,19 @@ function submitCustomTime() {
 }
 
 function goToFinalStepWithPendingEvent() {
-  // Example: hide current step and show final confirmation panel
-  document.getElementById('main-registration-panel').style.display = 'none';
+  // Hide the slot selection and any prior messages
+  document.getElementById('slots-box').classList.add('hidden');
+  document.getElementById('confirm-box').classList.add('hidden');
+  document.getElementById('final-box').classList.add('hidden');
+
+  // Show the final pending panel
   document.getElementById('final-confirmation-panel').style.display = 'block';
 
   // Update the summary message
   document.getElementById('final-summary').innerText =
     "Thank you! We’ve received your availability request. We’ll review your times and get back to you shortly.";
 }
+
 
 function submitPendingRegistration() {
   const email = document.getElementById('email').value;
