@@ -307,6 +307,16 @@ public class SubmissionController {
                             "If you have any questions or issues, please reply to this email or contact us at ea442@njit.edu.\n\n" +
                             "— Code Comprehension Study Team";
                     break;
+                case "pending":
+                    subject = "Code Comprehension Study – Availability Received";
+
+                    message = "Thank you for suggesting your available time slots for the Code Comprehension Study.\n\n" +
+                            "📅 Your availability:\n" +
+                            customAvailability + "\n\n" +
+                            "We'll review your responses and reach out shortly to confirm your session time.\n\n" +
+                            "If you have any questions or issues, please reply to this email or contact us at ea442@njit.edu.\n\n" +
+                            "— Code Comprehension Study Team";
+                    break;
 
                 case "register":
                 default:
@@ -320,7 +330,6 @@ public class SubmissionController {
                             "We'll follow up with the exact room location, but it will be in one of the rooms at GITC, NJIT.\n\n" +
                             "If you want to cancel or change your time slot, please use this link:\n" + cancelLink + "\n\n" +
                             "If you have any questions or issues, please reply to this email or contact us at ea442@njit.edu.\n\n" +
-                            "If you have any questions, feel free to reach out.\n\n" +
                             "— Code Comprehension Study Team";
                     break;
             }
