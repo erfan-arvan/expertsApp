@@ -335,12 +335,29 @@ input.input-error {
   </p>
   
   <div id="custom-time-box" style="display: none; margin-top: 1em; border: 1px solid #ccc; padding: 1em; border-radius: 8px;">
-    <label for="custom-times"><strong>📅 Which days and times are you available?</strong><br>
-      Please list all possible options so we can try to accommodate your schedule.
-    </label><br>
-    <textarea id="custom-times" rows="4" style="width: 100%; margin-top: 0.5em;"></textarea><br>
+    <p><strong>📅 Please select all of your free times:</strong></p>
+    
+    <div class="day-card">
+      <h4>Wednesday, June 12</h4>
+      <div>
+        <div class="time-slot" onclick="toggleCustomSlot(this)">10:00 AM</div>
+        <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM</div>
+        <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM</div>
+      </div>
+    </div>
+  
+    <div class="day-card">
+      <h4>Thursday, June 13</h4>
+      <div>
+        <div class="time-slot" onclick="toggleCustomSlot(this)">9:00 AM</div>
+        <div class="time-slot" onclick="toggleCustomSlot(this)">12:00 PM</div>
+        <div class="time-slot" onclick="toggleCustomSlot(this)">3:00 PM</div>
+      </div>
+    </div>
+  
     <button onclick="submitCustomTime()">Next</button>
   </div>
+  
   
 </div>
 
@@ -365,8 +382,9 @@ input.input-error {
     <button onclick="addToGoogleCalendar()">📅 Add to Google Calendar</button>
   </div>
 
-  <div id="final-confirmation-panel" style="display: none;">
+  <div class="slots-box" id="final-confirmation-panel" style="display: none;">
     <p id="final-summary"></p>
+    <a href="#" onclick="changeSlot()">Change date</a>
     <button onclick="submitPendingRegistration()">Submit</button>
   </div>
   
@@ -729,21 +747,25 @@ function toggleCustomTimeBox() {
 }
 
 function submitCustomTime() {
-  const customTimes = document.getElementById('custom-times').value.trim();
-  if (!customTimes) {
-    alert("Please enter your availability.");
+  const selected = Array.from(document.querySelectorAll('#custom-time-box .time-slot.selected'))
+    .map(el => {
+      const day = el.closest('.day-card').querySelector('h4').innerText;
+      return `${day} at ${el.innerText}`;
+    });
+
+  if (selected.length === 0) {
+    alert("Please select at least one time slot.");
     return;
   }
 
-  // Save this information to be used on the next page or during registration
   window.customEventData = {
     event: "pending",
-    availabilityNote: customTimes
+    availabilityNote: selected
   };
 
-  // You can redirect to your next step/page or update the view dynamically
   goToFinalStepWithPendingEvent();
 }
+
 
 function goToFinalStepWithPendingEvent() {
   // Hide the slot selection and any prior messages
@@ -754,9 +776,12 @@ function goToFinalStepWithPendingEvent() {
   // Show the final pending panel
   document.getElementById('final-confirmation-panel').style.display = 'block';
 
-  // Update the summary message
-  document.getElementById('final-summary').innerText =
-    "Thank you! We’ve received your availability request. We’ll review your times and get back to you shortly.";
+  document.getElementById('final-summary').innerHTML = `
+  <p><strong>🕒 Please review your selected availability before submitting:</strong></p>
+  <ul>${formatted}</ul>
+  <p>Click “Submit” below and we’ll follow up to schedule your session based on your availability.</p>
+`;
+
 }
 
 
@@ -765,7 +790,7 @@ function submitPendingRegistration() {
   const payload = {
     email: email,
     event: "pending",
-    customAvailability: window.customEventData.availabilityNote,
+    customAvailability: window.customEventData.availabilityNote.join(", "),
     submitted: true
   };
 
@@ -780,6 +805,10 @@ function submitPendingRegistration() {
       alert("Something went wrong. Please try again.");
     }
   });
+}
+
+function toggleCustomSlot(el) {
+  el.classList.toggle('selected');
 }
 
 </script>
