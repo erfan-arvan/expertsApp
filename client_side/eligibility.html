@@ -330,6 +330,8 @@ input.input-error {
     </div>
   </div>
 
+  <button onclick="finalizeMultiSlotSelection()">Next</button>
+
   <p style="margin-top: 1em;">
     <a href="#" onclick="toggleCustomTimeBox(); return false;">None of these work for you?</a>
   </p>
@@ -569,22 +571,27 @@ function checkEligibility() {
 
 
 function selectSlot(el) {
+  el.classList.toggle('selected');
+
+  // Gather all selected slots
+  const selectedEls = document.querySelectorAll('.slots-box .time-slot.selected');
+  if (selectedEls.length === 0) return;
+
+  const selectedSlots = Array.from(selectedEls).map(el => {
+    const dayText = el.closest('.day-card').querySelector('h4').innerText;
+    return `${dayText} at ${el.innerText}`;
+  });
+
+  localStorage.setItem("selected_slot", selectedSlots.join(", "));
+
+  // Update confirmation UI
   document.getElementById('eligibility-success').classList.add('hidden');
-  document.querySelectorAll('.time-slot').forEach(e => e.classList.remove('selected'));
-  el.classList.add('selected');
-
-  const slotText = el.innerText;
-  const dayText = el.closest('.day-card').querySelector('h4').innerText;
-  const fullText = `${dayText} at ${slotText}`;
-
-  localStorage.setItem("selected_slot", fullText);
-
-  // Hide slot box and show confirmation
   document.getElementById('slots-box').classList.add('hidden');
-  document.getElementById('selected-slot-info').innerText = fullText;
+  document.getElementById('selected-slot-info').innerText = selectedSlots.join(", ");
   document.getElementById('notify-email').innerText = localStorage.getItem("student_email");
   document.getElementById('confirm-box').classList.remove('hidden');
 }
+
 
 function finalizeRegistration() {
   const notify = document.getElementById('notify-checkbox').checked;
@@ -845,6 +852,28 @@ function submitPendingRegistration() {
 function toggleCustomSlot(el) {
   el.classList.toggle('selected');
 }
+
+
+function finalizeMultiSlotSelection() {
+  const selectedEls = document.querySelectorAll('.slots-box .time-slot.selected');
+  if (selectedEls.length === 0) {
+    alert("Please select at least one time slot.");
+    return;
+  }
+
+  const selectedSlots = Array.from(selectedEls).map(el => {
+    const dayText = el.closest('.day-card').querySelector('h4').innerText;
+    return `${dayText} at ${el.innerText}`;
+  });
+
+  localStorage.setItem("selected_slot", selectedSlots.join(", "));
+  document.getElementById('eligibility-success').classList.add('hidden');
+  document.getElementById('slots-box').classList.add('hidden');
+  document.getElementById('selected-slot-info').innerText = selectedSlots.join(", ");
+  document.getElementById('notify-email').innerText = localStorage.getItem("student_email");
+  document.getElementById('confirm-box').classList.remove('hidden');
+}
+
 
 </script>
 </body>
