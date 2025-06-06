@@ -824,7 +824,9 @@ function submitPendingRegistration() {
     body: JSON.stringify(payload)
   }).then(response => {
     if (response.ok) {
-      alert("Submitted! We'll contact you to schedule a time.");
+      document.getElementById('final-confirmation-panel').classList.add('hidden');
+      document.getElementById('final-box-custom').classList.remove('hidden');
+
     } else {
       alert("Something went wrong. Please try again.");
     }
