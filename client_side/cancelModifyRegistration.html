@@ -72,8 +72,9 @@
     function handleCancel() {
         const payload = {
             email: email,
-            slot: "cancel",
-            submitted: true
+            selectedSlot: slot,
+            submitted: true,
+            event: "cancel"
         };
         fetch("/register_student", {
             method: "POST",
@@ -102,8 +103,9 @@
 
         const payload = {
             email: email,
-            slot: newSlot,
-            submitted: true
+            selectedSlot: newSlot,
+            submitted: true,
+            event: "modify"
         };
         fetch("/register_student", {
             method: "POST",

@@ -564,8 +564,10 @@ function submitRegistrationData() {
     notify: notify,
     selectedSlot: selectedSlot,
     eligibilityResponses: eligibilityResponses,
-    submitted: true
-  };
+    submitted: true,
+    event: "register" // or "cancel" or "modify"
+    };
+
 
   return fetch("https://codecomprehensibility.site/register_student", {
     method: "POST",
