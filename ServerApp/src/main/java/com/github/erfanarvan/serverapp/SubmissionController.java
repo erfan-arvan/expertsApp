@@ -208,7 +208,7 @@ public class SubmissionController {
 
     private void sendEmailViaPython(String to, String subject, String message) {
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder("python3", "/home/ubuntu/expertsApp/emailService/send_email.py");
+            ProcessBuilder processBuilder = new ProcessBuilder("python3", "/home/ubuntu/emailService/send_email.py");
             Process process = processBuilder.start();
 
             String payload = String.format(
