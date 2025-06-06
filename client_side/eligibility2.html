@@ -768,20 +768,34 @@ function submitCustomTime() {
 
 
 function goToFinalStepWithPendingEvent() {
-  // Hide the slot selection and any prior messages
-  document.getElementById('slots-box').classList.add('hidden');
-  document.getElementById('confirm-box').classList.add('hidden');
-  document.getElementById('final-box').classList.add('hidden');
+  const selectedTimes = Array.from(document.querySelectorAll('.custom-time-slot.selected'))
+    .map(slot => slot.innerText.trim());
 
-  // Show the final pending panel
-  document.getElementById('final-confirmation-panel').style.display = 'block';
+  if (selectedTimes.length === 0) {
+    alert("Please select at least one available time.");
+    return;
+  }
 
+  // Save for submission
+  window.customEventData = {
+    event: "pending",
+    availabilityNote: selectedTimes
+  };
+
+  // Format for preview
+  const formatted = selectedTimes.map(t => `<li>${t}</li>`).join("");
+
+  // Update the summary section
   document.getElementById('final-summary').innerHTML = `
-  <p><strong>🕒 Please review your selected availability before submitting:</strong></p>
-  <ul>${formatted}</ul>
-  <p>Click “Submit” below and we’ll follow up to schedule your session based on your availability.</p>
-`;
+    <p><strong>🕒 Please review your selected availability before submitting:</strong></p>
+    <ul>${formatted}</ul>
+    <p>Click “Submit” below and we’ll follow up to schedule your session based on your availability.</p>
+  `;
 
+  // Show final confirmation panel
+  document.getElementById('slots-box').classList.add('hidden');
+  document.getElementById('custom-time-box').style.display = 'none';
+  document.getElementById('final-confirmation-panel').style.display = 'block';
 }
 
 
