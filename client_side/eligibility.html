@@ -400,9 +400,10 @@ const questions = [
   {
     text: "Have you taken CS 288: Intensive Programming?",
     options: [
-      { label: "Yes, I have completed the course" },
+      { label: "I completed the course with a grade of C or better" },
       { label: "I am currently enrolled in the course" },
-      { label: "Neither", ineligible: true }
+      { label: "I have not taken CS 288", ineligible: true },
+      {label: "I have taken the course but did not receive a grade of C or better, and I am not currently enrolled", ineligible:true}
     ]
   },
   {
