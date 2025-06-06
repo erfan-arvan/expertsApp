@@ -768,35 +768,35 @@ function submitCustomTime() {
 
 
 function goToFinalStepWithPendingEvent() {
-  const selectedTimes = Array.from(document.querySelectorAll('.custom-time-slot.selected'))
-    .map(slot => slot.innerText.trim());
+  const selectedTimes = Array.from(document.querySelectorAll('#custom-time-box .time-slot.selected'))
+    .map(slot => {
+      const day = slot.closest('.day-card').querySelector('h4').innerText;
+      return `${day} at ${slot.innerText.trim()}`;
+    });
 
   if (selectedTimes.length === 0) {
     alert("Please select at least one available time.");
     return;
   }
 
-  // Save for submission
   window.customEventData = {
     event: "pending",
     availabilityNote: selectedTimes
   };
 
-  // Format for preview
   const formatted = selectedTimes.map(t => `<li>${t}</li>`).join("");
 
-  // Update the summary section
   document.getElementById('final-summary').innerHTML = `
     <p><strong>🕒 Please review your selected availability before submitting:</strong></p>
     <ul>${formatted}</ul>
     <p>Click “Submit” below and we’ll follow up to schedule your session based on your availability.</p>
   `;
 
-  // Show final confirmation panel
   document.getElementById('slots-box').classList.add('hidden');
   document.getElementById('custom-time-box').style.display = 'none';
   document.getElementById('final-confirmation-panel').style.display = 'block';
 }
+
 
 
 function submitPendingRegistration() {
