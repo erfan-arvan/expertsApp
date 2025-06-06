@@ -287,15 +287,16 @@ public class SubmissionController {
 
             switch (event) {
                 case "cancel":
-                    subject = "❌ Code Comprehension Study Registration Canceled";
+                    subject = "Code Comprehension Study Registration Canceled";
                     message = "Your registration for the Code Comprehension Study has been successfully canceled.\n\n" +
                             "If this was a mistake or you’d like to pick a new time slot, please re-register at:\n" +
                             "https://codecomprehensibility.site/register.html\n\n" +
+                            "If you have any questions or issues, please reply to this email or contact us at ea442@njit.edu.\n\n" +
                             "— Code Comprehension Study Team";
                     break;
 
                 case "modify":
-                    subject = "✏️ Code Comprehension Study Registration Updated";
+                    subject = "Code Comprehension Study Registration Updated";
                     String modifyLink = "https://codecomprehensibility.site/cancelModifyRegistration.html" +
                                         "?email=" + java.net.URLEncoder.encode(email, StandardCharsets.UTF_8) +
                                         "&slot=" + java.net.URLEncoder.encode(sessionTime, StandardCharsets.UTF_8);
@@ -303,12 +304,13 @@ public class SubmissionController {
                     message = "You've successfully modified your session for the Code Comprehension Study.\n\n" +
                             "📅 Your updated session time: " + sessionTime + "\n\n" +
                             "If you need to cancel or modify again, please use this link:\n" + modifyLink + "\n\n" +
+                            "If you have any questions or issues, please reply to this email or contact us at ea442@njit.edu.\n\n" +
                             "— Code Comprehension Study Team";
                     break;
 
                 case "register":
                 default:
-                    subject = "✅ Code Comprehension Study Registration Confirmation";
+                    subject = "Code Comprehension Study Registration Confirmation";
                     String cancelLink = "https://codecomprehensibility.site/cancelModifyRegistration.html" +
                                         "?email=" + java.net.URLEncoder.encode(email, StandardCharsets.UTF_8) +
                                         "&slot=" + java.net.URLEncoder.encode(sessionTime, StandardCharsets.UTF_8);
@@ -317,6 +319,7 @@ public class SubmissionController {
                             "📅 Your session is scheduled for: " + sessionTime + "\n\n" +
                             "We'll follow up with the exact room location, but it will be in one of the rooms at GITC, NJIT.\n\n" +
                             "If you want to cancel or change your time slot, please use this link:\n" + cancelLink + "\n\n" +
+                            "If you have any questions or issues, please reply to this email or contact us at ea442@njit.edu.\n\n" +
                             "If you have any questions, feel free to reach out.\n\n" +
                             "— Code Comprehension Study Team";
                     break;
