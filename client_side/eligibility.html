@@ -193,6 +193,31 @@
   margin-top: 10px;
 }
 
+input.input-error {
+  border: 2px solid red;
+  background-color: #ffe6e6;
+}
+
+#warning-modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+#warning-modal .modal-content {
+  background-color: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
   </style>
 </head>
 <body>
@@ -275,8 +300,16 @@
     <h3>Not Eligible</h3>
     <p>Unfortunately, you are not eligible to participate in this study. Thank you for your interest.</p>
     <button onclick="document.getElementById('ineligible-modal').classList.add('hidden')">Close</button>
+  </div>
 </div>
+
+<div class="modal hidden" id="warning-modal">
+    <div class="modal-content">
+      <p id="warning-message">Placeholder warning text.</p>
+      <button onclick="closeWarningModal()">Close</button>
+    </div>
 </div>
+  
 
 <script>
 const questions = [
@@ -337,13 +370,36 @@ let currentQuestion = 0;
 let answers = [];
 
 function startSurvey() {
-  const email = document.getElementById('email').value.trim();
-  if (!email) return alert("Please enter a valid email.");
+  
+  const emailInput = document.getElementById('email');
+  const email = emailInput.value.trim().toLowerCase();
+
+
+  // Remove any prior error indication
+  emailInput.classList.remove("input-error");
+
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (!isValidEmail) {
+    emailInput.classList.add("input-error");
+    showWarningModal("Please enter a valid email address.");
+    emailInput.focus();
+    return;
+  }
+
+  if (!email.endsWith("@njit.edu")) {
+    emailInput.classList.add("input-error");
+    showWarningModal("Please use your NJIT email address (e.g., yourname@njit.edu).");
+    emailInput.focus();
+    return;
+  }
+
   localStorage.setItem("student_email", email);
   document.getElementById('email-box').classList.add('hidden');
   document.getElementById('survey-box').classList.remove('hidden');
   showQuestion();
 }
+
+
 
 function showQuestion() {
   const q = questions[currentQuestion];
@@ -510,6 +566,25 @@ function submitRegistrationData() {
     return false;
   });
 }
+
+function showWarningModal(message) {
+  document.getElementById("warning-message").textContent = message;
+  document.getElementById("warning-modal").classList.remove("hidden");
+}
+
+function closeWarningModal() {
+  document.getElementById("warning-modal").classList.add("hidden");
+}
+
+document.getElementById('email').addEventListener('input', function () {
+  const value = this.value.trim().toLowerCase();
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+  // If the input is now a valid email OR ends with '@njit.edu', remove error styling
+  if (isValidEmail && value.endsWith('@njit.edu')) {
+    this.classList.remove('input-error');
+  }
+});
 
 
 </script>
