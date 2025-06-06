@@ -290,6 +290,7 @@ input.input-error {
   <div class="final-box hidden" id="final-box">
     <h3>✅ Registration Complete</h3>
     <p>Thank you! We'll follow up with the exact room location. It will be in one of the rooms at <strong>GITC, NJIT</strong>.</p>
+    <p><strong>Your session:</strong> <span id="confirmed-session"></span></p>
     <p>You can add the session to your Google Calendar:</p>
     <button onclick="addToGoogleCalendar()">📅 Add to Google Calendar</button>
   </div>
@@ -484,6 +485,10 @@ function finalizeRegistration() {
     if (success) {
       document.getElementById('confirm-box').classList.add('hidden');
       document.getElementById('final-box').classList.remove('hidden');
+      const selectedSlot = localStorage.getItem("selected_slot");
+        const selectedDate = localStorage.getItem("selected_date");
+        const sessionText = `${selectedDate}, ${selectedSlot}`;
+        document.getElementById("confirmed-session").innerText = sessionText;
     } else {
       alert("❌ Something went wrong while registering. Please try again or contact the research team.");
     }
