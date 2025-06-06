@@ -749,7 +749,8 @@ function changeSlotCustom() {
   // Hide confirmation section and show time slot selection again
   document.getElementById('confirm-box').classList.add('hidden');
   document.getElementById('slots-box').classList.remove('hidden');
-  document.getElementById('final-confirmation-panel').classList.add('hidden');
+  document.getElementById('final-confirmation-panel').style.display = 'block';
+  toggleCustomTimeBox();
 
 }
 
