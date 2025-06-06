@@ -206,8 +206,8 @@ public class SubmissionController {
 
     private void sendEmailViaPython(String to, String subject, String message) {
         try {
-            ProcessBuilder pb = new ProcessBuilder("python3", "send_email.py");
-            Process process = pb.start();
+            ProcessBuilder processBuilder = new ProcessBuilder("python3", "/home/ubuntu/expertsApp/emailService/send_email.py");
+            Process process = processBuilder.start();
 
             String payload = String.format(
                 "{\"to\":\"%s\", \"subject\":\"%s\", \"message\":\"%s\"}",
