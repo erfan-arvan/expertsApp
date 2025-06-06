@@ -464,6 +464,7 @@ function startSurvey() {
   localStorage.setItem("student_email", email);
   document.getElementById('email-box').classList.add('hidden');
   document.getElementById('survey-box').classList.remove('hidden');
+  hideStudyInfoIfVisible();
   showQuestion();
 }
 
@@ -602,6 +603,31 @@ function toggleInfo(btn) {
     btn.innerText = "Show";
   }
 }
+
+function toggleStudyInfo() {
+  const info = document.getElementById('study-info');
+  const button = document.getElementById('toggleInfoButton');
+
+  if (info.classList.contains('hidden')) {
+    info.classList.remove('hidden');
+    button.innerText = "Hide";
+  } else {
+    info.classList.add('hidden');
+    button.innerText = "Show";
+  }
+}
+
+function hideStudyInfoIfVisible() {
+  const info = document.getElementById('study-info');
+  const button = document.getElementById('toggleInfoButton');
+
+  if (!info.classList.contains('hidden')) {
+    info.classList.add('hidden');
+    if (button) button.innerText = "Show";
+  }
+}
+
+
 
 function submitRegistrationData() {
   const email = localStorage.getItem("student_email") || "unknown";
