@@ -9,28 +9,58 @@
     .hidden { display: none; }
     .button { margin: 10px 5px; padding: 10px 20px; font-size: 16px; }
     .time-select { margin-top: 20px; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 40px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    .box {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
   </style>
 </head>
 <body>
-  <h2>Modify or Cancel Your Session</h2>
-  <p><strong>Email:</strong> <span id="emailDisplay"></span></p>
-  <p><strong>Current Session:</strong> <span id="slotDisplay"></span></p>
+<div class="box">
+    <h2>Modify or Cancel Your Session</h2>
+    <p><strong>Email:</strong> <span id="emailDisplay"></span></p>
+    <p><strong>Current Session:</strong> <span id="slotDisplay"></span></p>
 
-  <button class="button" onclick="handleCancel()">❌ Cancel My Registration</button>
-  <button class="button" onclick="showModify()">✏️ Modify Time Slot</button>
+    <button class="button" onclick="handleCancel()">❌ Cancel My Registration</button>
+    <button class="button" onclick="showModify()">✏️ Modify Time Slot</button>
 
-  <div id="modifySection" class="hidden">
-    <h3>Select a New Time Slot</h3>
-    <select id="newSlot">
-      <option value="">-- Select --</option>
-      <option>Monday, June 10 at 4:00 PM</option>
-      <option>Tuesday, June 11 at 11:00 AM</option>
-      <option>Wednesday, June 12 at 2:00 PM</option>
-    </select>
-    <br/><br/>
-    <button onclick="submitModifiedSlot()">✅ Confirm New Slot</button>
-  </div>
-
+    <div id="modifySection" class="hidden">
+        <h3>Select a New Time Slot</h3>
+        <select id="newSlot">
+        <option value="">-- Select --</option>
+        <option>Monday, June 10 at 4:00 PM</option>
+        <option>Tuesday, June 11 at 11:00 AM</option>
+        <option>Wednesday, June 12 at 2:00 PM</option>
+        </select>
+        <br/><br/>
+        <button onclick="submitModifiedSlot()">✅ Confirm New Slot</button>
+    </div>
+</div>
   <script>
     const params = new URLSearchParams(window.location.search);
     const email = params.get("email") || "unknown";
