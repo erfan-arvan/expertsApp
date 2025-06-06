@@ -355,7 +355,7 @@ input.input-error {
       </div>
     </div>
   
-    <button onclick="submitCustomTime()">Next</button>
+    <button onclick="reviewCustomTime()">Next</button>
   </div>
   
   
@@ -736,6 +736,8 @@ function changeSlot() {
   // Hide confirmation section and show time slot selection again
   document.getElementById('confirm-box').classList.add('hidden');
   document.getElementById('slots-box').classList.remove('hidden');
+  document.getElementById('final-confirmation-panel').classList.remove('hidden');
+
 }
 
 </script>
@@ -746,7 +748,7 @@ function toggleCustomTimeBox() {
   box.style.display = (box.style.display === 'none') ? 'block' : 'none';
 }
 
-function submitCustomTime() {
+function reviewCustomTime() {
   const selected = Array.from(document.querySelectorAll('#custom-time-box .time-slot.selected'))
     .map(el => {
       const day = el.closest('.day-card').querySelector('h4').innerText;
@@ -763,6 +765,7 @@ function submitCustomTime() {
     availabilityNote: selected
   };
 
+  document.getElementById('eligibility-success').classList.add('hidden');
   goToFinalStepWithPendingEvent();
 }
 
