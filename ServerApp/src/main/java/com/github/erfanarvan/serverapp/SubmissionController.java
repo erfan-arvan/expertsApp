@@ -284,6 +284,8 @@ public class SubmissionController {
             String event = body.getOrDefault("event", "register").toString().toLowerCase().trim();
             String subject;
             String message;
+            String customAvailability = data.getString("customAvailability", "Not specified");
+
 
             switch (event) {
                 case "cancel":
