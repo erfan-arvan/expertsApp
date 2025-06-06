@@ -57,7 +57,7 @@
     }
 
     .hidden {
-      display: none !important;
+      display: none;
     }
 
     .modal {
@@ -388,7 +388,7 @@ input.input-error {
     <p>The exact room location will be shared in a separate follow-up—it will be in one of the rooms at <strong>GITC, NJIT</strong>.</p>
   </div>
 
-  <div class="slots-box hidden" id="final-confirmation-panel" style="display: none;">
+  <div class="slots-box" id="final-confirmation-panel" style="display: none;">
     <p id="final-summary"></p>
     <a href="#" onclick="changeSlot()">Change date</a>
     <button onclick="submitPendingRegistration()">Submit</button>
@@ -824,7 +824,7 @@ function submitPendingRegistration() {
     body: JSON.stringify(payload)
   }).then(response => {
     if (response.ok) {
-      document.getElementById('final-confirmation-panel').classList.add('hidden');
+      document.getElementById('final-confirmation-panel').style.display = 'none';
       document.getElementById('final-box-custom').classList.remove('hidden');
 
     } else {
