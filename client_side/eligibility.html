@@ -486,8 +486,7 @@ function finalizeRegistration() {
       document.getElementById('confirm-box').classList.add('hidden');
       document.getElementById('final-box').classList.remove('hidden');
       const selectedSlot = localStorage.getItem("selected_slot");
-        const selectedDate = localStorage.getItem("selected_date");
-        const sessionText = `${selectedDate}, ${selectedSlot}`;
+        const sessionText = `${selectedSlot}`;
         document.getElementById("confirmed-session").innerText = sessionText;
     } else {
       alert("❌ Something went wrong while registering. Please try again or contact the research team.");
