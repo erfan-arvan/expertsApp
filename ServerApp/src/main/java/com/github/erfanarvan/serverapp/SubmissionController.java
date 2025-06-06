@@ -204,6 +204,35 @@ public class SubmissionController {
         }
     }
 
+    private void sendEmailViaPython(String to, String subject, String message) {
+        try {
+            ProcessBuilder pb = new ProcessBuilder("python3", "send_email.py");
+            Process process = pb.start();
+
+            String payload = String.format(
+                "{\"to\":\"%s\", \"subject\":\"%s\", \"message\":\"%s\"}",
+                to,
+                subject.replace("\"", "\\\""),
+                message.replace("\"", "\\\"")
+            );
+
+            try (var writer = new java.io.OutputStreamWriter(process.getOutputStream())) {
+                writer.write(payload);
+                writer.flush();
+            }
+
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                System.out.println(">>> Email successfully sent to: " + to);
+            } else {
+                System.err.println(">>> Failed to send email to: " + to + " (exit code: " + exitCode + ")");
+            }
+        } catch (Exception e) {
+            System.err.println(">>> Exception while sending email to: " + to);
+            e.printStackTrace();
+        }
+    }
+
     @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
     @PostMapping("/register_student")
     public synchronized String handleStudentRegistration(@RequestBody Map<String, Object> body) {
@@ -235,6 +264,24 @@ public class SubmissionController {
             mapper.writeValue(registrationFile, allData);
             System.out.println(">>> Saved to registration.json");
 
+            // ==== Send Confirmation Email ====
+            String sessionTime = body.getOrDefault("sessionTime", "unspecified").toString();
+            String subject = "✅ Code Comprehension Study Registration Confirmation";
+            String cancelLink = "https://codecomprehensibility.site/cancelModifyRegistration.html" +
+                                "?email=" + java.net.URLEncoder.encode(email, StandardCharsets.UTF_8) +
+                                "&slot=" + java.net.URLEncoder.encode(sessionTime, StandardCharsets.UTF_8);
+
+
+            String message = "Thank you for registering!\n\n" +
+                            "📅 Your session is scheduled for: " + sessionTime + "\n\n" +
+                            "We'll follow up with the exact room location, but it will be in one of the rooms at GITC, NJIT.\n\n" +
+                            "If you want to cancel or change your time slot, please use this link:\n" + cancelLink + "\n\n" +
+                            "If you have any questions, feel free to reach out.\n\n" +
+                            "— Code Comprehension Study Team";
+
+
+            sendEmailViaPython(email, subject, message);
+
             return "Registration saved.";
         } catch (IOException e) {
             System.err.println(">>> ERROR saving registration for: " + email);
@@ -242,6 +289,7 @@ public class SubmissionController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save registration.");
         }
     }
+
 
 
 

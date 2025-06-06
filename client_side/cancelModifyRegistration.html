@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Modify Registration</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .hidden { display: none; }
+    .button { margin: 10px 5px; padding: 10px 20px; font-size: 16px; }
+    .time-select { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h2>Modify or Cancel Your Session</h2>
+  <p><strong>Email:</strong> <span id="emailDisplay"></span></p>
+  <p><strong>Current Session:</strong> <span id="slotDisplay"></span></p>
+
+  <button class="button" onclick="handleCancel()">❌ Cancel My Registration</button>
+  <button class="button" onclick="showModify()">✏️ Modify Time Slot</button>
+
+  <div id="modifySection" class="hidden">
+    <h3>Select a New Time Slot</h3>
+    <select id="newSlot">
+      <option value="">-- Select --</option>
+      <option>Monday, June 10 at 4:00 PM</option>
+      <option>Tuesday, June 11 at 11:00 AM</option>
+      <option>Wednesday, June 12 at 2:00 PM</option>
+    </select>
+    <br/><br/>
+    <button onclick="submitModifiedSlot()">✅ Confirm New Slot</button>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get("email") || "unknown";
+    const slot = params.get("slot") || "unknown";
+
+    document.getElementById("emailDisplay").textContent = email;
+    document.getElementById("slotDisplay").textContent = slot;
+
+    function handleCancel() {
+      const payload = {
+        email: email,
+        slot: "cancel",
+        submitted: true
+      };
+      fetch("/register_student", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.ok ? alert("✅ Registration cancelled.") : alert("❌ Failed to cancel."))
+      .catch(() => alert("❌ Network error."));
+    }
+
+    function showModify() {
+      document.getElementById("modifySection").classList.remove("hidden");
+    }
+
+    function submitModifiedSlot() {
+      const newSlot = document.getElementById("newSlot").value;
+      if (!newSlot) return alert("Please select a time slot.");
+
+      const payload = {
+        email: email,
+        slot: newSlot,
+        submitted: true
+      };
+      fetch("/register_student", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.ok ? alert("✅ Time slot updated.") : alert("❌ Failed to update."))
+      .catch(() => alert("❌ Network error."));
+    }
+  </script>
+</body>
+</html>
