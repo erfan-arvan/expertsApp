@@ -319,7 +319,17 @@ public class SubmissionController {
                             "If you have any questions or issues, please reply to this email or contact us at ea442@njit.edu.\n\n" +
                             "— Code Comprehension Study Team";
                     break;
+            case "availability":
+                subject = "Code Comprehension Study – Availability Received";
 
+                message = "Thank you for sharing your available time slots for the Code Comprehension Study.\n\n" +
+                        "📅 Your availability:\n" +
+                        sessionTime + "\n\n" +
+                        "We'll review your availability and follow up soon to confirm your session time and location.\n" +
+                        "The session will take place at NJIT, in one of the rooms in the GITC building.\n\n" +
+                        "If you have any questions or concerns, feel free to reply to this email or contact us at ea442@njit.edu.\n\n" +
+                        "— Code Comprehension Study Team";
+                break;
                 case "register":
                 default:
                     subject = "Code Comprehension Study Registration Confirmation";
