@@ -212,7 +212,7 @@ private void sendEmailViaPython(String to, String subject, String message) {
             "echo " + escapeForShell(String.format(
                 "{\"to\":\"%s\", \"subject\":\"%s\", \"message\":\"%s\"}",
                 to, subject, message
-            )) + " | python3 /home/ubuntu/expertsApp/emailService/send_email.py"
+            )) + " | python3 /home/ubuntu/emailService/send_email.py"
         );
 
         processBuilder.redirectErrorStream(true); // Merge stderr with stdout
