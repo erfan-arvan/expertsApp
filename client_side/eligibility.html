@@ -371,8 +371,16 @@ input.input-error {
 
 <script>
 const questions = [
-    {
-    text: "What is your current academic level?",
+{
+  text: "Where are you studying?",
+  options: [
+    { label: "NJIT" },
+    { label: "College of William & Mary" },
+    { label: "Another university or college", ineligible: true }
+  ]
+}
+,{
+    text: "what's your class standing?",
     options: [
         { label: "First-year undergraduate (Freshman)" },
         { label: "Second-year undergraduate (Sophomore)" },
