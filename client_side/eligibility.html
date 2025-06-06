@@ -313,6 +313,16 @@ input.input-error {
 
 <script>
 const questions = [
+    {
+    text: "What is your current academic level?",
+    options: [
+        { label: "First-year undergraduate (Freshman)" },
+        { label: "Second-year undergraduate (Sophomore)" },
+        { label: "Third-year undergraduate (Junior)" },
+        { label: "Fourth-year undergraduate (Senior)" },
+        { label: "Graduate student", ineligible: true }
+    ]
+    },
   {
     text: "What is your age?",
     options: [
@@ -354,7 +364,7 @@ const questions = [
     ]
   },
   {
-    text: "How many years have you been programming in Java?",
+    text: "How many years have you been programming in Java (through coursework, personal projects, or other experiences)?",
     options: [
       { label: "I am not familiar with Java", ineligible: true },
       { label: "Less than 1 year" },
