@@ -390,7 +390,7 @@ input.input-error {
 
   <div class="slots-box" id="final-confirmation-panel" style="display: none;">
     <p id="final-summary"></p>
-    <a href="#" onclick="changeSlot()">Change date</a>
+    <a href="#" onclick="changeSlotCustom()">Change date</a>
     <button onclick="submitPendingRegistration()">Submit</button>
   </div>
   
@@ -742,7 +742,14 @@ function changeSlot() {
   // Hide confirmation section and show time slot selection again
   document.getElementById('confirm-box').classList.add('hidden');
   document.getElementById('slots-box').classList.remove('hidden');
-  document.getElementById('final-confirmation-panel').classList.remove('hidden');
+
+}
+
+function changeSlotCustom() {
+  // Hide confirmation section and show time slot selection again
+  document.getElementById('confirm-box').classList.add('hidden');
+  document.getElementById('slots-box').classList.remove('hidden');
+  document.getElementById('final-confirmation-panel').classList.add('hidden');
 
 }
 
