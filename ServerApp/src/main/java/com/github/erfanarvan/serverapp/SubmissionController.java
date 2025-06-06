@@ -206,34 +206,42 @@ public class SubmissionController {
         }
     }
 
-    private void sendEmailViaPython(String to, String subject, String message) {
-        try {
-            ProcessBuilder processBuilder = new ProcessBuilder("python3", "/home/ubuntu/emailService/send_email.py");
-            Process process = processBuilder.start();
+ private void sendEmailViaPython(String to, String subject, String message) {
+    try {
+        ProcessBuilder processBuilder = new ProcessBuilder("python3", "/home/ubuntu/emailService/send_email.py");
+        Process process = processBuilder.start();
 
-            String payload = String.format(
-                "{\"to\":\"%s\", \"subject\":\"%s\", \"message\":\"%s\"}",
-                to,
-                subject.replace("\"", "\\\""),
-                message.replace("\"", "\\\"")
-            );
+        String payload = String.format(
+            "{\"to\":\"%s\", \"subject\":\"%s\", \"message\":\"%s\"}",
+            to,
+            subject.replace("\"", "\\\""),
+            message.replace("\"", "\\\"")
+        );
 
-            try (var writer = new java.io.OutputStreamWriter(process.getOutputStream())) {
-                writer.write(payload);
-                writer.flush();
-            }
-
-            int exitCode = process.waitFor();
-            if (exitCode == 0) {
-                System.out.println(">>> Email successfully sent to: " + to);
-            } else {
-                System.err.println(">>> Failed to send email to: " + to + " (exit code: " + exitCode + ")");
-            }
-        } catch (Exception e) {
-            System.err.println(">>> Exception while sending email to: " + to);
-            e.printStackTrace();
+        try (var writer = new java.io.OutputStreamWriter(process.getOutputStream())) {
+            writer.write(payload);
+            writer.flush();
         }
+
+        // Capture and print error stream
+        try (var reader = new java.io.BufferedReader(new java.io.InputStreamReader(process.getErrorStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.err.println(">>> Python Error: " + line);
+            }
+        }
+
+        int exitCode = process.waitFor();
+        if (exitCode == 0) {
+            System.out.println(">>> Email successfully sent to: " + to);
+        } else {
+            System.err.println(">>> Failed to send email to: " + to + " (exit code: " + exitCode + ")");
+        }
+    } catch (Exception e) {
+        System.err.println(">>> Exception while sending email to: " + to);
+        e.printStackTrace();
     }
+}
 
     @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
     @PostMapping("/register_student")
