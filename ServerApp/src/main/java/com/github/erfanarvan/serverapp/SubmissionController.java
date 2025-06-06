@@ -290,7 +290,7 @@ public class SubmissionController {
                     subject = "Code Comprehension Study Registration Canceled";
                     message = "Your registration for the Code Comprehension Study has been successfully canceled.\n\n" +
                             "If this was a mistake or you’d like to pick a new time slot, please re-register at:\n" +
-                            "https://codecomprehensibility.site/register.html\n\n" +
+                            "https://codecomprehensibility.site/eligibility.html\n\n" +
                             "If you have any questions or issues, please reply to this email or contact us at ea442@njit.edu.\n\n" +
                             "— Code Comprehension Study Team";
                     break;
