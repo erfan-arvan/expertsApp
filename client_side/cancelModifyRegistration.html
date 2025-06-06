@@ -40,41 +40,57 @@
     document.getElementById("slotDisplay").textContent = slot;
 
     function handleCancel() {
-      const payload = {
-        email: email,
-        slot: "cancel",
-        submitted: true
-      };
-      fetch("/register_student", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      })
-      .then(res => res.ok ? alert("✅ Registration cancelled.") : alert("❌ Failed to cancel."))
-      .catch(() => alert("❌ Network error."));
-    }
+        const payload = {
+            email: email,
+            slot: "cancel",
+            submitted: true
+        };
+        fetch("/register_student", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        })
+        .then(res => {
+            if (res.ok) {
+            document.getElementById("slotDisplay").textContent = "Canceled";
+            alert("✅ Registration cancelled.");
+            } else {
+            alert("❌ Failed to cancel.");
+            }
+        })
+        .catch(() => alert("❌ Network error."));
+        }
+
 
     function showModify() {
       document.getElementById("modifySection").classList.remove("hidden");
     }
 
     function submitModifiedSlot() {
-      const newSlot = document.getElementById("newSlot").value;
-      if (!newSlot) return alert("Please select a time slot.");
+        const newSlot = document.getElementById("newSlot").value;
+        if (!newSlot) return alert("Please select a time slot.");
 
-      const payload = {
-        email: email,
-        slot: newSlot,
-        submitted: true
-      };
-      fetch("/register_student", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      })
-      .then(res => res.ok ? alert("✅ Time slot updated.") : alert("❌ Failed to update."))
-      .catch(() => alert("❌ Network error."));
-    }
+        const payload = {
+            email: email,
+            slot: newSlot,
+            submitted: true
+        };
+        fetch("/register_student", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        })
+        .then(res => {
+            if (res.ok) {
+            document.getElementById("slotDisplay").textContent = newSlot + " (updated)";
+            alert("✅ Time slot updated.");
+            } else {
+            alert("❌ Failed to update.");
+            }
+        })
+        .catch(() => alert("❌ Network error."));
+        }
+
   </script>
 </body>
 </html>
