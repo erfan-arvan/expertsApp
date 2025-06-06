@@ -206,39 +206,47 @@ public class SubmissionController {
         }
     }
 
-private void sendEmailViaPython(String to, String subject, String message) {
-    try {
-        ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c",
-            "echo " + escapeForShell(String.format(
-                "{\"to\":\"%s\", \"subject\":\"%s\", \"message\":\"%s\"}",
-                to, subject, message
-            )) + " | python3 /home/ubuntu/emailService/send_email.py"
-        );
-
-        processBuilder.redirectErrorStream(true); // Merge stderr with stdout
-        Process process = processBuilder.start();
-
-        try (Scanner scanner = new Scanner(process.getInputStream())) {
-            while (scanner.hasNextLine()) {
-                System.out.println(">>> Python Output: " + scanner.nextLine());
-            }
-        }
-
-        int exitCode = process.waitFor();
-        if (exitCode == 0) {
-            System.out.println(">>> Email successfully sent to: " + to);
-        } else {
-            System.err.println(">>> Failed to send email to: " + to + " (exit code: " + exitCode + ")");
-        }
-    } catch (Exception e) {
-        System.err.println(">>> Exception while sending email to: " + to);
-        e.printStackTrace();
+    private String escapeJson(String s) {
+        return s
+            .replace("\\", "\\\\")
+            .replace("\"", "\\\"")
+            .replace("\n", "\\n")
+            .replace("\r", "\\r");
     }
-}
 
-private String escapeForShell(String input) {
-    return "'" + input.replace("'", "'\"'\"'") + "'";
-}
+    private void sendEmailViaPython(String to, String subject, String message) {
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c",
+                "echo " + escapeForShell(String.format(
+                    "{\"to\":\"%s\", \"subject\":\"%s\", \"message\":\"%s\"}",
+                    escapeJson(to), escapeJson(subject), escapeJson(message)
+                )) + " | python3 /home/ubuntu/emailService/send_email.py"
+            );
+
+            processBuilder.redirectErrorStream(true); // Merge stderr with stdout
+            Process process = processBuilder.start();
+
+            try (Scanner scanner = new Scanner(process.getInputStream())) {
+                while (scanner.hasNextLine()) {
+                    System.out.println(">>> Python Output: " + scanner.nextLine());
+                }
+            }
+
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                System.out.println(">>> Email successfully sent to: " + to);
+            } else {
+                System.err.println(">>> Failed to send email to: " + to + " (exit code: " + exitCode + ")");
+            }
+        } catch (Exception e) {
+            System.err.println(">>> Exception while sending email to: " + to);
+            e.printStackTrace();
+        }
+    }
+
+    private String escapeForShell(String input) {
+        return "'" + input.replace("'", "'\"'\"'") + "'";
+    }
 
     @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
     @PostMapping("/register_student")
