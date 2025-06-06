@@ -601,6 +601,12 @@ document.getElementById('email').addEventListener('input', function () {
 });
 
 
+function changeSlot() {
+  // Hide confirmation section and show time slot selection again
+  document.getElementById('confirm-box').classList.add('hidden');
+  document.getElementById('slots-box').classList.remove('hidden');
+}
+
 </script>
 </body>
 </html>
