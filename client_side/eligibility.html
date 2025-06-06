@@ -329,6 +329,36 @@ input.input-error {
       <div class="time-slot" onclick="selectSlot(this)">3:00 PM</div>
     </div>
   </div>
+
+  <p style="margin-top: 1em;">
+    <a href="#" onclick="toggleCustomTimeBox(); return false;">None of these work for you?</a>
+  </p>
+  
+  <div id="custom-time-box" style="display: none; margin-top: 1em; border: 1px solid #ccc; padding: 1em; border-radius: 8px;">
+    <p><strong>📅 Please select all of your free times:</strong></p>
+    
+    <div class="day-card">
+      <h4>Wednesday, June 12</h4>
+      <div>
+        <div class="time-slot" onclick="toggleCustomSlot(this)">10:00 AM</div>
+        <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM</div>
+        <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM</div>
+      </div>
+    </div>
+  
+    <div class="day-card">
+      <h4>Thursday, June 13</h4>
+      <div>
+        <div class="time-slot" onclick="toggleCustomSlot(this)">9:00 AM</div>
+        <div class="time-slot" onclick="toggleCustomSlot(this)">12:00 PM</div>
+        <div class="time-slot" onclick="toggleCustomSlot(this)">3:00 PM</div>
+      </div>
+    </div>
+  
+    <button onclick="reviewCustomTime()">Next</button>
+  </div>
+  
+  
 </div>
 
 <!-- Confirmation Section -->
@@ -351,6 +381,19 @@ input.input-error {
     <p>You can add the session to your Google Calendar:</p>
     <button onclick="addToGoogleCalendar()">📅 Add to Google Calendar</button>
   </div>
+
+  <div class="final-box hidden" id="final-box-custom">
+    <h3>✅ Submitted!</h3>
+    <p>Thank you! Your submission has been received. <strong>We’ll contact you soon to schedule a time.</strong></p>
+    <p>The exact room location will be shared in a separate follow-up—it will be in one of the rooms at <strong>GITC, NJIT</strong>.</p>
+  </div>
+
+  <div class="slots-box" id="final-confirmation-panel" style="display: none;">
+    <p id="final-summary"></p>
+    <a href="#" onclick="changeSlotCustom()">Change date</a>
+    <button onclick="submitPendingRegistration()">Submit</button>
+  </div>
+  
   
 
 <div class="modal hidden" id="ineligible-modal">
@@ -407,12 +450,12 @@ const questions = [
     ]
   },
   {
-    text: "Have you been diagnosed with a reading disability or any condition that affects your ability to read code or instructions?",
-    options: [
-      { label: "Yes", ineligible: true },
-      { label: "No" }
-    ]
-  },
+  text: "Have you been diagnosed with a reading disability or any condition that affects your ability to read code or instructions?",
+  options: [
+    { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
+    { label: "No, I have not been diagnosed with any such condition" }
+  ]
+},
   {
     text: "How comfortable are you with reading English-language text and programming instructions?",
     options: [
@@ -699,6 +742,108 @@ function changeSlot() {
   // Hide confirmation section and show time slot selection again
   document.getElementById('confirm-box').classList.add('hidden');
   document.getElementById('slots-box').classList.remove('hidden');
+  document.getElementById('final-confirmation-panel').style.display = 'none';
+
+}
+
+function changeSlotCustom() {
+  // Hide confirmation section and show time slot selection again
+  document.getElementById('confirm-box').classList.add('hidden');
+  document.getElementById('slots-box').classList.remove('hidden');
+  document.getElementById('final-confirmation-panel').style.display = 'none';
+  toggleCustomTimeBox();
+
+}
+
+</script>
+
+<script>
+function toggleCustomTimeBox() {
+  const box = document.getElementById('custom-time-box');
+  box.style.display = (box.style.display === 'none') ? 'block' : 'none';
+}
+
+function reviewCustomTime() {
+  const selected = Array.from(document.querySelectorAll('#custom-time-box .time-slot.selected'))
+    .map(el => {
+      const day = el.closest('.day-card').querySelector('h4').innerText;
+      return `${day} at ${el.innerText}`;
+    });
+
+  if (selected.length === 0) {
+    alert("Please select at least one time slot.");
+    return;
+  }
+
+  window.customEventData = {
+    event: "pending",
+    availabilityNote: selected
+  };
+
+  document.getElementById('eligibility-success').classList.add('hidden');
+
+  goToFinalStepWithPendingEvent();
+}
+
+
+function goToFinalStepWithPendingEvent() {
+  const selectedTimes = Array.from(document.querySelectorAll('#custom-time-box .time-slot.selected'))
+    .map(slot => {
+      const day = slot.closest('.day-card').querySelector('h4').innerText;
+      return `${day} at ${slot.innerText.trim()}`;
+    });
+
+  if (selectedTimes.length === 0) {
+    alert("Please select at least one available time.");
+    return;
+  }
+
+  window.customEventData = {
+    event: "pending",
+    availabilityNote: selectedTimes
+  };
+
+  const formatted = selectedTimes.map(t => `<li>${t}</li>`).join("");
+
+  document.getElementById('final-summary').innerHTML = `
+    <p><strong>🕒 Please review your selected availability before submitting:</strong></p>
+    <ul>${formatted}</ul>
+    <p>Click “Submit” below and we’ll follow up to schedule your session based on your availability.</p>
+  `;
+
+  document.getElementById('slots-box').classList.add('hidden');
+  document.getElementById('custom-time-box').style.display = 'none';
+  document.getElementById('final-confirmation-panel').style.display = 'block';
+}
+
+
+
+function submitPendingRegistration() {
+  const email = document.getElementById('email').value;
+  const payload = {
+    email: email,
+    event: "pending",
+    customAvailability: window.customEventData.availabilityNote.join(", "),
+    submitted: true
+  };
+
+  fetch("/register_student", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  }).then(response => {
+    if (response.ok) {
+      document.getElementById('final-confirmation-panel').style.display = 'none';
+      document.getElementById('final-box-custom').classList.remove('hidden');
+
+    } else {
+      alert("Something went wrong. Please try again.");
+    }
+  });
+}
+
+function toggleCustomSlot(el) {
+  el.classList.toggle('selected');
 }
 
 </script>
