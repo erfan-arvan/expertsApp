@@ -206,28 +206,21 @@ public class SubmissionController {
         }
     }
 
- private void sendEmailViaPython(String to, String subject, String message) {
+private void sendEmailViaPython(String to, String subject, String message) {
     try {
-        ProcessBuilder processBuilder = new ProcessBuilder("python3", "/home/ubuntu/emailService/send_email.py");
-        Process process = processBuilder.start();
-
-        String payload = String.format(
-            "{\"to\":\"%s\", \"subject\":\"%s\", \"message\":\"%s\"}",
-            to,
-            subject.replace("\"", "\\\""),
-            message.replace("\"", "\\\"")
+        ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c",
+            "echo " + escapeForShell(String.format(
+                "{\"to\":\"%s\", \"subject\":\"%s\", \"message\":\"%s\"}",
+                to, subject, message
+            )) + " | python3 /home/ubuntu/expertsApp/emailService/send_email.py"
         );
 
-        try (var writer = new java.io.OutputStreamWriter(process.getOutputStream())) {
-            writer.write(payload);
-            writer.flush();
-        }
+        processBuilder.redirectErrorStream(true); // Merge stderr with stdout
+        Process process = processBuilder.start();
 
-        // Capture and print error stream
-        try (var reader = new java.io.BufferedReader(new java.io.InputStreamReader(process.getErrorStream()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.err.println(">>> Python Error: " + line);
+        try (Scanner scanner = new Scanner(process.getInputStream())) {
+            while (scanner.hasNextLine()) {
+                System.out.println(">>> Python Output: " + scanner.nextLine());
             }
         }
 
@@ -241,6 +234,10 @@ public class SubmissionController {
         System.err.println(">>> Exception while sending email to: " + to);
         e.printStackTrace();
     }
+}
+
+private String escapeForShell(String input) {
+    return "'" + input.replace("'", "'\"'\"'") + "'";
 }
 
     @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
