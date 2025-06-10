@@ -560,8 +560,8 @@ function submitQuestionnaireAnswers() {
   localStorage.setItem("backgroundQuestionnaire", JSON.stringify(responses));
 
   // UI feedback
-  document.getElementById('survey-box').classList.add('hidden');
-  document.getElementById('final-box-submit').classList.remove('hidden');
+  // document.getElementById('survey-box').classList.add('hidden');
+  // document.getElementById('final-box-submit').classList.remove('hidden');
   localStorage.setItem('FromPrevPage', 'true');
   window.location.href = "students.html";
 
