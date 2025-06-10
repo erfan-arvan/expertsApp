@@ -533,7 +533,6 @@ function submitQuestionnaireAnswers() {
   });
 }
 
-window.onload = showQuestion;
 
 
 
@@ -703,7 +702,8 @@ const Ispaused = localStorage.getItem('pausedUnload') === 'true';
   }
 
   if (localStorage.getItem('studyStarted') === 'true') {
-    loadSnippet(currentSnippet);
+    //loadSnippet(currentSnippet);
+    showQuestion();
   }
 
 
