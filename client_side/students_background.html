@@ -470,6 +470,7 @@ let currentQuestion = 0;
 let answers = [];
 
 function showQuestion() {
+    console.log("🧪 Showing question:", currentQuestion, questions[currentQuestion], answers[currentQuestion]);
   const q = questions[currentQuestion];
   const container = document.getElementById('question-container');
   let html = `<p><strong>${q.text}</strong></p>`;
