@@ -800,7 +800,7 @@ window.addEventListener('beforeunload', () => {
   } catch (e) {
     console.warn("recordQuestionTime failed", e);
   }
-  //localStorage.setItem('pausedUnload', 'true');
+  localStorage.setItem('pausedUnload', 'true');
   //pauseStudy();
 });
 
