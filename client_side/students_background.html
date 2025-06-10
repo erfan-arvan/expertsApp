@@ -608,12 +608,11 @@ function startStudy() {
 
   generateAndStoreUsername();
   document.getElementById('start-modal').style.display = 'none';
-  loadSnippet(currentSnippet);
   startTimer();
 }
 
 function pauseStudy() {
-  recordQuestionTime(currentSnippet, currentQuestionIndex);
+  //recordQuestionTime(currentSnippet, currentQuestionIndex);
   localStorage.setItem('pausedAt', Date.now());
   updateTimerDisplay(); // ensure last moment is rendered before freezing
   pauseTimer();         // clears the interval
@@ -744,7 +743,7 @@ window.addEventListener('beforeunload', () => {
     const isReset = localStorage.getItem('isReset') === 'true';
     if (isReset) {
       localStorage.removeItem('isReset');
-      recordQuestionTime(currentSnippet, currentQuestionIndex);
+      //recordQuestionTime(currentSnippet, currentQuestionIndex);
     } 
   } catch (e) {
     console.warn("recordQuestionTime failed", e);
