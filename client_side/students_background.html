@@ -297,6 +297,89 @@ input.input-error {
   <p>Thank you! Your responses have been submitted successfully.</p>
 </div>
 
+
+<div id="review-modal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); width:80%; max-height:80%; overflow-y:auto; background:#fff; border:1px solid #ccc; padding:20px 20px 10px 20px; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002; font-family:'Segoe UI', sans-serif;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+      <h3 style="margin:0;">Review Your Summaries</h3>
+      <span onclick="document.getElementById('review-modal').style.display='none'" style="cursor:pointer; font-size:20px; font-weight:bold;">&times;</span>
+    </div>
+  
+    <div id="review-content" style="white-space:pre-wrap; margin-bottom:20px; font-size:14px; color:#333;"></div>
+  
+    <button onclick="submitAndCloseModal()">Submit Now</button>
+    <button onclick="document.getElementById('review-modal').style.display='none'" style="margin-left:10px;">Cancel</button>
+  </div>
+  
+  <div id="validation-modal" style="
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff0f0;
+    color: #660000;
+    border: 1px solid #ff9999;
+    padding: 20px;
+    border-radius: 10px;
+    width: 440px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    z-index: 1002;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+  ">
+    <p id="validation-message" style="font-weight: bold;"></p>
+    <button onclick="document.getElementById('validation-modal').style.display = 'none';" style="
+      margin-top: 15px;
+      padding: 8px 14px;
+      background-color: #ff9999;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    ">OK</button>
+  </div>
+  
+<!-- Start Modal -->
+<div id="start-modal" style="
+  display: none;  /* or 'none' by default, set to 'block' on load */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  display: none;  /* important: toggle this from JS */
+  justify-content: center;
+  align-items: center;
+">
+  <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+    <h2>Ready to Begin?</h2>
+    <p>Click the button below to start the study. A timer will begin.</p>
+    <button onclick="startStudy()">Start</button>
+  </div>
+</div>
+
+  
+<!-- Pause Modal -->
+<div id="pause-modal" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+">
+  <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+    <h2>Study Paused</h2>
+    <p>The timer is paused. Click below to resume.</p>
+    <button onclick="resumeStudy()">Resume</button>
+  </div>
+</div>
+
+
 <script>
 const questions = [
   {
@@ -417,7 +500,228 @@ function submitQuestionnaireAnswers() {
 }
 
 window.onload = showQuestion;
+
+
+
 </script>
 
+
+<script>
+
+
+function toggleTimer() {
+  const timerEl = document.getElementById('timer');
+  const btn = event.target;
+
+  const isHidden = timerEl.style.display === 'none';
+
+  if (isHidden) {
+    timerEl.style.display = 'inline';
+    btn.innerHTML = 'Hide Timer'; // Show "eye" icon again
+    localStorage.setItem('timerHidden', 'false');
+  } else {
+    timerEl.style.display = 'none';
+    btn.innerHTML = 'Show Timer'; // Hidden eye icon
+    localStorage.setItem('timerHidden', 'true');
+  }
+}
+
+
+function startTimer() {
+  const timerEl = document.getElementById('timer');
+
+  if (!startTime || isNaN(startTime) || startTime <= 0) {
+    const stored = localStorage.getItem('startTime');
+    startTime = stored ? parseInt(stored) : Date.now();
+    localStorage.setItem('startTime', startTime);
+  }
+
+  if (timerInterval) clearInterval(timerInterval);
+
+  timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startTime - totalPausedTime) / 1000);
+    const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    const secs = String(elapsed % 60).padStart(2, '0');
+    timerEl.textContent = `⏱️ ${mins}:${secs}`;
+  }, 1000);
+}
+
+
+
+function generateAndStoreUsername() {
+    const randomNumber = Math.floor(Math.random() * 1_000_000_000);
+    const username = 'student' + randomNumber.toString().padStart(9, '0');
+
+    // Save to localStorage
+    localStorage.setItem('usernameS', username);
+
+    // Save to cookies (expires in 30 days)
+    const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    document.cookie = `usernameS=${username}; expires=${expires}; path=/`;
+
+    console.log("Generated and stored username:", username);
+    return username;
+}
+
+
+function startStudy() {
+  startTime = Date.now();
+  localStorage.setItem('studyStarted', 'true');
+  localStorage.setItem('startTime', startTime);
+  localStorage.setItem('lastResumeTime', startTime);
+  localStorage.setItem('pausedTotal', '0');
+  totalPausedTime = 0;
+
+  generateAndStoreUsername();
+  document.getElementById('start-modal').style.display = 'none';
+  loadSnippet(currentSnippet);
+  startTimer();
+}
+
+function pauseStudy() {
+  recordQuestionTime(currentSnippet, currentQuestionIndex);
+  localStorage.setItem('pausedAt', Date.now());
+  updateTimerDisplay(); // ensure last moment is rendered before freezing
+  pauseTimer();         // clears the interval
+  pausedAt = Date.now();
+  localStorage.setItem('pausedAt', pausedAt);
+  document.getElementById('pause-modal').style.display = 'flex';
+
+  // 👇 Add this to toggle buttons
+  document.getElementById('pause-btn').style.display = 'none';
+  document.getElementById('resume-btn').style.display = 'inline';
+}
+
+function resumeStudy() {
+  document.getElementById('pause-modal').style.display = 'none';
+
+  const pausedAtStored = parseInt(localStorage.getItem('pausedAt') || '0', 10);
+  if (pausedAtStored && !isNaN(pausedAtStored)) {
+    const resumeDelta = Date.now() - pausedAtStored;
+    totalPausedTime += resumeDelta;
+    localStorage.setItem('pausedTotal', totalPausedTime);
+    localStorage.removeItem('pausedAt');
+    pausedAt = null;
+  }
+
+  localStorage.setItem('lastResumeTime', Date.now());
+
+  updateTimerDisplay();
+  startTimer();
+
+  document.getElementById('pause-btn').style.display = 'inline';
+  document.getElementById('resume-btn').style.display = 'none';
+}
+
+
+
+
+window.onload = function () {
+  setTimeout(syncAnswersFromCookies, 100);
+  syncAnswersFromCookies();
+
+  console.log("📦 Unload was triggered at:", new Date(parseInt(localStorage.getItem('lastUnloadTriggeredAt') || 0)).toLocaleTimeString());
+  console.log("🚀 Page load");
+  console.log("Loaded startTime:", localStorage.getItem('startTime'));
+  console.log("Loaded pausedTotal:", localStorage.getItem('pausedTotal'));
+  console.log("Loaded pausedAt:", localStorage.getItem('pausedAt'));
+  console.log("Loaded lastResumeTime:", localStorage.getItem('lastResumeTime'));
+
+  const hidden = localStorage.getItem('timerHidden') === 'true';
+  if (hidden) {
+    document.getElementById('timer').style.display = 'none';
+    document.querySelector('#timer-wrapper button').textContent = 'Show Timer';
+  }
+
+  const started = localStorage.getItem('studyStarted') === 'true';
+  if (!started) {
+    document.getElementById('start-modal').style.display = 'flex';
+  } else {
+    startTime = parseInt(localStorage.getItem('startTime') || `${Date.now()}`, 10);
+    totalPausedTime = parseInt(localStorage.getItem('pausedTotal') || '0', 10);
+    pausedAt = parseInt(localStorage.getItem('pausedAt') || '0', 10);
+
+    if (!isNaN(pausedAt) && pausedAt > 0) {
+      const lastResume = parseInt(localStorage.getItem('lastResumeTime') || startTime, 10);
+
+      if (pausedAt > lastResume) {
+        // Legit paused state
+        const resumeDelta = Date.now() - pausedAt;
+        totalPausedTime += resumeDelta;
+
+        localStorage.setItem('pausedTotal', totalPausedTime);
+        localStorage.removeItem('pausedAt');
+        localStorage.setItem('lastResumeTime', Date.now());
+        pausedAt = null;
+      } else {
+        // Probably a stale pausedAt — ignore it
+        pausedAt = null;
+        localStorage.removeItem('pausedAt');
+      }
+
+    }
+
+const Ispaused = localStorage.getItem('pausedUnload') === 'true';
+  if(Ispaused){
+    setTimeout(pauseStudy, 100);
+    localStorage.setItem('pausedUnload', 'false');
+  } else{startTimer();}
+
+
+    document.getElementById('pause-btn').style.display = 'inline';
+    document.getElementById('resume-btn').style.display = 'none';
+  }
+
+  if (localStorage.getItem('studyStarted') === 'true') {
+    loadSnippet(currentSnippet);
+  }
+
+
+  setInterval(() => {
+    try {
+      saveToServer();
+      console.log("[Auto-Save] Progress saved to server.");
+    } catch (e) {
+      console.warn("[Auto-Save] Failed to save:", e);
+    }
+  }, 120000);
+};
+
+
+function resetTimer() {
+  if (confirm("Are you sure you want to reset the timer?")) {
+    clearInterval(timerInterval);
+    const now = Date.now();
+    startTime = now;
+    pausedAt = null;
+    totalPausedTime = 0;
+
+    localStorage.setItem('startTime', startTime);
+    localStorage.setItem('pausedTotal', '0');
+    localStorage.removeItem('pausedAt');
+
+    updateTimerDisplay();
+    startTimer(); // restart interval
+    clearAllStoredData();
+    localStorage.setItem('isReset','true');
+    location.reload();
+  }
+}
+
+window.addEventListener('beforeunload', () => {
+  try {
+    const isReset = localStorage.getItem('isReset') === 'true';
+    if (isReset) {
+      localStorage.removeItem('isReset');
+      recordQuestionTime(currentSnippet, currentQuestionIndex);
+    } 
+  } catch (e) {
+    console.warn("recordQuestionTime failed", e);
+  }
+  localStorage.setItem('pausedUnload', 'true');
+  //pauseStudy();
+});
+
+</script>
 </body>
 </html>
