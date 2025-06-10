@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Background Questionnaire</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 40px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    .survey-box, .final-box {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .full-width-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .full-width-btn:hover {
+      background-color: #45a049;
+    }
+    button:active {
+      transform: scale(0.97);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) inset;
+    }
+    .hidden {
+      display: none;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="survey-box" id="survey-box">
+  <h3>Participant Background Questionnaire</h3>
+  <p>The following questions help us understand your background. Some may disqualify you from participating. All responses are anonymous and used only for research purposes.</p>
+  <div id="question-container"></div>
+  <div style="margin-top: 20px;">
+    <button onclick="prevQuestion()" id="prevBtn" disabled>Previous</button>
+    <button onclick="nextQuestion()" id="nextBtn">Next</button>
+  </div>
+</div>
+
+<div class="final-box hidden" id="final-box-submit">
+  <h3>✅ Submission Received!</h3>
+  <p>Thank you! Your responses have been submitted successfully.</p>
+</div>
+
+<script>
+const questions = [
+  {
+    text: "What is your age?",
+    options: [
+      { label: "Under 18", ineligible: true },
+      { label: "18–20" },
+      { label: "21–24" },
+      { label: "25–30" },
+      { label: "31–40" },
+      { label: "Over 40" },
+      { label: "Prefer not to say" }
+    ]
+  },
+  {
+    text: "What is your gender?",
+    options: [
+      { label: "Male" },
+      { label: "Female" },
+      { label: "Non-binary / Third gender" },
+      { label: "Prefer to self-describe:", input: true },
+      { label: "Prefer not to say" }
+    ]
+  },
+  {
+    text: "What is your current academic level?",
+    options: [
+      { label: "First-year undergraduate (Freshman)" },
+      { label: "Second-year undergraduate (Sophomore)" },
+      { label: "Third-year undergraduate (Junior)" },
+      { label: "Fourth-year undergraduate (Senior)" },
+      { label: "Graduate student", ineligible: true },
+      { label: "Other:", input: true },
+      { label: "Prefer not to say" }
+    ]
+  }
+];
+
+let currentQuestion = 0;
+let answers = [];
+
+function showQuestion() {
+  const q = questions[currentQuestion];
+  const container = document.getElementById('question-container');
+  let html = `<p><strong>${q.text}</strong></p>`;
+  q.options.forEach((opt, i) => {
+    const checked = answers[currentQuestion]?.index === i ? 'checked' : '';
+    const value = answers[currentQuestion]?.input || '';
+    html += `<label><input type="radio" name="q${currentQuestion}" value="${i}" ${checked}> ${opt.label}</label>`;
+    if (opt.input) {
+      html += `<input type="text" id="input-q${currentQuestion}-${i}" value="${value}">`;
+    }
+    html += `<br>`;
+  });
+  container.innerHTML = html;
+  document.getElementById('prevBtn').disabled = currentQuestion === 0;
+  document.getElementById('nextBtn').innerText = currentQuestion === questions.length - 1 ? 'Submit' : 'Next';
+}
+
+function nextQuestion() {
+  const selected = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
+  if (!selected) return alert("Please select an option.");
+  const index = parseInt(selected.value);
+  const inputField = document.getElementById(`input-q${currentQuestion}-${index}`);
+  const input = inputField ? inputField.value.trim() : null;
+  answers[currentQuestion] = { index, input };
+
+  const opt = questions[currentQuestion].options[index];
+  if (opt.ineligible) {
+    alert("Unfortunately, you are not eligible to participate in this study.");
+    return;
+  }
+
+  if (currentQuestion === questions.length - 1) {
+    submitQuestionnaireAnswers();
+  } else {
+    currentQuestion++;
+    showQuestion();
+  }
+}
+
+function prevQuestion() {
+  if (currentQuestion > 0) currentQuestion--;
+  showQuestion();
+}
+
+function submitQuestionnaireAnswers() {
+  const responses = questions.map((q, i) => {
+    const ans = answers[i];
+    const label = q.options[ans.index].label;
+    return {
+      question: q.text,
+      selectedOption: label + (q.options[ans.index].input ? `: ${ans.input}` : '')
+    };
+  });
+
+  const payload = {
+    responses: responses,
+    submitted: true,
+    event: "background_questionnaire"
+  };
+
+  fetch("https://codecomprehensibility.site/register_student", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  }).then(res => {
+    if (res.ok) {
+      document.getElementById('survey-box').classList.add('hidden');
+      document.getElementById('final-box-submit').classList.remove('hidden');
+    } else {
+      alert("❌ Submission failed. Please try again later.");
+    }
+  }).catch(err => {
+    console.error("❌ Network error:", err);
+    alert("❌ Network error. Please check your connection.");
+  });
+}
+
+window.onload = showQuestion;
+</script>
+
+</body>
+</html>
