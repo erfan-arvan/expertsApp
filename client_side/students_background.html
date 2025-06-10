@@ -47,6 +47,237 @@
       border: 1px solid #ccc;
       border-radius: 6px;
     }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 40px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    .instructions, .email-box, .survey-box, .slots-box {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .day-card {
+      background-color: #eaeaea;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+
+    .time-slot {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      background-color: #ccc;
+      cursor: pointer;
+    }
+
+    .time-slot.selected {
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 15px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+        margin-top: 8px;
+        margin-bottom: 16px;
+        background-color: #fff;
+        color: #333;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-field:focus {
+        border-color: #4CAF50;
+        outline: none;
+        box-shadow: 0 0 4px rgba(76, 175, 80, 0.4);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-top: 10px;
+            margin-bottom: 16px;
+            background-color: #fff;
+            color: #333;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            }
+
+            .input-field:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 4px rgba(76, 175, 80, 0.4);
+            }
+
+            .full-width-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            }
+
+            .full-width-btn:hover {
+            background-color: #45a049;
+            }
+
+            .modal.hidden {
+                display: none !important;
+            }
+
+            .success-message {
+                position: relative;
+                background-color: #e6f9ec;
+                color: #2e7d32;
+                border: 1px solid #2e7d32;
+                padding: 15px 20px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                font-size: 16px;
+                font-weight: 500;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+                }
+
+                .success-message .close-btn {
+                position: absolute;
+                top: 8px;
+                right: 12px;
+                background: none;
+                border: none;
+                color: #2e7d32;
+                font-size: 18px;
+                font-weight: bold;
+                cursor: pointer;
+                line-height: 1;
+                margin: 0;
+                }
+
+                .success-message .close-btn:hover {
+                color: #1b5e20;
+                }
+
+                .confirm-box, .final-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.confirm-box a {
+  color: #4CAF50;
+  margin-left: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.confirm-box a:hover {
+  text-decoration: underline;
+}
+
+.final-box button {
+  margin-top: 10px;
+}
+
+input.input-error {
+  border: 2px solid red;
+  background-color: #ffe6e6;
+}
+
+#warning-modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+#warning-modal .modal-content {
+  background-color: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+@keyframes glowPulse {
+        0% {
+          box-shadow: 0 0 10px #4CAF50;
+        }
+        100% {
+          box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+        }
+      }
+
+      #email {        animation: glowPulse 1.5s infinite alternate;
+      }
+
+      button:active {
+        transform: scale(0.97);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) inset;
+        }
   </style>
 </head>
 <body>
