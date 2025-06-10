@@ -625,6 +625,7 @@ function startStudy() {
   startTimer();
   document.getElementById('survey-box').classList.remove('hidden');
 
+  showQuestion();
 }
 
 function pauseStudy() {
@@ -718,13 +719,6 @@ const Ispaused = localStorage.getItem('pausedUnload') === 'true';
     document.getElementById('resume-btn').style.display = 'none';
   }
 
-
-  if (localStorage.getItem('studyStarted') === 'true') {
-    setTimeout(() => {
-      console.log("⏳ Delayed showQuestion()");
-      showQuestion();
-    }, 300); // 300ms delay
-  }
 };
 
 
