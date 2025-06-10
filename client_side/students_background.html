@@ -622,6 +622,8 @@ function startStudy() {
   generateAndStoreUsername();
   document.getElementById('start-modal').style.display = 'none';
   startTimer();
+  document.getElementById('survey-box').classList.remove('hidden');
+
 }
 
 function pauseStudy() {
