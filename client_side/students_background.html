@@ -738,6 +738,58 @@ function resetTimer() {
   }
 }
 
+
+let timerInterval = null;
+let startTime = null;
+let pausedAt = null;
+let totalPausedTime = 0;
+let questionStartTime = null;
+let questionTimers = {}; // key: `q-{snippetId}-{questionIndex}`, value: seconds
+
+
+function formatTime(seconds) {
+  const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+  const secs = String(seconds % 60).padStart(2, '0');
+  return `${mins}:${secs}`;
+}
+
+function updateTimerDisplay() {
+  const timerEl = document.getElementById('timer');
+  localStorage.setItem('pausedTotal', totalPausedTime);
+  if (!startTime) return;
+  const now = Date.now();
+  const elapsed = Math.floor((now - startTime - totalPausedTime) / 1000);
+  timerEl.textContent = `⏱️ ${formatTime(elapsed)}`;
+}
+
+
+function pauseTimer() {
+  clearInterval(timerInterval);
+}
+
+
+
+
+function resetTimer() {
+  if (confirm("Are you sure you want to reset the timer?")) {
+    clearInterval(timerInterval);
+    const now = Date.now();
+    startTime = now;
+    pausedAt = null;
+    totalPausedTime = 0;
+
+    localStorage.setItem('startTime', startTime);
+    localStorage.setItem('pausedTotal', '0');
+    localStorage.removeItem('pausedAt');
+
+    updateTimerDisplay();
+    startTimer(); // restart interval
+    clearAllStoredData();
+    localStorage.setItem('isReset','true');
+    location.reload();
+  }
+}
+
 window.addEventListener('beforeunload', () => {
   try {
     const isReset = localStorage.getItem('isReset') === 'true';
