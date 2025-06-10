@@ -431,39 +431,63 @@ input.input-error {
 <script>
 const questions = [
   {
-    text: "What is your age?",
-    code: "demographics.age",
+    text: "Compared to your classmates, how would you rate your programming experience?",
+    code: "s.ClassMates",
     options: [
-      { label: "Under 18", ineligible: true },
-      { label: "18–20" },
-      { label: "21–24" },
-      { label: "25–30" },
-      { label: "31–40" },
-      { label: "Over 40" },
-      { label: "Prefer not to say" }
+      { label: "1 — Very inexperienced" },
+      { label: "2 — Inexperienced" },
+      { label: "3 — Moderate" },
+      { label: "4 — Experienced" },
+      { label: "5 — Very experienced" }
     ]
   },
   {
-    text: "What is your gender?",
-    code: "demographics.gender",
+    text: "How experienced are you with logical programming (e.g., Prolog)?",
+    code: "s.Logical",
     options: [
-      { label: "Male" },
-      { label: "Female" },
-      { label: "Non-binary / Third gender" },
-      { label: "Prefer to self-describe:", input: true },
-      { label: "Prefer not to say" }
+      { label: "1 — Very inexperienced" },
+      { label: "2 — Inexperienced" },
+      { label: "3 — Moderate" },
+      { label: "4 — Experienced" },
+      { label: "5 — Very experienced" }
     ]
   },
   {
-    text: "What is your class standing?",
-    code: "demographics.classStanding",
+    text: "On a scale from 1 to 10, how would you rate your overall programming experience?",
+    code: "s.PE",
     options: [
-      { label: "First-year undergraduate (Freshman)" },
-      { label: "Second-year undergraduate (Sophomore)" },
-      { label: "Third-year undergraduate (Junior)" },
-      { label: "Fourth-year undergraduate (Senior)" },
-      { label: "Graduate student", ineligible: true },
-      { label: "Other:", input: true },
+      { label: "1 — Very inexperienced" },
+      { label: "2" },
+      { label: "3" },
+      { label: "4" },
+      { label: "5" },
+      { label: "6" },
+      { label: "7" },
+      { label: "8" },
+      { label: "9" },
+      { label: "10 — Very experienced" }
+    ]
+  },
+  {
+    text: "How experienced are you with object-oriented programming?\n(e.g., working with classes, inheritance, interfaces)",
+    code: "s.ObjectOriented",
+    options: [
+      { label: "1 — Very inexperienced" },
+      { label: "2 — Inexperienced" },
+      { label: "3 — Moderate" },
+      { label: "4 — Experienced" },
+      { label: "5 — Very experienced" }
+    ]
+  },
+  {
+    text: "How many years have you been programming in Java, whether through classes, personal projects, or other experiences?",
+    code: "s.JavaExperience",
+    options: [
+      { label: "I am not familiar with Java", ineligible: true },
+      { label: "Less than 1 year" },
+      { label: "1–2 years" },
+      { label: "3–4 years" },
+      { label: "5+ years" },
       { label: "Prefer not to say" }
     ]
   }
@@ -538,7 +562,8 @@ function submitQuestionnaireAnswers() {
   // UI feedback
   document.getElementById('survey-box').classList.add('hidden');
   document.getElementById('final-box-submit').classList.remove('hidden');
-  window.location.href = "javaExperience.html";
+
+  window.location.href = "students.html";
 
 }
 
