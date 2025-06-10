@@ -617,9 +617,6 @@ function resumeStudy() {
 
 
 window.onload = function () {
-  setTimeout(syncAnswersFromCookies, 100);
-  syncAnswersFromCookies();
-
   console.log("📦 Unload was triggered at:", new Date(parseInt(localStorage.getItem('lastUnloadTriggeredAt') || 0)).toLocaleTimeString());
   console.log("🚀 Page load");
   console.log("Loaded startTime:", localStorage.getItem('startTime'));
