@@ -538,6 +538,7 @@ function submitQuestionnaireAnswers() {
   // UI feedback
   document.getElementById('survey-box').classList.add('hidden');
   document.getElementById('final-box-submit').classList.remove('hidden');
+  localStorage.setItem('FromPrevPage', 'true');
   window.location.href = "javaExperience.html";
 
 }

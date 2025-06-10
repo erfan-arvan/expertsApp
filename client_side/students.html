@@ -1025,8 +1025,16 @@ window.onload = function () {
     }
 
 const Ispaused = localStorage.getItem('pausedUnload') === 'true';
-  if(Ispaused){
-    setTimeout(pauseStudy, 100);
+if(Ispaused){
+    setTimeout(() => {
+    pauseStudy();
+    isFromPrevPage=localStorage.getItem('FromPrevPage') === 'true';
+    if(isFromPrevPage){
+      resumeStudy();
+      localStorage.setItem('FromPrevPage','false');
+    }
+    }, 100);
+
     localStorage.setItem('pausedUnload', 'false');
   } else{startTimer();}
 
@@ -1650,6 +1658,7 @@ window.addEventListener('beforeunload', () => {
     console.warn("recordQuestionTime failed", e);
   }
   localStorage.setItem('pausedUnload', 'true');
+  //localStorage.setItem('FromPrevPage', 'true');
   //pauseStudy();
 });
 
