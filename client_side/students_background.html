@@ -490,7 +490,7 @@ function showQuestion() {
 
 function nextQuestion() {
   const selected = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
-  if (!selected) return alert("Please select an option.");
+  if (!selected) return showValidationMessage("Please select an option.");
   const index = parseInt(selected.value);
   const inputField = document.getElementById(`input-q${currentQuestion}-${index}`);
   const input = inputField ? inputField.value.trim() : null;
@@ -498,7 +498,7 @@ function nextQuestion() {
 
   const opt = questions[currentQuestion].options[index];
   if (opt.ineligible) {
-    alert("Unfortunately, you are not eligible to participate in this study.");
+    showValidationMessage("Unfortunately, you are not eligible to participate in this study.");
     return;
   }
 
@@ -540,11 +540,11 @@ function submitQuestionnaireAnswers() {
       document.getElementById('survey-box').classList.add('hidden');
       document.getElementById('final-box-submit').classList.remove('hidden');
     } else {
-      alert("❌ Submission failed. Please try again later.");
+      showValidationMessage("❌ Submission failed. Please try again later.");
     }
   }).catch(err => {
     console.error("❌ Network error:", err);
-    alert("❌ Network error. Please check your connection.");
+    showValidationMessage("❌ Network error. Please check your connection.");
   });
 }
 
@@ -826,6 +826,13 @@ window.addEventListener('beforeunload', () => {
   localStorage.clear();
 
   console.log("✅ All cookies, localStorage, and localStorage have been cleared.");
+}
+</script>
+
+<script>
+function showValidationMessage(message) {
+    document.getElementById('validation-message').innerText = message;
+    document.getElementById('validation-modal').style.display = 'block';
 }
 </script>
 </body>
