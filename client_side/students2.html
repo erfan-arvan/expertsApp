@@ -773,7 +773,42 @@ function updateButtons() {
   </div>
 </div>
 
-  
+<!-- Pause Modal -->
+<div id="pause-modal-short" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+">
+  <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+    <h2>Study Paused</h2>
+    <p>The timer is paused for a short break. Please resume after 1 minute.</p>
+    <button onclick="resumeStudy()">Resume</button>
+  </div>
+</div>
+
+
+<!-- Pause Modal -->
+<div id="pause-modal-long" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+">
+  <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+    <h2>Study Paused</h2>
+    <p>The timer is paused for a long break. Please resume after 3 to 7 minutes.</p>
+    <button onclick="resumeStudy()">Resume</button>
+  </div>
+</div>
 <script>
     let allQuestions = [];
 </script>
@@ -937,6 +972,34 @@ function startStudy() {
   document.getElementById('start-modal').style.display = 'none';
   loadSnippet(currentSnippet);
   startTimer();
+}
+
+function pauseStudyShort() {
+  recordQuestionTime(currentSnippet, currentQuestionIndex);
+  localStorage.setItem('pausedAt', Date.now());
+  updateTimerDisplay(); // ensure last moment is rendered before freezing
+  pauseTimer();         // clears the interval
+  pausedAt = Date.now();
+  localStorage.setItem('pausedAt', pausedAt);
+  document.getElementById('pause-modal-short').style.display = 'flex';
+
+  // 👇 Add this to toggle buttons
+  document.getElementById('pause-btn').style.display = 'none';
+  document.getElementById('resume-btn').style.display = 'inline';
+}
+
+function pauseStudyLong() {
+  recordQuestionTime(currentSnippet, currentQuestionIndex);
+  localStorage.setItem('pausedAt', Date.now());
+  updateTimerDisplay(); // ensure last moment is rendered before freezing
+  pauseTimer();         // clears the interval
+  pausedAt = Date.now();
+  localStorage.setItem('pausedAt', pausedAt);
+  document.getElementById('pause-modal-long').style.display = 'flex';
+
+  // 👇 Add this to toggle buttons
+  document.getElementById('pause-btn').style.display = 'none';
+  document.getElementById('resume-btn').style.display = 'inline';
 }
 
 function pauseStudy() {
@@ -1543,8 +1606,11 @@ function nextQuestion() {
   localStorage.setItem('currentQuestionStartTime', questionStartTime);
   console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex+1} at ${new Date(questionStartTime).toLocaleTimeString()}`);
 
-        if ([3, 5, 7].includes(currentSnippet)) {
-          pauseStudy();
+        if ([3, 7].includes(currentSnippet)) {
+          pauseStudyShort();
+        }
+        else if ([5].includes(currentSnippet)) {
+          pauseStudyLong();
         }
 }
 
