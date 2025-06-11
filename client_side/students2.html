@@ -1609,13 +1609,13 @@ function nextQuestion() {
   localStorage.setItem('currentQuestionStartTime', questionStartTime);
   console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex+1} at ${new Date(questionStartTime).toLocaleTimeString()}`);
 
-  if (snippetNumber === 3 && localStorage.getItem("break3") !== "1") {
+  if (currentSnippet === 3 && localStorage.getItem("break3") !== "1") {
     localStorage.setItem("break3", "1");
     pauseStudyShort();
-  } else if (snippetNumber === 5 && localStorage.getItem("break5") !== "1") {
+  } else if (currentSnippet === 5 && localStorage.getItem("break5") !== "1") {
     localStorage.setItem("break5", "1");
     pauseStudyLong();
-  } else if (snippetNumber === 7 && localStorage.getItem("break7") !== "1") {
+  } else if (currentSnippet === 7 && localStorage.getItem("break7") !== "1") {
     localStorage.setItem("break7", "1");
     pauseStudyShort();
   }
