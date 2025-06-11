@@ -375,7 +375,7 @@ a.underline-dotted-pointer {
           <a href="phase2.html" class="phase-link disabled" id="link-phase2">Phase 2</a>
           <a href="phase3.html" class="phase-link disabled" id="link-phase3">Phase 3</a>
           <a href="review.html" class="phase-link disabled" id="link-review">Review & Submit</a> -->
-      </div>
+    </div>
 
 
 <div id="snippet-container" style="display: flex; gap: 40px; align-items: flex-start;margin-top:100px;">
@@ -1025,8 +1025,16 @@ window.onload = function () {
     }
 
 const Ispaused = localStorage.getItem('pausedUnload') === 'true';
-  if(Ispaused){
-    setTimeout(pauseStudy, 100);
+if(Ispaused){
+    setTimeout(() => {
+    pauseStudy();
+    isFromPrevPage=localStorage.getItem('FromPrevPage') === 'true';
+    if(isFromPrevPage){
+      resumeStudy();
+      localStorage.setItem('FromPrevPage','false');
+    }
+    }, 100);
+
     localStorage.setItem('pausedUnload', 'false');
   } else{startTimer();}
 
@@ -1534,6 +1542,10 @@ function nextQuestion() {
   questionStartTime = Date.now();
   localStorage.setItem('currentQuestionStartTime', questionStartTime);
   console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex+1} at ${new Date(questionStartTime).toLocaleTimeString()}`);
+
+  if ([3, 5, 7].includes(currentSnippet)) {
+            pauseTimer();
+        }
 }
 
 
@@ -1650,6 +1662,7 @@ window.addEventListener('beforeunload', () => {
     console.warn("recordQuestionTime failed", e);
   }
   localStorage.setItem('pausedUnload', 'true');
+  //localStorage.setItem('FromPrevPage', 'true');
   //pauseStudy();
 });
 
