@@ -786,7 +786,7 @@ function updateButtons() {
   <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
     <h2>Study Paused</h2>
     <p>Please wait <span id="pause-countdown">60</span> seconds before continuing.</p>
-    <button id="resume-btn" onclick="resumeStudy()" style="display: none;">Resume</button>
+    <button id="resume-btn-short" onclick="resumeStudy()" style="display: none;">Resume</button>
   </div>
 </div>
 
@@ -986,29 +986,33 @@ function pauseStudyShort() {
 
   const modal = document.getElementById('pause-modal-short');
   const countdownEl = document.getElementById('pause-countdown');
-  const resumeBtn = document.getElementById('resume-btn');
+  const resumeBtn = document.getElementById('resume-btn-short');
 
-  // Reset state
-  countdownEl.textContent = "60";
+  // Reset UI state
+  let remaining = 60;
+  countdownEl.textContent = remaining;
   resumeBtn.style.display = 'none';
   modal.style.display = 'flex';
 
-  let remaining = 60; // seconds
-
   pauseCountdownInterval = setInterval(() => {
     remaining--;
-    countdownEl.textContent = remaining;
 
+    if (remaining >= 0) {
+      countdownEl.textContent = remaining;
+    }
+
+    // Show resume button when 10 seconds are left (i.e., after 50s passed)
     if (remaining === 10) {
       resumeBtn.style.display = 'inline';
     }
 
     if (remaining <= 0) {
       clearInterval(pauseCountdownInterval);
-      resumeBtn.style.display = 'inline';
     }
   }, 1000);
 }
+
+
 
 
 function pauseStudyLong() {
