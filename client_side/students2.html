@@ -1018,6 +1018,9 @@ function pauseStudy() {
 
 function resumeStudy() {
   document.getElementById('pause-modal').style.display = 'none';
+  document.getElementById('pause-modal-short').style.display = 'none';
+  document.getElementById('pause-modal-long').style.display = 'none';
+
 
   const pausedAtStored = parseInt(localStorage.getItem('pausedAt') || '0', 10);
   if (pausedAtStored && !isNaN(pausedAtStored)) {
