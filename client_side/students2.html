@@ -1543,9 +1543,9 @@ function nextQuestion() {
   localStorage.setItem('currentQuestionStartTime', questionStartTime);
   console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex+1} at ${new Date(questionStartTime).toLocaleTimeString()}`);
 
-  if (currentSnippet==1) {
-            pauseTimer();
-    }
+        if ([3, 5, 7].includes(currentSnippet)) {
+          pauseStudy();
+        }
 }
 
 
