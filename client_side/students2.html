@@ -1039,17 +1039,18 @@ function pauseStudyLong() {
       countdownEl.textContent = remaining;
     }
 
-    // Show resume after 180 seconds (i.e., 3 minutes passed)
+    // Show resume button after 180 seconds (when 240 seconds are left)
     if (remaining === 240) {
       resumeBtn.style.display = 'inline';
     }
 
+    // Stop countdown when it finishes
     if (remaining <= 0) {
       clearInterval(pauseCountdownInterval);
-      resumeBtn.style.display = 'inline'; // Ensure it is visible if not yet
     }
   }, 1000);
 }
+
 
 
 function pauseStudy() {
