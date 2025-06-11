@@ -780,16 +780,16 @@ function updateButtons() {
   top: 0; left: 0; right: 0; bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 9999;
-  display: none;
   justify-content: center;
   align-items: center;
 ">
   <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
     <h2>Study Paused</h2>
-    <p>The timer is paused for a short break. Please resume after 1 minute.</p>
-    <button onclick="resumeStudy()">Resume</button>
+    <p>Please wait <span id="pause-countdown">60</span> seconds before continuing.</p>
+    <button id="resume-btn" onclick="resumeStudy()" style="display: none;">Resume</button>
   </div>
 </div>
+
 
 
 <!-- Pause Modal -->
@@ -974,19 +974,42 @@ function startStudy() {
   startTimer();
 }
 
+let pauseCountdownInterval;
+
 function pauseStudyShort() {
   recordQuestionTime(currentSnippet, currentQuestionIndex);
-  localStorage.setItem('pausedAt', Date.now());
-  updateTimerDisplay(); // ensure last moment is rendered before freezing
-  pauseTimer();         // clears the interval
+  updateTimerDisplay();
+  pauseTimer();
+
   pausedAt = Date.now();
   localStorage.setItem('pausedAt', pausedAt);
-  document.getElementById('pause-modal-short').style.display = 'flex';
 
-  // 👇 Add this to toggle buttons
-  document.getElementById('pause-btn').style.display = 'none';
-  document.getElementById('resume-btn').style.display = 'inline';
+  const modal = document.getElementById('pause-modal-short');
+  const countdownEl = document.getElementById('pause-countdown');
+  const resumeBtn = document.getElementById('resume-btn');
+
+  // Reset state
+  countdownEl.textContent = "60";
+  resumeBtn.style.display = 'none';
+  modal.style.display = 'flex';
+
+  let remaining = 60; // seconds
+
+  pauseCountdownInterval = setInterval(() => {
+    remaining--;
+    countdownEl.textContent = remaining;
+
+    if (remaining === 10) {
+      resumeBtn.style.display = 'inline';
+    }
+
+    if (remaining <= 0) {
+      clearInterval(pauseCountdownInterval);
+      resumeBtn.style.display = 'inline';
+    }
+  }, 1000);
 }
+
 
 function pauseStudyLong() {
   recordQuestionTime(currentSnippet, currentQuestionIndex);
