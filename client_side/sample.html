@@ -597,12 +597,12 @@ console.log("Mapping from original (1-based):", snippetOrder.map(i => `Original 
 
 <script>
 const TOTAL_SNIPPETS = 1;
-let currentSnippet = 99;
+let currentSnippet = 999;
 
 
   
 function loadSnippet(snippetNumber) {
-  const snippet = snippets[snippetNumber - 1];
+  const snippet = snippets[0];
   document.getElementById('snippet-title').innerText = snippet.title;
 
   // Render code
@@ -1472,7 +1472,7 @@ console.log(`[🧹 Resetting] questionStartTime cleared`);
 function loadQuestion() {
     questionStartTime = Date.now();
     localStorage.setItem('currentQuestionStartTime', questionStartTime);
-    const snippetSpecific = questionsPerSnippet[currentSnippet];
+    const snippetSpecific = questionsPerSnippet[currentSnippet] || questionsPerSnippetOriginal["99"];
     allQuestions = [...StartingQuestions, ...snippetSpecific];
     const question = allQuestions[currentQuestionIndex];
 
@@ -1713,7 +1713,7 @@ function nextQuestion() {
 
   questionStartTime = Date.now();
   localStorage.setItem('currentQuestionStartTime', questionStartTime);
-  console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex+1} at ${new Date(questionStartTime).toLocaleTimeString()}`);
+  console.log(`[⏱️ Debug] Started timer for time-q-99-${currentQuestionIndex+1} at ${new Date(questionStartTime).toLocaleTimeString()}`);
 
   if (currentSnippet === 3 && localStorage.getItem("break3") !== "1") {
     localStorage.setItem("break3", "1");
@@ -1745,7 +1745,7 @@ function prevQuestion() {
   // Start timing the new question
   questionStartTime = Date.now();
   localStorage.setItem('currentQuestionStartTime', questionStartTime);
-  console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex+1} at ${new Date(questionStartTime).toLocaleTimeString()}`);
+  console.log(`[⏱️ Debug] Started timer for time-q-99-${currentQuestionIndex+1} at ${new Date(questionStartTime).toLocaleTimeString()}`);
 }
 
 
