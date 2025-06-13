@@ -784,7 +784,8 @@ function updateButtons() {
   align-items: center;
 ">
   <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
-    <h2>Study Paused</h2>
+    <h2>Short Break</h2>
+    <img src="img/relax.gif" alt="Relax..." style="max-width: 100%; height: auto;">
     <!-- <p>Please wait <span id="pause-countdown">60</span> seconds before continuing.</p> -->
     <p id="soonShort" style="display: none;">It's too soon to continue! Continue Resting.</p>
     <button id="resume-btn-short" onclick="resumeStudy()">Resume</button>
@@ -804,7 +805,7 @@ function updateButtons() {
   align-items: center;
 ">
   <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
-    <h2>Study Paused</h2>
+    <h2>Long Break</h2>
     <!-- <p>Please wait <span id="pause-countdown-long">420</span> seconds before continuing.</p> -->
     <p id="soonLong" style="display: none;">It's too soon to continue! Continue Resting.</p>
     <button id="resume-btn-long" onclick="resumeStudy()">Resume</button>
@@ -1127,8 +1128,8 @@ window.onload = function () {
   setTimeout(syncAnswersFromCookies, 100);
   syncAnswersFromCookies();
 
-  console.log("📦 Unload was triggered at:", new Date(parseInt(localStorage.getItem('lastUnloadTriggeredAt') || 0)).toLocaleTimeString());
-  console.log("🚀 Page load");
+  console.log("Unload was triggered at:", new Date(parseInt(localStorage.getItem('lastUnloadTriggeredAt') || 0)).toLocaleTimeString());
+  console.log("Page load");
   console.log("Loaded startTime:", localStorage.getItem('startTime'));
   console.log("Loaded pausedTotal:", localStorage.getItem('pausedTotal'));
   console.log("Loaded pausedAt:", localStorage.getItem('pausedAt'));
