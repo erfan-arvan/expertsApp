@@ -557,13 +557,14 @@ console.log("snippetsOriginal:", snippetsOriginal);
 
 
 // Create shuffled snippets using 1-based indices
-const snippets = snippetOrder.map((i, idx) => {
-  const s = { ...snippetsOriginal[i - 1] }; // Clone
-  s.id = idx + 1;                           // New display ID
-  s.title = `Snippet ${idx + 1}`;          // Updated title
-  s.originalId = i;                        // 🔥 Save original ID
-  return s;
-});
+
+const snippets = snippetsOriginal.map((s, idx) => ({
+  ...s,
+  id: idx + 1,
+  originalId: s.id || 99,
+  title: `Snippet ${idx + 1}`
+}));
+
 
 
 
@@ -599,7 +600,7 @@ const TOTAL_SNIPPETS = 1;
 let currentSnippet = 1;
 
 
-
+  
 function loadSnippet(snippetNumber) {
   const snippet = snippets[snippetNumber - 1];
   document.getElementById('snippet-title').innerText = snippet.title;
