@@ -807,7 +807,7 @@ function updateButtons() {
 ">
   <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
     <h2>Long Break</h2>
-    <img src="img/stretch.gif" alt="Relax..." style="max-width: 100%; height: auto;">
+    <img src="img/stretch.gif" alt="Relax..." style="width: 400px; height: auto;">
     <br>
     <!-- <p>Please wait <span id="pause-countdown-long">420</span> seconds before continuing.</p> -->
     <p id="soonLong" style="display: none;">No rush! Keep chilling a little longer.</p>
@@ -1033,13 +1033,18 @@ function showTooSoonMessageShort() {
   }, 4000);
 }
 
+let longMessageIndex = 0;
+
 function showTooSoonMessageLong() {
   const msg = document.getElementById('soonLong');
-  msg.style.display = 'block'; // or 'inline' depending on your layout
+  msg.textContent = messagesLong[longMessageIndex];
+  longMessageIndex = (longMessageIndex + 1) % messagesLong.length;
+
+  msg.style.display = 'block';
 
   setTimeout(() => {
     msg.style.display = 'none';
-  }, 4000); // 4000 ms = 4 seconds
+  }, 4000);
 }
 
 

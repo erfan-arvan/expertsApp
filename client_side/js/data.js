@@ -547,3 +547,37 @@ const snippetsOriginal = [
         "Okay… now you're ready. Let’s get back to it."
       ];
       
+
+      const messagesLong = [
+        "You made it to the long break! Time to relax — your way.",
+        "Step away if you'd like, or just sit back and breathe.",
+        "Stretch your legs… or stay put and stretch your thoughts.",
+        "No rush. Move slowly. This time is yours.",
+        "Use the restroom, refill your water, or simply rest.",
+        "Eyes tired? Now’s a great time to look away.",
+        "You don’t need to *do* anything right now.",
+        "If you leave, return quietly to keep the peace.",
+        "The best break is the one that works for you.",
+        "Just sitting quietly is a perfectly good option.",
+        "Move your neck, roll your shoulders — simple is enough.",
+        "If your body wants to move, let it. If not, let it be.",
+        "A quiet stretch can feel like a reboot.",
+        "You’re off the clock for a few minutes. Enjoy it.",
+        "The screen will wait. Your wellbeing comes first.",
+        "Standing up is great. So is sitting still.",
+        "This is your mental cool-down. Let it work.",
+        "A short walk? A quiet pause? Either is valid.",
+        "Let your brain catch its breath — it’s been busy.",
+        "Take a moment for yourself before we dive back in.",
+        "Want to close your eyes? Nobody’s judging.",
+        "Breaks like these aren’t wasted — they’re necessary.",
+        "Let your thoughts drift. Even coders need daydreams.",
+        "Coffee? Water? A breath of air? Take your pick.",
+        "The best thinking happens when you're not trying.",
+        "A short reset now will boost your focus later.",
+        "Just one goal: be kind to your brain and body.",
+        "Even a quiet moment of stillness counts as rest.",
+        "Almost there — return when you’re ready, gently.",
+        "Okay, time’s nearly up. Bring your calm self back."
+      ];
+      
