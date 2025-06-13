@@ -1167,7 +1167,7 @@ if(Ispaused){
 
   setInterval(() => {
     try {
-      saveToServer();
+      // saveToServer();
       console.log("[Auto-Save] Progress saved to server.");
     } catch (e) {
       console.warn("[Auto-Save] Failed to save:", e);
@@ -1409,6 +1409,11 @@ function recordQuestionTime(snippetId, questionIndex) {
   // Clear start timestamp
   questionStartTime = null;
   localStorage.removeItem('currentQuestionStartTime');
+
+  console.log(`[📌 recordQuestionTime] Called for snippet=${snippetId}, qIndex=${questionIndex}`);
+console.log(`[⏱️ Timing] Elapsed: ${elapsedSec}s | key: time-q-${snippetId}-${questionIndex + 1}`);
+console.log(`[🧹 Resetting] questionStartTime cleared`);
+
 
   // Debug
   console.log(`[⏱️ Debug] Recorded time for ${key}: +${elapsedSec}s → total ${newTotal}s`);
