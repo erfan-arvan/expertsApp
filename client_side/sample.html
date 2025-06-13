@@ -558,12 +558,13 @@ console.log("snippetsOriginal:", snippetsOriginal);
 
 // Create shuffled snippets using 1-based indices
 
-const snippets = snippetsOriginal.map((s, idx) => ({
-  ...s,
-  id: idx + 1,
-  originalId: s.id || 99,
-  title: `Snippet ${idx + 1}`
-}));
+const snippets = [{
+  id: 999, 
+  originalId: 99,
+  title: "Sample Snippet",
+  code: `...`
+}];
+
 
 
 
