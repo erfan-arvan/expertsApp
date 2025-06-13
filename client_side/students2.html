@@ -1009,7 +1009,7 @@ function pauseStudyShort() {
     }
 
     // Show resume button when 10 seconds are left (i.e., after 50s passed)
-    if (remaining === 10) {
+    if (remaining === 30) {
       resumeBtn.onclick = resumeStudy;
     }
 
@@ -1065,7 +1065,7 @@ function pauseStudyLong() {
     }
 
     // Show resume button after 180 seconds (when 240 seconds are left)
-    if (remaining === 240) {
+    if (remaining === 360) {
       resumeBtn.onclick = resumeStudy;
     }
 
