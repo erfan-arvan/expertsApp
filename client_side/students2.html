@@ -786,7 +786,8 @@ function updateButtons() {
   <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
     <h2>Study Paused</h2>
     <p>Please wait <span id="pause-countdown">60</span> seconds before continuing.</p>
-    <button id="resume-btn-short" onclick="resumeStudy()" disabled>Resume</button>
+    <p id="soonShort" style="display: none;">It's too soon to continue! Continue Resting.</p>
+    <button id="resume-btn-short" onclick="resumeStudy()">Resume</button>
   </div>
 </div>
 
@@ -805,7 +806,8 @@ function updateButtons() {
   <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
     <h2>Study Paused</h2>
     <p>Please wait <span id="pause-countdown-long">420</span> seconds before continuing.</p>
-    <button id="resume-btn-long" onclick="resumeStudy()" disabled>Resume</button>
+    <p id="soonLong" style="display: none;">It's too soon to continue! Continue Resting.</p>
+    <button id="resume-btn-long" onclick="resumeStudy()">Resume</button>
   </div>
 </div>
 
@@ -992,6 +994,7 @@ function pauseStudyShort() {
   let remaining = 60;
   countdownEl.textContent = remaining;
   // resumeBtn.style.display = 'none';
+  resumeBtn.onclick = showTooSoonMessageShort;
   modal.style.display = 'flex';
 
   pauseCountdownInterval = setInterval(() => {
@@ -1003,7 +1006,7 @@ function pauseStudyShort() {
 
     // Show resume button when 10 seconds are left (i.e., after 50s passed)
     if (remaining === 10) {
-      resumeBtn.disabled = false;
+      resumeBtn.onclick = resumeStudy;
     }
 
     if (remaining <= 0) {
@@ -1013,6 +1016,23 @@ function pauseStudyShort() {
 }
 
 
+function showTooSoonMessageShort() {
+  const msg = document.getElementById('soonShort');
+  msg.style.display = 'block'; // or 'inline' depending on your layout
+
+  setTimeout(() => {
+    msg.style.display = 'none';
+  }, 4000); // 4000 ms = 4 seconds
+}
+
+function showTooSoonMessageLong() {
+  const msg = document.getElementById('soonLong');
+  msg.style.display = 'block'; // or 'inline' depending on your layout
+
+  setTimeout(() => {
+    msg.style.display = 'none';
+  }, 4000); // 4000 ms = 4 seconds
+}
 
 
 function pauseStudyLong() {
@@ -1030,6 +1050,7 @@ function pauseStudyLong() {
   let remaining = 420; // 7 minutes
   countdownEl.textContent = remaining;
   // resumeBtn.style.display = 'none';
+  resumeBtn.onclick = showTooSoonMessageLong;
   modal.style.display = 'flex';
 
   pauseCountdownInterval = setInterval(() => {
@@ -1041,7 +1062,7 @@ function pauseStudyLong() {
 
     // Show resume button after 180 seconds (when 240 seconds are left)
     if (remaining === 240) {
-      resumeBtn.disabled = false;
+      resumeBtn.onclick = resumeStudy;
     }
 
     // Stop countdown when it finishes
