@@ -1089,6 +1089,14 @@ function resumeStudy() {
 
   document.getElementById('pause-btn').style.display = 'inline';
   document.getElementById('resume-btn').style.display = 'none';
+
+  // ✅ Fix: Resume timing for the current question if it was cleared
+  if (questionStartTime === null) {
+    questionStartTime = Date.now();
+    localStorage.setItem('currentQuestionStartTime', questionStartTime);
+    console.log(`[🛠️ FIX] Resumed question timer at ${new Date(questionStartTime).toLocaleTimeString()} (qIndex ${currentQuestionIndex})`);
+  }
+
 }
 
 
