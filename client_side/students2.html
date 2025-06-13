@@ -601,7 +601,7 @@ let currentSnippet = 1;
 
 
 function loadSnippet(snippetNumber) {
-  const snippet = snippets.find(s => s.id === snippetNumber);
+  const snippet = snippets[snippetNumber - 1];
   document.getElementById('snippet-title').innerText = snippet.title;
   const codeLines = snippet.code.trim().split('\n');
   document.getElementById('code-content').innerHTML = codeLines.join('\n');

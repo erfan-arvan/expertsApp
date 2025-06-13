@@ -512,7 +512,7 @@ a.underline-dotted-pointer {
   
   
    
-<script src="js/dataSample.js?v=1.0.0"></script>
+<script src="js/data.js?v=1.0.0"></script>
 
 
 <script>
@@ -595,7 +595,7 @@ console.log("Mapping from original (1-based):", snippetOrder.map(i => `Original 
 
 
 <script>
-const TOTAL_SNIPPETS = 8;
+const TOTAL_SNIPPETS = 1;
 let currentSnippet = 1;
 
 
@@ -625,11 +625,13 @@ function saveSummary() {
 
 
 function saveSummarySilentForPrev() {
-
+    saveSummary();
 }
 
 function nextSnippet() {
     if (!validateCurrentSnippetInputs()) return;
+
+    saveSummary();
 
     if (currentSnippet < TOTAL_SNIPPETS) {
         currentSnippet++;
@@ -641,7 +643,7 @@ function nextSnippet() {
 
 function prevSnippet() {
     if (currentSnippet > 1) {
-        // saveSummarySilentForPrev();
+        saveSummarySilentForPrev();
         currentSnippet--;
         loadSnippet(currentSnippet);
         updateButtons();
@@ -1427,13 +1429,42 @@ function saveAnswer(snippetId, questionId, value) {
 let currentQuestionIndex = 0;
 
 function recordQuestionTime(snippetId, questionIndex) {
- 
+  if (questionStartTime === null) return;
+
+  const elapsedMs = Date.now() - questionStartTime;
+  const elapsedSec = Math.round(elapsedMs / 1000);
+
+  const key = `time-q-${snippetId}-${questionIndex + 1}`;
+
+  // Get current total from memory, localStorage, or cookies
+  const sessionVal = questionTimers[key] || 0;
+  const localVal = parseInt(localStorage.getItem(key) || '0');
+  const cookieVal = parseInt(getCookie(key) || '0');
+
+  const currentTotal = Math.max(sessionVal, localVal, cookieVal); // pick most up-to-date
+  const newTotal = currentTotal + elapsedSec;
+
+  // Update all sources
+  questionTimers[key] = newTotal;
+  localStorage.setItem(key, newTotal);
+
+  // Clear start timestamp
+  questionStartTime = null;
+  localStorage.removeItem('currentQuestionStartTime');
+
+  console.log(`[📌 recordQuestionTime] Called for snippet=${snippetId}, qIndex=${questionIndex}`);
+console.log(`[⏱️ Timing] Elapsed: ${elapsedSec}s | key: time-q-${snippetId}-${questionIndex + 1}`);
+console.log(`[🧹 Resetting] questionStartTime cleared`);
+
+
+  // Debug
+  console.log(`[⏱️ Debug] Recorded time for ${key}: +${elapsedSec}s → total ${newTotal}s`);
 }
 
 function loadQuestion() {
     questionStartTime = Date.now();
     localStorage.setItem('currentQuestionStartTime', questionStartTime);
-    const snippetSpecific = questionsPerSnippet?.[currentSnippet] || [];
+    const snippetSpecific = questionsPerSnippet[currentSnippet];
     allQuestions = [...StartingQuestions, ...snippetSpecific];
     const question = allQuestions[currentQuestionIndex];
 
