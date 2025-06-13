@@ -512,7 +512,7 @@ a.underline-dotted-pointer {
   
   
    
-<script src="js/data.js?v=1.0.0"></script>
+<script src="js/dataSamle.js?v=1.0.0"></script>
 
 
 <script>
@@ -603,18 +603,25 @@ let currentSnippet = 1;
 function loadSnippet(snippetNumber) {
   const snippet = snippets[snippetNumber - 1];
   document.getElementById('snippet-title').innerText = snippet.title;
+
+  // Render code
   const codeLines = snippet.code.trim().split('\n');
   document.getElementById('code-content').innerHTML = codeLines.join('\n');
+  document.getElementById('line-numbers').innerHTML = codeLines.map((_, i) => i + 1).join('<br>');
 
-  const lineNumbersHtml = codeLines.map((_, i) => (i + 1)).join('<br>');
-  document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
+  // ✅ Correctly load questions for this snippet
+  const originalId = String(snippet.originalId || snippet.id || 99);
+  const snippetSpecific = questionsPerSnippetOriginal[originalId] || [];
+  questionsPerSnippet[snippetNumber] = snippetSpecific;
 
-  // ✅ FIXED: use the correct snippetNumber
-//   const snippetSpecific = questionsPerSnippet[snippetNumber];
-//   allQuestions = [...StartingQuestions, ...snippetSpecific];
+  // Set allQuestions for this snippet (Reading + real)
+  allQuestions = [...StartingQuestions, ...snippetSpecific];
 
+  // Load the first question
+  currentQuestionIndex = 0;
   loadQuestion();
 }
+
 
 
 
