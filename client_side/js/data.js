@@ -514,3 +514,36 @@ const snippetsOriginal = [
       }];
       
       
+      const messagesShort = [
+        "Not so fast! You’ve earned this break — stay put.",
+        "Deep breath in... and out. Let it all go.",
+        "Your back thanks you. Just sit. Just be.",
+        "Nothing to do. Nowhere to go. Just here.",
+        "Blink slowly. Reset your eyes. Feels good, right?",
+        "No clicking allowed — your hands are on vacation.",
+        "The chair feels like a throne right now.",
+        "If calm had a shape, you’d be sitting in it.",
+        "Let your shoulders drop. They’ve been working too hard.",
+        "Eyes off the screen for a second — even that helps.",
+        "Imagine your thoughts stretching like a cat.",
+        "The air is still. Your brain is idling.",
+        "You’re doing nothing — and that’s everything.",
+        "Still too soon. Let your breath take the lead.",
+        "Feel your weight in the chair — grounded and still.",
+        "A single minute can work quiet magic.",
+        "The code isn’t going anywhere. Neither are you.",
+        "Drift... just a little. You're still right here.",
+        "The timer ticks — you're still not allowed to think yet.",
+        "Soften your gaze. No one’s judging.",
+        "You are currently: buffering.",
+        "The best ideas start in moments like this.",
+        "Pause. Don’t plan. Don’t prepare. Just pause.",
+        "Don’t even *think* about typing yet.",
+        "You can resume soon — but not now.",
+        "Let stillness do its thing a bit longer.",
+        "This is the quiet moment your brain loves.",
+        "The seconds stretch out like a good sigh.",
+        "Almost there — but stay just a bit longer.",
+        "Okay… now you're ready. Let’s get back to it."
+      ];
+      

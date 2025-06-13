@@ -1019,14 +1019,18 @@ function pauseStudyShort() {
   }, 1000);
 }
 
+let shortMessageIndex = 0;
 
 function showTooSoonMessageShort() {
   const msg = document.getElementById('soonShort');
-  msg.style.display = 'block'; // or 'inline' depending on your layout
+  msg.textContent = messagesShort[shortMessageIndex];
+  shortMessageIndex = (shortMessageIndex + 1) % messagesShort.length;
+
+  msg.style.display = 'block';
 
   setTimeout(() => {
     msg.style.display = 'none';
-  }, 4000); // 4000 ms = 4 seconds
+  }, 4000);
 }
 
 function showTooSoonMessageLong() {
