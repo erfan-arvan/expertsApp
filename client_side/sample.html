@@ -1433,7 +1433,7 @@ function recordQuestionTime(snippetId, questionIndex) {
 function loadQuestion() {
     questionStartTime = Date.now();
     localStorage.setItem('currentQuestionStartTime', questionStartTime);
-    const snippetSpecific = questionsPerSnippet[currentSnippet];
+    const snippetSpecific = questionsPerSnippet?.[currentSnippet] || [];
     allQuestions = [...StartingQuestions, ...snippetSpecific];
     const question = allQuestions[currentQuestionIndex];
 
