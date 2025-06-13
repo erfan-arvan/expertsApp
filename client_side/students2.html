@@ -741,7 +741,7 @@ function updateButtons() {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.965);
   z-index: 9999;
   display: none;  /* important: toggle this from JS */
   justify-content: center;
@@ -760,7 +760,7 @@ function updateButtons() {
   display: none;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.965);
   z-index: 9999;
   display: none;
   justify-content: center;
@@ -778,7 +778,7 @@ function updateButtons() {
   display: none;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0, 0, 0, 0.904);
+  background-color: rgba(0, 0, 0, 0.965);
   z-index: 9999;
   justify-content: center;
   align-items: center;
@@ -786,7 +786,7 @@ function updateButtons() {
   <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
     <h2>Study Paused</h2>
     <p>Please wait <span id="pause-countdown">60</span> seconds before continuing.</p>
-    <button id="resume-btn-short" onclick="resumeStudy()" style="display: none;">Resume</button>
+    <button id="resume-btn-short" onclick="resumeStudy()" disabled>Resume</button>
   </div>
 </div>
 
@@ -805,7 +805,7 @@ function updateButtons() {
   <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
     <h2>Study Paused</h2>
     <p>Please wait <span id="pause-countdown-long">420</span> seconds before continuing.</p>
-    <button id="resume-btn-long" onclick="resumeStudy()" style="display: none;">Resume</button>
+    <button id="resume-btn-long" onclick="resumeStudy()" disabled>Resume</button>
   </div>
 </div>
 
@@ -1003,7 +1003,7 @@ function pauseStudyShort() {
 
     // Show resume button when 10 seconds are left (i.e., after 50s passed)
     if (remaining === 10) {
-      resumeBtn.style.display = 'inline';
+      resumeBtn.disabled = false;
     }
 
     if (remaining <= 0) {
@@ -1041,7 +1041,7 @@ function pauseStudyLong() {
 
     // Show resume button after 180 seconds (when 240 seconds are left)
     if (remaining === 240) {
-      resumeBtn.style.display = 'inline';
+      resumeBtn.disabled = false;
     }
 
     // Stop countdown when it finishes
