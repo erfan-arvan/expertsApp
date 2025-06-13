@@ -558,13 +558,12 @@ console.log("snippetsOriginal:", snippetsOriginal);
 
 // Create shuffled snippets using 1-based indices
 
-const snippets = [{
-  id: 999, 
-  originalId: 99,
-  title: "Sample Snippet",
-  code: `...`
-}];
-
+const snippets = snippetsOriginal.map((s, idx) => ({
+  ...s,
+  id: idx + 1,
+  originalId: s.id || 99,
+  title: `Snippet ${idx + 1}`
+}));
 
 
 
@@ -598,7 +597,7 @@ console.log("Mapping from original (1-based):", snippetOrder.map(i => `Original 
 
 <script>
 const TOTAL_SNIPPETS = 1;
-let currentSnippet = 1;
+let currentSnippet = 999;
 
 
   
