@@ -398,7 +398,7 @@ a.underline-dotted-pointer {
     <div id="question-box" style="flex: 1;">
         <div id="question-area"></div>
         <div class="buttons">
-          <!-- <button id="prev-question" onclick="prevQuestion()">Previous</button> -->
+          <button id="prev-question" onclick="prevQuestion()">Previous</button>
           <button id="next-question" onclick="nextQuestion()">Next</button>
         </div>
         <button onclick="showAnswerReview()" style="margin-top: 20px;">Review All Responses</button>
@@ -1094,7 +1094,7 @@ function resumeStudy() {
   if (questionStartTime === null) {
     questionStartTime = Date.now();
     localStorage.setItem('currentQuestionStartTime', questionStartTime);
-    console.log(`[🛠️ FIX] Resumed question timer at ${new Date(questionStartTime).toLocaleTimeString()} (qIndex ${currentQuestionIndex})`);
+    console.log(`[FIX] Resumed question timer at ${new Date(questionStartTime).toLocaleTimeString()} (qIndex ${currentQuestionIndex})`);
   }
 
 }
