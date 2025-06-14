@@ -427,6 +427,29 @@ input.input-error {
   </div>
 </div>
 
+<div id="goto-modal" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.965);
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+">
+<div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+  <img src="img/stretch.gif" alt="Relax..." style="width: 200px; height: auto;">
+  <br>
+  <h2>Great!</h2>
+  <p>You’ve successfully completed the sample study.</p>
+  <p>Click the button below to begin working on the real code snippets.</p>
+  <button onclick="localStorage.setItem('FromPrevPage', 'true'); window.location.href='https://codecomprehensibility.site/students.html';">
+    Go to Real Study
+  </button>
+  
+</div>
+
+</div>
 
 <script>
 const questions = [
@@ -513,6 +536,11 @@ function showQuestion() {
   container.innerHTML = html;
   document.getElementById('prevBtn').disabled = currentQuestion === 0;
   document.getElementById('nextBtn').innerText = currentQuestion === questions.length - 1 ? 'Submit' : 'Next';
+  if(currentQuestion === questions.length -1){
+      document.getElementById('nextBtn').onclick = function() {
+      document.getElementById('goto-modal').style.display = 'flex';
+    };
+  }
 }
 
 function nextQuestion() {
