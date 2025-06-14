@@ -842,7 +842,10 @@ function updateButtons() {
   <h2>Great!</h2>
   <p>You’ve successfully completed the sample study.</p>
   <p>Click the button below to begin working on the real code snippets.</p>
-  <button onclick="window.location.href='https://codecomprehensibility.site/students.html'">Go to Real Study</button>
+  <button onclick="localStorage.setItem('FromPrevPage', 'true'); window.location.href='https://codecomprehensibility.site/students.html';">
+    Go to Real Study
+  </button>
+  
 </div>
 
 </div>
