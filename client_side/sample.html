@@ -823,6 +823,26 @@ function updateButtons() {
   </div>
 </div>
 
+
+  
+<!-- Pause Modal -->
+<div id="goto-modal" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.965);
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+">
+  <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+    <h2>Great</h2>
+    <p>You’ve successfully completed the sample study. Click “Continue” to begin working on the real code snippets.</p>
+    <button onclick="window.location.href='https://codecomprehensibility.site/students.html'">Go to real study</button>
+  </div>
+</div>
+
 <script>
     let allQuestions = [];
 </script>
@@ -1498,8 +1518,10 @@ function loadQuestion() {
     if (currentQuestionIndex === totalQuestions - 1) {
       nextBtn.textContent = 'Go to next snippet';
       if (currentSnippet >= TOTAL_SNIPPETS) {
-        nextBtn.textContent = 'Finish and Submit';
-        nextBtn.onclick = FinishAndSubmit;
+        nextBtn.textContent = 'Finish the Test';
+        nextBtn.onclick = () => {
+          document.getElementById('goto-modal').style.display = 'flex';
+        };
       }
     } else {
       nextBtn.textContent = 'Next';
