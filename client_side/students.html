@@ -512,7 +512,7 @@ a.underline-dotted-pointer {
   
   
    
-<script src="js/dataTest.js?v=1.0.0"></script>
+<script src="js/data.js?v=1.0.0"></script>
 
 
 <script>
@@ -741,7 +741,7 @@ function updateButtons() {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.965);
   z-index: 9999;
   display: none;  /* important: toggle this from JS */
   justify-content: center;
@@ -760,7 +760,7 @@ function updateButtons() {
   display: none;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.965);
   z-index: 9999;
   display: none;
   justify-content: center;
@@ -773,7 +773,48 @@ function updateButtons() {
   </div>
 </div>
 
-  
+<!-- Pause Modal -->
+<div id="pause-modal-short" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.965);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+">
+  <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+    <h2>Short Break</h2>
+    <img src="img/relax.gif" alt="Relax..." style="max-width: 100%; height: auto;">
+    <br>
+    <!-- <p>Please wait <span id="pause-countdown">60</span> seconds before continuing.</p> -->
+    <p id="soonShort" style="display: none;">Not so fast! Take a few more seconds to chill.</p>
+    <button id="resume-btn-short" onclick="resumeStudy()">Resume</button>
+  </div>
+</div>
+
+
+
+<!-- Pause Modal -->
+<div id="pause-modal-long" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+">
+  <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+    <h2>Long Break</h2>
+    <img src="img/stretch.gif" alt="Relax..." style="width: 400px; height: auto;">
+    <br>
+    <!-- <p>Please wait <span id="pause-countdown-long">420</span> seconds before continuing.</p> -->
+    <p id="soonLong" style="display: none;">No rush! Keep chilling a little longer.</p>
+    <button id="resume-btn-long" onclick="resumeStudy()">Resume</button>
+  </div>
+</div>
+
 <script>
     let allQuestions = [];
 </script>
@@ -939,6 +980,113 @@ function startStudy() {
   startTimer();
 }
 
+let pauseCountdownInterval;
+
+function pauseStudyShort() {
+  recordQuestionTime(currentSnippet, currentQuestionIndex);
+  updateTimerDisplay();
+  pauseTimer();
+
+  pausedAt = Date.now();
+  localStorage.setItem('pausedAt', pausedAt);
+
+  const modal = document.getElementById('pause-modal-short');
+  // const countdownEl = document.getElementById('pause-countdown');
+  const resumeBtn = document.getElementById('resume-btn-short');
+
+  // Reset UI state
+  let remaining = 60;
+  // countdownEl.textContent = remaining;
+  // resumeBtn.style.display = 'none';
+  resumeBtn.onclick = showTooSoonMessageShort;
+  modal.style.display = 'flex';
+
+  pauseCountdownInterval = setInterval(() => {
+    remaining--;
+
+    if (remaining >= 0) {
+      // countdownEl.textContent = remaining;
+    }
+
+    // Show resume button when 10 seconds are left (i.e., after 50s passed)
+    if (remaining === 30) {
+      resumeBtn.onclick = resumeStudy;
+    }
+
+    if (remaining <= 0) {
+      clearInterval(pauseCountdownInterval);
+    }
+  }, 1000);
+}
+
+let shortMessageIndex = 0;
+
+function showTooSoonMessageShort() {
+  const msg = document.getElementById('soonShort');
+  msg.textContent = messagesShort[shortMessageIndex];
+  shortMessageIndex = (shortMessageIndex + 1) % messagesShort.length;
+
+  msg.style.display = 'block';
+
+  setTimeout(() => {
+    msg.style.display = 'none';
+  }, 4000);
+}
+
+let longMessageIndex = 0;
+
+function showTooSoonMessageLong() {
+  const msg = document.getElementById('soonLong');
+  msg.textContent = messagesLong[longMessageIndex];
+  longMessageIndex = (longMessageIndex + 1) % messagesLong.length;
+
+  msg.style.display = 'block';
+
+  setTimeout(() => {
+    msg.style.display = 'none';
+  }, 4000);
+}
+
+
+function pauseStudyLong() {
+  recordQuestionTime(currentSnippet, currentQuestionIndex);
+  updateTimerDisplay();
+  pauseTimer();
+
+  pausedAt = Date.now();
+  localStorage.setItem('pausedAt', pausedAt);
+
+  const modal = document.getElementById('pause-modal-long');
+  // const countdownEl = document.getElementById('pause-countdown-long');
+  const resumeBtn = document.getElementById('resume-btn-long');
+
+  let remaining = 420; // 7 minutes
+  // countdownEl.textContent = remaining;
+  // resumeBtn.style.display = 'none';
+  resumeBtn.onclick = showTooSoonMessageLong;
+  modal.style.display = 'flex';
+
+  pauseCountdownInterval = setInterval(() => {
+    remaining--;
+
+    if (remaining >= 0) {
+      // countdownEl.textContent = remaining;
+    }
+
+    // Show resume button after 180 seconds (when 240 seconds are left)
+    if (remaining === 360) {
+      resumeBtn.onclick = resumeStudy;
+    }
+
+    // Stop countdown when it finishes
+    if (remaining <= 0) {
+      clearInterval(pauseCountdownInterval);
+    }
+  }, 1000);
+}
+
+
+
 function pauseStudy() {
   recordQuestionTime(currentSnippet, currentQuestionIndex);
   localStorage.setItem('pausedAt', Date.now());
@@ -955,6 +1103,9 @@ function pauseStudy() {
 
 function resumeStudy() {
   document.getElementById('pause-modal').style.display = 'none';
+  document.getElementById('pause-modal-short').style.display = 'none';
+  document.getElementById('pause-modal-long').style.display = 'none';
+
 
   const pausedAtStored = parseInt(localStorage.getItem('pausedAt') || '0', 10);
   if (pausedAtStored && !isNaN(pausedAtStored)) {
@@ -972,6 +1123,14 @@ function resumeStudy() {
 
   document.getElementById('pause-btn').style.display = 'inline';
   document.getElementById('resume-btn').style.display = 'none';
+
+  // ✅ Fix: Resume timing for the current question if it was cleared
+  if (questionStartTime === null) {
+    questionStartTime = Date.now();
+    localStorage.setItem('currentQuestionStartTime', questionStartTime);
+    console.log(`[FIX] Resumed question timer at ${new Date(questionStartTime).toLocaleTimeString()} (qIndex ${currentQuestionIndex})`);
+  }
+
 }
 
 
@@ -981,8 +1140,8 @@ window.onload = function () {
   setTimeout(syncAnswersFromCookies, 100);
   syncAnswersFromCookies();
 
-  console.log("📦 Unload was triggered at:", new Date(parseInt(localStorage.getItem('lastUnloadTriggeredAt') || 0)).toLocaleTimeString());
-  console.log("🚀 Page load");
+  console.log("Unload was triggered at:", new Date(parseInt(localStorage.getItem('lastUnloadTriggeredAt') || 0)).toLocaleTimeString());
+  console.log("Page load");
   console.log("Loaded startTime:", localStorage.getItem('startTime'));
   console.log("Loaded pausedTotal:", localStorage.getItem('pausedTotal'));
   console.log("Loaded pausedAt:", localStorage.getItem('pausedAt'));
@@ -1050,7 +1209,7 @@ if(Ispaused){
 
   setInterval(() => {
     try {
-      saveToServer();
+      // saveToServer();
       console.log("[Auto-Save] Progress saved to server.");
     } catch (e) {
       console.warn("[Auto-Save] Failed to save:", e);
@@ -1292,6 +1451,11 @@ function recordQuestionTime(snippetId, questionIndex) {
   // Clear start timestamp
   questionStartTime = null;
   localStorage.removeItem('currentQuestionStartTime');
+
+  console.log(`[📌 recordQuestionTime] Called for snippet=${snippetId}, qIndex=${questionIndex}`);
+console.log(`[⏱️ Timing] Elapsed: ${elapsedSec}s | key: time-q-${snippetId}-${questionIndex + 1}`);
+console.log(`[🧹 Resetting] questionStartTime cleared`);
+
 
   // Debug
   console.log(`[⏱️ Debug] Recorded time for ${key}: +${elapsedSec}s → total ${newTotal}s`);
@@ -1542,6 +1706,19 @@ function nextQuestion() {
   questionStartTime = Date.now();
   localStorage.setItem('currentQuestionStartTime', questionStartTime);
   console.log(`[⏱️ Debug] Started timer for time-q-${currentSnippet}-${currentQuestionIndex+1} at ${new Date(questionStartTime).toLocaleTimeString()}`);
+
+  if (currentSnippet === 3 && localStorage.getItem("break3") !== "1") {
+    localStorage.setItem("break3", "1");
+    pauseStudyShort();
+  } else if (currentSnippet === 5 && localStorage.getItem("break5") !== "1") {
+    localStorage.setItem("break5", "1");
+    pauseStudyLong();
+  } else if (currentSnippet === 7 && localStorage.getItem("break7") !== "1") {
+    localStorage.setItem("break7", "1");
+    pauseStudyShort();
+  }
+
+
 }
 
 
