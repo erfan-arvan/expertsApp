@@ -242,7 +242,7 @@ const snippetsOriginal = [
           {
             "type": "scale",
             "id": "scaleSM",
-            "question": "How easy or difficult was this snippet to understand?",
+            "prompt": "How easy or difficult was this snippet to understand?",
             "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
           },
           {
@@ -280,7 +280,7 @@ const snippetsOriginal = [
           {
             "type": "scale",
             "id": "scaleSM",
-            "question": "How easy or difficult was this snippet to understand?",
+            "prompt": "How easy or difficult was this snippet to understand?",
             "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
           },
           {
@@ -318,7 +318,7 @@ const snippetsOriginal = [
           {
             "type": "scale",
             "id": "scaleSM",
-            "question": "How easy or difficult was this snippet to understand?",
+            "prompt": "How easy or difficult was this snippet to understand?",
             "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
           },
           {
@@ -356,7 +356,7 @@ const snippetsOriginal = [
           {
             "type": "scale",
             "id": "scaleSM",
-            "question": "How easy or difficult was this snippet to understand?",
+            "prompt": "How easy or difficult was this snippet to understand?",
             "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
           },
           {
@@ -394,7 +394,7 @@ const snippetsOriginal = [
           {
             "type": "scale",
             "id": "scaleSM",
-            "question": "How easy or difficult was this snippet to understand?",
+            "prompt": "How easy or difficult was this snippet to understand?",
             "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
           },
           {
@@ -432,7 +432,7 @@ const snippetsOriginal = [
           {
             "type": "scale",
             "id": "scaleSM",
-            "question": "How easy or difficult was this snippet to understand?",
+            "prompt": "How easy or difficult was this snippet to understand?",
             "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
           },
           {
@@ -470,7 +470,7 @@ const snippetsOriginal = [
           {
             "type": "scale",
             "id": "scaleSM",
-            "question": "How easy or difficult was this snippet to understand?",
+            "prompt": "How easy or difficult was this snippet to understand?",
             "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
           },
           {
@@ -508,7 +508,7 @@ const snippetsOriginal = [
         {
             "type": "scale",
             "id": "scaleSM",
-            "question": "How easy or difficult was this snippet to understand?",
+            "prompt": "How easy or difficult was this snippet to understand?",
             "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
           },
           {
