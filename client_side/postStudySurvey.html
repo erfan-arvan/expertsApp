@@ -505,12 +505,6 @@ function showQuestion() {
   container.innerHTML = html;
   document.getElementById('prevBtn').disabled = currentQuestion === 0;
   document.getElementById('nextBtn').innerText = currentQuestion === questions.length - 1 ? 'Submit' : 'Next';
-
-  if (currentQuestion === questions.length - 1) {
-    document.getElementById('nextBtn').onclick = function () {
-      document.getElementById('goto-modal').style.display = 'flex';
-    };
-  }
 }
 
 
@@ -522,6 +516,8 @@ function nextQuestion() {
     answers[currentQuestion] = { text: input };
     if (currentQuestion === questions.length - 1) {
       submitQuestionnaireAnswers();
+      submitFinalAnswersToServer();
+      document.getElementById('goto-modal').style.display = 'flex';
     } else {
       currentQuestion++;
       showQuestion();
@@ -577,7 +573,7 @@ function submitQuestionnaireAnswers() {
 
 
   // Save in localStorage to send later from another page
-  localStorage.setItem("javaExperience", JSON.stringify(responses));
+  localStorage.setItem("postSurvey", JSON.stringify(responses));
 
   // UI feedback
   // document.getElementById('survey-box').classList.add('hidden');
@@ -883,6 +879,84 @@ function showValidationMessage(message) {
     document.getElementById('validation-message').innerText = message;
     document.getElementById('validation-modal').style.display = 'block';
 }
+</script>
+
+
+<script>
+  async function submitFinalAnswersToServer() {
+  const username = getStoredUsername();
+  const payload = {
+    username: username,
+    submitted: '1',
+    answers: {},
+    metadata: {}
+  };
+
+  // Include javaExperience, backgroundQuestionnaire, and postSurvey from localStorage
+  try {
+    const javaExp = JSON.parse(localStorage.getItem("javaExperience") || '{}');
+    const backgroundQ = JSON.parse(localStorage.getItem("backgroundQuestionnaire") || '{}');
+    const postSurvey = JSON.parse(localStorage.getItem("postSurvey") || '{}');
+
+    payload.metadata.javaExperience = javaExp;
+    payload.metadata.backgroundQuestionnaire = backgroundQ;
+    payload.metadata.postSurvey = postSurvey;
+  } catch (err) {
+    console.warn("⚠️ Failed to parse one or more survey fields:", err);
+  }
+
+  // Add per-snippet answers
+  for (let snippet = 1; snippet <= TOTAL_SNIPPETS; snippet++) {
+    const snippetKey = `snippet-${snippet}`;
+    payload.answers[snippetKey] = {
+      readTime: parseInt(localStorage.getItem(`time-q-${snippet}-1`) || '0'),
+      questions: []
+    };
+
+    const questions = questionsPerSnippet[snippet] || [];
+
+    questions.forEach((q, i) => {
+      const answer = localStorage.getItem(`answer-${snippet}-${q.id}`) || '[No answer]';
+      const time = parseInt(localStorage.getItem(`time-q-${snippet}-${i + 2}`) || '0');
+      const entry = {
+        id: q.id,
+        prompt: q.prompt || '[Missing prompt]',
+        answer: answer,
+        timeSec: time
+      };
+
+      if (q.id2 && q.question2) {
+        const secondAnswer = localStorage.getItem(`answer-${snippet}-${q.id2}`) || '[No answer]';
+        entry.followUp = {
+          id: q.id2,
+          prompt: q.question2,
+          answer: secondAnswer
+        };
+      }
+
+      payload.answers[snippetKey].questions.push(entry);
+    });
+  }
+
+  try {
+    const response = await fetch('/submit_students_part', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      alert("✅ Final answers submitted successfully.");
+    } else {
+      const error = await response.text();
+      alert("❌ Submission failed:\n" + error);
+    }
+  } catch (err) {
+    console.error("Submission error:", err);
+    alert("❌ Submission error: " + err.message);
+  }
+}
+
 </script>
 </body>
 </html>
