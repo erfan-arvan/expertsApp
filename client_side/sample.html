@@ -1733,21 +1733,12 @@ function nextQuestion() {
       console.log("→ Selected value:", selected?.value);
 
       if (!confirmed) {
-        // showValidationMessage("⚠️ Please confirm you read the snippet before proceeding.");
-        return;
-      }
-    }
-
-
-
-    //check for other questions
-  if (currentQuestionIndex === 0) {
-      const readConfirmed = document.querySelector('input[name="answer-1-ReadConfirm"]:checked');
-      if (!readConfirmed || readConfirmed.value !== "Yes") {
         showValidationMessage("⚠️ Please confirm you read the snippet before proceeding.");
         return;
       }
     }
+
+
 
     if (currentQuestionIndex !== 0 && !isCurrentQuestionAnswered()) {
         showValidationMessage("⚠️ Please answer the question before proceeding.");
