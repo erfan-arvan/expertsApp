@@ -436,12 +436,7 @@ input.input-error {
   align-items: center;
 ">
   <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
-    <h2>Great!</h2>
-    <p>You’ve successfully completed the study.</p>
-    <p>We deeply appreciate your time and participation.</p>
-    <p>Please enjoy the pizza and drinks provided on the table. You’re welcome to enjoy them outside.</p>
-    <p>We will notify you of the $50 Amazon gift card winner after all study sessions are complete.</p>
-
+    <h2>Submitting ...</h2>
     <button onclick="window.location.href='thankyou.html';">Close this page</button>
   </div>
 </div>
@@ -625,7 +620,7 @@ function nextQuestion() {
     if (currentQuestion === questions.length - 1) {
       submitQuestionnaireAnswers();
       submitFinalAnswersToServer();
-      // document.getElementById('goto-modal').style.display = 'flex';
+      document.getElementById('goto-modal').style.display = 'flex';
     } else {
       currentQuestion++;
       showQuestion();
