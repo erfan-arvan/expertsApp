@@ -1501,8 +1501,10 @@ function loadQuestion() {
     if (currentQuestionIndex === totalQuestions - 1) {
       nextBtn.textContent = 'Go to next snippet';
       if (currentSnippet >= TOTAL_SNIPPETS) {
-        nextBtn.textContent = 'Finish and Submit';
-        nextBtn.onclick = FinishAndSubmit;
+        nextBtn.textContent = 'Go to Post-Study Survey';
+        nextBtn.onclick = () => {
+          window.location = "postStudySurvey.html";
+        };
       }
     } else {
       nextBtn.textContent = 'Next';
