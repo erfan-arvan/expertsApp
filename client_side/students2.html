@@ -1074,11 +1074,11 @@ function pauseStudyLong() {
     remaining--;
 
     if (remaining >= 0) {
-      // countdownEl.textContent = remaining;
+      countdownEl.textContent = remaining;
     }
 
     // Show resume button after 180 seconds (when 240 seconds are left)
-    if (remaining === 360) {
+    if (remaining <= 360) {
       resumeBtn.onclick = resumeStudy;
     }
 
