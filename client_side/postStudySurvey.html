@@ -906,7 +906,7 @@ function showValidationMessage(message) {
   }
 
   // Add per-snippet answers
-  for (let snippet = 1; snippet <= TOTAL_SNIPPETS; snippet++) {
+  for (let snippet = 1; snippet <= 8; snippet++) {
     const snippetKey = `snippet-${snippet}`;
     payload.answers[snippetKey] = {
       readTime: parseInt(localStorage.getItem(`time-q-${snippet}-1`) || '0'),
