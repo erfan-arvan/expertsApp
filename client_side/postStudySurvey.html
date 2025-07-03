@@ -449,6 +449,70 @@ input.input-error {
 <script src="js/data.js?v=1.0.0"></script>
 
 <script>
+   function getCookie(name) {
+      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      return match ? decodeURIComponent(match[2]) : null;
+  }
+  
+  // Returns existing or creates a new randomized order of indices
+  function getOrCreateSnippetOrder(length) {
+  const key = 'snippetOrder';
+
+  // Try to load from localStorage or cookie
+  let stored = localStorage.getItem(key);
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length === length) return parsed;
+    } catch {}
+  }
+
+  // Generate new shuffled 1-based order: [1, 2, ..., length]
+  const order = Array.from({ length }, (_, i) => i + 1);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+
+  // Store in localStorage and cookie
+  const serialized = JSON.stringify(order);
+  localStorage.setItem(key, serialized);
+  document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=2592000`; // 30 days
+
+  return order;
+}
+
+  
+// Create randomized snippets based on snippetsOriginal
+const snippetOrder = getOrCreateSnippetOrder(snippetsOriginal.length);
+console.log("🔀 New randomized snippet order (1-based):", snippetOrder);
+console.log("snippetsOriginal:", snippetsOriginal);
+
+
+// Create shuffled snippets using 1-based indices
+const snippets = snippetOrder.map((i, idx) => {
+  const s = { ...snippetsOriginal[i - 1] }; // Clone
+  s.id = idx + 1;                           // New display ID
+  s.title = `Snippet ${idx + 1}`;          // Updated title
+  s.originalId = i;                        // 🔥 Save original ID
+  return s;
+});
+
+
+
+// Assign new display ids and titles
+snippets.forEach((snippet, idx) => {
+  snippet.id = idx + 1;
+  snippet.title = `Snippet ${idx + 1}`;
+});
+
+// Debug
+console.log("Final snippet order (titles):", snippets.map(s => s.title));
+console.log("Final snippet order (ids):", snippets.map(s => s.id));
+console.log("Mapping from original (1-based):", snippetOrder.map(i => `Original Snippet ${i}`))
+
+</script>
+<script>
 function getOrCreateQuestionOrder(snippetId, numQuestions) {
   const key = `qOrder-${snippetId}`;
   const stored = localStorage.getItem(key);
