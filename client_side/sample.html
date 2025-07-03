@@ -1724,7 +1724,7 @@ function renderLikertScale(container, id, labels, saved = '') {
 
 function nextQuestion() {
     //check for read
-    const groupName = `answer-${currentSnippet}-ReadConfirm`;
+    const groupName = `answer-99-ReadConfirm`;
     const selected = document.querySelector(`input[name="${groupName}"]:checked`);
     const confirmed = selected?.value?.trim().toLowerCase() === "yes";
 
