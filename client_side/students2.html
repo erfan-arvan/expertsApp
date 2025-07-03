@@ -1700,7 +1700,15 @@ function renderLikertScale(container, id, labels, saved = '') {
 
 
 function nextQuestion() {
-    if ( !isCurrentQuestionAnswered()) {
+  if (currentQuestionIndex === 0) {
+        const readConfirmEl = document.querySelector('input[name="ReadConfirm"]:checked');
+        if (!readConfirmEl) {
+          showValidationMessage("⚠️ Please confirm you read the snippet before proceeding.");
+          return;
+        }
+    }
+    
+    if (currentQuestionIndex !== 0 && !isCurrentQuestionAnswered()) {
         showValidationMessage("⚠️ Please answer the question before proceeding.");
         return;
     }
