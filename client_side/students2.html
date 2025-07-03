@@ -1700,7 +1700,7 @@ function renderLikertScale(container, id, labels, saved = '') {
 
 
 function nextQuestion() {
-    if (currentQuestionIndex !== 0 && !isCurrentQuestionAnswered()) {
+    if ( !isCurrentQuestionAnswered()) {
         showValidationMessage("⚠️ Please answer the question before proceeding.");
         return;
     }
