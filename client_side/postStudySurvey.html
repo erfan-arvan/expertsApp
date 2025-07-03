@@ -958,5 +958,28 @@ function showValidationMessage(message) {
 }
 
 </script>
+
+<script>
+    function getStoredUsername() {
+    // 1. Try localStorage
+    let username = localStorage.getItem('usernameS');
+    if (username) return username;
+
+    // 2. Try cookies
+    const cookieMatch = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('usernameS='));
+    
+    if (cookieMatch) {
+        username = cookieMatch.split('=')[1];
+        // Optional: sync back to localStorage if only found in cookies
+        localStorage.setItem('usernameS', username);
+        return username;
+    }
+
+    // Not found
+    return null;
+}
+</script>
 </body>
 </html>
