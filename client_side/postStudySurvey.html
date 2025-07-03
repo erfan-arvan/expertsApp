@@ -453,64 +453,31 @@ input.input-error {
 <script>
 const questions = [
   {
-    text: "Compared to your classmates, how would you rate your programming experience?",
-    code: "s.ClassMates",
+    text: "Were the instructions and question formats clear and easy to follow?",
+    code: "s.InstructionClarity",
     options: [
-      { label: "1 — Very inexperienced" },
-      { label: "2 — Inexperienced" },
-      { label: "3 — Moderate" },
-      { label: "4 — Experienced" },
-      { label: "5 — Very experienced" }
+      { label: "Yes" },
+      { label: "Somewhat" },
+      { label: "No" }
     ]
   },
   {
-    text: "How experienced are you with logical programming (e.g., Prolog)?",
-    code: "s.Logical",
+    text: "Did you encounter any technical issues using the website?",
+    code: "s.TechnicalIssues",
     options: [
-      { label: "1 — Very inexperienced" },
-      { label: "2 — Inexperienced" },
-      { label: "3 — Moderate" },
-      { label: "4 — Experienced" },
-      { label: "5 — Very experienced" }
-    ]
+      { label: "Yes (please specify below)" },
+      { label: "No" }
+    ],
+    followup: {
+      type: "text", // Indicates an optional text box for elaboration
+      placeholder: "If yes, please describe the issue (optional)"
+    }
   },
   {
-    text: "On a scale from 1 to 10, how would you rate your overall programming experience?",
-    code: "s.PE",
-    options: [
-      { label: "1 — Very inexperienced" },
-      { label: "2" },
-      { label: "3" },
-      { label: "4" },
-      { label: "5" },
-      { label: "6" },
-      { label: "7" },
-      { label: "8" },
-      { label: "9" },
-      { label: "10 — Very experienced" }
-    ]
-  },
-  {
-    text: "How experienced are you with object-oriented programming?\n(e.g., working with classes, inheritance, interfaces)",
-    code: "s.ObjectOriented",
-    options: [
-      { label: "1 — Very inexperienced" },
-      { label: "2 — Inexperienced" },
-      { label: "3 — Moderate" },
-      { label: "4 — Experienced" },
-      { label: "5 — Very experienced" }
-    ]
-  },
-  {
-    text: "How many years have you been programming in Java, whether through classes, personal projects, or other experiences?",
-    code: "s.JavaExperience",
-    options: [
-      { label: "Less than 1 year" },
-      { label: "1–2 years" },
-      { label: "3–4 years" },
-      { label: "5+ years" },
-      { label: "Prefer not to say" }
-    ]
+    text: "Do you have any feedback or suggestions about the study or the tasks?",
+    code: "s.GeneralFeedback",
+    type: "text", // Indicates an open-ended text box
+    placeholder: "Your comments (optional)"
   }
 ];
 
