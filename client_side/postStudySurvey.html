@@ -486,39 +486,62 @@ let currentQuestion = 0;
 let answers = [];
 
 function showQuestion() {
-    console.log("🧪 Showing question:", currentQuestion, questions[currentQuestion], answers[currentQuestion]);
   const q = questions[currentQuestion];
   const container = document.getElementById('question-container');
   let html = `<p><strong>${q.text}</strong></p>`;
-  q.options.forEach((opt, i) => {
-    const checked = answers[currentQuestion]?.index === i ? 'checked' : '';
-    const value = answers[currentQuestion]?.input || '';
-    html += `<label><input type="radio" name="q${currentQuestion}" value="${i}" ${checked}> ${opt.label}</label>`;
-    if (opt.input) {
-      html += `<input type="text" id="input-q${currentQuestion}-${i}" value="${value}">`;
+
+  if (q.type === "text") {
+    const value = answers[currentQuestion]?.text || "";
+    html += `<textarea id="input-q${currentQuestion}" class="input-field" placeholder="${q.placeholder || ''}" rows="4">${value}</textarea>`;
+  } else {
+    q.options.forEach((opt, i) => {
+      const checked = answers[currentQuestion]?.index === i ? 'checked' : '';
+      html += `<label><input type="radio" name="q${currentQuestion}" value="${i}" ${checked}> ${opt.label}</label><br>`;
+    });
+
+    if (q.followup && q.followup.type === "text") {
+      const value = answers[currentQuestion]?.input || '';
+      html += `<textarea id="followup-q${currentQuestion}" class="input-field" placeholder="${q.followup.placeholder || ''}" rows="3">${value}</textarea>`;
     }
-    html += `<br>`;
-  });
+  }
+
   container.innerHTML = html;
   document.getElementById('prevBtn').disabled = currentQuestion === 0;
   document.getElementById('nextBtn').innerText = currentQuestion === questions.length - 1 ? 'Submit' : 'Next';
-  if(currentQuestion === questions.length -1){
-      document.getElementById('nextBtn').onclick = function() {
+
+  if (currentQuestion === questions.length - 1) {
+    document.getElementById('nextBtn').onclick = function () {
       document.getElementById('goto-modal').style.display = 'flex';
     };
   }
 }
 
+
 function nextQuestion() {
+  const q = questions[currentQuestion];
+
+  if (q.type === "text") {
+    const input = document.getElementById(`input-q${currentQuestion}`).value.trim();
+    answers[currentQuestion] = { text: input };
+    if (currentQuestion === questions.length - 1) {
+      submitQuestionnaireAnswers();
+    } else {
+      currentQuestion++;
+      showQuestion();
+    }
+    return;
+  }
+
   const selected = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
   if (!selected) return showValidationMessage("Please select an option.");
+
   const index = parseInt(selected.value);
-  const inputField = document.getElementById(`input-q${currentQuestion}-${index}`);
+  const inputField = document.getElementById(`followup-q${currentQuestion}`);
   const input = inputField ? inputField.value.trim() : null;
+
   answers[currentQuestion] = { index, input };
 
-  const opt = questions[currentQuestion].options[index];
-  if (opt.ineligible) {
+  if (q.options[index].ineligible) {
     showValidationMessage("Unfortunately, you are not eligible to participate in this study.");
     return;
   }
@@ -531,6 +554,7 @@ function nextQuestion() {
   }
 }
 
+
 function prevQuestion() {
   if (currentQuestion > 0) currentQuestion--;
   showQuestion();
@@ -540,14 +564,20 @@ function submitQuestionnaireAnswers() {
   const responses = {};
 
   questions.forEach((q, i) => {
-    const ans = answers[i];
-    const opt = q.options[ans.index];
-    let value = opt.label;
-    if (opt.input && ans.input) {
-      value += `: ${ans.input}`;
+  const ans = answers[i];
+
+  if (q.type === "text") {
+      responses[q.code || `q${i}`] = ans.text || '';
+    } else {
+      const opt = q.options[ans.index];
+      let value = opt.label;
+      if (q.followup && ans.input) {
+        value += `: ${ans.input}`;
+      }
+      responses[q.code || `q${i}`] = value;
     }
-    responses[q.code || `q${i}`] = value;
   });
+
 
   // Save in localStorage to send later from another page
   localStorage.setItem("javaExperience", JSON.stringify(responses));
