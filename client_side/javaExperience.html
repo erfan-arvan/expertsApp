@@ -536,8 +536,8 @@ function showQuestion() {
   document.getElementById('prevBtn').disabled = currentQuestion === 0;
   document.getElementById('nextBtn').innerText = currentQuestion === questions.length - 1 ? 'Submit' : 'Next';
   if(currentQuestion === questions.length -1){
-      submitQuestionnaireAnswers();
       document.getElementById('nextBtn').onclick = function() {
+      submitQuestionnaireAnswers();
       document.getElementById('goto-modal').style.display = 'flex';
     };
   }
