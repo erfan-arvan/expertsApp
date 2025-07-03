@@ -993,6 +993,7 @@ function showValidationMessage(message) {
   const payload = {
     username: username,
     submitted: '1',
+    snippetOrder: localStorage.getItem("snippetOrder"),
     answers: {},
     metadata: {}
   };
