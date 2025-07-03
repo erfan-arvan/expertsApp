@@ -52,15 +52,15 @@
   };
 
 
-  const StartingQuestions = [{
-    "type": "none",
-    "id": "Read",
-    "prompt": "<p class=\"instruction\"><strong>Please read the code snippet and form an overall impression.</strong><span> This should take no more than 2 minutes.</span></p><p class=\"instruction\">When you're ready, confirm that you have read it and click <strong>'Next'</strong> to proceed to the questions. <em>(You will still be able to see the snippet while answering.)</em></p>",
-    "type2": "scale",
-    "id2": "ReadConfirm",
-    "question2": "Have you carefully read the entire snippet and formed an overall impression?",
-    "labels2": ["Yes"]
-  }];
+    const StartingQuestions = [{
+      "type": "none",
+      "id": "Read",
+      "prompt": "<p class=\"instruction\"><strong>Please read the code snippet and form an overall impression.</strong><span> This should take no more than 2 minutes.</span></p><p class=\"instruction\">When you're ready, confirm that you have read it and click <strong>'Next'</strong> to proceed to the questions. <em>(You will still be able to see the snippet while answering.)</em></p>",
+      "type2": "scale",
+      "id2": "ReadConfirm",
+      "question2": "Have you carefully read the entire snippet and formed an overall impression?",
+      "labels2": ["Yes"]
+    }];
       
       
       const messagesShort = [
