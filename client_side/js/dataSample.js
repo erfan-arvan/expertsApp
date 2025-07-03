@@ -43,10 +43,18 @@
         "id": "scaleST",
         "prompt": "How easy or difficult were the tasks you performed for this snippet?",
         "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
-        "type2": "scale",
-        "id2": "scaleSM",
-        "question2": "How easy or difficult was this snippet to understand?",
-        "labels2": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"]
+        "type2": "",
+        "id2": "",
+        "question2": "",
+      },
+      {
+        "type": "scale",
+        "id": "scaleSM",
+        "prompt": "How easy or difficult was this snippet to understand?",
+        "labels": ["Very easy", "Easy", "Neutral", "Difficult", "Very difficult"],
+        "type2": "",
+        "id2": "",
+        "question2": "",
       }
     ]
   };
