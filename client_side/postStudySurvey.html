@@ -416,7 +416,6 @@ input.input-error {
   top: 0; left: 0; right: 0; bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 9999;
-  display: none;
   justify-content: center;
   align-items: center;
 ">
@@ -433,22 +432,20 @@ input.input-error {
   top: 0; left: 0; right: 0; bottom: 0;
   background-color: rgba(0, 0, 0, 0.965);
   z-index: 9999;
-  display: none;
   justify-content: center;
   align-items: center;
 ">
-<div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
-  <!-- <img src="img/ready.gif" alt="Relax..." style="width: 400px; height: auto;"> -->
-  <!-- <br> -->
-  <h2>Great!</h2>
-  <!-- <p>You’ve successfully completed the surveys.</p> -->
-  <p>Next, you’ll see a <strong>sample code snippet</strong> and a few questions to help you get familiar with the website and the study.</p>
-  <button onclick="localStorage.setItem('FromPrevPage', 'true'); window.location.href='https://codecomprehensibility.site/sample.html';">
-    Continue to Sample Task
-  </button>
+  <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+    <h2>Great!</h2>
+    <p>You’ve successfully completed the study.</p>
+    <p>We deeply appreciate your time and participation.</p>
+    <p>Please enjoy the pizza and drinks provided on the table. You’re welcome to enjoy them outside.</p>
+    <p>We will notify you of the $50 Amazon gift card winner after all study sessions are complete.</p>
+
+    <button onclick="window.close()">Close this page</button>
+  </div>
 </div>
 
-</div>
 
 <script>
 const questions = [
