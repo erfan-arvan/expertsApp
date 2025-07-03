@@ -625,7 +625,8 @@ function nextQuestion() {
     if (currentQuestion === questions.length - 1) {
       submitQuestionnaireAnswers();
       submitFinalAnswersToServer();
-      document.getElementById('goto-modal').style.display = 'flex';
+      // document.getElementById('goto-modal').style.display = 'flex';
+      window.location.href='thankyou.html';
     } else {
       currentQuestion++;
       showQuestion();
