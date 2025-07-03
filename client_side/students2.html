@@ -1990,36 +1990,6 @@ async function submitFinalAnswersToServer() {
 
       payload.answers[snippetKey].questions.push(entry);
     });
-
-    // // General Q5: Function description
-    // const answer5 = localStorage.getItem(`answer-${snippet}-function`) || getCookie(`answer-${snippet}-function`) || '[No answer]';
-    // const time5 = parseInt(localStorage.getItem(`time-q-${snippet}-6`) || getCookie(`time-q-${snippet}-6`) || '0');
-    // payload.answers[snippetKey].questions.push({
-    //   id: 'function',
-    //   prompt: "What does this code snippet do? Briefly describe its main functionality.",
-    //   answer: answer5,
-    //   timeSec: time5
-    // });
-
-    // // General Q6.1: Self-assessed difficulty
-    // const answer6_1 = localStorage.getItem(`answer-${snippet}-scaleSM`) || getCookie(`answer-${snippet}-scaleSM`) || '[No answer]';
-
-    // // General Q6.2: Perceived difficulty
-    // const answer6_2 = localStorage.getItem(`answer-${snippet}-scaleST`) || getCookie(`answer-${snippet}-scaleST`) || '[No answer]';
-    // const time6 = parseInt(localStorage.getItem(`time-q-${snippet}-7`) || getCookie(`time-q-${snippet}-7`) || '0');
-
-    // payload.answers[snippetKey].questions.push({
-    //   id: 'scaleSM',
-    //   prompt: "How easy or difficult were the tasks you performed for this snippet?",
-    //   answer: answer6_1
-    // });
-
-    // payload.answers[snippetKey].questions.push({
-    //   id: 'scaleST',
-    //   prompt: "How easy or difficult was this snippet to understand?",
-    //   answer: answer6_2,
-    //   timeSec: time6
-    // });
   }
 
   try {
