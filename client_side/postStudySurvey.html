@@ -446,7 +446,51 @@ input.input-error {
   </div>
 </div>
 
+<script src="js/data.js?v=1.0.0"></script>
 
+<script>
+function getOrCreateQuestionOrder(snippetId, numQuestions) {
+  const key = `qOrder-${snippetId}`;
+  const stored = localStorage.getItem(key);
+
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length === numQuestions) return parsed;
+    } catch {}
+  }
+
+  const order = Array.from({ length: numQuestions }, (_, i) => i+1);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+
+  const serialized = JSON.stringify(order);
+  localStorage.setItem(key, serialized);
+  document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=2592000`;
+  return order;
+}
+
+const questionsPerSnippet = {};
+
+console.log("🧪 questionsPerSnippetOriginal =", questionsPerSnippetOriginal);
+
+// `snippets` is already randomized, and each has `.originalId`
+snippets.forEach((snippet, newIndex) => {
+  const newSnippetId = newIndex + 1; // 1-based for current session
+  const originalId = snippet.originalId; 
+
+  const originalQs = questionsPerSnippetOriginal[String(originalId)];
+  console.log("💥 originalId =", originalId);
+  console.log("💥 questionsPerSnippetOriginal =", questionsPerSnippetOriginal);
+  console.log("💥 originalQs =", questionsPerSnippetOriginal?.[String(originalId)]);
+
+  const order = getOrCreateQuestionOrder(newSnippetId, originalQs.length);
+  questionsPerSnippet[newSnippetId] = order.map(i => structuredClone(originalQs[i - 1]));
+});
+
+</script>
 <script>
 const questions = [
   {
