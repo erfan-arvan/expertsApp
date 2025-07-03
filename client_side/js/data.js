@@ -520,26 +520,17 @@ const snippetsOriginal = [
         ]
       };
 
-      
       const StartingQuestions = [{
-        "type": "checkbox",
+        "type": "none",
         "id": "Read",
-        "prompt": `
-          <p class="instruction"><strong>Please read the code snippet and form an overall impression.</strong>
-          <span> This should take no more than 2 minutes.</span></p>
-          <p class="instruction">When you're ready, confirm below and click <strong>'Next'</strong> to proceed to the questions. 
-          <em>(You will still be able to see the snippet while answering.)</em></p>
-          <label style="display: block; margin-top: 20px;">
-            <input type="checkbox" id="confirmRead"> 
-            I have carefully read the entire snippet and formed an overall impression of what it does.
-          </label>
-        `,
-        "type2": "",
-        "id2": "",
-        "question2": ""
+        "prompt": "<p class=\"instruction\"><strong>Please read the code snippet and form an overall impression.</strong><span> This should take no more than 2 minutes.</span></p><p class=\"instruction\">When you're ready, click <strong>'Next'</strong> to proceed to the questions. <em>(You will still be able to see the snippet while answering.)</em></p>",
+        "type2": "scale",
+        "id2": "ReadConfirm",
+        "question2": "Have you carefully read the entire snippet and formed an overall impression?",
+        "labels2": ["No", "Not really", "Somewhat", "Yes"]
       }];
       
-
+      
       const messagesShort = [
         "Not so fast! You’ve earned this break — stay put.",
         "Deep breath in... and out. Let it all go.",
