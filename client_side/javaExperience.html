@@ -556,6 +556,8 @@ function nextQuestion() {
     return;
   }
 
+  console.log("🟡 Responses being next:", responses);
+
   if (currentQuestion === questions.length - 1) {
     submitQuestionnaireAnswers();
   } else {
@@ -583,7 +585,7 @@ function submitQuestionnaireAnswers() {
   });
 
   console.log("🟡 Responses being saved:", responses);
-  
+
   // Save in localStorage to send later from another page
   localStorage.setItem("javaExperience", JSON.stringify(responses));
 
