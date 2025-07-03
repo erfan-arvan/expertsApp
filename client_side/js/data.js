@@ -527,7 +527,7 @@ const snippetsOriginal = [
         "type2": "scale",
         "id2": "ReadConfirm",
         "question2": "Have you carefully read the entire snippet and formed an overall impression?",
-        "labels2": ["No", "Not really", "Somewhat", "Yes"]
+        "labels2": ["Yes"]
       }];
       
       
