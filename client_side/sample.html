@@ -1725,23 +1725,14 @@ function renderLikertScale(container, id, labels, saved = '') {
 function nextQuestion() {
     //check for read
     if (currentQuestionIndex === 0) {
-    setTimeout(() => {
-      const selected = document.querySelector('input[name="answer-999-ReadConfirm"]:checked');
-      const confirmed = selected?.value?.trim().toLowerCase() === "yes";
+    const selected = document.querySelector('input[name="answer-999-ReadConfirm"]:checked');
+    const confirmed = selected?.value?.trim().toLowerCase() === "yes";
 
-      if (!confirmed) {
-        showValidationMessage("⚠️ Please confirm you read the snippet before proceeding.");
-        return;
-      }
-
-      // ✅ Continue with next question...
-      goToNextQuestion();
-    }, 0);
-
-    return; // 👈 Important to pause here while the timeout runs
+    if (!confirmed) {
+      showValidationMessage("⚠️ Please confirm you read the snippet before proceeding.");
+      return;
+    }
   }
-
-
 
 
     //check for other questions
