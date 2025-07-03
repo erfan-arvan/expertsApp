@@ -626,7 +626,6 @@ function nextQuestion() {
       submitQuestionnaireAnswers();
       submitFinalAnswersToServer();
       // document.getElementById('goto-modal').style.display = 'flex';
-      window.location.href='thankyou.html';
     } else {
       currentQuestion++;
       showQuestion();
@@ -1055,7 +1054,8 @@ function showValidationMessage(message) {
     });
 
     if (response.ok) {
-      alert("✅ Final answers submitted successfully.");
+      // alert("✅ Final answers submitted successfully.");
+      window.location.href='thankyou.html';
     } else {
       const error = await response.text();
       alert("❌ Submission failed:\n" + error);
