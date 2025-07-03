@@ -582,6 +582,8 @@ function submitQuestionnaireAnswers() {
     responses[q.code || `q${i}`] = value;
   });
 
+  console.log("🟡 Responses being saved:", responses);
+  
   // Save in localStorage to send later from another page
   localStorage.setItem("javaExperience", JSON.stringify(responses));
 
