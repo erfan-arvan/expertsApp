@@ -1728,10 +1728,6 @@ function nextQuestion() {
       const selected = document.querySelector('input[name="answer-999-ReadConfirm"]:checked');
       const confirmed = selected?.value?.trim().toLowerCase() === "yes";
 
-      console.log("→ Confirmed:", confirmed);
-      console.log("→ Selected input:", selected);
-      console.log("→ Selected value:", selected?.value);
-
       if (!confirmed) {
         showValidationMessage("⚠️ Please confirm you read the snippet before proceeding.");
         return;
