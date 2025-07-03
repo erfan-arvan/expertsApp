@@ -1080,6 +1080,7 @@ function pauseStudyLong() {
 
     // Show resume button after 180 seconds (when 240 seconds are left)
     if (remaining <= 360) {
+      console.log("Less than 360" + remaining);
       resumeBtn.onclick = resumeStudy;
     }
 
@@ -1212,14 +1213,14 @@ if(Ispaused){
   }
 
 
-  setInterval(() => {
-    try {
-      // saveToServer();
-      console.log("[Auto-Save] Progress saved to server.");
-    } catch (e) {
-      console.warn("[Auto-Save] Failed to save:", e);
-    }
-  }, 120000);
+  // setInterval(() => {
+  //   try {
+  //     // saveToServer();
+  //     console.log("[Auto-Save] Progress saved to server.");
+  //   } catch (e) {
+  //     console.warn("[Auto-Save] Failed to save:", e);
+  //   }
+  // }, 120000);
 };
 
 
