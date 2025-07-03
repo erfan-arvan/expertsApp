@@ -1724,14 +1724,21 @@ function renderLikertScale(container, id, labels, saved = '') {
 
 function nextQuestion() {
     //check for read
+    if (currentQuestionIndex === 0) {
     const groupName = `answer-999-ReadConfirm`;
     const selected = document.querySelector(`input[name="${groupName}"]:checked`);
+    
+    console.log("Selected element:", selected);
+    console.log("Value:", selected?.value);
+
     const confirmed = selected?.value?.trim().toLowerCase() === "yes";
 
-    if (currentQuestionIndex === 0 && !confirmed) {
+    if (!confirmed) {
       showValidationMessage("⚠️ Please confirm you read the snippet before proceeding.");
       return;
     }
+  }
+
 
     //check for other questions
   if (currentQuestionIndex === 0) {
