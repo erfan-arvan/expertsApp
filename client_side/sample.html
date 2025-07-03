@@ -1723,6 +1723,17 @@ function renderLikertScale(container, id, labels, saved = '') {
 
 
 function nextQuestion() {
+    //check for read
+    const groupName = `answer-${currentSnippet}-ReadConfirm`;
+    const selected = document.querySelector(`input[name="${groupName}"]:checked`);
+    const confirmed = selected?.value?.trim().toLowerCase() === "yes";
+
+    if (currentQuestionIndex === 0 && !confirmed) {
+      showValidationMessage("⚠️ Please confirm you read the snippet before proceeding.");
+      return;
+    }
+
+    //check for other questions
   if (currentQuestionIndex === 0) {
       const readConfirmed = document.querySelector('input[name="answer-1-ReadConfirm"]:checked');
       if (!readConfirmed || readConfirmed.value !== "Yes") {
