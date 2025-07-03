@@ -1061,11 +1061,11 @@ function pauseStudyLong() {
   localStorage.setItem('pausedAt', pausedAt);
 
   const modal = document.getElementById('pause-modal-long');
-  const countdownEl = document.getElementById('pause-countdown-long');
+  // const countdownEl = document.getElementById('pause-countdown-long');
   const resumeBtn = document.getElementById('resume-btn-long');
 
   let remaining = 420; // 7 minutes
-  countdownEl.textContent = remaining;
+  // countdownEl.textContent = remaining;
   // resumeBtn.style.display = 'none';
   resumeBtn.onclick = showTooSoonMessageLong;
   modal.style.display = 'flex';
@@ -1074,7 +1074,7 @@ function pauseStudyLong() {
     remaining--;
 
     if (remaining >= 0) {
-      countdownEl.textContent = remaining;
+      // countdownEl.textContent = remaining;
     }
 
     // Show resume button after 180 seconds (when 240 seconds are left)
