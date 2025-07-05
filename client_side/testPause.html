@@ -779,7 +779,6 @@ const Ispaused = localStorage.getItem('pausedUnload') === 'true';
     isFromPrevPage=localStorage.getItem('FromPrevPage') === 'true';
     if(isFromPrevPage){
       resumeStudy();
-      document.getElementById('pause-test-modal').style.display = 'flex';
       localStorage.setItem('FromPrevPage','false');
     }
     }, 100);
@@ -788,6 +787,7 @@ const Ispaused = localStorage.getItem('pausedUnload') === 'true';
   } else{startTimer();}
 
 
+    document.getElementById('pause-test-modal').style.display = 'flex';
     document.getElementById('pause-btn').style.display = 'inline';
     document.getElementById('resume-btn').style.display = 'none';
   }
