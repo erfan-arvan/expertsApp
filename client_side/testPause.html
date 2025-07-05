@@ -404,7 +404,7 @@ input.input-error {
 
 <!--pause test modal-->
 <div id="pause-test-modal" style="
-  display: none;  /* or 'none' by default, set to 'block' on load */
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -412,16 +412,30 @@ input.input-error {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.237);
   z-index: 9999;
-  display: none;  /* important: toggle this from JS */
   justify-content: center;
   align-items: center;
-">
-  <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+" onclick="hidePauseModal(event)">
+  <div id="pause-modal-content" style="
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+  " onclick="event.stopPropagation()">
     <h2>Let's test the timer...</h2>
     <p>Click the pause button in the top bar to pause the study.</p>
     <button onclick="document.getElementById('pause-test-modal').style.display = 'none';">OK</button>
   </div>
 </div>
+
+<script>
+  function hidePauseModal(event) {
+    const modalContent = document.getElementById('pause-modal-content');
+    if (!modalContent.contains(event.target)) {
+      document.getElementById('pause-test-modal').style.display = 'none';
+    }
+  }
+</script>
+
   
 <!-- Pause Modal -->
 <div id="pause-modal" style="
