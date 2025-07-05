@@ -774,7 +774,7 @@ window.onload = function () {
 const Ispaused = localStorage.getItem('pausedUnload') === 'true';
   if(Ispaused){
     setTimeout(() => {
-    pauseStudy();
+    // pauseStudy();
     isFromPrevPage=localStorage.getItem('FromPrevPage') === 'true';
     if(isFromPrevPage){
       resumeStudy();
