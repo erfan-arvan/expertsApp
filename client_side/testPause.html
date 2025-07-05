@@ -699,7 +699,10 @@ function startStudy() {
   //here
   // showQuestion();
   document.getElementById('pause-test-modal').style.display = 'flex';
-  document.getElementById('pause-btn').classList.add('glow');
+  setTimeout(() => {
+    document.getElementById('pause-btn').classList.add('glow');
+  }, 100); // Delay 100ms to ensure render cycle is done
+
 }
 
 function pauseStudy() {
