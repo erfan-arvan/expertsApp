@@ -317,11 +317,20 @@ input.input-error {
   color: white;
 }
 
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 10px #4CAF50;
+  }
+  100% {
+    box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+  }
+}
+
 #pause-btn.glow {
-  box-shadow: 0 0 10px #4CAF50, 0 0 20px #4CAF50, 0 0 30px #4CAF50 !important;
   animation: glowPulse 1.5s infinite alternate !important;
   border: 2px solid #4CAF50 !important;
 }
+
 
 
   </style>
