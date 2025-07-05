@@ -414,27 +414,20 @@ input.input-error {
   z-index: 9999;
   justify-content: center;
   align-items: center;
-" onclick="hidePauseModal(event)">
+  pointer-events: none; /* allows clicks to go through */
+">
   <div id="pause-modal-content" style="
     background: white;
     padding: 30px;
     border-radius: 10px;
     text-align: center;
-  " onclick="event.stopPropagation()">
+    pointer-events: auto; /* allows interaction with modal box */
+  ">
     <h2>Let's test the timer...</h2>
     <p>Click the pause button in the top bar to pause the study.</p>
     <button onclick="document.getElementById('pause-test-modal').style.display = 'none';">OK</button>
   </div>
 </div>
-
-<script>
-  function hidePauseModal(event) {
-    const modalContent = document.getElementById('pause-modal-content');
-    if (!modalContent.contains(event.target)) {
-      document.getElementById('pause-test-modal').style.display = 'none';
-    }
-  }
-</script>
 
   
 <!-- Pause Modal -->
