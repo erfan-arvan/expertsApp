@@ -711,9 +711,6 @@ function startStudy() {
   //here
   // showQuestion();
   document.getElementById('pause-test-modal').style.display = 'flex';
-  setTimeout(() => {
-    document.getElementById('pause-btn').classList.add('glow');
-  }, 1000); // Delay 100ms to ensure render cycle is done
 
 }
 
@@ -816,6 +813,9 @@ const Ispaused = localStorage.getItem('pausedUnload') === 'true';
 
 
     document.getElementById('pause-test-modal').style.display = 'flex';
+    setTimeout(() => {
+    document.getElementById('pause-btn').classList.add('glow');
+  }, 100);
     document.getElementById('pause-btn').style.display = 'inline';
     document.getElementById('resume-btn').style.display = 'none';
   }
