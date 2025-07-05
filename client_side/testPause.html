@@ -755,15 +755,11 @@ function pauseStudy() {
   document.getElementById('pause-btn').style.display = 'none';
   document.getElementById('resume-btn').style.display = 'inline';
 
-  document.getElementById('pause-test-modal').style.display = 'none';
-  document.getElementById('pause-btn').classList.remove('glow');
-  document.getElementById('show-hide-btn').classList.add('glow');
-  document.getElementById('hide-test-modal').style.display = 'flex';
+  // document.getElementById('pause-test-modal').style.display = 'none';
+  // document.getElementById('pause-btn').classList.remove('glow');
+  // document.getElementById('show-hide-btn').classList.add('glow');
+  // document.getElementById('hide-test-modal').style.display = 'flex';
 
-  document.getElementById('pause-test-modal').style.display = 'none';
-  document.getElementById('pause-btn').classList.remove('glow');
-  document.getElementById('show-hide-btn').classList.add('glow');
-  document.getElementById('hide-test-modal').style.display = 'flex';
 }
 
 function resumeStudy() {
@@ -856,6 +852,7 @@ const Ispaused = localStorage.getItem('pausedUnload') === 'true';
     setTimeout(() => {
     document.getElementById('pause-btn').classList.add('glow');
   }, 100);
+
     document.getElementById('pause-btn').style.display = 'inline';
     document.getElementById('resume-btn').style.display = 'none';
   }
