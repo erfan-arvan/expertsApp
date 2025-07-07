@@ -3,7 +3,7 @@ const snippets = [
       id: 1,
       title: "Snippet 1",
       code: `
-      <span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">qux</span>(<span class="type">String</span> name) {
+      <span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">isValidProjectName</span>(<span class="type">String</span> name) {
         <span class="keyword">if</span> (name == <span class="literal">null</span>) {
           <span class="keyword">return</span> <span class="literal">false</span>;
         }
@@ -27,7 +27,7 @@ const snippets = [
             id: 2,
             title: "Snippet 2",
             code: `
-            <span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">baz</span>(<span class="type">URI</span> uri) {
+            <span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">isRemote</span>(<span class="type">URI</span> uri) {
               <span class="keyword">if</span> (<span class="function">isFilesystemPath</span>(uri)) {
                 <span class="keyword">return</span> <span class="literal">false</span>;
               }
@@ -50,7 +50,7 @@ const snippets = [
             id: 3,
             title: "Snippet 3",
             code: `
-            <span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">corge</span>(<span class="type">short</span> type) {
+            <span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">isMachineTypeDefined</span>(<span class="type">short</span> type) {
               <span class="keyword">if</span> (type == IMAGE_FILE_MACHINE_UNKNOWN) {
                 <span class="comment">// Unsupported machine type</span>
                 <span class="keyword">return</span> <span class="literal">false</span>;
@@ -77,7 +77,7 @@ const snippets = [
             id: 4,
             title: "Snippet 4",
             code: `
-            <span class="keyword">public static</span> <span class="type">int</span> <span class="function">grault</span>(<span class="type">CharSequence</span> str, <span class="type">CharSequence</span> searchStr, <span class="type">int</span> startPos) {
+            <span class="keyword">public static</span> <span class="type">int</span> <span class="function">indexOfIgnoreCase</span>(<span class="type">CharSequence</span> str, <span class="type">CharSequence</span> searchStr, <span class="type">int</span> startPos) {
               <span class="keyword">if</span> (str == <span class="literal">null</span> || searchStr == <span class="literal">null</span>) {
                 <span class="keyword">return</span> INDEX_NOT_FOUND;
               }
@@ -105,7 +105,7 @@ const snippets = [
             id: 5,
             title: "Snippet 5",
             code: `
-            <span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">waldo</span>(@Nullable <span class="type">Path</span> root) <span class="keyword">throws</span> <span class="type">IOException</span> {
+            <span class="keyword">public static</span> <span class="type">boolean</span> <span class="function">deleteRecursively</span>(@Nullable <span class="type">Path</span> root) <span class="keyword">throws</span> <span class="type">IOException</span> {
               <span class="keyword">if</span> (root == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>;
               <span class="keyword">if</span> (!<a href="#" class="standard-method function" onclick="openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#exists-java.nio.file.Path-java.nio.file.LinkOption...-')">Files.exists</a>(root)) <span class="keyword">return</span> <span class="literal">false</span>;
             
@@ -130,7 +130,7 @@ const snippets = [
         id: 6,
         title: "Snippet 6",
         code: `
-        <span class="keyword">public static</span> <span class="type">int</span> <span class="function">fred</span>(<span class="type">CharSequence</span> sequence) {
+        <span class="keyword">public static</span> <span class="type">int</span> <span class="function">encodedLength</span>(<span class="type">CharSequence</span> sequence) {
           <span class="comment">// Optimized implementation</span>
           <span class="type">int</span> utf16Length = sequence.<a href="#" class="standard-method function" onclick="openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html#length--')">length</a>();
           <span class="type">int</span> utf8Length = utf16Length;
@@ -163,7 +163,7 @@ const snippets = [
         id: 7,
         title: "Snippet 7",
         code: `
-        <span class="keyword">public static</span> <span class="type">float</span> <span class="function">plugh</span>(<span class="type">float</span> a, <span class="type">float</span> b, <span class="type">float</span> c) {
+        <span class="keyword">public static</span> <span class="type">float</span> <span class="function">lowestPositiveRoot</span>(<span class="type">float</span> a, <span class="type">float</span> b, <span class="type">float</span> c) {
           <span class="type">float</span> det = b * b - <span class="number">4</span> * a * c;
           <span class="keyword">if</span> (det < <span class="number">0</span>) <span class="keyword">return</span> <span class="type">Float</span>.NaN;
         
@@ -188,7 +188,7 @@ const snippets = [
         id: 8,
         title: "Snippet 8",
         code: `
-        <span class="keyword">public static</span> <span class="type">float</span> <span class="function">xyzzy</span>(<span class="type">float</span> y, <span class="type">float</span> x) {
+        <span class="keyword">public static</span> <span class="type">float</span> <span class="function">atan2</span>(<span class="type">float</span> y, <span class="type">float</span> x) {
           <span class="type">float</span> n = y / x;
         
           <span class="keyword">if</span> (n != n)
