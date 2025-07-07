@@ -131,7 +131,7 @@ const snippets = [
         id: 6,
         title: "Snippet 6",
         code: `
-        <span class="keyword">public static</span> <span class="type">int</span> <span class="function">encodedLength</span>(<span class="type">CharSequence</span> sequence) {
+        <span class="keyword">public static</span> <span class="type">int</span> <span class="function">encodedLength2</span>(<span class="type">CharSequence</span> sequence) {
           <span class="comment">// Optimized implementation</span>
           <span class="type">int</span> utf16Length = sequence.<a href="#" class="standard-method function" onclick="openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html#length--')">length</a>();
           <span class="type">int</span> utf8Length = utf16Length;
