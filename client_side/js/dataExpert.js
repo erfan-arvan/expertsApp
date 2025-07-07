@@ -76,28 +76,28 @@ const snippets = [
           {
             id: 4,
             title: "Snippet 4",
-            code: `<span class="keyword">public static</span> <span class="type">int</span> <span class="function">indexOfIgnoreCase</span>(<span class="type">CharSequence</span> str, <span class="type">CharSequence</span> searchStr, <span class="type">int</span> startPos) {
-                <span class="keyword">if</span> (str == <span class="literal">null</span> || searchStr == <span class="literal">null</span>) {
-                  <span class="keyword">return</span> INDEX_NOT_FOUND;
-                }
-                <span class="keyword">if</span> (startPos < <span class="number">0</span>) {
-                  startPos = <span class="number">0</span>;
-                }
-                <span class="type">int</span> searchStrLen = searchStr.<a href="#" class="standard-method function" onclick="openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html#length--')">length</a>();
-                <span class="type">int</span> endLimit = str.<a href="#" class="standard-method function" onclick="openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html#length--')">length</a>() - searchStrLen + <span class="number">1</span>;
-                <span class="keyword">if</span> (startPos > endLimit) {
-                  <span class="keyword">return</span> INDEX_NOT_FOUND;
-                }
-                <span class="keyword">if</span> (searchStrLen == <span class="number">0</span>) {
-                  <span class="keyword">return</span> startPos;
-                }
-                <span class="keyword">for</span> (<span class="type">int</span> i = startPos; i < endLimit; i++) {
-                  <span class="keyword">if</span> (<span class="function">regionMatches</span>(str, <span class="literal">true</span>, i, searchStr, <span class="number">0</span>, searchStrLen)) {
-                    <span class="keyword">return</span> i;
-                  }
-                }
-                <span class="keyword">return</span> INDEX_NOT_FOUND;
-              }`
+code: `<span class="keyword">public static</span> <span class="type">int</span> <span class="function">indexOfIgnoreCase</span>(<span class="type">CharSequence</span> str, <span class="type">CharSequence</span> searchStr, <span class="type">int</span> startPos) {
+    <span class="keyword">if</span> (str == <span class="literal">null</span> || searchStr == <span class="literal">null</span>) {
+        <span class="keyword">return</span> INDEX_NOT_FOUND;
+    }
+    <span class="keyword">if</span> (startPos < <span class="number">0</span>) {
+        startPos = <span class="number">0</span>;
+    }
+    <span class="type">int</span> searchStrLen = searchStr.<a href="#" class="standard-method function" onclick="openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html#length--')">length</a>();
+    <span class="type">int</span> endLimit = str.<a href="#" class="standard-method function" onclick="openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html#length--')">length</a>() - searchStrLen + <span class="number">1</span>;
+    <span class="keyword">if</span> (startPos > endLimit) {
+        <span class="keyword">return</span> INDEX_NOT_FOUND;
+    }
+    <span class="keyword">if</span> (searchStrLen == <span class="number">0</span>) {
+        <span class="keyword">return</span> startPos;
+    }
+    <span class="keyword">for</span> (<span class="type">int</span> i = startPos; i < endLimit; i++) {
+        <span class="keyword">if</span> (<span class="function">regionMatches</span>(str, <span class="literal">true</span>, i, searchStr, <span class="number">0</span>, searchStrLen)) {
+        <span class="keyword">return</span> i;
+        }
+    }
+    <span class="keyword">return</span> INDEX_NOT_FOUND;
+    }`
           },              
           {
             id: 5,
