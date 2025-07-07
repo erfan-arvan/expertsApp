@@ -66,8 +66,8 @@ const snippets = [
             } <span class="keyword">catch</span> (<span class="type">IllegalAccessException</span> e) {
                 <span class="keyword">continue</span>;
             }
+            }
         }
-    }
     }
     <span class="keyword">return</span> <span class="literal">false</span>;
 }
