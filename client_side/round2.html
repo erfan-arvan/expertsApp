@@ -99,6 +99,37 @@
     button:hover {
       background-color: #45a049;
     }
+    .content-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.disagreement-box, .right-panel {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.question-box textarea {
+  width: 100%;
+  height: 120px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+}
+
+.right-panel .navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
   </style>
 </head>
 <body>
@@ -106,18 +137,22 @@
 
   <div class="content-wrapper">
     <div id="disagreement-box" class="disagreement-box">
-      <!-- Dynamic disagreement content will be inserted here -->
+      <!-- Disagreement content here -->
     </div>
-
-    <div id="question-box" class="question-box">
-      <h3>Reflection Question</h3>
-      <textarea placeholder="Write your thoughts here..."></textarea>
-    </div>
-    <div class="navigation">
-      <button onclick="prev()" id="prevBtn" style="display: none;">⬅️ Previous</button>
-      <button onclick="next()" id="nextBtn">Next ➡️</button>
+  
+    <div class="right-panel">
+      <div id="question-box" class="question-box">
+        <!-- JS will populate this -->
+      </div>
+  
+      <div class="navigation">
+        <button onclick="prev()" id="prevBtn" style="display: none;">⬅️ Previous</button>
+        <button onclick="next()" id="nextBtn">Next ➡️</button>
+      </div>
     </div>
   </div>
+  
+
 
   <script>
     const disagreements = [
