@@ -128,34 +128,34 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
         id: 6,
         title: "Snippet 6",
         code: `
-        <span class="keyword">public static</span> <span class="type">int</span> <span class="function">encodedLength</span>(<span class="type">CharSequence</span> sequence) {
-          <span class="comment">// Optimized implementation</span>
-          <span class="type">int</span> utf16Length = sequence.<a href="#" class="standard-method function" onclick="openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html#length--')">length</a>();
-          <span class="type">int</span> utf8Length = utf16Length;
-          <span class="type">int</span> i = <span class="number">0</span>;
-        
-          <span class="keyword">while</span> (i < utf16Length && sequence.<a href="#" class="standard-method function" onclick="openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html#charAt-int-')">charAt</a>(i) < <span class="literal">0x80</span>) {
-            i++;
-          }
-        
-          <span class="keyword">for</span> (; i < utf16Length; i++) {
-            <span class="type">char</span> c = sequence.<a href="#" class="standard-method function" onclick="openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html#charAt-int-')">charAt</a>(i);
-            <span class="keyword">if</span> (c < <span class="literal">0x800</span>) {
-              utf8Length += ((<span class="literal">0x7f</span> - c) >>> <span class="number">31</span>);
-            } <span class="keyword">else</span> {
-              utf8Length += <span class="function">encodedLengthGeneral</span>(sequence, i);
-              <span class="keyword">break</span>;
-            }
-          }
-        
-          <span class="keyword">if</span> (utf8Length < utf16Length) {
-            <span class="keyword">throw new</span> <span class="type">IllegalArgumentException</span>(
-              <span class="string">"UTF-8 length does not fit in int: "</span> + (utf8Length + (<span class="literal">1L</span> << <span class="number">32</span>)));
-          }
-        
-          <span class="keyword">return</span> utf8Length;
-        }
-        `        
+<span class="keyword">public static</span> <span class="type">int</span> <span class="function">encodedLength</span>(<span class="type">CharSequence</span> sequence) {
+    <span class="comment">// Optimized implementation</span>
+    <span class="type">int</span> utf16Length = sequence.<a href="#" class="standard-method function" onclick="openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html#length--')">length</a>();
+    <span class="type">int</span> utf8Length = utf16Length;
+    <span class="type">int</span> i = <span class="number">0</span>;
+
+    <span class="keyword">while</span> (i < utf16Length && sequence.<a href="#" class="standard-method function" onclick="openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html#charAt-int-')">charAt</a>(i) < <span class="literal">0x80</span>) {
+    i++;
+    }
+
+    <span class="keyword">for</span> (; i < utf16Length; i++) {
+    <span class="type">char</span> c = sequence.<a href="#" class="standard-method function" onclick="openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html#charAt-int-')">charAt</a>(i);
+    <span class="keyword">if</span> (c < <span class="literal">0x800</span>) {
+        utf8Length += ((<span class="literal">0x7f</span> - c) >>> <span class="number">31</span>);
+    } <span class="keyword">else</span> {
+        utf8Length += <span class="function">encodedLengthGeneral</span>(sequence, i);
+        <span class="keyword">break</span>;
+    }
+    }
+
+    <span class="keyword">if</span> (utf8Length < utf16Length) {
+    <span class="keyword">throw new</span> <span class="type">IllegalArgumentException</span>(
+        <span class="string">"UTF-8 length does not fit in int: "</span> + (utf8Length + (<span class="literal">1L</span> << <span class="number">32</span>)));
+    }
+
+    <span class="keyword">return</span> utf8Length;
+}
+`        
       },
       {
         id: 7,
