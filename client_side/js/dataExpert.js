@@ -161,26 +161,26 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
         id: 7,
         title: "Snippet 7",
         code: `
-        <span class="keyword">public static</span> <span class="type">float</span> <span class="function">lowestPositiveRoot</span>(<span class="type">float</span> a, <span class="type">float</span> b, <span class="type">float</span> c) {
-          <span class="type">float</span> det = b * b - <span class="number">4</span> * a * c;
-          <span class="keyword">if</span> (det < <span class="number">0</span>) <span class="keyword">return</span> <span class="type">Float</span>.NaN;
-        
-          <span class="type">float</span> sqrtD = (<span class="type">float</span>)<span class="type">Math</span>.<a href="#" class="standard-method function" onclick="openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/Math.html#sqrt-double-')">sqrt</a>(det);
-          <span class="type">float</span> invA = <span class="number">1</span> / (<span class="number">2</span> * a);
-          <span class="type">float</span> r1 = (-b - sqrtD) * invA;
-          <span class="type">float</span> r2 = (-b + sqrtD) * invA;
-        
-          <span class="keyword">if</span> (r1 > r2) {
-            <span class="type">float</span> tmp = r2;
-            r2 = r1;
-            r1 = tmp;
-          }
-        
-          <span class="keyword">if</span> (r1 > <span class="number">0</span>) <span class="keyword">return</span> r1;
-          <span class="keyword">if</span> (r2 > <span class="number">0</span>) <span class="keyword">return</span> r2;
-          <span class="keyword">return</span> <span class="type">Float</span>.NaN;
-        }
-        `        
+<span class="keyword">public static</span> <span class="type">float</span> <span class="function">lowestPositiveRoot</span>(<span class="type">float</span> a, <span class="type">float</span> b, <span class="type">float</span> c) {
+    <span class="type">float</span> det = b * b - <span class="number">4</span> * a * c;
+    <span class="keyword">if</span> (det < <span class="number">0</span>) <span class="keyword">return</span> <span class="type">Float</span>.NaN;
+
+    <span class="type">float</span> sqrtD = (<span class="type">float</span>)<span class="type">Math</span>.<a href="#" class="standard-method function" onclick="openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/Math.html#sqrt-double-')">sqrt</a>(det);
+    <span class="type">float</span> invA = <span class="number">1</span> / (<span class="number">2</span> * a);
+    <span class="type">float</span> r1 = (-b - sqrtD) * invA;
+    <span class="type">float</span> r2 = (-b + sqrtD) * invA;
+
+    <span class="keyword">if</span> (r1 > r2) {
+        <span class="type">float</span> tmp = r2;
+        r2 = r1;
+        r1 = tmp;
+    }
+
+    <span class="keyword">if</span> (r1 > <span class="number">0</span>) <span class="keyword">return</span> r1;
+    <span class="keyword">if</span> (r2 > <span class="number">0</span>) <span class="keyword">return</span> r2;
+    <span class="keyword">return</span> <span class="type">Float</span>.NaN;
+}
+`        
       },
       {
         id: 8,
