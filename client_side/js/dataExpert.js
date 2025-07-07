@@ -186,27 +186,27 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
         id: 8,
         title: "Snippet 8",
         code: `
-        <span class="keyword">public static</span> <span class="type">float</span> <span class="function">atan2</span>(<span class="type">float</span> y, <span class="type">float</span> x) {
-          <span class="type">float</span> n = y / x;
-        
-          <span class="keyword">if</span> (n != n)
-            n = (y == x ? <span class="number">1f</span> : <span class="number">-1f</span>);
-          <span class="keyword">else if</span> (n - n != n - n)
-            x = <span class="number">0f</span>;
-        
-          <span class="keyword">if</span> (x > <span class="number">0</span>)
-            <span class="keyword">return</span> <span class="function">atanUnchecked</span>(n);
-          <span class="keyword">else if</span> (x < <span class="number">0</span>) {
-            <span class="keyword">if</span> (y >= <span class="number">0</span>) <span class="keyword">return</span> <span class="function">atanUnchecked</span>(n) + PI;
-            <span class="keyword">return</span> <span class="function">atanUnchecked</span>(n) - PI;
-          } <span class="keyword">else if</span> (y > <span class="number">0</span>)
-            <span class="keyword">return</span> x + HALF_PI;
-          <span class="keyword">else if</span> (y < <span class="number">0</span>)
-            <span class="keyword">return</span> x - HALF_PI;
-        
-          <span class="keyword">return</span> x + y;
-        }
-        `        
+<span class="keyword">public static</span> <span class="type">float</span> <span class="function">atan2</span>(<span class="type">float</span> y, <span class="type">float</span> x) {
+    <span class="type">float</span> n = y / x;
+
+    <span class="keyword">if</span> (n != n)
+        n = (y == x ? <span class="number">1f</span> : <span class="number">-1f</span>);
+    <span class="keyword">else if</span> (n - n != n - n)
+        x = <span class="number">0f</span>;
+
+    <span class="keyword">if</span> (x > <span class="number">0</span>)
+        <span class="keyword">return</span> <span class="function">atanUnchecked</span>(n);
+    <span class="keyword">else if</span> (x < <span class="number">0</span>) {
+        <span class="keyword">if</span> (y >= <span class="number">0</span>) <span class="keyword">return</span> <span class="function">atanUnchecked</span>(n) + PI;
+        <span class="keyword">return</span> <span class="function">atanUnchecked</span>(n) - PI;
+    } <span class="keyword">else if</span> (y > <span class="number">0</span>)
+        <span class="keyword">return</span> x + HALF_PI;
+    <span class="keyword">else if</span> (y < <span class="number">0</span>)
+        <span class="keyword">return</span> x - HALF_PI;
+
+    <span class="keyword">return</span> x + y;
+}
+`        
       }
     ];
   
