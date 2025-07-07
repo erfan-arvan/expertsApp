@@ -93,11 +93,11 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     }
     <span class="keyword">for</span> (<span class="type">int</span> i = startPos; i < endLimit; i++) {
         <span class="keyword">if</span> (<span class="function">regionMatches</span>(str, <span class="literal">true</span>, i, searchStr, <span class="number">0</span>, searchStrLen)) {
-        <span class="keyword">return</span> i;
+            <span class="keyword">return</span> i;
         }
     }
     <span class="keyword">return</span> INDEX_NOT_FOUND;
-    }`
+}`
           },              
           {
             id: 5,
