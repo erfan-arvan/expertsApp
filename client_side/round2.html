@@ -647,5 +647,87 @@ This suggests that while he found it conceptually challenging, he still viewed i
     } 
 </script>
 
+<script>
+      function saveState() {
+      const positions = {};
+      document.querySelectorAll('.ranking-slot').forEach((slot, index) => {
+        positions[index + 1] = Array.from(slot.children).map(el => el.id);
+      });
+      const json = JSON.stringify(positions);
+      sessionStorage.setItem('phase3_ranking', json);
+      document.cookie = `phase3_ranking=${encodeURIComponent(json)}; path=/; max-age=${60 * 60 * 24 * 30}`;
+
+      /* Check if the phase is completed */
+      if (areAllCardsRanked()) {
+        document.getElementById('continueBtn').style.display = 'inline-block';
+        document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
+        document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
+        sessionStorage.setItem('phase2Complete', 'true');
+        document.cookie = `phase2Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
+
+        // ✅ Also update the status bar
+        const phase3Link = document.getElementById('link-phase3');
+        if (phase3Link) {
+          phase3Link.classList.remove('disabled');
+        }
+      } else {
+        sessionStorage.removeItem('phase2Complete');
+        document.cookie = `phase2Complete=; path=/; max-age=0`;
+        document.getElementById('continueBtn').style.display = 'none';
+        const phase3Link = document.getElementById('link-phase3');
+        if (phase3Link) {
+          phase3Link.classList.add('disabled');
+        }
+      }
+
+    }
+</script>
+
+<script>
+      function show_snippet(id) {
+    const snippet = snippets.find(s => s.id === id);
+    if (!snippet) return;
+
+    document.getElementById('modal-snippet-title').innerText = snippet.title;
+
+    const codeLines = snippet.code.trim().split('\n');
+
+    // ✅ Use innerHTML here to render styled spans correctly
+    document.getElementById('modal-code-content').innerHTML = codeLines.join('\n');
+
+    // ✅ Line numbers are just plain numbers
+    document.getElementById('modal-line-numbers').innerHTML = codeLines.map((_, i) => i + 1).join('<br>');
+
+    document.getElementById('snippet-modal').style.display = 'block';
+
+    applyModalTheme(); // Keep the theme consistent
+    }
+
+    
+    function toggleModalTheme() {
+      const body = document.body;
+      const isLight = body.classList.contains("light-mode");
+    
+      if (isLight) {
+        body.classList.remove("light-mode");
+        body.classList.add("dark-mode");
+        localStorage.setItem("codeTheme", "dark");
+        document.getElementById('modal-theme-toggle').textContent = "Switch to Light Mode";
+      } else {
+        body.classList.remove("dark-mode");
+        body.classList.add("light-mode");
+        localStorage.setItem("codeTheme", "light");
+        document.getElementById('modal-theme-toggle').textContent = "Switch to Dark Mode";
+      }
+    }
+    
+    function applyModalTheme() {
+      const theme = localStorage.getItem('codeTheme') || 'light';
+      document.body.classList.remove('light-mode', 'dark-mode');
+      document.body.classList.add(theme + '-mode');
+      document.getElementById('modal-theme-toggle').textContent =
+        theme === 'light' ? "Switch to Dark Mode" : "Switch to Light Mode";
+    }
+</script>
 </body>
 </html>
