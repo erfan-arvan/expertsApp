@@ -378,7 +378,10 @@ This suggests that while he found it conceptually challenging, he still viewed i
     return match ? decodeURIComponent(match[2]) : null;
   }
 
-    window.onload = render;
+  window.onload = () => {
+    render();
+    loadCards();
+  };
   </script>
   <script>
     function saveRound2Response(stepIndex, responseObj) {
