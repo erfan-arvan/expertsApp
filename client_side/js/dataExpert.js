@@ -99,7 +99,8 @@ const snippets = [
               }
               <span class="keyword">return</span> INDEX_NOT_FOUND;
             }
-            `            
+            `
+                
           },
           {
             id: 5,
