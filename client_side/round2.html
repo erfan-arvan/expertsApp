@@ -134,6 +134,8 @@
   </style>
 </head>
 <body>
+  <div id="cards" style="margin-bottom: 20px;"></div>
+
   <div class="status-bar">Round 2: Reflect on Expert Disagreements</div>
 
   <div class="content-wrapper">
@@ -392,7 +394,35 @@ This suggests that while he found it conceptually challenging, he still viewed i
     function showValidationMessage(msg) {
       alert(msg); // You can replace this with a styled modal if you prefer
     }
-  </script>
+</script>
   
+<script>
+      function loadCards() {
+      const container = document.getElementById('cards');
+      snippets.forEach(snippet => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.draggable = true;
+        card.id = `snippet-${snippet.id}`;
+        card.innerHTML = `
+          <strong>${snippet.title}</strong>
+          <br><label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
+        `;
+        card.addEventListener('dragstart', () => card.classList.add('dragging'));
+        card.addEventListener('dragend', () => card.classList.remove('dragging'));
+        container.appendChild(card);
+      });
+
+      document.querySelectorAll('.ranking-slot').forEach(slot => {
+        slot.addEventListener('dragover', e => {
+          e.preventDefault();
+          const dragging = document.querySelector('.dragging');
+          if (dragging) slot.appendChild(dragging);
+          saveState();
+        });
+      });
+    }
+</script>
+
 </body>
 </html>
