@@ -357,10 +357,10 @@
 
 
 <script>
-  function setCookie(name, value) {
-    sessionStorage.setItem(name, value);
+  function setCookie(name, value, days = 30) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; expires=${expires}`;
   }
-
   
   async function loginAndProceed(event) {
     event.preventDefault();
@@ -437,8 +437,8 @@
 
         sessionStorage.setItem(`summary${i}`, summary);
         sessionStorage.setItem(`compSummary${i}`, comp);
-        setCookie(`summary${i}`, summary, 30);
-        setCookie(`compSummary${i}`, comp, 30);
+        setCookie(`summary${i}`, encodeURIComponent(summary), 30);
+        setCookie(`compSummary${i}`, encodeURIComponent(comp), 30);
       });
 
       // Phase 2 and 3
