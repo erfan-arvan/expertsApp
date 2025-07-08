@@ -482,8 +482,6 @@ function saveSummary() {
   sessionStorage.setItem(keyCompSummary, compSummary);
 
   // Save to cookies
-  setCookie(keySummary, encodeURIComponent(summary), 30);
-  setCookie(keyCompSummary, encodeURIComponent(compSummary), 30);
 
   if(areAllSnippetsFilled()){
     document.getElementById('continueBtn').style.display = 'inline-block';
