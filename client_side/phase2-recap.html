@@ -532,10 +532,10 @@ a:hover {
 <div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <h2 style="margin: 0;">Phase 2: Ranking Code Snippets by Comprehension Difficulty</h2>
-    <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
+    <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Show</button>
   </div>
 
-  <div id="instructions-content" style="margin-top: 15px;">
+  <div id="instructions-content" style="margin-top: 15px; display: none;">
     <p>In this phase, you will rank the 8 code snippets based on how easy or difficult they are to understand.</p>
     <ol>
       <li><strong>Rank the snippets:</strong> Drag and drop each snippet (white) card into the 8 green boxes, which represent ranking positions.</li>
@@ -1348,7 +1348,7 @@ function renderParticipantRankings() {
 
 <script>
       function show_snippet(id) {
-    const snippet = originalSnippets.find(s => s.id === id);
+    const snippet = snippets.find(s => s.id === id);
     if (!snippet) return;
 
     document.getElementById('modal-snippet-title').innerText = snippet.title;
