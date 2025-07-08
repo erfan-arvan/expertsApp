@@ -489,8 +489,7 @@ document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
   document.getElementById('summary').value = savedSummary;
   document.getElementById('compSummary').value = savedcompSummary;
 
-
-  // === NEW: Load others' summaries and comprehensibility ===
+  // === NEW: Load all participant responses and show user's first as "You" ===
   const otherSumDiv = document.getElementById('otherSum');
   const otherCompDiv = document.getElementById('otherComp');
 
@@ -500,22 +499,40 @@ document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
   const currentParticipant = (sessionStorage.getItem('participantName') || getCookie('participantName') || '').toLowerCase();
 
   if (snippet.responses && Array.isArray(snippet.responses)) {
-    snippet.responses.forEach(response => {
-      if (response.participant.toLowerCase() !== currentParticipant) {
-        const sumHTML = `
-          <div class="participant">
-            <h4>${response.participant}</h4>
-            ${response.summary}
-          </div>`;
-        otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
+    // Separate current user's response
+    const youResponse = snippet.responses.find(r => r.participant.toLowerCase() === currentParticipant);
+    const otherResponses = snippet.responses.filter(r => r.participant.toLowerCase() !== currentParticipant);
 
-        const compHTML = `
-          <div class="participant">
-            <h4>${response.participant}</h4>
-            ${response.comprehensibility}
-          </div>`;
-        otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
-      }
+    // First: append "You" response
+    if (youResponse) {
+      const sumHTML = `
+        <div class="participant">
+          <h4>You</h4>
+          ${youResponse.summary}
+        </div>`;
+      const compHTML = `
+        <div class="participant">
+          <h4>You</h4>
+          ${youResponse.comprehensibility}
+        </div>`;
+      otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
+      otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
+    }
+
+    // Then: append all other responses
+    otherResponses.forEach(response => {
+      const sumHTML = `
+        <div class="participant">
+          <h4>${response.participant}</h4>
+          ${response.summary}
+        </div>`;
+      const compHTML = `
+        <div class="participant">
+          <h4>${response.participant}</h4>
+          ${response.comprehensibility}
+        </div>`;
+      otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
+      otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
     });
   }
 }
