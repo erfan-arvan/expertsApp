@@ -271,6 +271,16 @@ a.underline-dotted-pointer {
 textarea {
     background-color: #f0f0f0 !important;
   }
+
+.participant {
+  background: #f9f9f9;
+  border-left: 4px solid #aaa;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.participant h4 {
+  margin-top: 0;
+}
 </style>
 
     
@@ -334,7 +344,12 @@ textarea {
   
       <label for="compSummary"><strong>How did you assess this snippet's comprehensibility? What features made it easy or hard to understand? Provide a brief explanation.</strong></label>
       <textarea id="compSummary" oninput="saveSummary()"></textarea>
-  
+
+      <div class="participant"><h4>Nadeeshan</h4>
+        <p><strong>Summary:</strong> This method takes a project name and validates it based on several criteria.</p>
+        <p><strong>Comprehensibility:</strong> Clear method/final variable names make it easier to understand. Also, the clear logic separation of the conditional statements makes it easier to follow.</p>
+      </div>
+
       <div class="buttons">
           <button id="prev" onclick="prevSnippet()">Previous</button>
           <button id="next" onclick="nextSnippet()">Next</button>
