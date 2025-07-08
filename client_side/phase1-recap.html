@@ -345,13 +345,16 @@ textarea {
   
       <div id="otherSum">
         <h4>Other experts' response:</h4>
-        <div class="participant"><h4>Nadeeshan</h4>
-          <p><strong>Summary:</strong> This method takes a project name and validates it based on several criteria.</p>
-        </div>
-       </div>
+
+      </div>
 
       <label for="compSummary"><strong>2- How did you assess this snippet's comprehensibility? What features made it easy or hard to understand? Provide a brief explanation.</strong></label>
+      <h4>Your response:</h4>
       <textarea id="compSummary" oninput="saveSummary()"></textarea>
+      <div id="otherComp">
+        <h4>Other experts' response:</h4>
+
+      </div>
       <div class="buttons">
           <button id="prev" onclick="prevSnippet()">Previous</button>
           <button id="next" onclick="nextSnippet()">Next</button>
@@ -485,6 +488,32 @@ document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
 
   document.getElementById('summary').value = savedSummary;
   document.getElementById('compSummary').value = savedcompSummary;
+
+
+  // === NEW: Load others' summaries and comprehensibility ===
+  const otherSumDiv = document.getElementById('otherSum');
+  const otherCompDiv = document.getElementById('otherComp');
+
+  otherSumDiv.innerHTML = '';  // clear previous
+  otherCompDiv.innerHTML = '';
+
+  if (snippet.responses && Array.isArray(snippet.responses)) {
+    snippet.responses.forEach(response => {
+      const sumHTML = `
+        <div class="participant">
+          <h4>${response.participant}</h4>
+          ${response.summary}
+        </div>`;
+      otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
+
+      const compHTML = `
+        <div class="participant">
+          <h4>${response.participant}</h4>
+          ${response.comprehensibility}
+        </div>`;
+      otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
+    });
+  }
 }
 
 
