@@ -959,6 +959,8 @@ function saveToServer() {
 
   const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
   navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+
+  console.log(payload);
 }
 
 window.addEventListener('beforeunload', saveToServer);
