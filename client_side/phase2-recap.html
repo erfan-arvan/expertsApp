@@ -1348,7 +1348,7 @@ function renderParticipantRankings() {
 
 <script>
       function show_snippet(id) {
-        id=id+1;
+        id=id-1;
     const snippet = snippets.find(s => s.id === id);
     if (!snippet) return;
 
