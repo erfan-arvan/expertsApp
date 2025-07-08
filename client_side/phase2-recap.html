@@ -338,6 +338,7 @@
     </button>
   </div>
   
+  <div class="phase-section"></div>
   
   <div class="preview-area" id="previewArea"></div>
 
@@ -632,6 +633,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 </script>
 <script>
     window.onload = () => {
+      remapSnippetReferences();
+      renderParticipantRankings();
       loadCards();
       loadState();
       applyTheme();
@@ -980,6 +983,85 @@ function saveToServer() {
 
 window.addEventListener('beforeunload', saveToServer);
 
+
+</script>
+
+<script>
+  function remapSnippetReferences(participantRankings) {
+  const getSnippetOrder = () => {
+    const key = 'snippetOrder';
+    const fromSession = sessionStorage.getItem(key);
+    if (fromSession) return JSON.parse(fromSession);
+    const fromCookie = decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith(key + '='))?.split('=')[1] || '[]');
+    return JSON.parse(fromCookie || '[]');
+  };
+
+  const order = getSnippetOrder(); // e.g., [6,7,8,1,2,3,4,5]
+  if (!Array.isArray(order) || order.length !== 8) {
+    console.warn('Invalid snippetOrder:', order);
+    return;
+  }
+
+  const mapOldToNew = {};
+  for (let i = 0; i < 8; i++) {
+    mapOldToNew[i + 1] = order[i]; // 1-based snippet numbers
+  }
+
+  participantRankings.forEach(participant => {
+    let html = participant.html;
+
+    // Replace Snippet X (e.g., Snippet 1 -> Snippet 6)
+    html = html.replace(/\bSnippet (\d)\b/g, (_, x) => `Snippet ${mapOldToNew[parseInt(x)]}`);
+
+    // Replace show_snippet(X)
+    html = html.replace(/show_snippet\((\d)\)/g, (_, x) => `show_snippet(${mapOldToNew[parseInt(x)]})`);
+
+    // Replace compare([...], [...]) by mapping each number inside both arrays
+    html = html.replace(/compare\(\[([^\]]*)\],\s*\[([^\]]*)\]\)/g, (_, group1, group2) => {
+      const remapGroup = group => group
+        .split(',')
+        .map(n => parseInt(n.trim()))
+        .filter(n => !isNaN(n))
+        .map(n => mapOldToNew[n])
+        .join(',');
+      const newG1 = remapGroup(group1);
+      const newG2 = remapGroup(group2);
+      return `compare([${newG1}], [${newG2}])`;
+    });
+
+    // Update the participant object
+    participant.html = html;
+  });
+}
+
+
+function renderParticipantRankings() {
+  const container = document.querySelector('.phase-section');
+  if (!container) {
+    console.error('No .phase-section container found.');
+    return;
+  }
+
+  container.innerHTML = ''; // Clear existing content
+
+  const currentUser = (sessionStorage.getItem('username') || getCookie('username') || '').trim().toLowerCase();
+
+  participantRankings.forEach(participant => {
+    const participantName = participant.name.trim();
+    const isCurrentUser = participantName.toLowerCase() === currentUser;
+
+    // Replace name in HTML heading
+    const displayHTML = participant.html.replace(
+      new RegExp(`<h3>${participantName}</h3>`),
+      `<h3>${isCurrentUser ? 'Your Ranking' : participantName}</h3>`
+    );
+
+    // Append updated HTML
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = displayHTML;
+    container.appendChild(wrapper);
+  });
+}
 
 </script>
 
