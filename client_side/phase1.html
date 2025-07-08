@@ -657,7 +657,7 @@ function submitAll() {
 
 <script>
   function setLocalStorage(name, value, days = 30) {
-    localStorage.setItem('keyName', encodeURIComponent(value));
+    localStorage.setItem(name, encodeURIComponent(value));
   }
     
     function getLocalStorage(name) {
@@ -779,7 +779,7 @@ function validateCurrentSnippetInputs() {
 
 
   function setLocalStorage(name, value, days = 30) {
-    localStorage.setItem('keyName', encodeURIComponent(value));
+    localStorage.setItem(name, encodeURIComponent(value));
   }
 
 </script>
