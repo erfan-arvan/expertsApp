@@ -357,10 +357,10 @@
 
 
 <script>
-  function setCookie(name, value, days = 30) {
-    const expires = new Date(Date.now() + days * 864e5).toUTCString();
-    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; expires=${expires}`;
+  function setCookie(name, value) {
+    sessionStorage.setItem(name, value);
   }
+
   
   async function loginAndProceed(event) {
     event.preventDefault();
