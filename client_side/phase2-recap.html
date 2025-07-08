@@ -1265,52 +1265,60 @@ window.addEventListener('beforeunload', saveToServer);
 </script>
 
 <script>
-  function remapSnippetReferences(participantRankings) {
-  const getSnippetOrder = () => {
-    const key = 'snippetOrder';
-    const fromSession = sessionStorage.getItem(key);
-    if (fromSession) return JSON.parse(fromSession);
-    const fromCookie = decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith(key + '='))?.split('=')[1] || '[]');
-    return JSON.parse(fromCookie || '[]');
-  };
-
-  const order = getSnippetOrder(); // e.g., [6,7,8,1,2,3,4,5]
-  if (!Array.isArray(order) || order.length !== 8) {
-    console.warn('Invalid snippetOrder:', order);
+function remapSnippetReferences(rankings) {
+  if (!Array.isArray(rankings)) {
+    console.error('remapSnippetReferences: rankings is not a valid array.');
     return;
   }
 
-  const mapOldToNew = {};
-  for (let i = 0; i < 8; i++) {
-    mapOldToNew[i + 1] = order[i]; // 1-based snippet numbers
+  // Get snippet order from sessionStorage or cookies
+  function getSnippetOrder() {
+    const key = 'snippetOrder';
+    const sessionValue = sessionStorage.getItem(key);
+    if (sessionValue) return JSON.parse(sessionValue);
+
+    const cookieMatch = document.cookie
+      .split('; ')
+      .find(row => row.startsWith(key + '='));
+    if (cookieMatch) {
+      const cookieValue = decodeURIComponent(cookieMatch.split('=')[1]);
+      return JSON.parse(cookieValue);
+    }
+    return [];
   }
 
-  participantRankings.forEach(participant => {
-    let html = participant.html;
+  const snippetOrder = getSnippetOrder();
+  if (!Array.isArray(snippetOrder) || snippetOrder.length !== 8) {
+    console.warn('Invalid or missing snippetOrder:', snippetOrder);
+    return;
+  }
 
-    // Replace Snippet X (e.g., Snippet 1 -> Snippet 6)
-    html = html.replace(/\bSnippet (\d)\b/g, (_, x) => `Snippet ${mapOldToNew[parseInt(x)]}`);
+  // Map old snippet numbers (1 to 8) to new ones
+  const map = {};
+  for (let i = 0; i < 8; i++) {
+    map[i + 1] = snippetOrder[i];
+  }
+
+  // Update all references in the HTML strings
+  rankings.forEach(participant => {
+    let updated = participant.html;
+
+    // Replace Snippet X text
+    updated = updated.replace(/\bSnippet (\d)\b/g, (_, num) => `Snippet ${map[parseInt(num)]}`);
 
     // Replace show_snippet(X)
-    html = html.replace(/show_snippet\((\d)\)/g, (_, x) => `show_snippet(${mapOldToNew[parseInt(x)]})`);
+    updated = updated.replace(/show_snippet\((\d)\)/g, (_, num) => `show_snippet(${map[parseInt(num)]})`);
 
-    // Replace compare([...], [...]) by mapping each number inside both arrays
-    html = html.replace(/compare\(\[([^\]]*)\],\s*\[([^\]]*)\]\)/g, (_, group1, group2) => {
-      const remapGroup = group => group
-        .split(',')
-        .map(n => parseInt(n.trim()))
-        .filter(n => !isNaN(n))
-        .map(n => mapOldToNew[n])
-        .join(',');
-      const newG1 = remapGroup(group1);
-      const newG2 = remapGroup(group2);
-      return `compare([${newG1}], [${newG2}])`;
+    // Replace compare([X,...],[Y,...])
+    updated = updated.replace(/compare\(\[([^\]]*)\],\s*\[([^\]]*)\]\)/g, (_, group1, group2) => {
+      const mapGroup = g => g.split(',').map(x => map[parseInt(x.trim())]).join(',');
+      return `compare([${mapGroup(group1)}], [${mapGroup(group2)}])`;
     });
 
-    // Update the participant object
-    participant.html = html;
+    participant.html = updated;
   });
 }
+
 
 
 function renderParticipantRankings() {
