@@ -358,17 +358,17 @@ a.underline-dotted-pointer {
 <script src="js/dataExpert.js"></script>
 
 <script>
-  function getCookie(name) {
-      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-      return match ? decodeURIComponent(match[2]) : null;
-  }
+function getLocalStorage(name) {
+  const value = localStorage.getItem(name);
+  return value ? decodeURIComponent(value) : null;
+}
   
   // Returns existing or creates a new randomized order of indices
   function getOrCreateSnippetOrder(length) {
     const key = 'snippetOrder';
   
     // Try to load from sessionStorage or cookie
-    let stored = sessionStorage.getItem(key) || getCookie(key);
+    let stored = sessionStorage.getItem(key) || getLocalStorage(key);
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
@@ -386,8 +386,7 @@ a.underline-dotted-pointer {
     // Store in sessionStorage and cookie
     const serialized = JSON.stringify(order);
     sessionStorage.setItem(key, serialized);
-    document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=2592000`; // 30 days
-  
+    setLocalStorage(key, serialized, 30);
     return order;
   }
   
@@ -411,13 +410,13 @@ a.underline-dotted-pointer {
 </script>
 
 <script>
-    function getCookie(name) {
-      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-      return match ? decodeURIComponent(match[2]) : null;
-    }
+function getLocalStorage(name) {
+  const value = localStorage.getItem(name);
+  return value ? decodeURIComponent(value) : null;
+}
   
     function isComplete(key) {
-      return sessionStorage.getItem(key) === 'true' || getCookie(key) === 'true';
+      return sessionStorage.getItem(key) === 'true' || getLocalStorage(key) === 'true';
     }
   
     // Unlock links based on progress
@@ -461,8 +460,8 @@ document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
   let savedSummary = sessionStorage.getItem(keySummary);
   let savedcompSummary = sessionStorage.getItem(keycompSummary);
 
-  if (!savedSummary) savedSummary = decodeURIComponent(getCookie(keySummary) || '');
-  if (!savedcompSummary) savedcompSummary = decodeURIComponent(getCookie(keycompSummary) || '');
+  if (!savedSummary) savedSummary = decodeURIComponent(getLocalStorage(keySummary) || '');
+  if (!savedcompSummary) savedcompSummary = decodeURIComponent(getLocalStorage(keycompSummary) || '');
 
   document.getElementById('summary').value = savedSummary;
   document.getElementById('compSummary').value = savedcompSummary;
@@ -486,7 +485,7 @@ function saveSummary() {
   if(areAllSnippetsFilled()){
     document.getElementById('continueBtn').style.display = 'inline-block';
     sessionStorage.setItem('phase1Complete', 'true');
-    setCookie('phase1Complete', 'true', 30);
+    setLocalStorage('phase1Complete', 'true', 30);
     
     //update status bar if needed
     if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
@@ -494,7 +493,7 @@ function saveSummary() {
   }else{
     document.getElementById('continueBtn').style.display = 'none';
     sessionStorage.setItem('phase1Complete', 'false');
-    setCookie('phase1Complete', 'false', 30);
+    setLocalStorage('phase1Complete', 'false', 30);
     document.getElementById('link-phase2').classList.add('disabled');
     document.getElementById('link-phase3').classList.add('disabled');
     document.getElementById('link-review').classList.add('disabled');
@@ -545,7 +544,7 @@ function submitAll() {
     for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
         const key = `summary${i}`;
         const sessionVal = sessionStorage.getItem(key);
-        const cookieVal = getCookie(key);
+        const cookieVal = getLocalStorage(key);
         allSummaries[key] = sessionVal || decodeURIComponent(cookieVal || '');
     }
 
@@ -559,7 +558,7 @@ function submitAll() {
       showSubmissionModal('✅ Summaries submitted successfully. Click “Continue to Phase 2” to proceed.\nYou may resubmit before the deadline if you change your mind about any part of your response.');
       document.getElementById('continueBtn').style.display = 'inline-block';
       sessionStorage.setItem('phase1_submitted', 'true');
-      setCookie('phase1_submitted', 'true', 30);
+      setLocalStorage('phase1_submitted', 'true', 30);
     } else {
       showSubmissionModal('❌ Submission failed. Please try again.');
     }
@@ -657,15 +656,14 @@ function submitAll() {
   </script>  
 
 <script>
-    function setCookie(name, value, days) {
-        const expires = new Date(Date.now() + days*24*60*60*1000).toUTCString();
-        document.cookie = `${name}=${value}; expires=${expires}; path=/`;
-    }
-    
-    function getCookie(name) {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return match ? decodeURIComponent(match[2]) : null;
+  function setLocalStorage(name, value, days = 30) {
+    localStorage.setItem('keyName', encodeURIComponent(value));
   }
+    
+    function getLocalStorage(name) {
+  const value = localStorage.getItem(name);
+  return value ? decodeURIComponent(value) : null;
+}
 </script>
 
 <script>
@@ -738,7 +736,7 @@ window.onload = function() {
     else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
     else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
 
-    if (sessionStorage.getItem('phase1Complete') === 'true' || getCookie('phase1Complete') === 'true') {
+    if (sessionStorage.getItem('phase1Complete') === 'true' || getLocalStorage('phase1Complete') === 'true') {
         document.getElementById('continueBtn').style.display = 'inline-block';
     }
 
@@ -780,9 +778,8 @@ function validateCurrentSnippetInputs() {
   }
 
 
-  function setCookie(name, value, days) {
-    const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
-    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+  function setLocalStorage(name, value, days = 30) {
+    localStorage.setItem('keyName', encodeURIComponent(value));
   }
 
 </script>
@@ -794,7 +791,7 @@ function validateCurrentSnippetInputs() {
   let content = `Name: ${name}\n\n`;
   for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
     const key = `summary${i}`;
-    const val = sessionStorage.getItem(key) || decodeURIComponent(getCookie(key) || '');
+    const val = sessionStorage.getItem(key) || decodeURIComponent(getLocalStorage(key) || '');
     content += `Snippet ${i}:\n${val.trim() || "(empty)"}\n\n`;
   }
 
@@ -818,7 +815,7 @@ function submitAndCloseModal() {
 
   for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
     const key = `summary${i}`;
-    const text = sessionStorage.getItem(key) || decodeURIComponent(getCookie(key) || '');
+    const text = sessionStorage.getItem(key) || decodeURIComponent(getLocalStorage(key) || '');
 
     if (!text.trim()) {
       missing.push(`Snippet ${i}`);
@@ -848,8 +845,8 @@ function showValidationMessage(msg) {
             const summaryKey = `summary${i}`;
             const compKey = `compSummary${i}`;
 
-            const summary = sessionStorage.getItem(summaryKey) || decodeURIComponent(getCookie(summaryKey) || '');
-            const compSummary = sessionStorage.getItem(compKey) || decodeURIComponent(getCookie(compKey) || '');
+            const summary = sessionStorage.getItem(summaryKey) || decodeURIComponent(getLocalStorage(summaryKey) || '');
+            const compSummary = sessionStorage.getItem(compKey) || decodeURIComponent(getLocalStorage(compKey) || '');
 
             if (!summary.trim() || !compSummary.trim()) {
             return false;
@@ -862,7 +859,7 @@ function showValidationMessage(msg) {
 
 <script>
   function displayUserName() {
-    const name = sessionStorage.getItem('participantName') || getCookie('participantName');
+    const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName');
     if (name) {
       document.getElementById('user-info').textContent = `👤 ${name}`;
     }
@@ -903,8 +900,8 @@ function logout() {
 
 <script>
   function isLoggedIn() {
-    const name = sessionStorage.getItem('participantName') || getCookie('participantName');
-    const order = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
+    const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName');
+    const order = sessionStorage.getItem('snippetOrder') || getLocalStorage('snippetOrder');
     return name && order;
   }
 
@@ -920,31 +917,31 @@ function logout() {
 
 <script>
 function saveToServer() {
-  const name = sessionStorage.getItem('participantName') || getCookie('participantName') || 'Anonymous';
-  const username = getCookie('username') || 'anonymous';
+  const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName') || 'Anonymous';
+  const username = getLocalStorage('username') || 'anonymous';
 
   // Phase 1 data
   const phase1 = {};
   for (let i = 1; i <= 8; i++) {
-    const summary = sessionStorage.getItem(`summary${i}`) || getCookie(`summary${i}`) || '';
-    const comp = sessionStorage.getItem(`compSummary${i}`) || getCookie(`compSummary${i}`) || '';
+    const summary = sessionStorage.getItem(`summary${i}`) || getLocalStorage(`summary${i}`) || '';
+    const comp = sessionStorage.getItem(`compSummary${i}`) || getLocalStorage(`compSummary${i}`) || '';
     phase1[`snippet${i}`] = { summary, comprehensibility: comp };
   }
 
   // Phase 2 & 3 data
   let phase2 = {}, phase3 = {};
   try {
-    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getCookie('phase3_ranking') || '{}');
-    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getCookie('phase3_reasoning') || '{}');
+    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getLocalStorage('phase3_ranking') || '{}');
+    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getLocalStorage('phase3_reasoning') || '{}');
   } catch (e) {
     console.warn("Error parsing phase2 or phase3 data", e);
   }
 
   // Completion flags and theme
   const flags = {
-    phase1Complete: sessionStorage.getItem('phase1Complete') || getCookie('phase1Complete') || 'false',
-    phase2Complete: sessionStorage.getItem('phase2Complete') || getCookie('phase2Complete') || 'false',
-    phase3Complete: sessionStorage.getItem('phase3Complete') || getCookie('phase3Complete') || 'false',
+    phase1Complete: sessionStorage.getItem('phase1Complete') || getLocalStorage('phase1Complete') || 'false',
+    phase2Complete: sessionStorage.getItem('phase2Complete') || getLocalStorage('phase2Complete') || 'false',
+    phase3Complete: sessionStorage.getItem('phase3Complete') || getLocalStorage('phase3Complete') || 'false',
     codeTheme: localStorage.getItem('codeTheme') || 'light',
     submitted: '0',
   };

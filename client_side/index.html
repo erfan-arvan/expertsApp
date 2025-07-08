@@ -357,9 +357,8 @@
 
 
 <script>
-  function setCookie(name, value, days = 30) {
-    const expires = new Date(Date.now() + days * 864e5).toUTCString();
-    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; expires=${expires}`;
+  function setLocalStorage(name, value, days = 30) {
+    localStorage.setItem('keyName', encodeURIComponent(value));
   }
   
   async function loginAndProceed(event) {
@@ -394,9 +393,9 @@
       sessionStorage.setItem('snippetOrder', JSON.stringify(snippetOrder));
       sessionStorage.setItem('username', username);
 
-      setCookie('participantName', participantName);
-      setCookie('snippetOrder', JSON.stringify(snippetOrder));
-      setCookie('username', username);
+      setLocalStorage('participantName', participantName);
+      setLocalStorage('snippetOrder', JSON.stringify(snippetOrder));
+      setLocalStorage('username', username);
       loadPreviousData()
         .then(() => {
           window.location.href = 'phase1.html'; // only after data is fully loaded
@@ -413,7 +412,7 @@
   }
 
   function loadPreviousData() {
-    const username = sessionStorage.getItem('username') || getCookie('username');
+    const username = sessionStorage.getItem('username') || getLocalStorage('username');
     if (!username) {
       alert("Username not found.");
       return Promise.reject("No username");  // return a rejected promise
@@ -437,48 +436,48 @@
 
         sessionStorage.setItem(`summary${i}`, summary);
         sessionStorage.setItem(`compSummary${i}`, comp);
-        setCookie(`summary${i}`, encodeURIComponent(summary), 30);
-        setCookie(`compSummary${i}`, encodeURIComponent(comp), 30);
+        setLocalStorage(`summary${i}`, encodeURIComponent(summary), 30);
+        setLocalStorage(`compSummary${i}`, encodeURIComponent(comp), 30);
       });
 
       // Phase 2 and 3
       if (data.phase2) {
         const p2 = JSON.stringify(data.phase2);
         sessionStorage.setItem('phase3_ranking', p2);
-        setCookie('phase3_ranking', p2, 30);
+        setLocalStorage('phase3_ranking', p2, 30);
       }
 
       if (data.phase3) {
         const p3 = JSON.stringify(data.phase3);
         sessionStorage.setItem('phase3_reasoning', p3);
-        setCookie('phase3_reasoning', p3, 30);
+        setLocalStorage('phase3_reasoning', p3, 30);
       }
 
       // Participant name
       if (data.participantName) {
         sessionStorage.setItem('participantName', data.participantName);
-        setCookie('participantName', data.participantName, 30);
+        setLocalStorage('participantName', data.participantName, 30);
       }
 
       // Snippet order
       if (data.snippetOrder) {
         const order = JSON.stringify(data.snippetOrder);
         sessionStorage.setItem('snippetOrder', order);
-        setCookie('snippetOrder', order, 30);
+        setLocalStorage('snippetOrder', order, 30);
       }
 
       // ✅ Restore additional flags
       if ('phase1Complete' in data) {
         sessionStorage.setItem('phase1Complete', data.phase1Complete);
-        setCookie('phase1Complete', data.phase1Complete, 30);
+        setLocalStorage('phase1Complete', data.phase1Complete, 30);
       }
       if ('phase2Complete' in data) {
         sessionStorage.setItem('phase2Complete', data.phase2Complete);
-        setCookie('phase2Complete', data.phase2Complete, 30);
+        setLocalStorage('phase2Complete', data.phase2Complete, 30);
       }
       if ('phase3Complete' in data) {
         sessionStorage.setItem('phase3Complete', data.phase3Complete);
-        setCookie('phase3Complete', data.phase3Complete, 30);
+        setLocalStorage('phase3Complete', data.phase3Complete, 30);
       }
 
       if ('codeTheme' in data) {
@@ -486,7 +485,7 @@
       }
       if ('submitted' in data) {
         sessionStorage.setItem('submitted', data.submitted);
-        setCookie('submitted', data.submitted, 30);
+        setLocalStorage('submitted', data.submitted, 30);
       }
       console.log("Previous data loaded successfully.");
     })
@@ -498,20 +497,21 @@
   
 
 <script>
-  function getCookie(name) {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return match ? decodeURIComponent(match[2]) : null;
-  }
+function getLocalStorage(name) {
+  const value = localStorage.getItem(name);
+  return value ? decodeURIComponent(value) : null;
+}
+
 
   function isLoggedIn() {
-    const name = sessionStorage.getItem('participantName') || getCookie('participantName');
-    const order = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
+    const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName');
+    const order = sessionStorage.getItem('snippetOrder') || getLocalStorage('snippetOrder');
     return name && order;
   }
 
   window.onload = () => {
     if (isLoggedIn()) {
-      const name = sessionStorage.getItem('participantName') || getCookie('participantName');
+      const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName');
       document.getElementById('login-box').style.display = 'none';
       document.getElementById('proceed-box').style.display = 'block';
       document.getElementById('participant-display-name').textContent = name;
