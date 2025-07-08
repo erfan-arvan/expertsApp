@@ -494,24 +494,28 @@ document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
   const otherSumDiv = document.getElementById('otherSum');
   const otherCompDiv = document.getElementById('otherComp');
 
-  otherSumDiv.innerHTML = '';  // clear previous
+  otherSumDiv.innerHTML = '';
   otherCompDiv.innerHTML = '';
+
+  const currentParticipant = (sessionStorage.getItem('participantName') || getCookie('participantName') || '').toLowerCase();
 
   if (snippet.responses && Array.isArray(snippet.responses)) {
     snippet.responses.forEach(response => {
-      const sumHTML = `
-        <div class="participant">
-          <h4>${response.participant}</h4>
-          ${response.summary}
-        </div>`;
-      otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
+      if (response.participant.toLowerCase() !== currentParticipant) {
+        const sumHTML = `
+          <div class="participant">
+            <h4>${response.participant}</h4>
+            ${response.summary}
+          </div>`;
+        otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
 
-      const compHTML = `
-        <div class="participant">
-          <h4>${response.participant}</h4>
-          ${response.comprehensibility}
-        </div>`;
-      otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
+        const compHTML = `
+          <div class="participant">
+            <h4>${response.participant}</h4>
+            ${response.comprehensibility}
+          </div>`;
+        otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
+      }
     });
   }
 }
