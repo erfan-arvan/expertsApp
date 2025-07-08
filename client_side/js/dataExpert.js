@@ -361,7 +361,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       participant: "Oscar",
       summary: `<p>Calculates UTF8 length of a sequence.</p>`,
       comprehensibility: `<p>Hard due to encoding/bits; needed to Google concepts.</p>`
-    },
+    }, 
     {
       id: 3,
       participant: "Martin",
