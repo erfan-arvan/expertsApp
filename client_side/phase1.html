@@ -886,6 +886,7 @@ function showValidationMessage(msg) {
 
 // Clear storage and redirect to login
 function logout() {
+  saveSummary();
   sessionStorage.clear();
   localStorage.clear();
 
@@ -963,7 +964,9 @@ function saveToServer() {
   console.log(payload);
 }
 
-window.addEventListener('beforeunload', saveToServer);
+window.addEventListener('beforeunload', function (e) {
+  saveToServer();  // Your existing function to save data
+});
 
 </script>
 
