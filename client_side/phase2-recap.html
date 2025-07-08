@@ -1309,22 +1309,40 @@ function renderParticipantRankings() {
 
   const currentUser = (sessionStorage.getItem('username') || getCookie('username') || '').trim().toLowerCase();
 
+  let yourHTML = '';
+  const others = [];
+
   participantRankings.forEach(participant => {
     const participantName = participant.name.trim();
     const isCurrentUser = participantName.toLowerCase() === currentUser;
 
-    // Replace name in HTML heading
-    const displayHTML = participant.html.replace(
+    const updatedHTML = participant.html.replace(
       new RegExp(`<h3>${participantName}</h3>`),
       `<h3>${isCurrentUser ? 'Your Ranking' : participantName}</h3>`
     );
 
-    // Append updated HTML
+    if (isCurrentUser) {
+      yourHTML = updatedHTML;
+    } else {
+      others.push(updatedHTML);
+    }
+  });
+
+  // Append your ranking first
+  if (yourHTML) {
+    const yourWrapper = document.createElement('div');
+    yourWrapper.innerHTML = yourHTML;
+    container.appendChild(yourWrapper);
+  }
+
+  // Append others
+  others.forEach(html => {
     const wrapper = document.createElement('div');
-    wrapper.innerHTML = displayHTML;
+    wrapper.innerHTML = html;
     container.appendChild(wrapper);
   });
 }
+
 
 </script>
 
