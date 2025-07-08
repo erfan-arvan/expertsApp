@@ -572,13 +572,13 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   
 
 
-  function getCookie(name) {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return match ? decodeURIComponent(match[2]) : null;
-  }
+    function getLocalStorage(name) {
+      const value = localStorage.getItem(name);
+      return value ? decodeURIComponent(value) : null;
+    }
 
   function getStoredSnippetOrder() {
-    const stored = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
+    const stored = sessionStorage.getItem('snippetOrder') || getLocalStorage('snippetOrder');
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
@@ -620,15 +620,15 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     }
   }
 
-  function getCookie(name) {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]*)'));
-    return match ? decodeURIComponent(match[2]) : null;
+  function getLocalStorage(name) {
+    const value = localStorage.getItem(name);
+    return value ? decodeURIComponent(value) : null;
   }
 
     const phase3Ranking = JSON.parse(sessionStorage.getItem('phase3_ranking') || decodeURIComponent(document.cookie.match(/(?:^|; )phase3_ranking=([^;]*)/)?.[1] || '{}'));
     // Try restoring from cookie first if sessionStorage is empty
     if (!sessionStorage.getItem('phase3_reasoning')) {
-      const cookieReasoning = getCookie('phase3_reasoning');
+      const cookieReasoning = getLocalStorage('phase3_reasoning');
       if (cookieReasoning) {
         sessionStorage.setItem('phase3_reasoning', cookieReasoning);
       }
@@ -686,7 +686,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     });
     reasoning = newReasoning;
     sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
-    document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
+    // document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
 function showStep() {
   document.getElementById('answer-box').style.display = 'block';
@@ -798,7 +798,7 @@ function showStep() {
       const key = generateKey(steps[stepIndex]);
       reasoning[key] = response;
       sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
-      document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
+      // document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
       stepIndex++;
       if (stepIndex < steps.length) {
@@ -807,11 +807,11 @@ function showStep() {
         if(validateAllResponses()){
           // ✅ Mark phase 3 as complete
           sessionStorage.setItem('phase3Complete', 'true');
-          document.cookie = `phase3Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
+          // document.cookie = `phase3Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
           document.getElementById('submit-review').style.display = 'inline-block';
         } else{
           sessionStorage.setItem('phase3Complete', 'false');
-          document.cookie = `phase3Complete=false; path=/; max-age=${60 * 60 * 24 * 30}`;
+          // document.cookie = `phase3Complete=false; path=/; max-age=${60 * 60 * 24 * 30}`;
           document.getElementById('submit-review').style.display = 'none';
         }
         // Store Phase 3 data
@@ -826,7 +826,7 @@ function showStep() {
       const key = generateKey(steps[stepIndex]);
       reasoning[key] = response;
       sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
-      document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
+      // document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
       if (stepIndex > 0) {
         stepIndex--;
@@ -847,7 +847,7 @@ function showStep() {
 
         // Restore reasoning from cookie if sessionStorage is empty
         if (!sessionStorage.getItem('phase3_reasoning')) {
-          const cookieReasoning = getCookie('phase3_reasoning');
+          const cookieReasoning = getLocalStorage('phase3_reasoning');
           if (cookieReasoning) {
             sessionStorage.setItem('phase3_reasoning', cookieReasoning);
           }
@@ -929,13 +929,13 @@ function showStep() {
   </script>
 
   <script>
-      function getCookie(name) {
-        const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-        return match ? decodeURIComponent(match[2]) : null;
-      }
+  function getLocalStorage(name) {
+    const value = localStorage.getItem(name);
+    return value ? decodeURIComponent(value) : null;
+  }
       
     function displayUserName() {
-      const name = sessionStorage.getItem('participantName') || getCookie('participantName');
+      const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName');
       if (name) {
         document.getElementById('user-info').textContent = `👤 ${name}`;
       }
@@ -944,8 +944,8 @@ function showStep() {
 
 <script>
   function isLoggedIn() {
-    const name = sessionStorage.getItem('participantName') || getCookie('participantName');
-    const order = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
+    const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName');
+    const order = sessionStorage.getItem('snippetOrder') || getLocalStorage('snippetOrder');
     return name && order;
   }
 
@@ -958,7 +958,7 @@ function showStep() {
 
   function isPhaseComplete(phaseKey) {
     const sessionVal = sessionStorage.getItem(phaseKey);
-    const cookieVal = getCookie(phaseKey);
+    const cookieVal = getLocalStorage(phaseKey);
     return sessionVal === 'true' || cookieVal === 'true';
   }
 
@@ -1009,31 +1009,31 @@ function logout() {
 
 <script>
 function saveToServer() {
-  const name = sessionStorage.getItem('participantName') || getCookie('participantName') || 'Anonymous';
-  const username = getCookie('username') || 'anonymous';
+  const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName') || 'Anonymous';
+  const username = getLocalStorage('username') || 'anonymous';
 
   // Phase 1 data
   const phase1 = {};
   for (let i = 1; i <= 8; i++) {
-    const summary = sessionStorage.getItem(`summary${i}`) || getCookie(`summary${i}`) || '';
-    const comp = sessionStorage.getItem(`compSummary${i}`) || getCookie(`compSummary${i}`) || '';
+    const summary = sessionStorage.getItem(`summary${i}`) || getLocalStorage(`summary${i}`) || '';
+    const comp = sessionStorage.getItem(`compSummary${i}`) || getLocalStorage(`compSummary${i}`) || '';
     phase1[`snippet${i}`] = { summary, comprehensibility: comp };
   }
 
   // Phase 2 & 3 data
   let phase2 = {}, phase3 = {};
   try {
-    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getCookie('phase3_ranking') || '{}');
-    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getCookie('phase3_reasoning') || '{}');
+    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getLocalStorage('phase3_ranking') || '{}');
+    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getLocalStorage('phase3_reasoning') || '{}');
   } catch (e) {
     console.warn("Error parsing phase2 or phase3 data", e);
   }
 
   // Completion flags and theme
   const flags = {
-    phase1Complete: sessionStorage.getItem('phase1Complete') || getCookie('phase1Complete') || 'false',
-    phase2Complete: sessionStorage.getItem('phase2Complete') || getCookie('phase2Complete') || 'false',
-    phase3Complete: sessionStorage.getItem('phase3Complete') || getCookie('phase3Complete') || 'false',
+    phase1Complete: sessionStorage.getItem('phase1Complete') || getLocalStorage('phase1Complete') || 'false',
+    phase2Complete: sessionStorage.getItem('phase2Complete') || getLocalStorage('phase2Complete') || 'false',
+    phase3Complete: sessionStorage.getItem('phase3Complete') || getLocalStorage('phase3Complete') || 'false',
     codeTheme: localStorage.getItem('codeTheme') || 'light',
     submitted: '0',
   };
@@ -1068,16 +1068,16 @@ window.addEventListener('beforeunload', saveToServer);
       // Save to reasoning and storage
       reasoning[key] = value;
       sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
-      document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
+      // document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
   
       // Validate all responses
       if (validateAllResponses()) {
         sessionStorage.setItem('phase3Complete', 'true');
-        document.cookie = `phase3Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
+        // document.cookie = `phase3Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
         document.getElementById('submit-review').style.display = 'inline-block';
       } else {
         sessionStorage.setItem('phase3Complete', 'false');
-        document.cookie = `phase3Complete=false; path=/; max-age=${60 * 60 * 24 * 30}`;
+        // document.cookie = `phase3Complete=false; path=/; max-age=${60 * 60 * 24 * 30}`;
         document.getElementById('submit-review').style.display = 'none';
       }
     });
