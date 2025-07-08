@@ -21,7 +21,47 @@ const snippets = [
     }
     <span class="keyword">return</span> <span class="literal">true</span>;
 }
-`
+`, responses: [
+    {
+      id: 1,
+      participant: "Nadeeshan",
+      summary: `<p>This method takes a project name and validates it based on several criteria.</p>`,
+      comprehensibility: `<p>Clear method/final variable names make it easier to understand. Also, the clear logic separation of the conditional statements makes it easier to follow.</p>`
+    },
+    {
+      id: 2,
+      participant: "Oscar",
+      summary: `<p>Checks that the project name is valid: it is not null, does not start with ., is within length, is alphanumeric, and contains allowed characters.</p>`,
+      comprehensibility: `<p>This one is easy to understand: the logic is simple and the identifiers helped me understand what the method is doing.</p>`
+    },
+    {
+      id: 3,
+      participant: "Martin",
+      summary: `<p>This is a string validation method implementing the follow rules:<br>
+          – the input must be nonnull<br>
+          – the input must not start with a dot<br>
+          – the input must not be the empty string<br>
+          – the input must be shorter than or equal to the MAX_NAME_LENGTH constant<br>
+          – each character must be a letter/digit or in VALID_NAME_SET</p>`,
+      comprehensibility: `<p>The method is a straightforward set of tests against the string. These kinds of tests are common in validation logic. The name \`VALID_NAME_EST\` and the method name, combined with the string operations being performed, make the purpose obvious. The method uses simple string conditions to check most of the properties; the only ones that are more complex are the character properties, which are contained in a simple loop. So, structurally, the method is also easy to understand</p>`
+    },
+    {
+      id: 4,
+      participant: "ChatGPT",
+      summary: `<p>This method, isValidProjectName, checks whether a given string is a valid project name based on several criteria:<br><br>
+              It must not be null.<br>
+              It must not start with a dot (.).<br>
+              Its length must be between 1 and a maximum defined by MAX_NAME_LENGTH.<br>
+              Every character in the name must be either a letter, digit, or a member of the VALID_NAME_SET.<br><br>
+              If all these conditions are met, it returns true; otherwise, it returns false.</p>`,
+      comprehensibility: `<p>This snippet is easy to understand due to the following factors:<br><br>
+              Descriptive naming: The method name isValidProjectName clearly conveys its purpose.<br>
+              Straightforward logic: The checks are simple, sequential, and follow an intuitive order of validation (null check → format check → length check → character check).<br>
+              Readable structure: Each condition is isolated in a separate if block, avoiding nesting and making the logic easy to follow.<br>
+              Familiar constructs: Uses standard Java constructs and well-known classes like Character.</p>`
+    }
+  ]
+  
           },
           {
             id: 2,
