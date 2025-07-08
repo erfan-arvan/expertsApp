@@ -527,8 +527,6 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   
 
 
-
-
     const participantRankings = [
         {
           id: 1,
