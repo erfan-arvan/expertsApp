@@ -489,53 +489,66 @@ document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
   document.getElementById('summary').value = savedSummary;
   document.getElementById('compSummary').value = savedcompSummary;
 
-  // === NEW: Load all participant responses and show user's first as "You" ===
-  const otherSumDiv = document.getElementById('otherSum');
-  const otherCompDiv = document.getElementById('otherComp');
+ // === Load all participant responses and show user's first as "You" ===
+const otherSumDiv = document.getElementById('otherSum');
+const otherCompDiv = document.getElementById('otherComp');
 
-  otherSumDiv.innerHTML = '';
-  otherCompDiv.innerHTML = '';
+otherSumDiv.innerHTML = '';
+otherCompDiv.innerHTML = '';
 
-  const currentParticipant = (sessionStorage.getItem('participantName') || getCookie('participantName') || '').trim().toLowerCase();
+const currentParticipantRaw = sessionStorage.getItem('participantName') || getCookie('participantName') || '';
+const currentParticipant = currentParticipantRaw.trim().toLowerCase();
+console.log("[DEBUG] currentParticipantRaw:", currentParticipantRaw);
+console.log("[DEBUG] normalized currentParticipant:", currentParticipant);
 
+if (snippet.responses && Array.isArray(snippet.responses)) {
+  snippet.responses.forEach(r => {
+    const participantRaw = r.participant || '';
+    const normalized = participantRaw.trim().toLowerCase();
+    const isCurrentUser = normalized === currentParticipant;
 
-  if (snippet.responses && Array.isArray(snippet.responses)) {
-    // Separate current user's response
-    const youResponse = snippet.responses.find(r => r.participant.toLowerCase() === currentParticipant);
-    const otherResponses = snippet.responses.filter(r => r.participant.toLowerCase() !== currentParticipant);
+    console.log(`[DEBUG] Checking participant: "${participantRaw}" → "${normalized}"`);
+    console.log(`[DEBUG] Match with current user?`, isCurrentUser);
+  });
 
-    // First: append "You" response
-    if (youResponse) {
-      const sumHTML = `
-        <div class="participant">
-          <h4>You</h4>
-          ${youResponse.summary}
-        </div>`;
-      const compHTML = `
-        <div class="participant">
-          <h4>You</h4>
-          ${youResponse.comprehensibility}
-        </div>`;
-      otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
-      otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
-    }
+  const youResponse = snippet.responses.find(r => r.participant.trim().toLowerCase() === currentParticipant);
+  const otherResponses = snippet.responses.filter(r => r.participant.trim().toLowerCase() !== currentParticipant);
 
-    // Then: append all other responses
-    otherResponses.forEach(response => {
-      const sumHTML = `
-        <div class="participant">
-          <h4>${response.participant}</h4>
-          ${response.summary}
-        </div>`;
-      const compHTML = `
-        <div class="participant">
-          <h4>${response.participant}</h4>
-          ${response.comprehensibility}
-        </div>`;
-      otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
-      otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
-    });
+  if (youResponse) {
+    console.log(`[DEBUG] Found matching "You" response from:`, youResponse.participant);
+    const sumHTML = `
+      <div class="participant">
+        <h4>You</h4>
+        ${youResponse.summary}
+      </div>`;
+    const compHTML = `
+      <div class="participant">
+        <h4>You</h4>
+        ${youResponse.comprehensibility}
+      </div>`;
+    otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
+    otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
+  } else {
+    console.log(`[DEBUG] No matching "You" response found`);
   }
+
+  otherResponses.forEach(response => {
+    console.log(`[DEBUG] Appending other response from:`, response.participant);
+    const sumHTML = `
+      <div class="participant">
+        <h4>${response.participant}</h4>
+        ${response.summary}
+      </div>`;
+    const compHTML = `
+      <div class="participant">
+        <h4>${response.participant}</h4>
+        ${response.comprehensibility}
+      </div>`;
+    otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
+    otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
+  });
+}
+
 }
 
 
