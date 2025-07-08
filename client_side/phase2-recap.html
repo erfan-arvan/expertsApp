@@ -1273,22 +1273,26 @@ function remapSnippetReferences(rankings) {
     return;
   }
 
-  // Map visible number to actual snippet number:
-  // e.g., if snippetOrder = [7,4,2,1,8,5,6,3]
-  // then visual Snippet 1 should point to real Snippet 7
+  // Reverse mapping: actual snippet number → new visual snippet #
   const map = {};
   for (let i = 0; i < 8; i++) {
-    map[i + 1] = snippetOrder[i]; // visible "Snippet i+1" → actual snippet #
+    map[snippetOrder[i]] = i + 1;
   }
 
   rankings.forEach(participant => {
     let updated = participant.html;
 
-    // Replace Snippet X text
-    updated = updated.replace(/\bSnippet (\d)\b/g, (_, num) => `Snippet ${map[parseInt(num)]}`);
+    // Replace Snippet X (text label)
+    updated = updated.replace(/\bSnippet (\d)\b/g, (_, num) => {
+      const mapped = map[parseInt(num)];
+      return `Snippet ${mapped}`;
+    });
 
     // Replace show_snippet(X)
-    updated = updated.replace(/show_snippet\((\d)\)/g, (_, num) => `show_snippet(${map[parseInt(num)]})`);
+    updated = updated.replace(/show_snippet\((\d)\)/g, (_, num) => {
+      const mapped = map[parseInt(num)];
+      return `show_snippet(${mapped})`;
+    });
 
     // Replace compare([X,...],[Y,...])
     updated = updated.replace(/compare\(\[([^\]]*)\],\s*\[([^\]]*)\]\)/g, (_, group1, group2) => {
@@ -1304,10 +1308,8 @@ function remapSnippetReferences(rankings) {
     });
 
     participant.html = updated;
-  }); 
+  });
 }
-
-
 
 
 function renderParticipantRankings() {
