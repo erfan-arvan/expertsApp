@@ -358,7 +358,7 @@
 
 <script>
   function setLocalStorage(name, value, days = 30) {
-    localStorage.setItem('keyName', encodeURIComponent(value));
+    localStorage.setItem(name, encodeURIComponent(value));
   }
   
   async function loginAndProceed(event) {
