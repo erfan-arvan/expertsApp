@@ -425,6 +425,8 @@
 // Clear storage and redirect to login
 function logout() {
   sessionStorage.clear();
+  localStorage.clear();
+
 
   // Clear all cookies
   document.cookie.split(";").forEach(cookie => {
