@@ -437,8 +437,8 @@
 
         sessionStorage.setItem(`summary${i}`, summary);
         sessionStorage.setItem(`compSummary${i}`, comp);
-        setCookie(`summary${i}`, encodeURIComponent(summary), 30);
-        setCookie(`compSummary${i}`, encodeURIComponent(comp), 30);
+        setCookie(`summary${i}`, summary, 30);
+        setCookie(`compSummary${i}`, comp, 30);
       });
 
       // Phase 2 and 3
