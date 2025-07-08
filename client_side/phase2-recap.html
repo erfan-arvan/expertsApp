@@ -1243,6 +1243,9 @@ window.addEventListener('beforeunload', saveToServer);
 
 <script>
 function remapSnippetReferences(rankings) {
+  console.log('sessionStorage:', sessionStorage.getItem('snippetOrder'));
+  console.log('cookie:', document.cookie);
+
   if (!Array.isArray(rankings)) {
     console.error('remapSnippetReferences: rankings is not a valid array.');
     return;
