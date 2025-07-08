@@ -342,13 +342,14 @@ textarea {
       <label for="summary"><strong>What does this code snippet do? Briefly describe its main functionality.</strong></label>
       <textarea id="summary" oninput="saveSummary()"></textarea>
   
-      <label for="compSummary"><strong>How did you assess this snippet's comprehensibility? What features made it easy or hard to understand? Provide a brief explanation.</strong></label>
-      <textarea id="compSummary" oninput="saveSummary()"></textarea>
       <div id="otherSum">
         <div class="participant"><h4>Nadeeshan</h4>
           <p><strong>Summary:</strong> This method takes a project name and validates it based on several criteria.</p>
         </div>
-    </div>
+       </div>
+       
+      <label for="compSummary"><strong>How did you assess this snippet's comprehensibility? What features made it easy or hard to understand? Provide a brief explanation.</strong></label>
+      <textarea id="compSummary" oninput="saveSummary()"></textarea>
       <div class="buttons">
           <button id="prev" onclick="prevSnippet()">Previous</button>
           <button id="next" onclick="nextSnippet()">Next</button>
