@@ -496,7 +496,7 @@ const otherCompDiv = document.getElementById('otherComp');
 otherSumDiv.innerHTML = '';
 otherCompDiv.innerHTML = '';
 
-const currentParticipantRaw = sessionStorage.getItem('participantName') || getCookie('participantName') || '';
+const currentParticipantRaw = sessionStorage.getItem('username') || getCookie('username') || '';
 const currentParticipant = currentParticipantRaw.trim().toLowerCase();
 console.log("[DEBUG] currentParticipantRaw:", currentParticipantRaw);
 console.log("[DEBUG] normalized currentParticipant:", currentParticipant);
