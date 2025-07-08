@@ -340,8 +340,8 @@ textarea {
     <!-- RIGHT: Questions -->
     <div id="question-box" style="flex: 1;">
       <label for="summary"><strong>1- What does this code snippet do? Briefly describe its main functionality.</strong></label>
-      <h4>Your response:</h4>
-      <textarea id="summary" oninput="saveSummary()"></textarea>
+      <!-- <h4>Your response:</h4> -->
+      <textarea id="summary" oninput="saveSummary()" style="display: none;"></textarea>
   
       <div id="otherSum">
         <h4>Other experts' response:</h4>
@@ -350,7 +350,7 @@ textarea {
 
       <label for="compSummary"><strong>2- How did you assess this snippet's comprehensibility? What features made it easy or hard to understand? Provide a brief explanation.</strong></label>
       <h4>Your response:</h4>
-      <textarea id="compSummary" oninput="saveSummary()"></textarea>
+      <textarea id="compSummary" oninput="saveSummary()" style="display: none;"></textarea>
       <div id="otherComp">
         <h4>Other experts' response:</h4>
 
