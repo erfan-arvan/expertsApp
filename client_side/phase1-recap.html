@@ -496,7 +496,8 @@ document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
   otherSumDiv.innerHTML = '';
   otherCompDiv.innerHTML = '';
 
-  const currentParticipant = (sessionStorage.getItem('participantName') || getCookie('participantName') || '').toLowerCase();
+  const currentParticipant = (sessionStorage.getItem('participantName') || getCookie('participantName') || '').trim().toLowerCase();
+
 
   if (snippet.responses && Array.isArray(snippet.responses)) {
     // Separate current user's response
