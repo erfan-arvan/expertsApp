@@ -1270,13 +1270,14 @@ function remapSnippetReferences(rankings) {
     return;
   }
 
-  // Map old snippet numbers (1 to 8) to new ones
+  // Map visible number to actual snippet number:
+  // e.g., if snippetOrder = [7,4,2,1,8,5,6,3]
+  // then visual Snippet 1 should point to real Snippet 7
   const map = {};
   for (let i = 0; i < 8; i++) {
-    map[i + 1] = snippetOrder[i];
+    map[i + 1] = snippetOrder[i]; // visible "Snippet i+1" → actual snippet #
   }
 
-  // Update all references in the HTML strings
   rankings.forEach(participant => {
     let updated = participant.html;
 
@@ -1288,13 +1289,21 @@ function remapSnippetReferences(rankings) {
 
     // Replace compare([X,...],[Y,...])
     updated = updated.replace(/compare\(\[([^\]]*)\],\s*\[([^\]]*)\]\)/g, (_, group1, group2) => {
-      const mapGroup = g => g.split(',').map(x => map[parseInt(x.trim())]).join(',');
+      const mapGroup = g =>
+        g.split(',')
+         .map(x => {
+           const trimmed = x.trim();
+           return trimmed ? map[parseInt(trimmed)] : '';
+         })
+         .filter(x => x !== '')
+         .join(',');
       return `compare([${mapGroup(group1)}], [${mapGroup(group2)}])`;
     });
 
     participant.html = updated;
   });
 }
+
 
 
 
