@@ -919,7 +919,7 @@ function logout() {
 </script>
 
 <script>
-function saveToServer() {
+async function saveToServer() {
   const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName') || 'Anonymous';
   const username = getLocalStorage('username') || 'anonymous';
 
@@ -958,11 +958,31 @@ function saveToServer() {
     ...flags
   };
 
-  const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+  const payloadStr = JSON.stringify(payload);
+
+  // Hash function (returns hex string)
+  async function hashString(str) {
+    const buffer = new TextEncoder().encode(str);
+    const digest = await crypto.subtle.digest('SHA-256', buffer);
+    return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  const currentHash = await hashString(payloadStr);
+  const previousHash = sessionStorage.getItem('lastPayloadHash');
+
+  if (currentHash === previousHash) {
+    console.log('Payload unchanged, not saving to server.');
+    return;
+  }
+
+  sessionStorage.setItem('lastPayloadHash', currentHash);
+
+  const blob = new Blob([payloadStr], { type: 'application/json' });
   navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
 
-  console.log(payload);
+  console.log('Payload saved to server:', payload);
 }
+
 
 window.addEventListener('beforeunload', function (e) {
   saveToServer();  // Your existing function to save data
