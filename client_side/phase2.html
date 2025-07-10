@@ -595,13 +595,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     ];
   
 
-  function getCookie(name) {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return match ? decodeURIComponent(match[2]) : null;
-  }
-
   function getStoredSnippetOrder() {
-    const stored = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
+    const stored = sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder');
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
@@ -639,7 +634,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 
       // ✅ Restore Continue button if phase2Complete is already set
       const continueBtn = document.getElementById('continueBtn');
-      if (sessionStorage.getItem('phase2Complete') === 'true' || getCookie('phase2Complete') === 'true') {
+      if (sessionStorage.getItem('phase2Complete') === 'true' || localStorage.getItem('phase2Complete') === 'true') {
         if (continueBtn) {
           continueBtn.style.display = 'inline-block';
           continueBtn.style.backgroundColor = '#4CAF50'; 
@@ -658,7 +653,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
       else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
 
-      if (sessionStorage.getItem('phase2Complete') === 'true' || getCookie('phase2Complete') === 'true') {
+      if (sessionStorage.getItem('phase2Complete') === 'true' || localStorage.getItem('phase2Complete') === 'true') {
           document.getElementById('continueBtn').style.display = 'inline-block';
           document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
           document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
@@ -761,15 +756,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     }
 
     function loadState() {
-      let saved = sessionStorage.getItem('phase3_ranking');
+      let saved = sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking');
 
-      if (!saved) {
-        const cookieMatch = document.cookie.match(/(?:^|; )phase3_ranking=([^;]*)/);
-        if (cookieMatch) {
-          saved = decodeURIComponent(cookieMatch[1]);  // ✅ decode before parsing
-          sessionStorage.setItem('phase3_ranking', saved);
-        }
-      }
 
       if (!saved) return;
 
@@ -836,13 +824,13 @@ function applyTheme() {
     }
   }
 
-  function getCookie(name) {
+  function getLocalStorage(name) {
       const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
       return match ? decodeURIComponent(match[2]) : null;
   }
 
   function isComplete(key) {
-    return sessionStorage.getItem(key) === 'true' || getCookie(key) === 'true';
+    return sessionStorage.getItem(key) === 'true' || localStorage.getItem(key) === 'true';
   }
 
   function areAllCardsRanked() {
@@ -863,7 +851,7 @@ function applyTheme() {
 
 <script>
   function displayUserName() {
-    const name = sessionStorage.getItem('participantName') || getCookie('participantName');
+    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
     if (name) {
       document.getElementById('user-info').textContent = `👤 ${name}`;
     }
@@ -872,8 +860,8 @@ function applyTheme() {
 
 <script>
   function isLoggedIn() {
-    const name = sessionStorage.getItem('participantName') || getCookie('participantName');
-    const order = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
+    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
+    const order = sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder');
     return name && order;
   }
 
@@ -893,7 +881,7 @@ function applyTheme() {
   
   function isPhaseComplete(phaseKey) {
     const sessionVal = sessionStorage.getItem(phaseKey);
-    const cookieVal = getCookie(phaseKey);
+    const cookieVal = localStorage.getItem(phaseKey);
     return sessionVal === 'true' || cookieVal === 'true';
   }
 

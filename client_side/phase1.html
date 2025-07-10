@@ -367,7 +367,7 @@ a.underline-dotted-pointer {
     const key = 'snippetOrder';
   
     // Try to load from sessionStorage or cookie
-    let stored = sessionStorage.getItem(key) || getLocalStorage(key);
+    let stored = sessionStorage.getItem(key) || localStorage.getItem(key);
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
@@ -385,7 +385,7 @@ a.underline-dotted-pointer {
     // Store in sessionStorage and cookie
     const serialized = JSON.stringify(order);
     sessionStorage.setItem(key, serialized);
-    setLocalStorage(key, serialized, 30);
+    localStorage.setItem(key, serialized);
     return order;
   }
   
@@ -415,7 +415,7 @@ function getLocalStorage(name) {
 }
   
     function isComplete(key) {
-      return sessionStorage.getItem(key) === 'true' || getLocalStorage(key) === 'true';
+      return sessionStorage.getItem(key) === 'true' || localStorage.getItem(key) === 'true';
     }
   
     // Unlock links based on progress
@@ -459,8 +459,8 @@ document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
   let savedSummary = sessionStorage.getItem(keySummary);
   let savedcompSummary = sessionStorage.getItem(keycompSummary);
 
-  if (!savedSummary) savedSummary = decodeURIComponent(getLocalStorage(keySummary) || '');
-  if (!savedcompSummary) savedcompSummary = decodeURIComponent(getLocalStorage(keycompSummary) || '');
+  if (!savedSummary) savedSummary = localStorage.getItem(keySummary) || '';
+  if (!savedcompSummary) savedcompSummary = localStorage.getItem(keycompSummary) || '';
 
   document.getElementById('summary').value = savedSummary;
   document.getElementById('compSummary').value = savedcompSummary;
@@ -478,13 +478,14 @@ function saveSummary() {
   // Save to sessionStorage
   sessionStorage.setItem(keySummary, summary);
   sessionStorage.setItem(keyCompSummary, compSummary); 
-
-  // Save to cookies
+  localStorage.setItem(keySummary, summary);
+  localStorage.setItem(keyCompSummary, compSummary); 
 
   if(areAllSnippetsFilled()){
     document.getElementById('continueBtn').style.display = 'inline-block';
     sessionStorage.setItem('phase1Complete', 'true');
-    setLocalStorage('phase1Complete', 'true', 30);
+    localStorage.setItem('phase1Complete', 'true');
+
     
     //update status bar if needed
     if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
@@ -492,7 +493,7 @@ function saveSummary() {
   }else{
     document.getElementById('continueBtn').style.display = 'none';
     sessionStorage.setItem('phase1Complete', 'false');
-    setLocalStorage('phase1Complete', 'false', 30);
+    localStorage.setItem('phase1Complete', 'false');
     document.getElementById('link-phase2').classList.add('disabled');
     document.getElementById('link-phase3').classList.add('disabled');
     document.getElementById('link-review').classList.add('disabled');
@@ -543,8 +544,8 @@ function submitAll() {
     for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
         const key = `summary${i}`;
         const sessionVal = sessionStorage.getItem(key);
-        const cookieVal = getLocalStorage(key);
-        allSummaries[key] = sessionVal || decodeURIComponent(cookieVal || '');
+        const localVal = localStorage.getItem(key);
+        allSummaries[key] = sessionVal || localVal || '';
     }
 
     fetch("https://codecomprehensibility.site/submit", {
@@ -557,7 +558,7 @@ function submitAll() {
       showSubmissionModal('✅ Summaries submitted successfully. Click “Continue to Phase 2” to proceed.\nYou may resubmit before the deadline if you change your mind about any part of your response.');
       document.getElementById('continueBtn').style.display = 'inline-block';
       sessionStorage.setItem('phase1_submitted', 'true');
-      setLocalStorage('phase1_submitted', 'true', 30);
+      localStorage.setItem('phase1_submitted', 'true');
     } else {
       showSubmissionModal('❌ Submission failed. Please try again.');
     }
@@ -725,7 +726,7 @@ window.onload = function() {
     else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
     else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
 
-    if (sessionStorage.getItem('phase1Complete') === 'true' || getLocalStorage('phase1Complete') === 'true') {
+    if (sessionStorage.getItem('phase1Complete') === 'true' || localStorage.getItem('phase1Complete') === 'true') {
         document.getElementById('continueBtn').style.display = 'inline-block';
     }
 
@@ -768,14 +769,14 @@ function validateCurrentSnippetInputs() {
 
 </script>
 
-<script>
+<!-- <script>
   function openReviewModal() {
   saveSummary();
 
   let content = `Name: ${name}\n\n`;
   for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
     const key = `summary${i}`;
-    const val = sessionStorage.getItem(key) || decodeURIComponent(getLocalStorage(key) || '');
+    const val = sessionStorage.getItem(key) || decodeURIComponent(localStorage.getItem(key) || '');
     content += `Snippet ${i}:\n${val.trim() || "(empty)"}\n\n`;
   }
 
@@ -788,7 +789,7 @@ function submitAndCloseModal() {
   submitAll();
 }
 
-</script>
+</script> -->
 
 <script>
   function reviewAndSubmit() {
@@ -799,7 +800,7 @@ function submitAndCloseModal() {
 
   for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
     const key = `summary${i}`;
-    const text = sessionStorage.getItem(key) || decodeURIComponent(getLocalStorage(key) || '');
+    const text = sessionStorage.getItem(key) || localStorage.getItem(key) || '';
 
     if (!text.trim()) {
       missing.push(`Snippet ${i}`);
@@ -829,8 +830,8 @@ function showValidationMessage(msg) {
             const summaryKey = `summary${i}`;
             const compKey = `compSummary${i}`;
 
-            const summary = sessionStorage.getItem(summaryKey) || decodeURIComponent(getLocalStorage(summaryKey) || '');
-            const compSummary = sessionStorage.getItem(compKey) || decodeURIComponent(getLocalStorage(compKey) || '');
+            const summary = sessionStorage.getItem(summaryKey) || localStorage.getItem(summaryKey) || '';
+            const compSummary = sessionStorage.getItem(compKey) || localStorage.getItem(compKey) || '';
 
             if (!summary.trim() || !compSummary.trim()) {
             return false;
@@ -843,7 +844,7 @@ function showValidationMessage(msg) {
 
 <script>
   function displayUserName() {
-    const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName');
+    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
     if (name) {
       document.getElementById('user-info').textContent = `👤 ${name}`;
     }
@@ -887,8 +888,8 @@ function logout() {
 
 <script>
   function isLoggedIn() {
-    const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName');
-    const order = sessionStorage.getItem('snippetOrder') || getLocalStorage('snippetOrder');
+    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
+    const order = sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder');
     return name && order;
   }
 

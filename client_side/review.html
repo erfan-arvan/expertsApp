@@ -228,11 +228,6 @@
   </script>
 
   <script>
-    function getLocalStorage(name) {
-      const value = localStorage.getItem(name);
-      return value ? decodeURIComponent(value) : null;
-    }
-
     function renderPhase1() {
       const container = document.getElementById('phase1');
       let foundAny = false;
@@ -241,8 +236,8 @@
         const summaryKey = `summary${i}`;
         const compKey = `compSummary${i}`;
 
-        const summary = sessionStorage.getItem(summaryKey) || decodeURIComponent(getLocalStorage(summaryKey) || '');
-        const comp = sessionStorage.getItem(compKey) || decodeURIComponent(getLocalStorage(compKey) || '');
+        const summary = sessionStorage.getItem(summaryKey) || localStorage.getItem(summaryKey) || '';
+        const comp = sessionStorage.getItem(compKey) || localStorage.getItem(compKey) || '';
 
         if (summary || comp) {
           foundAny = true;
@@ -262,7 +257,7 @@
     }
 
     function renderPhase2() {
-      const data = JSON.parse(sessionStorage.getItem('phase3_ranking') || getLocalStorage('phase3_ranking') || '{}');
+      const data = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
       const container = document.getElementById('phase2');
       if (!data || Object.keys(data).length === 0) {
         container.innerHTML = '<em>No data found.</em>';
@@ -286,25 +281,25 @@
     }
 
   function submitAll() {
-    const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName') || 'Anonymous';
-    const username = getLocalStorage('username') || 'anonymous';
+    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
+    const username = localStorage.getItem('username') || 'anonymous';
 
     // Phase 1
     const phase1 = {};
     for (let i = 1; i <= 8; i++) {
-      const summary = sessionStorage.getItem(`summary${i}`) || getLocalStorage(`summary${i}`) || '';
-      const comp = sessionStorage.getItem(`compSummary${i}`) || getLocalStorage(`compSummary${i}`) || '';
+      const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
+      const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
       phase1[`snippet${i}`] = { summary, comprehensibility: comp };
     }
 
     // Phase 2 & 3
-    const phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getLocalStorage('phase3_ranking') || '{}');
-    const phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getLocalStorage('phase3_reasoning') || '{}');
+    const phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
+    const phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
 
     const flags = {
-      phase1Complete: sessionStorage.getItem('phase1Complete') || getLocalStorage('phase1Complete') || 'false',
-      phase2Complete: sessionStorage.getItem('phase2Complete') || getLocalStorage('phase2Complete') || 'false',
-      phase3Complete: sessionStorage.getItem('phase3Complete') || getLocalStorage('phase3Complete') || 'false',
+      phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
+      phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
+      phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
       codeTheme: localStorage.getItem('codeTheme') || 'light',
       submitted: '1' // final submission flag
     };
@@ -365,7 +360,7 @@
 
 <script>
   function displayUserName() {
-    const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName');
+    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
     if (name) {
       document.getElementById('user-info').textContent = `👤 ${name}`;
     }
@@ -374,8 +369,8 @@
 
 <script>
   function isLoggedIn() {
-    const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName');
-    const order = sessionStorage.getItem('snippetOrder') || getLocalStorage('snippetOrder');
+    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
+    const order = sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder');
     return name && order;
   }
 
@@ -388,7 +383,7 @@
 
   function isPhaseComplete(phaseKey) {
     const sessionVal = sessionStorage.getItem(phaseKey);
-    const cookieVal = getLocalStorage(phaseKey);
+    const cookieVal = localStorage.getItem(phaseKey);
     return sessionVal === 'true' || cookieVal === 'true';
   }
 
@@ -440,31 +435,31 @@ function logout() {
 
 <script>
 function saveToServer() {
-  const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName') || 'Anonymous';
-  const username = getLocalStorage('username') || 'anonymous';
+  const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
+  const username = localStorage.getItem('username') || 'anonymous';
 
   // Phase 1 data
   const phase1 = {};
   for (let i = 1; i <= 8; i++) {
-    const summary = sessionStorage.getItem(`summary${i}`) || getLocalStorage(`summary${i}`) || '';
-    const comp = sessionStorage.getItem(`compSummary${i}`) || getLocalStorage(`compSummary${i}`) || '';
+    const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
+    const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
     phase1[`snippet${i}`] = { summary, comprehensibility: comp };
   }
 
   // Phase 2 & 3 data
   let phase2 = {}, phase3 = {};
   try {
-    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getLocalStorage('phase3_ranking') || '{}');
-    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getLocalStorage('phase3_reasoning') || '{}');
+    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
+    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
   } catch (e) {
     console.warn("Error parsing phase2 or phase3 data", e);
   }
 
   // Completion flags and theme
   const flags = {
-    phase1Complete: sessionStorage.getItem('phase1Complete') || getLocalStorage('phase1Complete') || 'false',
-    phase2Complete: sessionStorage.getItem('phase2Complete') || getLocalStorage('phase2Complete') || 'false',
-    phase3Complete: sessionStorage.getItem('phase3Complete') || getLocalStorage('phase3Complete') || 'false',
+    phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
+    phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
+    phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
     codeTheme: localStorage.getItem('codeTheme') || 'light',
     submitted: '0',
   };

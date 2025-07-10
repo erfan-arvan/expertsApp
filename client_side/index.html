@@ -393,9 +393,9 @@
       sessionStorage.setItem('snippetOrder', JSON.stringify(snippetOrder));
       sessionStorage.setItem('username', username);
 
-      setLocalStorage('participantName', participantName);
-      setLocalStorage('snippetOrder', JSON.stringify(snippetOrder));
-      setLocalStorage('username', username);
+      localStorage.setItem('participantName', participantName);
+      localStorage.setItem('snippetOrder', JSON.stringify(snippetOrder));
+      localStorage.setItem('username', username);
       loadPreviousData()
         .then(() => {
           window.location.href = 'phase1.html'; // only after data is fully loaded
@@ -412,7 +412,7 @@
   }
 
   function loadPreviousData() {
-    const username = sessionStorage.getItem('username') || getLocalStorage('username');
+    const username = sessionStorage.getItem('username') || localStorage.getItem('username');
     if (!username) {
       alert("Username not found.");
       return Promise.reject("No username");  // return a rejected promise
@@ -436,56 +436,58 @@
 
         sessionStorage.setItem(`summary${i}`, summary);
         sessionStorage.setItem(`compSummary${i}`, comp);
-        setLocalStorage(`summary${i}`, encodeURIComponent(summary), 30);
-        setLocalStorage(`compSummary${i}`, encodeURIComponent(comp), 30);
+
+        localStorage.setItem(`summary${i}`, summary);
+        localStorage.setItem(`compSummary${i}`, comp);
       });
 
       // Phase 2 and 3
       if (data.phase2) {
         const p2 = JSON.stringify(data.phase2);
         sessionStorage.setItem('phase3_ranking', p2);
-        setLocalStorage('phase3_ranking', p2, 30);
+        localStorage.setItem('phase3_ranking', p2);
       }
 
       if (data.phase3) {
         const p3 = JSON.stringify(data.phase3);
         sessionStorage.setItem('phase3_reasoning', p3);
-        setLocalStorage('phase3_reasoning', p3, 30);
+        localStorage.setItem('phase3_reasoning', p3);
       }
 
       // Participant name
       if (data.participantName) {
         sessionStorage.setItem('participantName', data.participantName);
-        setLocalStorage('participantName', data.participantName, 30);
+        localStorage.setItem('participantName', data.participantName);
       }
 
       // Snippet order
       if (data.snippetOrder) {
         const order = JSON.stringify(data.snippetOrder);
         sessionStorage.setItem('snippetOrder', order);
-        setLocalStorage('snippetOrder', order, 30);
+        localStorage.setItem('snippetOrder', order);
       }
 
       // ✅ Restore additional flags
       if ('phase1Complete' in data) {
         sessionStorage.setItem('phase1Complete', data.phase1Complete);
-        setLocalStorage('phase1Complete', data.phase1Complete, 30);
+        localStorage.setItem('phase1Complete', data.phase1Complete);
       }
       if ('phase2Complete' in data) {
         sessionStorage.setItem('phase2Complete', data.phase2Complete);
-        setLocalStorage('phase2Complete', data.phase2Complete, 30);
+        localStorage.setItem('phase2Complete', data.phase2Complete);
       }
       if ('phase3Complete' in data) {
         sessionStorage.setItem('phase3Complete', data.phase3Complete);
-        setLocalStorage('phase3Complete', data.phase3Complete, 30);
+        localStorage.setItem('phase3Complete', data.phase3Complete);
       }
 
       if ('codeTheme' in data) {
+        sessionStorage.setItem('codeTheme', data.codeTheme); // No cookie needed
         localStorage.setItem('codeTheme', data.codeTheme); // No cookie needed
       }
       if ('submitted' in data) {
         sessionStorage.setItem('submitted', data.submitted);
-        setLocalStorage('submitted', data.submitted, 30);
+        localStorage.setItem('submitted', data.submitted);
       }
       console.log("Previous data loaded successfully.");
     })
@@ -504,14 +506,14 @@ function getLocalStorage(name) {
 
 
   function isLoggedIn() {
-    const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName');
-    const order = sessionStorage.getItem('snippetOrder') || getLocalStorage('snippetOrder');
+    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
+    const order = sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder');
     return name && order;
   }
 
   window.onload = () => {
     if (isLoggedIn()) {
-      const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName');
+      const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
       document.getElementById('login-box').style.display = 'none';
       document.getElementById('proceed-box').style.display = 'block';
       document.getElementById('participant-display-name').textContent = name;

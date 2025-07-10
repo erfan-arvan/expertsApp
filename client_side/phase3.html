@@ -571,14 +571,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     ];
   
 
-
-    function getLocalStorage(name) {
-      const value = localStorage.getItem(name);
-      return value ? decodeURIComponent(value) : null;
-    }
-
   function getStoredSnippetOrder() {
-    const stored = sessionStorage.getItem('snippetOrder') || getLocalStorage('snippetOrder');
+    const stored = sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder');
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
@@ -620,15 +614,12 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     }
   }
 
-  function getLocalStorage(name) {
-    const value = localStorage.getItem(name);
-    return value ? decodeURIComponent(value) : null;
-  }
 
-    const phase3Ranking = JSON.parse(sessionStorage.getItem('phase3_ranking') || decodeURIComponent(document.cookie.match(/(?:^|; )phase3_ranking=([^;]*)/)?.[1] || '{}'));
+
+    const phase3Ranking = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking'));
     // Try restoring from cookie first if sessionStorage is empty
     if (!sessionStorage.getItem('phase3_reasoning')) {
-      const cookieReasoning = getLocalStorage('phase3_reasoning');
+      const cookieReasoning = localStorage.getItem('phase3_reasoning');
       if (cookieReasoning) {
         sessionStorage.setItem('phase3_reasoning', cookieReasoning);
       }
@@ -847,7 +838,7 @@ function showStep() {
 
         // Restore reasoning from cookie if sessionStorage is empty
         if (!sessionStorage.getItem('phase3_reasoning')) {
-          const cookieReasoning = getLocalStorage('phase3_reasoning');
+          const cookieReasoning = localStorage.getItem('phase3_reasoning');
           if (cookieReasoning) {
             sessionStorage.setItem('phase3_reasoning', cookieReasoning);
           }
@@ -929,13 +920,9 @@ function showStep() {
   </script>
 
   <script>
-  function getLocalStorage(name) {
-    const value = localStorage.getItem(name);
-    return value ? decodeURIComponent(value) : null;
-  }
       
     function displayUserName() {
-      const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName');
+      const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
       if (name) {
         document.getElementById('user-info').textContent = `👤 ${name}`;
       }
@@ -944,8 +931,8 @@ function showStep() {
 
 <script>
   function isLoggedIn() {
-    const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName');
-    const order = sessionStorage.getItem('snippetOrder') || getLocalStorage('snippetOrder');
+    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
+    const order = sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder');
     return name && order;
   }
 
@@ -958,7 +945,7 @@ function showStep() {
 
   function isPhaseComplete(phaseKey) {
     const sessionVal = sessionStorage.getItem(phaseKey);
-    const cookieVal = getLocalStorage(phaseKey);
+    const cookieVal = localStorage.getItem(phaseKey);
     return sessionVal === 'true' || cookieVal === 'true';
   }
 
@@ -1009,31 +996,31 @@ function logout() {
 
 <script>
 function saveToServer() {
-  const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName') || 'Anonymous';
-  const username = getLocalStorage('username') || 'anonymous';
+  const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
+  const username = localStorage.getItem('username') || 'anonymous';
 
   // Phase 1 data
   const phase1 = {};
   for (let i = 1; i <= 8; i++) {
-    const summary = sessionStorage.getItem(`summary${i}`) || getLocalStorage(`summary${i}`) || '';
-    const comp = sessionStorage.getItem(`compSummary${i}`) || getLocalStorage(`compSummary${i}`) || '';
+    const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
+    const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
     phase1[`snippet${i}`] = { summary, comprehensibility: comp };
   }
 
   // Phase 2 & 3 data
   let phase2 = {}, phase3 = {};
   try {
-    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getLocalStorage('phase3_ranking') || '{}');
-    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getLocalStorage('phase3_reasoning') || '{}');
+    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
+    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
   } catch (e) {
     console.warn("Error parsing phase2 or phase3 data", e);
   }
 
   // Completion flags and theme
   const flags = {
-    phase1Complete: sessionStorage.getItem('phase1Complete') || getLocalStorage('phase1Complete') || 'false',
-    phase2Complete: sessionStorage.getItem('phase2Complete') || getLocalStorage('phase2Complete') || 'false',
-    phase3Complete: sessionStorage.getItem('phase3Complete') || getLocalStorage('phase3Complete') || 'false',
+    phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
+    phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
+    phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
     codeTheme: localStorage.getItem('codeTheme') || 'light',
     submitted: '0',
   };
