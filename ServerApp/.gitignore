@@ -42,3 +42,8 @@ build/
 
 ### __pycache__
 __pycache__
+
+#submissions
+ServerApp/phase1_submissions.txt
+ServerApp/phase2_submissions.txt
+ServerApp/submissions/
