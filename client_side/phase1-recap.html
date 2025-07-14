@@ -492,13 +492,71 @@ textarea {
       let savedSummary = sessionStorage.getItem(keySummary);
       let savedcompSummary = sessionStorage.getItem(keycompSummary);
 
-      if (!savedSummary)
-        savedSummary = localStorage.getItem(keySummary) || "";
-      if (!savedcompSummary)
-        savedcompSummary = localStorage.getItem(keycompSummary) || "";
+  if (!savedSummary) savedSummary = decodeURIComponent(getCookie(keySummary) || '');
+  if (!savedcompSummary) savedcompSummary = decodeURIComponent(getCookie(keycompSummary) || '');
 
-      document.getElementById("summary").value = savedSummary;
-      document.getElementById("compSummary").value = savedcompSummary;
+  document.getElementById('summary').value = savedSummary;
+  document.getElementById('compSummary').value = savedcompSummary;
+
+ // === Load all participant responses and show user's first as "You" ===
+const otherSumDiv = document.getElementById('otherSum');
+const otherCompDiv = document.getElementById('otherComp');
+
+otherSumDiv.innerHTML = '';
+otherCompDiv.innerHTML = '';
+
+const currentParticipantRaw = sessionStorage.getItem('username') || getCookie('username') || '';
+const currentParticipant = currentParticipantRaw.trim().toLowerCase();
+console.log("[DEBUG] currentParticipantRaw:", currentParticipantRaw);
+console.log("[DEBUG] normalized currentParticipant:", currentParticipant);
+
+if (snippet.responses && Array.isArray(snippet.responses)) {
+  snippet.responses.forEach(r => {
+    const participantRaw = r.participant || '';
+    const normalized = participantRaw.trim().toLowerCase();
+    const isCurrentUser = normalized === currentParticipant;
+
+    console.log(`[DEBUG] Checking participant: "${participantRaw}" → "${normalized}"`);
+    console.log(`[DEBUG] Match with current user?`, isCurrentUser);
+  });
+
+  const youResponse = snippet.responses.find(r => r.participant.trim().toLowerCase() === currentParticipant);
+  const otherResponses = snippet.responses.filter(r => r.participant.trim().toLowerCase() !== currentParticipant);
+
+  if (youResponse) {
+    console.log(`[DEBUG] Found matching "You" response from:`, youResponse.participant);
+    const sumHTML = `
+      <div class="participant">
+        <h4>You</h4>
+        ${youResponse.summary}
+      </div>`;
+    const compHTML = `
+      <div class="participant">
+        <h4>You</h4>
+        ${youResponse.comprehensibility}
+      </div>`;
+    otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
+    otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
+  } else {
+    console.log(`[DEBUG] No matching "You" response found`);
+  }
+
+  otherResponses.forEach(response => {
+    console.log(`[DEBUG] Appending other response from:`, response.participant);
+    const sumHTML = `
+      <div class="participant">
+        <h4>${response.participant}</h4>
+        ${response.summary}
+      </div>`;
+    const compHTML = `
+      <div class="participant">
+        <h4>${response.participant}</h4>
+        ${response.comprehensibility}
+      </div>`;
+    otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
+    otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
+  });
+}
     }
 
     function saveSummary() {
