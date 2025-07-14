@@ -600,31 +600,29 @@ a:hover {
       style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
   </div>
 
-  <div id="instructions-content" style="margin-top: 15px;">
+<div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2 style="margin: 0;">Phase 2: Ranking Code Snippets by Comprehension Difficulty</h2>
+    <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Show</button>
+  </div>
+
+  <div id="instructions-content" style="margin-top: 15px; display: none;">
     <p>In this phase, you will rank the 8 code snippets based on how easy or difficult they are to understand.</p>
     <ol>
-      <li><strong>Rank the snippets:</strong> Drag and drop each snippet (white) card into the 8 green boxes, which
-        represent ranking positions.</li>
+      <li><strong>Rank the snippets:</strong> Drag and drop each snippet (white) card into the 8 green boxes, which represent ranking positions.</li>
       <li><strong>Understand the scale:</strong>
         <ul>
-          <li><strong>Position 1</strong> (leftmost): it should contain the snippets that are easiest to understand.
-          </li>
-          <li><strong>Position 8</strong> (rightmost): it should contain the snippets that are easiest to understand.
-          </li>
+          <li><strong>Position 1</strong> (leftmost): it should contain the snippets that are easiest to understand.</li>
+          <li><strong>Position 8</strong> (rightmost): it should contain the snippets that are easiest to understand.</li>
         </ul>
       </li>
-      <li><strong>Equal ranking:</strong> You may place multiple snippets in the same position if they are similarly
-        easy/difficult to understand.</li>
-      <li><strong>Empty positions:</strong> it is possible to have empty positions (e.g., when grouping multiple
-        snippets in one position).</li>
-      <li><strong>Comparing snippets:</strong> You can compare the code of multiple snippets by clicking their "View"
-        checkboxes, which display the snippets' code.</li>
+      <li><strong>Equal ranking:</strong> You may place multiple snippets in the same position if they are similarly easy/difficult to understand.</li>
+      <li><strong>Empty positions:</strong> it is possible to have empty positions (e.g., when grouping multiple snippets in one position).</li>
+      <li><strong>Comparing snippets:</strong> You can compare the code of multiple snippets by clicking their "View" checkboxes, which display the snippets' code.</li>
     </ol>
     <!-- <p><strong>Important:</strong> Please fill the ranking positions from left to right. If you leave any positions empty (e.g., due to grouping multiple snippets in one position), leave the rightmost positions empty.</p> -->
-
-    <p><strong>Please complete this phase using your own judgment</strong>. <span style="color:red;"><strong>Do not
-          consult with anyone else or use generative AI tools (ChatGPT, GitHub Copilot, etc.), search engines, or
-          external websites</strong></span>. Your judgment is essential to the validity of our study.</p>
+     
+          <p><strong>Please complete this phase using your own judgment</strong>. <span style="color:red;"><strong>Do not consult with anyone else or use generative AI tools (ChatGPT, GitHub Copilot, etc.), search engines, or external websites</strong></span>. Your judgment is essential to the validity of our study.</p>
   </div>
 </div>
 
