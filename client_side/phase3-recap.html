@@ -23,7 +23,7 @@
     .ranking-row {
       display: flex;
       gap: 10px;
-      overflow-x: auto;
+      overflow-x: visible;
       margin-bottom: 20px;
     }
   
@@ -321,6 +321,259 @@
     a:hover {
       text-decoration: underline;
     }
+
+      .participant-section {
+      margin-bottom: 10px;
+    }
+
+    .ranking-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .ranking-labels {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+
+    .ranking-label {
+      flex: 1;
+      text-align: center;
+      font-weight: bold;
+      color: #009999;
+    }
+
+    .ranking-slot {
+      flex: 1;
+      min-height: 100px;
+      border: 2px dashed #4CAF50;
+      background-color: #e8f5e9;
+      border-radius: 6px;
+      padding: 10px;
+    }
+
+    .ranking-slot button {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      padding: 6px;
+      border: none;
+      border-radius: 4px;
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .ranking-slot button:hover {
+      background-color: #45a049;
+      position: relative;
+    }
+
+    .ranking-label:last-child {
+      color: red;
+    }
+
+    .snippet-1 { background-color: #4CAF50; color: white; } /* Green */
+    .snippet-2 { background-color: #2196F3; color: white; } /* Blue */
+    .snippet-3 { background-color: #f44336; color: white; } /* Red */
+    .snippet-4 { background-color: #FF9800; color: white; } /* Orange */
+    .snippet-5 { background-color: #9C27B0; color: white; } /* Purple */
+    .snippet-6 { background-color: #3F51B5; color: white; } /* Indigo */
+    .snippet-7 { background-color: #009688; color: white; } /* Teal */
+    .snippet-8 { background-color: #795548; color: white; } /* Brown */
+
+    button.snippet-1 { background-color: #4CAF50; color: white; }
+    button.snippet-2 { background-color: #2196F3; color: white; }
+    button.snippet-3 { background-color: #f44336; color: white; }
+    button.snippet-4 { background-color: #FF9800; color: white; }
+    button.snippet-5 { background-color: #9C27B0; color: white; }
+    button.snippet-6 { background-color: #3F51B5; color: white; }
+    button.snippet-7 { background-color: #009688; color: white; }
+    button.snippet-8 { background-color: #795548; color: white; }
+
+
+.reasoning-point {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: white;
+  border: 2px solid black;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.2s ease;
+}
+
+.reasoning-point:hover {
+  transform: scale(1.2);
+}
+
+.tooltip-box {
+  position: absolute;
+  background-color: #333;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  max-width: 260px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  display: none;
+  z-index: 99;
+}
+
+.reasoning-container {
+  position: relative;
+}
+
+/* Show tooltip on hover */
+.reasoning-point:hover + .tooltip-box {
+  display: block;
+}
+
+.snippet-box {
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-family: 'Courier New', monospace;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.code-content {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.participant {
+      background: #f9f9f9;
+      border-left: 4px solid #aaa;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .participant h4 {
+      margin-top: 0;
+    }
+
+
+    #modal-code {
+  background-color: #2d2d2d;
+  color: #ccc;
+  padding: 20px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.light-mode #modal-code {
+  background-color: #f0f0f0;
+  color: #333;
+}
+.code-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  background-color: inherit;
+  color: inherit;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.line-numbers {
+  text-align: right;
+  padding-right: 10px;
+  user-select: none;
+  color: #888;
+}
+
+.code-content {
+  white-space: pre;
+}
+
+#code {
+  background-color: #2d2d2d;
+  color: #ccc;
+  padding: 20px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.light-mode #code {
+  background-color: #f0f0f0;
+  color: #333;
+}
+/* LIGHT MODE styles */
+.keyword     { color: #0000ff; font-weight: bold; }
+.type        { color: #007070; }
+.function    { color: #7928a1; font-weight: bold; }
+.literal     { color: #009999; }
+.string      { color: #a31515; }
+.comment     { color: #6a9955; font-style: italic; }
+.number      { color: #098658; }
+
+/* DARK MODE overrides */
+.dark-mode .keyword  { color: #82aaff; }
+.dark-mode .type     { color: #89ddff; }
+.dark-mode .function { color: #c792ea; }
+.dark-mode .literal  { color: #ffcb6b; }
+.dark-mode .string   { color: #c3e88d; }
+.dark-mode .comment  { color: #7f848e; }
+.dark-mode .number   { color: #f78c6c; }
+
+a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+
+.sticky-menu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  padding: 10px 0;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  z-index: 1000;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.06);
+}
+
+.sticky-menu button {
+  background: #ffffff;
+  color: #333;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.sticky-menu button:hover {
+  background: #f3f3f3;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
   </style>
 </head>
 <body>
@@ -333,95 +586,83 @@
     </div>
   </div>
   <a href="index.html" class="phase-link" id="link-home">🏠 Home</a>
-  <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
-  <a href="phase2.html" class="phase-link disabled" id="link-phase2">Phase 2</a>
-  <a href="phase3.html" class="phase-link disabled" id="link-phase3">Phase 3</a>
+  <a href="phase1-recap.html" class="phase-link" id="link-phase1">Phase 1</a>
+  <a href="phase2-recap.html" class="phase-link disabled" id="link-phase2">Phase 2</a>
+  <a href="phase3-recap.html" class="phase-link disabled" id="link-phase3">Phase 3</a>
   <a href="review.html" class="phase-link disabled" id="link-review">Review & Submit</a>
 </div>
 
-<div id="instructions-box"
-  style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
+
+<div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <h2 style="margin: 0;">Phase 2: Ranking Code Snippets by Comprehension Difficulty</h2>
-    <button onclick="toggleInstructions()"
-      style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
+    <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Show</button>
   </div>
 
-  <div id="instructions-content" style="margin-top: 15px;">
+  <div id="instructions-content" style="margin-top: 15px; display: none;">
     <p>In this phase, you will rank the 8 code snippets based on how easy or difficult they are to understand.</p>
     <ol>
-      <li><strong>Rank the snippets:</strong> Drag and drop each snippet (white) card into the 8 green boxes, which
-        represent ranking positions.</li>
+      <li><strong>Rank the snippets:</strong> Drag and drop each snippet (white) card into the 8 green boxes, which represent ranking positions.</li>
       <li><strong>Understand the scale:</strong>
         <ul>
-          <li><strong>Position 1</strong> (leftmost): it should contain the snippets that are easiest to understand.
-          </li>
-          <li><strong>Position 8</strong> (rightmost): it should contain the snippets that are easiest to understand.
-          </li>
+          <li><strong>Position 1</strong> (leftmost): it should contain the snippets that are easiest to understand.</li>
+          <li><strong>Position 8</strong> (rightmost): it should contain the snippets that are easiest to understand.</li>
         </ul>
       </li>
-      <li><strong>Equal ranking:</strong> You may place multiple snippets in the same position if they are similarly
-        easy/difficult to understand.</li>
-      <li><strong>Empty positions:</strong> it is possible to have empty positions (e.g., when grouping multiple
-        snippets in one position).</li>
-      <li><strong>Comparing snippets:</strong> You can compare the code of multiple snippets by clicking their "View"
-        checkboxes, which display the snippets' code.</li>
+      <li><strong>Equal ranking:</strong> You may place multiple snippets in the same position if they are similarly easy/difficult to understand.</li>
+      <li><strong>Empty positions:</strong> it is possible to have empty positions (e.g., when grouping multiple snippets in one position).</li>
+      <li><strong>Comparing snippets:</strong> You can compare the code of multiple snippets by clicking their "View" checkboxes, which display the snippets' code.</li>
     </ol>
     <!-- <p><strong>Important:</strong> Please fill the ranking positions from left to right. If you leave any positions empty (e.g., due to grouping multiple snippets in one position), leave the rightmost positions empty.</p> -->
-
-    <p><strong>Please complete this phase using your own judgment</strong>. <span style="color:red;"><strong>Do not
-          consult with anyone else or use generative AI tools (ChatGPT, GitHub Copilot, etc.), search engines, or
-          external websites</strong></span>. Your judgment is essential to the validity of our study.</p>
+     
+          <p><strong>Please complete this phase using your own judgment</strong>. <span style="color:red;"><strong>Do not consult with anyone else or use generative AI tools (ChatGPT, GitHub Copilot, etc.), search engines, or external websites</strong></span>. Your judgment is essential to the validity of our study.</p>
   </div>
 </div>
 
 
-<div class="ranking-row-numbers" id="rankingRow">
-  <p class="ranking-number">Position 1 <span style="color: green;">(easiest)</span></p>
-  <p class="ranking-number">Position 2</p>
-  <p class="ranking-number">Position 3</p>
-  <p class="ranking-number">Position 4</p>
-  <p class="ranking-number">Position 5</p>
-  <p class="ranking-number">Position 6</p>
-  <p class="ranking-number">Position 7</p>
-  <p class="ranking-number">Position 8 <span style="color: red;">(hardest)</span></p>
-</div>
-<div class="ranking-row" id="rankingRow">
-  <!-- 8 drop zones -->
-  <div class="ranking-slot" data-rank="1"></div>
-  <div class="ranking-slot" data-rank="2"></div>
-  <div class="ranking-slot" data-rank="3"></div>
-  <div class="ranking-slot" data-rank="4"></div>
-  <div class="ranking-slot" data-rank="5"></div>
-  <div class="ranking-slot" data-rank="6"></div>
-  <div class="ranking-slot" data-rank="7"></div>
-  <div class="ranking-slot" data-rank="8"></div>
-</div>
+  <div class="ranking-row-numbers" id="rankingRow" style="display: none;">
+    <p class="ranking-number">Position 1 <span style="color: green;">(easiest)</span></p>
+    <p class="ranking-number">Position 2</p>
+    <p class="ranking-number">Position 3</p>
+    <p class="ranking-number">Position 4</p>
+    <p class="ranking-number">Position 5</p>
+    <p class="ranking-number">Position 6</p>
+    <p class="ranking-number">Position 7</p>
+    <p class="ranking-number">Position 8 <span style="color: red;">(hardest)</span></p> 
+  </div>
+  <div class="ranking-row" id="rankingRow" style="display: none;">
+    <!-- 8 drop zones -->
+    <div class="ranking-slot" data-rank="1"></div>
+    <div class="ranking-slot" data-rank="2"></div>
+    <div class="ranking-slot" data-rank="3"></div>
+    <div class="ranking-slot" data-rank="4"></div>
+    <div class="ranking-slot" data-rank="5"></div>
+    <div class="ranking-slot" data-rank="6"></div>
+    <div class="ranking-slot" data-rank="7"></div>
+    <div class="ranking-slot" data-rank="8"></div>
+  </div>
 
-<div id="cards" style="margin-bottom: 20px;"></div>
+  <div id="cards" style="margin-bottom: 20px; display: none;"></div>
 
-<div id="snippet-bar"
-  style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background-color: #f5f5f5; border-radius: 6px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-  <h3 style="margin: 0; font-size: 16px; color: #333;">
-    🔍 Snippet Preview & Compare <span style="font-weight: normal;">(click on view checkboxes to preview or compare
-      snippets)</span>
-  </h3>
-  <button id="theme-toggle" onclick="toggleTheme()"
-    style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #333; color: white; border: none; cursor: pointer;">
-    Switch to Dark Mode
-  </button>
-</div>
+  
+  <div class="phase-section"></div>
 
+  <div id="snippet-bar" style="display: none; justify-content: space-between; align-items: center; padding: 10px 15px; background-color: #f5f5f5; border-radius: 6px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+    <h3 style="margin: 0; font-size: 16px; color: #333;">
+      🔍 Snippet Preview & Compare <span style="font-weight: normal;">(click on view checkboxes to preview or compare snippets)</span>
+    </h3>
+        <button id="theme-toggle" onclick="toggleTheme()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #333; color: white; border: none; cursor: pointer;">
+      Switch to Dark Mode
+    </button>
+  </div>
+  
+  <div class="preview-area" id="previewArea"></div>
 
-<div class="preview-area" id="previewArea"></div>
+  <div style="margin-top: 30px;">
+    <button id="continueBtn" onclick="goToPhase3()" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: gray; color: white; cursor: pointer;">Continue to Phase 3 ➡️</button>
+  </div>
 
-<div style="margin-top: 30px;">
-  <button id="continueBtn" onclick="goToPhase3()"
-    style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: gray; color: white; cursor: pointer;">Continue
-    to Phase 3 ➡️</button>
-</div>
-
-<div id="validation-modal" style="
+  <div id="validation-modal" style="
   display: none;
   position: fixed;
   top: 30%;
@@ -438,8 +679,8 @@
   text-align: center;
   font-family: 'Segoe UI', Tahoma, sans-serif;
   ">
-  <p id="validation-message" style="font-weight: bold;"></p>
-  <button onclick="document.getElementById('validation-modal').style.display = 'none';" style="
+    <p id="validation-message" style="font-weight: bold;"></p>
+    <button onclick="document.getElementById('validation-modal').style.display = 'none';" style="
       margin-top: 15px;
       padding: 8px 14px;
       background-color: #ff9999;
@@ -448,7 +689,37 @@
       border-radius: 5px;
       cursor: pointer;
     ">OK</button>
+  </div>
+
+  <div id="snippet-modal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); width:80%; max-height:80%; overflow-y:auto; background:#fff; border:1px solid #ccc; padding:20px; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+    <h3 id="modal-snippet-title" style="margin:0;">Snippet</h3>
+    <div>
+      <button onclick="toggleModalTheme()" id="modal-theme-toggle" style="margin-right: 10px; padding: 6px 12px; border-radius: 5px; border: none; background-color: #333; color: white; cursor: pointer;">Switch to Light Mode</button>
+      <span onclick="document.getElementById('snippet-modal').style.display='none'" style="cursor:pointer; font-size:20px; font-weight:bold;">&times;</span>
+    </div>
+  </div>
+
+  <div class="code-container" id="modal-code">
+    <div class="line-numbers" id="modal-line-numbers"></div>
+    <div class="code-content" id="modal-code-content"></div>
+  </div>
 </div>
+
+
+<div id="compare-modal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); width:90%; max-height:80%; overflow-y:auto; background:#fff; border:1px solid #ccc; padding:20px; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+    <h3 style="margin:0;">Compare Snippets</h3>
+    <span onclick="document.getElementById('compare-modal').style.display='none'" style="cursor:pointer; font-size:20px; font-weight:bold;">&times;</span>
+  </div>
+
+  <div id="compare-columns" style="display: flex; gap: 20px; ">
+    <div id="compare-left" style="flex: 1; overflow-x: auto;" ></div>
+    <div id="compare-right" style="flex: 1; overflow-x: auto;"></div>
+  </div>
+</div>
+
+<script src="js/rankings.js"></script>
 
 <script>
   function showValidationMessage(msg) {
@@ -703,10 +974,12 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 </script>
 <script>
   window.onload = () => {
-    loadCards();
-    loadState();
-    applyTheme();
-    displayUserName();
+      remapSnippetReferences(participantRankings);
+      renderParticipantRankings();
+      loadCards();
+      loadState();
+      applyTheme();
+      displayUserName();
 
     // ✅ Restore Continue button if phase2Complete is already set
     const continueBtn = document.getElementById('continueBtn');
@@ -882,7 +1155,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 
   function goToPhase3() {
     if (areAllCardsRanked()) {
-      location.href = '/phase3.html';
+      location.href = '/phase3-recap.html';
     } else { showValidationMessage("⚠️ Please rank all snippets") };
   }
 
@@ -951,7 +1224,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   function checkPhase1Completion() {
     if (!isPhaseComplete('phase1Complete')) {
       alert('Please complete Phase 1 before continuing.');
-      window.location.href = 'phase1.html';
+      window.location.href = 'phase1-recap.html';
     }
   }
 
@@ -1051,6 +1324,210 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   });
 
 
+</script>
+
+<script>
+function remapSnippetReferences(rankings) {
+  console.log('sessionStorage:', sessionStorage.getItem('snippetOrder'));
+  console.log('cookie:', document.cookie);
+
+  if (!Array.isArray(rankings)) {
+    console.error('remapSnippetReferences: rankings is not a valid array.');
+    return;
+  }
+
+  // Get snippet order from sessionStorage or cookies
+  function getSnippetOrder() {
+    const key = 'snippetOrder';
+    const sessionValue = sessionStorage.getItem(key);
+    if (sessionValue) return JSON.parse(sessionValue);
+
+    const cookieMatch = document.cookie
+      .split('; ')
+      .find(row => row.startsWith(key + '='));
+    if (cookieMatch) {
+      const cookieValue = decodeURIComponent(cookieMatch.split('=')[1]);
+      return JSON.parse(cookieValue);
+    }
+    return [];
+  }
+
+  const snippetOrder = getSnippetOrder();
+  if (!Array.isArray(snippetOrder) || snippetOrder.length !== 8) {
+    console.warn('Invalid or missing snippetOrder:', snippetOrder);
+    return;
+  }
+
+  // Reverse mapping: actual snippet number → new visual snippet #
+  const map = {};
+  for (let i = 0; i < 8; i++) {
+    map[snippetOrder[i]] = i + 1;
+  }
+
+  rankings.forEach(participant => {
+    let updated = participant.html;
+
+    // Replace Snippet X (text label)
+    updated = updated.replace(/\bSnippet (\d)\b/g, (_, num) => {
+      const mapped = map[parseInt(num)];
+      return `Snippet ${mapped}`;
+    });
+
+    // Replace show_snippet(X)
+    updated = updated.replace(/show_snippet\((\d)\)/g, (_, num) => {
+      const mapped = map[parseInt(num)];
+      return `show_snippet(${mapped})`;
+    });
+
+    // Replace compare([X,...],[Y,...])
+    updated = updated.replace(/compare\(\[([^\]]*)\],\s*\[([^\]]*)\]\)/g, (_, group1, group2) => {
+      const mapGroup = g =>
+        g.split(',')
+         .map(x => {
+           const trimmed = x.trim();
+           return trimmed ? map[parseInt(trimmed)] : '';
+         })
+         .filter(x => x !== '')
+         .join(',');
+      return `compare([${mapGroup(group1)}], [${mapGroup(group2)}])`;
+    });
+
+    participant.html = updated;
+  });
+}
+
+
+function renderParticipantRankings() {
+  const container = document.querySelector('.phase-section');
+  if (!container) {
+    console.error('No .phase-section container found.');
+    return;
+  }
+
+  container.innerHTML = ''; // Clear existing content
+
+  const currentUser = (sessionStorage.getItem('username') || getCookie('username') || '').trim().toLowerCase();
+
+  let yourHTML = '';
+  const others = [];
+
+  participantRankings.forEach(participant => {
+    const participantName = participant.name.trim();
+    const isCurrentUser = participantName.toLowerCase() === currentUser;
+
+    const updatedHTML = participant.html.replace(
+      new RegExp(`<h3>${participantName}</h3>`),
+      `<h3>${isCurrentUser ? 'Your Ranking' : participantName}</h3>`
+    );
+
+    if (isCurrentUser) {
+      yourHTML = updatedHTML;
+    } else {
+      others.push(updatedHTML);
+    }
+  });
+
+  // Append your ranking first
+  if (yourHTML) {
+    const yourWrapper = document.createElement('div');
+    yourWrapper.innerHTML = yourHTML;
+    container.appendChild(yourWrapper);
+  }
+
+  // Append others
+  others.forEach(html => {
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = html;
+    container.appendChild(wrapper);
+  });
+}
+
+
+</script>
+
+<script>
+      function show_snippet(id) {
+        // id=id-1;
+    const snippet = snippets.find(s => s.id === id);
+    if (!snippet) return;
+
+    document.getElementById('modal-snippet-title').innerText = snippet.title;
+
+    const codeLines = snippet.code.trim().split('\n');
+
+    // ✅ Use innerHTML here to render styled spans correctly
+    document.getElementById('modal-code-content').innerHTML = codeLines.join('\n');
+
+    // ✅ Line numbers are just plain numbers
+    document.getElementById('modal-line-numbers').innerHTML = codeLines.map((_, i) => i + 1).join('<br>');
+
+    document.getElementById('snippet-modal').style.display = 'block';
+
+    applyModalTheme(); // Keep the theme consistent
+    }
+
+    
+    function toggleModalTheme() {
+      const body = document.body;
+      const isLight = body.classList.contains("light-mode");
+    
+      if (isLight) {
+        body.classList.remove("light-mode");
+        body.classList.add("dark-mode");
+        localStorage.setItem("codeTheme", "dark");
+        document.getElementById('modal-theme-toggle').textContent = "Switch to Light Mode";
+      } else {
+        body.classList.remove("dark-mode");
+        body.classList.add("light-mode");
+        localStorage.setItem("codeTheme", "light");
+        document.getElementById('modal-theme-toggle').textContent = "Switch to Dark Mode";
+      }
+    }
+    
+    function applyModalTheme() {
+      const theme = localStorage.getItem('codeTheme') || 'light';
+      document.body.classList.remove('light-mode', 'dark-mode');
+      document.body.classList.add(theme + '-mode');
+      document.getElementById('modal-theme-toggle').textContent =
+        theme === 'light' ? "Switch to Dark Mode" : "Switch to Light Mode";
+    }
+
+
+</script>
+
+<script>
+      function compare(leftIds, rightIds) {
+  const leftContainer = document.getElementById('compare-left');
+  const rightContainer = document.getElementById('compare-right');
+  leftContainer.innerHTML = '';
+  rightContainer.innerHTML = '';
+
+  const getSnippet = id => snippets.find(s => s.id === id);
+
+  // Left side: stacked
+  leftIds.forEach(id => {
+    const snippet = getSnippet(id);
+    if (snippet) {
+      const box = document.createElement('div');
+      box.className = 'snippet-box';
+      box.innerHTML = `<h4>${snippet.title}</h4><pre class="code-content">${snippet.code}</pre>`;
+      leftContainer.appendChild(box);
+    }
+  });
+
+  // Right side: stacked
+  rightIds.forEach(id => {
+    const snippet = getSnippet(id);
+    if (snippet) {
+      const box = document.createElement('div');
+      box.className = 'snippet-box';
+      box.innerHTML = `<h4>${snippet.title}</h4><pre class="code-content">${snippet.code}</pre>`;
+      rightContainer.appendChild(box);
+    }
+  });
+
+  document.getElementById('compare-modal').style.display = 'block';
+}
 </script>
 
 <footer
