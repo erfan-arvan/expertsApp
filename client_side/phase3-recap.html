@@ -1101,6 +1101,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   window.onload = () => {
       remapSnippetReferences(participantRankings);
       renderParticipantRankings();
+      render();
       loadCards();
       loadState();
       applyTheme();
@@ -1872,11 +1873,6 @@ This suggests that while he found it conceptually challenging, he still viewed i
 
 
 
-  window.onload = () => {
-    render();
-    loadCards();
-    loadState();
-  };
   </script>
   <script>
     function saveRound2Response(stepIndex, responseObj) {
