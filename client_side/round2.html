@@ -273,7 +273,7 @@
   }
 
   function getStoredSnippetOrder() {
-    const stored = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
+    const stored = sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder');
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
