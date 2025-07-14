@@ -755,7 +755,7 @@ a:hover {
   
 <div class="phase-wrapper" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
-    <h2 style="margin: 0;">Phase 3: Your Phase Title</h2>
+    <h2 style="margin: 0;">Phase 3: Rankings and Reasonings</h2>
     <button onclick="togglePhaseSection()" class="toggle-btn" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Show</button>
   </div>
 
@@ -2039,17 +2039,17 @@ This suggests that while he found it conceptually challenging, he still viewed i
 
 <script>
   function togglePhaseSection() {
-  const content = document.getElementById("phase-section-content");
-  const button = document.querySelector(".phase-wrapper .toggle-btn");
+    const content = document.getElementById("phase-section-content");
+    const button = document.querySelector(".phase-wrapper .toggle-btn");
 
-  if (content.style.display === "none") {
-    content.style.display = "block";
-    button.textContent = "Hide";
-  } else {
-    content.style.display = "none";
-    button.textContent = "Show";
+    if (content.style.display === "none") {
+      content.style.display = "block";
+      button.textContent = "Hide";
+    } else {
+      content.style.display = "none";
+      button.textContent = "Show";
+    }
   }
-}
 
 </script>
 <footer
