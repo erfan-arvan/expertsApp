@@ -437,7 +437,7 @@ textarea {
     }
 
     // Unlock links based on progress
-    if (isComplete("phase1Complete")) {
+    if (isComplete("round2-phase1-complete")) {
       document.getElementById("link-phase2").classList.remove("disabled");
     }
     if (isComplete("phase2Complete")) {
@@ -817,7 +817,7 @@ window.onload = function() {
 
 
     // Unlock and highlight status bar
-    if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
+    if (isComplete('round2-phase1-complete')) document.getElementById('link-phase2').classList.remove('disabled');
     if (isComplete('phase2Complete')) document.getElementById('link-phase3').classList.remove('disabled');
     if (isComplete('phase3Complete')) document.getElementById('link-review').classList.remove('disabled');
 
