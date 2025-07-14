@@ -267,10 +267,7 @@
 <body>
   <script src="js/data.js?v=1.0.0"></script>
   <script>
-      function getCookie(name) {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return match ? decodeURIComponent(match[2]) : null;
-  }
+
 
   function getStoredSnippetOrder() {
     const stored = sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder');
@@ -404,8 +401,8 @@ This suggests that while he found it conceptually challenging, he still viewed i
       }
     ];
 
-    const username = getCookie("username") || "anonymous";
-    const snippetOrder = JSON.parse(sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder') || '[]');
+    const username = localStorage.getItem("username") || "anonymous";
+    const snippetOrder = JSON.parse(sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder') || '[]');
 
     let index = 0;
 
@@ -419,7 +416,7 @@ This suggests that while he found it conceptually challenging, he still viewed i
 
     const round2Responses = disagreements.map((_, i) => {
     const key = `round2_response_${i}`;
-    const raw = sessionStorage.getItem(key) || getCookie(key);
+    const raw = sessionStorage.getItem(key) || localStorage.getItem(key);
     try {
         return raw ? JSON.parse(raw) : {};
     } catch {
@@ -456,7 +453,7 @@ This suggests that while he found it conceptually challenging, he still viewed i
 
 
     function getLocalSnippetMapping() {
-        const stored = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
+        const stored = sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder');
         if (!stored) return null;
 
         try {
@@ -475,7 +472,7 @@ This suggests that while he found it conceptually challenging, he still viewed i
 
     function getRound2Response(i) {
         const key = `round2_response_${i}`;
-        const raw = sessionStorage.getItem(key) || getCookie(key);
+        const raw = sessionStorage.getItem(key) || localStorage.getItem(key);
         try {
             return raw ? JSON.parse(raw) : {};
         } catch {
@@ -488,7 +485,7 @@ This suggests that while he found it conceptually challenging, he still viewed i
         const container = document.getElementById('disagreement-box');
         const entry = disagreements[index];
         const localSnippets = getLocalSnippetMapping();
-        const username = sessionStorage.getItem('participantName') || getCookie('participantName') || 'anonymous';
+        const username = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'anonymous';
 
         container.innerHTML = `
             <div class="disagreement-text" style="margin-bottom: 20px;">
@@ -565,10 +562,6 @@ This suggests that while he found it conceptually challenging, he still viewed i
     }
 
 
-  function getCookie(name) {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return match ? decodeURIComponent(match[2]) : null;
-  }
 
   window.onload = () => {
     render();
