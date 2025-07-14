@@ -6,28 +6,33 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0 40px 40px 40px; /* top right bottom left */
+      margin: 0 40px 40px 40px;
+      /* top right bottom left */
       background-color: #f4f4f4;
       color: #333;
     }
+  
     .instructions {
       background-color: #fff;
       padding: 20px;
       border-radius: 8px;
       margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
+  
     .ranking-row {
       display: flex;
       gap: 10px;
       overflow-x: auto;
       margin-bottom: 20px;
     }
+  
     .ranking-row-numbers {
       display: flex;
       gap: 10px;
       margin-bottom: 0;
     }
+  
     .ranking-slot {
       flex: 1 1 100px;
       background: #e8f5e9;
@@ -37,12 +42,13 @@
       min-height: 80px;
       text-align: center;
     }
-
+  
     .ranking-number {
-      flex: 1; 
+      flex: 1;
       text-align: center;
       color: #009999;
     }
+  
     .card {
       background: #fff;
       border: 1px solid #ccc;
@@ -51,15 +57,18 @@
       margin: 5px;
       cursor: grab;
     }
+  
     .card.dragging {
       opacity: 0.5;
     }
+  
     .preview-area {
       display: flex;
       gap: 20px;
       flex-wrap: wrap;
       margin-top: 20px;
     }
+  
     .snippet-preview-box {
       flex: 1 1 45%;
       min-width: 300px;
@@ -69,6 +78,7 @@
       background-color: #ffffff;
       border: 1px solid #ddd;
     }
+  
     .snippet-header {
       background-color: #f5f5f5;
       padding: 10px 15px;
@@ -76,6 +86,7 @@
       font-size: 16px;
       border-bottom: 1px solid #ccc;
     }
+  
     .code-box {
       font-family: 'Courier New', Courier, monospace;
       white-space: pre-wrap;
@@ -85,6 +96,7 @@
       color: #333;
       background-color: #f9f9f9;
     }
+  
     #theme-toggle {
       background-color: #333;
       color: white;
@@ -94,80 +106,81 @@
       cursor: pointer;
       margin-bottom: 20px;
     }
-
+  
     #continueBtn {
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        padding: 12px 24px;
-        font-size: 16px;
-        border-radius: 6px;
-        cursor: pointer;
-        box-shadow: 0 0 10px #4CAF50;
-      }
-
-      #continueBtn:hover {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #4CAF50;
+    }
+  
+    #continueBtn:hover {
       background-color: #45a049;
       animation: glowPulse 1.5s infinite alternate;
     }
-
+  
     @keyframes glowPulse {
       0% {
         box-shadow: 0 0 10px #4CAF50;
       }
+  
       100% {
         box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
       }
     }
-
+  
     /*.status-bar {
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 0;
+        position: static; 
+      }*/
+  
+    .status-bar {
       background-color: #333;
       color: white;
       padding: 10px 20px;
       display: flex;
       justify-content: center;
       gap: 30px;
-      margin-top: 0;
-      position: static; 
-    }*/
-
-.status-bar {
-  background-color: #333;
-  color: white;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-}
-
-.phase-link {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+  
+    .phase-link {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+  
     .phase-link:hover:not(.disabled) {
       background-color: #4CAF50;
     }
-
+  
     .phase-link.active {
       background-color: #4CAF50;
     }
-
+  
     .phase-link.disabled {
       pointer-events: none;
       opacity: 0.5;
       cursor: not-allowed;
     }
-
+  
     /*For snippet cards*/
     #cards {
       display: flex;
@@ -176,7 +189,7 @@
       padding: 10px 0;
       flex-wrap: nowrap;
     }
-
+  
     button {
       padding: 10px 20px;
       margin-right: 10px;
@@ -186,166 +199,229 @@
       background-color: #4CAF50;
       color: white;
       cursor: pointer;
-  }
-  button:hover {
+    }
+  
+    button:hover {
       background-color: #45a049;
-  }
-  button[disabled] {
+    }
+  
+    button[disabled] {
       background-color: #888;
       cursor: not-allowed;
-  }
-
+    }
+  
     /*dark/light mode*/
     /* Light mode preview styles */
-  /* === Default (light mode) === */
-  .card {
-    background-color: #ffffff;
-    border-color: #ccc;
-    color: #333;
-  }
-
-  .snippet-preview-box {
-    background-color: #fefefe;
-    border: 1px solid #bbb;
-  }
-
-  .code-box {
-    background-color: #f9f9f9;
-    color: #222;
-  }
-
-/* === Dark mode overrides === */
-  body.dark-mode .card {
-    background-color: #2a2a2a;
-    border-color: #555;
-    color: #ddd;
-  }
-
-  body.dark-mode .snippet-preview-box {
-    background-color: #1e1e1e;
-    border: 1px solid #444;
-  }
-
-  body.dark-mode .code-box {
-    background-color: #2d2d2d;
-    color: #ddd;
-  }
-
-
+    /* === Default (light mode) === */
+    .card {
+      background-color: #ffffff;
+      border-color: #ccc;
+      color: #333;
+    }
+  
+    .snippet-preview-box {
+      background-color: #fefefe;
+      border: 1px solid #bbb;
+    }
+  
+    .code-box {
+      background-color: #f9f9f9;
+      color: #222;
+    }
+  
+    /* === Dark mode overrides === */
+    body.dark-mode .card {
+      background-color: #2a2a2a;
+      border-color: #555;
+      color: #ddd;
+    }
+  
+    body.dark-mode .snippet-preview-box {
+      background-color: #1e1e1e;
+      border: 1px solid #444;
+    }
+  
+    body.dark-mode .code-box {
+      background-color: #2d2d2d;
+      color: #ddd;
+    }
+  
+  
     /*code box*/
-  /* Basic syntax highlighting classes */
-  .keyword     { color: #0000ff; font-weight: bold; }
-  .type        { color: #007070; }
-  .function    { color: #7928a1; font-weight: bold; }
-  .literal     { color: #009999; }
-  .string      { color: #a31515; }
-  .comment     { color: #6a9955; font-style: italic; }
-  .number      { color: #098658; }
-
+    /* Basic syntax highlighting classes */
+    .keyword {
+      color: #0000ff;
+      font-weight: bold;
+    }
+  
+    .type {
+      color: #007070;
+    }
+  
+    .function {
+      color: #7928a1;
+      font-weight: bold;
+    }
+  
+    .literal {
+      color: #009999;
+    }
+  
+    .string {
+      color: #a31515;
+    }
+  
+    .comment {
+      color: #6a9955;
+      font-style: italic;
+    }
+  
+    .number {
+      color: #098658;
+    }
+  
     /* Dark mode overrides */
-  .dark-mode .keyword  { color: #82aaff; }
-  .dark-mode .type     { color: #89ddff; }
-  .dark-mode .function { color: #c792ea; }
-  .dark-mode .literal  { color: #ffcb6b; }
-  .dark-mode .string   { color: #c3e88d; }
-  .dark-mode .comment  { color: #7f848e; }
-  .dark-mode .number   { color: #f78c6c; }
-
-  html {
-  scroll-behavior: smooth;
-  }
-  a {
-    color: #4CAF50;
-    text-decoration: none;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
-
-
-</style>
+    .dark-mode .keyword {
+      color: #82aaff;
+    }
+  
+    .dark-mode .type {
+      color: #89ddff;
+    }
+  
+    .dark-mode .function {
+      color: #c792ea;
+    }
+  
+    .dark-mode .literal {
+      color: #ffcb6b;
+    }
+  
+    .dark-mode .string {
+      color: #c3e88d;
+    }
+  
+    .dark-mode .comment {
+      color: #7f848e;
+    }
+  
+    .dark-mode .number {
+      color: #f78c6c;
+    }
+  
+    html {
+      scroll-behavior: smooth;
+    }
+  
+    a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+  
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
 
 <div class="status-bar">
   <div class="user-dropdown" style="position: relative;">
-    <div style="padding: 8px 12px; color: gainsboro; font-weight: bold;"><span id="user-info"></span> (<button onclick="logout()" style="color: white; background: none; border: none; cursor: pointer; margin: 0;padding: 0;">🚪 Logout</button>)</div>
+    <div style="padding: 8px 12px; color: gainsboro; font-weight: bold;"><span id="user-info"></span> (<button
+        onclick="logout()"
+        style="color: white; background: none; border: none; cursor: pointer; margin: 0;padding: 0;">🚪 Logout</button>)
+    </div>
   </div>
-    <a href="index.html" class="phase-link" id="link-home">🏠 Home</a>
-    <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
-    <a href="phase2.html" class="phase-link disabled" id="link-phase2">Phase 2</a>
-    <a href="phase3.html" class="phase-link disabled" id="link-phase3">Phase 3</a>
-    <a href="review.html" class="phase-link disabled" id="link-review">Review & Submit</a>
+  <a href="index.html" class="phase-link" id="link-home">🏠 Home</a>
+  <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
+  <a href="phase2.html" class="phase-link disabled" id="link-phase2">Phase 2</a>
+  <a href="phase3.html" class="phase-link disabled" id="link-phase3">Phase 3</a>
+  <a href="review.html" class="phase-link disabled" id="link-review">Review & Submit</a>
 </div>
 
-<div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
+<div id="instructions-box"
+  style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <h2 style="margin: 0;">Phase 2: Ranking Code Snippets by Comprehension Difficulty</h2>
-    <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
+    <button onclick="toggleInstructions()"
+      style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
   </div>
 
   <div id="instructions-content" style="margin-top: 15px;">
     <p>In this phase, you will rank the 8 code snippets based on how easy or difficult they are to understand.</p>
     <ol>
-      <li><strong>Rank the snippets:</strong> Drag and drop each snippet (white) card into the 8 green boxes, which represent ranking positions.</li>
+      <li><strong>Rank the snippets:</strong> Drag and drop each snippet (white) card into the 8 green boxes, which
+        represent ranking positions.</li>
       <li><strong>Understand the scale:</strong>
         <ul>
-          <li><strong>Position 1</strong> (leftmost): it should contain the snippets that are easiest to understand.</li>
-          <li><strong>Position 8</strong> (rightmost): it should contain the snippets that are easiest to understand.</li>
+          <li><strong>Position 1</strong> (leftmost): it should contain the snippets that are easiest to understand.
+          </li>
+          <li><strong>Position 8</strong> (rightmost): it should contain the snippets that are easiest to understand.
+          </li>
         </ul>
       </li>
-      <li><strong>Equal ranking:</strong> You may place multiple snippets in the same position if they are similarly easy/difficult to understand.</li>
-      <li><strong>Empty positions:</strong> it is possible to have empty positions (e.g., when grouping multiple snippets in one position).</li>
-      <li><strong>Comparing snippets:</strong> You can compare the code of multiple snippets by clicking their "View" checkboxes, which display the snippets' code.</li>
+      <li><strong>Equal ranking:</strong> You may place multiple snippets in the same position if they are similarly
+        easy/difficult to understand.</li>
+      <li><strong>Empty positions:</strong> it is possible to have empty positions (e.g., when grouping multiple
+        snippets in one position).</li>
+      <li><strong>Comparing snippets:</strong> You can compare the code of multiple snippets by clicking their "View"
+        checkboxes, which display the snippets' code.</li>
     </ol>
     <!-- <p><strong>Important:</strong> Please fill the ranking positions from left to right. If you leave any positions empty (e.g., due to grouping multiple snippets in one position), leave the rightmost positions empty.</p> -->
-     
-          <p><strong>Please complete this phase using your own judgment</strong>. <span style="color:red;"><strong>Do not consult with anyone else or use generative AI tools (ChatGPT, GitHub Copilot, etc.), search engines, or external websites</strong></span>. Your judgment is essential to the validity of our study.</p>
+
+    <p><strong>Please complete this phase using your own judgment</strong>. <span style="color:red;"><strong>Do not
+          consult with anyone else or use generative AI tools (ChatGPT, GitHub Copilot, etc.), search engines, or
+          external websites</strong></span>. Your judgment is essential to the validity of our study.</p>
   </div>
 </div>
 
 
-  <div class="ranking-row-numbers" id="rankingRow">
-    <p class="ranking-number">Position 1 <span style="color: green;">(easiest)</span></p>
-    <p class="ranking-number">Position 2</p>
-    <p class="ranking-number">Position 3</p>
-    <p class="ranking-number">Position 4</p>
-    <p class="ranking-number">Position 5</p>
-    <p class="ranking-number">Position 6</p>
-    <p class="ranking-number">Position 7</p>
-    <p class="ranking-number">Position 8 <span style="color: red;">(hardest)</span></p> 
-  </div>
-  <div class="ranking-row" id="rankingRow">
-    <!-- 8 drop zones -->
-    <div class="ranking-slot" data-rank="1"></div>
-    <div class="ranking-slot" data-rank="2"></div>
-    <div class="ranking-slot" data-rank="3"></div>
-    <div class="ranking-slot" data-rank="4"></div>
-    <div class="ranking-slot" data-rank="5"></div>
-    <div class="ranking-slot" data-rank="6"></div>
-    <div class="ranking-slot" data-rank="7"></div>
-    <div class="ranking-slot" data-rank="8"></div>
-  </div>
+<div class="ranking-row-numbers" id="rankingRow">
+  <p class="ranking-number">Position 1 <span style="color: green;">(easiest)</span></p>
+  <p class="ranking-number">Position 2</p>
+  <p class="ranking-number">Position 3</p>
+  <p class="ranking-number">Position 4</p>
+  <p class="ranking-number">Position 5</p>
+  <p class="ranking-number">Position 6</p>
+  <p class="ranking-number">Position 7</p>
+  <p class="ranking-number">Position 8 <span style="color: red;">(hardest)</span></p>
+</div>
+<div class="ranking-row" id="rankingRow">
+  <!-- 8 drop zones -->
+  <div class="ranking-slot" data-rank="1"></div>
+  <div class="ranking-slot" data-rank="2"></div>
+  <div class="ranking-slot" data-rank="3"></div>
+  <div class="ranking-slot" data-rank="4"></div>
+  <div class="ranking-slot" data-rank="5"></div>
+  <div class="ranking-slot" data-rank="6"></div>
+  <div class="ranking-slot" data-rank="7"></div>
+  <div class="ranking-slot" data-rank="8"></div>
+</div>
 
-  <div id="cards" style="margin-bottom: 20px;"></div>
+<div id="cards" style="margin-bottom: 20px;"></div>
 
-  <div id="snippet-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background-color: #f5f5f5; border-radius: 6px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-    <h3 style="margin: 0; font-size: 16px; color: #333;">
-      🔍 Snippet Preview & Compare <span style="font-weight: normal;">(click on view checkboxes to preview or compare snippets)</span>
-    </h3>
-        <button id="theme-toggle" onclick="toggleTheme()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #333; color: white; border: none; cursor: pointer;">
-      Switch to Dark Mode
-    </button>
-  </div>
-  
-  
-  <div class="preview-area" id="previewArea"></div>
+<div id="snippet-bar"
+  style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background-color: #f5f5f5; border-radius: 6px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+  <h3 style="margin: 0; font-size: 16px; color: #333;">
+    🔍 Snippet Preview & Compare <span style="font-weight: normal;">(click on view checkboxes to preview or compare
+      snippets)</span>
+  </h3>
+  <button id="theme-toggle" onclick="toggleTheme()"
+    style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #333; color: white; border: none; cursor: pointer;">
+    Switch to Dark Mode
+  </button>
+</div>
 
-  <div style="margin-top: 30px;">
-    <button id="continueBtn" onclick="goToPhase3()" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: gray; color: white; cursor: pointer;">Continue to Phase 3 ➡️</button>
-  </div>
 
-  <div id="validation-modal" style="
+<div class="preview-area" id="previewArea"></div>
+
+<div style="margin-top: 30px;">
+  <button id="continueBtn" onclick="goToPhase3()"
+    style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: gray; color: white; cursor: pointer;">Continue
+    to Phase 3 ➡️</button>
+</div>
+
+<div id="validation-modal" style="
   display: none;
   position: fixed;
   top: 30%;
@@ -362,8 +438,8 @@
   text-align: center;
   font-family: 'Segoe UI', Tahoma, sans-serif;
   ">
-    <p id="validation-message" style="font-weight: bold;"></p>
-    <button onclick="document.getElementById('validation-modal').style.display = 'none';" style="
+  <p id="validation-message" style="font-weight: bold;"></p>
+  <button onclick="document.getElementById('validation-modal').style.display = 'none';" style="
       margin-top: 15px;
       padding: 8px 14px;
       background-color: #ff9999;
@@ -372,14 +448,14 @@
       border-radius: 5px;
       cursor: pointer;
     ">OK</button>
-  </div>
+</div>
 
-  <script>
-    function showValidationMessage(msg) {
-      document.getElementById('validation-message').innerText = msg;
-      document.getElementById('validation-modal').style.display = 'block';
-    }
-  </script>
+<script>
+  function showValidationMessage(msg) {
+    document.getElementById('validation-message').innerText = msg;
+    document.getElementById('validation-modal').style.display = 'block';
+  }
+</script>
 
 <script>
   const originalSnippets = [
@@ -626,38 +702,38 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 
 </script>
 <script>
-    window.onload = () => {
-      loadCards();
-      loadState();
-      applyTheme();
-      displayUserName();
+  window.onload = () => {
+    loadCards();
+    loadState();
+    applyTheme();
+    displayUserName();
 
-      // ✅ Restore Continue button if phase2Complete is already set
-      const continueBtn = document.getElementById('continueBtn');
-      if (sessionStorage.getItem('phase2Complete') === 'true' || localStorage.getItem('phase2Complete') === 'true') {
-        if (continueBtn) {
-          continueBtn.style.display = 'inline-block';
-          continueBtn.style.backgroundColor = '#4CAF50'; 
-          continueBtn.style.animation = 'glowPulse 1.5s infinite alternate';
-        }
+    // ✅ Restore Continue button if phase2Complete is already set
+    const continueBtn = document.getElementById('continueBtn');
+    if (sessionStorage.getItem('phase2Complete') === 'true' || localStorage.getItem('phase2Complete') === 'true') {
+      if (continueBtn) {
+        continueBtn.style.display = 'inline-block';
+        continueBtn.style.backgroundColor = '#4CAF50';
+        continueBtn.style.animation = 'glowPulse 1.5s infinite alternate';
       }
+    }
 
-      // Unlock and highlight status bar
-      if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
-      if (isComplete('phase2Complete')) document.getElementById('link-phase3').classList.remove('disabled');
-      if (isComplete('phase3Complete')) document.getElementById('link-review').classList.remove('disabled');
+    // Unlock and highlight status bar
+    if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
+    if (isComplete('phase2Complete')) document.getElementById('link-phase3').classList.remove('disabled');
+    if (isComplete('phase3Complete')) document.getElementById('link-review').classList.remove('disabled');
 
-      const current = window.location.pathname.split('/').pop();
-      if (current.includes('phase1')) document.getElementById('link-phase1').classList.add('active');
-      else if (current.includes('phase2')) document.getElementById('link-phase2').classList.add('active');
-      else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
-      else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
+    const current = window.location.pathname.split('/').pop();
+    if (current.includes('phase1')) document.getElementById('link-phase1').classList.add('active');
+    else if (current.includes('phase2')) document.getElementById('link-phase2').classList.add('active');
+    else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
+    else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
 
-      if (sessionStorage.getItem('phase2Complete') === 'true' || localStorage.getItem('phase2Complete') === 'true') {
-          document.getElementById('continueBtn').style.display = 'inline-block';
-          document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
-          document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
-      }
+    if (sessionStorage.getItem('phase2Complete') === 'true' || localStorage.getItem('phase2Complete') === 'true') {
+      document.getElementById('continueBtn').style.display = 'inline-block';
+      document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
+      document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
+    }
 
     setInterval(() => {
       try {
@@ -667,113 +743,113 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
         console.warn("[Auto-Save] Failed to save:", e);
       }
     }, 120000); // every 2 minutes
-    };
+  };
 
-    function loadCards() {
-      const container = document.getElementById('cards');
-      snippets.forEach(snippet => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.draggable = true;
-        card.id = `snippet-${snippet.id}`;
-        card.innerHTML = `
+  function loadCards() {
+    const container = document.getElementById('cards');
+    snippets.forEach(snippet => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.draggable = true;
+      card.id = `snippet-${snippet.id}`;
+      card.innerHTML = `
           <strong>${snippet.title}</strong>
           <br><label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
         `;
-        card.addEventListener('dragstart', () => card.classList.add('dragging'));
-        card.addEventListener('dragend', () => card.classList.remove('dragging'));
-        container.appendChild(card);
-      });
+      card.addEventListener('dragstart', () => card.classList.add('dragging'));
+      card.addEventListener('dragend', () => card.classList.remove('dragging'));
+      container.appendChild(card);
+    });
 
-      document.querySelectorAll('.ranking-slot').forEach(slot => {
-        slot.addEventListener('dragover', e => {
-          e.preventDefault();
-          const dragging = document.querySelector('.dragging');
-          if (dragging) slot.appendChild(dragging);
-          saveState();
+    document.querySelectorAll('.ranking-slot').forEach(slot => {
+      slot.addEventListener('dragover', e => {
+        e.preventDefault();
+        const dragging = document.querySelector('.dragging');
+        if (dragging) slot.appendChild(dragging);
+        saveState();
+      });
+    });
+  }
+
+  function togglePreview(id, checkbox) {
+    const previewArea = document.getElementById('previewArea');
+    const snippet = snippets.find(s => s.id === id);
+    const existing = document.getElementById(`preview-${id}`);
+
+    if (checkbox.checked && !existing) {
+      const wrapper = document.createElement('div');
+      wrapper.id = `preview-${id}`;
+      wrapper.className = 'snippet-preview-box';
+
+      const header = document.createElement('div');
+      header.className = 'snippet-header';
+      header.textContent = snippet.title;
+
+      const codeBox = document.createElement('div');
+      codeBox.className = 'code-box';
+      codeBox.innerHTML = snippet.code;
+
+      wrapper.appendChild(header);
+      wrapper.appendChild(codeBox);
+      previewArea.appendChild(wrapper);
+    } else if (!checkbox.checked && existing) {
+      previewArea.removeChild(existing);
+    }
+  }
+
+  function saveState() {
+    const positions = {};
+    document.querySelectorAll('.ranking-slot').forEach((slot, index) => {
+      positions[index + 1] = Array.from(slot.children).map(el => el.id);
+    });
+    const json = JSON.stringify(positions);
+    sessionStorage.setItem('phase3_ranking', json);
+    document.cookie = `phase3_ranking=${encodeURIComponent(json)}; path=/; max-age=${60 * 60 * 24 * 30}`;
+
+    /* Check if the phase is completed */
+    if (areAllCardsRanked()) {
+      document.getElementById('continueBtn').style.display = 'inline-block';
+      document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
+      document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
+      sessionStorage.setItem('phase2Complete', 'true');
+      document.cookie = `phase2Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
+
+      // ✅ Also update the status bar
+      const phase3Link = document.getElementById('link-phase3');
+      if (phase3Link) {
+        phase3Link.classList.remove('disabled');
+      }
+    } else {
+      sessionStorage.removeItem('phase2Complete');
+      document.cookie = `phase2Complete=; path=/; max-age=0`;
+      document.getElementById('continueBtn').style.display = 'none';
+      const phase3Link = document.getElementById('link-phase3');
+      if (phase3Link) {
+        phase3Link.classList.add('disabled');
+      }
+    }
+
+  }
+
+  function loadState() {
+    let saved = sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking');
+
+
+    if (!saved) return;
+
+    try {
+      const parsed = JSON.parse(saved);  // now valid JSON
+      Object.entries(parsed).forEach(([rank, ids]) => {
+        const slot = document.querySelector(`.ranking-slot[data-rank='${rank}']`);
+        ids.forEach(id => {
+          const el = document.getElementById(id);
+          if (el && slot) slot.appendChild(el);
         });
       });
+    } catch (e) {
+      console.error('Failed to parse phase3_ranking JSON:', e);
     }
-
-    function togglePreview(id, checkbox) {
-      const previewArea = document.getElementById('previewArea');
-      const snippet = snippets.find(s => s.id === id);
-      const existing = document.getElementById(`preview-${id}`);
-
-      if (checkbox.checked && !existing) {
-        const wrapper = document.createElement('div');
-        wrapper.id = `preview-${id}`;
-        wrapper.className = 'snippet-preview-box';
-
-        const header = document.createElement('div');
-        header.className = 'snippet-header';
-        header.textContent = snippet.title;
-
-        const codeBox = document.createElement('div');
-        codeBox.className = 'code-box';
-        codeBox.innerHTML = snippet.code;
-
-        wrapper.appendChild(header);
-        wrapper.appendChild(codeBox);
-        previewArea.appendChild(wrapper);
-      } else if (!checkbox.checked && existing) {
-        previewArea.removeChild(existing);
-      }
-    }
-
-    function saveState() {
-      const positions = {};
-      document.querySelectorAll('.ranking-slot').forEach((slot, index) => {
-        positions[index + 1] = Array.from(slot.children).map(el => el.id);
-      });
-      const json = JSON.stringify(positions);
-      sessionStorage.setItem('phase3_ranking', json);
-      document.cookie = `phase3_ranking=${encodeURIComponent(json)}; path=/; max-age=${60 * 60 * 24 * 30}`;
-
-      /* Check if the phase is completed */
-      if (areAllCardsRanked()) {
-        document.getElementById('continueBtn').style.display = 'inline-block';
-        document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
-        document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
-        sessionStorage.setItem('phase2Complete', 'true');
-        document.cookie = `phase2Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
-
-        // ✅ Also update the status bar
-        const phase3Link = document.getElementById('link-phase3');
-        if (phase3Link) {
-          phase3Link.classList.remove('disabled');
-        }
-      } else {
-        sessionStorage.removeItem('phase2Complete');
-        document.cookie = `phase2Complete=; path=/; max-age=0`;
-        document.getElementById('continueBtn').style.display = 'none';
-        const phase3Link = document.getElementById('link-phase3');
-        if (phase3Link) {
-          phase3Link.classList.add('disabled');
-        }
-      }
-
-    }
-
-    function loadState() {
-      let saved = sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking');
-
-
-      if (!saved) return;
-
-      try {
-        const parsed = JSON.parse(saved);  // now valid JSON
-        Object.entries(parsed).forEach(([rank, ids]) => {
-          const slot = document.querySelector(`.ranking-slot[data-rank='${rank}']`);
-          ids.forEach(id => {
-            const el = document.getElementById(id);
-            if (el && slot) slot.appendChild(el);
-          });
-        });
-      } catch (e) {
-        console.error('Failed to parse phase3_ranking JSON:', e);
-      }
-    } 
+  }
 
 
   function toggleTheme() {
@@ -789,25 +865,25 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       localStorage.setItem('codeTheme', 'dark');
       document.getElementById('theme-toggle').textContent = 'Switch to Light Mode';
     }
-}
-
-function applyTheme() {
-  const theme = localStorage.getItem('codeTheme') || 'light';
-  const btn = document.getElementById('theme-toggle');
-
-  if (theme === 'dark') {
-    document.body.classList.add('dark-mode');
-    if (btn) btn.textContent = 'Switch to Light Mode';
-  } else {
-    document.body.classList.remove('dark-mode');
-    if (btn) btn.textContent = 'Switch to Dark Mode';
   }
-}
 
-    function goToPhase3() {
-    if(areAllCardsRanked()){
+  function applyTheme() {
+    const theme = localStorage.getItem('codeTheme') || 'light';
+    const btn = document.getElementById('theme-toggle');
+
+    if (theme === 'dark') {
+      document.body.classList.add('dark-mode');
+      if (btn) btn.textContent = 'Switch to Light Mode';
+    } else {
+      document.body.classList.remove('dark-mode');
+      if (btn) btn.textContent = 'Switch to Dark Mode';
+    }
+  }
+
+  function goToPhase3() {
+    if (areAllCardsRanked()) {
       location.href = '/phase3.html';
-    }else{showValidationMessage("⚠️ Please rank all snippets")};
+    } else { showValidationMessage("⚠️ Please rank all snippets") };
   }
 
   /*For the instructions section*/
@@ -825,8 +901,8 @@ function applyTheme() {
   }
 
   function getLocalStorage(name) {
-      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-      return match ? decodeURIComponent(match[2]) : null;
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : null;
   }
 
   function isComplete(key) {
@@ -878,7 +954,7 @@ function applyTheme() {
       window.location.href = 'phase1.html';
     }
   }
-  
+
   function isPhaseComplete(phaseKey) {
     const sessionVal = sessionStorage.getItem(phaseKey);
     const cookieVal = localStorage.getItem(phaseKey);
@@ -892,92 +968,93 @@ function applyTheme() {
 
 <script>
   // Toggle logout menu visibility
-// document.addEventListener('DOMContentLoaded', () => {
-//   const userInfo = document.getElementById('user-info');
-//   const logoutMenu = document.getElementById('logout-menu');
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   const userInfo = document.getElementById('user-info');
+  //   const logoutMenu = document.getElementById('logout-menu');
 
-//   userInfo.addEventListener('click', () => {
-//     logoutMenu.style.display = logoutMenu.style.display === 'block' ? 'none' : 'block';
-//   });
+  //   userInfo.addEventListener('click', () => {
+  //     logoutMenu.style.display = logoutMenu.style.display === 'block' ? 'none' : 'block';
+  //   });
 
-//   // Hide the menu if clicked outside
-//   document.addEventListener('click', (event) => {
-//     if (!event.target.closest('.user-dropdown')) {
-//       logoutMenu.style.display = 'none';
-//     }
-//   });
-// });
+  //   // Hide the menu if clicked outside
+  //   document.addEventListener('click', (event) => {
+  //     if (!event.target.closest('.user-dropdown')) {
+  //       logoutMenu.style.display = 'none';
+  //     }
+  //   });
+  // });
 
-// Clear storage and redirect to login
-function logout() {
-  sessionStorage.clear();
-  localStorage.clear();
+  // Clear storage and redirect to login
+  function logout() {
+    sessionStorage.clear();
+    localStorage.clear();
 
 
-  // Clear all cookies
-  document.cookie.split(";").forEach(cookie => {
-    const name = cookie.split("=")[0].trim();
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-  });
+    // Clear all cookies
+    document.cookie.split(";").forEach(cookie => {
+      const name = cookie.split("=")[0].trim();
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    });
 
-  window.location.href = 'index.html';
-}
+    window.location.href = 'index.html';
+  }
 </script>
 
 <script>
-function saveToServer() {
-  const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName') || 'Anonymous';
-  const username = getLocalStorage('username') || 'anonymous';
+  function saveToServer() {
+    const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName') || 'Anonymous';
+    const username = getLocalStorage('username') || 'anonymous';
 
-  // Phase 1 data
-  const phase1 = {};
-  for (let i = 1; i <= 8; i++) {
-    const summary = sessionStorage.getItem(`summary${i}`) || getLocalStorage(`summary${i}`) || '';
-    const comp = sessionStorage.getItem(`compSummary${i}`) || getLocalStorage(`compSummary${i}`) || '';
-    phase1[`snippet${i}`] = { summary, comprehensibility: comp };
+    // Phase 1 data
+    const phase1 = {};
+    for (let i = 1; i <= 8; i++) {
+      const summary = sessionStorage.getItem(`summary${i}`) || getLocalStorage(`summary${i}`) || '';
+      const comp = sessionStorage.getItem(`compSummary${i}`) || getLocalStorage(`compSummary${i}`) || '';
+      phase1[`snippet${i}`] = { summary, comprehensibility: comp };
+    }
+
+    // Phase 2 & 3 data
+    let phase2 = {}, phase3 = {};
+    try {
+      phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getLocalStorage('phase3_ranking') || '{}');
+      phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getLocalStorage('phase3_reasoning') || '{}');
+    } catch (e) {
+      console.warn("Error parsing phase2 or phase3 data", e);
+    }
+
+    // Completion flags and theme
+    const flags = {
+      phase1Complete: sessionStorage.getItem('phase1Complete') || getLocalStorage('phase1Complete') || 'false',
+      phase2Complete: sessionStorage.getItem('phase2Complete') || getLocalStorage('phase2Complete') || 'false',
+      phase3Complete: sessionStorage.getItem('phase3Complete') || getLocalStorage('phase3Complete') || 'false',
+      codeTheme: localStorage.getItem('codeTheme') || 'light',
+      submitted: '0',
+    };
+
+    const payload = {
+      username,
+      participantName: name,
+      phase1,
+      phase2,
+      phase3,
+      ...flags
+    };
+
+    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+
+    console.log(payload);
   }
 
-  // Phase 2 & 3 data
-  let phase2 = {}, phase3 = {};
-  try {
-    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getLocalStorage('phase3_ranking') || '{}');
-    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getLocalStorage('phase3_reasoning') || '{}');
-  } catch (e) {
-    console.warn("Error parsing phase2 or phase3 data", e);
-  }
-
-  // Completion flags and theme
-  const flags = {
-    phase1Complete: sessionStorage.getItem('phase1Complete') || getLocalStorage('phase1Complete') || 'false',
-    phase2Complete: sessionStorage.getItem('phase2Complete') || getLocalStorage('phase2Complete') || 'false',
-    phase3Complete: sessionStorage.getItem('phase3Complete') || getLocalStorage('phase3Complete') || 'false',
-    codeTheme: localStorage.getItem('codeTheme') || 'light',
-    submitted: '0',
-  };
-
-  const payload = {
-    username,
-    participantName: name,
-    phase1,
-    phase2,
-    phase3,
-    ...flags
-  };
-
-  const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-  navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
-
-  console.log(payload);
-}
-
-window.addEventListener('beforeunload', function (e) {
-  saveToServer();  
-});
+  window.addEventListener('beforeunload', function (e) {
+    saveToServer();
+  });
 
 
 </script>
 
-<footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
+<footer
+  style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
   Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
 </footer>
 </body>

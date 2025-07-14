@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Final Review</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0 40px 40px 40px; /* top right bottom left */
+      margin: 0 40px 40px 40px;
+      /* top right bottom left */
       background-color: #f4f4f4;
       color: #333;
     }
+
     h2 {
       margin-bottom: 10px;
     }
+
     .section {
       background: #fff;
       padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       margin-bottom: 30px;
     }
-    pre, .code-box {
+
+    pre,
+    .code-box {
       background: #2d2d2d;
       color: #ccc;
       padding: 10px;
@@ -29,6 +35,7 @@
       overflow-x: auto;
       white-space: pre-wrap;
     }
+
     button {
       padding: 10px 20px;
       margin: 10px 10px 0 0;
@@ -37,10 +44,12 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
     .nav-button {
       background-color: #777;
       color: white;
     }
+
     .submit-button {
       background-color: #4CAF50;
       color: white;
@@ -48,19 +57,19 @@
     }
 
     /*status bar*/
-  .status-bar {
-    background-color: #333;
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-  }
+    .status-bar {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
 
     .phase-link {
       color: white;
@@ -85,30 +94,35 @@
       cursor: not-allowed;
     }
 
-  a {
-    color: #4CAF50;
-    text-decoration: none;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
+    a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
 
-  @keyframes glowPulse {
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @keyframes glowPulse {
       0% {
         box-shadow: 0 0 10px #4CAF50;
       }
+
       100% {
         box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
       }
     }
-
   </style>
 </head>
+
 <body>
 
   <div class="status-bar">
     <div class="user-dropdown" style="position: relative;">
-      <div style="padding: 8px 12px; color: gainsboro; font-weight: bold;"><span id="user-info"></span> (<button onclick="logout()" style="color: white; background: none; border: none; cursor: pointer; margin: 0;padding: 0;">🚪 Logout</button>)</div>
+      <div style="padding: 8px 12px; color: gainsboro; font-weight: bold;"><span id="user-info"></span> (<button
+          onclick="logout()"
+          style="color: white; background: none; border: none; cursor: pointer; margin: 0;padding: 0;">🚪
+          Logout</button>)</div>
     </div>
     <a href="index.html" class="phase-link" id="link-home">🏠 Home</a>
     <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
@@ -117,25 +131,28 @@
     <a href="review.html" class="phase-link active" id="link-review">Review & Submit</a>
   </div>
 
-  <div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
+  <div id="instructions-box"
+    style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <h2 style="margin: 0;">Review and Submit</h2>
-      <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
+      <button onclick="toggleInstructions()"
+        style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
     </div>
-  
+
     <div id="instructions-content" style="margin-top: 15px;">
-      <p>Please review your responses for all phases. If everything looks good, click the "Submit All Responses" button.</p>
+      <p>Please review your responses for all phases. If everything looks good, click the "Submit All Responses" button.
+      </p>
       <p>You can edit each phase by clicking on the corresponding "Update" buttons.</p>
     </div>
   </div>
-  
 
-  
+
+
   <div class="section">
     <h2>Phase 1: Summary and Comprehensibility</h2>
     <div id="phase1"></div>
     <button class="nav-button" onclick="location.href='/phase1.html'">Update Phase 1</button>
-  </div>  
+  </div>
 
   <div class="section">
     <h2>Phase 2: Snippet Ranking</h2>
@@ -207,18 +224,18 @@
         border-radius: 5px;
         cursor: pointer;
     ">OK</button>
-</div>
+  </div>
 
-<script>
-  function showSubmissionModal(message) {
-    document.getElementById('submission-message').innerText = message;
-    document.getElementById('submission-modal').style.display = 'block';
-  }
-  
-  function hideSubmissionModal() {
-    document.getElementById('submission-modal').style.display = 'none';
-  }
-</script>  
+  <script>
+    function showSubmissionModal(message) {
+      document.getElementById('submission-message').innerText = message;
+      document.getElementById('submission-modal').style.display = 'block';
+    }
+
+    function hideSubmissionModal() {
+      document.getElementById('submission-modal').style.display = 'none';
+    }
+  </script>
 
   <script>
     function showValidationMessage(msg) {
@@ -280,53 +297,53 @@
       });
     }
 
-  function submitAll() {
-    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
-    const username = localStorage.getItem('username') || 'anonymous';
+    function submitAll() {
+      const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
+      const username = localStorage.getItem('username') || 'anonymous';
 
-    // Phase 1
-    const phase1 = {};
-    for (let i = 1; i <= 8; i++) {
-      const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
-      const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
-      phase1[`snippet${i}`] = { summary, comprehensibility: comp };
+      // Phase 1
+      const phase1 = {};
+      for (let i = 1; i <= 8; i++) {
+        const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
+        const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
+        phase1[`snippet${i}`] = { summary, comprehensibility: comp };
+      }
+
+      // Phase 2 & 3
+      const phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
+      const phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
+
+      const flags = {
+        phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
+        phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
+        phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
+        codeTheme: localStorage.getItem('codeTheme') || 'light',
+        submitted: '1' // final submission flag
+      };
+
+      const payload = {
+        username,
+        participantName: name,
+        phase1,
+        phase2,
+        phase3,
+        ...flags
+      };
+
+      console.log("🚀 Submitting FINAL payload via Beacon:", payload);
+
+      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+      const success = navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+
+      if (success) {
+        showSubmissionModal('✅ Submission successful!\n\nWe will notify you about the possible next steps. \n\nYou can still resubmit your responses before the deadline if needed.');
+      } else {
+        showValidationMessage('❌ Submission failed. Beacon transmission failed.');
+      }
     }
 
-    // Phase 2 & 3
-    const phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
-    const phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
 
-    const flags = {
-      phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
-      phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
-      phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
-      codeTheme: localStorage.getItem('codeTheme') || 'light',
-      submitted: '1' // final submission flag
-    };
-
-    const payload = {
-      username,
-      participantName: name,
-      phase1,
-      phase2,
-      phase3,
-      ...flags
-    };
-
-    console.log("🚀 Submitting FINAL payload via Beacon:", payload);
-
-    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-    const success = navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
-
-    if (success) {
-      showSubmissionModal('✅ Submission successful!\n\nWe will notify you about the possible next steps. \n\nYou can still resubmit your responses before the deadline if needed.');
-    } else {
-      showValidationMessage('❌ Submission failed. Beacon transmission failed.');
-    }
-  }
-
-
-    renderPhase1(); 
+    renderPhase1();
     renderPhase2();
     renderPhase3();
   </script>
@@ -358,135 +375,137 @@
     };
   </script>
 
-<script>
-  function displayUserName() {
-    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
-    if (name) {
-      document.getElementById('user-info').textContent = `👤 ${name}`;
+  <script>
+    function displayUserName() {
+      const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
+      if (name) {
+        document.getElementById('user-info').textContent = `👤 ${name}`;
+      }
     }
-  }
-</script>
+  </script>
 
-<script>
-  function isLoggedIn() {
-    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
-    const order = sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder');
-    return name && order;
-  }
-
-  function checkLogin() {
-    if (!isLoggedIn()) {
-      alert('You must be logged in to access this page. Redirecting to the homepage.');
-      window.location.href = 'https://codecomprehensibility.site/';
+  <script>
+    function isLoggedIn() {
+      const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
+      const order = sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder');
+      return name && order;
     }
-  }
 
-  function isPhaseComplete(phaseKey) {
-    const sessionVal = sessionStorage.getItem(phaseKey);
-    const cookieVal = localStorage.getItem(phaseKey);
-    return sessionVal === 'true' || cookieVal === 'true';
-  }
-
-  function checkPhase3Completion() {
-    if (!isPhaseComplete('phase3Complete') || !isPhaseComplete('phase2Complete') || !isPhaseComplete('phase1Complete')) {
-      alert('Please complete Phase 3 before continuing.');
-      window.location.href = 'phase3.html';
+    function checkLogin() {
+      if (!isLoggedIn()) {
+        alert('You must be logged in to access this page. Redirecting to the homepage.');
+        window.location.href = 'https://codecomprehensibility.site/';
+      }
     }
-  }
 
-  window.addEventListener('load', checkLogin);
-  window.addEventListener('load', checkPhase3Completion);
-</script>
+    function isPhaseComplete(phaseKey) {
+      const sessionVal = sessionStorage.getItem(phaseKey);
+      const cookieVal = localStorage.getItem(phaseKey);
+      return sessionVal === 'true' || cookieVal === 'true';
+    }
 
+    function checkPhase3Completion() {
+      if (!isPhaseComplete('phase3Complete') || !isPhaseComplete('phase2Complete') || !isPhaseComplete('phase1Complete')) {
+        alert('Please complete Phase 3 before continuing.');
+        window.location.href = 'phase3.html';
+      }
+    }
 
-<script>
-  // Toggle logout menu visibility
-// document.addEventListener('DOMContentLoaded', () => {
-//   const userInfo = document.getElementById('user-info');
-//   const logoutMenu = document.getElementById('logout-menu');
-
-//   userInfo.addEventListener('click', () => {
-//     logoutMenu.style.display = logoutMenu.style.display === 'block' ? 'none' : 'block';
-//   });
-
-//   // Hide the menu if clicked outside
-//   document.addEventListener('click', (event) => {
-//     if (!event.target.closest('.user-dropdown')) {
-//       logoutMenu.style.display = 'none';
-//     }
-//   });
-// });
-
-// Clear storage and redirect to login
-function logout() {
-  sessionStorage.clear();
-  localStorage.clear();
+    window.addEventListener('load', checkLogin);
+    window.addEventListener('load', checkPhase3Completion);
+  </script>
 
 
-  // Clear all cookies
-  document.cookie.split(";").forEach(cookie => {
-    const name = cookie.split("=")[0].trim();
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-  });
+  <script>
+    // Toggle logout menu visibility
+    // document.addEventListener('DOMContentLoaded', () => {
+    //   const userInfo = document.getElementById('user-info');
+    //   const logoutMenu = document.getElementById('logout-menu');
 
-  window.location.href = 'index.html';
-}
-</script>
+    //   userInfo.addEventListener('click', () => {
+    //     logoutMenu.style.display = logoutMenu.style.display === 'block' ? 'none' : 'block';
+    //   });
 
-<script>
-function saveToServer() {
-  const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
-  const username = localStorage.getItem('username') || 'anonymous';
+    //   // Hide the menu if clicked outside
+    //   document.addEventListener('click', (event) => {
+    //     if (!event.target.closest('.user-dropdown')) {
+    //       logoutMenu.style.display = 'none';
+    //     }
+    //   });
+    // });
 
-  // Phase 1 data
-  const phase1 = {};
-  for (let i = 1; i <= 8; i++) {
-    const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
-    const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
-    phase1[`snippet${i}`] = { summary, comprehensibility: comp };
-  }
+    // Clear storage and redirect to login
+    function logout() {
+      sessionStorage.clear();
+      localStorage.clear();
 
-  // Phase 2 & 3 data
-  let phase2 = {}, phase3 = {};
-  try {
-    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
-    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
-  } catch (e) {
-    console.warn("Error parsing phase2 or phase3 data", e);
-  }
 
-  // Completion flags and theme
-  const flags = {
-    phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
-    phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
-    phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
-    codeTheme: localStorage.getItem('codeTheme') || 'light',
-    submitted: '0',
-  };
+      // Clear all cookies
+      document.cookie.split(";").forEach(cookie => {
+        const name = cookie.split("=")[0].trim();
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      });
 
-  const payload = {
-    username,
-    participantName: name,
-    phase1,
-    phase2,
-    phase3,
-    ...flags
-  };
+      window.location.href = 'index.html';
+    }
+  </script>
 
-  const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-  navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+  <script>
+    function saveToServer() {
+      const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
+      const username = localStorage.getItem('username') || 'anonymous';
 
-  console.log(payload);
-}
+      // Phase 1 data
+      const phase1 = {};
+      for (let i = 1; i <= 8; i++) {
+        const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
+        const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
+        phase1[`snippet${i}`] = { summary, comprehensibility: comp };
+      }
 
-window.addEventListener('beforeunload', function (e) {
-  saveToServer();  
-});
+      // Phase 2 & 3 data
+      let phase2 = {}, phase3 = {};
+      try {
+        phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
+        phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
+      } catch (e) {
+        console.warn("Error parsing phase2 or phase3 data", e);
+      }
 
-</script>
+      // Completion flags and theme
+      const flags = {
+        phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
+        phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
+        phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
+        codeTheme: localStorage.getItem('codeTheme') || 'light',
+        submitted: '0',
+      };
 
-<footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
-  Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
-</footer>
+      const payload = {
+        username,
+        participantName: name,
+        phase1,
+        phase2,
+        phase3,
+        ...flags
+      };
+
+      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+      navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+
+      console.log(payload);
+    }
+
+    window.addEventListener('beforeunload', function (e) {
+      saveToServer();
+    });
+
+  </script>
+
+  <footer
+    style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
+    Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
+  </footer>
 </body>
+
 </html>

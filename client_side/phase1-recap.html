@@ -377,284 +377,230 @@ textarea {
 </div>
 
   
-<script src="js/dataExpert.js"></script>
-
+  <script src="js/dataExpert.js"></script>
+  <script src="js/common.js"></script>
 <script>
-  function getCookie(name) {
-      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-      return match ? decodeURIComponent(match[2]) : null;
-  }
-  
-  // Returns existing or creates a new randomized order of indices
-  function getOrCreateSnippetOrder(length) {
-    const key = 'snippetOrder';
-  
-    // Try to load from sessionStorage or cookie
-    let stored = sessionStorage.getItem(key) || getCookie(key);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length === length) return parsed;
-      } catch {}
+    // Returns existing or creates a new randomized order of indices
+    function getOrCreateSnippetOrder(length) {
+      const key = "snippetOrder";
+
+      // Try to load from sessionStorage or cookie
+      let stored = sessionStorage.getItem(key) || localStorage.getItem(key);
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length === length)
+            return parsed;
+        } catch { }
+      }
+
+      // Generate new shuffled order of indices
+      const order = Array.from({ length }, (_, i) => i);
+      for (let i = order.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [order[i], order[j]] = [order[j], order[i]];
+      }
+
+      // Store in sessionStorage and cookie
+      const serialized = JSON.stringify(order);
+      sessionStorage.setItem(key, serialized);
+      localStorage.setItem(key, serialized);
+      return order;
     }
-  
-    // Generate new shuffled order of indices
-    const order = Array.from({ length }, (_, i) => i);
-    for (let i = order.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [order[i], order[j]] = [order[j], order[i]];
-    }
-  
-    // Store in sessionStorage and cookie
-    const serialized = JSON.stringify(order);
-    sessionStorage.setItem(key, serialized);
-    document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=2592000`; // 30 days
-  
-    return order;
-  }
-  
-  const originalSnippets = [...snippets]; // Clone BEFORE mutation
-  const order = getOrCreateSnippetOrder(originalSnippets.length); // 1-based [1..8]
 
-  const shuffled = order.map(i => originalSnippets[i - 1]); // ✅ Convert to 0-based
+    const originalSnippets = [...snippets]; // Clone BEFORE mutation
+    const order = getOrCreateSnippetOrder(originalSnippets.length); // 1-based [1..8]
 
-  snippets.length = 0;
-  snippets.push(...shuffled);
+    const shuffled = order.map((i) => originalSnippets[i - 1]); // ✅ Convert to 0-based
 
-  shuffled.forEach((snippet, newIndex) => {
-    snippet.id = newIndex + 1;                      // Maintain new 1-based IDs
-    snippet.title = `Snippet ${newIndex + 1}`;      // Display title
-  });
+    snippets.length = 0;
+    snippets.push(...shuffled);
 
-  console.log("Final snippet order (titles):", snippets.map(s => s.title));
-  console.log("Final snippet order (ids):", snippets.map(s => s.id));
-  console.log("Server snippet order (1-based):", order.map(i => `Snippet ${i}`));
+    shuffled.forEach((snippet, newIndex) => {
+      snippet.id = newIndex + 1; // Maintain new 1-based IDs
+      snippet.title = `Snippet ${newIndex + 1}`; // Display title
+    });
 
+    console.log(
+      "Final snippet order (titles):",
+      snippets.map((s) => s.title)
+    );
+    console.log(
+      "Final snippet order (ids):",
+      snippets.map((s) => s.id)
+    );
+    console.log(
+      "Server snippet order (1-based):",
+      order.map((i) => `Snippet ${i}`)
+    );
 </script>
 
 <script>
-    function getCookie(name) {
-      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-      return match ? decodeURIComponent(match[2]) : null;
+    function getLocalStorage(name) {
+      const value = localStorage.getItem(name);
+      return value ? decodeURIComponent(value) : null;
     }
-  
+
     function isComplete(key) {
-      return sessionStorage.getItem(key) === 'true' || getCookie(key) === 'true';
+      return (
+        sessionStorage.getItem(key) === "true" ||
+        localStorage.getItem(key) === "true"
+      );
     }
-  
+
     // Unlock links based on progress
-    if (isComplete('phase1Complete')) {
-      document.getElementById('link-phase2').classList.remove('disabled');
+    if (isComplete("phase1Complete")) {
+      document.getElementById("link-phase2").classList.remove("disabled");
     }
-    if (isComplete('phase2Complete')) {
-      document.getElementById('link-phase3').classList.remove('disabled');
+    if (isComplete("phase2Complete")) {
+      document.getElementById("link-phase3").classList.remove("disabled");
     }
-    if (isComplete('phase3Complete')) {
-      document.getElementById('link-review').classList.remove('disabled');
+    if (isComplete("phase3Complete")) {
+      document.getElementById("link-review").classList.remove("disabled");
     }
-  
+
     // Highlight current phase
-    const current = window.location.pathname.split('/').pop();
-    if (current.includes('phase1')) document.getElementById('link-phase1').classList.add('active');
-    else if (current.includes('phase2')) document.getElementById('link-phase2').classList.add('active');
-    else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
-    else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
+    const current = window.location.pathname.split("/").pop();
+    if (current.includes("phase1"))
+      document.getElementById("link-phase1").classList.add("active");
+    else if (current.includes("phase2"))
+      document.getElementById("link-phase2").classList.add("active");
+    else if (current.includes("phase3"))
+      document.getElementById("link-phase3").classList.add("active");
+    else if (current.includes("review"))
+      document.getElementById("link-review").classList.add("active");
 </script>
   
 
 
 <script>
-const TOTAL_SNIPPETS = 8;
-let currentSnippet = 1;
+    const TOTAL_SNIPPETS = 8;
+    let currentSnippet = 1;
 
+    function loadSnippet(snippetNumber) {
+      const snippet = snippets[snippetNumber - 1];
+      document.getElementById("snippet-title").innerText = snippet.title;
+      const codeLines = snippet.code.trim().split("\n");
+      document.getElementById("code-content").innerHTML =
+        codeLines.join("\n");
 
+      const lineNumbersHtml = codeLines.map((_, i) => i + 1).join("<br>");
+      document.getElementById("line-numbers").innerHTML = lineNumbersHtml;
 
-function loadSnippet(snippetNumber) {
-  const snippet = snippets[snippetNumber - 1];
-  document.getElementById('snippet-title').innerText = snippet.title;
-  const codeLines = snippet.code.trim().split('\n');
-  document.getElementById('code-content').innerHTML = codeLines.join('\n');
+      const keySummary = `summary${snippetNumber}`;
+      const keycompSummary = `compSummary${snippetNumber}`;
+      let savedSummary = sessionStorage.getItem(keySummary);
+      let savedcompSummary = sessionStorage.getItem(keycompSummary);
 
-const lineNumbersHtml = codeLines.map((_, i) => (i + 1)).join('<br>');
-document.getElementById('line-numbers').innerHTML = lineNumbersHtml;
+      if (!savedSummary)
+        savedSummary = localStorage.getItem(keySummary) || "";
+      if (!savedcompSummary)
+        savedcompSummary = localStorage.getItem(keycompSummary) || "";
 
-  const keySummary = `summary${snippetNumber}`;
-  const keycompSummary = `compSummary${snippetNumber}`;
-  let savedSummary = sessionStorage.getItem(keySummary);
-  let savedcompSummary = sessionStorage.getItem(keycompSummary);
+      document.getElementById("summary").value = savedSummary;
+      document.getElementById("compSummary").value = savedcompSummary;
+    }
 
-  if (!savedSummary) savedSummary = decodeURIComponent(getCookie(keySummary) || '');
-  if (!savedcompSummary) savedcompSummary = decodeURIComponent(getCookie(keycompSummary) || '');
+    function saveSummary() {
+      const summary = document.getElementById("summary").value.trim();
+      const compSummary = document.getElementById("compSummary").value.trim();
 
-  document.getElementById('summary').value = savedSummary;
-  document.getElementById('compSummary').value = savedcompSummary;
+      const keySummary = `summary${currentSnippet}`;
+      const keyCompSummary = `compSummary${currentSnippet}`;
 
- // === Load all participant responses and show user's first as "You" ===
-const otherSumDiv = document.getElementById('otherSum');
-const otherCompDiv = document.getElementById('otherComp');
+      // Save to sessionStorage
+      sessionStorage.setItem(keySummary, summary);
+      sessionStorage.setItem(keyCompSummary, compSummary);
+      localStorage.setItem(keySummary, summary);
+      localStorage.setItem(keyCompSummary, compSummary);
 
-otherSumDiv.innerHTML = '';
-otherCompDiv.innerHTML = '';
+      if (areAllSnippetsFilled()) {
+        document.getElementById("continueBtn").style.display = "inline-block";
+        sessionStorage.setItem("phase1Complete", "true");
+        localStorage.setItem("phase1Complete", "true");
 
-const currentParticipantRaw = sessionStorage.getItem('username') || getCookie('username') || '';
-const currentParticipant = currentParticipantRaw.trim().toLowerCase();
-console.log("[DEBUG] currentParticipantRaw:", currentParticipantRaw);
-console.log("[DEBUG] normalized currentParticipant:", currentParticipant);
+        //update status bar if needed
+        if (isComplete("phase1Complete"))
+          document.getElementById("link-phase2").classList.remove("disabled");
+      } else {
+        document.getElementById("continueBtn").style.display = "none";
+        sessionStorage.setItem("phase1Complete", "false");
+        localStorage.setItem("phase1Complete", "false");
+        document.getElementById("link-phase2").classList.add("disabled");
+        document.getElementById("link-phase3").classList.add("disabled");
+        document.getElementById("link-review").classList.add("disabled");
+      }
+    }
 
-if (snippet.responses && Array.isArray(snippet.responses)) {
-  snippet.responses.forEach(r => {
-    const participantRaw = r.participant || '';
-    const normalized = participantRaw.trim().toLowerCase();
-    const isCurrentUser = normalized === currentParticipant;
+    function saveSummarySilentForPrev() {
+      saveSummary();
+    }
 
-    console.log(`[DEBUG] Checking participant: "${participantRaw}" → "${normalized}"`);
-    console.log(`[DEBUG] Match with current user?`, isCurrentUser);
-  });
+    function nextSnippet() {
+      if (!validateCurrentSnippetInputs()) return;
 
-  const youResponse = snippet.responses.find(r => r.participant.trim().toLowerCase() === currentParticipant);
-  const otherResponses = snippet.responses.filter(r => r.participant.trim().toLowerCase() !== currentParticipant);
+      saveSummary();
 
-  if (youResponse) {
-    console.log(`[DEBUG] Found matching "You" response from:`, youResponse.participant);
-    const sumHTML = `
-      <div class="participant">
-        <h4>You</h4>
-        ${youResponse.summary}
-      </div>`;
-    const compHTML = `
-      <div class="participant">
-        <h4>You</h4>
-        ${youResponse.comprehensibility}
-      </div>`;
-    otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
-    otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
-  } else {
-    console.log(`[DEBUG] No matching "You" response found`);
-  }
-
-  otherResponses.forEach(response => {
-    console.log(`[DEBUG] Appending other response from:`, response.participant);
-    const sumHTML = `
-      <div class="participant">
-        <h4>${response.participant}</h4>
-        ${response.summary}
-      </div>`;
-    const compHTML = `
-      <div class="participant">
-        <h4>${response.participant}</h4>
-        ${response.comprehensibility}
-      </div>`;
-    otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
-    otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
-  });
-}
-
-}
-
-
-
-function saveSummary() {
-  const summary = document.getElementById('summary').value.trim();
-  const compSummary = document.getElementById('compSummary').value.trim();
-
-  const keySummary = `summary${currentSnippet}`;
-  const keyCompSummary = `compSummary${currentSnippet}`;
-
-  // Save to sessionStorage
-  sessionStorage.setItem(keySummary, summary);
-  sessionStorage.setItem(keyCompSummary, compSummary);
-
-  // Save to cookies
-  setCookie(keySummary, encodeURIComponent(summary), 30);
-  setCookie(keyCompSummary, encodeURIComponent(compSummary), 30);
-
-  if(areAllSnippetsFilled()){
-    document.getElementById('continueBtn').style.display = 'inline-block';
-    sessionStorage.setItem('phase1Complete', 'true');
-    setCookie('phase1Complete', 'true', 30);
-    
-    //update status bar if needed
-    if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
-
-  }else{
-    document.getElementById('continueBtn').style.display = 'none';
-    sessionStorage.setItem('phase1Complete', 'false');
-    setCookie('phase1Complete', 'false', 30);
-    document.getElementById('link-phase2').classList.add('disabled');
-    document.getElementById('link-phase3').classList.add('disabled');
-    document.getElementById('link-review').classList.add('disabled');
-  }
-}
-
-
-function saveSummarySilentForPrev() {
-    saveSummary();
-}
-
-function nextSnippet() {
-    if (!validateCurrentSnippetInputs()) return;
-
-    saveSummary();
-
-    if (currentSnippet < TOTAL_SNIPPETS) {
+      if (currentSnippet < TOTAL_SNIPPETS) {
         currentSnippet++;
         loadSnippet(currentSnippet);
         updateButtons();
+      }
     }
-}
 
-
-function prevSnippet() {
-    if (currentSnippet > 1) {
+    function prevSnippet() {
+      if (currentSnippet > 1) {
         saveSummarySilentForPrev();
         currentSnippet--;
         loadSnippet(currentSnippet);
         updateButtons();
-    } else {
+      } else {
         // Prevent any default behavior like navigating back
         return false;
+      }
     }
-}
 
+    function updateButtons() {
+      document.getElementById("prev").disabled = currentSnippet === 1;
+      document.getElementById("next").disabled =
+        currentSnippet === TOTAL_SNIPPETS;
+    }
 
-function updateButtons() {
-    document.getElementById('prev').disabled = currentSnippet === 1;
-    document.getElementById('next').disabled = currentSnippet === TOTAL_SNIPPETS;
-}
+    function submitAll() {
+      saveSummary(); // save the current snippet
+      const allSummaries = {};
 
-function submitAll() {
-    saveSummary(); // save the current snippet
-    const allSummaries = {};
-
-    // Pull all saved snippets from session or cookie
-    for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
+      // Pull all saved snippets from session or cookie
+      for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
         const key = `summary${i}`;
         const sessionVal = sessionStorage.getItem(key);
-        const cookieVal = getCookie(key);
-        allSummaries[key] = sessionVal || decodeURIComponent(cookieVal || '');
-    }
+        const localVal = localStorage.getItem(key);
+        allSummaries[key] = sessionVal || localVal || "";
+      }
 
-    fetch("https://codecomprehensibility.site/submit", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(allSummaries)
-  })
-  .then(response => {
-    if (response.ok) {
-      showSubmissionModal('✅ Summaries submitted successfully. Click “Continue to Phase 2” to proceed.\nYou may resubmit before the deadline if you change your mind about any part of your response.');
-      document.getElementById('continueBtn').style.display = 'inline-block';
-      sessionStorage.setItem('phase1_submitted', 'true');
-      setCookie('phase1_submitted', 'true', 30);
-    } else {
-      showSubmissionModal('❌ Submission failed. Please try again.');
+      fetch("https://codecomprehensibility.site/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(allSummaries),
+      })
+        .then((response) => {
+          if (response.ok) {
+            showSubmissionModal(
+              "✅ Summaries submitted successfully. Click “Continue to Phase 2” to proceed.\nYou may resubmit before the deadline if you change your mind about any part of your response."
+            );
+            document.getElementById("continueBtn").style.display =
+              "inline-block";
+            sessionStorage.setItem("phase1_submitted", "true");
+            localStorage.setItem("phase1_submitted", "true");
+          } else {
+            showSubmissionModal("❌ Submission failed. Please try again.");
+          }
+        })
+        .catch((error) => {
+          console.error("Submission error:", error);
+          showSubmissionModal("⚠️ Error occurred during submission.");
+        });
     }
-  })
-  .catch(error => {
-    console.error("Submission error:", error);
-    showSubmissionModal('⚠️ Error occurred during submission.');
-  });
-
-}
 </script>
 
 
@@ -741,17 +687,6 @@ function submitAll() {
   }
   </script>  
 
-<script>
-    function setCookie(name, value, days) {
-        const expires = new Date(Date.now() + days*24*60*60*1000).toUTCString();
-        document.cookie = `${name}=${value}; expires=${expires}; path=/`;
-    }
-    
-    function getCookie(name) {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return match ? decodeURIComponent(match[2]) : null;
-  }
-</script>
 
 <script>
     function toggleInstructions() {
@@ -769,41 +704,56 @@ function submitAll() {
 </script>
     
 <script>
-function applyTheme() {
-  const theme = localStorage.getItem('codeTheme') || 'light';
+    function toggleInstructions() {
+      const content = document.getElementById("instructions-content");
+      const button = event.target;
 
-  // Clear both classes first
-  document.body.classList.remove('light-mode', 'dark-mode');
+      if (content.style.display === "none") {
+        content.style.display = "block";
+        button.textContent = "Hide";
+      } else {
+        content.style.display = "none";
+        button.textContent = "Show";
+      }
+    }
+  </script>
 
-  if (theme === 'dark') {
-    document.body.classList.add('dark-mode');
-    const btn = document.getElementById('theme-toggle');
-    if (btn) btn.textContent = 'Switch to Light Mode';
-  } else {
-    document.body.classList.add('light-mode');
-    const btn = document.getElementById('theme-toggle');
-    if (btn) btn.textContent = 'Switch to Dark Mode';
-  }
-}
+  <script>
+    function applyTheme() {
+      const theme = localStorage.getItem("codeTheme") || "light";
 
+      // Clear both classes first
+      document.body.classList.remove("light-mode", "dark-mode");
 
-function toggleTheme() {
-  const body = document.body;
-  const isLight = body.classList.contains("light-mode");
+      if (theme === "dark") {
+        document.body.classList.add("dark-mode");
+        const btn = document.getElementById("theme-toggle");
+        if (btn) btn.textContent = "Switch to Light Mode";
+      } else {
+        document.body.classList.add("light-mode");
+        const btn = document.getElementById("theme-toggle");
+        if (btn) btn.textContent = "Switch to Dark Mode";
+      }
+    }
 
-  if (isLight) {
-    body.classList.remove("light-mode");
-    body.classList.add("dark-mode");
-    localStorage.setItem("codeTheme", "dark"); // Use unified key
-    document.getElementById('theme-toggle').textContent = "Switch to Light Mode";
-  } else {
-    body.classList.add("light-mode");
-    body.classList.remove("dark-mode");
-    localStorage.setItem("codeTheme", "light"); // Use unified key
-    document.getElementById('theme-toggle').textContent = "Switch to Dark Mode";
-  }
-}
+    function toggleTheme() {
+      const body = document.body;
+      const isLight = body.classList.contains("light-mode");
 
+      if (isLight) {
+        body.classList.remove("light-mode");
+        body.classList.add("dark-mode");
+        localStorage.setItem("codeTheme", "dark"); // Use unified key
+        document.getElementById("theme-toggle").textContent =
+          "Switch to Light Mode";
+      } else {
+        body.classList.add("light-mode");
+        body.classList.remove("dark-mode");
+        localStorage.setItem("codeTheme", "light"); // Use unified key
+        document.getElementById("theme-toggle").textContent =
+          "Switch to Dark Mode";
+      }
+    }
 
 window.onload = function() {
     displayUserName();
@@ -929,18 +879,24 @@ function showValidationMessage(msg) {
 
 <script>
     function areAllSnippetsFilled() {
-        for (let i = 1; i <= 8; i++) {
-            const summaryKey = `summary${i}`;
-            const compKey = `compSummary${i}`;
+      for (let i = 1; i <= 8; i++) {
+        const summaryKey = `summary${i}`;
+        const compKey = `compSummary${i}`;
 
-            const summary = sessionStorage.getItem(summaryKey) || decodeURIComponent(getCookie(summaryKey) || '');
-            const compSummary = sessionStorage.getItem(compKey) || decodeURIComponent(getCookie(compKey) || '');
+        const summary =
+          sessionStorage.getItem(summaryKey) ||
+          localStorage.getItem(summaryKey) ||
+          "";
+        const compSummary =
+          sessionStorage.getItem(compKey) ||
+          localStorage.getItem(compKey) ||
+          "";
 
-            if (!summary.trim() || !compSummary.trim()) {
-            return false;
-            }
+        if (!summary.trim() || !compSummary.trim()) {
+          return false;
         }
-        return true;
+      }
+      return true;
     }
 
 </script>
@@ -973,101 +929,9 @@ function showValidationMessage(msg) {
 // });
 
 // Clear storage and redirect to login
-function logout() {
-  sessionStorage.clear();
-
-  // Clear all cookies
-  document.cookie.split(";").forEach(cookie => {
-    const name = cookie.split("=")[0].trim();
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-  });
-
-  window.location.href = 'index.html';
-}
-</script>
-
-<script>
-  function isLoggedIn() {
-    const name = sessionStorage.getItem('participantName') || getCookie('participantName');
-    const order = sessionStorage.getItem('snippetOrder') || getCookie('snippetOrder');
-    return name && order;
-  }
-
-  function checkLogin() {
-    if (!isLoggedIn()) {
-      alert('You must be logged in to access this page. Redirecting to the homepage.');
-      window.location.href = 'https://codecomprehensibility.site/';
-    }
-  }
-
-  window.addEventListener('load', checkLogin);
-</script>
-
-<script>
-function saveToServer() {
-  const name = sessionStorage.getItem('participantName') || getCookie('participantName') || 'Anonymous';
-  const username = getCookie('username') || 'anonymous';
-
-  // Phase 1 data
-  const phase1 = {};
-  for (let i = 1; i <= 8; i++) {
-    const summary = sessionStorage.getItem(`summary${i}`) || getCookie(`summary${i}`) || '';
-    const comp = sessionStorage.getItem(`compSummary${i}`) || getCookie(`compSummary${i}`) || '';
-    phase1[`snippet${i}`] = { summary, comprehensibility: comp };
-  }
-
-  // Phase 2 & 3 data
-  let phase2 = {}, phase3 = {};
-  try {
-    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getCookie('phase3_ranking') || '{}');
-    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getCookie('phase3_reasoning') || '{}');
-  } catch (e) {
-    console.warn("Error parsing phase2 or phase3 data", e);
-  }
-
-  // Completion flags and theme
-  const flags = {
-    phase1Complete: sessionStorage.getItem('phase1Complete') || getCookie('phase1Complete') || 'false',
-    phase2Complete: sessionStorage.getItem('phase2Complete') || getCookie('phase2Complete') || 'false',
-    phase3Complete: sessionStorage.getItem('phase3Complete') || getCookie('phase3Complete') || 'false',
-    codeTheme: localStorage.getItem('codeTheme') || 'light',
-    submitted: '0',
-  };
-
-  const payload = {
-    username,
-    participantName: name,
-    phase1,
-    phase2,
-    phase3,
-    ...flags
-  };
-
-  const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-  navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
-}
-
-window.addEventListener('beforeunload', saveToServer);
 
 </script>
 
-<script>
-  function openJavadocModal(url) {
-    const iframe = document.getElementById("javadocFrame");
-    iframe.src = url;
-    document.getElementById("javadocModal").style.display = "block";
-  }
-  
-  function closeJavadocModal() {
-    document.getElementById("javadocModal").style.display = "none";
-    document.getElementById("javadocFrame").src = "";
-  }
-  
-  function javadocFrameReload() {
-    const iframe = document.getElementById("javadocFrame");
-    iframe.src = iframe.src;
-  }
-</script>
     
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
   Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>

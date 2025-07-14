@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Phase 4: Explain Your Ranking Decisions</title>
@@ -9,15 +10,15 @@
       margin: 0 40px 40px 40px;
       background-color: #f9f9f9;
     }
-  
+
     .step-box {
       background: #fff;
       padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
     }
-  
+
     .status-bar {
       background-color: #333;
       color: white;
@@ -31,7 +32,7 @@
       right: 0;
       z-index: 1000;
     }
-  
+
     .phase-link {
       color: white;
       text-decoration: none;
@@ -40,21 +41,21 @@
       border-radius: 4px;
       transition: background-color 0.2s;
     }
-  
+
     .phase-link:hover:not(.disabled) {
       background-color: #4CAF50;
     }
-  
+
     .phase-link.active {
       background-color: #4CAF50;
     }
-  
+
     .phase-link.disabled {
       pointer-events: none;
       opacity: 0.5;
       cursor: not-allowed;
     }
-  
+
     .snippet-preview-box {
       border-radius: 8px;
       overflow: hidden;
@@ -63,7 +64,7 @@
       border: 1px solid #bbb;
       margin-bottom: 20px;
     }
-  
+
     .snippet-header {
       background-color: #f5f5f5;
       padding: 10px 15px;
@@ -71,7 +72,7 @@
       font-size: 16px;
       border-bottom: 1px solid #ccc;
     }
-  
+
     .code-box {
       background-color: #f9f9f9;
       color: #222;
@@ -83,7 +84,7 @@
       white-space: pre-wrap;
       margin-bottom: 20px;
     }
-  
+
     .code-container {
       display: grid;
       grid-template-columns: auto 1fr;
@@ -95,7 +96,7 @@
       overflow-x: auto;
       padding: 0;
     }
-  
+
     .line-numbers {
       text-align: right;
       padding-right: 12px;
@@ -103,13 +104,13 @@
       color: #999;
       border-right: 1px solid #ccc;
     }
-  
+
     .code-content {
       padding-left: 12px;
       white-space: pre;
       word-break: break-word;
     }
-  
+
     textarea {
       width: 100%;
       height: 120px;
@@ -119,12 +120,12 @@
       border-radius: 5px;
       border: 1px solid #ccc;
     }
-  
+
     .buttons {
       text-align: center;
       margin-top: 30px;
     }
-  
+
     button {
       padding: 10px 20px;
       margin-right: 10px;
@@ -135,162 +136,219 @@
       color: white;
       cursor: pointer;
     }
-  
+
     button:hover {
       background-color: #45a049;
     }
-  
+
     button[disabled] {
       background-color: #888;
       cursor: not-allowed;
     }
-  
+
     button#submit-review {
       display: none;
       animation: glowPulse 1.5s infinite alternate;
     }
-  
+
     @keyframes glowPulse {
       0% {
         box-shadow: 0 0 10px #4CAF50;
       }
+
       100% {
         box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
       }
     }
-  
+
     /* Light/Dark mode support */
-  
+
     body.dark-mode .snippet-preview-box {
       background-color: #1e1e1e;
       border: 1px solid #444;
     }
-  
+
     body.dark-mode .code-box {
       background-color: #2d2d2d;
       color: #ddd;
     }
-  
+
     body.dark-mode .line-numbers {
       color: #777;
       border-right: 1px solid #555;
     }
-  
+
     body.dark-mode .card {
       background-color: #2a2a2a;
       border-color: #555;
       color: #ddd;
     }
-  
+
     /* Syntax Highlighting */
-    .keyword     { color: #0000ff; font-weight: bold; }
-    .type        { color: #007070; }
-    .function    { color: #7928a1; font-weight: bold; }
-    .literal     { color: #009999; }
-    .string      { color: #a31515; }
-    .comment     { color: #6a9955; font-style: italic; }
-    .number      { color: #098658; }
-  
-    .dark-mode .keyword  { color: #82aaff; }
-    .dark-mode .type     { color: #89ddff; }
-    .dark-mode .function { color: #c792ea; }
-    .dark-mode .literal  { color: #ffcb6b; }
-    .dark-mode .string   { color: #c3e88d; }
-    .dark-mode .comment  { color: #7f848e; }
-    .dark-mode .number   { color: #f78c6c; }
-  
+    .keyword {
+      color: #0000ff;
+      font-weight: bold;
+    }
+
+    .type {
+      color: #007070;
+    }
+
+    .function {
+      color: #7928a1;
+      font-weight: bold;
+    }
+
+    .literal {
+      color: #009999;
+    }
+
+    .string {
+      color: #a31515;
+    }
+
+    .comment {
+      color: #6a9955;
+      font-style: italic;
+    }
+
+    .number {
+      color: #098658;
+    }
+
+    .dark-mode .keyword {
+      color: #82aaff;
+    }
+
+    .dark-mode .type {
+      color: #89ddff;
+    }
+
+    .dark-mode .function {
+      color: #c792ea;
+    }
+
+    .dark-mode .literal {
+      color: #ffcb6b;
+    }
+
+    .dark-mode .string {
+      color: #c3e88d;
+    }
+
+    .dark-mode .comment {
+      color: #7f848e;
+    }
+
+    .dark-mode .number {
+      color: #f78c6c;
+    }
+
     html {
       scroll-behavior: smooth;
     }
-  
+
     a {
       color: #4CAF50;
       text-decoration: none;
     }
-  
+
     a:hover {
       text-decoration: underline;
     }
 
 
     .comparison-container {
-    display: flex;
-    gap: 40px;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    max-width: 1200px;
-    margin: 0 auto;
-    box-sizing: border-box;
-  }
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
 
-  #code-comparison {
-    flex: 2;
-    min-width: 60%;
-    max-width: 80%;
-    box-sizing: border-box;
-  }
+    #code-comparison {
+      flex: 2;
+      min-width: 60%;
+      max-width: 80%;
+      box-sizing: border-box;
+    }
 
-  .explanation-box {
-    flex: 1;
-    min-width: 20%;
-    max-width: 40%;
-    box-sizing: border-box;
-  }
+    .explanation-box {
+      flex: 1;
+      min-width: 20%;
+      max-width: 40%;
+      box-sizing: border-box;
+    }
 
-  .explanation-box textarea {
-    width: 100%;
-    box-sizing: border-box;
-  }
+    .explanation-box textarea {
+      width: 100%;
+      box-sizing: border-box;
+    }
   </style>
-  
+
 </head>
+
 <body>
 
   <div class="status-bar">
     <div class="user-dropdown" style="position: relative;">
-      <div style="padding: 8px 12px; color: gainsboro; font-weight: bold;"><span id="user-info"></span> (<button onclick="logout()" style="color: white; background: none; border: none; cursor: pointer; margin: 0;padding: 0;">🚪 Logout</button>)</div>
+      <div style="padding: 8px 12px; color: gainsboro; font-weight: bold;"><span id="user-info"></span> (<button
+          onclick="logout()"
+          style="color: white; background: none; border: none; cursor: pointer; margin: 0;padding: 0;">🚪
+          Logout</button>)</div>
     </div>
     <a href="index.html" class="phase-link" id="link-home">🏠 Home</a>
     <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
     <a href="phase2.html" class="phase-link" id="link-phase2">Phase 2</a>
     <a href="phase3.html" class="phase-link" id="link-phase3">Phase 3</a>
     <a href="review.html" class="phase-link disabled" id="link-review">Review & Submit</a>
-  </div>  
+  </div>
 
-  
-  <div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
+
+  <div id="instructions-box"
+    style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <h2 style="margin: 0;">Phase 3: Explain Your Ranking</h2>
-      <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
+      <button onclick="toggleInstructions()"
+        style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none; cursor: pointer;">Hide</button>
     </div>
-  
+
     <div id="instructions-content" style="margin-top: 15px;">
       <p>In this phase, you will explain the reasoning behind your ranking from the previous phase. </p>
       <ol>
-        <li><strong>Grouped Snippets:</strong> explain why the snippets placed in the same position are similarly comprehensible.</li>
-        <li><strong>Comparisons:</strong> explain why the snippets placed in one position are easier to understand than those in the next position.</li>
+        <li><strong>Grouped Snippets:</strong> explain why the snippets placed in the same position are similarly
+          comprehensible.</li>
+        <li><strong>Comparisons:</strong> explain why the snippets placed in one position are easier to understand than
+          those in the next position.</li>
       </ol>
       <p><strong>Tip:</strong> There are no right or wrong answers.</p>
-     <p><strong>Please complete this phase using your own judgment</strong>. <span style="color:red;"><strong>Do not consult with anyone else or use generative AI tools (ChatGPT, GitHub Copilot, etc.), search engines, or external websites</strong></span>. Your judgment is essential to the validity of our study.</p>
+      <p><strong>Please complete this phase using your own judgment</strong>. <span style="color:red;"><strong>Do not
+            consult with anyone else or use generative AI tools (ChatGPT, GitHub Copilot, etc.), search engines, or
+            external websites</strong></span>. Your judgment is essential to the validity of our study.</p>
     </div>
   </div>
-    
+
   <div id="question-container" class="step-box">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
       <div id="question-text" style="flex: 1; min-height: 24px;"></div>
-      <button id="theme-toggle" onclick="toggleTheme()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #333; color: white; border: none; cursor: pointer;">
+      <button id="theme-toggle" onclick="toggleTheme()"
+        style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #333; color: white; border: none; cursor: pointer;">
         Switch to Dark Mode
       </button>
     </div>
-  
-    <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start; max-width: 100%; margin: 0; box-sizing: border-box;">
+
+    <div
+      style="display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start; max-width: 100%; margin: 0; box-sizing: border-box;">
       <div id="code-comparison" style="flex: 1 1 60%; width: 80%; box-sizing: border-box;">
         <!-- Snippets inserted dynamically -->
       </div>
-    
+
       <div style="flex: 1 1 35%; width: 20%; box-sizing: border-box;">
         <label for="answer-box" style="font-weight: bold;">Your Explanation</label>
-        <textarea id="answer-box" placeholder="Type your explanation here..." style="width: 100%; box-sizing: border-box;"></textarea>
+        <textarea id="answer-box" placeholder="Type your explanation here..."
+          style="width: 100%; box-sizing: border-box;"></textarea>
         <div class="buttons">
           <button onclick="prevQuestion()">⬅️ Previous</button>
           <button id="next-question" onclick="nextQuestion()">Next ➡️</button>
@@ -299,9 +357,9 @@
         </div>
       </div>
     </div>
-    
+
   </div>
-  
+
 
   <div id="validation-modal" style="
   display: none;
@@ -339,13 +397,13 @@
     }
   </script>
 
-<script>
-function renderCodeWithLineNumbers(highlightedCodeHtml) {
-  const codeLines = highlightedCodeHtml.trim().split('\n');
-  const numberedLines = codeLines.map((_, i) => i + 1).join('<br>');
-  const joinedCode = codeLines.join('\n');
+  <script>
+    function renderCodeWithLineNumbers(highlightedCodeHtml) {
+      const codeLines = highlightedCodeHtml.trim().split('\n');
+      const numberedLines = codeLines.map((_, i) => i + 1).join('<br>');
+      const joinedCode = codeLines.join('\n');
 
-  return `
+      return `
     <div class="code-box">
       <div class="code-container">
         <div class="line-numbers">${numberedLines}</div>
@@ -353,9 +411,9 @@ function renderCodeWithLineNumbers(highlightedCodeHtml) {
       </div>
     </div>
   `;
-}
+    }
 
-</script>
+  </script>
 
 <script>
   const originalSnippets = [
@@ -601,8 +659,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   console.log("Applied snippet order:", snippets.map(s => s.title));
 
 </script>
-
-  <script>
+<script>
   function generateKey(step) {
     if (step.type === "grouping") {
       const ids = step.snippets.map(s => s.id).sort((a, b) => a - b).join(',');
@@ -616,254 +673,254 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 
 
 
-    const phase3Ranking = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking'));
-    // Try restoring from cookie first if sessionStorage is empty
-    if (!sessionStorage.getItem('phase3_reasoning')) {
-      const cookieReasoning = localStorage.getItem('phase3_reasoning');
-      if (cookieReasoning) {
-        sessionStorage.setItem('phase3_reasoning', cookieReasoning);
-      }
+  const phase3Ranking = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking'));
+  // Try restoring from cookie first if sessionStorage is empty
+  if (!sessionStorage.getItem('phase3_reasoning')) {
+    const cookieReasoning = localStorage.getItem('phase3_reasoning');
+    if (cookieReasoning) {
+      sessionStorage.setItem('phase3_reasoning', cookieReasoning);
+    }
+  }
+
+  // Now safely parse it
+  let reasoning = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
+
+  let stepIndex = 0;
+  const steps = [];
+
+  Object.entries(phase3Ranking).forEach(([rank, ids], i, arr) => {
+    const currentSnippets = ids.map(id => snippets.find(s => `snippet-${s.id}` === id)).filter(Boolean);
+
+    // Add grouping step if more than one snippet in this rank
+    if (currentSnippets.length > 1) {
+      steps.push({
+        type: 'grouping',
+        rank,
+        snippets: currentSnippets
+      });
     }
 
-    // Now safely parse it
-    let reasoning = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
+    // Find the next non-empty rank
+    let j = i + 1;
+    while (j < arr.length && (!arr[j][1] || arr[j][1].length === 0)) {
+      j++;
+    }
 
-    let stepIndex = 0;
-    const steps = [];
+    if (j < arr.length) {
+      const nextRank = arr[j][0];
+      const nextIds = arr[j][1];
+      const nextSnippets = nextIds.map(id => snippets.find(s => `snippet-${s.id}` === id)).filter(Boolean);
 
-    Object.entries(phase3Ranking).forEach(([rank, ids], i, arr) => {
-      const currentSnippets = ids.map(id => snippets.find(s => `snippet-${s.id}` === id)).filter(Boolean);
-
-      // Add grouping step if more than one snippet in this rank
-      if (currentSnippets.length > 1) {
+      if (currentSnippets.length > 0 && nextSnippets.length > 0) {
         steps.push({
-          type: 'grouping',
-          rank,
-          snippets: currentSnippets
+          type: 'comparison',
+          currentRank: rank,
+          nextRank,
+          currentSnippets,
+          nextSnippets
         });
       }
-
-      // Find the next non-empty rank
-      let j = i + 1;
-      while (j < arr.length && (!arr[j][1] || arr[j][1].length === 0)) {
-        j++;
-      }
-
-      if (j < arr.length) {
-        const nextRank = arr[j][0];
-        const nextIds = arr[j][1];
-        const nextSnippets = nextIds.map(id => snippets.find(s => `snippet-${s.id}` === id)).filter(Boolean);
-
-        if (currentSnippets.length > 0 && nextSnippets.length > 0) {
-          steps.push({
-            type: 'comparison',
-            currentRank: rank,
-            nextRank,
-            currentSnippets,
-            nextSnippets
-          });
-        }
-      }
-    });
+    }
+  });
 
 
 
-    const newReasoning = {};
-    steps.forEach(step => {
-      const key = generateKey(step);
-      if (reasoning[key]) {
-        newReasoning[key] = reasoning[key];
-      }
-    });
-    reasoning = newReasoning;
-    sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
-    // document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
+  const newReasoning = {};
+  steps.forEach(step => {
+    const key = generateKey(step);
+    if (reasoning[key]) {
+      newReasoning[key] = reasoning[key];
+    }
+  });
+  reasoning = newReasoning;
+  sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
+  // document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
-function showStep() {
-  document.getElementById('answer-box').style.display = 'block';
-  document.getElementById('next-question').style.display = 'inline-block';
+  function showStep() {
+    document.getElementById('answer-box').style.display = 'block';
+    document.getElementById('next-question').style.display = 'inline-block';
 
-  const step = steps[stepIndex];
-  const qText = document.getElementById('question-text');
-  const comp = document.getElementById('code-comparison');
-  const textarea = document.getElementById('answer-box');
-  const key = generateKey(step);
-  const saved = reasoning[key] || '';
-  textarea.value = saved;
+    const step = steps[stepIndex];
+    const qText = document.getElementById('question-text');
+    const comp = document.getElementById('code-comparison');
+    const textarea = document.getElementById('answer-box');
+    const key = generateKey(step);
+    const saved = reasoning[key] || '';
+    textarea.value = saved;
 
-  // Hide “Previous” on first step
-  document.querySelector('button[onclick="prevQuestion()"]').style.display =
-    stepIndex === 0 ? 'none' : 'inline-block';
+    // Hide “Previous” on first step
+    document.querySelector('button[onclick="prevQuestion()"]').style.display =
+      stepIndex === 0 ? 'none' : 'inline-block';
 
-  comp.innerHTML = '';
+    comp.innerHTML = '';
 
-  if (step.type === 'grouping') {
-    qText.innerHTML = `
+    if (step.type === 'grouping') {
+      qText.innerHTML = `
       <div style="margin-bottom: 15px;">
         <strong>Position ${step.rank}:</strong> Why do you think the following snippets are similarly comprehensible?
       </div>
     `;
 
-    const row = document.createElement('div');
-  // ✅ Use grid to show 2 snippets per row
-  row.style.display = 'grid';
-  row.style.gridTemplateColumns = 'repeat(2, 1fr)'; // Hard limit to 2 per row
-  row.style.gridAutoRows = 'auto';
-  row.style.gap = '30px';
-  row.style.boxSizing = 'border-box';
-  row.style.width = '100%';
+      const row = document.createElement('div');
+      // ✅ Use grid to show 2 snippets per row
+      row.style.display = 'grid';
+      row.style.gridTemplateColumns = 'repeat(2, 1fr)'; // Hard limit to 2 per row
+      row.style.gridAutoRows = 'auto';
+      row.style.gap = '30px';
+      row.style.boxSizing = 'border-box';
+      row.style.width = '100%';
 
-  step.snippets.forEach(snippet => {
-    const box = document.createElement('div');
-    box.className = 'snippet-preview-box';
-    box.style.width = '100%';
-    box.innerHTML = `
+      step.snippets.forEach(snippet => {
+        const box = document.createElement('div');
+        box.className = 'snippet-preview-box';
+        box.style.width = '100%';
+        box.innerHTML = `
       <div class="snippet-header">${snippet.title}</div>
       ${renderCodeWithLineNumbers(snippet.code)}
     `;
-    row.appendChild(box);
-    });
+        row.appendChild(box);
+      });
 
-    comp.appendChild(row);
+      comp.appendChild(row);
 
-  } else if (step.type === 'comparison') {
-    qText.innerHTML = `
+    } else if (step.type === 'comparison') {
+      qText.innerHTML = `
       <div style="margin-bottom: 15px;">
         <strong>Positions ${step.currentRank} vs ${step.nextRank}:</strong>
         Why are the snippets in Position ${step.currentRank} easier to understand than those in Position ${step.nextRank}?
       </div>
     `;
 
-    const row = document.createElement('div');
-    row.style.display = 'flex';
-    row.style.flexWrap = 'nowrap';
-    row.style.width = '100%';
-    row.style.gap = '40px';
-    row.style.boxSizing = 'border-box';
+      const row = document.createElement('div');
+      row.style.display = 'flex';
+      row.style.flexWrap = 'nowrap';
+      row.style.width = '100%';
+      row.style.gap = '40px';
+      row.style.boxSizing = 'border-box';
 
-    const leftCol = document.createElement('div');
-    leftCol.style.flex = '1';
-    leftCol.style.minWidth = '0';
-    leftCol.style.boxSizing = 'border-box';
-    leftCol.innerHTML = `<h4>Position ${step.currentRank}</h4>`;
-    step.currentSnippets.forEach(snippet => {
-      leftCol.innerHTML += `
+      const leftCol = document.createElement('div');
+      leftCol.style.flex = '1';
+      leftCol.style.minWidth = '0';
+      leftCol.style.boxSizing = 'border-box';
+      leftCol.innerHTML = `<h4>Position ${step.currentRank}</h4>`;
+      step.currentSnippets.forEach(snippet => {
+        leftCol.innerHTML += `
         <div class="snippet-preview-box">
           <div class="snippet-header">${snippet.title}</div>
           ${renderCodeWithLineNumbers(snippet.code)}
         </div>`;
-    });
+      });
 
-    const rightCol = document.createElement('div');
-    rightCol.style.flex = '1';
-    rightCol.style.minWidth = '0';
-    rightCol.style.boxSizing = 'border-box';
-    rightCol.innerHTML = `<h4>Position ${step.nextRank}</h4>`;
-    step.nextSnippets.forEach(snippet => {
-      rightCol.innerHTML += `
+      const rightCol = document.createElement('div');
+      rightCol.style.flex = '1';
+      rightCol.style.minWidth = '0';
+      rightCol.style.boxSizing = 'border-box';
+      rightCol.innerHTML = `<h4>Position ${step.nextRank}</h4>`;
+      step.nextSnippets.forEach(snippet => {
+        rightCol.innerHTML += `
         <div class="snippet-preview-box">
           <div class="snippet-header">${snippet.title}</div>
           ${renderCodeWithLineNumbers(snippet.code)}
         </div>`;
-    });
+      });
 
-    row.appendChild(leftCol);
-    row.appendChild(rightCol);
-    comp.appendChild(row);
-  }
+      row.appendChild(leftCol);
+      row.appendChild(rightCol);
+      comp.appendChild(row);
+    }
 
     // Hide “Next” button if this is the last question
-  if (stepIndex === steps.length - 1) {
-    document.getElementById('next-question').style.display = 'none';
-  } else {
-    document.getElementById('next-question').style.display = 'inline-block';
+    if (stepIndex === steps.length - 1) {
+      document.getElementById('next-question').style.display = 'none';
+    } else {
+      document.getElementById('next-question').style.display = 'inline-block';
+    }
+
   }
 
-}
 
 
+  function nextQuestion() {
+    const response = document.getElementById('answer-box').value.trim();
+    if (!response) { showValidationMessage("⚠️ Please provide an explanation."); return }
+    const key = generateKey(steps[stepIndex]);
+    reasoning[key] = response;
+    sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
+    // document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
-    function nextQuestion() {
-      const response = document.getElementById('answer-box').value.trim();
-      if (!response) {showValidationMessage("⚠️ Please provide an explanation."); return}
-      const key = generateKey(steps[stepIndex]);
-      reasoning[key] = response;
-      sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
-      // document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
-
-      stepIndex++;
-      if (stepIndex < steps.length) {
-        showStep();
-      } else {
-        if(validateAllResponses()){
-          // ✅ Mark phase 3 as complete
-          sessionStorage.setItem('phase3Complete', 'true');
-          // document.cookie = `phase3Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
-          document.getElementById('submit-review').style.display = 'inline-block';
-        } else{
-          sessionStorage.setItem('phase3Complete', 'false');
-          // document.cookie = `phase3Complete=false; path=/; max-age=${60 * 60 * 24 * 30}`;
-          document.getElementById('submit-review').style.display = 'none';
-        }
-        // Store Phase 3 data
-        sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
-        document.getElementById('next-question').style.display = 'none';  // Hide next button
-        stepIndex--;
-      }
-    }
-
-    function prevQuestion() {
-      const response = document.getElementById('answer-box').value.trim();
-      const key = generateKey(steps[stepIndex]);
-      reasoning[key] = response;
-      sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
-      // document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
-
-      if (stepIndex > 0) {
-        stepIndex--;
-        showStep();  // ✅ This was missing
-      }
-    }
-
-
-    function reviewAndSubmit() {
-      window.location.href = '/review.html';
-    }
-
-    showStep();
-
-    window.onload = () => {
-        applyTheme(); // Apply saved light/dark mode first
-        displayUserName();
-
-        // Restore reasoning from cookie if sessionStorage is empty
-        if (!sessionStorage.getItem('phase3_reasoning')) {
-          const cookieReasoning = localStorage.getItem('phase3_reasoning');
-          if (cookieReasoning) {
-            sessionStorage.setItem('phase3_reasoning', cookieReasoning);
-          }
-        }
-        // Mark completed phases
-        if (sessionStorage.getItem('phase1Complete') === 'true' || document.cookie.includes('phase1Complete=true')) {
-          document.getElementById('link-phase2')?.classList.remove('disabled');
-        }
-        if (sessionStorage.getItem('phase2Complete') === 'true' || document.cookie.includes('phase2Complete=true')) {
-          document.getElementById('link-phase3')?.classList.remove('disabled');
-        }
-        if (sessionStorage.getItem('phase3Complete') === 'true' || document.cookie.includes('phase3Complete=true')) {
-          document.getElementById('link-review')?.classList.remove('disabled');
-        }
-
-        // Highlight current tab
-        const current = window.location.pathname.split('/').pop();
-        if (current.includes('phase1')) document.getElementById('link-phase1')?.classList.add('active');
-        else if (current.includes('phase2')) document.getElementById('link-phase2')?.classList.add('active');
-        else if (current.includes('phase3')) document.getElementById('link-phase3')?.classList.add('active');
-        else if (current.includes('review')) document.getElementById('link-review')?.classList.add('active');
-
-        if (validateAllResponses() && (sessionStorage.getItem('phase3Complete') === 'true' || document.cookie.includes('phase3Complete=true'))) {
+    stepIndex++;
+    if (stepIndex < steps.length) {
+      showStep();
+    } else {
+      if (validateAllResponses()) {
+        // ✅ Mark phase 3 as complete
+        sessionStorage.setItem('phase3Complete', 'true');
+        // document.cookie = `phase3Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
         document.getElementById('submit-review').style.display = 'inline-block';
+      } else {
+        sessionStorage.setItem('phase3Complete', 'false');
+        // document.cookie = `phase3Complete=false; path=/; max-age=${60 * 60 * 24 * 30}`;
+        document.getElementById('submit-review').style.display = 'none';
       }
+      // Store Phase 3 data
+      sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
+      document.getElementById('next-question').style.display = 'none';  // Hide next button
+      stepIndex--;
+    }
+  }
+
+  function prevQuestion() {
+    const response = document.getElementById('answer-box').value.trim();
+    const key = generateKey(steps[stepIndex]);
+    reasoning[key] = response;
+    sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
+    // document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
+
+    if (stepIndex > 0) {
+      stepIndex--;
+      showStep();  // ✅ This was missing
+    }
+  }
+
+
+  function reviewAndSubmit() {
+    window.location.href = '/review.html';
+  }
+
+  showStep();
+
+  window.onload = () => {
+    applyTheme(); // Apply saved light/dark mode first
+    displayUserName();
+
+    // Restore reasoning from cookie if sessionStorage is empty
+    if (!sessionStorage.getItem('phase3_reasoning')) {
+      const cookieReasoning = localStorage.getItem('phase3_reasoning');
+      if (cookieReasoning) {
+        sessionStorage.setItem('phase3_reasoning', cookieReasoning);
+      }
+    }
+    // Mark completed phases
+    if (sessionStorage.getItem('phase1Complete') === 'true' || document.cookie.includes('phase1Complete=true')) {
+      document.getElementById('link-phase2')?.classList.remove('disabled');
+    }
+    if (sessionStorage.getItem('phase2Complete') === 'true' || document.cookie.includes('phase2Complete=true')) {
+      document.getElementById('link-phase3')?.classList.remove('disabled');
+    }
+    if (sessionStorage.getItem('phase3Complete') === 'true' || document.cookie.includes('phase3Complete=true')) {
+      document.getElementById('link-review')?.classList.remove('disabled');
+    }
+
+    // Highlight current tab
+    const current = window.location.pathname.split('/').pop();
+    if (current.includes('phase1')) document.getElementById('link-phase1')?.classList.add('active');
+    else if (current.includes('phase2')) document.getElementById('link-phase2')?.classList.add('active');
+    else if (current.includes('phase3')) document.getElementById('link-phase3')?.classList.add('active');
+    else if (current.includes('review')) document.getElementById('link-review')?.classList.add('active');
+
+    if (validateAllResponses() && (sessionStorage.getItem('phase3Complete') === 'true' || document.cookie.includes('phase3Complete=true'))) {
+      document.getElementById('submit-review').style.display = 'inline-block';
+    }
 
     setInterval(() => {
       try {
@@ -908,26 +965,26 @@ function showStep() {
 
 
   function validateAllResponses() {
-  for (const step of steps) {
-    const key = generateKey(step);
-    const response = reasoning[key]?.trim();
-    if (!response) {
-      return false;
-    }
-  }
-  return true;
-}
-  </script>
-
-  <script>
-      
-    function displayUserName() {
-      const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
-      if (name) {
-        document.getElementById('user-info').textContent = `👤 ${name}`;
+    for (const step of steps) {
+      const key = generateKey(step);
+      const response = reasoning[key]?.trim();
+      if (!response) {
+        return false;
       }
     }
-  </script>
+    return true;
+  }
+</script>
+
+<script>
+
+  function displayUserName() {
+    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
+    if (name) {
+      document.getElementById('user-info').textContent = `👤 ${name}`;
+    }
+  }
+</script>
 
 <script>
   function isLoggedIn() {
@@ -962,87 +1019,87 @@ function showStep() {
 
 <script>
   // Toggle logout menu visibility
-// document.addEventListener('DOMContentLoaded', () => {
-//   const userInfo = document.getElementById('user-info');
-//   const logoutMenu = document.getElementById('logout-menu');
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   const userInfo = document.getElementById('user-info');
+  //   const logoutMenu = document.getElementById('logout-menu');
 
-//   userInfo.addEventListener('click', () => {
-//     logoutMenu.style.display = logoutMenu.style.display === 'block' ? 'none' : 'block';
-//   });
+  //   userInfo.addEventListener('click', () => {
+  //     logoutMenu.style.display = logoutMenu.style.display === 'block' ? 'none' : 'block';
+  //   });
 
-//   // Hide the menu if clicked outside
-//   document.addEventListener('click', (event) => {
-//     if (!event.target.closest('.user-dropdown')) {
-//       logoutMenu.style.display = 'none';
-//     }
-//   });
-// });
+  //   // Hide the menu if clicked outside
+  //   document.addEventListener('click', (event) => {
+  //     if (!event.target.closest('.user-dropdown')) {
+  //       logoutMenu.style.display = 'none';
+  //     }
+  //   });
+  // });
 
-// Clear storage and redirect to login
-function logout() {
-  sessionStorage.clear();
-  localStorage.clear();
+  // Clear storage and redirect to login
+  function logout() {
+    sessionStorage.clear();
+    localStorage.clear();
 
 
-  // Clear all cookies
-  document.cookie.split(";").forEach(cookie => {
-    const name = cookie.split("=")[0].trim();
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-  });
+    // Clear all cookies
+    document.cookie.split(";").forEach(cookie => {
+      const name = cookie.split("=")[0].trim();
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    });
 
-  window.location.href = 'index.html';
-}
+    window.location.href = 'index.html';
+  }
 </script>
 
 <script>
-function saveToServer() {
-  const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
-  const username = localStorage.getItem('username') || 'anonymous';
+  function saveToServer() {
+    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
+    const username = localStorage.getItem('username') || 'anonymous';
 
-  // Phase 1 data
-  const phase1 = {};
-  for (let i = 1; i <= 8; i++) {
-    const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
-    const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
-    phase1[`snippet${i}`] = { summary, comprehensibility: comp };
+    // Phase 1 data
+    const phase1 = {};
+    for (let i = 1; i <= 8; i++) {
+      const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
+      const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
+      phase1[`snippet${i}`] = { summary, comprehensibility: comp };
+    }
+
+    // Phase 2 & 3 data
+    let phase2 = {}, phase3 = {};
+    try {
+      phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
+      phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
+    } catch (e) {
+      console.warn("Error parsing phase2 or phase3 data", e);
+    }
+
+    // Completion flags and theme
+    const flags = {
+      phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
+      phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
+      phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
+      codeTheme: localStorage.getItem('codeTheme') || 'light',
+      submitted: '0',
+    };
+
+    const payload = {
+      username,
+      participantName: name,
+      phase1,
+      phase2,
+      phase3,
+      ...flags
+    };
+
+    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+
+    console.log(payload);
   }
 
-  // Phase 2 & 3 data
-  let phase2 = {}, phase3 = {};
-  try {
-    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
-    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
-  } catch (e) {
-    console.warn("Error parsing phase2 or phase3 data", e);
-  }
-
-  // Completion flags and theme
-  const flags = {
-    phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
-    phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
-    phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
-    codeTheme: localStorage.getItem('codeTheme') || 'light',
-    submitted: '0',
-  };
-
-  const payload = {
-    username,
-    participantName: name,
-    phase1,
-    phase2,
-    phase3,
-    ...flags
-  };
-
-  const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-  navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
-
-  console.log(payload);
-}
-
-window.addEventListener('beforeunload', function (e) {
-  saveToServer(); 
-});
+  window.addEventListener('beforeunload', function (e) {
+    saveToServer();
+  });
 
 </script>
 
@@ -1050,17 +1107,17 @@ window.addEventListener('beforeunload', function (e) {
   // Automatically save and validate on textarea change
   document.addEventListener('DOMContentLoaded', () => {
     const textarea = document.getElementById('answer-box');
-  
+
     textarea.addEventListener('input', () => {
       const step = steps[stepIndex];
       const key = generateKey(step);
       const value = textarea.value.trim();
-  
+
       // Save to reasoning and storage
       reasoning[key] = value;
       sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
       // document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
-  
+
       // Validate all responses
       if (validateAllResponses()) {
         sessionStorage.setItem('phase3Complete', 'true');
@@ -1073,7 +1130,7 @@ window.addEventListener('beforeunload', function (e) {
       }
     });
   });
-  </script>
+</script>
   
 
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
