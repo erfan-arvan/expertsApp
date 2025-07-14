@@ -123,64 +123,63 @@ async function saveToServer() {
 //-----------------------------------------------
 
 
-    // Clear storage and redirect to login
-    function logout() {
-      saveSummary();
-      sessionStorage.clear();
-      localStorage.clear();
+// Clear storage and redirect to login
+function logout() {
+  saveSummary();
+  sessionStorage.clear();
+  localStorage.clear();
 
-      // Clear all cookies
-      document.cookie.split(";").forEach((cookie) => {
-        const name = cookie.split("=")[0].trim();
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-      });
+  // Clear all cookies
+  document.cookie.split(";").forEach((cookie) => {
+    const name = cookie.split("=")[0].trim();
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  });
 
-      window.location.href = "index.html";
-    }
-
-
-        function isLoggedIn() {
-      const name =
-        sessionStorage.getItem("participantName") ||
-        localStorage.getItem("participantName");
-      const order =
-        sessionStorage.getItem("snippetOrder") ||
-        localStorage.getItem("snippetOrder");
-      return name && order;
-    }
-
-    function checkLogin() {
-      if (!isLoggedIn()) {
-        alert(
-          "You must be logged in to access this page. Redirecting to the homepage."
-        );
-        window.location.href = "https://codecomprehensibility.site/";
-      }
-    }
-
-    window.addEventListener("load", checkLogin);
+  window.location.href = "index.html";
+}
 
 
+function isLoggedIn() {
+  const name =
+    sessionStorage.getItem("participantName") ||
+    localStorage.getItem("participantName");
+  const order =
+    sessionStorage.getItem("snippetOrder") ||
+    localStorage.getItem("snippetOrder");
+  return name && order;
+}
+
+function checkLogin() {
+  if (!isLoggedIn()) {
+    alert(
+      "You must be logged in to access this page. Redirecting to the homepage."
+    );
+    window.location.href = "https://codecomprehensibility.site/";
+  }
+}
+
+window.addEventListener("load", checkLogin);
 
 
 
 
 
-        function openJavadocModal(url) {
-      const iframe = document.getElementById("javadocFrame");
-      iframe.src = url;
-      document.getElementById("javadocModal").style.display = "block";
-    }
-
-    function closeJavadocModal() {
-      document.getElementById("javadocModal").style.display = "none";
-      document.getElementById("javadocFrame").src = "";
-    }
-
-    function javadocFrameReload() {
-      const iframe = document.getElementById("javadocFrame");
-      iframe.src = iframe.src;
-    }
 
 
-    
+function openJavadocModal(url) {
+  const iframe = document.getElementById("javadocFrame");
+  iframe.src = url;
+  document.getElementById("javadocModal").style.display = "block";
+}
+
+function closeJavadocModal() {
+  document.getElementById("javadocModal").style.display = "none";
+  document.getElementById("javadocFrame").src = "";
+}
+
+function javadocFrameReload() {
+  const iframe = document.getElementById("javadocFrame");
+  iframe.src = iframe.src;
+}
+
+
