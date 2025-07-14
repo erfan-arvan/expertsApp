@@ -1541,7 +1541,7 @@ function renderParticipantRankings() {
 
   container.innerHTML = ''; // Clear existing content
 
-  const currentUser = (sessionStorage.getItem('username') || getCookie('username') || '').trim().toLowerCase();
+  const currentUser = (sessionStorage.getItem('username') || localStorage.getItem('username') || '').trim().toLowerCase();
 
   let yourHTML = '';
   const others = [];
