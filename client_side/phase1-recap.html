@@ -617,6 +617,7 @@ if (snippet.responses && Array.isArray(snippet.responses)) {
           sessionStorage.setItem(key,"true");
           localStorage.setItem(key,"true");
           document.getElementById('continueBtn').style.display = 'inline-block';
+          document.getElementById('link-phase2').classList.remove('disabled');
         }
     }
 
