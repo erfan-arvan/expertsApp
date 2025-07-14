@@ -1474,7 +1474,7 @@ function remapSnippetReferences(rankings) {
   // Get snippet order from sessionStorage or cookies
   function getSnippetOrder() {
     const key = 'snippetOrder';
-    const sessionValue = sessionStorage.getItem(key);
+    const sessionValue = sessionStorage.getItem(key) || localStorage.getItem(key);
     if (sessionValue) return JSON.parse(sessionValue);
 
     const cookieMatch = document.cookie
@@ -1927,7 +1927,7 @@ This suggests that while he found it conceptually challenging, he still viewed i
     }
 
     function loadState() {
-      let saved = sessionStorage.getItem('phase3_ranking');
+      let saved = sessionStorage.getItem('phase3_ranking') || localStorage.getItem("phase3_ranking");
 
       if (!saved) {
         const cookieMatch = document.cookie.match(/(?:^|; )phase3_ranking=([^;]*)/);

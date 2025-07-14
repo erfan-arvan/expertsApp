@@ -429,11 +429,6 @@ textarea {
 </script>
 
 <script>
-    function getLocalStorage(name) {
-      const value = localStorage.getItem(name);
-      return value ? decodeURIComponent(value) : null;
-    }
-
     function isComplete(key) {
       return (
         sessionStorage.getItem(key) === "true" ||
@@ -880,7 +875,7 @@ function validateCurrentSnippetInputs() {
   let content = `Name: ${name}\n\n`;
   for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
     const key = `summary${i}`;
-    const val = sessionStorage.getItem(key) || decodeURIComponent(getCookie(key) || '');
+    const val = sessionStorage.getItem(key) || localStorage.getItem(key) || '';
     content += `Snippet ${i}:\n${val.trim() || "(empty)"}\n\n`;
   }
 
@@ -904,7 +899,7 @@ function submitAndCloseModal() {
 
   for (let i = 1; i <= TOTAL_SNIPPETS; i++) {
     const key = `summary${i}`;
-    const text = sessionStorage.getItem(key) || decodeURIComponent(getCookie(key) || '');
+    const text = sessionStorage.getItem(key) || localStorage.getItem(key) || '';
 
     if (!text.trim()) {
       missing.push(`Snippet ${i}`);
@@ -954,7 +949,7 @@ function showValidationMessage(msg) {
 
 <script>
   function displayUserName() {
-    const name = sessionStorage.getItem('participantName') || getCookie('participantName');
+    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
     if (name) {
       document.getElementById('user-info').textContent = `👤 ${name}`;
     }
