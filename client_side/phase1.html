@@ -550,6 +550,7 @@
 
   <script>
 
+
     function isComplete(key) {
       return (
         sessionStorage.getItem(key) === "true" ||
@@ -585,15 +586,6 @@
     let currentSnippet = 1;
 
     function loadSnippet(snippetNumber) {
-
-    if (currentSnippet >= TOTAL_SNIPPETS) {
-      document.getElementById("next").onclick = function() {
-        window.location.href = "/phase2-recap.html";
-      };
-      document.getElementById("next").innerText = "Ready for Next Phase?";
-    }
-
-
       const snippet = snippets[snippetNumber - 1];
       document.getElementById("snippet-title").innerText = snippet.title;
       const codeLines = snippet.code.trim().split("\n");
@@ -679,7 +671,7 @@
     function updateButtons() {
       document.getElementById("prev").disabled = currentSnippet === 1;
       document.getElementById("next").disabled =
-      currentSnippet === TOTAL_SNIPPETS;
+        currentSnippet === TOTAL_SNIPPETS;
     }
 
     function submitAll() {

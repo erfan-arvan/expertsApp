@@ -612,6 +612,13 @@ if (snippet.responses && Array.isArray(snippet.responses)) {
       document.getElementById("prev").disabled = currentSnippet === 1;
       document.getElementById("next").disabled =
         currentSnippet === TOTAL_SNIPPETS;
+        if (currentSnippet >= TOTAL_SNIPPETS) {
+          document.getElementById("next").onclick = function() {
+            window.location.href = "/phase2-recap.html";
+          };
+          document.getElementById("next").innerText = "Ready for Next Phase?";
+          document.getElementById("next").disabled = false;
+        }
     }
 
     function submitAll() {
