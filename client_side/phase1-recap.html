@@ -617,6 +617,7 @@ if (snippet.responses && Array.isArray(snippet.responses)) {
           const key = "round2-phase1-complete";
           sessionStorage.setItem(key,"true");
           localStorage.setItem(key,"true");
+          document.getElementById('continueBtn').style.display = 'inline-block';
         }
     }
 
