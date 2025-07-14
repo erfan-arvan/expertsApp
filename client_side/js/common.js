@@ -172,7 +172,7 @@ function openJavadocModal(url) {
   document.getElementById("javadocModal").style.display = "block";
 }
 
-function closeJavadocModal() {
+function closeJavadocModal() { 
   document.getElementById("javadocModal").style.display = "none";
   document.getElementById("javadocFrame").src = "";
 }
