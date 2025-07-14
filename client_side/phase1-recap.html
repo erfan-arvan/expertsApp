@@ -568,7 +568,7 @@ if (snippet.responses && Array.isArray(snippet.responses)) {
         localStorage.setItem("phase1Complete", "true");
 
         //update status bar if needed
-        if (isComplete("phase1Complete"))
+        if (isComplete("round2-phase1-complete"))
           document.getElementById("link-phase2").classList.remove("disabled");
       } else {
         document.getElementById("continueBtn").style.display = "none";
@@ -613,7 +613,10 @@ if (snippet.responses && Array.isArray(snippet.responses)) {
       document.getElementById("next").disabled =
         currentSnippet === TOTAL_SNIPPETS;
         if (currentSnippet >= TOTAL_SNIPPETS) {
-
+          //round2
+          const key = "round2-phase1-complete";
+          sessionStorage.setItem(key,"true");
+          localStorage.setItem(key,"true");
         }
     }
 
@@ -824,7 +827,7 @@ window.onload = function() {
     else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
     else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
 
-    if (sessionStorage.getItem('phase1Complete') === 'true' || localStorage.getItem('phase1Complete') === 'true') {
+    if (sessionStorage.getItem('round2-phase1-complete') === 'true' || localStorage.getItem('round2-phase1-complete') === 'true') {
         document.getElementById('continueBtn').style.display = 'inline-block';
     }
 
@@ -932,7 +935,7 @@ function showValidationMessage(msg) {
 function areAllSnippetsFilled() {
   const key = "round2-phase1-complete";
   const isRead = sessionStorage.getItem(key) || localStorage.getItem(key);
-  return isRead === "1";
+  return isRead === "true";
 }
 
 </script>
