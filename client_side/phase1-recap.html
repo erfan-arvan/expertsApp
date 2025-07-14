@@ -480,8 +480,10 @@ textarea {
       let savedSummary = sessionStorage.getItem(keySummary);
       let savedcompSummary = sessionStorage.getItem(keycompSummary);
 
-  if (!savedSummary) savedSummary = decodeURIComponent(getCookie(keySummary) || '');
-  if (!savedcompSummary) savedcompSummary = decodeURIComponent(getCookie(keycompSummary) || '');
+      if (!savedSummary)
+        savedSummary = localStorage.getItem(keySummary) || "";
+      if (!savedcompSummary)
+        savedcompSummary = localStorage.getItem(keycompSummary) || "";
 
   document.getElementById('summary').value = savedSummary;
   document.getElementById('compSummary').value = savedcompSummary;
@@ -493,7 +495,7 @@ const otherCompDiv = document.getElementById('otherComp');
 otherSumDiv.innerHTML = '';
 otherCompDiv.innerHTML = '';
 
-const currentParticipantRaw = sessionStorage.getItem('username') || getCookie('username') || '';
+const currentParticipantRaw = sessionStorage.getItem('username') || localStorage.getItem('username') || '';
 const currentParticipant = currentParticipantRaw.trim().toLowerCase();
 console.log("[DEBUG] currentParticipantRaw:", currentParticipantRaw);
 console.log("[DEBUG] normalized currentParticipant:", currentParticipant);
@@ -819,7 +821,7 @@ window.onload = function() {
     else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
     else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
 
-    if (sessionStorage.getItem('phase1Complete') === 'true' || getCookie('phase1Complete') === 'true') {
+    if (sessionStorage.getItem('phase1Complete') === 'true' || localStorage.getItem('phase1Complete') === 'true') {
         document.getElementById('continueBtn').style.display = 'inline-block';
     }
 
