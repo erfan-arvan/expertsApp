@@ -613,11 +613,7 @@ if (snippet.responses && Array.isArray(snippet.responses)) {
       document.getElementById("next").disabled =
         currentSnippet === TOTAL_SNIPPETS;
         if (currentSnippet >= TOTAL_SNIPPETS) {
-          document.getElementById("next").onclick = function() {
-            window.location.href = "/phase2-recap.html";
-          };
-          document.getElementById("next").innerText = "Ready for Next Phase?";
-          document.getElementById("next").disabled = false;
+
         }
     }
 
@@ -933,26 +929,11 @@ function showValidationMessage(msg) {
 </script>
 
 <script>
-    function areAllSnippetsFilled() {
-      for (let i = 1; i <= 8; i++) {
-        const summaryKey = `summary${i}`;
-        const compKey = `compSummary${i}`;
-
-        const summary =
-          sessionStorage.getItem(summaryKey) ||
-          localStorage.getItem(summaryKey) ||
-          "";
-        const compSummary =
-          sessionStorage.getItem(compKey) ||
-          localStorage.getItem(compKey) ||
-          "";
-
-        if (!summary.trim() || !compSummary.trim()) {
-          return false;
-        }
-      }
-      return true;
-    }
+function areAllSnippetsFilled() {
+  const key = "round2-phase1-complete";
+  const isRead = sessionStorage.getItem(key) || localStorage.getItem(key);
+  return isRead === "1";
+}
 
 </script>
 
