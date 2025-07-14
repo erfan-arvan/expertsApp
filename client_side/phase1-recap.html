@@ -566,10 +566,12 @@ if (snippet.responses && Array.isArray(snippet.responses)) {
         document.getElementById("continueBtn").style.display = "inline-block";
         sessionStorage.setItem("phase1Complete", "true");
         localStorage.setItem("phase1Complete", "true");
-
+        if (isComplete("round2-phase1-complete")){
+            document.getElementById("link-phase2").classList.remove("disabled");
+        }
         //update status bar if needed
         if (isComplete("round2-phase1-complete"))
-          document.getElementById("link-phase2").classList.remove("disabled");
+        { document.getElementById("link-phase2");}
       } else {
         document.getElementById("continueBtn").style.display = "none";
         sessionStorage.setItem("phase1Complete", "false");
