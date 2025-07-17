@@ -490,10 +490,14 @@ to complete this round is approximately <strong>40 minutes</strong>.
       if ('phase2Complete' in data) {
         sessionStorage.setItem('phase2Complete', data.phase2Complete);
         localStorage.setItem('phase2Complete', data.phase2Complete);
+        sessionStorage.setItem('round2-phase4-complete', data.phase2Complete);
+        localStorage.setItem('round2-phase4-complete', data.phase2Complete);
       }
       if ('phase3Complete' in data) {
         sessionStorage.setItem('phase3Complete', data.phase3Complete);
         localStorage.setItem('phase3Complete', data.phase3Complete);
+        sessionStorage.setItem('round2-phase5-complete', data.phase3Complete);
+        localStorage.setItem('round2-phase5-complete', data.phase3Complete);
       }
 
       if ('codeTheme' in data) {
