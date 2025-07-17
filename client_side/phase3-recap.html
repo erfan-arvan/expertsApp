@@ -1841,8 +1841,21 @@ This suggests that while he found it conceptually challenging, he still viewed i
         document.getElementById('q3').value = saved.q3 || '';
 
         // ✅ Show/hide previous button
-        document.getElementById('prevBtn').style.display = index === 0 ? 'none' : 'inline-block';
-        }
+        // document.getElementById('prevBtn').style.display = index === 0 ? 'none' : 'inline-block';
+
+
+          const nextBtn = document.getElementById("nextBtn");
+          if (index === disagreements.length - 1) {
+              nextBtn.disabled = true;
+              nextBtn.innerText = "Done"; // optional
+          } else {
+              nextBtn.disabled = false;
+              nextBtn.innerText = "Next"; // optional
+          }
+
+        const prevBtn = document.getElementById("prevBtn");
+        prevBtn.disabled = index === 0;
+    }
 
 
 
@@ -1863,10 +1876,8 @@ This suggests that while he found it conceptually challenging, he still viewed i
             index++;
             render();
             document.getElementById("nextBtn").disabled = true;
-            // document.getElementById("prevBtn").disabled = false;
         } else {
-            // window.location.href = 'phase4-recap.html';
-            document.getElementById("nextBtn").disabled = false;
+            window.location.href = 'phase4-recap.html';
         }
     }
 
@@ -1882,9 +1893,6 @@ This suggests that while he found it conceptually challenging, he still viewed i
         if (index > 0) {
             index--;
             render();
-        } else {
-          // document.getElementById("prevBtn").disabled = true;
-          document.getElementById("nextBtn").disabled = false;
         }
     }
 
