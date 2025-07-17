@@ -816,6 +816,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     });
     const json = JSON.stringify(positions);
     sessionStorage.setItem('phase3_ranking', json);
+    localStorage.setItem('phase3_ranking', json);
+
     document.cookie = `phase3_ranking=${encodeURIComponent(json)}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
     /* Check if the phase is completed */
@@ -835,6 +837,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       }
     } else {
       sessionStorage.removeItem('round2-phase4-complete');
+      localStorage.removeItem('round2-phase4-complete');
       document.cookie = `round2-phase4-complete=; path=/; max-age=0`;
       document.getElementById('continueBtn').style.display = 'none';
       const phase3Link = document.getElementById('link-phase3');
