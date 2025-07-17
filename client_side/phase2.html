@@ -804,6 +804,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     });
     const json = JSON.stringify(positions);
     sessionStorage.setItem('phase3_ranking', json);
+    localStorage.setItem('phase3_ranking', json);
+
     document.cookie = `phase3_ranking=${encodeURIComponent(json)}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
     /* Check if the phase is completed */
@@ -812,6 +814,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
       document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
       sessionStorage.setItem('phase2Complete', 'true');
+      localStorage.setItem('phase2Complete', 'true');
+
       document.cookie = `phase2Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
 
       // ✅ Also update the status bar
@@ -821,6 +825,9 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       }
     } else {
       sessionStorage.removeItem('phase2Complete');
+      localStorage.removeItem('phase2Complete');
+
+
       document.cookie = `phase2Complete=; path=/; max-age=0`;
       document.getElementById('continueBtn').style.display = 'none';
       const phase3Link = document.getElementById('link-phase3');

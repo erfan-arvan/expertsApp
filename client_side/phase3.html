@@ -855,15 +855,19 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       if (validateAllResponses()) {
         // ✅ Mark phase 3 as complete
         sessionStorage.setItem('phase3Complete', 'true');
+        localStorage.setItem('phase3Complete', 'true');
+
         // document.cookie = `phase3Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
         document.getElementById('submit-review').style.display = 'inline-block';
       } else {
         sessionStorage.setItem('phase3Complete', 'false');
+        localStorage.setItem('phase3Complete', 'false');
         // document.cookie = `phase3Complete=false; path=/; max-age=${60 * 60 * 24 * 30}`;
         document.getElementById('submit-review').style.display = 'none';
       }
       // Store Phase 3 data
       sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
+      localStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
       document.getElementById('next-question').style.display = 'none';  // Hide next button
       stepIndex--;
     }
@@ -874,6 +878,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     const key = generateKey(steps[stepIndex]);
     reasoning[key] = response;
     sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
+    localStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
+
     // document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
     if (stepIndex > 0) {
@@ -918,7 +924,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     else if (current.includes('phase3')) document.getElementById('link-phase3')?.classList.add('active');
     else if (current.includes('review')) document.getElementById('link-review')?.classList.add('active');
 
-    if (validateAllResponses() && (sessionStorage.getItem('phase3Complete') === 'true' || document.cookie.includes('phase3Complete=true'))) {
+    if (validateAllResponses() && (sessionStorage.getItem('phase3Complete') === 'true' || localStorage.getItem('phase3Complete') === 'true')) {
       document.getElementById('submit-review').style.display = 'inline-block';
     }
 
@@ -1116,15 +1122,21 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       // Save to reasoning and storage
       reasoning[key] = value;
       sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
+      localStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
+
       // document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
       // Validate all responses
       if (validateAllResponses()) {
         sessionStorage.setItem('phase3Complete', 'true');
+        localStorage.setItem('phase3Complete', 'true');
+
         // document.cookie = `phase3Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
         document.getElementById('submit-review').style.display = 'inline-block';
       } else {
         sessionStorage.setItem('phase3Complete', 'false');
+        localStorage.setItem('phase3Complete', 'false');
+
         // document.cookie = `phase3Complete=false; path=/; max-age=${60 * 60 * 24 * 30}`;
         document.getElementById('submit-review').style.display = 'none';
       }
