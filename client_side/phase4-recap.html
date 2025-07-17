@@ -703,6 +703,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 </script>
 <script>
   window.onload = () => {
+    sessionStorage.setItem("phase1Complete","true");
+    localStorage.setItem("phase1Complete","true");
     loadCards();
     loadState();
     applyTheme();
