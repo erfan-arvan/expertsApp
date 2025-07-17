@@ -1225,17 +1225,17 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       document.cookie = `round2-phase2-complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
 
       // ✅ Also update the status bar
-      const phase3Link = document.getElementById('link-phase3');
-      if (phase3Link) {
-        phase3Link.classList.remove('disabled');
+      const phase4Link = document.getElementById('link-phase4');
+      if (phase4Link) {
+        phase4Link.classList.remove('disabled');
       }
     } else {
       sessionStorage.removeItem('phase2Complete');
       document.cookie = `phase2Complete=; path=/; max-age=0`;
       document.getElementById('continueBtn').style.display = 'none';
-      const phase3Link = document.getElementById('link-phase3');
-      if (phase3Link) {
-        phase3Link.classList.add('disabled');
+      const phase4Link = document.getElementById('link-phase4');
+      if (phase4Link) {
+        phase4Link.classList.add('disabled');
       }
     }
 
@@ -1985,7 +1985,7 @@ This suggests that while he found it conceptually challenging, he still viewed i
         const q3 = document.getElementById('q3').value.trim();
 
         if (!q1 || !q2 || !q3) {
-            showValidationMessage("⚠️ Please answer all three questions before continuing.");
+            // showValidationMessage("⚠️ Please answer all three questions before continuing.");
             return;
         }
   for (let i = 0; i < disagreements.length; i++) {
