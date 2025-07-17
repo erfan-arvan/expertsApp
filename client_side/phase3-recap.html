@@ -795,7 +795,7 @@ a:hover {
   </div>
 
   <div style="margin-top: 30px; display: none;">
-    <button id="continueBtn" onclick="goToPhase3()" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: gray; color: white; cursor: pointer;">Continue to Phase 3 ➡️</button>
+    <button id="continueBtn" onclick="goToPhase4()" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: gray; color: white; cursor: pointer;">Continue to Phase 4 ➡️</button>
   </div>
 
   <div id="validation-modal" style="
@@ -1120,7 +1120,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 
     // ✅ Restore Continue button if phase2Complete is already set
     const continueBtn = document.getElementById('continueBtn');
-    if (sessionStorage.getItem('round2-phase2-complete') === 'true' || localStorage.getItem('round2-phase2-complete') === 'true') {
+    if (sessionStorage.getItem('round2-phase3-complete') === 'true' || localStorage.getItem('round2-phase2-complete') === 'true') {
       if (continueBtn) {
         continueBtn.style.display = 'inline-block';
         continueBtn.style.backgroundColor = '#4CAF50';
@@ -1290,9 +1290,9 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     }
   }
 
-  function goToPhase3() {
+  function goToPhase4() {
     if (areAllCardsRanked()) {
-      location.href = '/phase3-recap.html';
+      location.href = '/phase4-recap.html';
     } else { showValidationMessage("⚠️ Please rank all snippets") };
   }
 
@@ -1848,6 +1848,12 @@ This suggests that while he found it conceptually challenging, he still viewed i
           if (index === disagreements.length - 1) {
               nextBtn.disabled = true;
               nextBtn.innerText = "Done"; // optional
+                  const continueBtn = document.getElementById('continueBtn');
+                  if (continueBtn) {
+                    continueBtn.style.display = 'inline-block';
+                    continueBtn.style.backgroundColor = '#4CAF50';
+                    continueBtn.style.animation = 'glowPulse 1.5s infinite alternate';
+                  }
           } else {
               nextBtn.disabled = false;
               nextBtn.innerText = "Next"; // optional
