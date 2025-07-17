@@ -418,9 +418,9 @@
 <div class="preview-area" id="previewArea"></div>
 
 <div style="margin-top: 30px;">
-  <button id="continueBtn" onclick="goToPhase3()"
+  <button id="continueBtn" onclick="goToPhase5()"
     style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: gray; color: white; cursor: pointer;">Continue
-    to Phase 3 ➡️</button>
+    to Phase 5 ➡️</button>
 </div>
 
 <div id="validation-modal" style="
@@ -891,9 +891,9 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     }
   }
 
-  function goToPhase3() {
+  function goToPhase5() {
     if (areAllCardsRanked()) {
-      location.href = '/phase3-recap.html';
+      location.href = '/phase5-recap.html';
     } else { showValidationMessage("⚠️ Please rank all snippets") };
   }
 
