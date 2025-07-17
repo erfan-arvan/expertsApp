@@ -736,6 +736,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   });
   reasoning = newReasoning;
   sessionStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
+    localStorage.setItem('phase3_reasoning', JSON.stringify(reasoning));
+
   // document.cookie = `phase3_reasoning=${encodeURIComponent(JSON.stringify(reasoning))}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
   function showStep() {
@@ -926,7 +928,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     else if (current.includes('phase5')) document.getElementById('link-phase5').classList.add('active');
     else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
 
-    if (validateAllResponses() && (sessionStorage.getItem('round2-phase5-complete') === 'true' || document.cookie.includes('round2-phase5-complete=true'))) {
+    if (validateAllResponses() && (sessionStorage.getItem('round2-phase5-complete') === 'true' || localStorage.getItem('round2-phase5-complete') === 'true')) {
       document.getElementById('submit-review').style.display = 'inline-block';
     }
 
