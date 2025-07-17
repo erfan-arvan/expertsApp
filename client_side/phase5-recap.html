@@ -1007,7 +1007,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   }
 
   function checkPhase2Completion() {
-    if (!isPhaseComplete('phase2Complete') || !isPhaseComplete('phase1Complete')) {
+    if (!isPhaseComplete('round2-phase4-complete') || !isPhaseComplete('round2-phase4-complete')) {
       alert('Please complete Phase 2 before continuing.');
       window.location.href = 'phase2-recap.html';
     }
@@ -1075,8 +1075,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 
     // Completion flags and theme
     const flags = {
-      phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
-      phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
+      phase1Complete: sessionStorage.getItem('round2-phase1-complete') || localStorage.getItem('round2-phase1-complete') || 'false',
+      phase2Complete: sessionStorage.getItem('round2-phase4-complete') || localStorage.getItem('round2-phase4-complete') || 'false',
       phase3Complete: sessionStorage.getItem('round2-phase5-complete') || localStorage.getItem('round2-phase5-complete') || 'false',
       codeTheme: localStorage.getItem('codeTheme') || 'light',
       submitted: '0',
