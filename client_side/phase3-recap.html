@@ -1853,6 +1853,8 @@ This suggests that while he found it conceptually challenging, he still viewed i
               nextBtn.disabled = true;
               nextBtn.innerText = "Done"; // optional
               if(areAllDisagreementsAnswered){
+                  sessionStorage.setItem("round2-phase3-complete","true");
+                  localStorage.setItem("round2-phase3-complete","true");
                   console.log("areAllDisagreementsAnswered3");
                   const continueBtn = document.getElementById('continueBtn');
                   continueBtn.style.display = 'inline-block';
@@ -1862,6 +1864,9 @@ This suggests that while he found it conceptually challenging, he still viewed i
                   if (phase4Link) {
                     phase4Link.classList.remove('disabled');
                   }
+              } else{
+                  sessionStorage.setItem("round2-phase3-complete","false");
+                  localStorage.setItem("round2-phase3-complete","false");
               }
           } else {
               nextBtn.disabled = false;
