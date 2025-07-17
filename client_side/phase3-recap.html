@@ -1862,8 +1862,11 @@ This suggests that while he found it conceptually challenging, he still viewed i
         if (index < disagreements.length - 1) {
             index++;
             render();
+            document.getElementById("nextBtn").disabled = true;
+            document.getElementById("prevBtn").disabled = false;
         } else {
-            window.location.href = 'phase4-recap.html';
+            // window.location.href = 'phase4-recap.html';
+            document.getElementById("nextBtn").disabled = false;
         }
     }
 
@@ -1879,6 +1882,10 @@ This suggests that while he found it conceptually challenging, he still viewed i
         if (index > 0) {
             index--;
             render();
+        } else {
+          document.getElementById("prevBtn").disabled = true;
+          document.getElementById("nextBtn").disabled = false;
+
         }
     }
 
