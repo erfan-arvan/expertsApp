@@ -1849,11 +1849,10 @@ This suggests that while he found it conceptually challenging, he still viewed i
               nextBtn.innerText = "Done"; // optional
               if(areAllDisagreementsAnswered){
                 const continueBtn = document.getElementById('continueBtn');
-                if (continueBtn) {
                   continueBtn.style.display = 'inline-block';
                   continueBtn.style.backgroundColor = '#4CAF50';
                   continueBtn.style.animation = 'glowPulse 1.5s infinite alternate';
-                }
+                
               }
           } else {
               nextBtn.disabled = false;
