@@ -705,8 +705,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 </script>
 <script>
   window.onload = () => {
-    sessionStorage.setItem("phase1Complete","true");
-    localStorage.setItem("phase1Complete","true");
+    sessionStorage.setItem("round2-phase1-complete","true");
+    localStorage.setItem("round2-phase1-complete","true");
     loadCards();
     loadState();
     applyTheme();
@@ -723,9 +723,9 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     }
 
     // Unlock and highlight status bar
-    if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
+    if (isComplete('round2-phase1-complete')) document.getElementById('link-phase2').classList.remove('disabled');
     if (isComplete('round2-phase4-complete')) document.getElementById('link-phase3').classList.remove('disabled');
-    if (isComplete('phase3Complete')) document.getElementById('link-review').classList.remove('disabled');
+    if (isComplete('round2-phase5-complete')) document.getElementById('link-review').classList.remove('disabled');
 
     const current = window.location.pathname.split('/').pop();
     if (current.includes('phase1')) document.getElementById('link-phase1').classList.add('active');
@@ -955,7 +955,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   }
 
   function checkPhase1Completion() {
-    if (!isPhaseComplete('phase1Complete')) {
+    if (!isPhaseComplete('round2-phase1-complete')) {
       alert('Please complete Phase 1 before continuing.');
       window.location.href = 'phase1-recap.html';
     }
@@ -1030,9 +1030,9 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 
     // Completion flags and theme
     const flags = {
-      phase1Complete: sessionStorage.getItem('phase1Complete') || getLocalStorage('phase1Complete') || 'false',
+      round1Complete: sessionStorage.getItem('round2-phase1-complete') || getLocalStorage('round2-phase1-complete') || 'false',
       round2Complete: sessionStorage.getItem('round2-phase4-complete') || getLocalStorage('round2-phase4-complete') || 'false',
-      phase3Complete: sessionStorage.getItem('phase3Complete') || getLocalStorage('phase3Complete') || 'false',
+      round5Complete: sessionStorage.getItem('round2-phase5-complete') || getLocalStorage('round2-phase5-complete') || 'false',
       codeTheme: localStorage.getItem('codeTheme') || 'light',
       submitted: '0',
     };
