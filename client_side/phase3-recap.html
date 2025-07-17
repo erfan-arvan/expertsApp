@@ -1217,6 +1217,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 
     /* Check if the phase is completed */
     if (areAllDisagreementsAnswered()) {
+      console.log("areAllDisagreementsAnswered4");
       document.getElementById('continueBtn').style.display = 'inline-block';
       document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
       document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
@@ -1848,6 +1849,7 @@ This suggests that while he found it conceptually challenging, he still viewed i
               nextBtn.disabled = true;
               nextBtn.innerText = "Done"; // optional
               if(areAllDisagreementsAnswered){
+                        console.log("areAllDisagreementsAnswered3");
                 const continueBtn = document.getElementById('continueBtn');
                   continueBtn.style.display = 'inline-block';
                   continueBtn.style.backgroundColor = '#4CAF50';
@@ -2013,6 +2015,7 @@ This suggests that while he found it conceptually challenging, he still viewed i
 
       /* Check if the phase is completed */
       if (areAllDisagreementsAnswered()) {
+        console.log("areAllDisagreementsAnswered6");
         document.getElementById('continueBtn').style.display = 'inline-block';
         document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
         document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
