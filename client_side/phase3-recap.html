@@ -791,12 +791,12 @@ a:hover {
         <button onclick="prev()" id="prevBtn">⬅️ Previous</button>
         <button onclick="next()" id="nextBtn">Next ➡️</button>
       </div>
+      <div style="margin-top: 30px;">
+        <button id="continueBtn" onclick="goToPhase4()" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: gray; color: white; cursor: pointer;">Continue to Phase 4 ➡️</button>
+      </div>
     </div>
   </div>
 
-  <div style="margin-top: 30px;">
-    <button id="continueBtn" onclick="goToPhase4()" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: gray; color: white; cursor: pointer;">Continue to Phase 4 ➡️</button>
-  </div>
 
   <div id="validation-modal" style="
   display: none;
@@ -1291,9 +1291,9 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   }
 
   function goToPhase4() {
-    if (areAllCardsRanked()) {
+    if (areAllDisagreementsAnswered()) {
       location.href = '/phase4-recap.html';
-    } else { showValidationMessage("⚠️ Please rank all snippets") };
+    } else { showValidationMessage("⚠️ Please answer all questions") };
   }
 
   /*For the instructions section*/
