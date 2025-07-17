@@ -1855,6 +1855,8 @@ This suggests that while he found it conceptually challenging, he still viewed i
 
         const prevBtn = document.getElementById("prevBtn");
         prevBtn.disabled = index === 0;
+        prevBtn.style.display = index === 0 ? 'none' : 'inline-block';
+
     }
 
 
@@ -1875,7 +1877,6 @@ This suggests that while he found it conceptually challenging, he still viewed i
         if (index < disagreements.length - 1) {
             index++;
             render();
-            document.getElementById("nextBtn").disabled = true;
         } else {
             window.location.href = 'phase4-recap.html';
         }
