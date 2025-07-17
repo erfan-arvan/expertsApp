@@ -1980,6 +1980,14 @@ This suggests that while he found it conceptually challenging, he still viewed i
     } 
 
     function areAllDisagreementsAnswered() {
+              const q1 = document.getElementById('q1').value.trim();
+        const q2 = document.getElementById('q2').value.trim();
+        const q3 = document.getElementById('q3').value.trim();
+
+        if (!q1 || !q2 || !q3) {
+            showValidationMessage("⚠️ Please answer all three questions before continuing.");
+            return;
+        }
   for (let i = 0; i < disagreements.length; i++) {
     const key = `round2_response_${i}`;
     const dataStr = sessionStorage.getItem(key) || localStorage.getItem(key);
