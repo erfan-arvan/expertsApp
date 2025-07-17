@@ -1295,6 +1295,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   }
 
   function goToPhase4() {
+    next();
     if (areAllDisagreementsAnswered()) {
       location.href = '/phase4-recap.html';
     } else { showValidationMessage("⚠️ Please answer all questions") };
