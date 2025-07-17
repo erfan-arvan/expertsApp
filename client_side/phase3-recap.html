@@ -2012,7 +2012,7 @@ This suggests that while he found it conceptually challenging, he still viewed i
       document.cookie = `phase3_ranking=${encodeURIComponent(json)}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
       /* Check if the phase is completed */
-      if (areAllCardsRanked()) {
+      if (areAllDisagreementsAnswered()) {
         document.getElementById('continueBtn').style.display = 'inline-block';
         document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
         document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
