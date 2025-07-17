@@ -374,6 +374,21 @@ textarea {
   
   <script src="js/dataExpert.js"></script>
   <script src="js/common.js"></script>
+  <script>
+      function logout() {
+    sessionStorage.clear();
+    localStorage.clear();
+
+
+    // Clear all cookies
+    document.cookie.split(";").forEach(cookie => {
+      const name = cookie.split("=")[0].trim();
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    });
+
+    window.location.href = 'round2.html';
+  }
+  </script>
 <script>
     // Returns existing or creates a new randomized order of indices
     function getOrCreateSnippetOrder(length) {
