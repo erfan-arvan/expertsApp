@@ -724,15 +724,20 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 
     // Unlock and highlight status bar
     if (isComplete('round2-phase1-complete')) document.getElementById('link-phase2').classList.remove('disabled');
-    if (isComplete('round2-phase4-complete')) document.getElementById('link-phase3').classList.remove('disabled');
+    if (isComplete('round2-phase2-complete')) document.getElementById('link-phase3').classList.remove('disabled');
+    if (isComplete('round2-phase3-complete')) document.getElementById('link-phase4').classList.remove('disabled');
+    if (isComplete('round2-phase4-complete')) document.getElementById('link-phase5').classList.remove('disabled');
     if (isComplete('round2-phase5-complete')) document.getElementById('link-review').classList.remove('disabled');
 
     const current = window.location.pathname.split('/').pop();
     if (current.includes('phase1')) document.getElementById('link-phase1').classList.add('active');
     else if (current.includes('phase2')) document.getElementById('link-phase2').classList.add('active');
     else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
+    else if (current.includes('phase4')) document.getElementById('link-phase4').classList.add('active');
+    else if (current.includes('phase5')) document.getElementById('link-phase5').classList.add('active');
     else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
 
+    
     if (sessionStorage.getItem('round2-phase4-complete') === 'true' || localStorage.getItem('round2-phase4-complete') === 'true') {
       document.getElementById('continueBtn').style.display = 'inline-block';
       document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
