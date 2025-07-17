@@ -983,6 +983,10 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 </script>
 <script>
   window.onload = () => {
+      //mark phase2 as completed, since the user entered it.
+      localStorage.setItem("round2-phase2-complete","true");
+      sessionStorage.setItem("round2-phase2-complete","true");
+      
       remapSnippetReferences(participantRankings);
       renderParticipantRankings();
       loadCards();
@@ -992,7 +996,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 
     // ✅ Restore Continue button if phase2Complete is already set
     const continueBtn = document.getElementById('continueBtn');
-    if (sessionStorage.getItem('phase2Complete') === 'true' || localStorage.getItem('phase2Complete') === 'true') {
+    if (sessionStorage.getItem('round2-phase2-complete') === 'true' || localStorage.getItem('round2-phase2-complete') === 'true') {
       if (continueBtn) {
         continueBtn.style.display = 'inline-block';
         continueBtn.style.backgroundColor = '#4CAF50';
@@ -1001,9 +1005,9 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     }
 
     // Unlock and highlight status bar
-    if (isComplete('phase1Complete')) document.getElementById('link-phase2').classList.remove('disabled');
-    if (isComplete('phase2Complete')) document.getElementById('link-phase3').classList.remove('disabled');
-    if (isComplete('phase3Complete')) document.getElementById('link-review').classList.remove('disabled');
+    if (isComplete('round2-phase1-complete')) document.getElementById('link-phase2').classList.remove('disabled');
+    if (isComplete('round2-phase2-complete')) document.getElementById('link-phase3').classList.remove('disabled');
+    if (isComplete('round2-phase3-complete')) document.getElementById('link-review').classList.remove('disabled');
 
     const current = window.location.pathname.split('/').pop();
     if (current.includes('phase1')) document.getElementById('link-phase1').classList.add('active');
@@ -1011,7 +1015,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
     else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
 
-    if (sessionStorage.getItem('phase2Complete') === 'true' || localStorage.getItem('phase2Complete') === 'true') {
+    if (sessionStorage.getItem('round2-phase2-complete') === 'true' || localStorage.getItem('round2-phase2-complete') === 'true') {
       document.getElementById('continueBtn').style.display = 'inline-block';
       document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
       document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
@@ -1093,8 +1097,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       document.getElementById('continueBtn').style.display = 'inline-block';
       document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
       document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
-      sessionStorage.setItem('phase2Complete', 'true');
-      document.cookie = `phase2Complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
+      sessionStorage.setItem('round2-phase2-complete', 'true');
+      document.cookie = `round2-phase2-complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
 
       // ✅ Also update the status bar
       const phase3Link = document.getElementById('link-phase3');
@@ -1102,8 +1106,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
         phase3Link.classList.remove('disabled');
       }
     } else {
-      sessionStorage.removeItem('phase2Complete');
-      document.cookie = `phase2Complete=; path=/; max-age=0`;
+      sessionStorage.removeItem('round2-phase2-complete');
+      document.cookie = `round2-phase2-complete=; path=/; max-age=0`;
       document.getElementById('continueBtn').style.display = 'none';
       const phase3Link = document.getElementById('link-phase3');
       if (phase3Link) {
@@ -1306,9 +1310,9 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 
     // Completion flags and theme
     const flags = {
-      phase1Complete: sessionStorage.getItem('phase1Complete') || getLocalStorage('phase1Complete') || 'false',
-      phase2Complete: sessionStorage.getItem('phase2Complete') || getLocalStorage('phase2Complete') || 'false',
-      phase3Complete: sessionStorage.getItem('phase3Complete') || getLocalStorage('phase3Complete') || 'false',
+      phase1Complete: sessionStorage.getItem('round2-phase1-complete') || getLocalStorage('round2-phase1-complete') || 'false',
+      phase2Complete: sessionStorage.getItem('round2-phase2-complete') || getLocalStorage('round2-phase2-complete') || 'false',
+      phase3Complete: sessionStorage.getItem('round2-phase3-complete') || getLocalStorage('round2-phase3-complete') || 'false',
       codeTheme: localStorage.getItem('codeTheme') || 'light',
       submitted: '0',
     };
