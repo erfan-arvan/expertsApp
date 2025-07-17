@@ -932,6 +932,21 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       document.getElementById('submit-review').style.display = 'inline-block';
     }
 
+        setTimeout(function () {
+      if (validateAllResponses()) {
+        // ✅ Mark phase 3 as complete
+        sessionStorage.setItem('round2-phase5-complete', 'true');
+        localStorage.setItem('round2-phase5-complete', 'true');
+        // document.cookie = `round2-phase5-complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
+        document.getElementById('submit-review').style.display = 'inline-block';
+      } else {
+        sessionStorage.setItem('round2-phase5-complete', 'false');
+        localStorage.setItem('round2-phase5-complete', 'false');
+        // document.cookie = `round2-phase5-complete=false; path=/; max-age=${60 * 60 * 24 * 30}`;
+        document.getElementById('submit-review').style.display = 'none';
+      }
+    }, 500); // Delay in milliseconds (500ms = 0.5 second)
+    
     setInterval(() => {
       try {
         saveToServer();
