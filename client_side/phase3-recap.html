@@ -1118,7 +1118,6 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       applyTheme();
       displayUserName();
 
-    // ✅ Restore Continue button if phase2Complete is already set
     const continueBtn = document.getElementById('continueBtn');
     if (sessionStorage.getItem('round2-phase3-complete') === 'true' || localStorage.getItem('round2-phase2-complete') === 'true') {
       if (continueBtn) {
@@ -1139,7 +1138,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     else if (current.includes('phase3')) document.getElementById('link-phase3').classList.add('active');
     else if (current.includes('review')) document.getElementById('link-review').classList.add('active');
 
-    if (sessionStorage.getItem('round2-phase2-complete') === 'true' || localStorage.getItem('round2-phase2-complete') === 'true') {
+    if (sessionStorage.getItem('round2-phase3-complete') === 'true' || localStorage.getItem('round2-phase3-complete') === 'true') {
       document.getElementById('continueBtn').style.display = 'inline-block';
       document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
       document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
@@ -1217,7 +1216,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     document.cookie = `phase3_ranking=${encodeURIComponent(json)}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
     /* Check if the phase is completed */
-    if (areAllCardsRanked()) {
+    if (areAllDisagreementsAnswered()) {
       document.getElementById('continueBtn').style.display = 'inline-block';
       document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
       document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
@@ -1848,12 +1847,14 @@ This suggests that while he found it conceptually challenging, he still viewed i
           if (index === disagreements.length - 1) {
               nextBtn.disabled = true;
               nextBtn.innerText = "Done"; // optional
-                  const continueBtn = document.getElementById('continueBtn');
-                  if (continueBtn) {
-                    continueBtn.style.display = 'inline-block';
-                    continueBtn.style.backgroundColor = '#4CAF50';
-                    continueBtn.style.animation = 'glowPulse 1.5s infinite alternate';
-                  }
+              if(areAllDisagreementsAnswered){
+                const continueBtn = document.getElementById('continueBtn');
+                if (continueBtn) {
+                  continueBtn.style.display = 'inline-block';
+                  continueBtn.style.backgroundColor = '#4CAF50';
+                  continueBtn.style.animation = 'glowPulse 1.5s infinite alternate';
+                }
+              }
           } else {
               nextBtn.disabled = false;
               nextBtn.innerText = "Next"; // optional
@@ -1912,7 +1913,8 @@ This suggests that while he found it conceptually challenging, he still viewed i
         const json = JSON.stringify(responseObj);
 
         sessionStorage.setItem(key, json);
-        document.cookie = `${key}=${encodeURIComponent(json)}; path=/; max-age=${60 * 60 * 24 * 30}`;
+        // document.cookie = `${key}=${encodeURIComponent(json)}; path=/; max-age=${60 * 60 * 24 * 30}`;
+        localStorage.setItem(key,json);
     }
   </script>
 
@@ -1975,6 +1977,29 @@ This suggests that while he found it conceptually challenging, he still viewed i
         console.error('Failed to parse phase3_ranking JSON:', e);
       }
     } 
+
+    function areAllDisagreementsAnswered() {
+  for (let i = 0; i < disagreements.length; i++) {
+    const key = `round2_response_${i}`;
+    const dataStr = sessionStorage.getItem(key) || localStorage.getItem(key);
+
+    if (!dataStr) return false;
+
+    try {
+      const data = JSON.parse(dataStr);
+      const q1 = data.q1?.trim();
+      const q2 = data.q2?.trim();
+      const q3 = data.q3?.trim();
+
+      if (!q1 || !q2 || !q3) return false;
+    } catch (e) {
+      console.warn(`Invalid JSON for key ${key}`);
+      return false;
+    }
+  }
+  return true;
+}
+
 </script>
 
 <script>
