@@ -156,6 +156,12 @@
     <button class="nav-button" onclick="location.href='/phase1-recap.html'">Update Phase 1</button>
   </div>
 
+    <div class="section">
+    <h2>Phase 1: Summary and Comprehensibility</h2>
+    <div id="completion-status"></div>
+    <button class="nav-button" onclick="location.href='/phase1-recap.html'">Update Phase 1</button>
+  </div>
+
   <div class="section">
     <h2>Phase 2: Snippet Ranking</h2>
     <div id="phase2"></div>
@@ -343,6 +349,29 @@
   }
 }
 
+function renderRound2CompletionStatus() {
+  const container = document.getElementById('completion-status');
+  container.innerHTML = ''; // Clear existing content
+
+  let foundAny = false;
+
+  for (let i = 1; i <= 5; i++) {
+    const key = `round2-phase${i}-complete`;
+    const value = sessionStorage.getItem(key) || localStorage.getItem(key) || 'false';
+
+    container.innerHTML += `
+      <p>
+        <strong>Phase ${i}:</strong> ${value === 'true' ? '✅ Complete' : '❌ Incomplete'}
+      </p>
+    `;
+    foundAny = true;
+  }
+
+  if (!foundAny) {
+    container.innerHTML = '<em>No completion data found.</em>';
+  }
+}
+
 
 function submitAll() {
   const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
@@ -417,6 +446,7 @@ function submitAll() {
     renderPhase2();
     renderPhase3();
     renderRound2Responses();
+    renderRound2CompletionStatus();
   </script>
 
   <script>
