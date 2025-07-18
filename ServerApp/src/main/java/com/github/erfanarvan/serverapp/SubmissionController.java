@@ -357,8 +357,83 @@ public class SubmissionController {
         }
     }
 
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/submit_round2")
+public synchronized String handleRound2Submission(@RequestBody Map<String, Object> body) {
+    String username = (String) body.getOrDefault("username", "anonymous");
+    String timestamp = ZonedDateTime.now(ZoneId.of("America/New_York"))
+                                    .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+    boolean isFinal = "1".equals(String.valueOf(body.get("submitted")));
+
+    System.out.println(">>> [submit_round2] Submission received from: " + username);
+
+    File directory = new File("submissions/round2");
+    if (!directory.exists()) {
+        directory.mkdirs();
+        System.out.println(">>> Created 'submissions/round2' directory.");
+    }
+
+    File allFile = new File(directory, "round2_all.json");
+    File finalFile = new File(directory, "round2_final.json");
+
+    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
+    try {
+        Map<String, Object> wrapped = new HashMap<>();
+        wrapped.put("timestamp", timestamp);
+        wrapped.put("isFinal", isFinal);
+        wrapped.put("data", body);
+
+        Map<String, List<Map<String, Object>>> allData = allFile.exists()
+            ? mapper.readValue(allFile, new TypeReference<>() {})
+            : new HashMap<>();
+        allData.computeIfAbsent(username, k -> new ArrayList<>()).add(wrapped);
+        mapper.writeValue(allFile, allData);
+        System.out.println(">>> Saved to round2_all.json");
+
+        if (isFinal) {
+            Map<String, List<Map<String, Object>>> finalData = finalFile.exists()
+                ? mapper.readValue(finalFile, new TypeReference<>() {})
+                : new HashMap<>();
+            finalData.computeIfAbsent(username, k -> new ArrayList<>()).add(wrapped);
+            mapper.writeValue(finalFile, finalData);
+            System.out.println(">>> Saved to round2_final.json");
+        }
+
+        return "Round 2 submission saved.";
+    } catch (IOException e) {
+        System.err.println(">>> ERROR saving round2 submission for: " + username);
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save round2 submission.");
+    }
+}
 
 
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/get_latest_round2")
+public Map<String, Object> getLatestRound2Submission(@RequestBody Map<String, String> request) {
+    String username = request.getOrDefault("username", "anonymous");
+    File file = new File("submissions/round2/round2_all.json");
+    ObjectMapper mapper = new ObjectMapper();
+
+    try {
+        if (!file.exists()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Round 2 submissions found.");
+        }
+
+        Map<String, List<Map<String, Object>>> allData = mapper.readValue(file, new TypeReference<>() {});
+        List<Map<String, Object>> userSubs = allData.get(username);
+        if (userSubs == null || userSubs.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Round 2 submission for user.");
+        }
+
+        return (Map<String, Object>) userSubs.get(userSubs.size() - 1).get("data");
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read Round 2 submission.");
+    }
+}
 
 
     private String truncateJson(Map<String, Object> body, int maxLen) {
