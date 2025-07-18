@@ -1079,12 +1079,6 @@ function areAllSnippetsFilled() {
     }
   }
 
-  function checkPhase1Completion() {
-    if (!isPhaseComplete('round2-phase1-complete')) {
-      alert('Please complete Phase 1 before continuing.');
-      window.location.href = 'phase1-recap.html';
-    }
-  }
 
   function isPhaseComplete(phaseKey) {
     const sessionVal = sessionStorage.getItem(phaseKey);
@@ -1093,7 +1087,6 @@ function areAllSnippetsFilled() {
   }
 
   window.addEventListener('load', checkLogin);
-  window.addEventListener('load', checkPhase1Completion);
 </script>
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
   Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
