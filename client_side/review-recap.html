@@ -168,6 +168,18 @@
     <button class="nav-button" onclick="location.href='/phase3-recap.html'">Update Phase 3</button>
   </div>
 
+    <div class="section">
+    <h2>Disagreements answers</h2>
+    <div id="disagreements"></div>
+    <button class="nav-button" onclick="location.href='/phase2-recap.html'">Update Phase 2</button>
+  </div>
+
+    <div class="section">
+    <h2>Phase 2: Snippet Ranking</h2>
+    <div id="phase5"></div>
+    <button class="nav-button" onclick="location.href='/phase2-recap.html'">Update Phase 2</button>
+  </div>
+
   <button class="submit-button" onclick="submitAll()">✅ Submit All Responses</button>
 
   <div id="validation-modal" style="
@@ -298,6 +310,39 @@
         container.innerHTML += `<p><strong>Q${i + 1}:</strong> ${answer}</p>`;
       });
     }
+
+    function renderRound2Responses() {
+  const container = document.getElementById('disagreements');
+  container.innerHTML = ''; // Clear existing content
+
+  let foundAny = false;
+
+  for (let i = 0; i <= 4; i++) {
+    const key = `round2_response_${i}`;
+    const raw = sessionStorage.getItem(key) || localStorage.getItem(key);
+    if (!raw) continue;
+
+    let parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (e) {
+      console.warn(`Failed to parse ${key}:`, e);
+      parsed = { error: "Invalid JSON format" };
+    }
+
+    container.innerHTML += `<h4>Disagreement ${i + 1}</h4><ul>`;
+    Object.entries(parsed).forEach(([qKey, answer]) => {
+      container.innerHTML += `<li><strong>${qKey}:</strong> ${answer}</li>`;
+    });
+    container.innerHTML += `</ul>`;
+    foundAny = true;
+  }
+
+  if (!foundAny) {
+    container.innerHTML = '<em>No disagreement responses found.</em>';
+  }
+}
+
 
 function submitAll() {
   const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
