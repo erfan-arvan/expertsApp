@@ -150,40 +150,35 @@
 
 
 
-  <div class="section">
+  <div class="section" style="display: none;">
     <h2>Phase 1: Summary and Comprehensibility</h2>
     <div id="phase1"></div>
     <button class="nav-button" onclick="location.href='/phase1-recap.html'">Update Phase 1</button>
   </div>
 
-    <div class="section">
-    <h2>Phase 1: Summary and Comprehensibility</h2>
+  <div class="section">
+    <h2>Completion Status</h2>
     <div id="completion-status"></div>
-    <button class="nav-button" onclick="location.href='/phase1-recap.html'">Update Phase 1</button>
+    <!-- <button class="nav-button" onclick="location.href='/phase1-recap.html'">Update Phase 1</button> -->
   </div>
 
   <div class="section">
-    <h2>Phase 2: Snippet Ranking</h2>
-    <div id="phase2"></div>
-    <button class="nav-button" onclick="location.href='/phase2-recap.html'">Update Phase 2</button>
-  </div>
-
-  <div class="section">
-    <h2>Phase 3: Ranking Reasoning</h2>
-    <div id="phase3"></div>
-    <button class="nav-button" onclick="location.href='/phase3-recap.html'">Update Phase 3</button>
-  </div>
-
-    <div class="section">
-    <h2>Disagreements answers</h2>
+    <h2>Reflect on expert disagreements:</h2>
     <div id="disagreements"></div>
-    <button class="nav-button" onclick="location.href='/phase2-recap.html'">Update Phase 2</button>
+    <button class="nav-button" onclick="location.href='/phase3-recap.html'">Update Responses</button>
   </div>
 
-    <div class="section">
-    <h2>Phase 2: Snippet Ranking</h2>
-    <div id="phase5"></div>
-    <button class="nav-button" onclick="location.href='/phase2-recap.html'">Update Phase 2</button>
+
+  <div class="section">
+    <h2>Snippet Ranking</h2>
+    <div id="phase2"></div>
+    <button class="nav-button" onclick="location.href='/phase4-recap.html'">Update Ranking</button>
+  </div>
+
+  <div class="section">
+    <h2>Ranking Reasoning</h2>
+    <div id="phase3"></div>
+    <button class="nav-button" onclick="location.href='/phase5-recap.html'">Update Responses</button>
   </div>
 
   <button class="submit-button" onclick="submitAll()">✅ Submit All Responses</button>
@@ -439,8 +434,6 @@ function submitAll() {
     showValidationMessage('❌ Submission failed. Beacon transmission failed.');
   }
 }
-
-
 
     renderPhase1();
     renderPhase2();
