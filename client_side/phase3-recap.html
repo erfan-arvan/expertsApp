@@ -1416,50 +1416,73 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 </script>
 
 <script>
-  function saveToServer() {
-    const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName') || 'Anonymous';
-    const username = getLocalStorage('username') || 'anonymous';
+function saveToServer() {
+  const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName') || 'Anonymous';
+  const username = getLocalStorage('username') || 'anonymous';
 
-    // Phase 1 data
-    const phase1 = {};
-    for (let i = 1; i <= 8; i++) {
-      const summary = sessionStorage.getItem(`summary${i}`) || getLocalStorage(`summary${i}`) || '';
-      const comp = sessionStorage.getItem(`compSummary${i}`) || getLocalStorage(`compSummary${i}`) || '';
-      phase1[`snippet${i}`] = { summary, comprehensibility: comp };
-    }
-
-    // Phase 2 & 3 data
-    let phase2 = {}, phase3 = {};
-    try {
-      phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getLocalStorage('phase3_ranking') || '{}');
-      phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getLocalStorage('phase3_reasoning') || '{}');
-    } catch (e) {
-      console.warn("Error parsing phase2 or phase3 data", e);
-    }
-
-    // Completion flags and theme
-    const flags = {
-      phase1Complete: sessionStorage.getItem('round2-phase1-complete') || getLocalStorage('round2-phase1-complete') || 'false',
-      phase2Complete: sessionStorage.getItem('round2-phase2-complete') || getLocalStorage('round2-phase2-complete') || 'false',
-      phase3Complete: sessionStorage.getItem('round2-phase3-complete') || getLocalStorage('round2-phase3-complete') || 'false',
-      codeTheme: localStorage.getItem('codeTheme') || 'light',
-      submitted: '0',
-    };
-
-    const payload = {
-      username,
-      participantName: name,
-      phase1,
-      phase2,
-      phase3,
-      ...flags
-    };
-
-    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-    navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
-
-    console.log(payload);
+  // Phase 1 data
+  const phase1 = {};
+  for (let i = 1; i <= 8; i++) {
+    const summary = sessionStorage.getItem(`summary${i}`) || getLocalStorage(`summary${i}`) || '';
+    const comp = sessionStorage.getItem(`compSummary${i}`) || getLocalStorage(`compSummary${i}`) || '';
+    phase1[`snippet${i}`] = { summary, comprehensibility: comp };
   }
+
+  // Phase 2 & 3 data
+  let phase2 = {}, phase3 = {};
+  try {
+    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getLocalStorage('phase3_ranking') || '{}');
+    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getLocalStorage('phase3_reasoning') || '{}');
+  } catch (e) {
+    console.warn("Error parsing phase2 or phase3 data", e);
+  }
+
+  // Round 2 responses
+  const round2Responses = {};
+  for (let i = 0; i <= 4; i++) {
+    const key = `round2_response_${i}`;
+    const val = localStorage.getItem(key) || sessionStorage.getItem(key);
+    if (val) {
+      try {
+        round2Responses[key] = JSON.parse(val);
+      } catch (e) {
+        round2Responses[key] = val; // fallback
+      }
+    }
+  }
+
+  // Completion flags
+  const phaseCompletion = {};
+  for (let i = 1; i <= 5; i++) {
+    const key = `round2-phase${i}-complete`;
+    phaseCompletion[key] = sessionStorage.getItem(key) || getLocalStorage(key) || 'false';
+  }
+
+  // Other flags
+  const flags = {
+    codeTheme: localStorage.getItem('codeTheme') || 'light',
+    submitted: '0',
+    studyRound: '2'
+  };
+
+  // Final payload
+  const payload = {
+    username,
+    participantName: name,
+    phase1,
+    phase2,
+    phase3,
+    ...round2Responses,
+    ...phaseCompletion,
+    ...flags
+  };
+
+  const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+  navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+
+  console.log(payload);
+}
+
 
   window.addEventListener('beforeunload', function (e) {
     saveToServer();
