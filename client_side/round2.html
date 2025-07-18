@@ -413,11 +413,11 @@ to complete this round is approximately <strong>40 minutes</strong>.
       localStorage.setItem('username', username);
       loadPreviousData()
         .then(() => {
-          // window.location.href = 'phase1-recap.html'; // only after data is fully loaded
+          window.location.href = 'phase1-recap.html'; // only after data is fully loaded
         })
         .catch(() => {
           alert("⚠️ Could not load previous data. Redirecting anyway.");
-          // window.location.href = 'phase1-recap.html';
+          window.location.href = 'phase1-recap.html';
         });
     } catch (err) {
       console.error(err);
@@ -545,7 +545,7 @@ function getLocalStorage(name) {
   };
 
   function proceedToPhase1() {
-    // window.location.href = 'phase1-recap.html';
+    window.location.href = 'phase1-recap.html';
   }
 </script>
 
