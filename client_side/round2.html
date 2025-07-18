@@ -433,7 +433,7 @@ to complete this round is approximately <strong>40 minutes</strong>.
     return Promise.reject("No username");
   }
 
-  return fetch('https://codecomprehensibility.site/get_latest_submission', {
+  return fetch('https://codecomprehensibility.site/get_latest_round2', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username })

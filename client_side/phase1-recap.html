@@ -438,7 +438,7 @@ textarea {
   };
 
   const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-  navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+  navigator.sendBeacon('https://codecomprehensibility.site/submit_round2', blob);
 
   console.log(payload);
 }
