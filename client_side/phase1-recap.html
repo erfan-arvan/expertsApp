@@ -681,6 +681,9 @@ if (snippet.responses && Array.isArray(snippet.responses)) {
         loadSnippet(currentSnippet);
         updateButtons();
       }
+
+      document.getElementById('snippet-container').scrollIntoView({ behavior: 'smooth' });
+
     }
 
     function prevSnippet() {
