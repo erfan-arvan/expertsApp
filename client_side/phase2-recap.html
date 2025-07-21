@@ -1108,8 +1108,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       document.getElementById('continueBtn').style.display = 'inline-block';
       document.getElementById('continueBtn').style.backgroundColor = '#4CAF50';
       document.getElementById('continueBtn').style.animation = 'glowPulse 1.5s infinite alternate';
-      sessionStorage.setItem('round2-phase2-complete', 'true');
-      localStorage.setItem('round2-phase2-complete', 'true');
+      // sessionStorage.setItem('round2-phase2-complete', 'true');
+      // localStorage.setItem('round2-phase2-complete', 'true');
       document.cookie = `round2-phase2-complete=true; path=/; max-age=${60 * 60 * 24 * 30}`;
 
       // ✅ Also update the status bar
