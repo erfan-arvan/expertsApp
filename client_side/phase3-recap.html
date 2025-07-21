@@ -2030,7 +2030,7 @@ function markCurrentUserName(text, username) {
             window.location.href = 'phase4-recap.html';
         }
         const el = document.getElementById('disagreement-box');
-        const top = el.getBoundingClientRect().top + window.scrollY - 120;
+        const top = el.getBoundingClientRect().top + window.scrollY;
 
         window.scrollTo({ top, behavior: 'smooth' });
       }
