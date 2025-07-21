@@ -2314,7 +2314,7 @@ window.addEventListener('scroll', function () {
   const scrollY = window.scrollY;
 
   // Show or hide el based on your condition
-  if (contentRanking.style.display === "none") {
+  if (contentRanking.style.display !== "block") {
     el.classList.remove('visible');
   } else {
     const condition =
