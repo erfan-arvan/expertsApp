@@ -2009,19 +2009,6 @@ function personalize(text, username, snippetMap) {
         window.scrollTo({ top, behavior: 'smooth' });
       }
 
-      //Automatically saving the changes when something is modified
-      ['q1', 'q2', 'q3'].forEach(id => {
-      const textarea = document.getElementById(id);
-      if (textarea) {
-        textarea.addEventListener('input', () => {
-          const q1 = document.getElementById('q1').value.trim();
-          const q2 = document.getElementById('q2').value.trim();
-          const q3 = document.getElementById('q3').value.trim();
-          saveRound2Response(index, { q1, q2, q3 });
-        });
-      }
-    });
-
 
     function prev() {
         const q1 = document.getElementById('q1').value.trim();
@@ -2053,6 +2040,35 @@ function personalize(text, username, snippetMap) {
         // document.cookie = `${key}=${encodeURIComponent(json)}; path=/; max-age=${60 * 60 * 24 * 30}`;
         localStorage.setItem(key,json);
     }
+  </script>
+
+  <script>
+    ['q1', 'q2', 'q3'].forEach(id => {
+  const textarea = document.getElementById(id);
+  if (textarea) {
+    textarea.addEventListener('input', () => {
+      const q1 = document.getElementById('q1').value.trim();
+      const q2 = document.getElementById('q2').value.trim();
+      const q3 = document.getElementById('q3').value.trim();
+
+      // Save response
+      saveRound2Response(index, { q1, q2, q3 });
+
+      // Optional: log for debugging
+      console.log(`✅ Autosaved round2_response_${index}:`, { q1, q2, q3 });
+
+      // Optional: live phase3 completion check
+      if (validateAllDisagreementsAnswered()) {
+        sessionStorage.setItem("round2-phase3-complete", "true");
+        localStorage.setItem("round2-phase3-complete", "true");
+      } else {
+        sessionStorage.setItem("round2-phase3-complete", "false");
+        localStorage.setItem("round2-phase3-complete", "false");
+      }
+    });
+  }
+});
+
   </script>
 
 <script>
