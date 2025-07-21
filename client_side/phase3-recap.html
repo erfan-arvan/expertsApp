@@ -2307,22 +2307,19 @@ function togglePhaseSection() {
 window.addEventListener('scroll', function () {
   const el = document.getElementById('scroll-trigger-element');
   const content = document.getElementById("instructions-content");
-  const button = document.getElementById("instructions-content-btn");
   const contentRanking = document.getElementById('phase-section-content');
 
-  const contentVisible = content.style.display !== "none";
   const scrollY = window.scrollY;
 
+  const contentVisible = window.getComputedStyle(content).display !== "none";
   const rankingVisible = window.getComputedStyle(contentRanking).display !== "none";
 
-  if (!rankingVisible) {
-    el.classList.remove('visible');
-    return;
-  }
-
   const condition =
-    (contentVisible && scrollY >= 200) ||
-    (!contentVisible && scrollY >= 70);
+    rankingVisible &&
+    (
+      (contentVisible && scrollY >= 200) ||
+      (!contentVisible && scrollY >= 70)
+    );
 
   if (condition) {
     el.classList.add('visible');
