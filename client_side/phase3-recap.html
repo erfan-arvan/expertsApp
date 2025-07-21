@@ -1869,12 +1869,13 @@ function personalize(text, username, snippetMap) {
 
     // Replace expert name with "you"
     ['Oscar', 'Martin', 'Nadeeshan'].forEach(name => {
-        const regex = new RegExp(`\\b${name}\\b`, 'g');
-        if (username.toLowerCase() === name.toLowerCase()) {
-            console.log(`👤 Replacing name '${name}' with 'you'`);
-            text = text.replace(regex, 'you');
-        }
+      const regex = new RegExp(`\\b${name}\\b`, 'g');
+      if (username.toLowerCase() === name.toLowerCase()) {
+        console.log(`👤 Replacing name '${name}' with '${name} (you)'`);
+        text = text.replace(regex, `${name} (you)`);
+      }
     });
+
 
     // Replace all "Snippet X (functionName)" and "Snippet X" in one pass
     text = text.replace(/Snippet (\d+)(?: \((.*?)\))?/g, (match, origId, funcName) => {
