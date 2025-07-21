@@ -153,7 +153,7 @@ const participantRankings = [
             <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
             <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
             <div class="reasoning-point" onclick="compare([4], [7])" style="position: absolute; top: -7px; right:50px;"></div>
-            <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">
+            <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 500px;">
               These two snippets are moderately complex string and float algorithms, respectively. I don't differentiate between them, since both are tricky to get right but doing something pretty well understood.
               (prev:Snippets 4, 5, and 7 are pretty similar, in the sense that each implements a well-known algorithm that I immediately recognized. However, all three are pretty complicated algorithms to get right.)
             </div>
@@ -167,7 +167,7 @@ const participantRankings = [
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
             <div class="reasoning-point" onclick="compare([3], [6])" style="top: 50px; right: -12px;"></div>
-            <div class="tooltip-box" style="top:70px; right: -160px;">
+            <div class="tooltip-box" style="top:70px; right: -160px; width: 500px;">
               💡 <strong>Reason:</strong><br>
               \`isMachineTypeDefined\` required me to do true bottom-up reasoning to figure out what it was doing, unlike \`deleteRecursively\`.<br>
               (prev:Then comes Snippet 3: it also required me to reason through it, since it wasn't clear what it was for just from reading through it once. However, it was noticeably easier to figure out what Snippet 3 is doing compared to Snippet 6.)
@@ -176,7 +176,7 @@ const participantRankings = [
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
             <div class="reasoning-point" onclick="compare([3], [6])" style="top: 50px; right: -12px;"></div>
-            <div class="tooltip-box" style="top:70px; right: -160px;">
+            <div class="tooltip-box" style="top:70px; right: -160px; width: 500px;">
               💡 <strong>Reason:</strong><br>
               Both snippets require bottom-up reasoning. However, \`encodedLength\` requires more domain knowledge to make sense of, since it seems obvious to me that Java programmers should know how the API for the language itself works at a basic level (e.g., "what's a field?" is not a question any Java programmer is going to ask), but \`encodedLength\` requires understanding UTF-8 vs UTF-16, which many Java programmers won't have had to deal with.
             </div>
