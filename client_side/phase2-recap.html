@@ -986,9 +986,22 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 
 <script>
         //mark phase2 as completed, since the user scrolled a little bit!
-      localStorage.setItem("round2-phase2-complete","true");
-      sessionStorage.setItem("round2-phase2-complete","true");
+      // localStorage.setItem("round2-phase2-complete","true");
+      // sessionStorage.setItem("round2-phase2-complete","true");
 </script>
+<script>
+let phase2MarkedComplete = false;
+
+window.addEventListener('scroll', () => {
+  if (!phase2MarkedComplete && window.scrollY >= 100) {
+    localStorage.setItem("round2-phase2-complete", "true");
+    sessionStorage.setItem("round2-phase2-complete", "true");
+    phase2MarkedComplete = true; // prevent duplicate writes
+    console.log("✅ round2-phase2-complete marked as true due to scroll");
+  }
+});
+</script>
+
 <script>
   window.onload = () => {
 
