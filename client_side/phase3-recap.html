@@ -1843,10 +1843,15 @@ This suggests that while he found it conceptually challenging, he still viewed i
 
 
 function personalize(text, username, snippetMap) {
+    console.log("🔍 Initial text:", text);
+    console.log("👤 Username:", username);
+    console.log("🧭 Snippet map (original ➝ local):", snippetMap);
+
     // Replace expert name with "you"
     ['Oscar', 'Martin', 'Nadeeshan'].forEach(name => {
         const regex = new RegExp(`\\b${name}\\b`, 'g');
         if (username.toLowerCase() === name.toLowerCase()) {
+            console.log(`👤 Replacing name '${name}' with 'you'`);
             text = text.replace(regex, 'you');
         }
     });
@@ -1854,10 +1859,16 @@ function personalize(text, username, snippetMap) {
     // Replace "Snippet X (name)" and "Snippet X" with user's visible number
     for (let originalId = 1; originalId <= 8; originalId++) {
         const localId = snippetMap[originalId];
+        if (!localId) {
+            console.warn(`⚠️ Original snippet ${originalId} not found in mapping.`);
+            continue;
+        }
+
+        const before = text;
 
         // First replace "Snippet X (functionName)"
         text = text.replace(
-            new RegExp(`Snippet ${originalId} \\((.*?)\\)`),
+            new RegExp(`Snippet ${originalId} \\((.*?)\\)`, 'g'),
             `Snippet ${localId} ($1)`
         );
 
@@ -1866,8 +1877,13 @@ function personalize(text, username, snippetMap) {
             new RegExp(`Snippet ${originalId}(?! \\()`, 'g'),
             `Snippet ${localId}`
         );
+
+        if (text !== before) {
+            console.log(`🔁 Replaced Snippet ${originalId} ➝ Snippet ${localId}`);
+        }
     }
 
+    console.log("✅ Final personalized text:", text);
     return text;
 }
 
