@@ -515,10 +515,9 @@ to complete this round is approximately <strong>40 minutes</strong>.
         localStorage.setItem('submitted', data.submitted);
       }
       console.log("Previous data loaded successfully.");
+      return loadPreviousData2(); // ✅ Chain this promise
     })
     .catch(() => console.log("Could not load previous submission."));
-
-    loadPreviousData2();
   }
 
  function loadPreviousData2() {
