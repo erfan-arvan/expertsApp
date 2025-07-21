@@ -158,7 +158,7 @@ const participantRankings = [
               (prev:Snippets 4, 5, and 7 are pretty similar, in the sense that each implements a well-known algorithm that I immediately recognized. However, all three are pretty complicated algorithms to get right.)
             </div>
             <div class="reasoning-point" onclick="compare([4,7], [5])" style="top: 50px; right: -12px;"></div>
-            <div class="tooltip-box" style="top:70px; right: -160px;">
+            <div class="tooltip-box" style="top:70px; right: -160px; min-width:500px;">
               💡 <strong>Reason:</strong><br>
               These three snippets are actually pretty similar: all are implementations of some kind of simple specification that's a bit tricky to get right in practice. I'm actually not even confident that \`deleteRecursively\` is correct, though, which is why I ranked it above the other two: the relevant Java APIs are quite confusing and easy to get wrong. I think this implementation might leak a file descriptor?
               (prev:I'm actually not even confident that Snippet 5 is correct, which is why I ranked it above the other two: the relevant Java APIs are quite confusing and easy to get wrong. Snippets 4 and 7 are moderately complex string and float algorithms, respectively. I don't differentiate between them.)
