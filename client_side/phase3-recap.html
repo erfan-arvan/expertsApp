@@ -2308,7 +2308,7 @@ function togglePhaseSection() {
   const el = document.getElementById('scroll-trigger-element');
   const content = document.getElementById("instructions-content");
   const button = document.getElementById("instructions-content-btn");
-  if (content.style.display !== "none" && window.scrollY >= 110) {
+  if (content.style.display !== "none" && window.scrollY >= 200) {
     el.classList.add('visible');
     content.style.display = "none";
     button.textContent = "Show";
