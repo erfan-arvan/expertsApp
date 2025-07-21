@@ -1846,7 +1846,7 @@ This suggests that while he found it conceptually challenging, he still viewed i
       const dynamicSnippetNum = snippetOrder ? snippetOrder.indexOf(originalSnippetNumber) + 1 : originalSnippetNumber;
       return text
         .replaceAll(`Snippet ${originalSnippetNumber}`, `Snippet ${dynamicSnippetNum}`)
-        .replace(/\b(Oscar|Martin|Nadeeshan)\b/g, name => name.toLowerCase() === username.toLowerCase() ? 'you' : name);
+        .replace(/\b(Oscar|Martin|Nadeeshan)\b/g, name => name.toLowerCase() === username.toLowerCase() ? `${name} (you)` : name);
     }
 
 
@@ -1915,6 +1915,11 @@ function personalize(text, username, snippetMap) {
         }
     }
 
+function markCurrentUserName(text, username) {
+  return text.replace(/\b(Oscar|Martin|Nadeeshan)\b/g, name =>
+    name.toLowerCase() === username.toLowerCase() ? `${name} (you)` : name
+  );
+}
 
     function getRound2Response(i) {
         const key = `round2_response_${i}`;
@@ -1936,7 +1941,7 @@ function personalize(text, username, snippetMap) {
         container.innerHTML = `
             <h3 style="margin-bottom: 10px;">Disagreement ${index + 1}</h3>
             <div class="disagreement-text" style="margin-bottom: 20px;">
-                ${personalize(entry.text, username, localSnippets)}
+                ${markCurrentUserName(personalize(entry.text, username, localSnippets), username)}
             </div>
         `;
 
