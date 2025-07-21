@@ -717,7 +717,7 @@ a:hover {
 
 /* Collapsible section — scrollable */
 .phase-section {
-  max-height: 200px; /* scroll limit */
+  /* max-height: 200px; */
   overflow-y: auto;
   padding: 10px 20px;
   display: none; /* Hidden by default */
@@ -2327,7 +2327,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (!isResizing) return;
 
     const newHeight = e.clientY - section.getBoundingClientRect().top;
-    const clampedHeight = Math.max(newHeight, 150);
+    const clampedHeight = Math.max(newHeight, 50);
     section.style.height = clampedHeight + 'px';
     localStorage.setItem('phaseSectionHeight', section.style.height);
   });
