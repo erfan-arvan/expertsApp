@@ -2310,13 +2310,13 @@ window.addEventListener('scroll', function () {
   const button = document.getElementById("instructions-content-btn");
   const contentRanking = document.getElementById('phase-section-content');
 
-  if (content.style.display !== "none" && window.scrollY >= 200) {
+  if (window.scrollY >= 200) {
     el.classList.add('visible');
     // content.style.display = "none";
     // button.textContent = "Show";
   }
 
-  if (content.style.display === "none" && window.scrollY >= 70) {
+  if (window.scrollY >= 70) {
     el.classList.add('visible');
     // content.style.display = "none";
     // button.textContent = "Show";
