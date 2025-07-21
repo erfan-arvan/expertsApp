@@ -2073,21 +2073,12 @@ function attachAutosaveListeners() {
         const q3 = document.getElementById('q3').value.trim();
 
         saveRound2Response(index, { q1, q2, q3 });
-        console.log(`✅ Autosaved round2_response_${index}:`, { q1, q2, q3 });
-
-        if (areAllDisagreementsAnswered()) {
-          sessionStorage.setItem("round2-phase3-complete", "true");
-          localStorage.setItem("round2-phase3-complete", "true");
-        } else {
-          sessionStorage.setItem("round2-phase3-complete", "false");
-          localStorage.setItem("round2-phase3-complete", "false");
-        }
+        debouncedSaveToServer(); // ✅ prevent flooding
       });
-    } else {
-      console.warn(`⚠️ Could not find #${id} — not yet in DOM`);
     }
   });
 }
+
 
   </script>
 
