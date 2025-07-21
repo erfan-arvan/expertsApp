@@ -753,14 +753,32 @@ a:hover {
 }
 
 #phase2 {
-  resize: vertical;
-  overflow: auto;
-  /* min-height: 150px; */
+  height: 300px;
+  min-height: 100px;
   max-height: 90vh;
-  border: 1px solid #ccc; /* optional, visual cue */
-  padding: 10px;
+  overflow: auto;
+  position: relative;
+  border: 1px solid #ccc;
 }
 
+#phase2-section {
+  position: relative;
+  height: 300px;
+  min-height: 150px;
+  max-height: 90vh;
+  overflow: auto;
+  border: 1px solid #ccc;
+}
+
+#phase2-resize-handle {
+  height: 10px;
+  background: #ddd;
+  cursor: ns-resize;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
 
 
   </style>
@@ -783,15 +801,15 @@ a:hover {
   <a href="review-recap.html" class="phase-link disabled" id="link-review">Review & Submit</a>
 </div>
 <div id="scroll-trigger-element">
-  <div id="phase2" class="phase-bar">
+  <div id="phase2-section" class="phase-bar">
     <div class="phase-header">
       <span class="phase-title">📌 Need to revisit the rankings and reasoning? Click "Show" to view.</span>
       <button onclick="togglePhaseSection()" class="toggle-btn">Show</button>
     </div>
     <div id="phase-section-content" class="phase-section">
       <p>This is the collapsible content for Phase 3.</p>
-      <p>You can add more lines here...</p>
     </div>
+    <div id="resize-handle"></div>
   </div>
 </div>
 
@@ -2334,6 +2352,41 @@ window.addEventListener('scroll', function () {
   } else if (window.getComputedStyle(contentRanking).display === "none") {
     el.classList.remove('visible');
   }
+});
+
+</script>
+
+<script>
+
+const section = document.getElementById('phase2-section');
+const handle = document.getElementById('phase2-resize-handle');
+
+// 🔁 Restore saved height
+const savedHeight = localStorage.getItem('phase2Height');
+if (savedHeight) {
+  section.style.height = savedHeight;
+}
+
+let isResizing = false;
+
+handle.addEventListener('mousedown', () => {
+  isResizing = true;
+  document.body.style.cursor = 'ns-resize';
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (!isResizing) return;
+  const newHeight = e.clientY - section.getBoundingClientRect().top;
+  const clampedHeight = Math.max(newHeight, 150);
+  section.style.height = clampedHeight + 'px';
+
+  // 💾 Save height
+  localStorage.setItem('phase2Height', section.style.height);
+});
+
+document.addEventListener('mouseup', () => {
+  isResizing = false;
+  document.body.style.cursor = '';
 });
 
 
