@@ -2063,6 +2063,15 @@ function personalize(text, username, snippetMap) {
   </script>
 
   <script>
+
+    function debounce(fn, delay = 500) {
+  let timeoutId;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(...args), delay);
+  };
+}
+
 function attachAutosaveListeners() {
   ['q1', 'q2', 'q3'].forEach(id => {
     const textarea = document.getElementById(id);
