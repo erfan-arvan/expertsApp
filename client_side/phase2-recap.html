@@ -993,7 +993,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 let phase2MarkedComplete = false;
 
 window.addEventListener('scroll', () => {
-  if (!phase2MarkedComplete && window.scrollY >= 100) {
+  if (!phase2MarkedComplete && window.scrollY >= 200) {
     localStorage.setItem("round2-phase2-complete", "true");
     sessionStorage.setItem("round2-phase2-complete", "true");
     phase2MarkedComplete = true; // prevent duplicate writes
