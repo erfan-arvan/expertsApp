@@ -752,6 +752,15 @@ a:hover {
   pointer-events: auto;
 }
 
+#scroll-trigger-element {
+  resize: vertical;
+  overflow: auto;
+  min-height: 100px;
+  max-height: 90vh; /* optional, to prevent it from going off screen */
+  border: 1px solid #ccc; /* optional, makes it look resizable */
+}
+
+
   </style>
 </head>
 <body>
@@ -772,16 +781,16 @@ a:hover {
   <a href="review-recap.html" class="phase-link disabled" id="link-review">Review & Submit</a>
 </div>
 <div id="scroll-trigger-element">
-<div class="phase-bar">
-  <div class="phase-header">
-    <span class="phase-title">📌 Need to revisit the rankings and reasoning? Click "Show" to view.</span>
-    <button onclick="togglePhaseSection()" class="toggle-btn">Show</button>
+  <div class="phase-bar">
+    <div class="phase-header">
+      <span class="phase-title">📌 Need to revisit the rankings and reasoning? Click "Show" to view.</span>
+      <button onclick="togglePhaseSection()" class="toggle-btn">Show</button>
+    </div>
+    <div id="phase-section-content" class="phase-section">
+      <p>This is the collapsible content for Phase 3.</p>
+      <p>You can add more lines here...</p>
+    </div>
   </div>
-  <div id="phase-section-content" class="phase-section">
-    <p>This is the collapsible content for Phase 3.</p>
-    <p>You can add more lines here...</p>
-  </div>
-</div>
 </div>
 
 
