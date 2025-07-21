@@ -2312,14 +2312,14 @@ window.addEventListener('scroll', function () {
 
   if (content.style.display !== "none" && window.scrollY >= 200) {
     el.classList.add('visible');
-    content.style.display = "none";
-    button.textContent = "Show";
+    // content.style.display = "none";
+    // button.textContent = "Show";
   }
 
   if (content.style.display === "none" && window.scrollY >= 70) {
     el.classList.add('visible');
-    content.style.display = "none";
-    button.textContent = "Show";
+    // content.style.display = "none";
+    // button.textContent = "Show";
   } else if (window.getComputedStyle(contentRanking).display === "none") {
     el.classList.remove('visible');
   }
