@@ -789,7 +789,7 @@ a:hover {
 <div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <h2 style="margin: 0;">Phase 3: Reflect on Expert Disagreements</h2>
-    <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ffffff; border: none; cursor: pointer; color: #222; border: solid;">Hide</button>
+    <button id="instructions-content-btn" onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ffffff; border: none; cursor: pointer; color: #222; border: solid;">Hide</button>
   </div>
 
   <div id="instructions-content" style="margin-top: 15px;">
@@ -2308,6 +2308,13 @@ function togglePhaseSection() {
   const el = document.getElementById('scroll-trigger-element');
   if (window.scrollY >= 70) {
     el.classList.add('visible');
+    const content = document.getElementById("instructions-content");
+    const button = document.getElementById("instructions-content-btn");
+
+    if (content.style.display !== "none") {
+      content.style.display = "none";
+      button.textContent = "Show";
+    }
   } else {
     el.classList.remove('visible');
   }
