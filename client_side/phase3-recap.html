@@ -1772,39 +1772,39 @@ function renderParticipantRankings() {
       {
         snippet: 3,
         text: `Snippet 3 (isMachineTypeDefined) appears to be a point of disagreement among the experts.
-* Oscar ranked it as one of the easiest (Position 1), describing it as having straightforward logic. He noted that the presence of nested if statements or loops did not make it harder to understand. However, in his detailed comments, he did mention that it was unclear what a "synthetic field" is, and that the snippet might be harder to understand for someone unfamiliar with the constants used.
-* Nadeeshan placed it in Position 4, stating that it was relatively hard to understand due to unfamiliarity with CoffMachineType. He emphasized that the snippet needs more context to be understood, and highlighted an unusual use of a getter with an argument — specifically pointing to a line where null is passed, which he found unnecessary and confusing.
-* Martin, who placed it in Position 6, noted that the method required bottom-up reasoning, meaning it was necessary to carefully examine each line to figure out what the method was doing. He pointed to the use of Java’s reflective features and the unclear nature of the type variable (possibly representing a non-standard enumeration) as contributing factors to its complexity. He also remarked that the overall purpose of the method was not easily discernible from the code alone.`
+<br>*Oscar ranked it as one of the easiest (Position 1), describing it as having straightforward logic. He noted that the presence of nested if statements or loops did not make it harder to understand. However, in his detailed comments, he did mention that it was unclear what a "synthetic field" is, and that the snippet might be harder to understand for someone unfamiliar with the constants used.
+<br>*Nadeeshan placed it in Position 4, stating that it was relatively hard to understand due to unfamiliarity with CoffMachineType. He emphasized that the snippet needs more context to be understood, and highlighted an unusual use of a getter with an argument — specifically pointing to a line where null is passed, which he found unnecessary and confusing.
+<br>*Martin, who placed it in Position 6, noted that the method required bottom-up reasoning, meaning it was necessary to carefully examine each line to figure out what the method was doing. He pointed to the use of Java’s reflective features and the unclear nature of the type variable (possibly representing a non-standard enumeration) as contributing factors to its complexity. He also remarked that the overall purpose of the method was not easily discernible from the code alone.`
       },
       {
         snippet: 2,
         text: `Snippet 2 (isRemote) appears to be a point of partial disagreement among the experts.
-* Nadeeshan considers it easy to understand and places it in the easiest position, alongside Snippet 1. He believes it has a meaningful method name, clear internal method invocations, and a straightforward switch statement.
-* Oscar also finds the snippet relatively easy, but slightly more difficult than Snippet 1 (isValidProjectName). He expressed uncertainty about the meaning of isFilesystemPath and the use of the URI scheme, stating:
+<br>*Nadeeshan considers it easy to understand and places it in the easiest position, alongside Snippet 1. He believes it has a meaningful method name, clear internal method invocations, and a straightforward switch statement.
+<br>*Oscar also finds the snippet relatively easy, but slightly more difficult than Snippet 1 (isValidProjectName). He expressed uncertainty about the meaning of isFilesystemPath and the use of the URI scheme, stating:
 “I am not familiar with a URI's scheme and why implementing that logic (in Snippet 2) is enough to check if it is remote.”
-* Martin also places Snippet 2 in Position 1 (easiest) and describes it as generally clear. He notes:
+<br>*Martin also places Snippet 2 in Position 1 (easiest) and describes it as generally clear. He notes:
 “There are some subtleties here (how do we know that 'jar' and 'file' are the only URI schemes that are not remote? I think that's domain knowledge...), but overall the purpose is clear and easy to understand from the code's structure.” However, unlike Nadeeshan and Oscar, Martin ranked Snippet 1 slightly lower, placing it in Position 2, indicating that he finds Snippet 2 just a bit easier due to its shorter and simpler set of rules.`
       },
       {
         snippet: 7,
         text: `Snippet 7 (lowestPositiveRoot) also caused disagreement among the experts.
-* Martin considers it moderately difficult and placed it in the middle (Position 4), grouped with Snippet 4. He explained:
+<br>*Martin considers it moderately difficult and placed it in the middle (Position 4), grouped with Snippet 4. He explained:
 “These two snippets are moderately complex string and float algorithms, respectively. I don't differentiate between them, since both are tricky to get right but are doing something pretty well understood.”
 He also noted that Snippet 7 “calls back to grade school math pretty aggressively (e.g., through naming its parameters a, b, and c), and that makes it easier to understand the overall purpose by recognizing the quadratic formula. The swap block (lines 10–14) is also an easily recognizable pattern to swap via a temporary variable. Overall, then, this is relatively straightforward.”
-* Oscar placed this snippet slightly earlier (Position 3) and commented:
+<br>*Oscar placed this snippet slightly earlier (Position 3) and commented:
 “Easy after remembering the formula; logic is clear with basic math review.”
-* Nadeeshan, however, ranked Snippet 7 as the most difficult (Position 8). He found the method name misleading and the logic unclear, even after testing it with dummy values. He wrote:
+<br>*Nadeeshan, however, ranked Snippet 7 as the most difficult (Position 8). He found the method name misleading and the logic unclear, even after testing it with dummy values. He wrote:
 “Snippet 7’s logic is in contradiction with the method name. I thought it returns the lowest positive root from three numbers, but line 2 is unclear.”`
       },
       {
         snippet: 5,
         text: `Snippet 5 (deleteRecursively) is another point of disagreement among the experts.
-* Oscar placed it in the easiest position (Position 1). He stated that he is “familiar with the visitor pattern” and that “identifiers help clarify”. He described the snippet as having straightforward logic and noted that it was hard for him to distinguish between Snippets 1, 3, and 5 in terms of comprehensibility, as all seemed similarly clear to him.
-* Nadeeshan, who placed it in Position 6, described it as:
+<br>*Oscar placed it in the easiest position (Position 1). He stated that he is “familiar with the visitor pattern” and that “identifiers help clarify”. He described the snippet as having straightforward logic and noted that it was hard for him to distinguish between Snippets 1, 3, and 5 in terms of comprehensibility, as all seemed similarly clear to him.
+<br>*Nadeeshan, who placed it in Position 6, described it as:
 “Harder due to unclear postVisitDirectory. Assumes dir is a Path object passed from FileVisitor.”
 However, he also acknowledged that “Snippet 5 has clear logic.”
 This suggests that while the overall intent was understandable, specific implementation details (e.g., method assumptions and API context) made it more difficult for him.
-* Martin placed Snippet 5 in Position 5 and offered a nuanced perspective:
+<br>*Martin placed Snippet 5 in Position 5 and offered a nuanced perspective:
 “This was easy for me to understand, but it required domain-specific knowledge of how Java handles file system operations that I do have: I immediately recognized the structure of the walkFileTree call with the anonymous visitor, and knew that I only needed to look at the names of the overridden methods and their bodies (i.e., lines 8 and 13) to figure out what the method does.”
 He also grouped this snippet with Snippets 4 and 7, noting:
 “These three snippets are actually pretty similar: all are implementations of some kind of simple specification that's a bit tricky to get right in practice.”`
@@ -1812,13 +1812,13 @@ He also grouped this snippet with Snippets 4 and 7, noting:
       {
         snippet: 8,
         text: `There is a small disagreement among the experts regarding the ranking of Snippet 8 (atan2).
-* Nadeeshan, unlike the others who placed this snippet in Position 8 (hardest), ranked it in Position 5. He considered it to be easier to understand than Snippets 6 (encodedLength) and 7 (lowestPositiveRoot).
+<br>*Nadeeshan, unlike the others who placed this snippet in Position 8 (hardest), ranked it in Position 5. He considered it to be easier to understand than Snippets 6 (encodedLength) and 7 (lowestPositiveRoot).
 However, he also acknowledged its difficulty, describing it as:
 “Difficult due to math background required and unclear method purpose.”
 This suggests that while he found it conceptually challenging, he still viewed it as more comprehensible than snippets that involved domain-specific programming knowledge or misleading logic.
-* Oscar and Martin both ranked Snippet 8 as the most difficult (Position 8). Oscar noted:
+<br>*Oscar and Martin both ranked Snippet 8 as the most difficult (Position 8). Oscar noted:
 “For obvious reasons, atan2 is harder to understand: I don't remember how atan works, the code contains cryptic instructions, and I don't know what atanUnchecked is doing — also, the identifiers here don't help.”
-* Martin shared a similar view, stating that the snippet requires two kinds of domain-specific knowledge — numerical methods and trigonometry — as opposed to just one in Snippet 6, which focuses on encoding.`
+<br>*Martin shared a similar view, stating that the snippet requires two kinds of domain-specific knowledge — numerical methods and trigonometry — as opposed to just one in Snippet 6, which focuses on encoding.`
       }
     ];
 
