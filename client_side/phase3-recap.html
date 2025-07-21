@@ -1485,22 +1485,22 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 
 <script>
 async function saveToServer() {
-  const name = sessionStorage.getItem('participantName') || getLocalStorage('participantName') || 'Anonymous';
-  const username = getLocalStorage('username') || 'anonymous';
+  const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
+  const username = localStorage.getItem('username') || 'anonymous';
 
   // Phase 1 data
   const phase1 = {};
   for (let i = 1; i <= 8; i++) {
-    const summary = sessionStorage.getItem(`summary${i}`) || getLocalStorage(`summary${i}`) || '';
-    const comp = sessionStorage.getItem(`compSummary${i}`) || getLocalStorage(`compSummary${i}`) || '';
+    const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
+    const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
     phase1[`snippet${i}`] = { summary, comprehensibility: comp };
   }
 
   // Phase 2 & 3 data
   let phase2 = {}, phase3 = {};
   try {
-    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || getLocalStorage('phase3_ranking') || '{}');
-    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || getLocalStorage('phase3_reasoning') || '{}');
+    phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
+    phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
   } catch (e) {
     console.warn("⚠️ Error parsing phase2 or phase3 data", e);
   }
@@ -1523,7 +1523,7 @@ async function saveToServer() {
   const phaseCompletion = {};
   for (let i = 1; i <= 5; i++) {
     const key = `round2-phase${i}-complete`;
-    phaseCompletion[key] = sessionStorage.getItem(key) || getLocalStorage(key) || 'false';
+    phaseCompletion[key] = sessionStorage.getItem(key) || localStorage.getItem(key) || 'false';
   }
 
   // Other flags
