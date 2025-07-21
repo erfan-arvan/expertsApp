@@ -2358,36 +2358,41 @@ window.addEventListener('scroll', function () {
 
 <script>
 
-const section = document.getElementById('phase2-section');
-const handle = document.getElementById('phase2-resize-handle');
+window.addEventListener('DOMContentLoaded', () => {
+  const section = document.getElementById('phase2-section');
+  const handle = document.getElementById('phase2-resize-handle');
 
-// 🔁 Restore saved height
-const savedHeight = localStorage.getItem('phase2Height');
-if (savedHeight) {
-  section.style.height = savedHeight;
-}
+  if (!section || !handle) {
+    console.warn("Resizable elements not found");
+    return;
+  }
 
-let isResizing = false;
+  const savedHeight = localStorage.getItem('phase2Height');
+  if (savedHeight) {
+    section.style.height = savedHeight;
+  }
 
-handle.addEventListener('mousedown', () => {
-  isResizing = true;
-  document.body.style.cursor = 'ns-resize';
+  let isResizing = false;
+
+  handle.addEventListener('mousedown', () => {
+    isResizing = true;
+    document.body.style.cursor = 'ns-resize';
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isResizing) return;
+    const newHeight = e.clientY - section.getBoundingClientRect().top;
+    const clampedHeight = Math.max(newHeight, 150);
+    section.style.height = clampedHeight + 'px';
+    localStorage.setItem('phase2Height', section.style.height);
+  });
+
+  document.addEventListener('mouseup', () => {
+    isResizing = false;
+    document.body.style.cursor = '';
+  });
 });
 
-document.addEventListener('mousemove', (e) => {
-  if (!isResizing) return;
-  const newHeight = e.clientY - section.getBoundingClientRect().top;
-  const clampedHeight = Math.max(newHeight, 150);
-  section.style.height = clampedHeight + 'px';
-
-  // 💾 Save height
-  localStorage.setItem('phase2Height', section.style.height);
-});
-
-document.addEventListener('mouseup', () => {
-  isResizing = false;
-  document.body.style.cursor = '';
-});
 
 
 </script>
