@@ -131,7 +131,7 @@ const participantRankings = [
       {
         id: 3,
         name: "Martin",
-        html: `<div class="participant-section">
+        html: `<div class="participant-section-wide">
         <h3>Martin</h3>
         <div class="ranking-row">
           <div class="ranking-slot" style="position: relative;">
