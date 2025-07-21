@@ -2166,19 +2166,14 @@ This suggests that while he found it conceptually challenging, he still viewed i
 
 <script>
   function togglePhaseSection() {
-    const content = document.getElementById("phase-section-content");
-    const button = document.querySelector(".phase-wrapper .toggle-btn");
-
-    if (content.style.display === "none") {
-      content.style.display = "block";
-      button.textContent = "Hide";
-    } else {
-      content.style.display = "none";
-      button.textContent = "Show";
-    }
+    const section = document.getElementById('phase-section-content');
+    const button = document.querySelector('.toggle-btn');
+    const isVisible = section.style.display === 'block';
+    section.style.display = isVisible ? 'none' : 'block';
+    button.textContent = isVisible ? 'Show' : 'Hide';
   }
-
 </script>
+
 <footer
   style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
   Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
