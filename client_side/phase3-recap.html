@@ -740,6 +740,18 @@ a:hover {
 body {
   margin-top: 140px;
 }
+
+#scroll-trigger-element {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+#scroll-trigger-element.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
   </style>
 </head>
 <body>
@@ -2212,6 +2224,17 @@ function togglePhaseSection() {
 
 </script>
 
+<script>
+  window.addEventListener('scroll', function () {
+  const el = document.getElementById('scroll-trigger-element');
+  if (window.scrollY >= 200) {
+    el.classList.add('visible');
+  } else {
+    el.classList.remove('visible');
+  }
+});
+
+</script>
 <footer
   style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
   Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
