@@ -682,6 +682,41 @@ a:hover {
   justify-content: space-between;
   margin-top: 20px;
 }
+
+/* Offset to account for sticky status bar height (50px) + optional padding */
+#fixed-offset-container {
+  margin-top: 60px; 
+}
+
+.phase-wrapper {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 0 0 20px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.phase-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggle-btn {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  border: 1px solid #aaa;
+  cursor: pointer;
+  color: #222;
+}
+
+.phase-section {
+  margin-top: 15px;
+  display: none;
+}
+
   </style>
 </head>
 <body>
@@ -701,6 +736,19 @@ a:hover {
   <a href="phase5-recap.html" class="phase-link disabled" id="link-phase5">Phase 5</a>
   <a href="review-recap.html" class="phase-link disabled" id="link-review">Review & Submit</a>
 </div>
+<div id="fixed-offset-container">
+  <div class="phase-wrapper">
+    <div class="phase-header">
+      <h2>Phase 3: Rankings and Reasonings</h2>
+      <button onclick="togglePhaseSection()" class="toggle-btn">Show</button>
+    </div>
+    <div id="phase-section-content" class="phase-section">
+      <p>This is the collapsible content for Phase 3.</p>
+    </div>
+  </div>
+  <!-- Your existing content starts here -->
+</div>
+
 
 
 <div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
