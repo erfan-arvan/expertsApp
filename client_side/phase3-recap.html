@@ -2064,7 +2064,8 @@ function personalize(text, username, snippetMap) {
 
   <script>
 
-    function debounce(fn, delay = 500) {
+// Debounce utility
+function debounce(fn, delay = 1000) {
   let timeoutId;
   return (...args) => {
     clearTimeout(timeoutId);
@@ -2072,6 +2073,10 @@ function personalize(text, username, snippetMap) {
   };
 }
 
+// Create the debounced version once
+const debouncedSaveToServer = debounce(saveToServer, 1000);
+
+// Attach autosave listeners
 function attachAutosaveListeners() {
   ['q1', 'q2', 'q3'].forEach(id => {
     const textarea = document.getElementById(id);
@@ -2082,11 +2087,15 @@ function attachAutosaveListeners() {
         const q3 = document.getElementById('q3').value.trim();
 
         saveRound2Response(index, { q1, q2, q3 });
-        debouncedSaveToServer(); // ✅ prevent flooding
+        debouncedSaveToServer(); // ✅ debounced save
       });
+    } else {
+      console.warn(`❗ Missing textarea: #${id}`);
     }
   });
 }
+
+
 
 
   </script>
