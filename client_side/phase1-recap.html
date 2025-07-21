@@ -462,6 +462,11 @@ async function saveToServer() {
   console.log('✅ Round 2 payload sent to server:', payload);
 }
 
+  window.addEventListener('beforeunload', function (e) {
+    saveToServer();
+  });
+
+
 </script>
 
   <script>
