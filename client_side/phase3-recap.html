@@ -765,6 +765,7 @@ a:hover {
   background: #ccc;
   cursor: ns-resize;
   position: relative;
+  display: none;
 }
 
 
@@ -2352,39 +2353,30 @@ window.addEventListener('scroll', function () {
 
 <script>
 
-window.addEventListener('DOMContentLoaded', () => {
+function togglePhaseSection() {
   const section = document.getElementById('phase-section-content');
   const handle = document.getElementById('phase2-resize-handle');
+  const button = document.querySelector('.toggle-btn');
 
-  if (!section || !handle) {
-    console.warn("Resizable elements not found");
-    return;
-  }
+  const isVisible = section.style.display === 'block';
 
-  const savedHeight = localStorage.getItem('phaseSectionHeight');
-  if (savedHeight) section.style.height = savedHeight;
+  // Toggle content
+  section.style.display = isVisible ? 'none' : 'block';
 
-  let isResizing = false;
+  // Show/hide handler only if content is visible
+  handle.style.display = isVisible ? 'none' : 'block';
 
-  handle.addEventListener('mousedown', () => {
-    isResizing = true;
-    document.body.style.cursor = 'ns-resize';
-  });
+  // Adjust page layout
+  const phaseBar = document.querySelector('.phase-bar');
+  const body = document.body;
+  setTimeout(() => {
+    const extraHeight = phaseBar.offsetHeight;
+    body.style.marginTop = `${extraHeight + 50}px`;
+  }, 0);
 
-  document.addEventListener('mousemove', (e) => {
-    if (!isResizing) return;
-
-    const newHeight = e.clientY - section.getBoundingClientRect().top;
-    const clampedHeight = Math.max(newHeight, 150);
-    section.style.height = clampedHeight + 'px';
-    localStorage.setItem('phaseSectionHeight', section.style.height);
-  });
-
-  document.addEventListener('mouseup', () => {
-    isResizing = false;
-    document.body.style.cursor = '';
-  });
-});
+  // Update button label
+  button.textContent = isVisible ? 'Show' : 'Hide';
+}
 
 
 
