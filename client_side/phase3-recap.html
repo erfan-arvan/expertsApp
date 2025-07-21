@@ -1842,30 +1842,35 @@ This suggests that while he found it conceptually challenging, he still viewed i
 
 
 
-    function personalize(text, username, snippetMap) {
-    const nameMap = {
-        'Oscar': 'Oscar',
-        'Martin': 'Martin',
-        'Nadeeshan': 'Nadeeshan'
-    };
-
-    // Replace name with "you" if username matches
-    Object.keys(nameMap).forEach(name => {
+function personalize(text, username, snippetMap) {
+    // Replace expert name with "you"
+    ['Oscar', 'Martin', 'Nadeeshan'].forEach(name => {
         const regex = new RegExp(`\\b${name}\\b`, 'g');
         if (username.toLowerCase() === name.toLowerCase()) {
-        text = text.replace(regex, 'you');
+            text = text.replace(regex, 'you');
         }
     });
 
-    // Replace "Snippet X" with local snippet number
+    // Replace "Snippet X (name)" and "Snippet X" with user's visible number
     for (let originalId = 1; originalId <= 8; originalId++) {
         const localId = snippetMap[originalId];
-        const regex = new RegExp(`Snippet ${originalId}\\b`, 'g');
-        text = text.replace(regex, `Snippet ${localId}`);
+
+        // First replace "Snippet X (functionName)"
+        text = text.replace(
+            new RegExp(`Snippet ${originalId} \\((.*?)\\)`),
+            `Snippet ${localId} ($1)`
+        );
+
+        // Then replace remaining "Snippet X" not followed by a parenthesis
+        text = text.replace(
+            new RegExp(`Snippet ${originalId}(?! \\()`, 'g'),
+            `Snippet ${localId}`
+        );
     }
 
     return text;
-    }
+}
+
 
 
     function getLocalSnippetMapping() {
@@ -1878,7 +1883,6 @@ This suggests that while he found it conceptually challenging, he still viewed i
             parsed.forEach((originalId, localIndex) => {
             mapping[originalId] = localIndex + 1; // original ID -> local snippet number
             });
-            console.log("Mapping "+ mapping);
             return mapping;
         } catch (e) {
             console.error("Failed to parse snippetOrder:", e);
