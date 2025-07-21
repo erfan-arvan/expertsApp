@@ -2320,7 +2320,7 @@ window.addEventListener('scroll', function () {
     el.classList.add('visible');
     content.style.display = "none";
     button.textContent = "Show";
-  } else if (contentRanking.style.display !== "none") {
+  } else if (window.getComputedStyle(contentRanking).display !== "none") {
     el.classList.remove('visible');
   }
 });
