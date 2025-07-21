@@ -2306,15 +2306,16 @@ function togglePhaseSection() {
 <script>
   window.addEventListener('scroll', function () {
   const el = document.getElementById('scroll-trigger-element');
-  if (window.scrollY >= 70) {
+  const content = document.getElementById("instructions-content");
+  const button = document.getElementById("instructions-content-btn");
+  if (content.style.display !== "none" && window.scrollY >= 110) {
     el.classList.add('visible');
-    const content = document.getElementById("instructions-content");
-    const button = document.getElementById("instructions-content-btn");
-
-    if (content.style.display !== "none") {
-      content.style.display = "none";
-      button.textContent = "Show";
-    }
+    content.style.display = "none";
+    button.textContent = "Show";
+  }  if (content.style.display === "none" && window.scrollY >= 70) {
+    el.classList.add('visible');
+    content.style.display = "none";
+    button.textContent = "Show";
   } else {
     el.classList.remove('visible');
   }
