@@ -1878,6 +1878,7 @@ This suggests that while he found it conceptually challenging, he still viewed i
             parsed.forEach((originalId, localIndex) => {
             mapping[originalId] = localIndex + 1; // original ID -> local snippet number
             });
+            console.log("Mapping "+ mapping);
             return mapping;
         } catch (e) {
             console.error("Failed to parse snippetOrder:", e);
