@@ -1856,32 +1856,20 @@ function personalize(text, username, snippetMap) {
         }
     });
 
-    // Replace "Snippet X (name)" and "Snippet X" with user's visible number
-    for (let originalId = 1; originalId <= 8; originalId++) {
+    // Replace all "Snippet X (functionName)" and "Snippet X" in one pass
+    text = text.replace(/Snippet (\d+)(?: \((.*?)\))?/g, (match, origId, funcName) => {
+        const originalId = parseInt(origId);
         const localId = snippetMap[originalId];
+
         if (!localId) {
-            console.warn(`⚠️ Original snippet ${originalId} not found in mapping.`);
-            continue;
+            console.warn(`⚠️ Unknown original snippet: ${originalId}`);
+            return match; // leave unchanged
         }
 
-        const before = text;
-
-        // First replace "Snippet X (functionName)"
-        text = text.replace(
-            new RegExp(`Snippet ${originalId} \\((.*?)\\)`, 'g'),
-            `Snippet ${localId} ($1)`
-        );
-
-        // Then replace remaining "Snippet X" not followed by a parenthesis
-        text = text.replace(
-            new RegExp(`Snippet ${originalId}(?! \\()`, 'g'),
-            `Snippet ${localId}`
-        );
-
-        if (text !== before) {
-            console.log(`🔁 Replaced Snippet ${originalId} ➝ Snippet ${localId}`);
-        }
-    }
+        const result = funcName ? `Snippet ${localId} (${funcName})` : `Snippet ${localId}`;
+        console.log(`🔁 ${match} ➝ ${result}`);
+        return result;
+    });
 
     console.log("✅ Final personalized text:", text);
     return text;
