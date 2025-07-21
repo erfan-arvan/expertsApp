@@ -2022,8 +2022,10 @@ function personalize(text, username, snippetMap) {
             index--;
             render();
         }
-        document.getElementById('instructions-box').scrollIntoView({ behavior: 'smooth' });
+        const el = document.getElementById('disagreement-box');
+        const top = el.getBoundingClientRect().top + window.scrollY - 120;
 
+        window.scrollTo({ top, behavior: 'smooth' });
     }
 
 
