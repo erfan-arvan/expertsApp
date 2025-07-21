@@ -2003,8 +2003,11 @@ function personalize(text, username, snippetMap) {
         } else {
             window.location.href = 'phase4-recap.html';
         }
-            document.getElementById('instructions-box').scrollIntoView({ behavior: 'smooth' });
-    }
+        const el = document.getElementById('instructions-box');
+        const top = el.getBoundingClientRect().top + window.scrollY - 50;
+
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
 
 
     function prev() {
