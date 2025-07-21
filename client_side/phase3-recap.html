@@ -683,23 +683,45 @@ a:hover {
   margin-top: 20px;
 }
 
-/* New: Second fixed bar just under it */
+/* Container fixed below status bar */
 .phase-bar {
   position: fixed;
-  top: 50px; /* directly under status-bar */
+  top: 50px;
   left: 0;
   right: 0;
+  height: 200px; /* total height, including header + content */
   background: #fff;
   z-index: 999;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  padding: 15px 20px;
   border-bottom: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Header (not scrollable) */
 .phase-header {
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 10px 20px;
+}
+
+/* Scrollable section */
+.phase-section {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 20px;
+  display: none; /* toggle visibility */
+}
+
+/* Optional scrollbar styling */
+.phase-section::-webkit-scrollbar {
+  width: 6px;
+}
+.phase-section::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
 }
 
 .toggle-btn {
@@ -710,12 +732,6 @@ a:hover {
   border: 1px solid #aaa;
   cursor: pointer;
   color: #222;
-}
-
-.phase-section {
-  margin-top: 10px;
-  display: none;
-  overflow-y: auto;
 }
   </style>
 </head>
