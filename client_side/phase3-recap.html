@@ -844,17 +844,7 @@ a:hover {
   
   <div class="preview-area" id="previewArea"></div>
 
-  <div class="content-wrapper" style="margin-bottom: 0 !important;">
-    <div class="disagreement-box">
-        <p><strong>Questions</strong></p>
-    </div>
-  
-    <div class="right-panel">
-      <p><strong>Questions</strong></p>
-    </div>
-  </div>
-
-  <div class="content-wrapper" style="margin-top: 0 !important;">
+  <div class="content-wrapper">
     <div id="disagreement-box" class="disagreement-box">
       <!-- Disagreement content here -->
     </div>
@@ -1924,10 +1914,12 @@ function personalize(text, username, snippetMap) {
         const username = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'anonymous';
 
         container.innerHTML = `
+            <h3 style="margin-bottom: 10px;">Disagreement ${index + 1}</h3>
             <div class="disagreement-text" style="margin-bottom: 20px;">
-            ${personalize(entry.text, username, localSnippets)}
+                ${personalize(entry.text, username, localSnippets)}
             </div>
         `;
+
 
         const questionsContainer = document.getElementById('question-box');
 
