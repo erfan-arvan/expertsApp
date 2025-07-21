@@ -1180,6 +1180,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       remapSnippetReferences(participantRankings);
       renderParticipantRankings();
       render();
+      attachAutosaveListeners();
       loadCards();
       loadState();
       applyTheme();
@@ -2043,31 +2044,6 @@ function personalize(text, username, snippetMap) {
   </script>
 
   <script>
-    ['q1', 'q2', 'q3'].forEach(id => {
-  const textarea = document.getElementById(id);
-  if (textarea) {
-    textarea.addEventListener('input', () => {
-      const q1 = document.getElementById('q1').value.trim();
-      const q2 = document.getElementById('q2').value.trim();
-      const q3 = document.getElementById('q3').value.trim();
-
-      // Save response
-      saveRound2Response(index, { q1, q2, q3 });
-
-      // Optional: log for debugging
-      console.log(`✅ Autosaved round2_response_${index}:`, { q1, q2, q3 });
-
-      // Optional: live phase3 completion check
-      if (validateAllDisagreementsAnswered()) {
-        sessionStorage.setItem("round2-phase3-complete", "true");
-        localStorage.setItem("round2-phase3-complete", "true");
-      } else {
-        sessionStorage.setItem("round2-phase3-complete", "false");
-        localStorage.setItem("round2-phase3-complete", "false");
-      }
-    });
-  }
-});
 
   </script>
 
