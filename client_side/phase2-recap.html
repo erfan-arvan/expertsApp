@@ -997,6 +997,12 @@ window.addEventListener('scroll', () => {
     localStorage.setItem("round2-phase2-complete", "true");
     sessionStorage.setItem("round2-phase2-complete", "true");
     phase2MarkedComplete = true; // prevent duplicate writes
+    const continueBtn = document.getElementById('continueBtn');
+      if (continueBtn) {
+        continueBtn.style.display = 'inline-block';
+        continueBtn.style.backgroundColor = '#4CAF50';
+        continueBtn.style.animation = 'glowPulse 1.5s infinite alternate';
+      }
     console.log("✅ round2-phase2-complete marked as true due to scroll");
   }
 });
