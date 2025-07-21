@@ -2283,23 +2283,33 @@ function attachAutosaveListeners() {
 </script>
 
 <script>
-function togglePhaseSection() {
-  const section = document.getElementById('phase-section-content');
-  const button = document.querySelector('.toggle-btn');
+window.addEventListener('scroll', function () {
+  const el = document.getElementById('scroll-trigger-element');
+  const content = document.getElementById("instructions-content");
+  const button = document.getElementById("instructions-content-btn");
+  const contentRanking = document.getElementById('phase-section-content');
 
-  const isVisible = section.style.display === 'block';
-  section.style.display = isVisible ? 'none' : 'block';
+  const contentVisible = content.style.display !== "none";
+  const scrollY = window.scrollY;
 
-  // Adjust page margin when expanding/collapsing
-  const phaseBar = document.querySelector('.phase-bar');
-  const body = document.body;
-  setTimeout(() => {
-    const extraHeight = phaseBar.offsetHeight;
-    body.style.marginTop = `${extraHeight + 50}px`; // + status bar
-  }, 0);
+  const rankingVisible = window.getComputedStyle(contentRanking).display !== "none";
 
-  button.textContent = isVisible ? 'Show' : 'Hide';
-}
+  if (!rankingVisible) {
+    el.classList.remove('visible');
+    return;
+  }
+
+  const condition =
+    (contentVisible && scrollY >= 200) ||
+    (!contentVisible && scrollY >= 70);
+
+  if (condition) {
+    el.classList.add('visible');
+  } else {
+    el.classList.remove('visible');
+  }
+});
+
 
 </script>
 
@@ -2314,7 +2324,7 @@ window.addEventListener('scroll', function () {
   const scrollY = window.scrollY;
 
   // Show or hide el based on your condition
-  if (contentRanking.style.display !== "block") {
+  if (contentRanking.style.display === "none") {
     el.classList.remove('visible');
   } else {
     const condition =
