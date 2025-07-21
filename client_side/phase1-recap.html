@@ -682,8 +682,10 @@ if (snippet.responses && Array.isArray(snippet.responses)) {
         updateButtons();
       }
 
-      document.getElementById('instructions-box').scrollIntoView({ behavior: 'smooth' });
+        const el = document.getElementById('snippet-box');
+        const top = el.getBoundingClientRect().top + window.scrollY - 120;
 
+        window.scrollTo({ top, behavior: 'smooth' });
     }
 
     function prevSnippet() {
