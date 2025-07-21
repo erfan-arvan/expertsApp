@@ -1863,10 +1863,11 @@ function personalize(text, username, snippetMap) {
 
         if (!localId) {
             console.warn(`⚠️ Unknown original snippet: ${originalId}`);
-            return match; // leave unchanged
+            return match;
         }
 
-        const result = funcName ? `Snippet ${localId} (${funcName})` : `Snippet ${localId}`;
+        const link = `<a href="javascript:void(0)" onclick="show_snippet(${localId})">Snippet ${localId}</a>`;
+        const result = funcName ? `${link} (${funcName})` : link;
         console.log(`🔁 ${match} ➝ ${result}`);
         return result;
     });
