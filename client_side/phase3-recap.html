@@ -1844,9 +1844,9 @@ This suggests that while he found it conceptually challenging, he still viewed i
 
 
 function personalize(text, username, snippetMap) {
-    console.log("🔍 Initial text:", text);
-    console.log("👤 Username:", username);
-    console.log("🧭 Snippet map (original ➝ local):", snippetMap);
+    // console.log("🔍 Initial text:", text);
+    // console.log("👤 Username:", username);
+    // console.log("🧭 Snippet map (original ➝ local):", snippetMap);
 
     // Replace expert name with "you"
     ['Oscar', 'Martin', 'Nadeeshan'].forEach(name => {
@@ -1869,11 +1869,11 @@ function personalize(text, username, snippetMap) {
 
         const link = `<a href="javascript:void(0)" onclick="show_snippet(${localId})">Snippet ${localId}</a>`;
         const result = funcName ? `${link} (${funcName})` : link;
-        console.log(`🔁 ${match} ➝ ${result}`);
+        // console.log(`🔁 ${match} ➝ ${result}`);
         return result;
     });
 
-    console.log("✅ Final personalized text:", text);
+    // console.log("✅ Final personalized text:", text);
     return text;
 }
 
