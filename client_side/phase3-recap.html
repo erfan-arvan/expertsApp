@@ -754,26 +754,19 @@ a:hover {
 
 
 #phase-section-content {
-  position: fixed; /* inherit from phase-bar */
-  top: 50px;
-  left: 0;
-  right: 0;
   overflow: auto;
-  /* min-height: 50px; */
-  resize: vertical;
-  /* height: 300px; */
-  background: #fff;
+  min-height: 150px;
+  height: 300px; /* default */
+  resize: none;  /* disable built-in resizing — we use custom handle */
 }
 
 #phase2-resize-handle {
   height: 10px;
   background: #ccc;
   cursor: ns-resize;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: relative;
 }
+
 
 
 
@@ -803,12 +796,16 @@ a:hover {
       <span class="phase-title">📌 Need to revisit the rankings and reasoning? Click "Show" to view.</span>
       <button onclick="togglePhaseSection()" class="toggle-btn">Show</button>
     </div>
+
     <div id="phase-section-content" class="phase-section">
       <p>This is the collapsible content for Phase 3.</p>
     </div>
+
+    <!-- 🔧 Grip to resize #phase-section-content -->
     <div id="phase2-resize-handle"></div>
   </div>
 </div>
+
 
 
 
@@ -2364,10 +2361,8 @@ window.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  const savedHeight = localStorage.getItem('phase2Height');
-  if (savedHeight) {
-    section.style.height = savedHeight;
-  }
+  const savedHeight = localStorage.getItem('phaseSectionHeight');
+  if (savedHeight) section.style.height = savedHeight;
 
   let isResizing = false;
 
@@ -2378,10 +2373,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('mousemove', (e) => {
     if (!isResizing) return;
+
     const newHeight = e.clientY - section.getBoundingClientRect().top;
     const clampedHeight = Math.max(newHeight, 150);
     section.style.height = clampedHeight + 'px';
-    localStorage.setItem('phase2Height', section.style.height);
+    localStorage.setItem('phaseSectionHeight', section.style.height);
   });
 
   document.addEventListener('mouseup', () => {
