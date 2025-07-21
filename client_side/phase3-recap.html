@@ -683,46 +683,6 @@ a:hover {
   margin-top: 20px;
 }
 
-/* Container fixed below status bar */
-.phase-bar {
-  position: fixed;
-  top: 50px;
-  left: 0;
-  right: 0;
-  height: 200px; /* total height, including header + content */
-  background: #fff;
-  z-index: 999;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  border-bottom: 1px solid #ccc;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Header (not scrollable) */
-.phase-header {
-  flex-shrink: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-}
-
-/* Scrollable section */
-.phase-section {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px 20px;
-  display: none; /* toggle visibility */
-}
-
-/* Optional scrollbar styling */
-.phase-section::-webkit-scrollbar {
-  width: 6px;
-}
-.phase-section::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 3px;
-}
 
 .toggle-btn {
   padding: 6px 12px;
@@ -733,6 +693,36 @@ a:hover {
   cursor: pointer;
   color: #222;
 }
+
+/* This is no longer fixed height */
+.phase-bar {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  right: 0;
+  background: #fff;
+  z-index: 999;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-bottom: 1px solid #ccc;
+  transition: max-height 0.3s ease;
+}
+
+/* Static header */
+.phase-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+/* Collapsible section — scrollable */
+.phase-section {
+  max-height: 200px; /* scroll limit */
+  overflow-y: auto;
+  padding: 10px 20px;
+  display: none; /* Hidden by default */
+}
+
   </style>
 </head>
 <body>
@@ -2182,13 +2172,24 @@ This suggests that while he found it conceptually challenging, he still viewed i
 </script>
 
 <script>
-  function togglePhaseSection() {
-    const section = document.getElementById('phase-section-content');
-    const button = document.querySelector('.toggle-btn');
-    const isVisible = section.style.display === 'block';
-    section.style.display = isVisible ? 'none' : 'block';
-    button.textContent = isVisible ? 'Show' : 'Hide';
-  }
+function togglePhaseSection() {
+  const section = document.getElementById('phase-section-content');
+  const button = document.querySelector('.toggle-btn');
+
+  const isVisible = section.style.display === 'block';
+  section.style.display = isVisible ? 'none' : 'block';
+
+  // Adjust page margin when expanding/collapsing
+  const phaseBar = document.querySelector('.phase-bar');
+  const body = document.body;
+  setTimeout(() => {
+    const extraHeight = phaseBar.offsetHeight;
+    body.style.marginTop = `${extraHeight + 50}px`; // + status bar
+  }, 0);
+
+  button.textContent = isVisible ? 'Show' : 'Hide';
+}
+
 </script>
 
 <footer
