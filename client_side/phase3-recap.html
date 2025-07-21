@@ -1941,7 +1941,7 @@ function markCurrentUserName(text, username) {
         container.innerHTML = `
             <h3 style="margin-bottom: 10px;">Disagreement ${index + 1}</h3>
             <div class="disagreement-text" style="margin-bottom: 20px;">
-                ${markCurrentUserName(personalize(entry.text, username, localSnippets), username)}
+                ${personalize(entry.text, username, localSnippets)}
             </div>
         `;
 
