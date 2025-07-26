@@ -417,7 +417,30 @@ input.input-error {
   color: #333;
 }
 
-  </style>
+
+.flex-container {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+ul {
+  flex: 1;
+  padding-left: 20px;
+}
+
+.code-box {
+  flex: 1;
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 6px;
+  font-family: "Courier New", Courier, monospace;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+</style>
 </head>
 <body>
 
@@ -427,6 +450,41 @@ input.input-error {
   <p>You have been invited to share your expertise to help us conduct research aimed at making it easier for junior engineers to understand code!</p>
 
   <h3>Cut to the chase:</h3>
+
+
+  <div class="flex-container">
+  <ul>
+    <li>This study involves five experts like yourself.</li>
+    <li>Our goal is to reach an expert-determined ranking of the comprehensibility of 8 Java code snippets.</li>
+    <li>In each round (1 to 3 total), you’ll answer questions about these snippets and rank them. Each round is estimated to take less than an hour of your time.</li>
+    <li>Rounds will continue until consensus is reached, or we reach round 3.</li>
+    <li>If the experts do not reach a consensus by round 3, we will combine all submitted rankings using a statistical method to generate a single expert-informed ranking.</li>
+    <li>The entire study takes place online through our website. You will not have direct contact with other experts. The research team will receive your responses, and any responses shared with other participants will be anonymized.</li>
+    <li>We know we cannot fully compensate your valuable time and expertise with our limited research budget. As a token of appreciation, you will receive a $50 Amazon gift card.</li>
+  </ul>
+
+  <div class="code-box">
+<code>BEGIN STUDY
+
+FOR round FROM 1 TO 3
+    DISPLAY other_experts_feedback(round - 1)
+    
+    expert_completes_round()
+    // Includes:
+    // - answering questions for all 8 snippets
+    // - ranking the snippets
+
+    research_team_reviews_responses()
+
+    IF consensus_reached()
+        BREAK
+END FOR
+
+END STUDY</code>
+  </div>
+</div>
+
+
 <ul>
   <li>This study involves five experts like yourself.</li>
   <li>Our goal is to reach an expert-determined ranking of the comprehensibility of 8 Java code snippets.</li>
