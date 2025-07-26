@@ -492,17 +492,27 @@ ul {
   padding: 15px;
   border-radius: 6px;
   font-family: "Courier New", Courier, monospace;
-  line-height: 1.6;
   white-space: pre-wrap;
+  position: relative;
 }
 
-.code-line {
-  margin-left: 20px;
+.tooltip {
+  display: none;
+  position: absolute;
+  max-width: 300px;
+  background-color: #333;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-size: 14px;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-.code-box span {
-  cursor: help;
+.code-function {
   text-decoration: underline dotted;
+  cursor: pointer;
+  color: #005;
 }
 </style>
 </head>
@@ -532,41 +542,35 @@ ul {
 <div class="code-section">
   <div class="section-header">Your Workflow</div>
   <div class="code-box">
-    <code>BEGIN STUDY</code><br>
+<pre><code>
+BEGIN STUDY
 
-    <code>FOR round FROM 1 TO 3</code><br>
+FOR round FROM 1 TO 3
 
-    <div class="code-line">
-      <code>IF round == 1</code><br>
-      <div class="code-line">
-        <span title="Review each code snippet and provide a short summary, along with your assessment of how easy or difficult it is to understand.">read_and_understand_code_snippets()</span><br>
-        <span title="Answer questions to assess your understanding of the code snippets.">answer_questions_about_snippets()</span><br>
-        <span title="Rank the snippets from easiest to hardest to understand, grouping similar snippets together.">rank_snippets()</span><br>
-        <span title="Explain your reasoning behind the ranking and the groupings.">provide_reasoning_for_ranking()</span>
-      </div>
+    IF round == 1
+        <span class="code-function" data-tooltip="Review each code snippet and provide a short summary, along with your assessment of how easy or difficult it is to understand.">read_and_understand_code_snippets()</span>
+        <span class="code-function" data-tooltip="Answer questions to assess your understanding of the code snippets.">answer_questions_about_snippets()</span>
+        <span class="code-function" data-tooltip="Rank the snippets from easiest to hardest to understand, grouping similar snippets together.">rank_snippets()</span>
+        <span class="code-function" data-tooltip="Explain your reasoning behind the ranking and the groupings.">provide_reasoning_for_ranking()</span>
 
-      <br><code>IF round > 1</code><br>
-      <div class="code-line">
-        <span title="Review your own and other experts’ summaries of code snippets, along with their comprehensibility assessments.">review_other_experts_responses()</span><br>
-        <span title="Reflect on expert disagreements by reading the major differences identified by the research team, and answer a few related questions.">reflect_on_expert_disagreements()</span><br>
-        <span title="Update your ranking of the snippets, if you think it should be changed.">update_snippet_ranking()</span><br>
-        <span title="Explain your reasoning behind the new ranking and groupings, if you made any updates.">provide_reasoning_for_updated_ranking()</span>
-      </div>
+    IF round > 1
+        <span class="code-function" data-tooltip="Review your own and other experts’ summaries of code snippets, along with their comprehensibility assessments.">review_other_experts_responses()</span>
+        <span class="code-function" data-tooltip="Reflect on expert disagreements by reading the major differences identified by the research team, and answer a few related questions.">reflect_on_expert_disagreements()</span>
+        <span class="code-function" data-tooltip="Update your ranking of the snippets, if you think it should be changed.">update_snippet_ranking()</span>
+        <span class="code-function" data-tooltip="Explain your reasoning behind the new ranking and groupings, if you made any updates.">provide_reasoning_for_updated_ranking()</span>
 
-      <br><span title="Answer a few final questions to share your perspective.">answer_additional_questions()</span>
-    </div>
+    <span class="code-function" data-tooltip="Answer a few final questions to share your perspective.">answer_additional_questions()</span>
 
-    <br><code>IF consensus_reached()</code><br>
-    <div class="code-line">BREAK</div>
+    IF consensus_reached()
+        BREAK
+END FOR
 
-    <br><code>END FOR</code><br><br>
+IF NOT consensus_reached()
+    <span class="code-function" data-tooltip="The research team will aggregate all expert rankings statistically to produce a final result.">apply_statistical_aggregation()</span>
 
-    <code>IF NOT consensus_reached()</code><br>
-    <div class="code-line">
-      <span title="The research team will aggregate all expert rankings statistically to produce a final result.">apply_statistical_aggregation()</span>
-    </div>
-
-    <br><code>END STUDY</code>
+END STUDY
+</code></pre>
+    <div class="tooltip" id="tooltip"></div>
   </div>
 </div>
 
@@ -1292,6 +1296,25 @@ function selectSlot(el) {
 }
 </script>
 
+<script>
+const tooltip = document.getElementById('tooltip');
+const funcs = document.querySelectorAll('.code-function');
+
+funcs.forEach(fn => {
+  fn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const rect = fn.getBoundingClientRect();
+    tooltip.innerText = fn.getAttribute('data-tooltip');
+    tooltip.style.top = `${rect.top + window.scrollY + 25}px`;
+    tooltip.style.left = `${rect.left + window.scrollX}px`;
+    tooltip.style.display = 'block';
+  });
+});
+
+document.addEventListener('click', () => {
+  tooltip.style.display = 'none';
+});
+</script>
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
     Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
 </footer>
