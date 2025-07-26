@@ -540,6 +540,26 @@ ul {
   white-space: pre-wrap;
   margin-top: 15px;
 }
+
+.toggle-btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  color: #333;
+  cursor: pointer;
+  box-shadow: none;
+  animation: none;
+  transition: background-color 0.2s ease;
+}
+
+.toggle-btn.active {
+  background-color: #d6eaff;
+  border-color: #007bff;
+  color: #007bff;
+}
+
 </style>
 </head>
 <body>
@@ -552,10 +572,11 @@ ul {
   <h3>Cut to the chase:</h3>
 
 <div class="abstraction-container">
-  <div class="abstraction-toggle">
-    <button id="summaryBtn" class="active" onclick="showLevel('summary')">Summary</button>
-    <button id="detailedBtn" onclick="showLevel('detailed')">Detailed</button>
-  </div>
+<div class="abstraction-toggle">
+  <button id="summaryBtn" class="toggle-btn active" onclick="showLevel('summary')">Summary</button>
+  <button id="detailedBtn" class="toggle-btn" onclick="showLevel('detailed')">Detailed</button>
+</div>
+
 
   <!-- Summary Level -->
   <div id="summary" class="abstraction-level active">
