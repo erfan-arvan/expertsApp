@@ -455,6 +455,32 @@ ul {
   overflow-x: auto;
 }
 
+.flex-container {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+.left-section, .code-section {
+  flex: 1;
+  max-width: 48%;
+}
+
+.section-header {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.code-box code {
+  display: block;
+  line-height: 1.5;
+  white-space: pre;
+  padding-left: 10px;
+}
+
+
 </style>
 </head>
 <body>
@@ -467,7 +493,7 @@ ul {
   <h3>Cut to the chase:</h3>
 
 <div class="flex-container">
-  <div>
+  <div class="left-section">
     <div class="section-header">Study Overview</div>
     <ul>
       <li>This study involves five experts like yourself.</li>
