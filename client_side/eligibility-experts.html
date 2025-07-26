@@ -483,12 +483,13 @@ ul {
 BEGIN STUDY
 
 FOR round FROM 1 TO 3
-    DISPLAY other_experts_feedback(round - 1)
+
+    read_code_snippets()
     
-    expert_completes_round()
-    // Includes:
-    // - answering questions for all 8 snippets
-    // - ranking the snippets
+    IF round > 1
+        review_other_experts_feedback()
+    
+    answer_questions_and_rank_snippets()
 
     research_team_reviews_responses()
 
