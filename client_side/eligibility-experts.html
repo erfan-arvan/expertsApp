@@ -486,6 +486,24 @@ ul {
 }
 
 
+.code-box {
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 6px;
+  font-family: "Courier New", Courier, monospace;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.code-line {
+  margin-left: 20px;
+}
+
+.code-box span {
+  cursor: help;
+  text-decoration: underline dotted;
+}
 </style>
 </head>
 <body>
@@ -511,37 +529,47 @@ ul {
     </ul>
   </div>
 
-  <div class="code-section">
-    <div class="code-header">Abstract Study Workflow</div>
-    <div class="code-box"><code>
-BEGIN STUDY
+<div class="code-section">
+  <div class="section-header">Your Workflow</div>
+  <div class="code-box">
+    <code>BEGIN STUDY</code><br>
 
-FOR round FROM 1 TO 3
+    <code>FOR round FROM 1 TO 3</code><br>
 
-    IF round == 1
-        <span title="Review each code snippet and provide a short summary, along with your assessment of how easy or difficult it is to understand.">read_and_understand_code_snippets()</span>
-        <span title="Answer questions to assess your understanding of the code snippets.">answer_questions_about_snippets()</span>
-        <span title="Rank the snippets from easiest to hardest to understand, grouping similar snippets together.">rank_snippets()</span>
+    <div class="code-line">
+      <code>IF round == 1</code><br>
+      <div class="code-line">
+        <span title="Review each code snippet and provide a short summary, along with your assessment of how easy or difficult it is to understand.">read_and_understand_code_snippets()</span><br>
+        <span title="Answer questions to assess your understanding of the code snippets.">answer_questions_about_snippets()</span><br>
+        <span title="Rank the snippets from easiest to hardest to understand, grouping similar snippets together.">rank_snippets()</span><br>
         <span title="Explain your reasoning behind the ranking and the groupings.">provide_reasoning_for_ranking()</span>
+      </div>
 
-    IF round > 1
-        <span title="Review your own and other experts’ summaries of code snippets, along with their comprehensibility assessments.">review_other_experts_responses()</span>
-        <span title="Reflect on expert disagreements by reading the major differences identified by the research team, and answer a few related questions.">reflect_on_expert_disagreements()</span>
-        <span title="Update your ranking of the snippets, if you think it should be changed.">update_snippet_ranking()</span>
+      <br><code>IF round > 1</code><br>
+      <div class="code-line">
+        <span title="Review your own and other experts’ summaries of code snippets, along with their comprehensibility assessments.">review_other_experts_responses()</span><br>
+        <span title="Reflect on expert disagreements by reading the major differences identified by the research team, and answer a few related questions.">reflect_on_expert_disagreements()</span><br>
+        <span title="Update your ranking of the snippets, if you think it should be changed.">update_snippet_ranking()</span><br>
         <span title="Explain your reasoning behind the new ranking and groupings, if you made any updates.">provide_reasoning_for_updated_ranking()</span>
+      </div>
 
-    <span title="Answer a few final questions to share your perspective.">answer_additional_questions()</span>
+      <br><span title="Answer a few final questions to share your perspective.">answer_additional_questions()</span>
+    </div>
 
-    IF consensus_reached()
-        BREAK
-END FOR
+    <br><code>IF consensus_reached()</code><br>
+    <div class="code-line">BREAK</div>
 
-IF NOT consensus_reached()
-    <span title="The research team will aggregate all expert rankings statistically to produce a final result.">apply_statistical_aggregation()</span>
+    <br><code>END FOR</code><br><br>
 
-END STUDY
-</code></div>
+    <code>IF NOT consensus_reached()</code><br>
+    <div class="code-line">
+      <span title="The research team will aggregate all expert rankings statistically to produce a final result.">apply_statistical_aggregation()</span>
+    </div>
+
+    <br><code>END STUDY</code>
   </div>
+</div>
+
 </div>
 
 
