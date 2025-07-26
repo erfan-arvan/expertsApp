@@ -485,7 +485,61 @@ ul {
   text-decoration: underline dotted;
 }
 
+/* Layout */
+.abstraction-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
+/* Toggle Menu */
+.abstraction-toggle {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.abstraction-toggle button {
+  padding: 10px 20px;
+  font-weight: bold;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.abstraction-toggle button.active {
+  background-color: #d6eaff;
+  border-color: #007bff;
+  color: #007bff;
+}
+
+/* Hide sections by default */
+.abstraction-level {
+  display: none;
+}
+
+.abstraction-level.active {
+  display: block;
+}
+
+/* Shared styles */
+.section-header {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.code-box {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 15px;
+  font-family: "Courier New", Courier, monospace;
+  border-radius: 6px;
+  white-space: pre-wrap;
+  margin-top: 15px;
+}
 </style>
 </head>
 <body>
@@ -496,6 +550,80 @@ ul {
   <p>You have been invited to share your expertise to help us conduct research aimed at making it easier for junior engineers to understand code!</p>
 
   <h3>Cut to the chase:</h3>
+
+<div class="abstraction-container">
+  <div class="abstraction-toggle">
+    <button id="summaryBtn" class="active" onclick="showLevel('summary')">Summary</button>
+    <button id="detailedBtn" onclick="showLevel('detailed')">Detailed</button>
+  </div>
+
+  <!-- Summary Level -->
+  <div id="summary" class="abstraction-level active">
+    <div class="section-header">Summary Overview</div>
+    <ul>
+      <li>You will participate in up to three rounds of evaluating 8 Java code snippets.</li>
+      <li>In each round, you will answer some questions and provide a ranking of the snippets based on how easy they are to understand.</li>
+      <li>After each round, we will check for consensus among experts. If a consensus is reached, the study ends early.</li>
+      <li>If consensus is not reached after the third round, we will apply a statistical aggregation to determine a final ranking.</li>
+    </ul>
+
+    <div class="code-box">
+<pre><code>BEGIN STUDY
+
+FOR round FROM 1 TO 3
+    answer_questions_and_rank_snippets()
+    IF consensus_reached()
+        BREAK
+END FOR
+
+IF NOT consensus_reached()
+    apply_statistical_aggregation()
+
+END STUDY</code></pre>
+    </div>
+  </div>
+
+  <!-- Detailed Level -->
+  <div id="detailed" class="abstraction-level">
+    <div class="section-header">Detailed Overview</div>
+    <ul>
+      <li><strong>Round 1:</strong> Read and summarize each code snippet, assess how understandable it is, rank the snippets, and explain your reasoning.</li>
+      <li><strong>Rounds 2 and 3:</strong> Review your own and others' summaries and rankings, reflect on disagreements, optionally update your rankings, and explain any changes.</li>
+      <li>The study ends early if consensus is reached. Otherwise, after round 3, we use statistical aggregation to finalize the rankings.</li>
+    </ul>
+
+    <div class="code-box">
+<pre><code>BEGIN STUDY
+
+FOR round FROM 1 TO 3
+
+    IF round == 1
+        read_and_understand_code_snippets()
+        answer_questions_about_snippets()
+        rank_snippets()
+        provide_reasoning_for_ranking()
+
+    IF round > 1
+        review_other_experts_responses()
+        reflect_on_expert_disagreements()
+        update_snippet_ranking()
+        provide_reasoning_for_updated_ranking()
+
+    answer_additional_questions()
+
+    IF consensus_reached()
+        BREAK
+END FOR
+
+IF NOT consensus_reached()
+    apply_statistical_aggregation()
+
+END STUDY</code></pre>
+    </div>
+  </div>
+</div>
+
+
 
 <div class="flex-container">
   <div class="left-section">
@@ -1266,6 +1394,17 @@ function selectSlot(el) {
 }
 </script>
 
+<script>
+function showLevel(level) {
+  document.querySelectorAll('.abstraction-level').forEach(div => {
+    div.classList.remove('active');
+  });
+  document.getElementById(level).classList.add('active');
+
+  document.getElementById('summaryBtn').classList.toggle('active', level === 'summary');
+  document.getElementById('detailedBtn').classList.toggle('active', level === 'detailed');
+}
+</script>
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
     Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
 </footer>
