@@ -418,6 +418,11 @@ input.input-error {
 }
 
 
+ul {
+  flex: 1;
+  padding-left: 20px;
+}
+
 .flex-container {
   display: flex;
   gap: 30px;
@@ -430,8 +435,17 @@ ul {
   padding-left: 20px;
 }
 
-.code-box {
+.code-section {
   flex: 1;
+}
+
+.code-header {
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.code-box {
   background-color: #f4f4f4;
   border: 1px solid #ccc;
   padding: 15px;
@@ -440,6 +454,7 @@ ul {
   white-space: pre-wrap;
   overflow-x: auto;
 }
+
 </style>
 </head>
 <body>
@@ -451,8 +466,7 @@ ul {
 
   <h3>Cut to the chase:</h3>
 
-
-  <div class="flex-container">
+<div class="flex-container">
   <ul>
     <li>This study involves five experts like yourself.</li>
     <li>Our goal is to reach an expert-determined ranking of the comprehensibility of 8 Java code snippets.</li>
@@ -463,8 +477,10 @@ ul {
     <li>We know we cannot fully compensate your valuable time and expertise with our limited research budget. As a token of appreciation, you will receive a $50 Amazon gift card.</li>
   </ul>
 
-  <div class="code-box">
-<code>BEGIN STUDY
+  <div class="code-section">
+    <div class="code-header">Expert Workflow</div>
+    <div class="code-box"><code>
+BEGIN STUDY
 
 FOR round FROM 1 TO 3
     DISPLAY other_experts_feedback(round - 1)
@@ -480,7 +496,8 @@ FOR round FROM 1 TO 3
         BREAK
 END FOR
 
-END STUDY</code>
+END STUDY
+</code></div>
   </div>
 </div>
 
