@@ -517,26 +517,29 @@ ul {
 BEGIN STUDY
 
 FOR round FROM 1 TO 3
-    
-    IF round == 1 
-        read_and_undrestand_code_snippets()
-        answer_some_questions_about_snippets()
-        rank_the_snippets()
-        provide_your_reasonings_for_ranking()
+
+    IF round == 1
+        read_and_understand_code_snippets()
+        answer_questions_about_snippets()
+        rank_snippets()
+        provide_reasoning_for_ranking()
 
     IF round > 1
-        review_other_experts_responses_anonymously()
+        review_other_experts_responses()
         reflect_on_expert_disagreements()
-        rerank_the_snippets()
-        provide_your_reasonings_for_ranking()
-    
-    answer_questions()
+        update_snippet_ranking()
+        provide_reasoning_for_updated_ranking()
 
-    //research_team_reviews_responses()
+    answer_additional_questions()
+
+    // research_team_reviews_responses()
 
     IF consensus_reached()
         BREAK
 END FOR
+
+//IF NOT consensus_reached()
+//    research_team_applys_statistical_aggregation()
 
 END STUDY
 </code></div>
