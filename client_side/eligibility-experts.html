@@ -560,6 +560,69 @@ ul {
   color: #007bff;
 }
 
+/* Shared container layout */
+.abstraction-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Toggle buttons */
+.abstraction-toggle {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.toggle-btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  color: #333;
+  cursor: pointer;
+  box-shadow: none;
+  animation: none;
+}
+.toggle-btn.active {
+  background-color: #d6eaff;
+  border-color: #007bff;
+  color: #007bff;
+}
+
+/* Levels */
+.abstraction-level {
+  display: none;
+}
+.abstraction-level.active {
+  display: block;
+}
+
+/* Color distinction */
+.summary-text {
+  color: #333; /* dark gray for shared content */
+}
+.detailed-only {
+  color: #003366; /* dark blue for additional detail */
+}
+
+/* Section headers */
+.section-header {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* Code box */
+.code-box {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 15px;
+  font-family: "Courier New", Courier, monospace;
+  border-radius: 6px;
+  white-space: pre-wrap;
+  margin-top: 15px;
+}
 </style>
 </head>
 <body>
@@ -571,6 +634,8 @@ ul {
 
   <h3>Cut to the chase:</h3>
 
+
+  
 <div class="abstraction-container">
 <div class="abstraction-toggle">
   <button id="summaryBtn" class="toggle-btn active" onclick="showLevel('summary')">Summary</button>
@@ -608,40 +673,41 @@ END STUDY</code></pre>
   <div id="detailed" class="abstraction-level">
 <div class="section-header">Detailed Overview</div>
 <ul>
-  <li>You will participate in up to three rounds of evaluating 8 Java code snippets.</li>
+  <li class="summary-text">You will participate in up to three rounds of evaluating 8 Java code snippets.</li>
 
-  <li>In each round, you will:
+  <li class="summary-text">In each round, you will:
     <ul>
-      <li>Answer questions related to the snippets’ comprehensibility.</li>
-      <li>Provide a ranking of the snippets from easiest to hardest to understand.</li>
-      <li>Explain your reasoning, especially if you revise your rankings in later rounds.</li>
+      <li class="summary-text">Answer questions related to the snippets’ comprehensibility.</li>
+      <li class="summary-text">Provide a ranking of the snippets from easiest to hardest to understand.</li>
+      <li class="summary-text">Explain your reasoning, especially if you revise your rankings in later rounds.</li>
     </ul>
   </li>
 
-  <li>After each round, the research team will review all expert responses and rankings to determine whether consensus has been reached.</li>
+  <li class="summary-text">After each round, the research team will review all expert responses and rankings to determine whether consensus has been reached.</li>
 
-  <li>If consensus is reached at any point before Round 3, the study will conclude early.</li>
+  <li class="summary-text">If consensus is reached at any point before Round 3, the study will conclude early.</li>
 
-  <li>If no consensus is reached after Round 3, a statistical aggregation method will be used to determine a final expert-informed ranking.</li>
+  <li class="summary-text">If no consensus is reached after Round 3, a statistical aggregation method will be used to determine a final expert-informed ranking.</li>
 
-  <li><strong>Round 1:</strong>
+  <li class="detailed-only"><strong>Round 1:</strong>
     <ul>
-      <li><strong>Phase 1:</strong> Review each code snippet and write a short summary. Also provide your assessment of how easy or difficult it is to understand.</li>
-      <li><strong>Phase 2:</strong> Rank all 8 snippets from easiest to hardest to understand. You may group snippets together if you feel they are similarly understandable.</li>
-      <li><strong>Phase 3:</strong> Explain your reasoning behind your ranking and the groups you formed.</li>
+      <li class="detailed-only"><strong>Phase 1:</strong> Review each code snippet and write a short summary. Also provide your assessment of how easy or difficult it is to understand.</li>
+      <li class="detailed-only"><strong>Phase 2:</strong> Rank all 8 snippets from easiest to hardest to understand. You may group snippets together if you feel they are similarly understandable.</li>
+      <li class="detailed-only"><strong>Phase 3:</strong> Explain your reasoning behind your ranking and the groups you formed.</li>
     </ul>
   </li>
 
-  <li><strong>Rounds 2 and 3:</strong>
+  <li class="detailed-only"><strong>Rounds 2 and 3:</strong>
     <ul>
-      <li><strong>Phase 1:</strong> Review your own and other experts’ summaries and assessments from the previous round.</li>
-      <li><strong>Phase 2:</strong> Review your own and other experts’ rankings and the reasoning provided for those rankings.</li>
-      <li><strong>Phase 3:</strong> Reflect on major disagreements between experts, as identified by the research team. You’ll be asked a few questions to share your thoughts.</li>
-      <li><strong>Phase 4:</strong> Update your ranking of the code snippets, if you wish.</li>
-      <li><strong>Phase 5:</strong> Explain your reasoning behind any changes you made to your ranking or groupings.</li>
+      <li class="detailed-only"><strong>Phase 1:</strong> Review your own and other experts’ summaries and assessments from the previous round.</li>
+      <li class="detailed-only"><strong>Phase 2:</strong> Review your own and other experts’ rankings and the reasoning provided for those rankings.</li>
+      <li class="detailed-only"><strong>Phase 3:</strong> Reflect on major disagreements between experts, as identified by the research team. You’ll be asked a few questions to share your thoughts.</li>
+      <li class="detailed-only"><strong>Phase 4:</strong> Update your ranking of the code snippets, if you wish.</li>
+      <li class="detailed-only"><strong>Phase 5:</strong> Explain your reasoning behind any changes you made to your ranking or groupings.</li>
     </ul>
   </li>
 </ul>
+
 
 
     <div class="code-box">
