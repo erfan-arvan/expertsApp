@@ -623,6 +623,65 @@ ul {
   white-space: pre-wrap;
   margin-top: 15px;
 }
+
+
+/* Container box */
+.abstraction-box {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  font-family: sans-serif;
+}
+
+/* Toggle buttons on top */
+.abstraction-toggle {
+  display: flex;
+  width: 100%;
+}
+
+.abstraction-toggle button {
+  flex: 1;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  margin: 0;
+  cursor: pointer;
+  background-color: #eee;
+  transition: background-color 0.2s ease;
+}
+
+.abstraction-toggle button.active {
+  background-color: #d6eaff;
+  color: #007bff;
+}
+
+/* Two-column content layout */
+.abstraction-content {
+  display: flex;
+  flex-direction: row;
+}
+
+.abstraction-column {
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+  border-top: 1px solid #ccc;
+}
+
+/* Optional: Give code column a different background */
+.code-column {
+  background-color: #f9f9f9;
+  font-family: "Courier New", monospace;
+  white-space: pre-wrap;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
 </style>
 </head>
 <body>
@@ -634,6 +693,69 @@ ul {
 
   <h3>Cut to the chase:</h3>
 
+
+  <div class="abstraction-box">
+  <div class="abstraction-toggle">
+    <button id="summaryBtn" class="active" onclick="switchView('summary')">Summary</button>
+    <button id="detailedBtn" onclick="switchView('detailed')">Detailed</button>
+  </div>
+
+  <div id="summaryView" class="abstraction-content">
+    <div class="abstraction-column text-column">
+      <!-- Summary text goes here -->
+      <p><strong>Summary:</strong> You will evaluate 8 Java snippets over up to 3 rounds. In each round, you’ll answer questions and rank the snippets. The study ends early if consensus is reached. Otherwise, a statistical method determines the final result.</p>
+    </div>
+    <div class="abstraction-column code-column">
+<code>BEGIN STUDY
+
+FOR round FROM 1 TO 3
+    answer_questions_and_rank_snippets()
+    IF consensus_reached()
+        BREAK
+END FOR
+
+IF NOT consensus_reached()
+    apply_statistical_aggregation()
+
+END STUDY</code>
+    </div>
+  </div>
+
+  <div id="detailedView" class="abstraction-content" style="display: none;">
+    <div class="abstraction-column text-column">
+      <!-- Detailed text goes here -->
+      <p><strong>Detailed:</strong> Includes summaries, reflections, rankings, and disagreements across all rounds. Each round has specific phases like reviewing summaries, updating rankings, and explaining your reasoning.</p>
+    </div>
+    <div class="abstraction-column code-column">
+<code>BEGIN STUDY
+
+FOR round FROM 1 TO 3
+
+    IF round == 1
+        read_and_understand_code_snippets()
+        answer_questions_about_snippets()
+        rank_snippets()
+        provide_reasoning_for_ranking()
+
+    IF round > 1
+        review_other_experts_responses()
+        reflect_on_expert_disagreements()
+        update_snippet_ranking()
+        provide_reasoning_for_updated_ranking()
+
+    answer_additional_questions()
+
+    IF consensus_reached()
+        BREAK
+END FOR
+
+IF NOT consensus_reached()
+    apply_statistical_aggregation()
+
+END STUDY</code>
+    </div>
+  </div>
+</div>
 
   
 <div class="abstraction-container">
