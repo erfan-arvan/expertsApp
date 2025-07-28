@@ -751,6 +751,46 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(36px);
 }
+
+/* Wrapper to allow stacking/fading */
+.abstraction-box {
+  position: relative;
+}
+
+/* Ensure abstraction-content fades nicely */
+.abstraction-content {
+  position: absolute;
+  top: 110px; /* adjust based on switch height */
+  left: 0;
+  width: 100%;
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+/* Show current view */
+.abstraction-content.active {
+  opacity: 1;
+  pointer-events: auto;
+  position: relative; /* so it's in the flow again */
+}
+
+/* Let inner layout (text/code) remain untouched */
+.abstraction-column {
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.code-column {
+  background-color: #f9f9f9;
+  font-family: "Courier New", monospace;
+  white-space: pre-wrap;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 </style>
 </head>
 <body>
@@ -804,7 +844,7 @@ END STUDY</code>
   </div>
 
   <!-- Detailed view -->
-  <div id="detailedView" class="abstraction-content" style="display: none;">
+  <div id="detailedView" class="abstraction-content">
     <div class="abstraction-column text-column">
 <div class="section-header">Detailed Overview</div>
 <ul>
@@ -1757,10 +1797,19 @@ function switchView(view) {
 </script>
 <script>
 function toggleView(isDetailed) {
-  document.getElementById('summaryView').style.display = isDetailed ? 'none' : 'flex';
-  document.getElementById('detailedView').style.display = isDetailed ? 'flex' : 'none';
+  const summary = document.getElementById('summaryView');
+  const detailed = document.getElementById('detailedView');
+
+  if (isDetailed) {
+    summary.classList.remove('active');
+    detailed.classList.add('active');
+  } else {
+    detailed.classList.remove('active');
+    summary.classList.add('active');
+  }
 }
 </script>
+
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
     Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
 </footer>
