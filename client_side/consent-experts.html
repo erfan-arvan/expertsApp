@@ -439,105 +439,41 @@
     I have read this form and understand it fully. My questions have been answered to my satisfaction. I agree to participate in this research study.
   </p>
 
-    <!-- SIGNATURE FIELDS -->
-    <div class="signature-section">
-      <label for="participantName">Participant Name:</label>
-      <input type="text" id="participantName" placeholder="Enter your full name">
+<div class="signature-section">
+  <label>Participant Name:</label>
+  <span contenteditable="true" id="participantName" style="
+    display: inline-block;
+    min-width: 200px;
+    border-bottom: 1px solid #000;
+    padding: 6px 8px;
+    background-color: #fff9c4;
+    transition: background-color 0.3s;
+    outline: none;
+  " onfocus="this.style.backgroundColor='#fff176'" 
+     onblur="this.style.backgroundColor='#fff9c4'"></span>
 
-      <label for="signatureConfirm">Signature:</label>
-      <input type="text" id="signatureConfirm" placeholder="Type your name to sign">
+  <label>Signature:</label>
+  <span contenteditable="true" id="signatureConfirm" style="
+    display: inline-block;
+    min-width: 200px;
+    border-bottom: 1px solid #000;
+    padding: 6px 8px;
+    background-color: #fff9c4;
+    transition: background-color 0.3s;
+    outline: none;
+  " onfocus="this.style.backgroundColor='#fff176'" 
+     onblur="this.style.backgroundColor='#fff9c4'"></span>
 
-      <label for="signatureDate">Date:</label>
-      <input type="text" id="signatureDate" class="readonly" readonly>
-    </div>
+  <label for="signatureDate">Date:</label>
+  <input type="text" id="signatureDate" class="readonly" readonly style="
+    display: inline-block;
+    padding: 6px 8px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  ">
 </div>
 
-
-<div class="consent-form" style="font-family: Arial, sans-serif; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 800px; margin: auto;">
-  <h2 style="text-align: center;">NEW JERSEY INSTITUTE OF TECHNOLOGY</h2>
-  <p style="text-align: center;">323 MARTIN LUTHER KING BLVD.<br>NEWARK, NJ 07102</p>
-  <h3 style="text-align: center;">CONSENT TO PARTICIPATE IN A RESEARCH STUDY</h3>
-  <h4>TITLE OF STUDY: Comparing Proxies for Code Comprehension</h4>
-
-  <p><strong>I,</strong> <span style="border-bottom: 1px solid #000; display: inline-block; width: 300px;"></span>, have been asked to participate in a research study under the direction of Dr. Martin Kellogg.</p>
-
-  <h4>PURPOSE</h4>
-  <p>The purpose of this study is to investigate the effectiveness of existing code comprehension measures in assessing the difficulty in understanding Java code snippets (i.e., code comprehensibility). Specifically, this research aims to determine whether these measures can reliably predict expert-determined rankings of code comprehensibility, contributing to improved methods for studying code comprehension.</p>
-
-  <h4>DURATION</h4>
-  <p>My participation in this study consists mainly of two parts. The first part is the comprehensibility task, which takes approximately 90 minutes to complete. The second part involves reaching consensus agreements over up to four rounds, with each round expected to take less than 30 minutes.</p>
-
-  <h4>BENEFITS FOR SOCIETY AND THE SUBJECT</h4>
-  <p>I have been told that the benefits of this research include advancing knowledge on how code is understood by developers, which can advance teaching and research in software engineering. As a participant, I will have the opportunity to contribute my experience and knowledge to code comprehension research and receive a $50 Amazon gift card as compensation for participating in the study. In the event of early withdrawal, I will receive partial compensation proportional to the extent of my participation.</p>
-
-  <h4>PROCEDURES</h4>
-  <p>I have been told that, during this study, the following will occur:</p>
-  <ul>
-    <li>I will participate as one of five expert Java developers in the study. My participation will take place through a secure web-based application (<a href="https://codecomprehensibility.site" target="_blank">https://codecomprehensibility.site</a>).</li>
-    <li>I will take part in up to four rounds following the Delphi method, which is designed to gather and refine expert judgments of a set of Java code snippets.</li>
-    <li>In the first round, I will read the study instructions, log in using a dedicated username and password, and sign an electronic informed consent form. I will then complete three tasks for each of eight Java code snippets: (1) describe the primary functionality, (2) explain how understandable I find it, and (3) rank all eight snippets based on difficulty using a drag-and-drop interface. I will also provide justifications.</li>
-    <li>I can revise my responses before submitting and may update them until the deadline (two weeks after the study begins).</li>
-    <li>After the deadline, the team will analyze all responses. If no consensus is found, de-identified summaries and disagreements will be shared.</li>
-    <li>I will then review summaries, revise my rankings if desired, and repeat this process up to four rounds.</li>
-    <li>If no consensus is reached by round four, a statistical method will be used to create the final ranking.</li>
-  </ul>
-
-  <h4>PARTICIPANTS</h4>
-  <p>I will be one of about five participants in this study.</p>
-
-  <h4>EXCLUSIONS</h4>
-  <p>I will inform the researcher if any of the following apply:</p>
-  <ul>
-    <li>I am under 18 years of age.</li>
-    <li>I have a reading disability or impairment affecting code comprehension tasks.</li>
-    <li>I am not comfortable reading English text.</li>
-    <li>My background does not include:
-      <ul>
-        <li>At least five years of Java programming experience, and</li>
-        <li>At least one year leading a team of Java programmers within an organization.</li>
-      </ul>
-    </li>
-  </ul>
-
-  <h4>RISKS/DISCOMFORTS</h4>
-  <p>This study may involve mild discomfort or fatigue from focusing for extended periods. Breaks will be provided. There may be unknown risks. I understand that I am not covered by NJIT’s insurance policy for any injury or loss during participation.</p>
-
-  <h4>CONFIDENTIALITY</h4>
-  <p>I understand that my participation is confidential but not anonymous. My responses will be linked to my name and email so the research team can contact me. Responses may be shared (after de-identification) with other experts but not linked to my identity. All data will be stored securely on AWS during the study and then transferred to NJIT servers and deleted from AWS. Only the research team will access identifying information.</p>
-
-  <h4>PAYMENT FOR PARTICIPATION</h4>
-  <p>I will receive a $50 Amazon gift card after completing the study. If I do not complete all tasks, I will receive partial compensation proportional to my participation.</p>
-
-  <h4>RIGHT TO REFUSE OR WITHDRAW</h4>
-  <p>Participation is voluntary. I may withdraw at any time without consequence. The investigator may also withdraw me at any time.</p>
-
-  <h4>INDIVIDUAL TO CONTACT</h4>
-  <p>
-    For questions about treatment or procedures:<br>
-    <strong>Martin Kellogg, Ph.D.</strong><br>
-    Assistant Professor of Computer Science<br>
-    NJIT, 323 Dr Martin Luther King Jr Blvd, Newark, NJ 07102<br>
-    (973) 596-3381<br>
-    <a href="mailto:martin.kellogg@njit.edu">martin.kellogg@njit.edu</a> (preferred)
-  </p>
-
-  <p>
-    For questions about research rights:<br>
-    <strong>Office of Research</strong><br>
-    NJIT, 323 Martin Luther King Boulevard, Newark, NJ 07102<br>
-    (973) 642-4877<br>
-    <a href="mailto:irb@njit.edu">irb@njit.edu</a> (preferred)
-  </p>
-
-  <h4>SIGNATURE OF PARTICIPANT</h4>
-  <p>
-    I have read this form and understand it fully. My questions have been answered to my satisfaction. I agree to participate in this research study.
-  </p>
-  <p>
-    Participant Name: <span style="border-bottom: 1px solid #000; display: inline-block; width: 250px;"></span><br><br>
-    Signature: <span style="border-bottom: 1px solid #000; display: inline-block; width: 250px;"></span><br><br>
-    Date: <span id="consent-date" style="border-bottom: 1px solid #000; display: inline-block; width: 250px;"></span>
-  </p>
 </div>
 
 <script>
