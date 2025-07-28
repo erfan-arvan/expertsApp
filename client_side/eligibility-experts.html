@@ -681,6 +681,76 @@ ul {
   font-size: 14px;
   line-height: 1.5;
 }
+
+.abstraction-box {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  font-family: sans-serif;
+}
+
+/* Toggle wrapper */
+.abstraction-switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Label next to switch */
+.abstraction-switch label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 12px;
+}
+
+/* Custom switch styling */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 70px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider base */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: 0.4s;
+}
+
+/* Slider knob */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px; width: 26px;
+  left: 4px; bottom: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+/* Checked state */
+input:checked + .slider {
+  background-color: #4CAF50;
+}
+input:checked + .slider:before {
+  transform: translateX(36px);
+}
 </style>
 </head>
 <body>
@@ -694,9 +764,17 @@ ul {
 
 <div class="abstraction-box">
   <!-- Toggle strip with two glued tabs -->
-  <div class="abstraction-toggle" style="margin: 0!important;">
+  <!-- <div class="abstraction-toggle" style="margin: 0!important;">
     <div id="summaryTab" class="abstraction-tab active" onclick="switchView('summary')">Summary</div>
     <div id="detailedTab" class="abstraction-tab" onclick="switchView('detailed')">Detailed</div>
+  </div> -->
+
+    <div class="abstraction-switch">
+    <label for="toggleSwitch">Detailed View:</label>
+    <label class="switch">
+      <input type="checkbox" id="toggleSwitch" onchange="toggleView(this.checked)">
+      <span class="slider"></span>
+    </label>
   </div>
 
   <!-- Summary view -->
@@ -1675,6 +1753,12 @@ function switchView(view) {
   detailedTab.classList.toggle('active', !isSummary);
   summaryView.style.display = isSummary ? 'flex' : 'none';
   detailedView.style.display = isSummary ? 'none' : 'flex';
+}
+</script>
+<script>
+function toggleView(isDetailed) {
+  document.getElementById('summaryView').style.display = isDetailed ? 'none' : 'flex';
+  document.getElementById('detailedView').style.display = isDetailed ? 'flex' : 'none';
 }
 </script>
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
