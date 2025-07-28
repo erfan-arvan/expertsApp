@@ -438,11 +438,12 @@
 <div style="
   margin-top: 20px;
   padding: 12px;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   border-radius: 6px;
-  background-color: #fff9c4; /* Yellow highlight */
-  transition: background-color 0.3s, border-color 0.3s;
-">
+  background-color: #f9f9f9;
+  transition: border-color 0.3s, background-color 0.3s;
+" onmouseenter="this.style.borderColor='#4CAF50'; this.style.backgroundColor='#f0fff0'"
+   onmouseleave="this.style.borderColor='#ccc'; this.style.backgroundColor='#f9f9f9'">
   <label style="cursor: pointer; font-size: 15px;">
     <input type="checkbox" id="consentCheckbox" required style="margin-right: 10px;">
     I have read this form and understand it fully. My questions have been answered to my satisfaction.
