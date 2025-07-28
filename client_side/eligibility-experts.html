@@ -791,6 +791,23 @@ input:checked + .slider:before {
   line-height: 1.5;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.abstraction-content {
+  display: none;
+  opacity: 0;
+}
+
+.abstraction-content.active {
+  display: flex;
+  opacity: 1;
+  animation: fadeIn 0.4s ease;
+}
+
+
 </style>
 </head>
 <body>
@@ -1800,15 +1817,25 @@ function toggleView(isDetailed) {
   const summary = document.getElementById('summaryView');
   const detailed = document.getElementById('detailedView');
 
-  if (isDetailed) {
-    summary.classList.remove('active');
-    detailed.classList.add('active');
-  } else {
-    detailed.classList.remove('active');
-    summary.classList.add('active');
-  }
+  // Hide both first
+  summary.classList.remove('active');
+  detailed.classList.remove('active');
+  summary.style.display = 'none';
+  detailed.style.display = 'none';
+
+  // Use timeout to allow display to reset before fade-in
+  setTimeout(() => {
+    if (isDetailed) {
+      detailed.style.display = 'flex';
+      detailed.classList.add('active');
+    } else {
+      summary.style.display = 'flex';
+      summary.classList.add('active');
+    }
+  }, 10);
 }
 </script>
+
 
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
     Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
