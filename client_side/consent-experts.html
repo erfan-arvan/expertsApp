@@ -464,31 +464,30 @@
   " onfocus="this.style.backgroundColor='#fff176'" 
      onblur="this.style.backgroundColor='#fff9c4'"></span>
 
-  <label for="signatureDate">Date:</label>
-  <input type="text" id="signatureDate" class="readonly" readonly style="
+  <label>Date:</label>
+  <span contenteditable="true" id="signatureDate" style="
     display: inline-block;
+    min-width: 200px;
+    border-bottom: 1px solid #000;
     padding: 6px 8px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  ">
+    background-color: #fff9c4;
+    transition: background-color 0.3s;
+    outline: none;
+  " onfocus="this.style.backgroundColor='#fff176'" 
+     onblur="this.style.backgroundColor='#fff9c4'"></span>
 </div>
 
 </div>
 
 <script>
-  // Auto-fill current date in user's local time zone
-  document.addEventListener('DOMContentLoaded', () => {
-    const dateInput = document.getElementById('signatureDate');
-    const today = new Date();
-    const localDate = today.toLocaleDateString(undefined, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-    dateInput.value = localDate;
+  document.addEventListener('DOMContentLoaded', function () {
+    const dateEl = document.getElementById('signatureDate');
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const today = new Date().toLocaleDateString(undefined, options);
+    dateEl.innerText = today;
   });
 </script>
+
 
   <footer
     style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
