@@ -751,6 +751,29 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(36px);
 }
+
+/* Wrap both views so we can animate height nicely (optional) */
+.content-wrapper {
+  position: relative;
+  overflow: hidden;
+  transition: height 250ms ease;
+}
+
+/* Each view (summary/detailed) will overlap and fade */
+.abstraction-content {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 250ms ease;
+  display: flex;              /* keep your 2-column layout */
+}
+
+.abstraction-content.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 </style>
 </head>
 <body>
@@ -761,6 +784,28 @@ input:checked + .slider:before {
   <p>You have been invited to share your expertise to help us conduct research aimed at making it easier for junior engineers to understand code!</p>
 
   <h3>Cut to the chase:</h3>
+
+<div class="abstraction-box">
+  <div class="abstraction-switch">
+    <label for="toggleSwitch">Detailed View:</label>
+    <label class="switch">
+      <input type="checkbox" id="toggleSwitch" onchange="toggleView(this.checked)">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <!-- NEW: wrapper to animate height -->
+  <div id="contentWrapper" class="content-wrapper">
+    <div id="summaryView" class="abstraction-content active">
+      <!-- left text + right code (summary) -->xxx
+    </div>
+
+    <div id="detailedView" class="abstraction-content">
+      <!-- left text + right code (detailed) -->yyyy
+    </div>
+  </div>
+</div>
+
 
 <div class="abstraction-box">
   <!-- Toggle strip with two glued tabs -->
@@ -1757,10 +1802,34 @@ function switchView(view) {
 </script>
 <script>
 function toggleView(isDetailed) {
-  document.getElementById('summaryView').style.display = isDetailed ? 'none' : 'flex';
-  document.getElementById('detailedView').style.display = isDetailed ? 'flex' : 'none';
+  const wrapper = document.getElementById('contentWrapper');
+  const summary = document.getElementById('summaryView');
+  const detailed = document.getElementById('detailedView');
+
+  const toShow   = isDetailed ? detailed : summary;
+  const toHide   = isDetailed ? summary  : detailed;
+
+  // Set wrapper height to current so we can animate to new height
+  wrapper.style.height = wrapper.offsetHeight + 'px';
+
+  // Activate target, deactivate the other (opacity handles fade)
+  toHide.classList.remove('active');
+  toShow.classList.add('active');
+
+  // Next frame: set wrapper height to new view's height, then clear inline height
+  requestAnimationFrame(() => {
+    wrapper.style.height = toShow.scrollHeight + 'px';
+    // After the height transition ends, remove the explicit height
+    wrapper.addEventListener('transitionend', function tidy(e) {
+      if (e.propertyName === 'height') {
+        wrapper.style.height = '';
+        wrapper.removeEventListener('transitionend', tidy);
+      }
+    });
+  });
 }
 </script>
+
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
     Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
 </footer>
