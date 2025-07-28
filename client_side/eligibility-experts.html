@@ -636,25 +636,27 @@ ul {
   font-family: sans-serif;
 }
 
-/* Toggle buttons on top */
+/* Top toggle strip using divs */
 .abstraction-toggle {
   display: flex;
   width: 100%;
+  height: 50px;
 }
 
-.abstraction-toggle button {
+.abstraction-tab {
   flex: 1;
-  padding: 12px 0;
+  text-align: center;
+  line-height: 50px;
   font-size: 16px;
   font-weight: bold;
-  border: none;
-  margin: 0;
-  cursor: pointer;
   background-color: #eee;
-  transition: background-color 0.2s ease;
+  color: #333;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.abstraction-toggle button.active {
+.abstraction-tab.active {
   background-color: #d6eaff;
   color: #007bff;
 }
@@ -672,7 +674,6 @@ ul {
   border-top: 1px solid #ccc;
 }
 
-/* Optional: Give code column a different background */
 .code-column {
   background-color: #f9f9f9;
   font-family: "Courier New", monospace;
@@ -680,8 +681,6 @@ ul {
   font-size: 14px;
   line-height: 1.5;
 }
-
-
 </style>
 </head>
 <body>
@@ -693,16 +692,16 @@ ul {
 
   <h3>Cut to the chase:</h3>
 
-
-  <div class="abstraction-box">
+<div class="abstraction-box">
+  <!-- Toggle strip with two glued tabs -->
   <div class="abstraction-toggle">
-    <button id="summaryBtn" class="active" onclick="switchView('summary')">Summary</button>
-    <button id="detailedBtn" onclick="switchView('detailed')">Detailed</button>
+    <div id="summaryTab" class="abstraction-tab active" onclick="switchView('summary')">Summary</div>
+    <div id="detailedTab" class="abstraction-tab" onclick="switchView('detailed')">Detailed</div>
   </div>
 
+  <!-- Summary view -->
   <div id="summaryView" class="abstraction-content">
     <div class="abstraction-column text-column">
-      <!-- Summary text goes here -->
       <p><strong>Summary:</strong> You will evaluate 8 Java snippets over up to 3 rounds. In each round, you’ll answer questions and rank the snippets. The study ends early if consensus is reached. Otherwise, a statistical method determines the final result.</p>
     </div>
     <div class="abstraction-column code-column">
@@ -721,10 +720,10 @@ END STUDY</code>
     </div>
   </div>
 
+  <!-- Detailed view -->
   <div id="detailedView" class="abstraction-content" style="display: none;">
     <div class="abstraction-column text-column">
-      <!-- Detailed text goes here -->
-      <p><strong>Detailed:</strong> Includes summaries, reflections, rankings, and disagreements across all rounds. Each round has specific phases like reviewing summaries, updating rankings, and explaining your reasoning.</p>
+      <p><strong>Detailed:</strong> Round 1 includes summarizing and ranking. Rounds 2–3 include reviewing peer feedback, resolving disagreements, and optionally updating your ranking with explanations.</p>
     </div>
     <div class="abstraction-column code-column">
 <code>BEGIN STUDY
@@ -756,7 +755,6 @@ END STUDY</code>
     </div>
   </div>
 </div>
-
   
 <div class="abstraction-container">
 <div class="abstraction-toggle">
