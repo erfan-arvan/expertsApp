@@ -358,8 +358,13 @@
     border-bottom: 1px solid #000;
     padding: 2px 4px;
     outline: none;
-  " placeholder="Type your name here"></span>, have been asked to participate in a research study under the direction of Dr. Martin Kellogg.
+    background-color: #fff9c4; /* light yellow highlight */
+    transition: background-color 0.3s;
+  " onfocus="this.style.backgroundColor='#fff176'" 
+     onblur="this.style.backgroundColor='#fff9c4'">
+  </span>, have been asked to participate in a research study under the direction of Dr. Martin Kellogg.
 </p>
+
 
   <h4>PURPOSE</h4>
   <p>The purpose of this study is to investigate the effectiveness of existing code comprehension measures in assessing the difficulty in understanding Java code snippets (i.e., code comprehensibility). Specifically, this research aims to determine whether these measures can reliably predict expert-determined rankings of code comprehensibility, contributing to improved methods for studying code comprehension.</p>
