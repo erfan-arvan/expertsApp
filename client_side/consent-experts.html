@@ -435,13 +435,32 @@
   </p>
 
   <h4>SIGNATURE OF PARTICIPANT</h4>
-    <div style="margin-top: 20px;">
-    <label>
-        <input type="checkbox" id="consentCheckbox" required style="margin-right: 8px;">
-        I have read this form and understand it fully. My questions have been answered to my satisfaction. I agree to participate in this research study.
-    </label>
-    </div>
+<div style="
+  margin-top: 20px;
+  padding: 12px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s, background-color 0.3s;
+" onmouseenter="this.style.borderColor='#4CAF50'; this.style.backgroundColor='#f0fff0'"
+   onmouseleave="this.style.borderColor='#ccc'; this.style.backgroundColor='#f9f9f9'">
+  <label style="cursor: pointer; font-size: 15px;">
+    <input type="checkbox" id="consentCheckbox" required style="margin-right: 10px;">
+    I have read this form and understand it fully. My questions have been answered to my satisfaction.
+    I agree to participate in this research study.
+  </label>
+</div>
 
+
+<div style="margin-top: 20px; padding: 12px; background-color: #fff3cd; border: 1px solid #ffeeba; border-radius: 6px; font-size: 15px;">
+  <p style="margin: 0;">
+    <strong>Or</strong><br>
+    I am not fully informed by this consent form and the information provided on the study summary page.
+    <a href="mailto:research-team@example.com?subject=Request%20for%20Meeting%20about%20Study" style="color: #0d6efd; text-decoration: underline;">
+      I want to schedule a meeting with the research team to get answers to my questions.
+    </a>
+  </p>
+</div>
 
 <div class="signature-section">
   <label>Participant Name:</label>
@@ -486,15 +505,7 @@
 </div>
 
 
-<div style="margin-top: 20px; padding: 12px; background-color: #fff3cd; border: 1px solid #ffeeba; border-radius: 6px; font-size: 15px;">
-  <p style="margin: 0;">
-    <strong>Or</strong><br>
-    I am not fully informed by this consent form and the information provided on the study summary page.
-    <a href="mailto:research-team@example.com?subject=Request%20for%20Meeting%20about%20Study" style="color: #0d6efd; text-decoration: underline;">
-      I want to schedule a meeting with the research team to get answers to my questions.
-    </a>
-  </p>
-</div>
+
 
 
 </div>
