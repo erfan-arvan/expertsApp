@@ -540,7 +540,19 @@
   </p>
 </div>
 
-
+<script>
+  // Auto-fill current date in user's local time zone
+  document.addEventListener('DOMContentLoaded', () => {
+    const dateInput = document.getElementById('signatureDate');
+    const today = new Date();
+    const localDate = today.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    dateInput.value = localDate;
+  });
+</script>
 
   <footer
     style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
