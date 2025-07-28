@@ -1632,6 +1632,21 @@ function showLevel(level) {
   document.getElementById('detailedBtn').classList.toggle('active', level === 'detailed');
 }
 </script>
+
+<script>
+function switchView(view) {
+  const summaryTab = document.getElementById("summaryTab");
+  const detailedTab = document.getElementById("detailedTab");
+  const summaryView = document.getElementById("summaryView");
+  const detailedView = document.getElementById("detailedView");
+
+  const isSummary = view === 'summary';
+  summaryTab.classList.toggle('active', isSummary);
+  detailedTab.classList.toggle('active', !isSummary);
+  summaryView.style.display = isSummary ? 'flex' : 'none';
+  detailedView.style.display = isSummary ? 'none' : 'flex';
+}
+</script>
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
     Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
 </footer>
