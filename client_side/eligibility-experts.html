@@ -757,48 +757,14 @@ input:checked + .slider:before {
   position: relative;
 }
 
-/* Ensure abstraction-content fades nicely */
-.abstraction-content {
-  position: absolute;
-  top: 110px; /* adjust based on switch height */
-  left: 0;
-  width: 100%;
-  display: flex;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-}
-
-/* Show current view */
-.abstraction-content.active {
-  opacity: 1;
-  pointer-events: auto;
-  position: relative; /* so it's in the flow again */
-}
-
-/* Let inner layout (text/code) remain untouched */
-.abstraction-column {
-  flex: 1;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.code-column {
-  background-color: #f9f9f9;
-  font-family: "Courier New", monospace;
-  white-space: pre-wrap;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
 .abstraction-content {
   display: none;
   opacity: 0;
+  transition: opacity 0.4s ease;
+  flex-direction: row;
+  animation: none;
+  position: relative; /* stays in document flow */
+  width: 100%;
 }
 
 .abstraction-content.active {
