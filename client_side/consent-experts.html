@@ -423,18 +423,19 @@
     box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4) inset;
   }
 
-  /* sticky submit button */
-    .sticky-submit-wrapper {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: white;
-    padding: 12px 24px;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-    text-align: right;
-    z-index: 100;
-  }
+.sticky-submit-wrapper {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding: 16px;
+  text-align: right;
+  border-top: 1px solid #ccc;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
 
   #submitBtn {
     padding: 12px 24px;
