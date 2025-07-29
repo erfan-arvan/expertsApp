@@ -678,17 +678,17 @@
     const consentCheckbox = document.getElementById('consentCheckbox');
     const submitBtn = document.getElementById('submitBtn');
 
-function checkFormCompletion() {
+    function checkFormCompletion() {
   const participantNameInput = document.getElementById('participantName');
   const consentNameSpan = document.getElementById('consentName');
   const signatureConfirmSpan = document.getElementById('signatureConfirm');
   const signatureDateInput = document.getElementById('signatureDate');
   const consentCheckbox = document.getElementById('consentCheckbox');
 
-  const name1 = participantNameInput ? participantNameInput.value.trim() : '';
+  const name1 = participantNameInput ? participantNameInput.textContent.trim() : '';
   const name2 = consentNameSpan ? consentNameSpan.textContent.trim() : '';
   const signature = signatureConfirmSpan ? signatureConfirmSpan.textContent.trim() : '';
-  const date = signatureDateInput ? signatureDateInput.value.trim() : '';
+  const date = signatureDateInput ? signatureDateInput.textContent.trim() : '';
   const checked = consentCheckbox ? consentCheckbox.checked : false;
 
   const allFilled = name1 && name2 && signature && date && checked;
