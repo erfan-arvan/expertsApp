@@ -542,7 +542,7 @@ const questions = [
       //     return;
       //   }
 
-      localStorage.setItem("student_email", email);
+      localStorage.setItem("expert_email", email);
       document.getElementById('email-box').classList.add('hidden');
       document.getElementById('survey-box').classList.remove('hidden');
       hideStudyInfoIfVisible();
@@ -565,17 +565,26 @@ const questions = [
       document.getElementById('nextBtn').innerText = currentQuestion === questions.length - 1 ? 'Check Eligibility' : 'Next';
     }
 
-    function nextQuestion() {
-      const selected = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
-      if (!selected) return alert("Please select an option.");
-      answers[currentQuestion] = parseInt(selected.value);
-      if (currentQuestion === questions.length - 1) {
-        checkEligibility();
-      } else {
-        currentQuestion++;
-        showQuestion();
-      }
-    }
+function nextQuestion() {
+  const selected = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
+  if (!selected) return alert("Please select an option.");
+
+  const selectedIndex = parseInt(selected.value);
+  answers[currentQuestion] = selectedIndex;
+
+  // Save the selected option to sessionStorage with a proper key
+  const key = `eligibility_q${currentQuestion}`;
+  const selectedOption = questions[currentQuestion].options[selectedIndex].label;
+  sessionStorage.setItem(key, selectedOption);
+
+  if (currentQuestion === questions.length - 1) {
+    checkEligibility();
+  } else {
+    currentQuestion++;
+    showQuestion();
+  }
+}
+
 
     function prevQuestion() {
       if (currentQuestion > 0) currentQuestion--;
@@ -615,7 +624,7 @@ const questions = [
     //   document.getElementById('eligibility-success').classList.add('hidden');
     //   document.getElementById('slots-box').classList.add('hidden');
     //   document.getElementById('selected-slot-info').innerText = selectedSlots.join(", ");
-    //   document.getElementById('notify-email').innerText = localStorage.getItem("student_email");
+    //   document.getElementById('notify-email').innerText = localStorage.getItem("expert_email");
     //   document.getElementById('confirm-box').classList.remove('hidden');
     // }
 
@@ -716,7 +725,7 @@ const questions = [
 
 
     function submitRegistrationData() {
-      const email = localStorage.getItem("student_email") || "unknown";
+      const email = localStorage.getItem("expert_email") || "unknown";
       const notify = localStorage.getItem("notify_opt_in") === "true";
       const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
 
@@ -899,7 +908,7 @@ const questions = [
       document.getElementById('slots-box').classList.add('hidden');
       document.getElementById('eligibility-success').classList.add('hidden');
       document.getElementById('selected-slot-info').innerText = selectedSlots.join(", ");
-      document.getElementById('notify-email').innerText = localStorage.getItem("student_email");
+      document.getElementById('notify-email').innerText = localStorage.getItem("expert_email");
       document.getElementById('confirm-box').classList.remove('hidden');
     }
 
