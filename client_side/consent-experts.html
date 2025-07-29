@@ -708,9 +708,9 @@
             </div>
 
             <div class="final-box hidden" id="final-box-consent">
-            <h3>✅ Your registration in this study has been completed!</h3>
-            <p>Thank you! We'll reach out to you via email soon to coordinate the next steps.</p>
-            <a>Click to download a copy of your signed consent form in PDF format.</a>
+                <h3>✅ Your registration in this study has been completed!</h3>
+                <p>Thank you! We'll reach out to you via email soon to coordinate the next steps.</p>
+                <a>Click to download a copy of your signed consent form in PDF format.</a>
             </div>
 
 
@@ -1045,20 +1045,20 @@
                 },
                 body: JSON.stringify(payload)
             })
-    .then(res => {
-      if (res.ok) {
-        showConsentConfirmation(consentForm);
-        return true;
-      } else {
-        alert("❌ Submission failed. Please try again.");
-        return false;
-      }
-    })
-    .catch(err => {
-      console.error("❌ Network error:", err);
-      alert("❌ Network error. Please check your connection and try again.");
-      return false;
-    });
+                .then(res => {
+                    if (res.ok) {
+                        showConsentConfirmation(consentForm);
+                        return true;
+                    } else {
+                        alert("❌ Submission failed. Please try again.");
+                        return false;
+                    }
+                })
+                .catch(err => {
+                    console.error("❌ Network error:", err);
+                    alert("❌ Network error. Please check your connection and try again.");
+                    return false;
+                });
         }
 
     </script>
@@ -1095,7 +1095,7 @@
         }
     </script>
 
-        <script>
+    <script>
         function finalizeConsent() {
             const selectedEls = document.querySelectorAll('.slots-box .time-slot.selected');
             if (selectedEls.length === 0) {
@@ -1163,36 +1163,43 @@
         });
     </script>
 
-<script>
-    function showConsentConfirmation(consentForm) {
-  const finalBox = document.getElementById("final-box-consent");
-  if (finalBox) {
-    finalBox.classList.remove("hidden");
+    <script>
+        function showConsentConfirmation(consentForm) {
+            generateConsentPDF({
+                participantName: document.getElementById("participantName").innerText.trim(),
+                consentName: document.getElementById("consentName").innerText.trim(),
+                signatureConfirm: document.getElementById("signatureConfirm").innerText.trim(),
+                signatureDate: document.getElementById("signatureDate").innerText.trim(),
+                consentCheckbox: document.getElementById("consentCheckbox").checked
+            });
 
-    const link = finalBox.querySelector("a");
-    if (link) {
-      const pdfContent = `
-        CONSENT FORM
+            document.getElementById("final-box-consent").classList.remove("hidden");
+        }
 
-        Full Name: ${consentForm.fullName}
-        Consent Name: ${consentForm.consentName}
-        Signature: ${consentForm.signature}
-        Date Signed: ${consentForm.dateSigned}
-        Consent Given: ${consentForm.consentGiven ? "Yes" : "No"}
-        Timestamp: ${consentForm.timestamp}
-        User Agent: ${consentForm.userAgent}
-      `;
+    </script>
 
-      const blob = new Blob([pdfContent], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      link.href = url;
-      link.download = "Signed_Consent_Form.pdf";
-      link.style.cursor = "pointer";
-    }
-  }
-}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-</script>
+
+    <script>
+        function generateConsentPDF(data) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(14);
+            doc.text("Signed Consent Form", 20, 20);
+
+            doc.setFontSize(12);
+            doc.text(`Participant Name: ${data.participantName}`, 20, 40);
+            doc.text(`Consent Name: ${data.consentName}`, 20, 50);
+            doc.text(`Signature: ${data.signatureConfirm}`, 20, 60);
+            doc.text(`Date: ${data.signatureDate}`, 20, 70);
+            doc.text(`Agreed to participate: ${data.consentCheckbox ? "Yes" : "No"}`, 20, 80);
+
+            doc.save("Signed_Consent_Form.pdf");
+        }
+
+    </script>
     <footer
         style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
         Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
