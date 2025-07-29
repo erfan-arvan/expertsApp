@@ -844,6 +844,44 @@ onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff
 </script>
 
 <script>
+    function submitRegistrationData() {
+  const email = localStorage.getItem("student_email") || "unknown";
+  const notify = localStorage.getItem("notify_opt_in") === "true";
+  const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
+
+  const eligibilityResponses = questions.map((q, index) => {
+    const selectedIndex = answers[index];
+    return {
+      question: q.text,
+      selectedOption: q.options[selectedIndex]?.label || "No answer"
+    };
+  });
+
+  const payload = {
+    email: email,
+    notify: notify,
+    selectedSlot: selectedSlot,
+    eligibilityResponses: eligibilityResponses,
+    submitted: true,
+    event: "availability" // or "cancel" or "modify"
+    };
+
+
+  return fetch("https://codecomprehensibility.site/register_student", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(res => res.ok)
+  .catch(err => {
+    console.error("❌ Network error:", err);
+    return false;
+  });
+}
+</script>
+<script>
     function finalizeMultiSlotSelection() {
   const selectedEls = document.querySelectorAll('.slots-box .time-slot.selected');
   if (selectedEls.length === 0) {
