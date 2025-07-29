@@ -82,7 +82,8 @@
             border-radius: 10px;
             max-width: 400px;
             text-align: center;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15); /* subtle shadow */
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            /* subtle shadow */
         }
 
         .input-field {
@@ -704,25 +705,27 @@
 
             <!-- Final Box Modal: Appointment Acknowledgement -->
             <div id="final-box" class="modal hidden">
-            <div class="modal-content">
-                <h3>✅ Your Request Has Been Received!</h3>
-                <p>Thank you! We'll reach out to you via email soon to schedule a meeting based on your specified availability.</p>
-                <p><strong>Selected availability:</strong> <span id="confirmed-session"></span></p>
-                <!-- <button onclick="closeModal('final-box')">Close</button> -->
-                 <p>You can now close the tab!</p>
-            </div>
+                <div class="modal-content">
+                    <h3>✅ Your Request Has Been Received!</h3>
+                    <p>Thank you! We'll reach out to you via email soon to schedule a meeting based on your specified
+                        availability.</p>
+                    <p><strong>Selected availability:</strong> <span id="confirmed-session"></span></p>
+                    <!-- <button onclick="closeModal('final-box')">Close</button> -->
+                    <p>You can now close the tab!</p>
+                </div>
             </div>
 
             <!-- Final Box Modal: Consent Confirmation -->
             <div id="final-box-consent" class="modal hidden">
-            <div class="modal-content">
-                <h3>✅ Your registration in this study has been completed!</h3>
-                <p>Thank you! We'll reach out to you via email soon to coordinate the next steps.</p>
-                <a href="#" onclick="generateAndDownloadConsentPDF()">📄 Click to download your signed consent form (PDF)</a>
-                <br><br>
-                <!-- <button onclick="closeModal('final-box-consent')">Close</button> -->
-                <p>You can now close the tab!</p>
-            </div>
+                <div class="modal-content">
+                    <h3>✅ Your registration in this study has been completed!</h3>
+                    <p>Thank you! We'll reach out to you via email soon to coordinate the next steps.</p>
+                    <a href="#" onclick="generateAndDownloadConsentPDF()">📄 Click to download your signed consent form
+                        (PDF)</a>
+                    <br><br>
+                    <!-- <button onclick="closeModal('final-box-consent')">Close</button> -->
+                    <p>You can now close the tab!</p>
+                </div>
             </div>
 
 
@@ -767,13 +770,12 @@
   " onfocus="this.style.backgroundColor='#fff176'" onblur="this.style.backgroundColor='#fff9c4'"></span>
 
 
-        <button id="submitBtn" disabled onclick="submitConsent()">Submit</button>
-        <div id="submitNote" class="submit-note">Please complete all highlighted parts before submitting.</div>
-
             </div>
 
 
 
+            <button id="submitBtn" disabled onclick="submitConsent()">Submit</button>
+            <div id="submitNote" class="submit-note">Please complete all highlighted parts before submitting.</div>
 
 
         </div>
@@ -877,7 +879,7 @@
             highlighted fields and click the Submit button at the end.</span>
 
         <!-- <button onclick="document.getElementById('consentReminder').style.display='none'" style="background-color: #90caf9; color: #000;">X Close!</button> -->
-         <p></p>
+        <p></p>
         <button onclick="document.getElementById('consentReminder').style.display='none'" style="
     background: none;
     border: none;
@@ -887,7 +889,7 @@
     font-weight: bold;
     padding: 0 8px;
     margin-left: auto;
-    margin-top: 20!important;
+    margin-top: 0!important;
   " aria-label="Close Reminder">X</button>
     </div>
 
