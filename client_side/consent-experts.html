@@ -707,6 +707,13 @@
                 <p><strong>Selected availability:</strong> <span id="confirmed-session"></span></p>
             </div>
 
+            <div class="final-box hidden" id="final-box-consent">
+            <h3>✅ Your registration in this study has been completed!</h3>
+            <p>Thank you! We'll reach out to you via email soon to coordinate the next steps.</p>
+            <a>Click to download a copy of your signed consent form in PDF format.</a>
+            </div>
+
+
             <div class="signature-section">
                 <label>Participant Name:</label>
                 <span contenteditable="true" id="participantName" style="
@@ -866,6 +873,8 @@
     margin-top: 0!important;
   " aria-label="Close Reminder">X</button>
     </div>
+
+    <button id="submitConsentBtn" onclick="submitConsent()">Submit</button>
 
 
     <script>
@@ -1036,11 +1045,20 @@
                 },
                 body: JSON.stringify(payload)
             })
-                .then(res => res.ok)
-                .catch(err => {
-                    console.error("❌ Network error:", err);
-                    return false;
-                });
+    .then(res => {
+      if (res.ok) {
+        showConsentConfirmation(consentForm);
+        return true;
+      } else {
+        alert("❌ Submission failed. Please try again.");
+        return false;
+      }
+    })
+    .catch(err => {
+      console.error("❌ Network error:", err);
+      alert("❌ Network error. Please check your connection and try again.");
+      return false;
+    });
         }
 
     </script>
@@ -1077,7 +1095,39 @@
         }
     </script>
 
-    <button id="submitConsentBtn" onclick="submitConsent()">Submit</button>
+        <script>
+        function finalizeConsent() {
+            const selectedEls = document.querySelectorAll('.slots-box .time-slot.selected');
+            if (selectedEls.length === 0) {
+                alert("Please select at least one time slot.");
+                return;
+            }
+
+            const selectedSlots = Array.from(selectedEls).map(el => {
+                const dayText = el.closest('.day-card').querySelector('h4').innerText;
+                return `${dayText} at ${el.innerText}`;
+            });
+            localStorage.setItem("selected_slot", selectedSlots.join(", "));
+
+
+            //   const notify = document.getElementById('notify-checkbox').checked;
+            //   localStorage.setItem("notify_opt_in", notify);
+
+            // Call registration submit before showing final confirmation
+            submitAppointmentRequest().then(success => {
+                if (success) {
+                    document.getElementById('slots-box').classList.add('hidden');
+                    document.getElementById('final-box').classList.remove('hidden');
+                    const selectedSlot = localStorage.getItem("selected_slot");
+                    const sessionText = `${selectedSlot}`;
+                    document.getElementById("confirmed-session").innerText = sessionText;
+                } else {
+                    alert("❌ Something went wrong while registering. Please try again or contact the research team.");
+                }
+            });
+        }
+    </script>
+
     <script>
         document.getElementById('submitConsentBtn').addEventListener('click', function () {
             const email = localStorage.getItem('expert_email');
@@ -1113,6 +1163,36 @@
         });
     </script>
 
+<script>
+    function showConsentConfirmation(consentForm) {
+  const finalBox = document.getElementById("final-box-consent");
+  if (finalBox) {
+    finalBox.classList.remove("hidden");
+
+    const link = finalBox.querySelector("a");
+    if (link) {
+      const pdfContent = `
+        CONSENT FORM
+
+        Full Name: ${consentForm.fullName}
+        Consent Name: ${consentForm.consentName}
+        Signature: ${consentForm.signature}
+        Date Signed: ${consentForm.dateSigned}
+        Consent Given: ${consentForm.consentGiven ? "Yes" : "No"}
+        Timestamp: ${consentForm.timestamp}
+        User Agent: ${consentForm.userAgent}
+      `;
+
+      const blob = new Blob([pdfContent], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      link.href = url;
+      link.download = "Signed_Consent_Form.pdf";
+      link.style.cursor = "pointer";
+    }
+  }
+}
+
+</script>
     <footer
         style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
         Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
