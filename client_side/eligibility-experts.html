@@ -336,68 +336,19 @@
     </div>
   </div>
 
-  <div id="eligibility-success" class="success-message hidden">
-    <button class="close-btn"
-      onclick="document.getElementById('eligibility-success').classList.add('hidden')">✕</button>
-    🎉 You're eligible to participate in the study! Please finilize your participation by clicking on this button:
-  </div>
+
   <div class="slots-box hidden" id="consent-form">
     
   </div>
 
 
-  <div class="slots-box hidden" id="slots-box">
-    <h3>Select All Your Available Time Slots</h3>
-    <div class="day-card">
-      <h4>Monday, June 10</h4>
-      <div>
-        <div class="time-slot" onclick="selectSlot(this)">10:00 AM</div>
-        <div class="time-slot" onclick="selectSlot(this)">1:00 PM</div>
-        <div class="time-slot" onclick="selectSlot(this)">4:00 PM</div>
-      </div>
-    </div>
-    <div class="day-card">
-      <h4>Tuesday, June 11</h4>
-      <div>
-        <div class="time-slot" onclick="selectSlot(this)">9:00 AM</div>
-        <div class="time-slot" onclick="selectSlot(this)">12:00 PM</div>
-        <div class="time-slot" onclick="selectSlot(this)">3:00 PM</div>
-      </div>
-    </div>
-
-    <button onclick="finalizeMultiSlotSelection()">Next</button>
-
-    <p style="margin-top: 1em;">
-      <a href="#" onclick="toggleCustomTimeBox(); return false;">None of these work for you?</a>
-    </p>
-
-    <div id="custom-time-box"
-      style="display: none; margin-top: 1em; border: 1px solid #ccc; padding: 1em; border-radius: 8px;">
-      <p><strong>📅 Please select all of your free times:</strong></p>
-
-      <div class="day-card">
-        <h4>Wednesday, June 12</h4>
-        <div>
-          <div class="time-slot" onclick="toggleCustomSlot(this)">10:00 AM</div>
-          <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM</div>
-          <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM</div>
-        </div>
-      </div>
-
-      <div class="day-card">
-        <h4>Thursday, June 13</h4>
-        <div>
-          <div class="time-slot" onclick="toggleCustomSlot(this)">9:00 AM</div>
-          <div class="time-slot" onclick="toggleCustomSlot(this)">12:00 PM</div>
-          <div class="time-slot" onclick="toggleCustomSlot(this)">3:00 PM</div>
-        </div>
-      </div>
-
-      <button onclick="reviewCustomTime()">Next</button>
-    </div>
-
-
+<div class="slots-box hidden" id="slots-box">
+  <div id="eligibility-success" class="success-message">
+    🎉 You're eligible to participate in the study!
+    <p>Please finalize your participation by reading and signing the informed consent form:</p>
+    <button onclick="window.location='/consent-experts.html'">Review Consent Form</button>
   </div>
+</div>
 
   <!-- Confirmation Section -->
   <div class="confirm-box hidden" id="confirm-box">
