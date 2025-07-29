@@ -678,16 +678,23 @@
     const consentCheckbox = document.getElementById('consentCheckbox');
     const submitBtn = document.getElementById('submitBtn');
 
-    function checkFormCompletion() {
-    const name1 = document.getElementById('participantName')?.value.trim() || '';
-    const name2 = document.getElementById('consentName')?.textContent.trim() || '';
-    const signature = document.getElementById('signatureConfirm')?.textContent.trim() || '';
-    const date = document.getElementById('signatureDate')?.value.trim() || '';
-    const checked = document.getElementById('consentCheckbox')?.checked;
+function checkFormCompletion() {
+  const participantNameInput = document.getElementById('participantName');
+  const consentNameSpan = document.getElementById('consentName');
+  const signatureConfirmSpan = document.getElementById('signatureConfirm');
+  const signatureDateInput = document.getElementById('signatureDate');
+  const consentCheckbox = document.getElementById('consentCheckbox');
 
-    const allFilled = name1 && name2 && signature && date && checked;
-    document.getElementById('submitBtn').disabled = !allFilled;
-    }
+  const name1 = participantNameInput ? participantNameInput.value.trim() : '';
+  const name2 = consentNameSpan ? consentNameSpan.textContent.trim() : '';
+  const signature = signatureConfirmSpan ? signatureConfirmSpan.textContent.trim() : '';
+  const date = signatureDateInput ? signatureDateInput.value.trim() : '';
+  const checked = consentCheckbox ? consentCheckbox.checked : false;
+
+  const allFilled = name1 && name2 && signature && date && checked;
+  document.getElementById('submitBtn').disabled = !allFilled;
+}
+
 
 
     nameInput.addEventListener('input', checkFormCompletion);
