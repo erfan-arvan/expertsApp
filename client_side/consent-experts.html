@@ -710,7 +710,7 @@
             <div class="final-box hidden" id="final-box-consent">
                 <h3>✅ Your registration in this study has been completed!</h3>
                 <p>Thank you! We'll reach out to you via email soon to coordinate the next steps.</p>
-                <a>Click to download a copy of your signed consent form in PDF format.</a>
+                <a href="#" onclick="generateAndDownloadConsentPDF()">📄 Click to download your signed consent form (PDF)</a>
             </div>
 
 
@@ -1165,13 +1165,6 @@
 
     <script>
         function showConsentConfirmation(consentForm) {
-            generateConsentPDF({
-                participantName: document.getElementById("participantName").innerText.trim(),
-                consentName: document.getElementById("consentName").innerText.trim(),
-                signatureConfirm: document.getElementById("signatureConfirm").innerText.trim(),
-                signatureDate: document.getElementById("signatureDate").innerText.trim(),
-                consentCheckbox: document.getElementById("consentCheckbox").checked
-            });
 
             document.getElementById("final-box-consent").classList.remove("hidden");
         }
@@ -1200,6 +1193,57 @@
         }
 
     </script>
+
+    <script>
+  async function generateAndDownloadConsentPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Extract values from the page
+    const participantName = document.getElementById('participantName')?.innerText.trim() || '';
+    const consentName = document.getElementById('consentName')?.innerText.trim() || '';
+    const signature = document.getElementById('signatureConfirm')?.innerText.trim() || '';
+    const date = document.getElementById('signatureDate')?.innerText.trim() || '';
+    
+    // Optional: make sure values are present
+    if (!participantName || !signature || !date) {
+      alert("Missing info — please fill all fields first.");
+      return;
+    }
+
+    // Construct the content of the consent form
+    let text = `
+NEW JERSEY INSTITUTE OF TECHNOLOGY
+323 MARTIN LUTHER KING BLVD.
+NEWARK, NJ 07102
+
+CONSENT TO PARTICIPATE IN A RESEARCH STUDY
+TITLE OF STUDY: Comparing Proxies for Code Comprehension
+
+I, ${consentName}, have been asked to participate in a research study under the direction of Dr. Martin Kellogg.
+
+PURPOSE
+The purpose of this study is to investigate the effectiveness of existing code comprehension measures in assessing the difficulty in understanding Java code snippets...
+
+...
+
+[You can truncate or customize the text to fit the PDF]
+
+SIGNATURE
+Participant Name: ${participantName}
+Signature (typed): ${signature}
+Date: ${date}
+`;
+
+    // Split long text into lines that fit the PDF width
+    const lines = doc.splitTextToSize(text, 180);
+    doc.text(lines, 15, 20);
+
+    // Save as file
+    doc.save("Signed_Consent_Form.pdf");
+  }
+</script>
+
     <footer
         style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
         Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
