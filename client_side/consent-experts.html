@@ -474,6 +474,16 @@
   display: none;
 }
 
+/* for the banner */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 10px #fdd835;
+  }
+  100% {
+    box-shadow: 0 0 20px #fdd835, 0 0 30px #fdd835;
+  }
+}
+
   </style>
 </head>
 
@@ -724,6 +734,39 @@ onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff
     consentCheckbox.addEventListener('change', checkFormCompletion);
   });
 </script>
+
+<!-- Sticky Notification Banner -->
+<div id="consentReminder" style="
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff9c4;
+  border: 2px solid #fdd835;
+  padding: 12px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 999;
+  font-size: 15px;
+  max-width: 90%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: pulseGlow 1.5s infinite alternate;
+">
+  <span>📌 Please scroll down to see the form. Complete the highlighted parts if you agree to participate.</span>
+  <button onclick="document.getElementById('consentReminder').style.display='none'" style="
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #333;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 0 8px;
+    margin-left: auto;
+  " aria-label="Close Reminder">&times;</button>
+</div>
 
 
 <footer
