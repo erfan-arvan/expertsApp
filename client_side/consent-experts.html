@@ -1194,25 +1194,18 @@
 
     </script>
 
-    <script>
+
+<script>
   async function generateAndDownloadConsentPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // Extract values from the page
     const participantName = document.getElementById('participantName')?.innerText.trim() || '';
     const consentName = document.getElementById('consentName')?.innerText.trim() || '';
     const signature = document.getElementById('signatureConfirm')?.innerText.trim() || '';
     const date = document.getElementById('signatureDate')?.innerText.trim() || '';
-    
-    // Optional: make sure values are present
-    if (!participantName || !signature || !date) {
-      alert("Missing info — please fill all fields first.");
-      return;
-    }
 
-    // Construct the content of the consent form
-    let text = `
+    const fullText = `
 NEW JERSEY INSTITUTE OF TECHNOLOGY
 323 MARTIN LUTHER KING BLVD.
 NEWARK, NJ 07102
@@ -1223,7 +1216,7 @@ TITLE OF STUDY: Comparing Proxies for Code Comprehension
 I, ${consentName}, have been asked to participate in a research study under the direction of Dr. Martin Kellogg.
 
 PURPOSE
-The purpose of this study is to investigate the effectiveness of existing code comprehension measures in assessing the difficulty in understanding Java code snippets...
+The purpose of this study is to investigate the effectiveness of existing code comprehension measures...
 
 DURATION
 My participation in this study consists mainly of two parts. The first part is the comprehensibility task, which takes approximately 90 minutes to complete. The second part involves reaching consensus agreements over up to four rounds, with each round expected to take less than 30 minutes.
@@ -1283,19 +1276,33 @@ SIGNATURE OF PARTICIPANT
 
  I have read this form and understand it fully. My questions have been answered to my satisfaction. I agree to participate in this study.
 
+
+SIGNATURE
 Participant Name: ${participantName}
 Signature (typed): ${signature}
 Date: ${date}
 `;
 
-    // Split long text into lines that fit the PDF width
-    const lines = doc.splitTextToSize(text, 180);
-    doc.text(lines, 15, 20);
+    const margin = 15;
+    const verticalOffset = 15;
+    const lineHeight = 8;
+    const maxLinesPerPage = Math.floor((297 - 2 * margin) / lineHeight); // A4 page height = 297mm
+    const lines = doc.splitTextToSize(fullText, 180); // wrap lines to 180mm width
 
-    // Save as file
+    let y = verticalOffset;
+    lines.forEach((line, i) => {
+      if ((i + 1) % maxLinesPerPage === 0) {
+        doc.addPage();
+        y = verticalOffset;
+      }
+      doc.text(line, margin, y);
+      y += lineHeight;
+    });
+
     doc.save("Signed_Consent_Form.pdf");
   }
 </script>
+
 
     <footer
         style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
