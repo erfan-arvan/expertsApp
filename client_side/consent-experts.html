@@ -964,6 +964,8 @@ onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff
     alert("Please select at least one time slot.");
     return;
   }
+    localStorage.setItem("selected_slot", selectedSlots.join(", "));
+
   
 //   const notify = document.getElementById('notify-checkbox').checked;
 //   localStorage.setItem("notify_opt_in", notify);
