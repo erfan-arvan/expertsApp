@@ -422,6 +422,46 @@
     background-color: #3e8e41;
     box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4) inset;
   }
+
+  /* sticky submit button */
+    .sticky-submit-wrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 12px 24px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    text-align: right;
+    z-index: 100;
+  }
+
+  #submitBtn {
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.6;
+    transition: background-color 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  #submitBtn:enabled {
+    cursor: pointer;
+    opacity: 1;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  }
+
+  #submitBtn:enabled:hover {
+    background-color: #45a049;
+  }
+
+  #submitBtn:enabled:active {
+    background-color: #3e8e41;
+    box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4) inset;
+  }
   </style>
 </head>
 
@@ -593,6 +633,12 @@
 
 
 </div>
+
+<div class="sticky-submit-wrapper">
+  <button id="submitBtn" disabled>Submit</button>
+</div>
+
+
 <button id="submitBtn" disabled>Submit</button>
 
 </div>
