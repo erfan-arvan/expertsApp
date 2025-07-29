@@ -461,6 +461,19 @@
     background-color: #3e8e41;
     box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4) inset;
   }
+
+  .submit-note {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #d32f2f; /* red-ish warning */
+  display: block;
+  transition: opacity 0.3s;
+}
+
+#submitBtn:enabled + .submit-note {
+  display: none;
+}
+
   </style>
 </head>
 
@@ -561,9 +574,9 @@
 <div style="
   margin-top: 20px;
   padding: 12px;
-  border: 2px solid #ccc;
+  border: 2px solid #ffeeba;
   border-radius: 6px;
-  background-color: #f9f9f9;
+  background-color:  #ffe4cd1b;
   transition: border-color 0.3s, background-color 0.3s;
 " onmouseenter="this.style.borderColor='#4CAF50'; this.style.backgroundColor='#f0fff0'"
    onmouseleave="this.style.borderColor='#ccc'; this.style.backgroundColor='#f9f9f9'">
@@ -575,7 +588,7 @@
 </div>
 
 
-<div style="margin-top: 20px; padding: 12px; background-color: #ffe4cd1b; border: 1px solid #ffeeba; border-radius: 6px; font-size: 15px;">
+<div style="margin-top: 20px; padding: 12px; background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
   <p style="margin: 0;">
     <strong>Or</strong><br>
     I am not fully informed by this consent form and the information provided on the study summary page.
@@ -635,6 +648,8 @@
 
 
 <button id="submitBtn" disabled>Submit</button>
+<div id="submitNote" class="submit-note">Please complete all highlighted parts before submitting.</div>
+
 
 </div>
 
@@ -684,6 +699,7 @@
   const signatureConfirmSpan = document.getElementById('signatureConfirm');
   const signatureDateInput = document.getElementById('signatureDate');
   const consentCheckbox = document.getElementById('consentCheckbox');
+  const submitNote = document.getElementById('submitNote');
 
   const name1 = participantNameInput ? participantNameInput.textContent.trim() : '';
   const name2 = consentNameSpan ? consentNameSpan.textContent.trim() : '';
@@ -693,6 +709,9 @@
 
   const allFilled = name1 && name2 && signature && date && checked;
   document.getElementById('submitBtn').disabled = !allFilled;
+  if (submitNote) {
+    submitNote.style.display = allFilled ? 'none' : 'block';
+  }
 }
 
 
