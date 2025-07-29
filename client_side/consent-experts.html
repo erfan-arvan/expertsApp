@@ -664,12 +664,22 @@ onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff
   </div>
 
   <button onclick="finalizeMultiSlotSelection()">Next</button>
-
-  <p style="margin-top: 1em;">
-    <a href="#" onclick="toggleCustomTimeBox(); return false;">None of these work for you?</a>
-  </p>
   
 </div>
+
+<!-- Confirmation Section -->
+<div class="confirm-box hidden" id="confirm-box">
+    <p><strong>You selected:</strong> <span id="selected-slot-info"></span>
+      <a href="#" onclick="changeSlot()">Change date</a>
+    </p>
+    <label style="display: block; margin: 15px 0;">
+      <input type="checkbox" id="notify-checkbox" checked>
+      I want to receive notifications about this session through my email "<span id="notify-email"></span>"
+    </label>
+    <button onclick="finalizeRegistration()">Finalize My Registration</button>
+  </div>
+
+  
 <div class="signature-section">
   <label>Participant Name:</label>
   <span contenteditable="true" id="participantName" style="
@@ -855,7 +865,6 @@ onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff
 
   // Go to confirmation step
   document.getElementById('slots-box').classList.add('hidden');
-  document.getElementById('eligibility-success').classList.add('hidden');
   document.getElementById('selected-slot-info').innerText = selectedSlots.join(", ");
   document.getElementById('notify-email').innerText = localStorage.getItem("student_email");
   document.getElementById('confirm-box').classList.remove('hidden');
