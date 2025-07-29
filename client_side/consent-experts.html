@@ -964,6 +964,11 @@ onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff
     alert("Please select at least one time slot.");
     return;
   }
+
+    const selectedSlots = Array.from(selectedEls).map(el => {
+    const dayText = el.closest('.day-card').querySelector('h4').innerText;
+    return `${dayText} at ${el.innerText}`;
+  });
     localStorage.setItem("selected_slot", selectedSlots.join(", "));
 
   
