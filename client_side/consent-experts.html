@@ -950,7 +950,7 @@
     </script>
     <script>
         function submitAppointmentRequest() {
-            const email = localStorage.getItem("student_email") || "unknown";
+            const email = localStorage.getItem("expert_email") || "unknown";
             const notify = localStorage.getItem("notify_opt_in") === "true";
             const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
 
@@ -989,7 +989,7 @@
         }
 
         function submitConsent() {
-            const email = localStorage.getItem("student_email") || "unknown";
+            const email = localStorage.getItem("expert_email") || "unknown";
             const notify = localStorage.getItem("notify_opt_in") === "true";
             const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
 
