@@ -2,536 +2,539 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Eligibility Check</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 40px;
-      background-color: #f4f4f4;
-      color: #333;
-    }
-
-    .instructions,
-    .email-box,
-    .survey-box,
-    .slots-box {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    button {
-      padding: 10px 20px;
-      margin-top: 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      background-color: #4CAF50;
-      color: white;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-
-    .day-card {
-      background-color: #eaeaea;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-    }
-
-    .time-slot {
-      display: inline-block;
-      margin: 5px;
-      padding: 10px 16px;
-      border-radius: 6px;
-      background-color: #ccc;
-      cursor: pointer;
-    }
-
-    .time-slot.selected {
-      background-color: #4CAF50;
-      color: white;
-      font-weight: bold;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background-color: white;
-      padding: 30px;
-      border-radius: 10px;
-      max-width: 400px;
-      text-align: center;
-    }
-
-    .input-field {
-      width: 100%;
-      padding: 10px 14px;
-      font-size: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      box-sizing: border-box;
-      margin-top: 8px;
-      margin-bottom: 16px;
-      background-color: #fff;
-      color: #333;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .input-field:focus {
-      border-color: #4CAF50;
-      outline: none;
-      box-shadow: 0 0 4px rgba(76, 175, 80, 0.4);
-    }
-
-    .input-field {
-      width: 100%;
-      padding: 12px 14px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-top: 10px;
-      margin-bottom: 16px;
-      background-color: #fff;
-      color: #333;
-      box-sizing: border-box;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .input-field:focus {
-      border-color: #4CAF50;
-      outline: none;
-      box-shadow: 0 0 4px rgba(76, 175, 80, 0.4);
-    }
-
-    .full-width-btn {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      background-color: #4CAF50;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .full-width-btn:hover {
-      background-color: #45a049;
-    }
-
-    .modal.hidden {
-      display: none !important;
-    }
-
-    .success-message {
-      position: relative;
-      background-color: #e6f9ec;
-      color: #2e7d32;
-      border: 1px solid #2e7d32;
-      padding: 15px 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      font-size: 16px;
-      font-weight: 500;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    }
-
-    .success-message .close-btn {
-      position: absolute;
-      top: 8px;
-      right: 12px;
-      background: none;
-      border: none;
-      color: #2e7d32;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      line-height: 1;
-      margin: 0;
-    }
-
-    .success-message .close-btn:hover {
-      color: #1b5e20;
-    }
-
-    .confirm-box,
-    .final-box {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .confirm-box a {
-      color: #4CAF50;
-      margin-left: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .confirm-box a:hover {
-      text-decoration: underline;
-    }
-
-    .final-box button {
-      margin-top: 10px;
-    }
-
-    input.input-error {
-      border: 2px solid red;
-      background-color: #ffe6e6;
-    }
-
-    #warning-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.4);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-
-    #warning-modal .modal-content {
-      background-color: white;
-      padding: 20px 30px;
-      border-radius: 10px;
-      text-align: center;
-      max-width: 400px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    }
-
-    @keyframes glowPulse {
-      0% {
-        box-shadow: 0 0 10px #4CAF50;
-      }
-
-      100% {
-        box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
-      }
-    }
-
-    #email {
-      animation: glowPulse 1.5s infinite alternate;
-    }
-
-    button:active {
-      transform: scale(0.97);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) inset;
-    }
-
-      .consent-container {
-    max-width: 800px;
-    margin: 0 auto;
-    border: 2px solid #ccc;
-    padding: 20px;
-    border-radius: 10px;
-    font-family: Arial, sans-serif;
-    background: #fff;
-    overflow-y: auto;
-    max-height: 80vh;
-    position: relative;
-  }
-
-  .consent-section {
-    margin-bottom: 20px;
-  }
-
-  .consent-section h3 {
-    margin-top: 30px;
-  }
-
-  .signature-section {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #ccc;
-  }
-
-  .signature-section label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-
-  .signature-section input {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-
-  .signature-section .readonly {
-    background: #f9f9f9;
-    cursor: not-allowed;
-  }
-
-        .consent-container {
-    max-width: 800px;
-    margin: 0 auto;
-    border: 2px solid #ccc;
-    padding: 20px;
-    border-radius: 10px;
-    font-family: Arial, sans-serif;
-    background: #fff;
-    overflow-y: auto;
-    max-height: 80vh;
-    position: relative;
-  }
-
-  .consent-section {
-    margin-bottom: 20px;
-  }
-
-  .consent-section h3 {
-    margin-top: 30px;
-  }
-
-  .signature-section {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #ccc;
-  }
-
-  .signature-section label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-
-  .signature-section input {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-
-  .signature-section .readonly {
-    background: #f9f9f9;
-    cursor: not-allowed;
-  }
-
-
-  /* for the checkbox */
-    .custom-checkbox {
-    position: relative;
-    padding-left: 30px;
-    cursor: pointer;
-    font-size: 15px;
-    user-select: none;
-    display: inline-block;
-  }
-
-  .custom-checkbox input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-  }
-
-  .checkmark {
-    position: absolute;
-    left: 0;
-    top: 1px;
-    height: 20px;
-    width: 20px;
-    background-color: #fff9c4; /* yellow highlight like input */
-    border: 2px solid #aaa;
-    border-radius: 4px;
-  }
-
-  .custom-checkbox input:checked ~ .checkmark {
-    background-color: #fdd835; /* slightly darker yellow when checked */
-    border-color: #4CAF50;
-  }
-
-  .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }
-
-  .custom-checkbox input:checked ~ .checkmark:after {
-    display: block;
-  }
-
-  .custom-checkbox .checkmark:after {
-    left: 6px;
-    top: 1px;
-    width: 6px;
-    height: 12px;
-    border: solid #333;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-  }
-
-/* For the submit button */
-  #submitBtn {
-    padding: 12px 24px;
-    font-size: 16px;
-    border: none;
-    border-radius: 6px;
-    background-color: #4CAF50;
-    color: white;
-    cursor: not-allowed;
-    opacity: 0.6;
-    transition: background-color 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  #submitBtn:enabled {
-    cursor: pointer;
-    opacity: 1;
-    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
-  }
-
-  #submitBtn:enabled:hover {
-    background-color: #45a049;
-  }
-
-  #submitBtn:enabled:active {
-    background-color: #3e8e41;
-    box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4) inset;
-  }
-
-.sticky-submit-wrapper {
-  position: sticky;
-  bottom: 0;
-  padding: 16px;
-  text-align: right;
-  max-width: 800px;
-  margin: 0 auto;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-}
-
-
-  #submitBtn {
-    padding: 12px 24px;
-    font-size: 16px;
-    border: none;
-    border-radius: 6px;
-    background-color: #4CAF50;
-    color: white;
-    cursor: not-allowed;
-    opacity: 0.6;
-    transition: background-color 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  #submitBtn:enabled {
-    cursor: pointer;
-    opacity: 1;
-    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
-  }
-
-  #submitBtn:enabled:hover {
-    background-color: #45a049;
-  }
-
-  #submitBtn:enabled:active {
-    background-color: #3e8e41;
-    box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4) inset;
-  }
-
-  .submit-note {
-  margin-top: 8px;
-  font-size: 14px;
-  color: #d32f2f; /* red-ish warning */
-  display: block;
-  transition: opacity 0.3s;
-}
-
-#submitBtn:enabled + .submit-note {
-  display: none;
-}
-
-/* for the banner */
-@keyframes pulseGlow {
-  0% {
-    box-shadow: 0 0 10px #42a5f5;
-  }
-  100% {
-    box-shadow: 0 0 20px #42a5f5, 0 0 30px #42a5f5;
-  }
-}
-
-    .slots-box {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+    <meta charset="UTF-8">
+    <title>Eligibility Check</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .instructions,
+        .email-box,
+        .survey-box,
+        .slots-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
 
         .day-card {
-      background-color: #eaeaea;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-    }
+            background-color: #eaeaea;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
 
-    .time-slot {
-      display: inline-block;
-      margin: 5px;
-      padding: 10px 16px;
-      border-radius: 6px;
-      background-color: #ccc;
-      cursor: pointer;
-    }
+        .time-slot {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 16px;
+            border-radius: 6px;
+            background-color: #ccc;
+            cursor: pointer;
+        }
 
-    .time-slot.selected {
-      background-color: #4CAF50;
-      color: white;
-      font-weight: bold;
-    }
+        .time-slot.selected {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
 
-    .hidden {
-      display: none;
-    }
+        .hidden {
+            display: none;
+        }
 
-  </style>
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px 14px;
+            font-size: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            margin-top: 8px;
+            margin-bottom: 16px;
+            background-color: #fff;
+            color: #333;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 4px rgba(76, 175, 80, 0.4);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-top: 10px;
+            margin-bottom: 16px;
+            background-color: #fff;
+            color: #333;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 4px rgba(76, 175, 80, 0.4);
+        }
+
+        .full-width-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .full-width-btn:hover {
+            background-color: #45a049;
+        }
+
+        .modal.hidden {
+            display: none !important;
+        }
+
+        .success-message {
+            position: relative;
+            background-color: #e6f9ec;
+            color: #2e7d32;
+            border: 1px solid #2e7d32;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .success-message .close-btn {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #2e7d32;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            margin: 0;
+        }
+
+        .success-message .close-btn:hover {
+            color: #1b5e20;
+        }
+
+        .confirm-box,
+        .final-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .confirm-box a {
+            color: #4CAF50;
+            margin-left: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .confirm-box a:hover {
+            text-decoration: underline;
+        }
+
+        .final-box button {
+            margin-top: 10px;
+        }
+
+        input.input-error {
+            border: 2px solid red;
+            background-color: #ffe6e6;
+        }
+
+        #warning-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #warning-modal .modal-content {
+            background-color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes glowPulse {
+            0% {
+                box-shadow: 0 0 10px #4CAF50;
+            }
+
+            100% {
+                box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+            }
+        }
+
+        #email {
+            animation: glowPulse 1.5s infinite alternate;
+        }
+
+        button:active {
+            transform: scale(0.97);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) inset;
+        }
+
+        .consent-container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: Arial, sans-serif;
+            background: #fff;
+            overflow-y: auto;
+            max-height: 80vh;
+            position: relative;
+        }
+
+        .consent-section {
+            margin-bottom: 20px;
+        }
+
+        .consent-section h3 {
+            margin-top: 30px;
+        }
+
+        .signature-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+        }
+
+        .signature-section label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .signature-section input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .signature-section .readonly {
+            background: #f9f9f9;
+            cursor: not-allowed;
+        }
+
+        .consent-container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: Arial, sans-serif;
+            background: #fff;
+            overflow-y: auto;
+            max-height: 80vh;
+            position: relative;
+        }
+
+        .consent-section {
+            margin-bottom: 20px;
+        }
+
+        .consent-section h3 {
+            margin-top: 30px;
+        }
+
+        .signature-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+        }
+
+        .signature-section label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .signature-section input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .signature-section .readonly {
+            background: #f9f9f9;
+            cursor: not-allowed;
+        }
+
+
+        /* for the checkbox */
+        .custom-checkbox {
+            position: relative;
+            padding-left: 30px;
+            cursor: pointer;
+            font-size: 15px;
+            user-select: none;
+            display: inline-block;
+        }
+
+        .custom-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            left: 0;
+            top: 1px;
+            height: 20px;
+            width: 20px;
+            background-color: #fff9c4;
+            /* yellow highlight like input */
+            border: 2px solid #aaa;
+            border-radius: 4px;
+        }
+
+        .custom-checkbox input:checked~.checkmark {
+            background-color: #fdd835;
+            /* slightly darker yellow when checked */
+            border-color: #4CAF50;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .custom-checkbox input:checked~.checkmark:after {
+            display: block;
+        }
+
+        .custom-checkbox .checkmark:after {
+            left: 6px;
+            top: 1px;
+            width: 6px;
+            height: 12px;
+            border: solid #333;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* For the submit button */
+        #submitBtn {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: not-allowed;
+            opacity: 0.6;
+            transition: background-color 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #submitBtn:enabled {
+            cursor: pointer;
+            opacity: 1;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+        }
+
+        #submitBtn:enabled:hover {
+            background-color: #45a049;
+        }
+
+        #submitBtn:enabled:active {
+            background-color: #3e8e41;
+            box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4) inset;
+        }
+
+        .sticky-submit-wrapper {
+            position: sticky;
+            bottom: 0;
+            padding: 16px;
+            text-align: right;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+
+        #submitBtn {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: not-allowed;
+            opacity: 0.6;
+            transition: background-color 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #submitBtn:enabled {
+            cursor: pointer;
+            opacity: 1;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+        }
+
+        #submitBtn:enabled:hover {
+            background-color: #45a049;
+        }
+
+        #submitBtn:enabled:active {
+            background-color: #3e8e41;
+            box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4) inset;
+        }
+
+        .submit-note {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #d32f2f;
+            /* red-ish warning */
+            display: block;
+            transition: opacity 0.3s;
+        }
+
+        #submitBtn:enabled+.submit-note {
+            display: none;
+        }
+
+        /* for the banner */
+        @keyframes pulseGlow {
+            0% {
+                box-shadow: 0 0 10px #42a5f5;
+            }
+
+            100% {
+                box-shadow: 0 0 20px #42a5f5, 0 0 30px #42a5f5;
+            }
+        }
+
+        .slots-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .day-card {
+            background-color: #eaeaea;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .time-slot {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 16px;
+            border-radius: 6px;
+            background-color: #ccc;
+            cursor: pointer;
+        }
+
+        .time-slot.selected {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="consent-container">
-  <div class="consent-section">
-  <h2 style="text-align: center;">NEW JERSEY INSTITUTE OF TECHNOLOGY</h2>
-  <p style="text-align: center;">323 MARTIN LUTHER KING BLVD.<br>NEWARK, NJ 07102</p>
-  <h3 style="text-align: center;">CONSENT TO PARTICIPATE IN A RESEARCH STUDY</h3>
-  <h4>TITLE OF STUDY: Comparing Proxies for Code Comprehension</h4>
+    <div class="consent-container">
+        <div class="consent-section">
+            <h2 style="text-align: center;">NEW JERSEY INSTITUTE OF TECHNOLOGY</h2>
+            <p style="text-align: center;">323 MARTIN LUTHER KING BLVD.<br>NEWARK, NJ 07102</p>
+            <h3 style="text-align: center;">CONSENT TO PARTICIPATE IN A RESEARCH STUDY</h3>
+            <h4>TITLE OF STUDY: Comparing Proxies for Code Comprehension</h4>
 
-<p>
-  I, <span contenteditable="true" id="consentName" style="
+            <p>
+                I, <span contenteditable="true" id="consentName" style="
     display: inline-block;
     min-width: 200px;
     border-bottom: 1px solid #000;
@@ -539,145 +542,174 @@
     outline: none;
     background-color: #fff9c4; /* light yellow highlight */
     transition: background-color 0.3s;
-  " onfocus="this.style.backgroundColor='#fff176'" 
-     onblur="this.style.backgroundColor='#fff9c4'">
-  </span>, have been asked to participate in a research study under the direction of Dr. Martin Kellogg.
-</p>
+  " onfocus="this.style.backgroundColor='#fff176'" onblur="this.style.backgroundColor='#fff9c4'">
+                </span>, have been asked to participate in a research study under the direction of Dr. Martin Kellogg.
+            </p>
 
 
-  <h4>PURPOSE</h4>
-  <p>The purpose of this study is to investigate the effectiveness of existing code comprehension measures in assessing the difficulty in understanding Java code snippets (i.e., code comprehensibility). Specifically, this research aims to determine whether these measures can reliably predict expert-determined rankings of code comprehensibility, contributing to improved methods for studying code comprehension.</p>
+            <h4>PURPOSE</h4>
+            <p>The purpose of this study is to investigate the effectiveness of existing code comprehension measures in
+                assessing the difficulty in understanding Java code snippets (i.e., code comprehensibility).
+                Specifically, this research aims to determine whether these measures can reliably predict
+                expert-determined rankings of code comprehensibility, contributing to improved methods for studying code
+                comprehension.</p>
 
-  <h4>DURATION</h4>
-  <p>My participation in this study consists mainly of two parts. The first part is the comprehensibility task, which takes approximately 90 minutes to complete. The second part involves reaching consensus agreements over up to four rounds, with each round expected to take less than 30 minutes.</p>
+            <h4>DURATION</h4>
+            <p>My participation in this study consists mainly of two parts. The first part is the comprehensibility
+                task, which takes approximately 90 minutes to complete. The second part involves reaching consensus
+                agreements over up to four rounds, with each round expected to take less than 30 minutes.</p>
 
-  <h4>BENEFITS FOR SOCIETY AND THE SUBJECT</h4>
-  <p>I have been told that the benefits of this research include advancing knowledge on how code is understood by developers, which can advance teaching and research in software engineering. As a participant, I will have the opportunity to contribute my experience and knowledge to code comprehension research and receive a $50 Amazon gift card as compensation for participating in the study. In the event of early withdrawal, I will receive partial compensation proportional to the extent of my participation.</p>
+            <h4>BENEFITS FOR SOCIETY AND THE SUBJECT</h4>
+            <p>I have been told that the benefits of this research include advancing knowledge on how code is understood
+                by developers, which can advance teaching and research in software engineering. As a participant, I will
+                have the opportunity to contribute my experience and knowledge to code comprehension research and
+                receive a $50 Amazon gift card as compensation for participating in the study. In the event of early
+                withdrawal, I will receive partial compensation proportional to the extent of my participation.</p>
 
-  <h4>PROCEDURES</h4>
-  <p>I have been told that, during this study, the following will occur:</p>
-  <ul>
-    <li>I will participate as one of five expert Java developers in the study. My participation will take place through a secure web-based application (<a href="https://codecomprehensibility.site" target="_blank">https://codecomprehensibility.site</a>).</li>
-    <li>I will take part in up to four rounds following the Delphi method, which is designed to gather and refine expert judgments of a set of Java code snippets.</li>
-    <li>In the first round, I will read the study instructions, log in using a dedicated username and password, and sign an electronic informed consent form. I will then complete three tasks for each of eight Java code snippets: (1) describe the primary functionality, (2) explain how understandable I find it, and (3) rank all eight snippets based on difficulty using a drag-and-drop interface. I will also provide justifications.</li>
-    <li>I can revise my responses before submitting and may update them until the deadline (two weeks after the study begins).</li>
-    <li>After the deadline, the team will analyze all responses. If no consensus is found, de-identified summaries and disagreements will be shared.</li>
-    <li>I will then review summaries, revise my rankings if desired, and repeat this process up to four rounds.</li>
-    <li>If no consensus is reached by round four, a statistical method will be used to create the final ranking.</li>
-  </ul>
+            <h4>PROCEDURES</h4>
+            <p>I have been told that, during this study, the following will occur:</p>
+            <ul>
+                <li>I will participate as one of five expert Java developers in the study. My participation will take
+                    place through a secure web-based application (<a href="https://codecomprehensibility.site"
+                        target="_blank">https://codecomprehensibility.site</a>).</li>
+                <li>I will take part in up to four rounds following the Delphi method, which is designed to gather and
+                    refine expert judgments of a set of Java code snippets.</li>
+                <li>In the first round, I will read the study instructions, log in using a dedicated username and
+                    password, and sign an electronic informed consent form. I will then complete three tasks for each of
+                    eight Java code snippets: (1) describe the primary functionality, (2) explain how understandable I
+                    find it, and (3) rank all eight snippets based on difficulty using a drag-and-drop interface. I will
+                    also provide justifications.</li>
+                <li>I can revise my responses before submitting and may update them until the deadline (two weeks after
+                    the study begins).</li>
+                <li>After the deadline, the team will analyze all responses. If no consensus is found, de-identified
+                    summaries and disagreements will be shared.</li>
+                <li>I will then review summaries, revise my rankings if desired, and repeat this process up to four
+                    rounds.</li>
+                <li>If no consensus is reached by round four, a statistical method will be used to create the final
+                    ranking.</li>
+            </ul>
 
-  <h4>PARTICIPANTS</h4>
-  <p>I will be one of about five participants in this study.</p>
+            <h4>PARTICIPANTS</h4>
+            <p>I will be one of about five participants in this study.</p>
 
-  <h4>EXCLUSIONS</h4>
-  <p>I will inform the researcher if any of the following apply:</p>
-  <ul>
-    <li>I am under 18 years of age.</li>
-    <li>I have a reading disability or impairment affecting code comprehension tasks.</li>
-    <li>I am not comfortable reading English text.</li>
-    <li>My background does not include:
-      <ul>
-        <li>At least five years of Java programming experience, and</li>
-        <li>At least one year leading a team of Java programmers within an organization.</li>
-      </ul>
-    </li>
-  </ul>
+            <h4>EXCLUSIONS</h4>
+            <p>I will inform the researcher if any of the following apply:</p>
+            <ul>
+                <li>I am under 18 years of age.</li>
+                <li>I have a reading disability or impairment affecting code comprehension tasks.</li>
+                <li>I am not comfortable reading English text.</li>
+                <li>My background does not include:
+                    <ul>
+                        <li>At least five years of Java programming experience, and</li>
+                        <li>At least one year leading a team of Java programmers within an organization.</li>
+                    </ul>
+                </li>
+            </ul>
 
-  <h4>RISKS/DISCOMFORTS</h4>
-  <p>This study may involve mild discomfort or fatigue from focusing for extended periods. Breaks will be provided. There may be unknown risks. I understand that I am not covered by NJIT’s insurance policy for any injury or loss during participation.</p>
+            <h4>RISKS/DISCOMFORTS</h4>
+            <p>This study may involve mild discomfort or fatigue from focusing for extended periods. Breaks will be
+                provided. There may be unknown risks. I understand that I am not covered by NJIT’s insurance policy for
+                any injury or loss during participation.</p>
 
-  <h4>CONFIDENTIALITY</h4>
-  <p>I understand that my participation is confidential but not anonymous. My responses will be linked to my name and email so the research team can contact me. Responses may be shared (after de-identification) with other experts but not linked to my identity. All data will be stored securely on AWS during the study and then transferred to NJIT servers and deleted from AWS. Only the research team will access identifying information.</p>
+            <h4>CONFIDENTIALITY</h4>
+            <p>I understand that my participation is confidential but not anonymous. My responses will be linked to my
+                name and email so the research team can contact me. Responses may be shared (after de-identification)
+                with other experts but not linked to my identity. All data will be stored securely on AWS during the
+                study and then transferred to NJIT servers and deleted from AWS. Only the research team will access
+                identifying information.</p>
 
-  <h4>PAYMENT FOR PARTICIPATION</h4>
-  <p>I will receive a $50 Amazon gift card after completing the study. If I do not complete all tasks, I will receive partial compensation proportional to my participation.</p>
+            <h4>PAYMENT FOR PARTICIPATION</h4>
+            <p>I will receive a $50 Amazon gift card after completing the study. If I do not complete all tasks, I will
+                receive partial compensation proportional to my participation.</p>
 
-  <h4>RIGHT TO REFUSE OR WITHDRAW</h4>
-  <p>Participation is voluntary. I may withdraw at any time without consequence. The investigator may also withdraw me at any time.</p>
+            <h4>RIGHT TO REFUSE OR WITHDRAW</h4>
+            <p>Participation is voluntary. I may withdraw at any time without consequence. The investigator may also
+                withdraw me at any time.</p>
 
-  <h4>INDIVIDUAL TO CONTACT</h4>
-  <p>
-    For questions about treatment or procedures:<br>
-    <strong>Martin Kellogg, Ph.D.</strong><br>
-    Assistant Professor of Computer Science<br>
-    NJIT, 323 Dr Martin Luther King Jr Blvd, Newark, NJ 07102<br>
-    (973) 596-3381<br>
-    <a href="mailto:martin.kellogg@njit.edu">martin.kellogg@njit.edu</a> (preferred)
-  </p>
+            <h4>INDIVIDUAL TO CONTACT</h4>
+            <p>
+                For questions about treatment or procedures:<br>
+                <strong>Martin Kellogg, Ph.D.</strong><br>
+                Assistant Professor of Computer Science<br>
+                NJIT, 323 Dr Martin Luther King Jr Blvd, Newark, NJ 07102<br>
+                (973) 596-3381<br>
+                <a href="mailto:martin.kellogg@njit.edu">martin.kellogg@njit.edu</a> (preferred)
+            </p>
 
-  <p>
-    For questions about research rights:<br>
-    <strong>Office of Research</strong><br>
-    NJIT, 323 Martin Luther King Boulevard, Newark, NJ 07102<br>
-    (973) 642-4877<br>
-    <a href="mailto:irb@njit.edu">irb@njit.edu</a> (preferred)
-  </p>
+            <p>
+                For questions about research rights:<br>
+                <strong>Office of Research</strong><br>
+                NJIT, 323 Martin Luther King Boulevard, Newark, NJ 07102<br>
+                (973) 642-4877<br>
+                <a href="mailto:irb@njit.edu">irb@njit.edu</a> (preferred)
+            </p>
 
-  <h4>SIGNATURE OF PARTICIPANT</h4>
+            <h4>SIGNATURE OF PARTICIPANT</h4>
 
-<div style="
+            <div style="
   margin-top: 20px;
   padding: 12px;
   border: 2px solid #ffeeba;
   border-radius: 6px;
   background-color: #fff9c423;
   transition: border-color 0.3s, background-color 0.3s;
-" 
-onmouseenter="this.style.borderColor='#fdd835'; this.style.backgroundColor='#fff59d'" 
-onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff9c423'">
-  <label class="custom-checkbox">
-    <strong> I have read this form and understand it fully. My questions have been answered to my satisfaction. I agree to participate in this research study.</strong>
-    <input type="checkbox" id="consentCheckbox" required>
-    <span class="checkmark"></span>
-  </label>
-</div>
+" onmouseenter="this.style.borderColor='#fdd835'; this.style.backgroundColor='#fff59d'"
+                onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff9c423'">
+                <label class="custom-checkbox">
+                    <strong> I have read this form and understand it fully. My questions have been answered to my
+                        satisfaction. I agree to participate in this research study.</strong>
+                    <input type="checkbox" id="consentCheckbox" required>
+                    <span class="checkmark"></span>
+                </label>
+            </div>
 
 
 
-<div style="margin-top: 20px; padding: 12px; background-color: #f9f9f923; border: 1px solid #cccccc59; border-radius: 6px; font-size: 15px; color: #363636;">
-  <p style="margin: 0;">
-    <strong>Or</strong><br>
-    I am not fully informed by this consent form and the information provided on the study summary page.
-    <a href="mailto:research-team@example.com?subject=Request%20for%20Meeting%20about%20Study" style="color: #0d6efd; text-decoration: underline;">
-      I want to schedule a meeting with the research team to get answers to my questions.
-    </a>
-  </p>
-</div>
+            <div
+                style="margin-top: 20px; padding: 12px; background-color: #f9f9f923; border: 1px solid #cccccc59; border-radius: 6px; font-size: 15px; color: #363636;">
+                <p style="margin: 0;">
+                    <strong>Or</strong><br>
+                    I am not fully informed by this consent form and the information provided on the study summary page.
+                    <a href="mailto:research-team@example.com?subject=Request%20for%20Meeting%20about%20Study"
+                        style="color: #0d6efd; text-decoration: underline;">
+                        I want to schedule a meeting with the research team to get answers to my questions.
+                    </a>
+                </p>
+            </div>
 
-<div class="slots-box " id="slots-box">
-    <h3>Select All Your Available Time Slots</h3>
-    <div class="day-card">
-    <h4>Monday, June 10</h4>
-    <div>
-      <div class="time-slot" onclick="selectSlot(this)">10:00 AM</div>
-      <div class="time-slot" onclick="selectSlot(this)">1:00 PM</div>
-      <div class="time-slot" onclick="selectSlot(this)">4:00 PM</div>
-    </div>
-  </div>
-  <div class="day-card">
-    <h4>Tuesday, June 11</h4>
-    <div>
-      <div class="time-slot" onclick="selectSlot(this)">9:00 AM</div>
-      <div class="time-slot" onclick="selectSlot(this)">12:00 PM</div>
-      <div class="time-slot" onclick="selectSlot(this)">3:00 PM</div>
-    </div>
-  </div>
+            <div class="slots-box " id="slots-box">
+                <h3>Select All Your Available Time Slots</h3>
+                <div class="day-card">
+                    <h4>Monday, June 10</h4>
+                    <div>
+                        <div class="time-slot" onclick="selectSlot(this)">10:00 AM</div>
+                        <div class="time-slot" onclick="selectSlot(this)">1:00 PM</div>
+                        <div class="time-slot" onclick="selectSlot(this)">4:00 PM</div>
+                    </div>
+                </div>
+                <div class="day-card">
+                    <h4>Tuesday, June 11</h4>
+                    <div>
+                        <div class="time-slot" onclick="selectSlot(this)">9:00 AM</div>
+                        <div class="time-slot" onclick="selectSlot(this)">12:00 PM</div>
+                        <div class="time-slot" onclick="selectSlot(this)">3:00 PM</div>
+                    </div>
+                </div>
 
-  <button onclick="finalizeMultiSlotSelection()">Next</button>
-  
-</div>
+                <button onclick="finalizeMultiSlotSelection()">Next</button>
 
-<div class="final-box hidden" id="final-box">
-    <h3>✅ Registration Received!</h3>
-    <p>Thank you! We'll reach out to you soon to confirm the final session time and share the exact room location. It will be in one of the rooms at <strong>GITC, NJIT</strong>.</p>
-    <p><strong>Selected availability:</strong> <span id="confirmed-session"></span></p>
-    <!-- <p>You can add a placeholder to your Google Calendar for now:</p>
-    <button onclick="addToGoogleCalendar()">📅 Add to Google Calendar</button> -->
-</div>
+            </div>
 
-<div class="signature-section">
-  <label>Participant Name:</label>
-  <span contenteditable="true" id="participantName" style="
+            <div class="final-box hidden" id="final-box">
+                <h3>✅ Your Request Has Been Received!</h3>
+                <p>Thank you! We'll reach out to you via email soon to schedule a meeting based on your specified
+                    availability.</p>
+                <p><strong>Selected availability:</strong> <span id="confirmed-session"></span></p>
+            </div>
+
+            <div class="signature-section">
+                <label>Participant Name:</label>
+                <span contenteditable="true" id="participantName" style="
     display: inline-block;
     min-width: 200px;
     border-bottom: 1px solid #000;
@@ -685,11 +717,10 @@ onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff
     background-color: #fff9c4;
     transition: background-color 0.3s;
     outline: none;
-  " onfocus="this.style.backgroundColor='#fff176'" 
-     onblur="this.style.backgroundColor='#fff9c4'"></span>
+  " onfocus="this.style.backgroundColor='#fff176'" onblur="this.style.backgroundColor='#fff9c4'"></span>
 
-<label>Signature (please type your full name):</label>
-<span contenteditable="true" id="signatureConfirm" style="
+                <label>Signature (please type your full name):</label>
+                <span contenteditable="true" id="signatureConfirm" style="
   display: inline-block;
   min-width: 200px;
   border-bottom: 1px solid #000;
@@ -701,11 +732,11 @@ onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff
   font-size: 18px;
   letter-spacing: 0.5px;
 ">
-</span>
+                </span>
 
 
-  <label>Date:</label>
-  <span contenteditable="true" id="signatureDate" style="
+                <label>Date:</label>
+                <span contenteditable="true" id="signatureDate" style="
     display: inline-block;
     min-width: 200px;
     border-bottom: 1px solid #000;
@@ -713,95 +744,94 @@ onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff
     background-color: #fff9c4;
     transition: background-color 0.3s;
     outline: none;
-  " onfocus="this.style.backgroundColor='#fff176'" 
-     onblur="this.style.backgroundColor='#fff9c4'"></span>
-</div>
+  " onfocus="this.style.backgroundColor='#fff176'" onblur="this.style.backgroundColor='#fff9c4'"></span>
+            </div>
 
 
 
 
 
-</div>
+        </div>
 
 
-<button id="submitBtn" disabled>Submit</button>
-<div id="submitNote" class="submit-note">Please complete all highlighted parts before submitting.</div>
+        <button id="submitBtn" disabled>Submit</button>
+        <div id="submitNote" class="submit-note">Please complete all highlighted parts before submitting.</div>
 
 
-</div>
+    </div>
 
-<!-- <div class="sticky-submit-wrapper">
+    <!-- <div class="sticky-submit-wrapper">
   <button id="submitBtn" disabled>Submit</button>
 </div> -->
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const dateEl = document.getElementById('signatureDate');
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const today = new Date().toLocaleDateString(undefined, options);
-    dateEl.innerText = today;
-  });
-</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dateEl = document.getElementById('signatureDate');
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const today = new Date().toLocaleDateString(undefined, options);
+            dateEl.innerText = today;
+        });
+    </script>
 
-<script>
-  function syncEditableNames(sourceId, targetId) {
-    const source = document.getElementById(sourceId);
-    const target = document.getElementById(targetId);
+    <script>
+        function syncEditableNames(sourceId, targetId) {
+            const source = document.getElementById(sourceId);
+            const target = document.getElementById(targetId);
 
-    source.addEventListener('input', () => {
-      if (document.activeElement === source) {
-        target.innerText = source.innerText;
-      }
-    });
-  }
+            source.addEventListener('input', () => {
+                if (document.activeElement === source) {
+                    target.innerText = source.innerText;
+                }
+            });
+        }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    syncEditableNames('participantName', 'consentName');
-    syncEditableNames('consentName', 'participantName');
-  });
-</script>
-
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const nameInput = document.getElementById('participantName');
-    const signatureInput = document.getElementById('signatureConfirm');
-    const dateInput = document.getElementById('signatureDate');
-    const consentCheckbox = document.getElementById('consentCheckbox');
-    const submitBtn = document.getElementById('submitBtn');
-
-    function checkFormCompletion() {
-  const participantNameInput = document.getElementById('participantName');
-  const consentNameSpan = document.getElementById('consentName');
-  const signatureConfirmSpan = document.getElementById('signatureConfirm');
-  const signatureDateInput = document.getElementById('signatureDate');
-  const consentCheckbox = document.getElementById('consentCheckbox');
-  const submitNote = document.getElementById('submitNote');
-
-  const name1 = participantNameInput ? participantNameInput.textContent.trim() : '';
-  const name2 = consentNameSpan ? consentNameSpan.textContent.trim() : '';
-  const signature = signatureConfirmSpan ? signatureConfirmSpan.textContent.trim() : '';
-  const date = signatureDateInput ? signatureDateInput.textContent.trim() : '';
-  const checked = consentCheckbox ? consentCheckbox.checked : false;
-
-  const allFilled = name1 && name2 && signature && date && checked;
-  document.getElementById('submitBtn').disabled = !allFilled;
-  if (submitNote) {
-    submitNote.style.display = allFilled ? 'none' : 'block';
-  }
-}
+        document.addEventListener('DOMContentLoaded', () => {
+            syncEditableNames('participantName', 'consentName');
+            syncEditableNames('consentName', 'participantName');
+        });
+    </script>
 
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const nameInput = document.getElementById('participantName');
+            const signatureInput = document.getElementById('signatureConfirm');
+            const dateInput = document.getElementById('signatureDate');
+            const consentCheckbox = document.getElementById('consentCheckbox');
+            const submitBtn = document.getElementById('submitBtn');
 
-    nameInput.addEventListener('input', checkFormCompletion);
-    signatureInput.addEventListener('input', checkFormCompletion);
-    dateInput.addEventListener('input', checkFormCompletion);
-    consentCheckbox.addEventListener('change', checkFormCompletion);
-  });
-</script>
+            function checkFormCompletion() {
+                const participantNameInput = document.getElementById('participantName');
+                const consentNameSpan = document.getElementById('consentName');
+                const signatureConfirmSpan = document.getElementById('signatureConfirm');
+                const signatureDateInput = document.getElementById('signatureDate');
+                const consentCheckbox = document.getElementById('consentCheckbox');
+                const submitNote = document.getElementById('submitNote');
 
-<!-- Sticky Notification Banner -->
-<div id="consentReminder" style="
+                const name1 = participantNameInput ? participantNameInput.textContent.trim() : '';
+                const name2 = consentNameSpan ? consentNameSpan.textContent.trim() : '';
+                const signature = signatureConfirmSpan ? signatureConfirmSpan.textContent.trim() : '';
+                const date = signatureDateInput ? signatureDateInput.textContent.trim() : '';
+                const checked = consentCheckbox ? consentCheckbox.checked : false;
+
+                const allFilled = name1 && name2 && signature && date && checked;
+                document.getElementById('submitBtn').disabled = !allFilled;
+                if (submitNote) {
+                    submitNote.style.display = allFilled ? 'none' : 'block';
+                }
+            }
+
+
+
+            nameInput.addEventListener('input', checkFormCompletion);
+            signatureInput.addEventListener('input', checkFormCompletion);
+            dateInput.addEventListener('input', checkFormCompletion);
+            consentCheckbox.addEventListener('change', checkFormCompletion);
+        });
+    </script>
+
+    <!-- Sticky Notification Banner -->
+    <div id="consentReminder" style="
   position: fixed;
   top: 20px;
   left: 50%;
@@ -820,10 +850,11 @@ onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff
   gap: 10px;
   animation: pulseGlow 1.5s infinite alternate;
 ">
-<span>📌 Please scroll down to read the informed consent form. If you agree to participate, complete the highlighted fields and click the Submit button at the end.</span>
+        <span>📌 Please scroll down to read the informed consent form. If you agree to participate, complete the
+            highlighted fields and click the Submit button at the end.</span>
 
-<!-- <button onclick="document.getElementById('consentReminder').style.display='none'" style="background-color: #90caf9; color: #000;">X Close!</button> -->
-  <button onclick="document.getElementById('consentReminder').style.display='none'" style="
+        <!-- <button onclick="document.getElementById('consentReminder').style.display='none'" style="background-color: #90caf9; color: #000;">X Close!</button> -->
+        <button onclick="document.getElementById('consentReminder').style.display='none'" style="
     background: none;
     border: none;
     font-size: 18px;
@@ -834,165 +865,165 @@ onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff
     margin-left: auto;
     margin-top: 0!important;
   " aria-label="Close Reminder">X</button>
-</div>
+    </div>
 
 
-<script>
-    function selectSlot(el) {
-  el.classList.toggle('selected');
-}
-</script>
+    <script>
+        function selectSlot(el) {
+            el.classList.toggle('selected');
+        }
+    </script>
 
-<script>
-    const questions = [
-{
-  text: "Where are you studying?",
-  options: [
-    { label: "NJIT" },
-    { label: "College of William & Mary" },
-    { label: "Another university or college", ineligible: true }
-  ]
-}
-,{
-    text: "what's your class standing?",
-    options: [
-        { label: "Freshman" },
-        { label: "Sophomore" },
-        { label: "Junior" },
-        { label: "Senior" },
-        { label: "Graduate student", ineligible: true }
-    ]
-    },
-  {
-    text: "What is your age?",
-    options: [
-      { label: "Under 18", ineligible: true },
-      { label: "18–20" }, { label: "21–24" }, { label: "25–30" },
-      { label: "31–40" }, { label: "Over 40" }
-    ]
-  },
-  {
-    text: "Have you taken CS 288: Intensive Programming?",
-    options: [
-      { label: "I completed the course with a grade of C or better" },
-      { label: "I am currently enrolled in the course" },
-      {label: "I have taken the course but did not receive a grade of C or better, and I am not currently enrolled", ineligible:true},
-      { label: "I have not taken CS 288", ineligible: true }
-    ]
-  },
-  {
-  text: "Have you been diagnosed with a reading or learning disability, or any condition that affects your ability to read or understand code or instructions??",
-  options: [
-    { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
-    { label: "No, I have not been diagnosed with any such condition" }
-  ]
-},
-  {
-    text: "How comfortable are you with reading English-language text?",
-    options: [
-      { label: "Not comfortable", ineligible: true },
-      { label: "Slightly comfortable" },
-      { label: "Moderately comfortable" },
-      { label: "Very comfortable" },
-      { label: "Native speaker / fluent" }
-    ]
-  },
-  {
-    text: "Do you have access to a personal laptop you can bring to the session?",
-    options: [
-      { label: "Yes" },
-      { label: "No", ineligible: true }
-    ]
-  },
-  {
-    text: "How many years have you been programming in Java (through coursework, personal projects, or other experiences)?",
-    options: [
-      { label: "I am not familiar with Java", ineligible: true },
-      { label: "Less than 1 year" },
-      { label: "1–2 years" },
-      { label: "3–4 years" },
-      { label: "5+ years" },
-      { label: "Prefer not to say", ineligible: true }
-    ]
-  }
-];
-</script>
-<script>
-    function submitRegistrationData() {
-  const email = localStorage.getItem("student_email") || "unknown";
-  const notify = localStorage.getItem("notify_opt_in") === "true";
-  const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
+    <script>
+        const questions = [
+            {
+                text: "Where are you studying?",
+                options: [
+                    { label: "NJIT" },
+                    { label: "College of William & Mary" },
+                    { label: "Another university or college", ineligible: true }
+                ]
+            }
+            , {
+                text: "what's your class standing?",
+                options: [
+                    { label: "Freshman" },
+                    { label: "Sophomore" },
+                    { label: "Junior" },
+                    { label: "Senior" },
+                    { label: "Graduate student", ineligible: true }
+                ]
+            },
+            {
+                text: "What is your age?",
+                options: [
+                    { label: "Under 18", ineligible: true },
+                    { label: "18–20" }, { label: "21–24" }, { label: "25–30" },
+                    { label: "31–40" }, { label: "Over 40" }
+                ]
+            },
+            {
+                text: "Have you taken CS 288: Intensive Programming?",
+                options: [
+                    { label: "I completed the course with a grade of C or better" },
+                    { label: "I am currently enrolled in the course" },
+                    { label: "I have taken the course but did not receive a grade of C or better, and I am not currently enrolled", ineligible: true },
+                    { label: "I have not taken CS 288", ineligible: true }
+                ]
+            },
+            {
+                text: "Have you been diagnosed with a reading or learning disability, or any condition that affects your ability to read or understand code or instructions??",
+                options: [
+                    { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
+                    { label: "No, I have not been diagnosed with any such condition" }
+                ]
+            },
+            {
+                text: "How comfortable are you with reading English-language text?",
+                options: [
+                    { label: "Not comfortable", ineligible: true },
+                    { label: "Slightly comfortable" },
+                    { label: "Moderately comfortable" },
+                    { label: "Very comfortable" },
+                    { label: "Native speaker / fluent" }
+                ]
+            },
+            {
+                text: "Do you have access to a personal laptop you can bring to the session?",
+                options: [
+                    { label: "Yes" },
+                    { label: "No", ineligible: true }
+                ]
+            },
+            {
+                text: "How many years have you been programming in Java (through coursework, personal projects, or other experiences)?",
+                options: [
+                    { label: "I am not familiar with Java", ineligible: true },
+                    { label: "Less than 1 year" },
+                    { label: "1–2 years" },
+                    { label: "3–4 years" },
+                    { label: "5+ years" },
+                    { label: "Prefer not to say", ineligible: true }
+                ]
+            }
+        ];
+    </script>
+    <script>
+        function submitRegistrationData() {
+            const email = localStorage.getItem("student_email") || "unknown";
+            const notify = localStorage.getItem("notify_opt_in") === "true";
+            const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
 
-    const eligibilityResponses = questions.map((q, index) => {
-    const key = `eligibility_q${index}`;
-    const storedAnswer = sessionStorage.getItem(key);
-    return {
-        question: q.text,
-        selectedOption: storedAnswer || "No answer"
-    };
-    });
-
-
-  const payload = {
-    email: email,
-    notify: notify,
-    selectedSlot: selectedSlot,
-    eligibilityResponses: eligibilityResponses,
-    submitted: true,
-    event: "availability" // or "cancel" or "modify"
-    };
+            const eligibilityResponses = questions.map((q, index) => {
+                const key = `eligibility_q${index}`;
+                const storedAnswer = sessionStorage.getItem(key);
+                return {
+                    question: q.text,
+                    selectedOption: storedAnswer || "No answer"
+                };
+            });
 
 
-  return fetch("https://codecomprehensibility.site/register_student", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  })
-  .then(res => res.ok)
-  .catch(err => {
-    console.error("❌ Network error:", err);
-    return false;
-  });
-}
-</script>
-<script>
-    function finalizeMultiSlotSelection() {
-  const selectedEls = document.querySelectorAll('.slots-box .time-slot.selected');
-  if (selectedEls.length === 0) {
-    alert("Please select at least one time slot.");
-    return;
-  }
+            const payload = {
+                email: email,
+                notify: notify,
+                selectedSlot: selectedSlot,
+                eligibilityResponses: eligibilityResponses,
+                submitted: true,
+                event: "availability" // or "cancel" or "modify"
+            };
 
-    const selectedSlots = Array.from(selectedEls).map(el => {
-    const dayText = el.closest('.day-card').querySelector('h4').innerText;
-    return `${dayText} at ${el.innerText}`;
-  });
-    localStorage.setItem("selected_slot", selectedSlots.join(", "));
 
-  
-//   const notify = document.getElementById('notify-checkbox').checked;
-//   localStorage.setItem("notify_opt_in", notify);
+            return fetch("https://codecomprehensibility.site/register_student", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(res => res.ok)
+                .catch(err => {
+                    console.error("❌ Network error:", err);
+                    return false;
+                });
+        }
+    </script>
+    <script>
+        function finalizeMultiSlotSelection() {
+            const selectedEls = document.querySelectorAll('.slots-box .time-slot.selected');
+            if (selectedEls.length === 0) {
+                alert("Please select at least one time slot.");
+                return;
+            }
 
-  // Call registration submit before showing final confirmation
-  submitRegistrationData().then(success => {
-    if (success) {
-      document.getElementById('slots-box').classList.add('hidden');
-      document.getElementById('final-box').classList.remove('hidden');
-      const selectedSlot = localStorage.getItem("selected_slot");
-        const sessionText = `${selectedSlot}`;
-        document.getElementById("confirmed-session").innerText = sessionText;
-    } else {
-      alert("❌ Something went wrong while registering. Please try again or contact the research team.");
-    }
-  });
-}
-</script>
-<footer
-    style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
-    Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
-</footer>
+            const selectedSlots = Array.from(selectedEls).map(el => {
+                const dayText = el.closest('.day-card').querySelector('h4').innerText;
+                return `${dayText} at ${el.innerText}`;
+            });
+            localStorage.setItem("selected_slot", selectedSlots.join(", "));
+
+
+            //   const notify = document.getElementById('notify-checkbox').checked;
+            //   localStorage.setItem("notify_opt_in", notify);
+
+            // Call registration submit before showing final confirmation
+            submitRegistrationData().then(success => {
+                if (success) {
+                    document.getElementById('slots-box').classList.add('hidden');
+                    document.getElementById('final-box').classList.remove('hidden');
+                    const selectedSlot = localStorage.getItem("selected_slot");
+                    const sessionText = `${selectedSlot}`;
+                    document.getElementById("confirmed-session").innerText = sessionText;
+                } else {
+                    alert("❌ Something went wrong while registering. Please try again or contact the research team.");
+                }
+            });
+        }
+    </script>
+    <footer
+        style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
+        Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
+    </footer>
 </body>
 
 </html>
