@@ -679,13 +679,16 @@
     const submitBtn = document.getElementById('submitBtn');
 
     function checkFormCompletion() {
-      const allFilled = nameInput.value.trim() !== '' &&
-                        signatureInput.value.trim() !== '' &&
-                        dateInput.value.trim() !== '' &&
-                        consentCheckbox.checked;
+    const name1 = document.getElementById('participantName')?.value.trim() || '';
+    const name2 = document.getElementById('consentName')?.textContent.trim() || '';
+    const signature = document.getElementById('signatureConfirm')?.textContent.trim() || '';
+    const date = document.getElementById('signatureDate')?.value.trim() || '';
+    const checked = document.getElementById('consentCheckbox')?.checked;
 
-      submitBtn.disabled = !allFilled;
+    const allFilled = name1 && name2 && signature && date && checked;
+    document.getElementById('submitBtn').disabled = !allFilled;
     }
+
 
     nameInput.addEventListener('input', checkFormCompletion);
     signatureInput.addEventListener('input', checkFormCompletion);
