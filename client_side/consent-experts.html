@@ -837,6 +837,30 @@ onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff
   el.classList.toggle('selected');
 }
 </script>
+
+<script>
+    function finalizeMultiSlotSelection() {
+  const selectedEls = document.querySelectorAll('.slots-box .time-slot.selected');
+  if (selectedEls.length === 0) {
+    alert("Please select at least one time slot.");
+    return;
+  }
+
+  const selectedSlots = Array.from(selectedEls).map(el => {
+    const dayText = el.closest('.day-card').querySelector('h4').innerText;
+    return `${dayText} at ${el.innerText}`;
+  });
+
+  localStorage.setItem("selected_slot", selectedSlots.join(", "));
+
+  // Go to confirmation step
+  document.getElementById('slots-box').classList.add('hidden');
+  document.getElementById('eligibility-success').classList.add('hidden');
+  document.getElementById('selected-slot-info').innerText = selectedSlots.join(", ");
+  document.getElementById('notify-email').innerText = localStorage.getItem("student_email");
+  document.getElementById('confirm-box').classList.remove('hidden');
+}
+</script>
 <footer
     style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
     Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
