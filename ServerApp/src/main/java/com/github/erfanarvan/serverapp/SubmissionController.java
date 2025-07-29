@@ -358,6 +358,81 @@ public class SubmissionController {
     }
 
 @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/register_expert")
+public synchronized String handleExpertRegistration(@RequestBody Map<String, Object> body) {
+    String email = (String) body.getOrDefault("email", "unknown");
+    String timestamp = ZonedDateTime.now(ZoneId.of("America/New_York"))
+                                    .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+    System.out.println(">>> [register_expert] Registration received from: " + email);
+    System.out.println(">>> Timestamp: " + timestamp);
+
+    File directory = new File("submissions");
+    if (!directory.exists()) {
+        directory.mkdirs();
+        System.out.println(">>> Created 'submissions' directory.");
+    }
+
+    File registrationFile = new File("submissions/expert_registration.json");
+    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
+    try {
+        Map<String, Object> wrapped = new HashMap<>();
+        wrapped.put("timestamp", timestamp);
+        wrapped.put("data", body);
+
+        List<Map<String, Object>> allData = registrationFile.exists()
+            ? mapper.readValue(registrationFile, new TypeReference<>() {})
+            : new ArrayList<>();
+        allData.add(wrapped);
+        mapper.writeValue(registrationFile, allData);
+        System.out.println(">>> Saved to expert_registration.json");
+
+        // Email Content Logic
+        String event = body.getOrDefault("event", "register").toString().toLowerCase().trim();
+        String subject, message;
+        String sessionTime = body.getOrDefault("selectedSlot", "unspecified").toString();
+
+        switch (event) {
+            case "appointment":
+                subject = "Availability Received – Expert Participation in Code Comprehension Study";
+                message = "Thank you for providing your available time slots for the Code Comprehension Study.\n\n" +
+                          "📅 Your availability: " + sessionTime + "\n\n" +
+                          "We'll follow up shortly to finalize an appointment.\n\n" +
+                          "If you have any questions, feel free to reply to this email or contact us at ea442@njit.edu.\n\n" +
+                          "— Code Comprehension Study Team";
+                break;
+
+            case "consent":
+                subject = "Consent Form Received – Code Comprehension Study";
+                message = "Thank you for signing the consent form for the Code Comprehension Study.\n\n" +
+                          "We’ve received your submission and will contact you soon with further instructions.\n\n" +
+                          "If you have any questions, feel free to reply to this email or contact us at ea442@njit.edu.\n\n" +
+                          "— Code Comprehension Study Team";
+                break;
+
+            default:
+                subject = "Expert Registration – Code Comprehension Study";
+                message = "Your registration for the Code Comprehension Study has been received.\n\n" +
+                          "We'll be in touch shortly to coordinate the next steps.\n\n" +
+                          "If you have any questions, feel free to reply to this email or contact us at ea442@njit.edu.\n\n" +
+                          "— Code Comprehension Study Team";
+                break;
+        }
+
+        System.out.println(">>> Sending " + event + " email to: " + email);
+        sendEmailViaPython(email, subject, message);
+
+        return "Expert registration saved.";
+    } catch (IOException e) {
+        System.err.println(">>> ERROR saving expert registration for: " + email);
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save expert registration.");
+    }
+}
+
+
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
 @PostMapping("/submit_round2")
 public synchronized String handleRound2Submission(@RequestBody Map<String, Object> body) {
     String username = (String) body.getOrDefault("username", "anonymous");

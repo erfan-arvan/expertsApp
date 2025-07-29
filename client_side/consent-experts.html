@@ -949,7 +949,7 @@
         ];
     </script>
     <script>
-        function submitRegistrationData() {
+        function submitAppointmentRequest() {
             const email = localStorage.getItem("student_email") || "unknown";
             const notify = localStorage.getItem("notify_opt_in") === "true";
             const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
@@ -970,11 +970,11 @@
                 selectedSlot: selectedSlot,
                 eligibilityResponses: eligibilityResponses,
                 submitted: true,
-                event: "availability" // or "cancel" or "modify"
+                event: "appointment" // or "cancel" or "modify"
             };
 
 
-            return fetch("https://codecomprehensibility.site/register_student", {
+            return fetch("https://codecomprehensibility.site/register_expert", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -987,6 +987,62 @@
                     return false;
                 });
         }
+
+        function submitConsent() {
+            const email = localStorage.getItem("student_email") || "unknown";
+            const notify = localStorage.getItem("notify_opt_in") === "true";
+            const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
+
+            const eligibilityResponses = questions.map((q, index) => {
+                const key = `eligibility_q${index}`;
+                const storedAnswer = sessionStorage.getItem(key);
+                return {
+                    question: q.text,
+                    selectedOption: storedAnswer || "No answer"
+                };
+            });
+
+            // Grab consent values from the DOM
+            const participantNameInput = document.getElementById('participantName');
+            const consentNameSpan = document.getElementById('consentName');
+            const signatureConfirmSpan = document.getElementById('signatureConfirm');
+            const signatureDateInput = document.getElementById('signatureDate');
+            const consentCheckbox = document.getElementById('consentCheckbox');
+
+            const consentForm = {
+                fullName: participantNameInput?.innerText.trim() || '',
+                consentName: consentNameSpan?.innerText.trim() || '',
+                signature: signatureConfirmSpan?.innerText.trim() || '',
+                dateSigned: signatureDateInput?.innerText.trim() || '',
+                consentGiven: consentCheckbox?.checked || false,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent
+            };
+
+            const payload = {
+                email: email,
+                notify: notify,
+                selectedSlot: selectedSlot,
+                eligibilityResponses: eligibilityResponses,
+                consentForm: consentForm,
+                submitted: true,
+                event: "consent" // or "cancel" or "modify"
+            };
+
+            return fetch("https://codecomprehensibility.site/register_expert", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(res => res.ok)
+                .catch(err => {
+                    console.error("❌ Network error:", err);
+                    return false;
+                });
+        }
+
     </script>
     <script>
         function finalizeMultiSlotSelection() {
@@ -1007,7 +1063,7 @@
             //   localStorage.setItem("notify_opt_in", notify);
 
             // Call registration submit before showing final confirmation
-            submitRegistrationData().then(success => {
+            submitAppointmentRequest().then(success => {
                 if (success) {
                     document.getElementById('slots-box').classList.add('hidden');
                     document.getElementById('final-box').classList.remove('hidden');
@@ -1020,6 +1076,43 @@
             });
         }
     </script>
+
+    <button id="submitConsentBtn" onclick="submitConsent()">Submit</button>
+    <script>
+        document.getElementById('submitConsentBtn').addEventListener('click', function () {
+            const email = localStorage.getItem('expert_email');
+            const participantNameInput = document.getElementById('participantName');
+            const consentNameSpan = document.getElementById('consentName');
+            const signatureConfirmSpan = document.getElementById('signatureConfirm');
+            const signatureDateInput = document.getElementById('signatureDate');
+            const consentCheckbox = document.getElementById('consentCheckbox');
+
+            const consentData = {
+                fullName: participantNameInput?.innerText.trim() || '',
+                consentName: consentNameSpan?.innerText.trim() || '',
+                signature: signatureConfirmSpan?.innerText.trim() || '',
+                dateSigned: signatureDateInput?.innerText.trim() || '',
+                consentGiven: consentCheckbox?.checked || false,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent
+            };
+
+            console.log('Consent JSON:', JSON.stringify(consentData, null, 2));
+
+            // Example of sending it to the server via fetch:
+            /*
+            fetch('/submit_consent', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(consentData)
+            }).then(res => {
+              if (res.ok) alert('Consent submitted successfully.');
+              else alert('Failed to submit.');
+            });
+            */
+        });
+    </script>
+
     <footer
         style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
         Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
