@@ -701,19 +701,27 @@
 
             </div>
 
-            <div class="final-box hidden" id="final-box">
+            <!-- Final Box Modal: Appointment Acknowledgement -->
+            <div id="final-box" class="modal hidden">
+            <div class="modal-content">
                 <h3>✅ Your Request Has Been Received!</h3>
-                <p>Thank you! We'll reach out to you via email soon to schedule a meeting based on your specified
-                    availability.</p>
+                <p>Thank you! We'll reach out to you via email soon to schedule a meeting based on your specified availability.</p>
                 <p><strong>Selected availability:</strong> <span id="confirmed-session"></span></p>
+                <button onclick="closeModal('final-box')">Close</button>
+            </div>
             </div>
 
-            <div class="final-box hidden" id="final-box-consent">
+            <!-- Final Box Modal: Consent Confirmation -->
+            <div id="final-box-consent" class="modal hidden">
+            <div class="modal-content">
                 <h3>✅ Your registration in this study has been completed!</h3>
                 <p>Thank you! We'll reach out to you via email soon to coordinate the next steps.</p>
-                <a href="#" onclick="generateAndDownloadConsentPDF()">📄 Click to download your signed consent form
-                    (PDF)</a>
+                <a href="#" onclick="generateAndDownloadConsentPDF()">📄 Click to download your signed consent form (PDF)</a>
+                <br><br>
+                <button onclick="closeModal('final-box-consent')">Close</button>
             </div>
+            </div>
+
 
 
             <div class="signature-section">
