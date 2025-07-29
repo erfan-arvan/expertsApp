@@ -594,6 +594,31 @@
 </script>
 
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const nameInput = document.getElementById('participantName');
+    const signatureInput = document.getElementById('signatureConfirm');
+    const dateInput = document.getElementById('signatureDate');
+    const consentCheckbox = document.getElementById('consentCheckbox');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function checkFormCompletion() {
+      const allFilled = nameInput.value.trim() !== '' &&
+                        signatureInput.value.trim() !== '' &&
+                        dateInput.value.trim() !== '' &&
+                        consentCheckbox.checked;
+
+      submitBtn.disabled = !allFilled;
+    }
+
+    nameInput.addEventListener('input', checkFormCompletion);
+    signatureInput.addEventListener('input', checkFormCompletion);
+    dateInput.addEventListener('input', checkFormCompletion);
+    consentCheckbox.addEventListener('change', checkFormCompletion);
+  });
+</script>
+
+
 <footer
     style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
     Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
