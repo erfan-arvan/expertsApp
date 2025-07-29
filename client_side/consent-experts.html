@@ -642,7 +642,8 @@
                 <a href="mailto:irb@njit.edu">irb@njit.edu</a> (preferred)
             </p>
 
-            <h4 style=" border-top: 1px solid #ccc;">SIGNATURE OF PARTICIPANT</h4>
+            <h4 style=" border-top: 1px solid #ccc;             margin-top: 30px;
+            padding-top: 20px;">SIGNATURE OF PARTICIPANT</h4>
 
             <div style="
   margin-top: 20px;
@@ -708,7 +709,8 @@
             <div class="final-box hidden" id="final-box-consent">
                 <h3>✅ Your registration in this study has been completed!</h3>
                 <p>Thank you! We'll reach out to you via email soon to coordinate the next steps.</p>
-                <a href="#" onclick="generateAndDownloadConsentPDF()">📄 Click to download your signed consent form (PDF)</a>
+                <a href="#" onclick="generateAndDownloadConsentPDF()">📄 Click to download your signed consent form
+                    (PDF)</a>
             </div>
 
 
@@ -1193,17 +1195,17 @@
     </script>
 
 
-<script>
-  async function generateAndDownloadConsentPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    <script>
+        async function generateAndDownloadConsentPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
 
-    const participantName = document.getElementById('participantName')?.innerText.trim() || '';
-    const consentName = document.getElementById('consentName')?.innerText.trim() || '';
-    const signature = document.getElementById('signatureConfirm')?.innerText.trim() || '';
-    const date = document.getElementById('signatureDate')?.innerText.trim() || '';
+            const participantName = document.getElementById('participantName')?.innerText.trim() || '';
+            const consentName = document.getElementById('consentName')?.innerText.trim() || '';
+            const signature = document.getElementById('signatureConfirm')?.innerText.trim() || '';
+            const date = document.getElementById('signatureDate')?.innerText.trim() || '';
 
-    const fullText = `
+            const fullText = `
 NEW JERSEY INSTITUTE OF TECHNOLOGY
 323 MARTIN LUTHER KING BLVD.
 NEWARK, NJ 07102
@@ -1282,25 +1284,25 @@ Signature (typed): ${signature}
 Date: ${date}
 `;
 
-    const margin = 15;
-    const verticalOffset = 15;
-    const lineHeight = 8;
-    const maxLinesPerPage = Math.floor((297 - 2 * margin) / lineHeight); // A4 page height = 297mm
-    const lines = doc.splitTextToSize(fullText, 180); // wrap lines to 180mm width
+            const margin = 15;
+            const verticalOffset = 15;
+            const lineHeight = 8;
+            const maxLinesPerPage = Math.floor((297 - 2 * margin) / lineHeight); // A4 page height = 297mm
+            const lines = doc.splitTextToSize(fullText, 180); // wrap lines to 180mm width
 
-    let y = verticalOffset;
-    lines.forEach((line, i) => {
-      if ((i + 1) % maxLinesPerPage === 0) {
-        doc.addPage();
-        y = verticalOffset;
-      }
-      doc.text(line, margin, y);
-      y += lineHeight;
-    });
+            let y = verticalOffset;
+            lines.forEach((line, i) => {
+                if ((i + 1) % maxLinesPerPage === 0) {
+                    doc.addPage();
+                    y = verticalOffset;
+                }
+                doc.text(line, margin, y);
+                y += lineHeight;
+            });
 
-    doc.save("Signed_Consent_Form.pdf");
-  }
-</script>
+            doc.save("Signed_Consent_Form.pdf");
+        }
+    </script>
 
 
     <footer
