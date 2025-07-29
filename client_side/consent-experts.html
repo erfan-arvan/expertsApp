@@ -477,12 +477,13 @@
 /* for the banner */
 @keyframes pulseGlow {
   0% {
-    box-shadow: 0 0 10px #fdd835;
+    box-shadow: 0 0 10px #42a5f5;
   }
   100% {
-    box-shadow: 0 0 20px #fdd835, 0 0 30px #fdd835;
+    box-shadow: 0 0 20px #42a5f5, 0 0 30px #42a5f5;
   }
 }
+
 
   </style>
 </head>
@@ -741,8 +742,8 @@ onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #fff9c4;
-  border: 2px solid #fdd835;
+  background-color: #e3f2fd;
+  border: 2px solid #90caf9;
   padding: 12px 20px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -755,7 +756,7 @@ onmouseleave="this.style.borderColor='#ffeeba'; this.style.backgroundColor='#fff
   gap: 10px;
   animation: pulseGlow 1.5s infinite alternate;
 ">
-  <span>📌 Please scroll down to see the form. Complete the highlighted parts if you agree to participate.</span>
+<span>📌 Please scroll down to read the informed consent form. If you agree to participate, complete the highlighted fields and click the Submit button at the end.</span>
   <button onclick="document.getElementById('consentReminder').style.display='none'" style="
     background: none;
     border: none;
