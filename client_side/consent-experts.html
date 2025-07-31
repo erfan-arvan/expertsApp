@@ -1041,6 +1041,15 @@ const questions = [
             const signatureDateInput = document.getElementById('signatureDate');
             const consentCheckbox = document.getElementById('consentCheckbox');
 
+            const participantName = participantNameInput?.innerText.trim() || '';
+            const signatureName = signatureConfirmSpan?.innerText.trim() || '';
+
+            // Validation: check if names match
+            if (participantName !== signatureName) {
+                alert("The name entered in the signature does not match the participant's name.");
+                return; // Stop submission
+             }
+
             const consentForm = {
                 fullName: participantNameInput?.innerText.trim() || '',
                 consentName: consentNameSpan?.innerText.trim() || '',
