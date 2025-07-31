@@ -984,7 +984,13 @@ const questions = [
     </script>
     <script>
         function submitAppointmentRequest() {
-            const email = localStorage.getItem("expert_email") || "unknown";
+            const email = localStorage.getItem("expert_email");
+              if (!email) {
+                alert("Email is missing. Please start the eligibility process from the beginning:\n\nhttps://codecomprehensibility.site/eligibility-experts.html");
+                // Optionally redirect the user:
+                window.location.href = "https://codecomprehensibility.site/eligibility-experts.html";
+                return;
+            }
             const notify = localStorage.getItem("notify_opt_in") === "true";
             const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
 
