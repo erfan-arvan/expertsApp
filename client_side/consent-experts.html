@@ -596,7 +596,7 @@
                 <li>I will take part in up to three rounds following the Delphi method, which is designed to gather and
                     refine expert judgments of a set of Java code snippets.</li>
                 <li>In the first round, I will read the study instructions, log in using a dedicated username and
-                    password, and sign an electronic informed consent form. I will then complete three tasks for each of
+                    password. I will then complete three tasks for each of
                     eight Java code snippets: (1) describe the primary functionality, (2) explain how understandable I
                     find it, and (3) rank all eight snippets based on difficulty using a drag-and-drop interface. I will
                     also provide justifications.</li>
@@ -926,34 +926,27 @@
 
     <script>
 const questions = [
-  {
-    text: "Have you held a senior-level engineering role or higher in your career?",
-    options: [
-      { label: "Yes, I’ve been a Senior Software Engineer or held a more advanced title (e.g., Staff Engineer, Tech Lead, Engineering Manager, etc.)" },
-      { label: "No, I have not held a senior-level engineering role", ineligible: true }
-    ]
-  },
-  {
-    text: "Is Java one of your primary programming languages?",
-    options: [
-      { label: "Yes" },
-      { label: "No", ineligible: true }
-    ]
-  },
+{
+  text: "Have you ever received a significant promotion in a software engineering role—for example, a promotion from an entry-level position to the next level where engineers are expected to operate more independently or lead small projects? Examples include a promotion to: Apple ICT3, Facebook E4, Uber Level 4 (Software Engineer II), Microsoft Level 61, Amazon L5, or Walmart L3.",
+  options: [
+    { label: "Yes, I have received a promotion like that." },
+    { label: "No, I have not received a promotion like that.", ineligible: true }
+  ]
+},
+{
+  text: "How much professional experience do you have with Java?",
+  options: [
+    { label: "None", ineligible: true },
+    { label: "Less than 1 year" },
+    { label: "1–3 years" },
+    { label: "More than 3 years" }
+  ]
+},
   {
     text: "Have you mentored at least one junior software engineer in a professional setting?",
     options: [
       { label: "Yes" },
       { label: "No", ineligible: true }
-    ]
-  },
-  {
-    text: "How many years of professional software development experience do you have?",
-    options: [
-      { label: "Less than 3 years" },
-      { label: "3–5 years" },
-      { label: "6–10 years" },
-      { label: "More than 10 years" }
     ]
   },
   {
@@ -1259,7 +1252,7 @@ I have been told that, during this study, the following will occur:
 
 I will participate as one of five expert Java developers in the study. My participation will take place through a secure web-based application (https://codecomprehensibility.site).
 I will take part in up to three rounds following the Delphi method, which is designed to gather and refine expert judgments of a set of Java code snippets.
-In the first round, I will read the study instructions, log in using a dedicated username and password, and sign an electronic informed consent form. I will then complete three tasks for each of eight Java code snippets: (1) describe the primary functionality, (2) explain how understandable I find it, and (3) rank all eight snippets based on difficulty using a drag-and-drop interface. I will also provide justifications.
+In the first round, I will read the study instructions, log in using a dedicated username and password. I will then complete three tasks for each of eight Java code snippets: (1) describe the primary functionality, (2) explain how understandable I find it, and (3) rank all eight snippets based on difficulty using a drag-and-drop interface. I will also provide justifications.
 I can revise my responses before submitting and may update them until the deadline (two weeks after the study begins).
 After the deadline, the team will analyze all responses. If no consensus is found, de-identified summaries and disagreements will be shared.
 I will then review summaries, revise my rankings if desired, and repeat this process up to three rounds.
