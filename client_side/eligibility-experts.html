@@ -265,6 +265,10 @@
   }
 }
 
+#gotoconsent{
+  animation: glowPulse 1.5s infinite alternate;
+}
+
 
   </style>
 </head>
@@ -366,7 +370,7 @@
     🎉 You're eligible to participate in the study!
   </div>
       <strong>Please finalize your participation by reading and signing the informed consent form:</strong>
-    <button onclick="window.location='/consent-experts.html'">Final Step: Review Consent Form</button>
+    <button id="gotoconsent" onclick="window.location='/consent-experts.html'">Final Step: Review Consent Form</button>
 </div>
 
   <!-- Confirmation Section -->
