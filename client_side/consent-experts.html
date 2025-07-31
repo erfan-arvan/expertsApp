@@ -745,6 +745,8 @@
                     <a href="#" onclick="generateAndDownloadConsentPDF()">📄 Click to download a copy of your signed consent form
                         (PDF)</a>
                     <br><br>
+                    <p>A confirmation email has been sent to <strong id="emailHolder"></strong>.</p>
+                    <br><br>
                     <!-- <button onclick="closeModal('final-box-consent')">Close</button> -->
                     <p>You can now close the tab!</p>
                 </div>
@@ -1197,7 +1199,8 @@ const questions = [
 
     <script>
         function showConsentConfirmation(consentForm) {
-
+            const email = localStorage.getItem("expert_email") || "your email";
+            document.getElementById("emailHolder").innerText = email;
             document.getElementById("final-box-consent").classList.remove("hidden");
         }
 
