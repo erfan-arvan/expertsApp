@@ -300,12 +300,12 @@
           Logout</button>)</div>
     </div>
   <a href="round2.html" class="phase-link" id="link-home">🏠 Home</a>
-  <a href="phase1-recap.html" class="phase-link" id="link-phase1">Phase 1</a>
-  <a href="phase2-recap.html" class="phase-link disabled" id="link-phase2">Phase 2</a>
-  <a href="phase3-recap.html" class="phase-link disabled" id="link-phase3">Phase 3</a>
-  <a href="phase4-recap.html" class="phase-link disabled" id="link-phase4">Phase 4</a>
+  <a href="round2-phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
+  <a href="round2-phase2.html" class="phase-link disabled" id="link-phase2">Phase 2</a>
+  <a href="round2-phase3.html" class="phase-link disabled" id="link-phase3">Phase 3</a>
+  <a href="round2-phase4.html" class="phase-link disabled" id="link-phase4">Phase 4</a>
   <a href="round2-phase5.html" class="phase-link" id="link-phase5">Phase 5</a>
-  <a href="round2-review-recap.html" class="phase-link disabled" id="link-review">Review & Submit</a>
+  <a href="round2-review.html" class="phase-link disabled" id="link-review">Review & Submit</a>
   </div>
 
 
@@ -896,7 +896,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 
 
   function reviewAndSubmit() {
-    window.location.href = '/round2-review-recap.html';
+    window.location.href = '/round2-review.html';
   }
 
   showStep();
@@ -1034,7 +1034,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   function checkPhase2Completion() {
     if (!isPhaseComplete('round2-phase4-complete') || !isPhaseComplete('round2-phase4-complete')) {
       alert('Please complete Phase 2 before continuing.');
-      window.location.href = 'phase2-recap.html';
+      window.location.href = 'round2-phase2.html';
     }
   }
 
