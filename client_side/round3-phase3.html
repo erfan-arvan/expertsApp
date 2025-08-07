@@ -1825,27 +1825,26 @@ function renderParticipantRankings() {
       },
       {
         snippet: 2,
-        text: `Snippet 2 (isRemote) appears to be a point of partial disagreement among the experts.
+        textold:
+                `Snippet 2 (isRemote) appears to be a point of partial disagreement among the experts.
 <br>*Nadeeshan considers it easy to understand and places it in the easiest position, alongside Snippet 1. He believes it has a meaningful method name, clear internal method invocations, and a straightforward switch statement.
 <br>*Oscar also finds the snippet relatively easy, but slightly more difficult than Snippet 1 (isValidProjectName). He expressed uncertainty about the meaning of isFilesystemPath and the use of the URI scheme, stating:
 “I am not familiar with a URI's scheme and why implementing that logic (in Snippet 2) is enough to check if it is remote.”
 <br>*Martin also places Snippet 2 in Position 1 (easiest) and describes it as generally clear. He notes:
-“There are some subtleties here (how do we know that 'jar' and 'file' are the only URI schemes that are not remote? I think that's domain knowledge...), but overall the purpose is clear and easy to understand from the code's structure.” However, unlike Nadeeshan and Oscar, Martin ranked Snippet 1 slightly lower, placing it in Position 2, indicating that he finds Snippet 2 just a bit easier due to its shorter and simpler set of rules.`
-      },
-      {
-        snippet: 7,
-        text: `Snippet 7 (lowestPositiveRoot) also caused disagreement among the experts.
-<br>*Martin considers it moderately difficult and placed it in the middle (Position 4), grouped with Snippet 4. He explained:
-“These two snippets are moderately complex string and float algorithms, respectively. I don't differentiate between them, since both are tricky to get right but are doing something pretty well understood.”
-He also noted that Snippet 7 “calls back to grade school math pretty aggressively (e.g., through naming its parameters a, b, and c), and that makes it easier to understand the overall purpose by recognizing the quadratic formula. The swap block (lines 10–14) is also an easily recognizable pattern to swap via a temporary variable. Overall, then, this is relatively straightforward.”
-<br>*Oscar placed this snippet slightly earlier (Position 3) and commented:
-“Easy after remembering the formula; logic is clear with basic math review.”
-<br>*Nadeeshan, however, ranked Snippet 7 as the most difficult (Position 8). He found the method name misleading and the logic unclear, even after testing it with dummy values. He wrote:
-“Snippet 7’s logic is in contradiction with the method name. I thought it returns the lowest positive root from three numbers, but line 2 is unclear.”`
+“There are some subtleties here (how do we know that 'jar' and 'file' are the only URI schemes that are not remote? I think that's domain knowledge...), but overall the purpose is clear and easy to understand from the code's structure.” However, unlike Nadeeshan and Oscar, Martin ranked Snippet 1 slightly lower, placing it in Position 2, indicating that he finds Snippet 2 just a bit easier due to its shorter and simpler set of rules.`,
+        text: `In round 2, the experts disagreed about how understandable Snippet 2 would be for a typical software engineer, especially in terms of the background knowledge it assumes about URI schemes.
+<ul>
+  <li><strong>Oscar</strong> placed the snippet in Position 4, indicating that he found it more difficult than most others. He questioned whether checking if the scheme is "jar" or "file" is enough to determine whether a URI is remote. Although he found the logic structurally simple, he felt the method’s purpose was unclear without understanding the significance of those schemes. For him, knowing what counts as a remote URI is not necessarily common knowledge, and that gap affects how easily the method can be understood.</li>
+  <li><strong>Martin</strong> placed the snippet in Position 2, seeing it as relatively easy. He acknowledged that the method relies on domain knowledge about URI schemes but believed that most engineers would still be able to follow the logic. He found the structure clean and the intent straightforward once the scheme check is interpreted correctly. From his perspective, the need for external knowledge was minimal and did not prevent comprehension.</li>
+  <li><strong>Nadeeshan</strong> originally placed the snippet in Position 1, seeing it as the easiest. After considering Oscar’s comments, he moved it to Position 2, recognizing that the use of "jar" and "file" might not be immediately intuitive to everyone. However, he still felt that the overall purpose of the method remained understandable and that the control flow supported clarity.</li>
+</ul>
+<p>The disagreement reflects a broader question: To what extent does familiarity with concepts like URI schemes affect how understandable this method would be for the average software engineer? Oscar believed this knowledge gap adds meaningful difficulty. Martin and Nadeeshan judged the snippet to be accessible in spite of it.</p>
+<p>The disagreement also raises a related but distinct point that was not directly discussed: how much familiarity with URI schemes can reasonably be assumed of typical software engineers. While the experts differed in how much this knowledge mattered for understanding the snippet, they did not explicitly address whether such knowledge is commonly held.</p>`
       },
       {
         snippet: 5,
-        text: `Snippet 5 (deleteRecursively) is another point of disagreement among the experts.
+        textold:
+                `Snippet 5 (deleteRecursively) is another point of disagreement among the experts.
 <br>*Oscar placed it in the easiest position (Position 1). He stated that he is “familiar with the visitor pattern” and that “identifiers help clarify”. He described the snippet as having straightforward logic and noted that it was hard for him to distinguish between Snippets 1, 3, and 5 in terms of comprehensibility, as all seemed similarly clear to him.
 <br>*Nadeeshan, who placed it in Position 6, described it as:
 “Harder due to unclear postVisitDirectory. Assumes dir is a Path object passed from FileVisitor.”
@@ -1854,18 +1853,24 @@ This suggests that while the overall intent was understandable, specific impleme
 <br>*Martin placed Snippet 5 in Position 5 and offered a nuanced perspective:
 “This was easy for me to understand, but it required domain-specific knowledge of how Java handles file system operations that I do have: I immediately recognized the structure of the walkFileTree call with the anonymous visitor, and knew that I only needed to look at the names of the overridden methods and their bodies (i.e., lines 8 and 13) to figure out what the method does.”
 He also grouped this snippet with Snippets 4 and 7, noting:
-“These three snippets are actually pretty similar: all are implementations of some kind of simple specification that's a bit tricky to get right in practice.”`
+“These three snippets are actually pretty similar: all are implementations of some kind of simple specification that's a bit tricky to get right in practice.”`,
+        text: `In round 2, the experts disagreed on how understandable Snippet 5 would be for a typical software engineer, particularly in relation to the prior experience it assumes with Java’s file system APIs and the Visitor design pattern.
+<ul>
+  <li><strong>Oscar</strong> placed the snippet in Position 2, continuing to view it as relatively easy. He acknowledged that engineers unfamiliar with the Visitor pattern might find it harder to understand, but he still believed the structure and naming made the method accessible. He did not express strong motivation to move it out of the "easy" tier and suggested only a slight shift to the right in his ranking.</li>
+  <li><strong>Nadeeshan</strong> placed the snippet in Position 5, moving it slightly up from his initial ranking but continuing to see it as significantly more difficult than Oscar did. He agreed with Martin’s earlier point that understanding the method depends on prior familiarity with Java’s file-handling APIs, including the role of <code>postVisitDirectory</code> and the behavior of <code>FileVisitor</code>. For him, these assumptions limit how easily the method can be understood by engineers who have not worked with this part of the API.</li>
+  <li><strong>Martin</strong> placed the snippet in Position 4 and shared a similar view. He found the method’s specification clear, but believed that understanding its behavior relies on recognizing the idiomatic use of <code>walkFileTree</code> and overridden visitor methods. He was willing to shift the snippet slightly lower in his ranking, but still saw it as easier than others that rely on reflection or encoding logic.</li>
+</ul>
+<p>The disagreement reflects two underlying questions. First, how much familiarity with the Java file system API and the Visitor pattern can reasonably be assumed of typical software engineers? Second, to what extent does that familiarity, or lack of it, impact how easily this method can be understood? Oscar believed that clear structure and naming could compensate for unfamiliarity. Martin and Nadeeshan viewed comprehension as closely tied to experience with the underlying API.</p>`
       },
       {
-        snippet: 8,
-        text: `There is a small disagreement among the experts regarding the ranking of Snippet 8 (atan2).
-<br>*Nadeeshan, unlike the others who placed this snippet in Position 8 (hardest), ranked it in Position 5. He considered it to be easier to understand than Snippets 6 (encodedLength) and 7 (lowestPositiveRoot).
-However, he also acknowledged its difficulty, describing it as:
-“Difficult due to math background required and unclear method purpose.”
-This suggests that while he found it conceptually challenging, he still viewed it as more comprehensible than snippets that involved domain-specific programming knowledge or misleading logic.
-<br>*Oscar and Martin both ranked Snippet 8 as the most difficult (Position 8). Oscar noted:
-“For obvious reasons, atan2 is harder to understand: I don't remember how atan works, the code contains cryptic instructions, and I don't know what atanUnchecked is doing — also, the identifiers here don't help.”
-<br>*Martin shared a similar view, stating that the snippet requires two kinds of domain-specific knowledge — numerical methods and trigonometry — as opposed to just one in Snippet 6, which focuses on encoding.`
+        snippet: 4,
+        text: `In round 2, the experts disagreed on how difficult Snippet 4 would be for a typical software engineer to understand, especially in terms of how much prior knowledge of Java’s string APIs is required.
+<ul>
+  <li><strong>Oscar</strong> placed Snippet 4 in Position 6, suggesting that many engineers might find it hard to follow. He pointed to missing context and uncertainty about what <code>regionMatches</code> is doing, indicating that the method depends on familiarity with less common API behavior. Although he understood the overall purpose, he believed the logic was more complex than in other snippets and that many engineers might struggle to follow it precisely.</li>
+  <li><strong>Martin</strong> placed Snippet 4 in Position 4 and grouped it with Snippets 5 and 7. He argued that all three have clear specifications but complicated implementations that require attention to detail. While not trivial, he considered Snippet 4 to be understandable for most engineers, assuming they read it carefully. He viewed it as more accessible than snippets like Snippet 3, which involve reflection.</li>
+  <li><strong>Nadeeshan</strong> placed Snippet 4 even higher, in Position 3, and similarly judged it to be approachable for engineers. He described the logic as straightforward when read from top to bottom and noted that it did not rely on specialized domain knowledge. Compared to Snippet 5, which uses a design pattern he thought many engineers might not know well, Snippet 4 seemed easier to understand.</li>
+</ul>
+<p>The main disagreement in round 2 concerns whether engineers unfamiliar with specific Java APIs would find Snippet 4 hard to follow. Oscar believed API familiarity would be a barrier, while Martin and Nadeeshan considered the logic clear enough for most engineers with basic Java experience.</p>`
       }
     ];
 
