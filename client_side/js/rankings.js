@@ -4,7 +4,7 @@ const participantRankings = [
       id: 1,
       name: "Nadeeshan",
       html: `<div class="participant-section">
-    <h3>Nadeeshan</h3>
+    <strong>Nadeeshan</strong>
     <div class="ranking-labels">
       <div class="ranking-label">1 (easiest)</div>
       <div class="ranking-label">2</div>
@@ -82,7 +82,7 @@ const participantRankings = [
         id: 2,
         name: "Oscar",
         html: `<div class="participant-section">
-        <h3>Oscar</h3>
+        <strong>Oscar</strong>
         <div class="ranking-row">
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
@@ -132,7 +132,7 @@ const participantRankings = [
         id: 3,
         name: "Martin",
         html: `<div class="participant-section-wide">
-        <h3>Martin</h3>
+        <strong>Martin</strong>
         <div class="ranking-row">
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
