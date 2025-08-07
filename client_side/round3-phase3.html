@@ -760,7 +760,7 @@ a:hover {
   /* margin-bottom: 100px; */
   overflow-y: visible;
   padding: 10px 20px;
-  display: none;
+  /*display: none;*/
 }
 
 #phase2-resize-handle {
@@ -795,7 +795,7 @@ a:hover {
   <div id="phase2-section" class="phase-bar">
     <div class="phase-header">
       <span class="phase-title">📌 Need to revisit the rankings and reasoning? Click "Show" to view.</span>
-      <button onclick="togglePhaseSection()" class="toggle-btn">Show</button>
+      <button onclick="togglePhaseSection()" class="toggle-btn">Hide</button>
     </div>
 
     <div id="phase-section-content" class="phase-section">
@@ -1988,7 +1988,7 @@ function markCurrentUserName(text, username) {
 
         questionsContainer.innerHTML = `
           <div>
-            <label><strong>1. Do any of the other experts’ concerns seem valid or worth considering?</strong></label><br>
+            <label><strong>1. Did any of the other experts’ perspectives seem reasonable or worth reflecting on, even if you don’t fully agree with them?</strong></label><br>
             <textarea id="q1" placeholder="Your response..."></textarea>
           </div>
 
