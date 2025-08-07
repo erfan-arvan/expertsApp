@@ -832,7 +832,7 @@ a:hover {
 </div>
 
 
-  <div class="ranking-row-numbers" id="rankingRow" style="display: none;">
+  <div class="ranking-row-numbers" style="display: none;">
     <p class="ranking-number">Position 1 <span style="color: green;">(easiest)</span></p>
     <p class="ranking-number">Position 2</p>
     <p class="ranking-number">Position 3</p>
@@ -1814,7 +1814,7 @@ function renderParticipantRankings() {
                 `Snippet 3 (isMachineTypeDefined) appears to be a point of disagreement among the experts.
 <br>*Oscar ranked it as one of the easiest (Position 1), describing it as having straightforward logic. He noted that the presence of nested if statements or loops did not make it harder to understand. However, in his detailed comments, he did mention that it was unclear what a "synthetic field" is, and that the snippet might be harder to understand for someone unfamiliar with the constants used.
 <br>*Nadeeshan placed it in Position 4, stating that it was relatively hard to understand due to unfamiliarity with CoffMachineType. He emphasized that the snippet needs more context to be understood, and highlighted an unusual use of a getter with an argument — specifically pointing to a line where null is passed, which he found unnecessary and confusing.
-<br>*Martin, who placed it in Position 6, noted that the method required bottom-up reasoning, meaning it was necessary to carefully examine each line to figure out what the method was doing. He pointed to the use of Java’s reflective features and the unclear nature of the type variable (possibly representing a non-standard enumeration) as contributing factors to its complexity. He also remarked that the overall purpose of the method was not easily discernible from the code alone.`
+<br>*Martin, who placed it in Position 6, noted that the method required bottom-up reasoning, meaning it was necessary to carefully examine each line to figure out what the method was doing. He pointed to the use of Java’s reflective features and the unclear nature of the type variable (possibly representing a non-standard enumeration) as contributing factors to its complexity. He also remarked that the overall purpose of the method was not easily discernible from the code alone.`,
         text: `The experts disagreed significantly on the comprehensibility of Snippet 3, particularly in how much the use of Java reflection and the unclear method purpose should affect its difficulty rating.
 <ul>
   <li><strong>Oscar</strong> ranked the snippet as one of the easiest in round 1 (Position 1), describing its logic as straightforward and noting that nested control flow did not add complexity. In round 2, he acknowledged that reflection might introduce difficulty for some readers but continued to view the snippet as relatively simple, adjusting his ranking only slightly to Position 2.</li>
