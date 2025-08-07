@@ -435,12 +435,12 @@ to complete this round is approximately <strong>40 minutes</strong>.
       localStorage.setItem('username', username);
       loadPreviousData()
         .then(() => {
-          window.location.href = 'round2-round2-phase1.html'; 
+          window.location.href = 'round2-phase1.html';
           // only after data is fully loaded
         })
         .catch(() => {
           alert("⚠️ Could not load previous data. Redirecting anyway.");
-          window.location.href = 'round2-round2-phase1.html';
+          window.location.href = 'round2-phase1.html';
         });
     } catch (err) {
       console.error(err);
