@@ -21,7 +21,7 @@ const participantRankings = [
     <div class="ranking-slot" style="position: relative;">
       <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
 
-      <!-- ⬅️ comparison:1-2 goes here -->
+      <!-- Comparison: 1 vs 2 -->
       <div class="reasoning-point" onclick="compare([1], [2])" style="position: absolute; top: -7px; right:50px;"></div>
       <div class="tooltip-box" style="position: absolute; top: 25px; right: 10px;">
         Snippet 1 has straightforward logic; snippet 2's URI logic is kinda unclear - (does it handle remote file location or local?)
@@ -38,19 +38,69 @@ const participantRankings = [
       <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
       <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
 
-      <!-- ⬅️ comparison:2-3 belongs here -->
+      <!-- Comparison: 2 vs 4+7 -->
       <div class="reasoning-point" onclick="compare([2], [4,7])" style="position: absolute; top: -7px; right:50px;"></div>
       <div class="tooltip-box" style="position: absolute; top: 25px; right: 10px;">
         Snippet 2 is way shorter than snippet 4, and the logic is much clearer.
         Snippet 7 is easier when you have common mathematics knowledge to solve quadratic equations.
       </div>
 
-      <!-- Grouping Reasoning -->
-      <div class="tooltip-box" style="position: absolute; top: 105px; right: 10px;">
+      <!-- Grouping reasoning -->
+      <div class="tooltip-box" style="position: absolute; top: 115px; right: 10px;">
         💡 <strong>Reason:</strong><br>
         Since Snippet 7 requires recalling the solution to a quadratic formula -- which I do know now, and Snippet 4 is straightforward when read from top to bottom, I believe the ranking is appropriate.
       </div>
+
+      <!-- Comparison: 4+7 vs 5 -->
+      <div class="reasoning-point" onclick="compare([4,7], [5])" style="position: absolute; top: 205px; right:50px;"></div>
+      <div class="tooltip-box" style="position: absolute; top: 225px; right: 10px;">
+        Snippet 5 uses the Visitor design pattern (which I'm not very familiar with) and relies on domain knowledge of the Java file visiting API.
+      </div>
     </div>
+
+    <!-- Rank 4 -->
+    <div class="ranking-slot"></div>
+
+    <!-- Rank 5 -->
+    <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
+
+      <!-- Comparison: 5 vs 3 -->
+      <div class="reasoning-point" onclick="compare([5], [3])" style="position: absolute; top: 10px; right: -12px;"></div>
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
+        Since snippet 3 uses Java reflection.
+      </div>
+    </div>
+
+    <!-- Rank 6 -->
+    <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
+
+      <!-- Comparison: 3 vs 6 -->
+      <div class="reasoning-point" onclick="compare([3], [6])" style="position: absolute; top: 10px; right: -12px;"></div>
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
+        Since Snippet 6 requires knowledge of UTF-8 to UTF-16 conversion, it assumes some familiarity with character encoding concepts.
+      </div>
+    </div>
+
+    <!-- Rank 7 -->
+    <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
+
+      <!-- Comparison: 6 vs 8 -->
+      <div class="reasoning-point" onclick="compare([6], [8])" style="position: absolute; top: 10px; right: -12px;"></div>
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
+        Snippet 8 require special domain knowledge--how atan works specifically
+      </div>
+    </div>
+
+    <!-- Rank 8 -->
+    <div class="ranking-slot">
+      <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
+    </div>
+
+  </div>
+</div>
 `
     },
     {
