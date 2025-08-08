@@ -23,7 +23,7 @@ const participantRankings = [
 
       <!-- Comparison: 1 vs 2 -->
       <div class="reasoning-point" onclick="compare([1], [2])" style="position: absolute; top: 10px; right: -12px;"></div>
-      <div class="tooltip-box" style="top:70px; right: -160px;">
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
         Snippet 1 has straightforward logic; snippet 2's URI logic is kinda unclear - (does it handle remote file location or local?)
       </div>
     </div>
@@ -34,7 +34,7 @@ const participantRankings = [
       
        <!-- Comparison: 2 vs 4+7 -->
       <div class="reasoning-point" onclick="compare([2], [4,7])" style="position: absolute; top: 10px; right: -12px;"></div>
-      <div class="tooltip-box" style="position: absolute; top: 25px; right: 10px;">
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
         Snippet 2 is way shorter than snippet 4, and the logic is much clearer.
         Snippet 7 is easier when you have common mathematics knowledge to solve quadratic equations.
       </div>
@@ -55,7 +55,7 @@ const participantRankings = [
 
       <!-- Comparison: 4+7 vs 5 -->
       <div class="reasoning-point" onclick="compare([4,7], [5])" style="position: absolute; top: 10px; right: -12px;"></div>
-      <div class="tooltip-box" style="top:70px; right: -160px; min-width:500px;">
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
         Snippet 5 uses the Visitor design pattern (which I'm not very familiar with) and relies on domain knowledge of the Java file visiting API.
       </div>
     </div>
