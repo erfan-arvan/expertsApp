@@ -19,7 +19,7 @@ const participantRankings = [
 
     <!-- Rank 1 -->
     <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+      <button class="snippet-1" onclick="show_snippet(1)">1 (isValidProjectName)</button>
 
       <!-- Comparison: 1 vs 2 -->
       <div class="reasoning-point" onclick="compare([1], [2])" style="position: absolute; top: 10px; right: -12px;"></div>
@@ -112,7 +112,7 @@ const participantRankings = [
         <strong>Oscar</strong>
         <div class="ranking-row">
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+            <button class="snippet-1" onclick="show_snippet(1)">1 (isValidProjectName)</button>
             <div class="reasoning-point" onclick="compare([7], [2])" style="position: absolute; top: 10px; right: -12px;"></div>
       <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
@@ -180,7 +180,7 @@ const participantRankings = [
         <strong>Martin</strong>
         <div class="ranking-row">
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+            <button class="snippet-1" onclick="show_snippet(1)">1 (isValidProjectName)</button>
             <div class="reasoning-point" onclick="compare([1], [2])" style="position: absolute; top: 10px; right: -12px;"></div>
       <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 isRemote involves a little more domain knowledge.
