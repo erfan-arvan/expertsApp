@@ -22,8 +22,8 @@ const participantRankings = [
       <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
 
       <!-- Comparison: 1 vs 2 -->
-      <div class="reasoning-point" onclick="compare([1], [2])" style="position: absolute; top: -7px; right:50px;"></div>
-      <div class="tooltip-box" style="position: absolute; top: 25px; right: 10px;">
+      <div class="reasoning-point" onclick="compare([1], [2])" style="top: 50px; right: -12px;"></div>
+      <div class="tooltip-box" style="top:70px; right: -160px; min-width:500px;">
         Snippet 1 has straightforward logic; snippet 2's URI logic is kinda unclear - (does it handle remote file location or local?)
       </div>
     </div>
@@ -31,6 +31,13 @@ const participantRankings = [
     <!-- Rank 2 -->
     <div class="ranking-slot" style="position: relative;">
       <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
+      
+       <!-- Comparison: 2 vs 4+7 -->
+      <div class="reasoning-point" onclick="compare([2], [4,7])" style="top: 50px; right: -12px;"></div>
+      <div class="tooltip-box" style="position: absolute; top: 25px; right: 10px;">
+        Snippet 2 is way shorter than snippet 4, and the logic is much clearer.
+        Snippet 7 is easier when you have common mathematics knowledge to solve quadratic equations.
+      </div>
     </div>
 
     <!-- Rank 3 -->
@@ -38,18 +45,13 @@ const participantRankings = [
       <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
       <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
 
-      <!-- Comparison: 2 vs 4+7 -->
-      <div class="reasoning-point" onclick="compare([2], [4,7])" style="position: absolute; top: -7px; right:50px;"></div>
-      <div class="tooltip-box" style="position: absolute; top: 25px; right: 10px;">
-        Snippet 2 is way shorter than snippet 4, and the logic is much clearer.
-        Snippet 7 is easier when you have common mathematics knowledge to solve quadratic equations.
-      </div>
-
       <!-- Grouping reasoning -->
+      <div class="reasoning-point" onclick="compare([4], [7])" style="position: absolute; top: -7px; right:50px;"></div>
       <div class="tooltip-box" style="position: absolute; top: 115px; right: 10px;">
         💡 <strong>Reason:</strong><br>
         Since Snippet 7 requires recalling the solution to a quadratic formula -- which I do know now, and Snippet 4 is straightforward when read from top to bottom, I believe the ranking is appropriate.
       </div>
+
 
       <!-- Comparison: 4+7 vs 5 -->
       <div class="reasoning-point" onclick="compare([4,7], [5])" style="position: absolute; top: 205px; right:50px;"></div>
