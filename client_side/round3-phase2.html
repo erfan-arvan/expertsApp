@@ -1661,6 +1661,26 @@ function renderParticipantRankings() {
   }
 
 </script>
+
+<script>
+  function openJavadocModal(url) {
+    const iframe = document.getElementById("javadocFrame");
+    iframe.src = url;
+    document.getElementById("javadocModal").style.display = "block";
+  }
+
+  function closeJavadocModal() {
+    document.getElementById("javadocModal").style.display = "none";
+    document.getElementById("javadocFrame").src = "";
+  }
+
+  function javadocFrameReload() {
+    const iframe = document.getElementById("javadocFrame");
+    iframe.src = iframe.src;
+  }
+
+
+</script>
 <footer
   style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
   Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
