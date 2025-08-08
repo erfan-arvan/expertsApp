@@ -218,7 +218,7 @@ encodedLength requires domain knowledge of encodings. isMachineTypeDefined's sem
           <div class="ranking-slot" style="position: relative;">
 
           </div>
-          <div class="ranking-slot">
+          <div class="ranking-slot" style="position: relative;">
             <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
             <div class="reasoning-point" onclick="compare([6], [8])" style="top: 50px; right: -12px;"></div>
             <div class="tooltip-box" style="top:70px; right: -160px;">
