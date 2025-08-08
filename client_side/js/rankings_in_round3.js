@@ -143,6 +143,12 @@ const participantRankings = [
           </div>
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
+            
+             <div class="reasoning-point" onclick="compare([7], [2])" style="top: 50px; right: -12px;"></div>
+            <div class="tooltip-box" style="top:70px; right: -160px;">
+              💡 <strong>Reason:</strong><br>
+                While there is missing context in both snippets required to help me understand the snippets, I think snippet 4 implements more complex logic.
+            </div>
           </div>
           <div class="ranking-slot"></div>
           <div class="ranking-slot" style="position: relative;">
@@ -158,7 +164,7 @@ const participantRankings = [
             <div class="reasoning-point" onclick="compare([6], [8])" style="top: 50px; right: -12px;"></div>
             <div class="tooltip-box" style="top:70px; right: -160px;">
               💡 <strong>Reason:</strong><br>
-              For obvious reasons, atan2 is harder to understand: I don't remember how atan works, the code contains cryptic instructions and I don't know what atanUnchecked is doing -- also, the identifiers here don't help!
+                atan2 is just very hard to understand because I don't remember how arctan's math works.
             </div>
           </div>
           <div class="ranking-slot">
