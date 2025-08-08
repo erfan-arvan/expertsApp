@@ -23,7 +23,7 @@ const participantRankings = [
 
       <!-- Comparison: 1 vs 2 -->
       <div class="reasoning-point" onclick="compare([1], [2])" style="top: 50px; right: -12px;"></div>
-      <div class="tooltip-box" style="top:70px; right: -160px; min-width:500px;">
+      <div class="tooltip-box" style="top:70px; right: -160px;">
         Snippet 1 has straightforward logic; snippet 2's URI logic is kinda unclear - (does it handle remote file location or local?)
       </div>
     </div>
