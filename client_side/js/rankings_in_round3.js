@@ -113,21 +113,25 @@ const participantRankings = [
         <div class="ranking-row">
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
-            <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
-            <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
-            <div class="reasoning-point" onclick="compare([1,5], [3])" style="position: absolute; top: -7px; right:50px;"></div>
-            <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">
-                It is hard for me to distinguish which one is easier/harder to understand. They have straightforward logic that I am familiar with, and I don't think the usage of a visitor or nested ifs or loops makes one harder/easier to understand than the others.
-            </div>
-          </div>
-          <div class="ranking-slot"></div>
-          <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
             <div class="reasoning-point" onclick="compare([7], [2])" style="top: 50px; right: -12px;"></div>
             <div class="tooltip-box" style="top:70px; right: -160px;">
               💡 <strong>Reason:</strong><br>
-              The reason I ranked Snippet 2 after Snippet 7 is that I am not familiar with a URI's scheme and why implementing that logic (in Snippet 2) is enough to check if it is remote. Snippet 7 is straightforward to understand if we remember/know the quadratic formula.
+            Those in position 2 use more complex implementation patterns than the one in position 1, still, all three are pretty easy to understand to me.            </div>
+          </div>
+          <div class="ranking-slot">
+             <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
+            <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
+             <div class="reasoning-point" onclick="compare([3], [5])" style="position: absolute; top: -7px; right:50px;"></div>
+            <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">
+                Similar logic and patterns are used to implement their functionality. Hard to distinguish them for me.
             </div>
+           </div>
+          <div class="ranking-slot" style="position: relative;">
+            <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
+            <div class="reasoning-point" onclick="compare([3,5], [7])" style="top: 50px; right: -12px;"></div>
+            <div class="tooltip-box" style="top:70px; right: -160px;">
+              💡 <strong>Reason:</strong><br>
+                Here low domain knowledge proficiency would make snippet 7 more difficult to understand. But actually, the logic is pretty simple in snippet 7. If we don't factor in the domain knowledge, I would put snippet 7 before snippets 3 and 5.            </div>
           </div>
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
