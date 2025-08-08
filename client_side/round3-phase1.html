@@ -664,9 +664,11 @@ if (snippet.responses && Array.isArray(snippet.responses)) {
         ${response.comprehensibility}
       </div>`;
     document.getElementById("question-box").classList.add("hidden");
-    otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
-    otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
-    document.getElementById("question-box").classList.remove("hidden");
+      setTimeout(() => {
+          otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
+          otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
+          document.getElementById("question-box").classList.remove("hidden");
+      }, 400);
 
   });
 }
