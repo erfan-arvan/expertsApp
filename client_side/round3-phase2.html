@@ -347,12 +347,18 @@
 
     .ranking-slot {
       flex: 1;
-      min-height: 100px;
+      min-height: 30px;
       border: 2px dashed #4CAF50;
       background-color: #e8f5e9;
       border-radius: 6px;
-      padding: 10px;
-      overflow: visible;
+      padding-left: 1px;
+      padding-right: 1px;
+
+      display: flex;           /* make contents align inline */
+      flex-wrap: wrap;         /* allow wrapping to next line */
+      gap: 5px;                /* optional: spacing between items */
+      justify-content: center; /* optional: center items horizontally */
+      align-items: center;     /* optional: center items vertically */
     }
 
     .ranking-slot button {
