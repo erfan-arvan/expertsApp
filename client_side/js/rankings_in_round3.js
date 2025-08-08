@@ -97,6 +97,10 @@ const participantRankings = [
     <!-- Rank 1 -->
     <div class="ranking-slot" style="position: relative;">
       <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+    </div>
+
+    <!-- Rank 2 -->
+    <div class="ranking-slot" style="position: relative;">
       <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
       <div class="reasoning-point" onclick="compare([1], [2])" style="position: absolute; top: -7px; right:50px;"></div>
       <div class="tooltip-box" style="position: absolute; top: 25px; right: 10px;">
@@ -104,24 +108,28 @@ const participantRankings = [
       </div>
     </div>
 
-    <!-- Rank 2 -->
-    <div class="ranking-slot"></div>
-
     <!-- Rank 3 -->
     <div class="ranking-slot" style="position: relative;">
       <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
       <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
-      <div class="reasoning-point" onclick="compare([2], [7,4])" style="position: absolute; top: -7px; right:50px;"></div>
-      <div class="reasoning-point" onclick="compare([7,4], [5])" style="position: absolute; top: 20px; right: 50px;"></div>
-      <div class="tooltip-box" style="position: absolute; top: 45px; right: 10px;">
-        Snippet 2 is way shorter than snippet 4, and the logic is much clearer. Snippet 7 is easier when you have common mathematics knowledge to solve quadratic equations.
+
+      <!-- Comparison with previous -->
+      <div class="reasoning-point" onclick="compare([2], [4,7])" style="position: absolute; top: -7px; right:50px;"></div>
+      <div class="tooltip-box" style="position: absolute; top: 25px; right: 10px;">
+        Snippet 2 is way shorter than snippet 4, and the logic is much clearer.
+        Snippet 7 is easier when you have common mathematics knowledge to solve quadratic equations.
       </div>
-      <div class="tooltip-box" style="position: absolute; top: 95px; right: 10px;">
-        Snippet 5 uses the Visitor design pattern (which I'm not very familiar with) and relies on domain knowledge of the Java file visiting API.
-      </div>
-      <div class="tooltip-box" style="position: absolute; top: 145px; right: 10px;">
+
+      <!-- Grouping Reason -->
+      <div class="tooltip-box" style="position: absolute; top: 105px; right: 10px;">
         💡 <strong>Reason:</strong><br>
         Since Snippet 7 requires recalling the solution to a quadratic formula -- which I do know now, and Snippet 4 is straightforward when read from top to bottom, I believe the ranking is appropriate.
+      </div>
+
+      <!-- Comparison with next -->
+      <div class="reasoning-point" onclick="compare([4,7], [5])" style="position: absolute; top: 180px; right:50px;"></div>
+      <div class="tooltip-box" style="position: absolute; top: 200px; right: 10px;">
+        Snippet 5 uses the Visitor design pattern (which I'm not very familiar with) and relies on domain knowledge of the Java file visiting API.
       </div>
     </div>
 
@@ -140,7 +148,7 @@ const participantRankings = [
     <!-- Rank 6 -->
     <div class="ranking-slot" style="position: relative;">
       <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
-      <div class="reasoning-point" onclick="compare([3], [6])" style="top: 10px; right: -12px;"></div>
+      <div class="reasoning-point" onclick="compare([3], [6])" style="position: absolute; top: 10px; right: -12px;"></div>
       <div class="tooltip-box" style="top: 35px; right: -160px;">
         Since Snippet 6 requires knowledge of UTF-8 to UTF-16 conversion, it assumes some familiarity with character encoding concepts.
       </div>
@@ -149,7 +157,7 @@ const participantRankings = [
     <!-- Rank 7 -->
     <div class="ranking-slot" style="position: relative;">
       <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
-      <div class="reasoning-point" onclick="compare([6], [8])" style="top: 10px; right: -12px;"></div>
+      <div class="reasoning-point" onclick="compare([6], [8])" style="position: absolute; top: 10px; right: -12px;"></div>
       <div class="tooltip-box" style="top: 35px; right: -160px;">
         Snippet 8 require special domain knowledge--how atan works specifically
       </div>
