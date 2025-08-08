@@ -118,7 +118,7 @@ const participantRankings = [
               💡 <strong>Reason:</strong><br>
             Those in position 2 use more complex implementation patterns than the one in position 1, still, all three are pretty easy to understand to me.            </div>
           </div>
-          <div class="ranking-slot">
+          <div class="ranking-slot" style="position: relative;">
              <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
             <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
              <div class="reasoning-point" onclick="compare([3], [5])" style="position: absolute; top: -7px; right:50px;"></div>
