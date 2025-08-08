@@ -1890,7 +1890,50 @@ function renderParticipantRankings() {
   <li><strong>Nadeeshan</strong> originally placed the snippet in Position 1, seeing it as the easiest. After considering Oscar’s comments, he moved it to Position 2, recognizing that the use of "jar" and "file" might not be immediately intuitive to everyone. However, he still felt that the overall purpose of the method remained understandable and that the control flow supported clarity.</li>
 </ul>
 <p>The disagreement reflects a broader question: To what extent does familiarity with concepts like URI schemes affect how understandable this method would be for the average software engineer? Oscar believed this knowledge gap adds meaningful difficulty. Martin and Nadeeshan judged the snippet to be accessible in spite of it.</p>
-<p>The disagreement also raises a related but distinct point that was not directly discussed: how much familiarity with URI schemes can reasonably be assumed of typical software engineers. While the experts differed in how much this knowledge mattered for understanding the snippet, they did not explicitly address whether such knowledge is commonly held.</p>`
+<p>The disagreement also raises a related but distinct point that was not directly discussed: how much familiarity with URI schemes can reasonably be assumed of typical software engineers. While the experts differed in how much this knowledge mattered for understanding the snippet, they did not explicitly address whether such knowledge is commonly held.</p>
+
+<details>
+  <summary style="cursor: pointer; font-weight: bold; margin-top: 1em;">View Round 2 Reflections</summary>
+  <div style="margin-top: 0.5em;">
+
+    <details>
+      <summary style="cursor: pointer; font-weight: bold;">View Summary of Disagreement</summary>
+      <div style="margin-top: 0.5em;">
+        Snippet 2 (<code>isRemote</code>) appears to be a point of partial disagreement among the experts.
+        <br><strong>Nadeeshan</strong> considers it easy to understand and places it in the easiest position, alongside Snippet 1. He believes it has a meaningful method name, clear internal method invocations, and a straightforward switch statement.
+        <br><strong>Oscar</strong> also finds the snippet relatively easy, but slightly more difficult than Snippet 1 (<code>isValidProjectName</code>). He expressed uncertainty about the meaning of <code>isFilesystemPath</code> and the use of the URI scheme, stating:
+        <br><em>“I am not familiar with a URI's scheme and why implementing that logic (in Snippet 2) is enough to check if it is remote.”</em>
+        <br><strong>Martin</strong> also places Snippet 2 in Position 1 (easiest) and describes it as generally clear. He notes:
+        <br><em>“There are some subtleties here (how do we know that 'jar' and 'file' are the only URI schemes that are not remote? I think that's domain knowledge...), but overall the purpose is clear and easy to understand from the code's structure.”</em>
+        <br>However, unlike Nadeeshan and Oscar, Martin ranked Snippet 1 slightly lower, placing it in Position 2, indicating that he finds Snippet 2 just a bit easier due to its shorter and simpler set of rules.
+      </div>
+    </details>
+
+    <p><strong>Martin:</strong></p>
+    <ul>
+      <li><strong>Q1:</strong> We broadly agree. I think it's worth differentiating this snippet from snippet 1, and Oscar and I agree that this one is a little bit trickier. I think Nadeeshan would agree that, if he had to choose between this one and snippet 1, this one is a little more complex. So, I think we'll agree here on Snippet 1 at the bottom, and this one above it.</li>
+      <li><strong>Q2:</strong> No.</li>
+      <li><strong>Q3:</strong> No.</li>
+    </ul>
+
+    <p><strong>Nadeeshan:</strong></p>
+    <ul>
+      <li><strong>Q1:</strong> I agree with Oscar on snippet 2's URI implementation logic. However, despite that uncertainty, the purpose of the method remains clear to me.</li>
+      <li><strong>Q2:</strong> Yes.</li>
+      <li><strong>Q3:</strong> I would change rank of snippet 2 -- from rank 1 to 2</li>
+    </ul>
+
+    <p><strong>Oscar:</strong></p>
+    <ul>
+      <li><strong>Q1:</strong> I think the other experts rated with less importance the fact that it is unclear why the implemented logic is enough to achieve that intended functionality (check that the URI is remote).</li>
+      <li><strong>Q2:</strong> I agree with them that the logic is simple, but I found it more complicated than other snippets because the intention of the code is not clear (i.e., why checking the scheme is jar or file is enough to check that the URI is or isn't remote).</li>
+      <li><strong>Q3:</strong> I don't think I would change the ranking for this snippet: simple logic does not equate entirely to simplicity of understanding the code, i.e., the code intention is also important to understand.</li>
+    </ul>
+
+  </div>
+</details>
+
+`
       },
       {
         snippet: 5,
@@ -1911,7 +1954,52 @@ He also grouped this snippet with Snippets 4 and 7, noting:
   <li><strong>Nadeeshan</strong> placed the snippet in Position 5, moving it slightly up from his initial ranking but continuing to see it as significantly more difficult than Oscar did. He agreed with Martin’s earlier point that understanding the method depends on prior familiarity with Java’s file-handling APIs, including the role of <code>postVisitDirectory</code> and the behavior of <code>FileVisitor</code>. For him, these assumptions limit how easily the method can be understood by engineers who have not worked with this part of the API.</li>
   <li><strong>Martin</strong> placed the snippet in Position 4 and shared a similar view. He found the method’s specification clear, but believed that understanding its behavior relies on recognizing the idiomatic use of <code>walkFileTree</code> and overridden visitor methods. He was willing to shift the snippet slightly lower in his ranking, but still saw it as easier than others that rely on reflection or encoding logic.</li>
 </ul>
-<p>The disagreement reflects two underlying questions. First, how much familiarity with the Java file system API and the Visitor pattern can reasonably be assumed of typical software engineers? Second, to what extent does that familiarity, or lack of it, impact how easily this method can be understood? Oscar believed that clear structure and naming could compensate for unfamiliarity. Martin and Nadeeshan viewed comprehension as closely tied to experience with the underlying API.</p>`
+<p>The disagreement reflects two underlying questions. First, how much familiarity with the Java file system API and the Visitor pattern can reasonably be assumed of typical software engineers? Second, to what extent does that familiarity, or lack of it, impact how easily this method can be understood? Oscar believed that clear structure and naming could compensate for unfamiliarity. Martin and Nadeeshan viewed comprehension as closely tied to experience with the underlying API.</p>
+
+<details>
+  <summary style="cursor: pointer; font-weight: bold; margin-top: 1em;">View Round 2 Reflections</summary>
+  <div style="margin-top: 0.5em;">
+
+    <details>
+      <summary style="cursor: pointer; font-weight: bold;">View Summary of Disagreement</summary>
+      <div style="margin-top: 0.5em;">
+        Snippet 5 (<code>deleteRecursively</code>) is another point of disagreement among the experts.
+        <br><strong>Oscar</strong> placed it in the easiest position (Position 1). He stated that he is “familiar with the visitor pattern” and that “identifiers help clarify.” He described the snippet as having straightforward logic and noted that it was hard for him to distinguish between Snippets 1, 3, and 5 in terms of comprehensibility, as all seemed similarly clear to him.
+        <br><strong>Nadeeshan</strong>, who placed it in Position 6, described it as:
+        <br><em>“Harder due to unclear postVisitDirectory. Assumes dir is a Path object passed from FileVisitor.”</em>
+        <br>However, he also acknowledged that <em>“Snippet 5 has clear logic.”</em>
+        This suggests that while the overall intent was understandable, specific implementation details (e.g., method assumptions and API context) made it more difficult for him.
+        <br><strong>Martin</strong> placed Snippet 5 in Position 5 and offered a nuanced perspective:
+        <br><em>“This was easy for me to understand, but it required domain-specific knowledge of how Java handles file system operations that I do have: I immediately recognized the structure of the walkFileTree call with the anonymous visitor, and knew that I only needed to look at the names of the overridden methods and their bodies (i.e., lines 8 and 13) to figure out what the method does.”</em>
+        <br>He also grouped this snippet with Snippets 4 and 7, noting:
+        <br><em>“These three snippets are actually pretty similar: all are implementations of some kind of simple specification that's a bit tricky to get right in practice.”</em>
+      </div>
+    </details>
+
+    <p><strong>Martin:</strong></p>
+    <ul>
+      <li><strong>Q1:</strong> I think Nadeeshan and I broadly agree on this snippet's comprehensibility: we both see the difficulty with the implementation but agree on the clear spec. Oscar also agrees that the spec is clear, but I think he (like me) is familiar with this Java idiom and so ranks the snippet as very easy. But for a non-expert, I think this would be a bit tricky. So, I prefer the ranking in the middle somewhere, as Nadeeshan and I have it; I think this is definitely trickier to understand than e.g., isRemote or the validation method that I ranked at the bottom.</li>
+      <li><strong>Q2:</strong> We all agree on what's there, but not on how to interpret it.</li>
+      <li><strong>Q3:</strong> Yes: I'm willing to shift it a bit downwards, but not below snippets 4 and 7.</li>
+    </ul>
+
+    <p><strong>Nadeeshan:</strong></p>
+    <ul>
+      <li><strong>Q1:</strong> I agree with Martin's comment that understanding Snippet 5 properly requires knowledge of Java's file system handling.</li>
+      <li><strong>Q2:</strong> Yes.</li>
+      <li><strong>Q3:</strong> Yes I would. From rank 6 to 5. However, I still believe that a person familiar with the Visitor design pattern, as Oscar pointed out, and with specific domain knowledge of Java file handling is required to fully understand the method. Therefore, I think the ranking is valid in this case.</li>
+    </ul>
+
+    <p><strong>Oscar:</strong></p>
+    <ul>
+      <li><strong>Q1:</strong> Same as with the reflection-based method, I recognize the method would be harder to understand for people unfamiliar with the visitor pattern and its usage with file systems.</li>
+      <li><strong>Q2:</strong> Not really.</li>
+      <li><strong>Q3:</strong> I may rank it more to the right.</li>
+    </ul>
+
+  </div>
+</details>
+`
       },
       {
         snippet: 4,
