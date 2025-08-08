@@ -19,7 +19,7 @@ const participantRankings = [
 
     <!-- Rank 1 -->
     <div class="ranking-slot" style="position: relative;">
-      <button class="1" onclick="show_snippet(1)">Snippet 1</button>
+      <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
 
       <!-- Comparison: 1 vs 2 -->
       <div class="reasoning-point" onclick="compare([1], [2])" style="top: 50px; right: -12px;"></div>
@@ -30,7 +30,7 @@ const participantRankings = [
 
     <!-- Rank 2 -->
     <div class="ranking-slot" style="position: relative;">
-      <button class="2" onclick="show_snippet(2)">Snippet 2</button>
+      <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
       
        <!-- Comparison: 2 vs 4+7 -->
       <div class="reasoning-point" onclick="compare([2], [4,7])" style="top: 50px; right: -12px;"></div>
@@ -42,8 +42,8 @@ const participantRankings = [
 
     <!-- Rank 3 -->
     <div class="ranking-slot" style="position: relative;">
-      <button class="4" onclick="show_snippet(4)">Snippet 4</button>
-      <button class="7" onclick="show_snippet(7)">Snippet 7</button>
+      <button class="snippet-4" onclick="show_snippet(4)">4</button>
+      <button class="snippet-7" onclick="show_snippet(7)">7</button>
 
       <!-- Grouping reasoning -->
       <div class="reasoning-point" onclick="compare([4], [7])" style="position: absolute; top: -7px; right:50px;"></div>
