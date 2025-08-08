@@ -4,7 +4,7 @@ const participantRankings = [
       id: 1,
       name: "Nadeeshan",
       html: `<div class="participant-section">
-    <strong>Nadeeshan</strong>
+    <h3>Nadeeshan</h3>
     <div class="ranking-labels">
       <div class="ranking-label">1 (easiest)</div>
       <div class="ranking-label">2</div>
@@ -17,8 +17,8 @@ const participantRankings = [
     </div>
     <div class="ranking-row">
       <div class="ranking-slot" style="position: relative;">
-        <button class="snippet-1" onclick="show_snippet(1)">1</button>
-        <button class="snippet-2" onclick="show_snippet(2)">2</button>
+        <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+        <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
         <div class="reasoning-point" onclick="compare([1], [2])" style="position: absolute; top: -7px; right:50px;"></div>
         <div class="tooltip-box" style="position: absolute; top: 25px; right: 10px;">
            Because both of them are equally understandable to me. Has similar LOC, clear and simple logical separation.
@@ -82,7 +82,7 @@ const participantRankings = [
         id: 2,
         name: "Oscar",
         html: `<div class="participant-section">
-        <strong>Oscar</strong>
+        <h3>Oscar</h3>
         <div class="ranking-row">
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
@@ -132,7 +132,7 @@ const participantRankings = [
         id: 3,
         name: "Martin",
         html: `<div class="participant-section-wide">
-        <strong>Martin</strong>
+        <h3>Martin</h3>
         <div class="ranking-row">
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
