@@ -47,7 +47,7 @@ const participantRankings = [
 
       <!-- Grouping reasoning -->
       <div class="reasoning-point" onclick="compare([4], [7])" style="position: absolute; top: -7px; right:50px;"></div>
-      <div class="tooltip-box" style="position: absolute; top: 115px; right: 10px;">
+      <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">
         💡 <strong>Reason:</strong><br>
         Since Snippet 7 requires recalling the solution to a quadratic formula -- which I do know now, and Snippet 4 is straightforward when read from top to bottom, I believe the ranking is appropriate.
       </div>
