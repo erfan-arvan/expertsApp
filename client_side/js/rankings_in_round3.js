@@ -197,10 +197,10 @@ These three snippets each involve a method with a clear specification but a comp
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
             <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
-            <div class="reasoning-point" onclick="compare([4], [7])" style="position: absolute; top: -7px; right:50px;"></div>
+            <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
+            <div class="reasoning-point" onclick="compare([4,7], [5])" style="position: absolute; top: -7px; right:50px;"></div>
             <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 500px;">
-              These two snippets are moderately complex string and float algorithms, respectively. I don't differentiate between them, since both are tricky to get right but doing something pretty well understood.
-              (prev:Snippets 4, 5, and 7 are pretty similar, in the sense that each implements a well-known algorithm that I immediately recognized. However, all three are pretty complicated algorithms to get right.)
+Each implements a moderately complex operation that's easy to specify but involves getting a bunch of details right.
             </div>
             <div class="reasoning-point" onclick="compare([4,7], [5])" style="top: 50px; right: -12px;"></div>
             <div class="tooltip-box" style="top:70px; right: -160px; min-width:500px;">
