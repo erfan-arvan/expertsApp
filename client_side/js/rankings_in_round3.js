@@ -113,8 +113,8 @@ const participantRankings = [
         <div class="ranking-row">
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
-            <div class="reasoning-point" onclick="compare([7], [2])" style="top: 50px; right: -12px;"></div>
-            <div class="tooltip-box" style="top:70px; right: -160px;">
+            <div class="reasoning-point" onclick="compare([7], [2])" style="position: absolute; top: 10px; right: -12px;"></div>
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
             Those in position 2 use more complex implementation patterns than the one in position 1, still, all three are pretty easy to understand to me.            </div>
           </div>
