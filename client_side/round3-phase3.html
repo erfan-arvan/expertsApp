@@ -2038,40 +2038,35 @@ He also grouped this snippet with Snippets 4 and 7, noting:
 
 
 
-function personalize(text, username, snippetMap) {
-    // console.log("🔍 Initial text:", text);
-    // console.log("👤 Username:", username);
-    // console.log("🧭 Snippet map (original ➝ local):", snippetMap);
+    function personalize(text, username, snippetMap) {
+      // Replace expert name with "you"
+      ['Oscar', 'Martin', 'Nadeeshan'].forEach(name => {
+        const regex = new RegExp(`\\b${name}\\b`, 'gi');
+        if (username.toLowerCase() === name.toLowerCase()) {
+          text = text.replace(regex, `${name} (you)`);
+        }
+      });
 
-    // Replace expert name with "you"
-    ['Oscar', 'Martin', 'Nadeeshan'].forEach(name => {
-      const regex = new RegExp(`\\b${name}\\b`, 'g');
-      if (username.toLowerCase() === name.toLowerCase()) {
-        console.log(`👤 Replacing name '${name}' with '${name} (you)'`);
-        text = text.replace(regex, `${name} (you)`);
-      }
-    });
+      // Replace all variants of "snippet X" or "snippet X (funcName)", case-insensitively
+      text = text.replace(/snippet (\d+)(?: \((.*?)\))?/gi, (match, origId, funcName, offset, fullText) => {
+        const originalWord = fullText.slice(offset, offset + 7); // 'Snippet' or 'snippet' or mixed
+        const capitalized = originalWord[0] === originalWord[0].toUpperCase();
 
-
-    // Replace all "Snippet X (functionName)" and "Snippet X" in one pass
-    text = text.replace(/Snippet (\d+)(?: \((.*?)\))?/g, (match, origId, funcName) => {
         const originalId = parseInt(origId);
         const localId = snippetMap[originalId];
 
         if (!localId) {
-            console.warn(`⚠️ Unknown original snippet: ${originalId}`);
-            return match;
+          console.warn(`⚠️ Unknown original snippet: ${originalId}`);
+          return match;
         }
 
-        const link = `<a href="javascript:void(0)" onclick="show_snippet(${localId})">Snippet ${localId}</a>`;
-        const result = funcName ? `${link} (${funcName})` : link;
-        // console.log(`🔁 ${match} ➝ ${result}`);
-        return result;
-    });
+        const label = `${capitalized ? 'Snippet' : 'snippet'} ${localId}`;
+        const link = `<a href="javascript:void(0)" onclick="show_snippet(${localId})">${label}</a>`;
+        return funcName ? `${link} (${funcName})` : link;
+      });
 
-    // console.log("✅ Final personalized text:", text);
-    return text;
-}
+      return text;
+    }
 
 
 
