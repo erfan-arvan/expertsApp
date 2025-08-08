@@ -32,16 +32,7 @@
       gap: 10px;
       margin-bottom: 0;
     }
-  
-    .ranking-slot {
-      flex: 1 1 100px;
-      background: #e8f5e9;
-      border: 2px dashed #4CAF50;
-      border-radius: 6px;
-      padding: 10px;
-      min-height: 80px;
-      text-align: center;
-    }
+
   
     .ranking-number {
       flex: 1;
@@ -362,16 +353,18 @@
     }
 
     .ranking-slot button {
-      display: block;
-      width: 100%;
-      margin: 5px 0;
-      padding: 6px;
+      display: inline-block;         /* allows buttons to sit next to each other */
+      width: auto;                   /* removes the full-width constraint */
+      margin: 5px;                   /* spacing around each button */
+      padding: 5px 5px;             /* more natural button padding */
       border: none;
       border-radius: 4px;
       background-color: #4CAF50;
       color: white;
+      font-size: 12px;
       font-weight: bold;
       cursor: pointer;
+      flex: 0 0 auto;                /* optional: don't grow/shrink in flex layout */
     }
 
     .ranking-slot button:hover {
