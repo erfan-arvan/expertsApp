@@ -55,7 +55,7 @@ const participantRankings = [
 
       <!-- Comparison: 4+7 vs 5 -->
       <div class="reasoning-point" onclick="compare([4,7], [5])" style="top: 50px; right: -12px;"></div>
-      <div class="tooltip-box" style="position: absolute; top: 225px; right: 10px;">
+      <div class="tooltip-box" style="position: absolute; top: 25px; right: 10px;">
         Snippet 5 uses the Visitor design pattern (which I'm not very familiar with) and relies on domain knowledge of the Java file visiting API.
       </div>
     </div>
