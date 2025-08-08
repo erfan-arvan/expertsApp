@@ -224,8 +224,6 @@ encodedLength requires domain knowledge of encodings. isMachineTypeDefined's sem
             <div class="tooltip-box" style="top:70px; right: -160px;">
               💡 <strong>Reason:</strong><br>
               Both require line-by-line reasoning, but \`atan2\` requires _two_ kinds of domain-specific knowledge (numerical methods + trig) vs just one for \`encodedLength\` (encodings).<br>
-              (prev:Snippet 8 is the toughest: it was the only one where I couldn't follow why it was doing what it was doing.<br>
-              Snippet 6 is next: it required me to reason through the code "bottom up" to figure out what it's doing.)
             </div>
           </div>
           <div class="ranking-slot">
