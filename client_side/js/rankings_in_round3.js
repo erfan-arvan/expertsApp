@@ -180,17 +180,17 @@ const participantRankings = [
         <h3>Martin</h3>
         <div class="ranking-row">
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
-            <div class="reasoning-point" onclick="compare([2], [1])" style="top: 50px; right: -12px;"></div>
+            <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+            <div class="reasoning-point" onclick="compare([1], [2])" style="top: 50px; right: -12px;"></div>
             <div class="tooltip-box" style="top:70px; right: -160px;">
-              💡 They both implement simple string validation logic. \`isRemote\` has a shorter, simpler set of rules that it implements, so I ranked it lower. However, I don't think either of these are very difficult: both were pretty trivial to write a specification for.
+              💡 isRemote involves a little more domain knowledge.
             </div>
           </div>
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
-            <div class="reasoning-point" onclick="compare([2], [1])" style="top: 50px; right: -12px;"></div>
+            <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
+            <div class="reasoning-point" onclick="compare([2], [4,5,7])" style="top: 50px; right: -12px;"></div>
             <div class="tooltip-box" style="top:70px; right: -160px;">
-              There is a big gap between these, in my view. \`isValidProjectName\` is simple string validation, but the other two snippets are implementations of more complex (but reasonably well-known!) algorithms that are pretty easy to recognize. 
+These three snippets each involve a method with a clear specification but a complicated implementation. Snippet 2 has both a clear spec and a clear impl.
             </div>
           </div>
           <div class="ranking-slot" style="position: relative;"></div>
