@@ -126,8 +126,8 @@ const participantRankings = [
                 Similar logic and patterns are used to implement their functionality. Hard to distinguish them for me.
             </div>
             
-            <div class="reasoning-point" onclick="compare([3,5], [7])" style="top: 50px; right: -12px;"></div>
-            <div class="tooltip-box" style="top:70px; right: -160px;">
+            <div class="reasoning-point" onclick="compare([3,5], [7])" style="position: absolute; top: 10px; right: -12px;"></div>
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
                 Here low domain knowledge proficiency would make snippet 7 more difficult to understand. But actually, the logic is pretty simple in snippet 7. If we don't factor in the domain knowledge, I would put snippet 7 before snippets 3 and 5.            
             </div>
@@ -135,8 +135,8 @@ const participantRankings = [
            </div>
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
-            <div class="reasoning-point" onclick="compare([7], [2])" style="top: 50px; right: -12px;"></div>
-            <div class="tooltip-box" style="top:70px; right: -160px;">
+            <div class="reasoning-point" onclick="compare([7], [2])" style="position: absolute; top: 10px; right: -12px;"></div>
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
                The reason a ranked snippet 2 after snippet 7 is that I am not familiar with an URI's scheme and why implementing that logic (in snippet 2) is enough to check if it is remote. Snippet 7 is straightforward to understand if we remember/know the quadratic formula.            
             </div>
@@ -144,8 +144,8 @@ const participantRankings = [
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
             
-             <div class="reasoning-point" onclick="compare([7], [2])" style="top: 50px; right: -12px;"></div>
-            <div class="tooltip-box" style="top:70px; right: -160px;">
+             <div class="reasoning-point" onclick="compare([7], [2])" style="position: absolute; top: 10px; right: -12px;"></div>
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
                 While there is missing context in both snippets required to help me understand the snippets, I think snippet 4 implements more complex logic.
             </div>
@@ -153,16 +153,16 @@ const participantRankings = [
           <div class="ranking-slot"></div>
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
-            <div class="reasoning-point" onclick="compare([4], [6])" style="top: 50px; right: -12px;"></div>
-            <div class="tooltip-box" style="top:70px; right: -160px;">
+            <div class="reasoning-point" onclick="compare([4], [6])" style="position: absolute; top: 10px; right: -12px;"></div>
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
               Snippet 6 is harder to understand for me because I don't know what the bit shifts are doing to check or determine the sequence length in UTF-8. Snippet 4 is easier to understand, despite it being unclear what regionMatches is doing — overall, I understand what the method is doing.
             </div>
           </div>
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
-            <div class="reasoning-point" onclick="compare([6], [8])" style="top: 50px; right: -12px;"></div>
-            <div class="tooltip-box" style="top:70px; right: -160px;">
+            <div class="reasoning-point" onclick="compare([6], [8])" style="position: absolute; top: 10px; right: -12px;"></div>
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
                 atan2 is just very hard to understand because I don't remember how arctan's math works.
             </div>
@@ -181,15 +181,15 @@ const participantRankings = [
         <div class="ranking-row">
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
-            <div class="reasoning-point" onclick="compare([1], [2])" style="top: 50px; right: -12px;"></div>
-            <div class="tooltip-box" style="top:70px; right: -160px;">
+            <div class="reasoning-point" onclick="compare([1], [2])" style="position: absolute; top: 10px; right: -12px;"></div>
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 isRemote involves a little more domain knowledge.
             </div>
           </div>
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
-            <div class="reasoning-point" onclick="compare([2], [4,5,7])" style="top: 50px; right: -12px;"></div>
-            <div class="tooltip-box" style="top:70px; right: -160px;">
+            <div class="reasoning-point" onclick="compare([2], [4,5,7])" style="position: absolute; top: 10px; right: -12px;"></div>
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
 These three snippets each involve a method with a clear specification but a complicated implementation. Snippet 2 has both a clear spec and a clear impl.
             </div>
           </div>
@@ -202,16 +202,16 @@ These three snippets each involve a method with a clear specification but a comp
             <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 500px;">
 Each implements a moderately complex operation that's easy to specify but involves getting a bunch of details right.
             </div>
-            <div class="reasoning-point" onclick="compare([4,7,5], [3])" style="top: 50px; right: -12px;"></div>
-            <div class="tooltip-box" style="top:70px; right: -160px; min-width:500px;">
+            <div class="reasoning-point" onclick="compare([4,7,5], [3])" style="position: absolute; top: 10px; right: -12px;"></div>
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
 Reflection.
             </div>
           </div>
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
-            <div class="reasoning-point" onclick="compare([3], [6])" style="top: 50px; right: -12px;"></div>
-            <div class="tooltip-box" style="top:70px; right: -160px; width: 500px;">
+            <div class="reasoning-point" onclick="compare([3], [6])" style="position: absolute; top: 10px; right: -12px;"></div>
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
 encodedLength requires domain knowledge of encodings. isMachineTypeDefined's semantics can at least be understood without any background, though its purpose remains mysterious.            </div>
           </div>
@@ -220,8 +220,8 @@ encodedLength requires domain knowledge of encodings. isMachineTypeDefined's sem
           </div>
           <div class="ranking-slot" style="position: relative;">
             <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
-            <div class="reasoning-point" onclick="compare([6], [8])" style="top: 50px; right: -12px;"></div>
-            <div class="tooltip-box" style="top:70px; right: -160px;">
+            <div class="reasoning-point" onclick="compare([6], [8])" style="position: absolute; top: 10px; right: -12px;"></div>
+      <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
               Both require line-by-line reasoning, but \`atan2\` requires _two_ kinds of domain-specific knowledge (numerical methods + trig) vs just one for \`encodedLength\` (encodings).<br>
             </div>
