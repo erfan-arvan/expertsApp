@@ -114,7 +114,20 @@
         animation: glowPulse 1.5s infinite alternate;
       }
 
-      @keyframes glowPulse {
+        #skipBtn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 0 10px #4CAF50;
+            animation: glowPulse 1.5s infinite alternate;
+        }
+
+
+        @keyframes glowPulse {
         0% {
           box-shadow: 0 0 10px #4CAF50;
         }
@@ -318,6 +331,11 @@ textarea {
   <div id="instructions-content" style="margin-top: 15px;">
       <p>In this phase, you will review your own and other experts’ summaries of code snippets, along with their comprehensibility assessments.</p>
       <p>For each snippet, please read the summaries and assessments carefully, then click “Next.”</p>
+
+      <p></p><button id="skipBtn" onclick="goToPhase2()"
+                     style="display: none;margin-top: 10px;">
+      Continue to Phase 2
+        </button>
   </div>
 
 </div>
@@ -946,6 +964,9 @@ if (snippet.responses && Array.isArray(snippet.responses)) {
     }
 
 window.onload = function() {
+    const key = "round3-phase1-complete";
+    sessionStorage.setItem(key,"true");
+    localStorage.setItem(key,"true");
     displayUserName();
     applyTheme();
     loadSnippet(currentSnippet);
