@@ -19,7 +19,7 @@ const participantRankings = [
 
     <!-- Rank 1 -->
     <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-1" onclick="show_snippet(1)">1 (isValidProjectName)</button>
+      <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
 
       <!-- Comparison: 1 vs 2 -->
       <div class="reasoning-point" onclick="compare([1], [2])" style="position: absolute; top: 10px; right: -12px;"></div>
@@ -30,7 +30,7 @@ const participantRankings = [
 
     <!-- Rank 2 -->
     <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-2" onclick="show_snippet(2)">2 (isRemote)</button>
+      <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
       
        <!-- Comparison: 2 vs 4+7 -->
       <div class="reasoning-point" onclick="compare([2], [4,7])" style="position: absolute; top: 10px; right: -12px;"></div>
@@ -65,7 +65,7 @@ const participantRankings = [
 
     <!-- Rank 5 -->
     <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-5" onclick="show_snippet(5)">5 (deleteRecursively)</button>
+      <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
 
       <!-- Comparison: 5 vs 3 -->
       <div class="reasoning-point" onclick="compare([5], [3])" style="position: absolute; top: 10px; right: -12px;"></div>
@@ -76,7 +76,7 @@ const participantRankings = [
 
     <!-- Rank 6 -->
     <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-3" onclick="show_snippet(3)">3 (isMachineTypeDefined)</button>
+      <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
 
       <!-- Comparison: 3 vs 6 -->
       <div class="reasoning-point" onclick="compare([3], [6])" style="position: absolute; top: 10px; right: -12px;"></div>
@@ -87,7 +87,7 @@ const participantRankings = [
 
     <!-- Rank 7 -->
     <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-6" onclick="show_snippet(6)">6 (encodedLength)</button>
+      <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
 
       <!-- Comparison: 6 vs 8 -->
       <div class="reasoning-point" onclick="compare([6], [8])" style="position: absolute; top: 10px; right: -12px;"></div>
@@ -98,7 +98,7 @@ const participantRankings = [
 
     <!-- Rank 8 -->
     <div class="ranking-slot">
-      <button class="snippet-8" onclick="show_snippet(8)">8 (atan2)</button>
+      <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
     </div>
 
   </div>
@@ -112,7 +112,7 @@ const participantRankings = [
         <strong>Oscar</strong>
         <div class="ranking-row">
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-1" onclick="show_snippet(1)">1 (isValidProjectName)</button>
+            <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
             <div class="reasoning-point" onclick="compare([7], [2])" style="position: absolute; top: 10px; right: -12px;"></div>
       <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
@@ -134,7 +134,7 @@ const participantRankings = [
             
            </div>
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-7" onclick="show_snippet(7)">7 (lowestPositiveRoot)</button>
+            <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
             <div class="reasoning-point" onclick="compare([7], [2])" style="position: absolute; top: 10px; right: -12px;"></div>
       <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
@@ -142,7 +142,7 @@ const participantRankings = [
             </div>
           </div>
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-2" onclick="show_snippet(2)">2 (isRemote)</button>
+            <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
             
              <div class="reasoning-point" onclick="compare([7], [2])" style="position: absolute; top: 10px; right: -12px;"></div>
       <div class="tooltip-box" style="top: 35px; right: -160px;">
@@ -152,7 +152,7 @@ const participantRankings = [
           </div>
           <div class="ranking-slot"></div>
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-4" onclick="show_snippet(4)">4 (indexOfIgnoreCase)</button>
+            <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
             <div class="reasoning-point" onclick="compare([4], [6])" style="position: absolute; top: 10px; right: -12px;"></div>
       <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
@@ -160,7 +160,7 @@ const participantRankings = [
             </div>
           </div>
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-6" onclick="show_snippet(6)">6 (encodedLength)</button>
+            <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
             <div class="reasoning-point" onclick="compare([6], [8])" style="position: absolute; top: 10px; right: -12px;"></div>
       <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
@@ -168,7 +168,7 @@ const participantRankings = [
             </div>
           </div>
           <div class="ranking-slot">
-            <button class="snippet-8" onclick="show_snippet(8)">8 (atan2)</button>
+            <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
           </div>
         </div>
       </div>`
@@ -180,14 +180,14 @@ const participantRankings = [
         <strong>Martin</strong>
         <div class="ranking-row">
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-1" onclick="show_snippet(1)">1 (isValidProjectName)</button>
+            <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
             <div class="reasoning-point" onclick="compare([1], [2])" style="position: absolute; top: 10px; right: -12px;"></div>
       <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 isRemote involves a little more domain knowledge.
             </div>
           </div>
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-2" onclick="show_snippet(2)">2 (isRemote)</button>
+            <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
             <div class="reasoning-point" onclick="compare([2], [4,5,7])" style="position: absolute; top: 10px; right: -12px;"></div>
       <div class="tooltip-box" style="top: 35px; right: -160px;">
 These three snippets each involve a method with a clear specification but a complicated implementation. Snippet 2 has both a clear spec and a clear impl.
@@ -209,7 +209,7 @@ Reflection.
             </div>
           </div>
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-3" onclick="show_snippet(3)">3 (isMachineTypeDefined)</button>
+            <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
             <div class="reasoning-point" onclick="compare([3], [6])" style="position: absolute; top: 10px; right: -12px;"></div>
       <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
@@ -219,7 +219,7 @@ encodedLength requires domain knowledge of encodings. isMachineTypeDefined's sem
 
           </div>
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-6" onclick="show_snippet(6)">6 (encodedLength)</button>
+            <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
             <div class="reasoning-point" onclick="compare([6], [8])" style="position: absolute; top: 10px; right: -12px;"></div>
       <div class="tooltip-box" style="top: 35px; right: -160px;">
               💡 <strong>Reason:</strong><br>
@@ -227,7 +227,7 @@ encodedLength requires domain knowledge of encodings. isMachineTypeDefined's sem
             </div>
           </div>
           <div class="ranking-slot">
-            <button class="snippet-8" onclick="show_snippet(8)">8 (atan2)</button>
+            <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
           </div>
         </div>
       </div>`
