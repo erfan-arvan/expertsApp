@@ -281,6 +281,14 @@ textarea {
 .participant h4 {
   margin-top: 0;
 }
+
+.fade {
+    transition: opacity 0.4s ease;
+    opacity: 1;
+}
+.fade.hidden {
+    opacity: 0;
+}
 </style>
 
     
@@ -333,7 +341,7 @@ textarea {
     </div>
   
     <!-- RIGHT: Questions -->
-    <div id="question-box" style="flex: 1;">
+    <div id="question-box" style="flex: 1;" class="fade">
       <label for="summary"><strong>1- What does this code snippet do? Briefly describe its main functionality.</strong></label>
       <!-- <h4>Your response:</h4> -->
       <h4>Responses:</h4>
@@ -655,8 +663,11 @@ if (snippet.responses && Array.isArray(snippet.responses)) {
         <h4>${response.participant}</h4>
         ${response.comprehensibility}
       </div>`;
+    document.getElementById("question-box").classList.add("hidden");
     otherSumDiv.insertAdjacentHTML('beforeend', sumHTML);
     otherCompDiv.insertAdjacentHTML('beforeend', compHTML);
+    document.getElementById("question-box").classList.remove("hidden");
+
   });
 }
     }
