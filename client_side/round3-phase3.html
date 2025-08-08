@@ -771,6 +771,13 @@ a:hover {
   /*display: none;*/
 }
 
+    .fade {
+      transition: opacity 0.4s ease;
+      opacity: 1;
+    }
+    .fade.hidden {
+      opacity: 0;
+    }
 
   </style>
 </head>
@@ -870,7 +877,7 @@ a:hover {
   <div class="preview-area" id="previewArea"></div>
 
   <div class="content-wrapper">
-    <div id="disagreement-box" class="disagreement-box">
+    <div id="disagreement-box" class="disagreement-box fade">
       <!-- Disagreement content here -->
     </div>
   
@@ -2110,12 +2117,17 @@ function markCurrentUserName(text, username) {
         const localSnippets = getLocalSnippetMapping();
         const username = sessionStorage.getItem('username') || localStorage.getItem('username') || 'anonymous';
 
+      container.classList.add("hidden")
+      setTimeout(() => {
         container.innerHTML = `
             <h3 style="margin-bottom: 10px;">Disagreement ${index + 1}</h3>
             <div class="disagreement-text" style="margin-bottom: 20px;">
                 ${personalize(entry.text, username, localSnippets)}
             </div>
         `;
+        container.classList.remove("hidden");
+      }, 400);
+
 
 
         const questionsContainer = document.getElementById('question-box');
