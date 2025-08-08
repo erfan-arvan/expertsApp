@@ -42,8 +42,8 @@ const participantRankings = [
 
     <!-- Rank 3 -->
     <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-4" onclick="show_snippet(4)">4</button>
-      <button class="snippet-7" onclick="show_snippet(7)">7</button>
+      <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
+      <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
 
       <!-- Grouping reasoning -->
       <div class="reasoning-point" onclick="compare([4], [7])" style="position: absolute; top: -7px; right:50px;"></div>
@@ -119,8 +119,8 @@ const participantRankings = [
             Those in position 2 use more complex implementation patterns than the one in position 1, still, all three are pretty easy to understand to me.            </div>
           </div>
           <div class="ranking-slot" style="position: relative;">
-             <button class="snippet-3" onclick="show_snippet(3)">3</button>
-            <button class="snippet-5" onclick="show_snippet(5)">5</button>
+             <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
+            <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
              <div class="reasoning-point" onclick="compare([3], [5])" style="position: absolute; top: -7px; right:50px;"></div>
             <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">
                 Similar logic and patterns are used to implement their functionality. Hard to distinguish them for me.
@@ -195,9 +195,9 @@ These three snippets each involve a method with a clear specification but a comp
           </div>
           <div class="ranking-slot" style="position: relative;"></div>
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-4" onclick="show_snippet(4)">4</button>
-            <button class="snippet-7" onclick="show_snippet(7)">7</button>
-            <button class="snippet-5" onclick="show_snippet(5)">5</button>
+            <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
+            <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
+            <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
             <div class="reasoning-point" onclick="compare([4,7], [5])" style="position: absolute; top: -7px; right:50px;"></div>
             <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 500px;">
 Each implements a moderately complex operation that's easy to specify but involves getting a bunch of details right.
