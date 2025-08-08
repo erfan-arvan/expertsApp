@@ -202,15 +202,14 @@ These three snippets each involve a method with a clear specification but a comp
             <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 500px;">
 Each implements a moderately complex operation that's easy to specify but involves getting a bunch of details right.
             </div>
-            <div class="reasoning-point" onclick="compare([4,7], [5])" style="top: 50px; right: -12px;"></div>
+            <div class="reasoning-point" onclick="compare([4,7,5], [3])" style="top: 50px; right: -12px;"></div>
             <div class="tooltip-box" style="top:70px; right: -160px; min-width:500px;">
               💡 <strong>Reason:</strong><br>
-              These three snippets are actually pretty similar: all are implementations of some kind of simple specification that's a bit tricky to get right in practice. I'm actually not even confident that \`deleteRecursively\` is correct, though, which is why I ranked it above the other two: the relevant Java APIs are quite confusing and easy to get wrong. I think this implementation might leak a file descriptor?
-              (prev:I'm actually not even confident that Snippet 5 is correct, which is why I ranked it above the other two: the relevant Java APIs are quite confusing and easy to get wrong. Snippets 4 and 7 are moderately complex string and float algorithms, respectively. I don't differentiate between them.)
+Reflection.
             </div>
           </div>
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
+            <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
             <div class="reasoning-point" onclick="compare([3], [6])" style="top: 50px; right: -12px;"></div>
             <div class="tooltip-box" style="top:70px; right: -160px; width: 500px;">
               💡 <strong>Reason:</strong><br>
@@ -219,7 +218,6 @@ Each implements a moderately complex operation that's easy to specify but involv
             </div>
           </div>
           <div class="ranking-slot" style="position: relative;">
-            <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
             <div class="reasoning-point" onclick="compare([3], [6])" style="top: 50px; right: -12px;"></div>
             <div class="tooltip-box" style="top:70px; right: -160px; width: 500px;">
               💡 <strong>Reason:</strong><br>
