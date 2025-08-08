@@ -213,16 +213,10 @@ Reflection.
             <div class="reasoning-point" onclick="compare([3], [6])" style="top: 50px; right: -12px;"></div>
             <div class="tooltip-box" style="top:70px; right: -160px; width: 500px;">
               💡 <strong>Reason:</strong><br>
-              \`isMachineTypeDefined\` required me to do true bottom-up reasoning to figure out what it was doing, unlike \`deleteRecursively\`.<br>
-              (prev:Then comes Snippet 3: it also required me to reason through it, since it wasn't clear what it was for just from reading through it once. However, it was noticeably easier to figure out what Snippet 3 is doing compared to Snippet 6.)
-            </div>
+encodedLength requires domain knowledge of encodings. isMachineTypeDefined's semantics can at least be understood without any background, though its purpose remains mysterious.            </div>
           </div>
           <div class="ranking-slot" style="position: relative;">
-            <div class="reasoning-point" onclick="compare([3], [6])" style="top: 50px; right: -12px;"></div>
-            <div class="tooltip-box" style="top:70px; right: -160px; width: 500px;">
-              💡 <strong>Reason:</strong><br>
-              Both snippets require bottom-up reasoning. However, \`encodedLength\` requires more domain knowledge to make sense of, since it seems obvious to me that Java programmers should know how the API for the language itself works at a basic level (e.g., "what's a field?" is not a question any Java programmer is going to ask), but \`encodedLength\` requires understanding UTF-8 vs UTF-16, which many Java programmers won't have had to deal with.
-            </div>
+
           </div>
           <div class="ranking-slot">
             <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
