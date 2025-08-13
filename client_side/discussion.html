@@ -428,15 +428,18 @@
         composer.className = 'composer';
         composer.hidden = true;
         composer.innerHTML = `
-          <div class="avatar" aria-hidden="true">${(state.user.name||'YO').slice(0,3).toUpperCase()}</div>
-          <div>
+        <div class="avatar" aria-hidden="true">${(state.user.name||'YO').slice(0,3).toUpperCase()}</div>
+        <div>
+            <div class="reply-fields" style="display:none;">
             <label class="sr-only">Write a reply</label>
             <textarea class="input" placeholder="Write a thoughtful reply…"></textarea>
             <div class="composer-actions">
-              <button class="btn" onclick="cancelReply(this)">Cancel</button>
-              <button class="btn primary" onclick="submitReply(this, '${msg.id}')">Post reply</button>
+                <button class="btn" onclick="cancelReply(this)">Cancel</button>
+                <button class="btn primary" onclick="submitReply(this, '${msg.id}')">Post reply</button>
             </div>
-          </div>`;
+            </div>
+        </div>`;
+
         el.querySelector('.post-body').appendChild(composer);
       }
       return el;
@@ -591,6 +594,31 @@ async function vote(el, delta) {
     alert('Could not register your vote.');
   }
 }
+
+</script>
+
+<script>
+    function toggleReply(btn) {
+  const post = btn.closest('.post');
+  const composer = post.querySelector('.composer');
+  const fields = composer.querySelector('.reply-fields');
+  if (fields) {
+    const isHidden = fields.style.display === 'none';
+    fields.style.display = isHidden ? '' : 'none';
+  }
+}
+
+</script>
+
+<script>
+    function cancelReply(el) {
+  const composer = el.closest('.composer');
+  const ta = composer.querySelector('textarea');
+  if (ta) ta.value = '';
+  const fields = composer.querySelector('.reply-fields');
+  if (fields) fields.style.display = 'none';
+}
+
 </script>
 
 </body>
