@@ -460,7 +460,11 @@ function loadDisagreements() {
   }
   renderDisagreementsMenu();
   const first = state.disagreements.find(x => x.id === state.currentId);
-  if (first) { document.getElementById('topic-title').textContent = first.title; }
+    if (first) {
+        $('#topic-title').textContent = first.title;
+        $('#topic-description').innerHTML = first.htmltext || '';
+    }
+
 }
 
 
