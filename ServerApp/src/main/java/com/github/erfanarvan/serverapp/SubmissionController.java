@@ -19,16 +19,15 @@ import java.time.format.DateTimeFormatter;
 
 import java.nio.charset.StandardCharsets;
 
-import java.util.stream.Collectors;
-import java.util.function.Function;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 
 @RestController
 public class SubmissionController {
-    private static final File CHAT_DIR = new File("submissions/chat");
+
+    private static final File CHAT_DIR  = new File("submissions/chat");
     private static final File CHAT_FILE = new File(CHAT_DIR, "chats_all.json");
 
     
@@ -607,167 +606,6 @@ public Map<String, Object> getLatestRound3Submission(@RequestBody Map<String, St
     }
 }
 
-@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
-@PostMapping("/get_latest_chat")
-public synchronized Map<String, Object> getLatestChat(@RequestBody Map<String, String> req) {
-    String username = Objects.toString(req.get("username"), "").trim();
-    if (username.isEmpty()) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username is required");
-    }
-
-    ensureChatStoreExists();
-
-    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-    try {
-        Map<String, Map<String, Object>> store = CHAT_FILE.exists()
-            ? mapper.readValue(CHAT_FILE, new TypeReference<>() {}) : new HashMap<>();
-
-        Map<String, Object> userChat = store.get(username);
-        if (userChat == null) {
-            // initialize an empty chat object for this user
-            userChat = new HashMap<>();
-            userChat.put("chats", new HashMap<String, List<Map<String, Object>>>());
-            userChat.put("updatedAt", nowIso());
-            store.put(username, userChat);
-            mapper.writeValue(CHAT_FILE, store);
-        }
-        return userChat;
-    } catch (IOException e) {
-        e.printStackTrace();
-        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read chat.");
-    }
-}
-
-@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
-@PostMapping("/submit_chat")
-public synchronized Map<String, Object> submitChat(@RequestBody Map<String, Object> req) {
-    String username = Objects.toString(req.get("username"), "").trim();
-    String disagreementId = Objects.toString(req.get("disagreementId"), "").trim();
-    String parentId = (req.get("parentId") == null) ? null : Objects.toString(req.get("parentId"), "").trim();
-    String content = Objects.toString(req.get("content"), "").trim();
-
-    if (username.isEmpty() || disagreementId.isEmpty()) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username and disagreementId are required");
-    }
-    if (content.isEmpty()) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "content is required");
-    }
-
-    ensureChatStoreExists();
-    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-
-    try {
-        Map<String, Map<String, Object>> store = CHAT_FILE.exists()
-            ? mapper.readValue(CHAT_FILE, new TypeReference<>() {}) : new HashMap<>();
-
-        Map<String, Object> userChat = store.computeIfAbsent(username, u -> {
-            Map<String, Object> root = new HashMap<>();
-            root.put("chats", new HashMap<String, List<Map<String, Object>>>());
-            root.put("updatedAt", nowIso());
-            return root;
-        });
-
-        // chats: Map<disagreementId, List<Message>>
-        @SuppressWarnings("unchecked")
-        Map<String, List<Map<String, Object>>> chats =
-            (Map<String, List<Map<String, Object>>>) userChat.computeIfAbsent("chats", k -> new HashMap<>());
-
-        List<Map<String, Object>> messages =
-            chats.computeIfAbsent(disagreementId, k -> new ArrayList<>());
-
-        // create the message
-        Map<String, Object> msg = new HashMap<>();
-        msg.put("id", UUID.randomUUID().toString());
-        msg.put("parentId", parentId);               // null for root
-        msg.put("username", username);
-        msg.put("content", content);
-        msg.put("createdAt", nowIso());
-        msg.put("is_deleted", false);
-        msg.put("up", 0);
-        msg.put("down", 0);
-
-        // Validate parent if replying
-        if (parentId != null && !parentId.isBlank()) {
-            boolean parentExists = messages.stream().anyMatch(m -> parentId.equals(m.get("id")));
-            if (!parentExists) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "parentId not found in this disagreement thread");
-            }
-        }
-
-        messages.add(msg);
-
-        userChat.put("updatedAt", nowIso());
-        mapper.writeValue(CHAT_FILE, store);
-
-        // Return full latest chat for convenience (frontend can just drop it in)
-        return userChat;
-    } catch (IOException e) {
-        e.printStackTrace();
-        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to write chat.");
-    }
-}
-
-@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
-@PostMapping("/delete_chat")
-public synchronized Map<String, Object> deleteChat(@RequestBody Map<String, Object> req) {
-    String username = Objects.toString(req.get("username"), "").trim();
-    String messageId = Objects.toString(req.get("messageId"), "").trim();
-    String disagreementId = req.get("disagreementId") == null ? null : Objects.toString(req.get("disagreementId"), "").trim();
-    if (username.isEmpty() || messageId.isEmpty()) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username and messageId are required");
-    }
-
-    ensureChatStoreExists();
-    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-
-    try {
-        Map<String, Map<String, Object>> store = CHAT_FILE.exists()
-            ? mapper.readValue(CHAT_FILE, new TypeReference<>() {}) : new HashMap<>();
-
-        Map<String, Object> userChat = store.get(username);
-        if (userChat == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No chat object for user");
-        }
-
-        @SuppressWarnings("unchecked")
-        Map<String, List<Map<String, Object>>> chats =
-            (Map<String, List<Map<String, Object>>>) userChat.get("chats");
-        if (chats == null || chats.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No chats found for user");
-        }
-
-        // If disagreementId is supplied, only search that thread; otherwise search all
-        List<String> threadKeys = (disagreementId == null || disagreementId.isBlank())
-            ? new ArrayList<>(chats.keySet())
-            : List.of(disagreementId);
-
-        boolean found = false;
-        for (String key : threadKeys) {
-            List<Map<String, Object>> msgs = chats.get(key);
-            if (msgs == null) continue;
-            Map<String, Object> target = findById(msgs, messageId);
-            if (target != null) {
-                // Soft delete: keep username/time, blank the content but mark as deleted
-                target.put("is_deleted", true);
-                target.put("content", "");
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "messageId not found");
-        }
-
-        userChat.put("updatedAt", nowIso());
-        mapper.writeValue(CHAT_FILE, store);
-        return userChat;
-    } catch (IOException e) {
-        e.printStackTrace();
-        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update chat.");
-    }
-}
-
 private String nowIso() {
     return ZonedDateTime.now(ZoneId.of("America/New_York"))
             .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
@@ -781,7 +619,10 @@ private void ensureChatStoreExists() {
     if (!CHAT_FILE.exists()) {
         try {
             ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-            mapper.writeValue(CHAT_FILE, new HashMap<String, Map<String, Object>>());
+            Map<String, Object> root = new HashMap<>();
+            root.put("chats", new HashMap<String, List<Map<String, Object>>>());
+            root.put("updatedAt", nowIso());
+            mapper.writeValue(CHAT_FILE, root);
             System.out.println(">>> Initialized chats_all.json");
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to initialize chat store");
@@ -789,13 +630,173 @@ private void ensureChatStoreExists() {
     }
 }
 
-/** Linear search for a message in a flat thread list (parent/child relation is implied by parentId). */
-private Map<String, Object> findById(List<Map<String, Object>> msgs, String id) {
-    for (Map<String, Object> m : msgs) {
-        if (id.equals(m.get("id"))) return m;
-    }
-    return null;
+/** Loads the full shared chat object: { chats: {...}, updatedAt: ... } */
+@SuppressWarnings("unchecked")
+private Map<String, Object> readChatStore(ObjectMapper mapper) throws IOException {
+    ensureChatStoreExists();
+    return mapper.readValue(CHAT_FILE, new TypeReference<Map<String, Object>>() {});
 }
 
+/** Writes the full shared chat object. */
+private void writeChatStore(ObjectMapper mapper, Map<String, Object> store) throws IOException {
+    store.put("updatedAt", nowIso());
+    mapper.enable(SerializationFeature.INDENT_OUTPUT).writeValue(CHAT_FILE, store);
+}
+
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/get_latest_chat")
+public synchronized Map<String, Object> getLatestChat(@RequestBody Map<String, String> req) {
+    // username may be provided by the client; we don't need it here for a shared store.
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+        return readChatStore(mapper);
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read chat.");
+    }
+}
+
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/submit_chat")
+public synchronized Map<String, Object> submitChat(@RequestBody Map<String, Object> req) {
+    String username = Objects.toString(req.get("username"), "").trim();
+    String disagreementId = Objects.toString(req.get("disagreementId"), "").trim();
+    String parentId = req.get("parentId") == null ? null : Objects.toString(req.get("parentId"), "").trim();
+    String content = Objects.toString(req.get("content"), "").trim();
+
+    if (username.isEmpty() || disagreementId.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username and disagreementId are required");
+    }
+    if (content.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "content is required");
+    }
+
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+        Map<String, Object> store = readChatStore(mapper);
+
+        @SuppressWarnings("unchecked")
+        Map<String, List<Map<String, Object>>> chats =
+                (Map<String, List<Map<String, Object>>>) store.get("chats");
+
+        List<Map<String, Object>> thread =
+                chats.computeIfAbsent(disagreementId, k -> new ArrayList<>());
+
+        // If replying, parent must exist within the same disagreement thread
+        if (parentId != null && !parentId.isBlank()) {
+            boolean parentExists = thread.stream().anyMatch(m -> parentId.equals(m.get("id")));
+            if (!parentExists) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "parentId not found in this disagreement thread");
+            }
+        }
+
+        Map<String, Object> msg = new HashMap<>();
+        msg.put("id", UUID.randomUUID().toString());
+        msg.put("parentId", parentId);          // null for root
+        msg.put("username", username);
+        msg.put("content", content);
+        msg.put("createdAt", nowIso());
+        msg.put("is_deleted", false);
+        msg.put("up", 0);
+        msg.put("down", 0);
+
+        thread.add(msg);
+        writeChatStore(mapper, store);
+
+        return store; // return full shared chat so client can refresh state easily
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to write chat.");
+    }
+}
+
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/delete_chat")
+public synchronized Map<String, Object> deleteChat(@RequestBody Map<String, Object> req) {
+    String username = Objects.toString(req.get("username"), "").trim();
+    String messageId = Objects.toString(req.get("messageId"), "").trim();
+
+    if (username.isEmpty() || messageId.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username and messageId are required");
+    }
+
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+        Map<String, Object> store = readChatStore(mapper);
+
+        @SuppressWarnings("unchecked")
+        Map<String, List<Map<String, Object>>> chats =
+                (Map<String, List<Map<String, Object>>>) store.get("chats");
+
+        boolean found = false;
+        outer:
+        for (Map.Entry<String, List<Map<String, Object>>> e : chats.entrySet()) {
+            List<Map<String, Object>> thread = e.getValue();
+            for (Map<String, Object> m : thread) {
+                if (messageId.equals(m.get("id"))) {
+                    // Only author can delete (soft delete)
+                    String author = Objects.toString(m.get("username"), "");
+                    if (!author.equals(username)) {
+                        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only the author can delete this message");
+                    }
+                    m.put("is_deleted", true);
+                    m.put("content", ""); // hide content but keep username/time/replies
+                    found = true;
+                    break outer;
+                }
+            }
+        }
+
+        if (!found) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "messageId not found");
+        }
+
+        writeChatStore(mapper, store);
+        return store;
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update chat.");
+    }
+}
+
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/vote_chat")
+public synchronized Map<String, Object> voteChat(@RequestBody Map<String, Object> req) {
+    String username = Objects.toString(req.get("username"), "").trim();
+    String messageId = Objects.toString(req.get("messageId"), "").trim();
+    int delta = Integer.parseInt(Objects.toString(req.getOrDefault("delta", "0")));
+
+    if (username.isEmpty() || messageId.isEmpty() || (delta != 1 && delta != -1)) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username, messageId and delta (+1/-1) are required");
+    }
+
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+        Map<String, Object> store = readChatStore(mapper);
+
+        @SuppressWarnings("unchecked")
+        Map<String, List<Map<String, Object>>> chats =
+                (Map<String, List<Map<String, Object>>>) store.get("chats");
+
+        boolean found = false;
+        for (List<Map<String, Object>> thread : chats.values()) {
+            for (Map<String, Object> m : thread) {
+                if (messageId.equals(m.get("id"))) {
+                    if (delta == 1) m.put("up", ((Number)m.getOrDefault("up", 0)).intValue() + 1);
+                    else m.put("down", ((Number)m.getOrDefault("down", 0)).intValue() + 1);
+                    found = true; break;
+                }
+            }
+            if (found) break;
+        }
+        if (!found) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "messageId not found");
+
+        writeChatStore(mapper, store);
+        return store;
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update vote.");
+    }
+}
 
 }
