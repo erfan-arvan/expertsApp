@@ -759,45 +759,6 @@ public synchronized Map<String, Object> deleteChat(@RequestBody Map<String, Obje
     }
 }
 
-@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
-@PostMapping("/vote_chat")
-public synchronized Map<String, Object> voteChat(@RequestBody Map<String, Object> req) {
-    String username = Objects.toString(req.get("username"), "").trim();
-    String messageId = Objects.toString(req.get("messageId"), "").trim();
-    int delta = Integer.parseInt(Objects.toString(req.getOrDefault("delta", "0")));
-
-    if (username.isEmpty() || messageId.isEmpty() || (delta != 1 && delta != -1)) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username, messageId and delta (+1/-1) are required");
-    }
-
-    ObjectMapper mapper = new ObjectMapper();
-    try {
-        Map<String, Object> store = readChatStore(mapper);
-
-        @SuppressWarnings("unchecked")
-        Map<String, List<Map<String, Object>>> chats =
-                (Map<String, List<Map<String, Object>>>) store.get("chats");
-
-        boolean found = false;
-        for (List<Map<String, Object>> thread : chats.values()) {
-            for (Map<String, Object> m : thread) {
-                if (messageId.equals(m.get("id"))) {
-                    if (delta == 1) m.put("up", ((Number)m.getOrDefault("up", 0)).intValue() + 1);
-                    else m.put("down", ((Number)m.getOrDefault("down", 0)).intValue() + 1);
-                    found = true; break;
-                }
-            }
-            if (found) break;
-        }
-        if (!found) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "messageId not found");
-
-        writeChatStore(mapper, store);
-        return store;
-    } catch (IOException e) {
-        e.printStackTrace();
-        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update vote.");
-    }
-}
 
 @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
 @PostMapping("/vote_chat")
