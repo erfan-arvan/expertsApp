@@ -225,140 +225,42 @@
   </style>
 </head>
 <body>
-  <div class="shell" role="application" aria-label="Threaded opinions">
+  <div class="shell" role="application" aria-label="Threaded opinions" id="app">
 
-    <!-- Topic Header -->
+    <!-- Topic/Header + Disagreement Switcher -->
     <section class="topic-card" aria-labelledby="topic-title">
       <div class="topic-heading">
         <div class="topic-icon" aria-hidden="true">💬</div>
         <div>
-          <h1 id="topic-title" class="topic-title">What’s the best way to teach code comprehension to juniors?</h1>
-          <div class="topic-meta">Single-subject thread • 42 opinions • Last activity 3m ago</div>
+          <h1 id="topic-title" class="topic-title">Loading disagreements…</h1>
+          <div class="topic-meta" id="topic-meta">Single-subject thread • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span></div>
         </div>
       </div>
-      <div class="toolbar" aria-label="Tools and filters">
-        <div class="controls">
-          <button class="chip" aria-pressed="false" onclick="toggleChip(this)">All</button>
-          <button class="chip" aria-pressed="false" onclick="toggleChip(this)">Pros</button>
-          <button class="chip" aria-pressed="false" onclick="toggleChip(this)">Cons</button>
-          <button class="chip" aria-pressed="false" onclick="toggleChip(this)">With replies</button>
-        </div>
-        <div class="controls">
-          <button class="select" onclick="cycleSort(this)" aria-haspopup="listbox" aria-expanded="false" aria-label="Sort options">Sort: Top</button>
-          <button class="select" onclick="cycleView(this)" aria-haspopup="listbox" aria-expanded="false" aria-label="Density options">View: Cozy</button>
+
+      <!-- Rectangular boxes menu for disagreements -->
+      <div class="toolbar" aria-label="Disagreements switcher">
+        <div class="controls" id="disagreements-menu" style="overflow:auto; white-space:nowrap; padding-bottom:6px; width:100%">
+          <!-- buttons inserted dynamically -->
         </div>
       </div>
     </section>
 
-    <!-- Opinions List -->
+    <!-- Opinions List (dynamic) -->
     <section class="list-card" aria-live="polite">
-
-      <!-- Post 1 -->
-      <article class="post" data-score="12">
-        <div class="avatar" aria-hidden="true">EA</div>
-        <div class="post-body">
-          <div class="post-head">
-            <span class="name">Erfan A.</span>
-            <span class="badge">Moderator</span>
-            <time class="time" datetime="2025-08-12T09:00:00-04:00">yesterday</time>
-          </div>
-          <div class="content">
-            Start with small, real-world Java methods and ask learners to predict outputs for tricky inputs. It forces deep reading and reveals gaps without heavy setup.
-          </div>
-          <div class="attachments">
-            <span class="pill">#teaching</span>
-            <span class="pill">#java</span>
-          </div>
-          <div class="post-actions">
-            <button class="btn" onclick="vote(this, 1)" aria-pressed="false" aria-label="Like this opinion">👍 Like</button>
-            <button class="btn" onclick="vote(this, -1)" aria-pressed="false" aria-label="Dislike this opinion">👎 Dislike</button>
-            <span class="score"><span class="up" data-up>12</span>/<span class="down" data-down>1</span></span>
-            <span class="spacer"></span>
-            <button class="btn ghost" onclick="toggleReply(this)">↩︎ Reply</button>
-            <button class="btn ghost" aria-label="More actions">⋯</button>
-          </div>
-
-          <div class="replies" role="group" aria-label="Replies">
-            <!-- Reply A -->
-            <article class="post" data-score="5">
-              <div class="avatar" aria-hidden="true">MK</div>
-              <div class="post-body">
-                <div class="post-head">
-                  <span class="name">Martin K.</span>
-                  <time class="time" datetime="2025-08-12T12:30:00-04:00">22h ago</time>
-                </div>
-                <div class="content">+1. And add a timed constraint to simulate pressure—they focus on the longest execution path first.</div>
-                <div class="post-actions">
-                  <button class="btn" onclick="vote(this, 1)">👍 Like</button>
-                  <button class="btn" onclick="vote(this, -1)">👎 Dislike</button>
-                  <span class="score"><span class="up" data-up>5</span>/<span class="down" data-down>0</span></span>
-                  <span class="spacer"></span>
-                  <button class="btn ghost" onclick="toggleReply(this)">↩︎ Reply</button>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <!-- Inline composer for replies -->
-          <div class="composer" hidden>
-            <div class="avatar" aria-hidden="true">YOU</div>
-            <div>
-              <label class="sr-only" for="reply-1">Write a reply</label>
-              <textarea id="reply-1" class="input" placeholder="Write a thoughtful reply…"></textarea>
-              <div class="composer-actions">
-                <button class="btn" onclick="cancelReply(this)">Cancel</button>
-                <button class="btn primary" onclick="submitReply(this)">Post reply</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <!-- Post 2 -->
-      <article class="post" data-score="3">
-        <div class="avatar" aria-hidden="true">ND</div>
-        <div class="post-body">
-          <div class="post-head">
-            <span class="name">Nadeeshan D.</span>
-            <time class="time" datetime="2025-08-13T09:03:00-04:00">just now</time>
-          </div>
-          <div class="content">I’d pair prediction tasks with short “explain the bug” prompts—learners justify reasoning, not only answers. Threading replies keeps ideas tight under one subject.</div>
-          <div class="post-actions">
-            <button class="btn" onclick="vote(this, 1)">👍 Like</button>
-            <button class="btn" onclick="vote(this, -1)">👎 Dislike</button>
-            <span class="score"><span class="up" data-up>3</span>/<span class="down" data-down>1</span></span>
-            <span class="spacer"></span>
-            <button class="btn ghost" onclick="toggleReply(this)">↩︎ Reply</button>
-            <button class="btn ghost">⋯</button>
-          </div>
-
-          <div class="composer" hidden>
-            <div class="avatar" aria-hidden="true">YOU</div>
-            <div>
-              <label class="sr-only" for="reply-2">Write a reply</label>
-              <textarea id="reply-2" class="input" placeholder="Write a thoughtful reply…"></textarea>
-              <div class="composer-actions">
-                <button class="btn" onclick="cancelReply(this)">Cancel</button>
-                <button class="btn primary" onclick="submitReply(this)">Post reply</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-
+      <div id="posts"></div>
     </section>
 
     <!-- New Opinion Composer (root-level) -->
     <section class="list-card" aria-label="Add new opinion">
       <div class="composer">
-        <div class="avatar" aria-hidden="true">YOU</div>
-        <div>
+        <div class="avatar" aria-hidden="true" id="you-avatar">YOU</div>
+        <div style="width:100%">
           <label class="sr-only" for="new-opinion">Share your opinion</label>
           <textarea id="new-opinion" class="input" placeholder="Share your opinion…"></textarea>
           <div class="composer-actions">
-            <button class="btn">Attach</button>
+            <button class="btn" id="attach-btn" disabled>Attach</button>
             <span class="spacer"></span>
-            <button class="btn primary" onclick="addRootOpinion()">Post opinion</button>
+            <button class="btn primary" id="post-root">Post opinion</button>
           </div>
         </div>
       </div>
@@ -367,113 +269,276 @@
   </div>
 
   <script>
-    // Minimal client-side interactions for demo purposes only.
-    function vote(el, delta) {
+    /* ===== Auth helpers (provided) ===== */
+    function isLoggedIn() {
+      const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
+      const order = sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder');
+      return name && order;
+    }
+    function checkLogin() {
+      if (!isLoggedIn()) {
+        alert('You must be logged in to access this page. Redirecting to the homepage.');
+        window.location.href = 'https://codecomprehensibility.site/';
+      }
+    }
+
+    /* ===== Config ===== */
+    const CONFIG = {
+      DISAGREEMENTS_URL: 'js/disagreements.json',
+      GET_LATEST_CHAT_URL: 'https://codecomprehensibility.site/get_latest_chat',
+      SUBMIT_CHAT_URL: 'https://codecomprehensibility.site/submit_chat',   // TODO: confirm
+      DELETE_CHAT_URL: 'https://codecomprehensibility.site/delete_chat',   // TODO: confirm
+      POLL_MS: 120000
+    };
+
+    /* ===== App state ===== */
+    const state = {
+      user: {
+        name: sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'You'
+      },
+      disagreements: [],           // {id, title, snippet_id, htmltext}
+      currentId: null,
+      chatsByDisagreement: {},     // { [disagreementId]: [messages] }
+      pollHandle: null
+    };
+
+    /* ===== Utility ===== */
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+    function fmtTime(dtStr) {
+      try { const d = new Date(dtStr); return d.toLocaleString(); } catch { return 'just now'; }
+    }
+
+    // Build a thread tree from flat messages
+    function buildThread(messages) {
+      const byId = new Map();
+      const roots = [];
+      messages.forEach(m => {
+        m.children = [];
+        byId.set(m.id, m);
+      });
+      messages.forEach(m => {
+        if (m.parentId) {
+          const p = byId.get(m.parentId);
+          if (p) p.children.push(m); else roots.push(m); // orphan safeguard
+        } else {
+          roots.push(m);
+        }
+      });
+      // sort by time ascending within each level (server may already do)
+      const sortRec = nodes => {
+        nodes.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+        nodes.forEach(n => sortRec(n.children));
+      };
+      sortRec(roots);
+      return roots;
+    }
+
+    function renderDisagreementsMenu() {
+      const menu = $('#disagreements-menu');
+      menu.innerHTML = '';
+      state.disagreements.forEach(d => {
+        const btn = document.createElement('button');
+        btn.className = 'chip';
+        btn.textContent = `${d.title}`;
+        btn.setAttribute('data-id', d.id);
+        btn.setAttribute('aria-pressed', String(d.id === state.currentId));
+        btn.style.borderRadius = '10px';
+        btn.style.display = 'inline-flex';
+        btn.style.marginRight = '8px';
+        btn.onclick = () => switchDisagreement(d.id);
+        menu.appendChild(btn);
+      });
+    }
+
+    function switchDisagreement(id) {
+      state.currentId = id;
+      // update pressed states
+      $$('#disagreements-menu .chip').forEach(b => b.setAttribute('aria-pressed', String(b.getAttribute('data-id') == id)));
+
+      const meta = $('#topic-meta');
+      const topicTitle = $('#topic-title');
+      const d = state.disagreements.find(x => String(x.id) === String(id));
+      if (d) {
+        topicTitle.textContent = d.title;
+        meta.innerHTML = `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>`;
+      }
+      renderCurrentThread();
+    }
+
+    function renderCurrentThread() {
+      const posts = $('#posts');
+      posts.innerHTML = '';
+      const msgs = state.chatsByDisagreement[state.currentId] || [];
+      const thread = buildThread(msgs);
+      $('#opinion-count').textContent = msgs.length;
+      $('#last-sync').textContent = new Date().toLocaleTimeString();
+      thread.forEach(node => posts.appendChild(renderMessage(node)));
+    }
+
+    function renderMessage(msg) {
+      const el = document.createElement('article');
+      el.className = 'post';
+      el.dataset.id = msg.id;
+      el.innerHTML = `
+        <div class="avatar" aria-hidden="true">${(msg.username || '?').slice(0,2).toUpperCase()}</div>
+        <div class="post-body">
+          <div class="post-head">
+            <span class="name">${msg.username || 'Unknown'}</span>
+            ${msg.role ? `<span class="badge">${msg.role}</span>` : ''}
+            <time class="time" datetime="${msg.createdAt || ''}">${fmtTime(msg.createdAt)}</time>
+          </div>
+          <div class="content">${msg.is_deleted ? '<em style="color:var(--muted)">[message deleted]</em>' : escapeHtml(msg.content || '')}</div>
+          <div class="post-actions">
+            <button class="btn" onclick="vote(this, 1)">👍 Like</button>
+            <button class="btn" onclick="vote(this, -1)">👎 Dislike</button>
+            <span class="score"><span class="up" data-up>${msg.up || 0}</span>/<span class="down" data-down>${msg.down || 0}</span></span>
+            <span class="spacer"></span>
+            ${ msg.is_deleted ? '' : `<button class="btn ghost" onclick="toggleReply(this)">↩︎ Reply</button>` }
+            ${ (msg.username === state.user.name && !msg.is_deleted) ? `<button class="btn ghost" onclick="requestDelete('${msg.id}')">🗑 Delete</button>` : ''}
+            <button class="btn ghost">⋯</button>
+          </div>
+        </div>`;
+
+      // Replies container
+      const repliesWrap = document.createElement('div');
+      repliesWrap.className = 'replies';
+      (msg.children || []).forEach(c => repliesWrap.appendChild(renderMessage(c)));
+      el.querySelector('.post-body').appendChild(repliesWrap);
+
+      // Inline composer (only if not deleted)
+      if (!msg.is_deleted) {
+        const composer = document.createElement('div');
+        composer.className = 'composer';
+        composer.hidden = true;
+        composer.innerHTML = `
+          <div class="avatar" aria-hidden="true">${(state.user.name||'YO').slice(0,3).toUpperCase()}</div>
+          <div>
+            <label class="sr-only">Write a reply</label>
+            <textarea class="input" placeholder="Write a thoughtful reply…"></textarea>
+            <div class="composer-actions">
+              <button class="btn" onclick="cancelReply(this)">Cancel</button>
+              <button class="btn primary" onclick="submitReply(this, '${msg.id}')">Post reply</button>
+            </div>
+          </div>`;
+        el.querySelector('.post-body').appendChild(composer);
+      }
+      return el;
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
+    }
+
+    /* ===== Network ===== */
+    async function loadDisagreements() {
+      const res = await fetch(CONFIG.DISAGREEMENTS_URL, {cache:'no-store'});
+      const arr = await res.json();
+      // normalize keys
+      state.disagreements = arr.map(d => ({
+        id: d.id,
+        title: d.title,
+        snippet_id: d['snippet-id'] ?? d.snippet_id,
+        htmltext: d.htmltext
+      }));
+      if (!state.currentId && state.disagreements.length) state.currentId = state.disagreements[0].id;
+      renderDisagreementsMenu();
+      const first = state.disagreements.find(x => x.id === state.currentId);
+      if (first) { $('#topic-title').textContent = first.title; }
+    }
+
+    async function fetchLatestChat() {
+      const payload = { username: state.user.name };
+      const res = await fetch(CONFIG.GET_LATEST_CHAT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        // credentials: 'include' // if needed
+      });
+      if (!res.ok) throw new Error('Failed to get latest chat');
+      const data = await res.json();
+      // Expected shape: { chats: { [disagreementId]: [ {id,parentId,username,content,createdAt,is_deleted,up,down,role} ] } }
+      state.chatsByDisagreement = data.chats || {};
+      renderCurrentThread();
+    }
+
+    async function sendMessage({ disagreementId, parentId=null, content }) {
+      const payload = { username: state.user.name, disagreementId, parentId, content };
+      const res = await fetch(CONFIG.SUBMIT_CHAT_URL, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+      });
+      if (!res.ok) { alert('Failed to send message'); return; }
+      const data = await res.json();
+      // Assume server returns updated structure compatible with fetchLatestChat
+      if (data?.chats) {
+        state.chatsByDisagreement = data.chats;
+      } else {
+        await fetchLatestChat();
+      }
+      renderCurrentThread();
+    }
+
+    async function deleteMessage(id) {
+      const payload = { username: state.user.name, messageId: id };
+      const res = await fetch(CONFIG.DELETE_CHAT_URL, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+      });
+      if (!res.ok) { alert('Delete failed'); return; }
+      await fetchLatestChat();
+    }
+
+    // Button handlers exposed globally
+    window.vote = function(el, delta) {
       const post = el.closest('.post');
       const up = post.querySelector('[data-up]');
       const down = post.querySelector('[data-down]');
       const upN = parseInt(up?.textContent || '0', 10);
       const downN = parseInt(down?.textContent || '0', 10);
-
-      // Simple toggle behavior
-      if (delta > 0) { up.textContent = upN + 1; el.setAttribute('aria-pressed', 'true'); }
-      if (delta < 0) { down.textContent = downN + 1; el.setAttribute('aria-pressed', 'true'); }
+      if (delta > 0) up.textContent = upN + 1; else down.textContent = downN + 1;
     }
-
-    function toggleReply(btn) {
+    window.toggleReply = function(btn) {
       const post = btn.closest('.post');
       const composer = post.querySelector('.composer');
       if (composer) composer.hidden = !composer.hidden;
     }
-    function cancelReply(el) {
+    window.cancelReply = function(el) {
       const card = el.closest('.composer');
       const ta = card.querySelector('textarea');
       ta.value = '';
       card.hidden = true;
     }
-    function submitReply(btn) {
+    window.submitReply = function(btn, parentId) {
       const composer = btn.closest('.composer');
       const text = composer.querySelector('textarea').value.trim();
       if (!text) return;
-      const replies = composer.previousElementSibling?.classList.contains('replies')
-        ? composer.previousElementSibling
-        : (() => { const d = document.createElement('div'); d.className = 'replies'; composer.before(d); return d; })();
-
-      replies.insertAdjacentHTML('beforeend', `
-        <article class="post">
-          <div class="avatar">YOU</div>
-          <div class="post-body">
-            <div class="post-head">
-              <span class="name">You</span>
-              <time class="time">just now</time>
-            </div>
-            <div class="content"></div>
-            <div class="post-actions">
-              <button class="btn" onclick="vote(this, 1)">👍 Like</button>
-              <button class="btn" onclick="vote(this, -1)">👎 Dislike</button>
-              <span class="score"><span class="up" data-up>0</span>/<span class="down" data-down>0</span></span>
-              <span class="spacer"></span>
-              <button class="btn ghost" onclick="toggleReply(this)">↩︎ Reply</button>
-            </div>
-          </div>
-        </article>`);
-      replies.lastElementChild.querySelector('.content').textContent = text;
-      composer.querySelector('textarea').value = '';
-      composer.hidden = true;
+      sendMessage({ disagreementId: state.currentId, parentId, content: text });
+    }
+    window.requestDelete = function(id) {
+      if (confirm('Delete your message? It will appear as [message deleted] but replies remain.')) deleteMessage(id);
     }
 
-    function addRootOpinion() {
-      const ta = document.getElementById('new-opinion');
-      const text = ta.value.trim();
-      if (!text) return;
-      const list = document.querySelectorAll('.list-card')[0];
-      list.insertAdjacentHTML('beforeend', `
-        <article class="post">
-          <div class="avatar">YOU</div>
-          <div class="post-body">
-            <div class="post-head">
-              <span class="name">You</span>
-              <time class="time">just now</time>
-            </div>
-            <div class="content"></div>
-            <div class="post-actions">
-              <button class="btn" onclick="vote(this, 1)">👍 Like</button>
-              <button class="btn" onclick="vote(this, -1)">👎 Dislike</button>
-              <span class="score"><span class="up" data-up>0</span>/<span class="down" data-down>0</span></span>
-              <span class="spacer"></span>
-              <button class="btn ghost" onclick="toggleReply(this)">↩︎ Reply</button>
-              <button class="btn ghost">⋯</button>
-            </div>
-          </div>
-        </article>`);
-      list.lastElementChild.querySelector('.content').textContent = text;
-      ta.value = '';
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }
-
-    function toggleChip(btn) {
-      const pressed = btn.getAttribute('aria-pressed') === 'true';
-      btn.setAttribute('aria-pressed', String(!pressed));
-    }
-
-    const sortModes = ['Top', 'Newest', 'Oldest', 'Most Replies'];
-    function cycleSort(btn) {
-      const current = btn.textContent.split(': ')[1];
-      const idx = (sortModes.indexOf(current) + 1) % sortModes.length;
-      btn.textContent = 'Sort: ' + sortModes[idx];
-    }
-
-    const views = ['Cozy', 'Compact', 'Comfy'];
-    function cycleView(btn) {
-      const current = btn.textContent.split(': ')[1];
-      const idx = (views.indexOf(current) + 1) % views.length;
-      btn.textContent = 'View: ' + views[idx];
-      document.querySelectorAll('.post').forEach(p => {
-        if (views[idx] === 'Compact') p.style.padding = '8px';
-        else if (views[idx] === 'Comfy') p.style.padding = '18px';
-        else p.style.padding = '14px';
+    // Root composer
+    function bindRootComposer() {
+      $('#post-root').addEventListener('click', () => {
+        const ta = $('#new-opinion');
+        const text = ta.value.trim();
+        if (!text) return;
+        sendMessage({ disagreementId: state.currentId, parentId: null, content: text });
+        ta.value = '';
       });
     }
+
+    async function init() {
+      checkLogin();
+      $('#you-avatar').textContent = (state.user.name || 'YOU').slice(0,3).toUpperCase();
+      bindRootComposer();
+      await loadDisagreements();
+      await fetchLatestChat().catch(console.error);
+      if (state.pollHandle) clearInterval(state.pollHandle);
+      state.pollHandle = setInterval(() => fetchLatestChat().catch(console.error), CONFIG.POLL_MS);
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
