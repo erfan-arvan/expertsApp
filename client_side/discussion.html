@@ -222,6 +222,16 @@
       .avatar { width: 36px; height: 36px; font-size: 12px; }
       .post { grid-template-columns: 36px 1fr; }
     }
+
+    .topic-description {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--muted);
+    }
+    .topic-description p {
+    margin: 0;
+    }
+
   </style>
 </head>
 <body>
@@ -236,6 +246,8 @@
           <div class="topic-meta" id="topic-meta">Single-subject thread • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span></div>
         </div>
       </div>
+
+      <div id="topic-description" class="topic-description"></div>
 
       <!-- Rectangular boxes menu for disagreements -->
       <div class="toolbar" aria-label="Disagreements switcher">
@@ -354,18 +366,20 @@
     }
 
     function switchDisagreement(id) {
-      state.currentId = id;
-      // update pressed states
-      $$('#disagreements-menu .chip').forEach(b => b.setAttribute('aria-pressed', String(b.getAttribute('data-id') == id)));
+    state.currentId = id;
+    // update pressed states
+    $$('#disagreements-menu .chip').forEach(b => b.setAttribute('aria-pressed', String(b.getAttribute('data-id') == id)));
 
-      const meta = $('#topic-meta');
-      const topicTitle = $('#topic-title');
-      const d = state.disagreements.find(x => String(x.id) === String(id));
-      if (d) {
+    const meta = $('#topic-meta');
+    const topicTitle = $('#topic-title');
+    const d = state.disagreements.find(x => String(x.id) === String(id));
+    if (d) {
         topicTitle.textContent = d.title;
         meta.innerHTML = `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>`;
-      }
-      renderCurrentThread();
+        
+        $('#topic-description').innerHTML = d.htmltext || '';
+    }
+    renderCurrentThread();
     }
 
     function renderCurrentThread() {
