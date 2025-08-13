@@ -799,4 +799,77 @@ public synchronized Map<String, Object> voteChat(@RequestBody Map<String, Object
     }
 }
 
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/vote_chat")
+public synchronized Map<String, Object> voteChat(@RequestBody Map<String, Object> req) {
+    String username = Objects.toString(req.get("username"), "").trim();
+    String messageId = Objects.toString(req.get("messageId"), "").trim();
+    int delta;
+    try {
+        delta = Integer.parseInt(Objects.toString(req.get("delta"), "0"));
+    } catch (NumberFormatException nfe) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "delta must be +1 or -1");
+    }
+    if (username.isEmpty() || messageId.isEmpty() || !(delta == 1 || delta == -1)) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username, messageId and delta (+1/-1) are required");
+    }
+
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+        Map<String, Object> store = readChatStore(mapper);
+        @SuppressWarnings("unchecked")
+        Map<String, List<Map<String, Object>>> chats =
+            (Map<String, List<Map<String, Object>>>) store.get("chats");
+
+        boolean found = false;
+        for (List<Map<String, Object>> thread : chats.values()) {
+            for (Map<String, Object> m : thread) {
+                if (messageId.equals(m.get("id"))) {
+                    // votes: username -> +1 / -1
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> votes = (Map<String, Object>) m.get("votes");
+                    if (votes == null) {
+                        votes = new HashMap<>();
+                        m.put("votes", votes);
+                    }
+
+                    // Toggle / change vote
+                    int prev = Integer.parseInt(Objects.toString(votes.getOrDefault(username, 0)));
+                    if (prev == delta) {
+                        // same vote again -> unvote
+                        votes.remove(username);
+                    } else {
+                        votes.put(username, delta);
+                    }
+
+                    // Recompute up/down from votes map
+                    int up = 0, down = 0;
+                    for (Object vObj : votes.values()) {
+                        int v = Integer.parseInt(Objects.toString(vObj));
+                        if (v == 1) up++;
+                        else if (v == -1) down++;
+                    }
+                    m.put("up", up);
+                    m.put("down", down);
+
+                    found = true;
+                    break;
+                }
+            }
+            if (found) break;
+        }
+
+        if (!found) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "messageId not found");
+        }
+
+        writeChatStore(mapper, store);
+        return store; // return full shared chat so clients can refresh easily
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update vote.");
+    }
+}
+
+
 }
