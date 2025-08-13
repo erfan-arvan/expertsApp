@@ -561,5 +561,37 @@ function loadDisagreements() {
 
     document.addEventListener('DOMContentLoaded', init);
   </script>
+
+
+<script>
+async function vote(el, delta) {
+  const post = el.closest('.post');
+  const messageId = post?.dataset?.id;
+  if (!messageId) return;
+
+  try {
+    // Send to server
+    const res = await fetch('https://codecomprehensibility.site/vote_chat', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        username: state.user.name, // already set from session/localStorage
+        messageId,
+        delta // +1 for like, -1 for dislike
+      })
+    });
+
+    if (!res.ok) throw new Error('Vote failed');
+
+    //re-pull full chat
+    await fetchLatestChat();
+
+  } catch (e) {
+    console.error(e);
+    alert('Could not register your vote.');
+  }
+}
+</script>
+
 </body>
 </html>
