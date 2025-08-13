@@ -19,9 +19,18 @@ import java.time.format.DateTimeFormatter;
 
 import java.nio.charset.StandardCharsets;
 
+import java.util.stream.Collectors;
+import java.util.function.Function;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.UUID;
+
+
 
 @RestController
 public class SubmissionController {
+    private static final File CHAT_DIR = new File("submissions/chat");
+    private static final File CHAT_FILE = new File(CHAT_DIR, "chats_all.json");
+
     
     // TODO: Move Hard coding Passwords to a separate DB
     private static final Map<String, String> userPasswords = Map.of(
@@ -597,5 +606,196 @@ public Map<String, Object> getLatestRound3Submission(@RequestBody Map<String, St
         return "[error printing JSON]";
     }
 }
+
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/get_latest_chat")
+public synchronized Map<String, Object> getLatestChat(@RequestBody Map<String, String> req) {
+    String username = Objects.toString(req.get("username"), "").trim();
+    if (username.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username is required");
+    }
+
+    ensureChatStoreExists();
+
+    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+    try {
+        Map<String, Map<String, Object>> store = CHAT_FILE.exists()
+            ? mapper.readValue(CHAT_FILE, new TypeReference<>() {}) : new HashMap<>();
+
+        Map<String, Object> userChat = store.get(username);
+        if (userChat == null) {
+            // initialize an empty chat object for this user
+            userChat = new HashMap<>();
+            userChat.put("chats", new HashMap<String, List<Map<String, Object>>>());
+            userChat.put("updatedAt", nowIso());
+            store.put(username, userChat);
+            mapper.writeValue(CHAT_FILE, store);
+        }
+        return userChat;
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read chat.");
+    }
+}
+
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/submit_chat")
+public synchronized Map<String, Object> submitChat(@RequestBody Map<String, Object> req) {
+    String username = Objects.toString(req.get("username"), "").trim();
+    String disagreementId = Objects.toString(req.get("disagreementId"), "").trim();
+    String parentId = (req.get("parentId") == null) ? null : Objects.toString(req.get("parentId"), "").trim();
+    String content = Objects.toString(req.get("content"), "").trim();
+
+    if (username.isEmpty() || disagreementId.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username and disagreementId are required");
+    }
+    if (content.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "content is required");
+    }
+
+    ensureChatStoreExists();
+    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
+    try {
+        Map<String, Map<String, Object>> store = CHAT_FILE.exists()
+            ? mapper.readValue(CHAT_FILE, new TypeReference<>() {}) : new HashMap<>();
+
+        Map<String, Object> userChat = store.computeIfAbsent(username, u -> {
+            Map<String, Object> root = new HashMap<>();
+            root.put("chats", new HashMap<String, List<Map<String, Object>>>());
+            root.put("updatedAt", nowIso());
+            return root;
+        });
+
+        // chats: Map<disagreementId, List<Message>>
+        @SuppressWarnings("unchecked")
+        Map<String, List<Map<String, Object>>> chats =
+            (Map<String, List<Map<String, Object>>>) userChat.computeIfAbsent("chats", k -> new HashMap<>());
+
+        List<Map<String, Object>> messages =
+            chats.computeIfAbsent(disagreementId, k -> new ArrayList<>());
+
+        // create the message
+        Map<String, Object> msg = new HashMap<>();
+        msg.put("id", UUID.randomUUID().toString());
+        msg.put("parentId", parentId);               // null for root
+        msg.put("username", username);
+        msg.put("content", content);
+        msg.put("createdAt", nowIso());
+        msg.put("is_deleted", false);
+        msg.put("up", 0);
+        msg.put("down", 0);
+
+        // Validate parent if replying
+        if (parentId != null && !parentId.isBlank()) {
+            boolean parentExists = messages.stream().anyMatch(m -> parentId.equals(m.get("id")));
+            if (!parentExists) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "parentId not found in this disagreement thread");
+            }
+        }
+
+        messages.add(msg);
+
+        userChat.put("updatedAt", nowIso());
+        mapper.writeValue(CHAT_FILE, store);
+
+        // Return full latest chat for convenience (frontend can just drop it in)
+        return userChat;
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to write chat.");
+    }
+}
+
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/delete_chat")
+public synchronized Map<String, Object> deleteChat(@RequestBody Map<String, Object> req) {
+    String username = Objects.toString(req.get("username"), "").trim();
+    String messageId = Objects.toString(req.get("messageId"), "").trim();
+    String disagreementId = req.get("disagreementId") == null ? null : Objects.toString(req.get("disagreementId"), "").trim();
+    if (username.isEmpty() || messageId.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username and messageId are required");
+    }
+
+    ensureChatStoreExists();
+    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
+    try {
+        Map<String, Map<String, Object>> store = CHAT_FILE.exists()
+            ? mapper.readValue(CHAT_FILE, new TypeReference<>() {}) : new HashMap<>();
+
+        Map<String, Object> userChat = store.get(username);
+        if (userChat == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No chat object for user");
+        }
+
+        @SuppressWarnings("unchecked")
+        Map<String, List<Map<String, Object>>> chats =
+            (Map<String, List<Map<String, Object>>>) userChat.get("chats");
+        if (chats == null || chats.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No chats found for user");
+        }
+
+        // If disagreementId is supplied, only search that thread; otherwise search all
+        List<String> threadKeys = (disagreementId == null || disagreementId.isBlank())
+            ? new ArrayList<>(chats.keySet())
+            : List.of(disagreementId);
+
+        boolean found = false;
+        for (String key : threadKeys) {
+            List<Map<String, Object>> msgs = chats.get(key);
+            if (msgs == null) continue;
+            Map<String, Object> target = findById(msgs, messageId);
+            if (target != null) {
+                // Soft delete: keep username/time, blank the content but mark as deleted
+                target.put("is_deleted", true);
+                target.put("content", "");
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "messageId not found");
+        }
+
+        userChat.put("updatedAt", nowIso());
+        mapper.writeValue(CHAT_FILE, store);
+        return userChat;
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update chat.");
+    }
+}
+
+private String nowIso() {
+    return ZonedDateTime.now(ZoneId.of("America/New_York"))
+            .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+}
+
+private void ensureChatStoreExists() {
+    if (!CHAT_DIR.exists()) {
+        CHAT_DIR.mkdirs();
+        System.out.println(">>> Created 'submissions/chat' directory.");
+    }
+    if (!CHAT_FILE.exists()) {
+        try {
+            ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+            mapper.writeValue(CHAT_FILE, new HashMap<String, Map<String, Object>>());
+            System.out.println(">>> Initialized chats_all.json");
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to initialize chat store");
+        }
+    }
+}
+
+/** Linear search for a message in a flat thread list (parent/child relation is implied by parentId). */
+private Map<String, Object> findById(List<Map<String, Object>> msgs, String id) {
+    for (Map<String, Object> m : msgs) {
+        if (id.equals(m.get("id"))) return m;
+    }
+    return null;
+}
+
 
 }
