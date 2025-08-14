@@ -409,9 +409,10 @@ function renderMessage(msg) {
   el.dataset.id = msg.id;
 
   const isRoot = !msg.parentId; // only roots can be replied to
-  const newBadge = isNewForUser(msg.createdAt)
-  ? `<span class="badge" style="border-color: transparent; background: linear-gradient(145deg, var(--primary), var(--primary-2)); color: #fff">NEW</span>`
-  : '';
+    const newBadge = isNewForUser(msg.createdAt)
+    ? `<span class="badge" style="border-color:transparent; background:linear-gradient(145deg,#ef4444,#dc2626); color:#fff;">NEW</span>`
+    : '';
+
 
 
   el.innerHTML = `
@@ -682,7 +683,7 @@ window.cancelReply = function (el) {
   if (!iso || !state.previousLatestAt) return false;
   const msgTime = new Date(iso).getTime();
   const prevLatest = new Date(state.previousLatestAt).getTime();
-  console.log("NEW NEW", !isNaN(msgTime) && !isNaN(prevLatest) && msgTime > prevLatest)
+  console.log("NEW NEW", !isNaN(msgTime) && !isNaN(prevLatest) && msgTime > prevLatest);
   return !isNaN(msgTime) && !isNaN(prevLatest) && msgTime > prevLatest;
 }
 
