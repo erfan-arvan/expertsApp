@@ -30,6 +30,7 @@ public class SubmissionController {
 
     private static final File CHAT_DIR  = new File("submissions/chat");
     private static final File CHAT_FILE = new File(CHAT_DIR, "chats_all.json");
+    private static final File CHAT_SEEN_FILE = new File("submissions/chat/seen_state.json");
 
     
     // TODO: Move Hard coding Passwords to a separate DB
@@ -617,6 +618,35 @@ private String nowIsoUtc() {
     return DateTimeFormatter.ISO_INSTANT.format(Instant.now());
 }
 
+@SuppressWarnings("unchecked")
+private Map<String, Object> readJsonFile(File f) throws IOException {
+    if (!f.exists()) return new HashMap<>();
+    ObjectMapper m = new ObjectMapper();
+    return m.readValue(f, new TypeReference<Map<String, Object>>() {});
+}
+
+private void writeJsonFile(File f, Map<String, Object> data) throws IOException {
+    f.getParentFile().mkdirs();
+    ObjectMapper m = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+    m.writeValue(f, data);
+}
+
+private java.time.Instant parseInstant(Object iso) {
+    if (iso == null) return java.time.Instant.EPOCH;
+    try { return java.time.Instant.parse(String.valueOf(iso)); } catch (Exception e) { return java.time.Instant.EPOCH; }
+}
+
+@SuppressWarnings("unchecked")
+private java.util.List<Map<String, Object>> allMessages(Map<String, Object> store) {
+    Map<String, List<Map<String, Object>>> chats = (Map<String, List<Map<String, Object>>>) store.get("chats");
+    if (chats == null) return java.util.Collections.emptyList();
+    List<Map<String, Object>> out = new ArrayList<>();
+    for (List<Map<String, Object>> thread : chats.values()) {
+        if (thread != null) out.addAll(thread);
+    }
+    return out;
+}
+
 private void ensureChatStoreExists() {
     if (!CHAT_DIR.exists()) {
         CHAT_DIR.mkdirs();
@@ -652,15 +682,51 @@ private void writeChatStore(ObjectMapper mapper, Map<String, Object> store) thro
 @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
 @PostMapping("/get_latest_chat")
 public synchronized Map<String, Object> getLatestChat(@RequestBody Map<String, String> req) {
-    // username may be provided by the client; we don't need it here for a shared store.
+    String username = Objects.toString(req.get("username"), "").trim().toLowerCase();
+    if (username.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username is required");
+    }
+
     ObjectMapper mapper = new ObjectMapper();
     try {
-        return readChatStore(mapper);
+        // Load shared chat
+        Map<String, Object> store = readChatStore(mapper); // your existing helper that reads CHAT_FILE
+
+        // Compute current oldest & latest message timestamps in UTC
+        List<Map<String, Object>> msgs = allMessages(store);
+        java.time.Instant oldest = java.time.Instant.MAX;
+        java.time.Instant latest = java.time.Instant.EPOCH;
+        for (Map<String, Object> m : msgs) {
+            java.time.Instant t = parseInstant(m.get("createdAt"));
+            if (t.isBefore(oldest)) oldest = t;
+            if (t.isAfter(latest)) latest = t;
+        }
+        if (msgs.isEmpty()) { oldest = java.time.Instant.EPOCH; latest = java.time.Instant.EPOCH; }
+
+        // Load per-user seen state
+        Map<String, Object> seen = readJsonFile(CHAT_SEEN_FILE);
+        Map<String, Object> userState = (Map<String, Object>) seen.get(username);
+        if (userState == null) userState = new HashMap<>();
+
+        String previousLatestAt = Objects.toString(userState.getOrDefault("previousLatestAt", ""), "");
+        // Prepare response: include hints for client
+        Map<String, Object> response = new HashMap<>(store);
+        response.put("previousLatestAt", previousLatestAt);                 // ⬅️ what user had seen last time
+        response.put("oldestReturnedAt", oldest.equals(java.time.Instant.EPOCH) ? "" : oldest.toString());
+        response.put("nowLatestAt", latest.equals(java.time.Instant.EPOCH) ? "" : latest.toString());
+
+        // Update user's previousLatestAt to "now" (current latest)
+        userState.put("previousLatestAt", latest.equals(java.time.Instant.EPOCH) ? "" : latest.toString());
+        seen.put(username, userState);
+        writeJsonFile(CHAT_SEEN_FILE, seen);
+
+        return response;
     } catch (IOException e) {
         e.printStackTrace();
         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read chat.");
     }
 }
+
 
 @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
 @PostMapping("/submit_chat")
