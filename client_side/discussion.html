@@ -598,15 +598,15 @@ async function fetchLatestChat() {
     }
 
     // Root composer
-    function bindRootComposer() {
-      $('#post-root').addEventListener('click', () => {
-        const ta = $('#new-opinion');
-        const text = ta.value.trim();
-        if (!text) return;
-        sendMessage({ disagreementId: state.currentId, parentId: null, content: text });
-        ta.value = '';
-      });
-    }
+    // function bindRootComposer() {
+    //   $('#post-root').addEventListener('click', () => {
+    //     const ta = $('#new-opinion');
+    //     const text = ta.value.trim();
+    //     if (!text) return;
+    //     sendMessage({ disagreementId: state.currentId, parentId: null, content: text });
+    //     ta.value = '';
+    //   });
+    // }
 
     async function init() {
       checkLogin();
