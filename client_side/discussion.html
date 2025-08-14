@@ -232,8 +232,6 @@
     margin: 0;
     }
 
-    [hidden] { display: none !important; }
-
   </style>
 </head>
 <body>
@@ -408,8 +406,8 @@
           </div>
           <div class="content">${msg.is_deleted ? '<em style="color:var(--muted)">[message deleted]</em>' : escapeHtml(msg.content || '')}</div>
           <div class="post-actions">
-            <button class="btn" onclick="vote(this, 1)">👍</button>
-            <button class="btn" onclick="vote(this, -1)">👎</button>
+            <button class="btn" onclick="vote(this, 1)">👍 Like</button>
+            <button class="btn" onclick="vote(this, -1)">👎 Dislike</button>
             <span class="score"><span class="up" data-up>${msg.up || 0}</span>/<span class="down" data-down>${msg.down || 0}</span></span>
             <span class="spacer"></span>
             ${ msg.is_deleted ? '' : `<button class="btn ghost" onclick="toggleReply(this)">↩︎ Reply</button>` }
@@ -426,21 +424,23 @@
 
         // Inline composer (only if not deleted)
         if (!msg.is_deleted) {
-            const composer = document.createElement('div');
-            composer.className = 'composer';
-            composer.hidden = true; // 🔴 start hidden
-            composer.innerHTML = `
+        const composer = document.createElement('div');
+        composer.className = 'composer';
+        composer.innerHTML = `...`;
+        el.querySelector('.post-body').appendChild(composer);
+
+
+        composer.innerHTML = `
             <div class="avatar" aria-hidden="true">${(state.user.name||'YO').slice(0,3).toUpperCase()}</div>
             <div>
-                <label class="sr-only">Write a reply</label>
-                <textarea class="input" placeholder="Write a thoughtful reply…"></textarea>
-                <div class="composer-actions">
+            <label class="sr-only">Write a reply</label>
+            <textarea class="input" placeholder="Write a thoughtful reply…"></textarea>
+            <div class="composer-actions">
                 <button class="btn" onclick="cancelReply(this)">Cancel</button>
                 <button class="btn primary" onclick="submitReply(this, '${msg.id}')">Post reply</button>
-                </div>
+            </div>
             </div>`;
-            el.querySelector('.post-body').appendChild(composer);
-
+        el.querySelector('.post-body').appendChild(composer);
         }
 
       return el;
@@ -521,7 +521,17 @@ function loadDisagreements() {
       const downN = parseInt(down?.textContent || '0', 10);
       if (delta > 0) up.textContent = upN + 1; else down.textContent = downN + 1;
     }
-
+    window.toggleReply = function(btn) {
+      const post = btn.closest('.post');
+      const composer = post.querySelector('.composer');
+      if (composer) composer.hidden = !composer.hidden;
+    }
+    window.cancelReply = function(el) {
+      const card = el.closest('.composer');
+      const ta = card.querySelector('textarea');
+      ta.value = '';
+      card.hidden = true;
+    }
     window.submitReply = function(btn, parentId) {
       const composer = btn.closest('.composer');
       const text = composer.querySelector('textarea').value.trim();
@@ -589,7 +599,7 @@ async function vote(el, delta) {
 </script>
 
 <script>
-function toggleReply(btn) {
+window.toggleReply = function (btn) {
   const post = btn.closest('.post');
   if (!post) return;
 
@@ -602,11 +612,25 @@ function toggleReply(btn) {
   if (!composer) return;
 
   composer.hidden = !composer.hidden;
-  if (!composer.hidden) {
-    composer.querySelector('textarea')?.focus();
-  }
-}
 
+  if (!composer.hidden) {
+    const ta = composer.querySelector('textarea');
+    // Put cursor at end
+    if (ta) {
+      ta.focus();
+      ta.selectionStart = ta.value.length;
+      ta.selectionEnd = ta.value.length;
+    }
+  }
+};
+
+window.cancelReply = function (el) {
+  const composer = el.closest('.composer');
+  if (!composer) return;
+  const ta = composer.querySelector('textarea');
+  if (ta) ta.value = '';
+  composer.hidden = true;
+};
 
 
 </script>
