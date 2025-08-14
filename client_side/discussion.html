@@ -424,21 +424,21 @@
 
         // Inline composer (only if not deleted)
         if (!msg.is_deleted) {
-        const composer = document.createElement('div');
-        composer.className = 'composer';
-        composer.hidden = true; // 🔴 start hidden
-
-        composer.innerHTML = `
+            const composer = document.createElement('div');
+            composer.className = 'composer';
+            composer.hidden = true; // 🔴 start hidden
+            composer.innerHTML = `
             <div class="avatar" aria-hidden="true">${(state.user.name||'YO').slice(0,3).toUpperCase()}</div>
             <div>
-            <label class="sr-only">Write a reply</label>
-            <textarea class="input" placeholder="Write a thoughtful reply…"></textarea>
-            <div class="composer-actions">
+                <label class="sr-only">Write a reply</label>
+                <textarea class="input" placeholder="Write a thoughtful reply…"></textarea>
+                <div class="composer-actions">
                 <button class="btn" onclick="cancelReply(this)">Cancel</button>
                 <button class="btn primary" onclick="submitReply(this, '${msg.id}')">Post reply</button>
-            </div>
+                </div>
             </div>`;
-        el.querySelector('.post-body').appendChild(composer);
+            el.querySelector('.post-body').appendChild(composer);
+
         }
 
       return el;
@@ -597,7 +597,7 @@ async function vote(el, delta) {
 </script>
 
 <script>
-window.toggleReply = function (btn) {
+function toggleReply(btn) {
   const post = btn.closest('.post');
   if (!post) return;
 
@@ -610,25 +610,11 @@ window.toggleReply = function (btn) {
   if (!composer) return;
 
   composer.hidden = !composer.hidden;
-
   if (!composer.hidden) {
-    const ta = composer.querySelector('textarea');
-    // Put cursor at end
-    if (ta) {
-      ta.focus();
-      ta.selectionStart = ta.value.length;
-      ta.selectionEnd = ta.value.length;
-    }
+    composer.querySelector('textarea')?.focus();
   }
-};
+}
 
-window.cancelReply = function (el) {
-  const composer = el.closest('.composer');
-  if (!composer) return;
-  const ta = composer.querySelector('textarea');
-  if (ta) ta.value = '';
-  composer.hidden = true;
-};
 
 
 </script>
