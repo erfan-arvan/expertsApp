@@ -442,7 +442,7 @@ function renderMessage(msg) {
   if (isRoot && !msg.is_deleted) {
     const composer = document.createElement('div');
     composer.className = 'composer';
-    composer.hidden = true; // start hidden
+    composer.hidden = false; // start hidden
     composer.innerHTML = `
       <div class="avatar" aria-hidden="true">${(state.user.name || 'YO').slice(0,3).toUpperCase()}</div>
       <div>
