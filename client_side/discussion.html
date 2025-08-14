@@ -610,7 +610,7 @@ async function fetchLatestChat() {
 
     async function init() {
       checkLogin();
-      $('#you-avatar').textContent = (state.user.name || 'YOU').slice(0,3).toUpperCase();
+    //   $('#you-avatar').textContent = (state.user.name || 'YOU').slice(0,3).toUpperCase();
     //   bindRootComposer();
       await loadDisagreements();
       await fetchLatestChat().catch(console.error);
