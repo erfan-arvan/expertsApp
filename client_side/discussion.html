@@ -413,8 +413,8 @@ function renderMessage(msg) {
         ${msg.is_deleted ? '<em style="color:var(--muted)">[message deleted]</em>' : escapeHtml(msg.content || '')}
       </div>
       <div class="post-actions">
-        <button class="btn" onclick="vote(this, 1)">👍 Like</button>
-        <button class="btn" onclick="vote(this, -1)">👎 Dislike</button>
+        <button class="btn" onclick="vote(this, 1)">👍</button>
+        <button class="btn" onclick="vote(this, -1)">👎</button>
         <span class="score"><span class="up" data-up>${msg.up || 0}</span>/<span class="down" data-down>${msg.down || 0}</span></span>
         <span class="spacer"></span>
         ${
