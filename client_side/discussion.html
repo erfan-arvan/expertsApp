@@ -257,10 +257,10 @@
         </div>
       </div>
 
-      <div id="topic-description" class="topic-description" style="display: none;"></div>
+      <div id="topic-description" class="topic-description"></div>
 
       <!-- Rectangular boxes menu for disagreements -->
-      <div class="toolbar" aria-label="Disagreements switcher" style="display: none;">
+      <div class="toolbar" aria-label="Disagreements switcher">
         <div class="controls" id="disagreements-menu" style="overflow:auto; white-space:nowrap; padding-bottom:6px; width:100%">
           <!-- buttons inserted dynamically -->
         </div>
@@ -273,7 +273,7 @@
     </section>
 
     <!-- New Opinion Composer (root-level) -->
-    <!-- <section class="list-card" aria-label="Add new opinion">
+    <section class="list-card" aria-label="Add new opinion">
       <div class="composer">
         <div class="avatar" aria-hidden="true" id="you-avatar">YOU</div>
         <div style="width:100%">
@@ -286,7 +286,7 @@
           </div>
         </div>
       </div>
-    </section> -->
+    </section>
 
   </div>
 
@@ -598,20 +598,20 @@ async function fetchLatestChat() {
     }
 
     // Root composer
-    // function bindRootComposer() {
-    //   $('#post-root').addEventListener('click', () => {
-    //     const ta = $('#new-opinion');
-    //     const text = ta.value.trim();
-    //     if (!text) return;
-    //     sendMessage({ disagreementId: state.currentId, parentId: null, content: text });
-    //     ta.value = '';
-    //   });
-    // }
+    function bindRootComposer() {
+      $('#post-root').addEventListener('click', () => {
+        const ta = $('#new-opinion');
+        const text = ta.value.trim();
+        if (!text) return;
+        sendMessage({ disagreementId: state.currentId, parentId: null, content: text });
+        ta.value = '';
+      });
+    }
 
     async function init() {
       checkLogin();
-    //   $('#you-avatar').textContent = (state.user.name || 'YOU').slice(0,3).toUpperCase();
-    //   bindRootComposer();
+      $('#you-avatar').textContent = (state.user.name || 'YOU').slice(0,3).toUpperCase();
+      bindRootComposer();
       await loadDisagreements();
       await fetchLatestChat().catch(console.error);
       if (state.pollHandle) clearInterval(state.pollHandle);
