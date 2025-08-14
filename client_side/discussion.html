@@ -501,7 +501,6 @@ function loadDisagreements() {
 
 }
 
-
 async function fetchLatestChat() {
   const payload = { username: state.user.name };
   const res = await fetch(CONFIG.GET_LATEST_CHAT_URL, {
@@ -510,7 +509,14 @@ async function fetchLatestChat() {
     body: JSON.stringify(payload)
   });
   if (!res.ok) throw new Error('Failed to get latest chat');
+  
   const data = await res.json();
+
+  // 📝 Debug logs
+  console.log("📥 Received chat data:", data);
+  console.log("📅 previousLatestAt:", data.previousLatestAt);
+  console.log("📅 nowLatestAt:", data.nowLatestAt);
+  console.log("📅 oldestReturnedAt:", data.oldestReturnedAt);
 
   // Store chats and meta times
   state.chatsByDisagreement = data.chats || {};
@@ -520,6 +526,7 @@ async function fetchLatestChat() {
 
   renderCurrentThread();
 }
+
 
 
     async function sendMessage({ disagreementId, parentId=null, content }) {
