@@ -319,9 +319,19 @@
     /* ===== Utility ===== */
     const $ = (sel, root=document) => root.querySelector(sel);
     const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
-    function fmtTime(dtStr) {
-      try { const d = new Date(dtStr); return d.toLocaleString(); } catch { return 'just now'; }
+    function fmtTime(iso) {
+    if (!iso) return '';
+    // Ensure string like "2025-08-14T16:03:25Z" or "...-04:00"
+    // The Date ctor understands both and converts to the user's local tz for output.
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return ''; // safeguard
+    // Use Intl to respect user locale + local time zone automatically
+    return new Intl.DateTimeFormat(undefined, {
+        year: 'numeric', month: 'short', day: '2-digit',
+        hour: '2-digit', minute: '2-digit',
+    }).format(d);
     }
+
 
     // Build a thread tree from flat messages
     function buildThread(messages) {

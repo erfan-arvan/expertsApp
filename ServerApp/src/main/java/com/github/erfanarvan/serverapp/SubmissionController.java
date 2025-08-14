@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 
 import java.nio.charset.StandardCharsets;
@@ -611,6 +612,11 @@ private String nowIso() {
             .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 }
 
+private String nowIsoUtc() {
+    // e.g., "2025-08-14T16:03:25Z"
+    return DateTimeFormatter.ISO_INSTANT.format(Instant.now());
+}
+
 private void ensureChatStoreExists() {
     if (!CHAT_DIR.exists()) {
         CHAT_DIR.mkdirs();
@@ -621,7 +627,7 @@ private void ensureChatStoreExists() {
             ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
             Map<String, Object> root = new HashMap<>();
             root.put("chats", new HashMap<String, List<Map<String, Object>>>());
-            root.put("updatedAt", nowIso());
+            root.put("updatedAt", nowIsoUtc());
             mapper.writeValue(CHAT_FILE, root);
             System.out.println(">>> Initialized chats_all.json");
         } catch (IOException e) {
@@ -639,7 +645,7 @@ private Map<String, Object> readChatStore(ObjectMapper mapper) throws IOExceptio
 
 /** Writes the full shared chat object. */
 private void writeChatStore(ObjectMapper mapper, Map<String, Object> store) throws IOException {
-    store.put("updatedAt", nowIso());
+    store.put("updatedAt", nowIsoUtc());
     mapper.enable(SerializationFeature.INDENT_OUTPUT).writeValue(CHAT_FILE, store);
 }
 
@@ -695,7 +701,7 @@ public synchronized Map<String, Object> submitChat(@RequestBody Map<String, Obje
         msg.put("parentId", parentId);          // null for root
         msg.put("username", username);
         msg.put("content", content);
-        msg.put("createdAt", nowIso());
+        msg.put("createdAt", nowIsoUtc());
         msg.put("is_deleted", false);
         msg.put("up", 0);
         msg.put("down", 0);
