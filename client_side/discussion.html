@@ -391,6 +391,7 @@
         $('#topic-description').innerHTML = d.htmltext || '';
     }
     renderCurrentThread();
+    updateNewMessageBadges();
     }
 
     function renderCurrentThread() {
@@ -687,6 +688,111 @@ window.cancelReply = function (el) {
   return !isNaN(msgTime) && !isNaN(prevLatest) && msgTime > prevLatest;
 }
 
+</script>
+
+<script>
+
+if (!window.state) window.state = {};
+state.lastSeenByDisagreement = state.lastSeenByDisagreement || {}; // { [id]: isoString }
+
+/** Call this once to inject badge CSS */
+function ensureBadgeStyles() {
+  if (document.getElementById('new-badge-styles')) return;
+  const css = `
+    .new-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 6px;
+      font-size: 12px;
+      line-height: 18px;
+      border-radius: 999px;
+      background: #e11d48; /* red */
+      color: #fff;
+      font-weight: 700;
+      text-align: center;
+      border: 1px solid rgba(0,0,0,0.05);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    .disagreement-box { position: relative; } /* so the badge can anchor */
+    .new-badge.hide { display: none; }
+  `;
+  const style = document.createElement('style');
+  style.id = 'new-badge-styles';
+  style.textContent = css;
+  document.head.appendChild(style);
+}
+
+/** Get a DOM node for a disagreement box by id */
+function getDisagreementBoxNode(disagreementId) {
+  return (
+    document.querySelector(`.disagreement-box[data-disagreement-id="${disagreementId}"]`) ||
+    document.getElementById(`disagreement-${disagreementId}`)
+  );
+}
+
+/** Count "new" messages for a disagreement since it was last viewed */
+function countNewForDisagreement(disagreementId) {
+  const msgs = (state.chatsByDisagreement && state.chatsByDisagreement[disagreementId]) || [];
+  const seenCutoff =
+    state.lastSeenByDisagreement[disagreementId] ||
+    state.previousLatestAt ||
+    ''; // fallback: treat all as not-new if unknown
+
+  // Prefer your existing isNewForUser() if available; otherwise compare timestamps.
+  const isNew = (msg) => {
+    if (typeof isNewForUser === 'function') return isNewForUser(msg.createdAt);
+    // Fallback: createdAt strictly greater than last-seen cutoff
+    const a = Date.parse(msg.createdAt);
+    const b = Date.parse(seenCutoff);
+    if (isNaN(a) || isNaN(b)) return false;
+    return a > b;
+  };
+
+  let count = 0;
+  for (const m of msgs) if (isNew(m)) count++;
+  return count;
+}
+
+/** Ensure a badge exists on a box and update its number */
+function setBadge(disagreementId, count) {
+  const box = getDisagreementBoxNode(disagreementId);
+  if (!box) return;
+
+  let badge = box.querySelector('.new-badge');
+  if (!badge) {
+    badge = document.createElement('span');
+    badge.className = 'new-badge';
+    box.appendChild(badge);
+  }
+  if (count > 0) {
+    badge.textContent = String(count);
+    badge.classList.remove('hide');
+  } else {
+    badge.textContent = '';
+    badge.classList.add('hide');
+  }
+}
+
+/** Public: recompute & render all badges. Call this after rendering messages. */
+function updateNewMessageBadges() {
+  ensureBadgeStyles();
+  const ids = Object.keys(state.chatsByDisagreement || {});
+  for (const id of ids) {
+    const count = countNewForDisagreement(id);
+    setBadge(id, count);
+  }
+}
+
+/** Call this when the user opens/views a disagreement thread.
+ *  It marks the thread as "seen" now and removes its badge. */
+function markDisagreementSeen(disagreementId) {
+  const nowIso = new Date().toISOString();
+  state.lastSeenByDisagreement[disagreementId] = nowIso;
+  setBadge(disagreementId, 0);
+}
 </script>
 
 </body>
