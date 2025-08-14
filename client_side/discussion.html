@@ -394,67 +394,57 @@
       thread.forEach(node => posts.appendChild(renderMessage(node)));
     }
 
-function renderMessage(msg, depth = 0) {
-  const el = document.createElement('article');
-  el.className = 'post';
-  el.dataset.id = msg.id;
+    function renderMessage(msg) {
+      const el = document.createElement('article');
+      el.className = 'post';
+      el.dataset.id = msg.id;
+      el.innerHTML = `
+        <div class="avatar" aria-hidden="true">${(msg.username || '?').slice(0,2).toUpperCase()}</div>
+        <div class="post-body">
+          <div class="post-head">
+            <span class="name">${msg.username || 'Unknown'}</span>
+            ${msg.role ? `<span class="badge">${msg.role}</span>` : ''}
+            <time class="time" datetime="${msg.createdAt || ''}">${fmtTime(msg.createdAt)}</time>
+          </div>
+          <div class="content">${msg.is_deleted ? '<em style="color:var(--muted)">[message deleted]</em>' : escapeHtml(msg.content || '')}</div>
+          <div class="post-actions">
+            <button class="btn" onclick="vote(this, 1)">👍</button>
+            <button class="btn" onclick="vote(this, -1)">👎</button>
+            <span class="score"><span class="up" data-up>${msg.up || 0}</span>/<span class="down" data-down>${msg.down || 0}</span></span>
+            <span class="spacer"></span>
+            ${ msg.is_deleted ? '' : `<button class="btn ghost" onclick="toggleReply(this)">↩︎ Reply</button>` }
+            ${ (msg.username === state.user.name && !msg.is_deleted) ? `<button class="btn ghost" onclick="requestDelete('${msg.id}')">🗑 Delete</button>` : ''}
+            <button class="btn ghost">⋯</button>
+          </div>
+        </div>`;
 
-  el.innerHTML = `
-    <div class="avatar" aria-hidden="true">${(msg.username || '?').slice(0,2).toUpperCase()}</div>
-    <div class="post-body">
-      <div class="post-head">
-        <span class="name">${msg.username || 'Unknown'}</span>
-        ${msg.role ? `<span class="badge">${msg.role}</span>` : ''}
-        <time class="time" datetime="${msg.createdAt || ''}">${fmtTime(msg.createdAt)}</time>
-      </div>
-      <div class="content">
-        ${msg.is_deleted ? '<em style="color:var(--muted)">[message deleted]</em>' : escapeHtml(msg.content || '')}
-      </div>
-      <div class="post-actions">
-        <button class="btn" onclick="vote(this, 1)">👍 Like</button>
-        <button class="btn" onclick="vote(this, -1)">👎 Dislike</button>
-        <span class="score"><span class="up" data-up>${msg.up || 0}</span>/<span class="down" data-down>${msg.down || 0}</span></span>
-        <span class="spacer"></span>
-        ${!msg.is_deleted ? `<button class="btn ghost" onclick="toggleReply(this)">↩︎ Reply</button>` : ``}
-        ${(msg.username === state.user.name && !msg.is_deleted)
-          ? `<button class="btn ghost" onclick="requestDelete('${msg.id}')">🗑 Delete</button>`
-          : ``}
-        <button class="btn ghost">⋯</button>
-      </div>
-    </div>
-  `;
+      // Replies container
+      const repliesWrap = document.createElement('div');
+      repliesWrap.className = 'replies';
+      (msg.children || []).forEach(c => repliesWrap.appendChild(renderMessage(c)));
+      el.querySelector('.post-body').appendChild(repliesWrap);
 
-  // Composer for replying to this message
-  if (!msg.is_deleted) {
-    const composer = document.createElement('div');
-    composer.className = 'composer';
-    composer.hidden = true;
-    composer.innerHTML = `
-      <div class="avatar" aria-hidden="true">${(state.user.name || 'YO').slice(0,3).toUpperCase()}</div>
-      <div>
-        <label class="sr-only">Write a reply</label>
-        <textarea class="input" placeholder="Write a thoughtful reply…"></textarea>
-        <div class="composer-actions">
-          <button class="btn" onclick="cancelReply(this)">Cancel</button>
-          <button class="btn primary" onclick="submitReply(this, '${msg.id}')">Post reply</button>
-        </div>
-      </div>`;
-    el.querySelector('.post-body').appendChild(composer);
-  }
+        // Inline composer (only if not deleted)
+        if (!msg.is_deleted) {
+            const composer = document.createElement('div');
+            composer.className = 'composer';
+            composer.hidden = true; // 🔴 start hidden
+            composer.innerHTML = `
+            <div class="avatar" aria-hidden="true">${(state.user.name||'YO').slice(0,3).toUpperCase()}</div>
+            <div>
+                <label class="sr-only">Write a reply</label>
+                <textarea class="input" placeholder="Write a thoughtful reply…"></textarea>
+                <div class="composer-actions">
+                <button class="btn" onclick="cancelReply(this)">Cancel</button>
+                <button class="btn primary" onclick="submitReply(this, '${msg.id}')">Post reply</button>
+                </div>
+            </div>`;
+            el.querySelector('.post-body').appendChild(composer);
 
-  // Render children with max depth = 1
-  if (msg.children && msg.children.length > 0) {
-    const repliesWrap = document.createElement('div');
-    repliesWrap.className = 'replies';
-    repliesWrap.style.marginLeft = depth === 0 ? '40px' : '0px'; // ✅ indent only once
-    msg.children.forEach(c => repliesWrap.appendChild(renderMessage(c, Math.min(depth + 1, 1))));
-    el.appendChild(repliesWrap);
-  }
+        }
 
-  return el;
-}
-
-
+      return el;
+    }
 
     function escapeHtml(s) {
       return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
