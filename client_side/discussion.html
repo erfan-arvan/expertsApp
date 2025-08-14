@@ -519,17 +519,7 @@ function loadDisagreements() {
       const downN = parseInt(down?.textContent || '0', 10);
       if (delta > 0) up.textContent = upN + 1; else down.textContent = downN + 1;
     }
-    window.toggleReply = function(btn) {
-      const post = btn.closest('.post');
-      const composer = post.querySelector('.composer');
-      if (composer) composer.hidden = !composer.hidden;
-    }
-    window.cancelReply = function(el) {
-      const card = el.closest('.composer');
-      const ta = card.querySelector('textarea');
-      ta.value = '';
-      card.hidden = true;
-    }
+
     window.submitReply = function(btn, parentId) {
       const composer = btn.closest('.composer');
       const text = composer.querySelector('textarea').value.trim();
