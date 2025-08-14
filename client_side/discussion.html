@@ -611,7 +611,7 @@ async function fetchLatestChat() {
     async function init() {
       checkLogin();
       $('#you-avatar').textContent = (state.user.name || 'YOU').slice(0,3).toUpperCase();
-      bindRootComposer();
+    //   bindRootComposer();
       await loadDisagreements();
       await fetchLatestChat().catch(console.error);
       if (state.pollHandle) clearInterval(state.pollHandle);
