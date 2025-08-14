@@ -233,6 +233,15 @@
     }
     .post.new-for-user { background: rgba(124,92,255,.08); border-color: var(--border); }
 
+    /* tiny pill on disagreement buttons */
+    .menu-badge{
+    display:inline-flex; align-items:center; justify-content:center;
+    margin-left:8px; padding:2px 8px; min-width:18px;
+    font-size:12px; line-height:1; font-weight:600;
+    border-radius:999px; color:#fff;
+    background: linear-gradient(145deg, var(--primary), var(--primary-2));
+    }
+
   </style>
 </head>
 <body>
@@ -691,51 +700,52 @@ window.cancelReply = function (el) {
 </script>
 
 <script>
-    // Call this AFTER you render the UI for the disagreements/buttons
-function updateDisagreementBadges() {
-  const byDis = state.chatsByDisagreement || {};
-
-  Object.entries(byDis).forEach(([disagreementId, msgs]) => {
-    const count = (msgs || []).reduce((acc, m) => {
-      if (!m) return acc;
-      // Only count messages that are "new" for the user
-      // (optionally ignore the user's own messages)
-      if (isNewForUser(m.createdAt) && m.author !== state.user?.name) {
-        return acc + 1;
-      }
-      return acc;
-    }, 0);
-
-    const selector = `.disagreement-btn[data-disagreement-id="${CSS.escape(disagreementId)}"]`;
-    const btn = document.querySelector(selector);
-    if (btn) setCountBadge(btn, count);
-  });
+function isNewForUser(iso){
+  if(!iso || !state.previousLatestAt) return false;
+  const mt = new Date(iso).getTime();
+  const pt = new Date(state.previousLatestAt).getTime();
+  return !isNaN(mt) && !isNaN(pt) && mt > pt;
 }
 
-// Creates/updates/removes the numeric badge on a button
-function setCountBadge(btn, count) {
-  let badge = btn.querySelector('.badge--count');
+/** Update number badges on the disagreement menu */
+function updateDisagreementBadges(){
+  const menu = document.getElementById('disagreements-menu');
+  if(!menu) return;
 
-  if (!count || count <= 0) {
-    if (badge) badge.remove();
-    btn.classList.remove('has-new');
+  // If we don't have a baseline yet, clear badges and bail
+  if(!state.previousLatestAt){
+    menu.querySelectorAll('.menu-badge').forEach(b=>b.remove());
     return;
   }
 
-  if (!badge) {
-    badge = document.createElement('span');
-    badge.className = 'badge badge--count';
-    btn.appendChild(badge);
+  // Count new messages per disagreement
+  for(const [id, msgs] of Object.entries(state.chatsByDisagreement || {})){
+    let count = 0;
+    for(const m of (msgs || [])){
+      if (!m?.is_deleted && isNewForUser(m.createdAt)) count++;
+    }
+
+    const btn = menu.querySelector(`.chip[data-id="${id}"]`);
+    if(!btn) continue;
+
+    let badge = btn.querySelector('.menu-badge');
+
+    if(count > 0){
+      if(!badge){
+        badge = document.createElement('span');
+        badge.className = 'menu-badge';
+        btn.appendChild(badge);
+      }
+      const text = count > 99 ? '99+' : String(count);
+      badge.textContent = text;
+      btn.setAttribute('aria-label', `${btn.textContent.trim()} (${text} new)`);
+      badge.hidden = false;
+    }else{
+      // no new → remove/hide badge
+      if(badge) badge.remove();
+      btn.removeAttribute('aria-label');
+    }
   }
-
-  badge.textContent = count > 99 ? '99+' : String(count);
-  btn.classList.add('has-new');
-
-  // subtle bump animation when the number updates
-  badge.classList.remove('bump');
-  // reflow to restart the animation
-  void badge.offsetWidth;
-  badge.classList.add('bump');
 }
 
 </script>
