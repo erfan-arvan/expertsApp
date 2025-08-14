@@ -692,107 +692,146 @@ window.cancelReply = function (el) {
 
 <script>
 
-if (!window.state) window.state = {};
-state.lastSeenByDisagreement = state.lastSeenByDisagreement || {}; // { [id]: isoString }
+// --- state bootstrap (if not already present)
+state.lastSeenByDisagreement = state.lastSeenByDisagreement || {}; // { [id]: ISO }
 
-/** Call this once to inject badge CSS */
-function ensureBadgeStyles() {
-  if (document.getElementById('new-badge-styles')) return;
-  const css = `
-    .new-badge {
+// --- styles once
+function ensureMenuBadgeStyles() {
+  if (document.getElementById('menu-badge-styles')) return;
+  const style = document.createElement('style');
+  style.id = 'menu-badge-styles';
+  style.textContent = `
+    #disagreements-menu .chip { position: relative; }
+
+    /* red gradient number badge */
+    .chip .new-badge {
       position: absolute;
-      top: 8px;
-      right: 8px;
+      top: -6px;
+      right: -6px;
       min-width: 18px;
       height: 18px;
       padding: 0 6px;
+      border-radius: 999px;
       font-size: 12px;
       line-height: 18px;
-      border-radius: 999px;
-      background: #e11d48; /* red */
-      color: #fff;
       font-weight: 700;
-      text-align: center;
+      color: #fff;
+      background: linear-gradient(145deg, #ef4444, #b91c1c);
       border: 1px solid rgba(0,0,0,0.05);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+      text-align: center;
+      pointer-events: none;
     }
-    .disagreement-box { position: relative; } /* so the badge can anchor */
-    .new-badge.hide { display: none; }
+    .chip .new-badge.hidden { display: none; }
   `;
-  const style = document.createElement('style');
-  style.id = 'new-badge-styles';
-  style.textContent = css;
   document.head.appendChild(style);
 }
 
-/** Get a DOM node for a disagreement box by id */
-function getDisagreementBoxNode(disagreementId) {
-  return (
-    document.querySelector(`.disagreement-box[data-disagreement-id="${disagreementId}"]`) ||
-    document.getElementById(`disagreement-${disagreementId}`)
-  );
-}
-
-/** Count "new" messages for a disagreement since it was last viewed */
+// --- utility: count "new" messages for a disagreement
 function countNewForDisagreement(disagreementId) {
   const msgs = (state.chatsByDisagreement && state.chatsByDisagreement[disagreementId]) || [];
   const seenCutoff =
     state.lastSeenByDisagreement[disagreementId] ||
-    state.previousLatestAt ||
-    ''; // fallback: treat all as not-new if unknown
+    state.previousLatestAt || '';
 
-  // Prefer your existing isNewForUser() if available; otherwise compare timestamps.
-  const isNew = (msg) => {
-    if (typeof isNewForUser === 'function') return isNewForUser(msg.createdAt);
-    // Fallback: createdAt strictly greater than last-seen cutoff
-    const a = Date.parse(msg.createdAt);
+  const isNew = (m) => {
+    if (typeof isNewForUser === 'function') return isNewForUser(m.createdAt);
+    const a = Date.parse(m.createdAt);
     const b = Date.parse(seenCutoff);
     if (isNaN(a) || isNaN(b)) return false;
     return a > b;
   };
 
-  let count = 0;
-  for (const m of msgs) if (isNew(m)) count++;
-  return count;
+  let c = 0;
+  for (const m of msgs) if (isNew(m)) c++;
+  return c;
 }
 
-/** Ensure a badge exists on a box and update its number */
-function setBadge(disagreementId, count) {
-  const box = getDisagreementBoxNode(disagreementId);
-  if (!box) return;
+// --- attach/update a badge on a chip button
+function setMenuBadge(disagreementId, count) {
+  const btn = document.querySelector(
+    `#disagreements-menu .chip[data-id="${disagreementId}"]`
+  );
+  if (!btn) return;
 
-  let badge = box.querySelector('.new-badge');
+  let badge = btn.querySelector('.new-badge');
   if (!badge) {
     badge = document.createElement('span');
     badge.className = 'new-badge';
-    box.appendChild(badge);
+    btn.appendChild(badge);
   }
+
   if (count > 0) {
     badge.textContent = String(count);
-    badge.classList.remove('hide');
+    badge.classList.remove('hidden');
+    btn.setAttribute('aria-label', `${btn.textContent.trim()} (${count} new)`);
   } else {
     badge.textContent = '';
-    badge.classList.add('hide');
+    badge.classList.add('hidden');
+    btn.removeAttribute('aria-label');
   }
 }
 
-/** Public: recompute & render all badges. Call this after rendering messages. */
-function updateNewMessageBadges() {
-  ensureBadgeStyles();
-  const ids = Object.keys(state.chatsByDisagreement || {});
-  for (const id of ids) {
-    const count = countNewForDisagreement(id);
-    setBadge(id, count);
+// --- public: recompute all menu badges (call after rendering)
+function updateMenuBadges() {
+  ensureMenuBadgeStyles();
+  for (const d of state.disagreements || []) {
+    const count = countNewForDisagreement(d.id);
+    setMenuBadge(d.id, count);
   }
 }
 
-/** Call this when the user opens/views a disagreement thread.
- *  It marks the thread as "seen" now and removes its badge. */
+// --- mark a thread as seen (call when user opens it)
 function markDisagreementSeen(disagreementId) {
-  const nowIso = new Date().toISOString();
-  state.lastSeenByDisagreement[disagreementId] = nowIso;
-  setBadge(disagreementId, 0);
+  state.lastSeenByDisagreement[disagreementId] = new Date().toISOString();
+  // optional: persist locally so badges survive reloads
+  try {
+    localStorage.setItem(
+      'lastSeenByDisagreement',
+      JSON.stringify(state.lastSeenByDisagreement)
+    );
+  } catch {}
+  setMenuBadge(disagreementId, 0);
 }
+
+/* ---------- integrate with your existing flow ---------- */
+
+// After you render menu + messages:
+function renderDisagreementsMenu() {
+  const menu = $('#disagreements-menu');
+  menu.innerHTML = '';
+  (state.disagreements || []).forEach(d => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.textContent = `${d.title}`;
+    btn.setAttribute('data-id', d.id);
+    btn.setAttribute('aria-pressed', String(d.id === state.currentId));
+    btn.style.borderRadius = '10px';
+    btn.style.display = 'inline-flex';
+    btn.style.marginRight = '8px';
+    btn.onclick = () => switchDisagreement(d.id);
+    menu.appendChild(btn);
+  });
+
+  // refresh badges whenever the menu is (re)rendered
+  updateMenuBadges();
+}
+
+// In your switcher, mark as seen:
+const _origSwitch = typeof switchDisagreement === 'function' ? switchDisagreement : null;
+window.switchDisagreement = function(id) {
+  if (_origSwitch) _origSwitch(id);
+  markDisagreementSeen(id);
+  // After the thread changes, you may want to recompute others:
+  updateMenuBadges();
+};
+
+// On boot, restore any persisted "last seen":
+try {
+  const saved = localStorage.getItem('lastSeenByDisagreement');
+  if (saved) state.lastSeenByDisagreement = JSON.parse(saved) || {};
+} catch {}
+
 </script>
 
 </body>
