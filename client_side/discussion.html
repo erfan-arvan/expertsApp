@@ -682,6 +682,7 @@ window.cancelReply = function (el) {
   if (!iso || !state.previousLatestAt) return false;
   const msgTime = new Date(iso).getTime();
   const prevLatest = new Date(state.previousLatestAt).getTime();
+  console.log("NEW NEW")
   return !isNaN(msgTime) && !isNaN(prevLatest) && msgTime > prevLatest;
 }
 
