@@ -422,26 +422,25 @@
       (msg.children || []).forEach(c => repliesWrap.appendChild(renderMessage(c)));
       el.querySelector('.post-body').appendChild(repliesWrap);
 
-      // Inline composer (only if not deleted)
-      if (!msg.is_deleted) {
+        // Inline composer (only if not deleted)
+        if (!msg.is_deleted) {
         const composer = document.createElement('div');
         composer.className = 'composer';
-        composer.hidden = true;
+        composer.hidden = true; // 🔴 start hidden
+
         composer.innerHTML = `
-        <div class="avatar" aria-hidden="true">${(state.user.name||'YO').slice(0,3).toUpperCase()}</div>
-        <div>
-            <div class="reply-fields" style="display:none;">
+            <div class="avatar" aria-hidden="true">${(state.user.name||'YO').slice(0,3).toUpperCase()}</div>
+            <div>
             <label class="sr-only">Write a reply</label>
             <textarea class="input" placeholder="Write a thoughtful reply…"></textarea>
             <div class="composer-actions">
                 <button class="btn" onclick="cancelReply(this)">Cancel</button>
                 <button class="btn primary" onclick="submitReply(this, '${msg.id}')">Post reply</button>
             </div>
-            </div>
-        </div>`;
-
+            </div>`;
         el.querySelector('.post-body').appendChild(composer);
-      }
+        }
+
       return el;
     }
 
@@ -598,26 +597,39 @@ async function vote(el, delta) {
 </script>
 
 <script>
-    function toggleReply(btn) {
+window.toggleReply = function (btn) {
   const post = btn.closest('.post');
+  if (!post) return;
+
+  // Close other open composers
+  document.querySelectorAll('.composer:not([hidden])').forEach(c => {
+    if (!post.contains(c)) c.hidden = true;
+  });
+
   const composer = post.querySelector('.composer');
-  const fields = composer.querySelector('.reply-fields');
-  if (fields) {
-    const isHidden = fields.style.display === 'none';
-    fields.style.display = isHidden ? '' : 'none';
+  if (!composer) return;
+
+  composer.hidden = !composer.hidden;
+
+  if (!composer.hidden) {
+    const ta = composer.querySelector('textarea');
+    // Put cursor at end
+    if (ta) {
+      ta.focus();
+      ta.selectionStart = ta.value.length;
+      ta.selectionEnd = ta.value.length;
+    }
   }
-}
+};
 
-</script>
-
-<script>
-    function cancelReply(el) {
+window.cancelReply = function (el) {
   const composer = el.closest('.composer');
+  if (!composer) return;
   const ta = composer.querySelector('textarea');
   if (ta) ta.value = '';
-  const fields = composer.querySelector('.reply-fields');
-  if (fields) fields.style.display = 'none';
-}
+  composer.hidden = true;
+};
+
 
 </script>
 
