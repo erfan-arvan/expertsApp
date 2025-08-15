@@ -242,9 +242,87 @@
     background: linear-gradient(145deg, var(--primary), var(--primary-2));
     }
 
+
+/* Sticky bar wrapper */
+#disagreements-bar{
+  position: sticky;          /* stick to top when scrolling */
+  top: 0;
+  z-index: 1000;             /* above cards */
+  background: var(--panel, var(--surface));
+  border-bottom: 1px solid var(--border);
+}
+
+/* The continuous strip */
+.disagreements-strip{
+  display: flex;
+  flex-wrap: nowrap;         /* keep in one row */
+  overflow-x: auto;          /* scroll horizontally if overflow */
+  scrollbar-width: thin;
+}
+
+/* Each segment looks like a glued rectangle */
+.disagreements-strip .chip{
+  flex: 0 0 auto;            /* don't shrink, auto width */
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 14px;
+  margin: 0;                 /* ← NO GAP: glued edges */
+  border-radius: 0;          /* squared to glue seamlessly */
+  border: 0;
+  border-right: 1px solid var(--border); /* vertical separator line */
+  background: var(--surface-2, #f7f7f8);
+  color: var(--text);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* First/last visual polish (optional) */
+.disagreements-strip .chip:first-child{
+  border-left: 1px solid var(--border);
+}
+.disagreements-strip .chip:last-child{
+  /* keeps right edge crisp if scrolled fully */
+}
+
+/* Active tab look */
+.disagreements-strip .chip[aria-pressed="true"]{
+  background: var(--surface-3, #ececf1);
+  font-weight: 600;
+}
+
+/* Hover/Focus */
+.disagreements-strip .chip:hover,
+.disagreements-strip .chip:focus-visible{
+  background: var(--surface-3, #ececf1);
+  outline: none;
+}
+
+/* Tiny badge for new counts */
+.menu-badge{
+  display:inline-flex; align-items:center; justify-content:center;
+  margin-left:8px; padding:2px 8px; min-width:18px;
+  font-size:12px; line-height:1; font-weight:600;
+  border-radius:999px; color:#fff;
+  background: linear-gradient(145deg, var(--primary), var(--primary-2));
+}
+
+/* Because the bar is sticky, add top padding to content so it doesn't hide under it */
+body.has-sticky-bar{
+  --bar-h: 48px;             /* adjust if you change chip padding/size */
+  padding-top: var(--bar-h);
+}
+
   </style>
 </head>
 <body>
+
+<!-- Top sticky disagreements bar -->
+<nav id="disagreements-bar" aria-label="Disagreements switcher">
+  <div id="disagreements-menu" class="disagreements-strip" role="tablist" aria-label="Disagreements">
+    <!-- buttons injected by JS -->
+  </div>
+</nav>
+
   <div class="shell" role="application" aria-label="Threaded opinions" id="app">
 
     <!-- Topic/Header + Disagreement Switcher -->
@@ -368,42 +446,57 @@
       return roots;
     }
 
-    function renderDisagreementsMenu() {
-      const menu = $('#disagreements-menu');
-      menu.innerHTML = '';
-      state.disagreements.forEach(d => {
-        const btn = document.createElement('button');
-        btn.className = 'chip';
-        btn.textContent = `${d.title}`;
-        btn.setAttribute('data-id', d.id);
-        btn.setAttribute('aria-pressed', String(d.id === state.currentId));
-        btn.style.borderRadius = '10px';
-        btn.style.display = 'inline-flex';
-        btn.style.marginRight = '8px';
-        btn.onclick = () => switchDisagreement(d.id);
-        menu.appendChild(btn);
-      });
+    // On boot, mark body so CSS adds top padding
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('has-sticky-bar');
+});
 
-      updateDisagreementBadges();
-    }
+function renderDisagreementsMenu() {
+  const menu = document.getElementById('disagreements-menu');
+  if (!menu) return;
 
-    function switchDisagreement(id) {
-    state.currentId = id;
-    // update pressed states
-    $$('#disagreements-menu .chip').forEach(b => b.setAttribute('aria-pressed', String(b.getAttribute('data-id') == id)));
+  menu.innerHTML = '';
 
-    const meta = $('#topic-meta');
-    const topicTitle = $('#topic-title');
-    const d = state.disagreements.find(x => String(x.id) === String(id));
-    if (d) {
-        topicTitle.textContent = d.title;
-        meta.innerHTML = `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>`;
-        
-        $('#topic-description').innerHTML = d.htmltext || '';
-    }
-    renderCurrentThread();
-    updateDisagreementBadges();
-    }
+  state.disagreements.forEach(d => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.type = 'button';
+    btn.role = 'tab';
+    btn.dataset.id = String(d.id);
+    btn.setAttribute('aria-pressed', String(d.id === state.currentId));
+    btn.textContent = d.title;
+    btn.onclick = () => switchDisagreement(d.id);
+    menu.appendChild(btn);
+  });
+
+  // badges after DOM exists
+  updateDisagreementBadges?.();
+}
+function switchDisagreement(id){
+  state.currentId = id;
+
+  // update pressed states
+  document.querySelectorAll('#disagreements-menu .chip')
+    .forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id == id)));
+
+  // scroll active into view
+  const active = document.querySelector(`#disagreements-menu .chip[data-id="${id}"]`);
+  active?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+
+  // existing stuff:
+  const d = state.disagreements.find(x => String(x.id) === String(id));
+  if (d) {
+    document.getElementById('topic-title').textContent = d.title;
+    document.getElementById('topic-description')?.setAttribute('aria-live','polite');
+    document.getElementById('topic-description').innerHTML = d.htmltext || '';
+    const meta = document.getElementById('topic-meta');
+    meta.innerHTML = `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>`;
+  }
+
+  renderCurrentThread();
+  updateDisagreementBadges?.();
+}
+
 
     function renderCurrentThread() {
       const posts = $('#posts');
