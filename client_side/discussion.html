@@ -326,12 +326,10 @@ body.has-sticky-bar{ --bar-h: 48px; padding-top: var(--bar-h); }
 
       <div id="topic-description" class="topic-description"></div>
 
-      <!-- Rectangular boxes menu for disagreements -->
-      <div class="toolbar" aria-label="Disagreements switcher">
+      <!-- <div class="toolbar" aria-label="Disagreements switcher">
         <div class="controls" id="disagreements-menu" style="overflow:auto; white-space:nowrap; padding-bottom:6px; width:100%">
-          <!-- buttons inserted dynamically -->
         </div>
-      </div>
+      </div> -->
     </section>
 
     <!-- Opinions List (dynamic) -->
@@ -384,14 +382,16 @@ body.has-sticky-bar{ --bar-h: 48px; padding-top: var(--bar-h); }
 
     /* ===== App state ===== */
     const state = {
-      user: {
+    user: {
         name: sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'You'
-      },
-      disagreements: [],           // {id, title, snippet_id, htmltext}
-      currentId: null,
-      chatsByDisagreement: {},     // { [disagreementId]: [messages] }
-      pollHandle: null
+    },
+    disagreements: [],
+    currentId: null,
+    chatsByDisagreement: {},
+    newMessageCounts: {},   
+    pollHandle: null
     };
+
 
     /* ===== Utility ===== */
     const $ = (sel, root=document) => root.querySelector(sel);
@@ -442,33 +442,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function renderDisagreementsMenu() {
   const menu = document.getElementById('disagreements-menu');
+  if (!menu) return;
   menu.innerHTML = '';
-  
+
   state.disagreements.forEach(d => {
     const btn = document.createElement('button');
     btn.className = 'chip';
-    btn.dataset.id = d.id;
+    btn.type = 'button';
+    btn.role = 'tab';
+    btn.dataset.id = String(d.id);
     btn.setAttribute('aria-pressed', String(d.id === state.currentId));
-    
-    // Title span
-    const titleSpan = document.createElement('span');
-    titleSpan.className = 'chip-title';
-    titleSpan.textContent = d.title;
-
-    btn.appendChild(titleSpan);
-
-    // Badge if new messages exist
-    const newCount = state.newMessageCounts[d.id] || 0;
-    if (newCount > 0) {
-      const badge = document.createElement('span');
-      badge.className = 'badge';
-      badge.textContent = newCount;
-      btn.appendChild(badge);
-    }
-
+    btn.textContent = d.title;          // ✅ title only; badges added later
+    btn.onclick = () => switchDisagreement(d.id);
     menu.appendChild(btn);
   });
+
+  updateDisagreementBadges();           // ✅ add badges after buttons exist
 }
+
 
 
 function switchDisagreement(id){
@@ -630,6 +621,7 @@ async function fetchLatestChat() {
   state.oldestReturnedAt = data.oldestReturnedAt || '';
 
   renderCurrentThread();
+  updateDisagreementBadges();
 }
 
 
@@ -783,13 +775,13 @@ window.cancelReply = function (el) {
 </script>
 
 <script>
-    function isNewForUser(iso) {
-  if (!iso || !state.previousLatestAt) return false;
-  const msgTime = new Date(iso).getTime();
-  const prevLatest = new Date(state.previousLatestAt).getTime();
-  console.log("NEW NEW", !isNaN(msgTime) && !isNaN(prevLatest) && msgTime > prevLatest);
-  return !isNaN(msgTime) && !isNaN(prevLatest) && msgTime > prevLatest;
-}
+//     function isNewForUser(iso) {
+//   if (!iso || !state.previousLatestAt) return false;
+//   const msgTime = new Date(iso).getTime();
+//   const prevLatest = new Date(state.previousLatestAt).getTime();
+//   console.log("NEW NEW", !isNaN(msgTime) && !isNaN(prevLatest) && msgTime > prevLatest);
+//   return !isNaN(msgTime) && !isNaN(prevLatest) && msgTime > prevLatest;
+// }
 
 </script>
 
