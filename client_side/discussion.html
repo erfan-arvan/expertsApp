@@ -265,7 +265,7 @@
   width: 100%;                               /* make each chip fill its grid column */
   display: inline-flex;
   align-items: center;
-  justify-content: space-between;            /* room for title + badge */
+  justify-content: center;            /* room for title + badge */
   padding: 12px 14px;
   margin: 0;                                 /* glue: no gaps */
   border: 0;
@@ -442,25 +442,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function renderDisagreementsMenu() {
   const menu = document.getElementById('disagreements-menu');
-  if (!menu) return;
-
   menu.innerHTML = '';
-
+  
   state.disagreements.forEach(d => {
     const btn = document.createElement('button');
     btn.className = 'chip';
-    btn.type = 'button';
-    btn.role = 'tab';
-    btn.dataset.id = String(d.id);
+    btn.dataset.id = d.id;
     btn.setAttribute('aria-pressed', String(d.id === state.currentId));
-    btn.textContent = d.title;
-    btn.onclick = () => switchDisagreement(d.id);
+    
+    // Title span
+    const titleSpan = document.createElement('span');
+    titleSpan.className = 'chip-title';
+    titleSpan.textContent = d.title;
+
+    btn.appendChild(titleSpan);
+
+    // Badge if new messages exist
+    const newCount = state.newMessageCounts[d.id] || 0;
+    if (newCount > 0) {
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.textContent = newCount;
+      btn.appendChild(badge);
+    }
+
     menu.appendChild(btn);
   });
-
-  // badges after DOM exists
-  updateDisagreementBadges?.();
 }
+
+
 function switchDisagreement(id){
   state.currentId = id;
 
