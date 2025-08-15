@@ -453,7 +453,7 @@ function renderMessage(msg) {
         ${
           // keep delete for the author if not deleted
           (msg.username === state.user.name && !msg.is_deleted)
-            ? `<button class="btn ghost" onclick="requestDelete('${msg.id}')">🗑 Delete</button>`
+            ? `<button class="btn ghost hidden" onclick="requestDelete('${msg.id}')" style="display: none;">🗑 Delete</button>`
             : ``
         }
         <button class="btn ghost">⋯</button>
