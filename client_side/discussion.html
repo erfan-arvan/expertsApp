@@ -244,60 +244,49 @@
 
 
 /* Sticky bar wrapper */
+/* Sticky bar wrapper (keep as you had it) */
 #disagreements-bar{
-  position: sticky;          /* stick to top when scrolling */
-  top: 0;
-  z-index: 1000;             /* above cards */
+  position: sticky; top: 0; z-index: 1000;
   background: var(--panel, var(--surface));
   border-bottom: 1px solid var(--border);
 }
 
-/* The continuous strip */
+/* Use grid so items fill 100% width when few, but scroll when many */
 .disagreements-strip{
-  display: flex;
-  flex-wrap: nowrap;         /* keep in one row */
-  overflow-x: auto;          /* scroll horizontally if overflow */
+  display: grid;
+  grid-auto-flow: column;                    /* lay chips in columns horizontally */
+  grid-auto-columns: minmax(160px, 1fr);     /* each chip at least 160px, otherwise stretch equally */
+  overflow-x: auto;                          /* scroll when too many chips to fit */
   scrollbar-width: thin;
 }
 
-/* Each segment looks like a glued rectangle */
+/* Glued rectangular segments */
 .disagreements-strip .chip{
-  flex: 0 0 auto;            /* don't shrink, auto width */
+  width: 100%;                               /* make each chip fill its grid column */
   display: inline-flex;
   align-items: center;
+  justify-content: space-between;            /* room for title + badge */
   padding: 12px 14px;
-  margin: 0;                 /* ← NO GAP: glued edges */
-  border-radius: 0;          /* squared to glue seamlessly */
+  margin: 0;                                 /* glue: no gaps */
   border: 0;
-  border-right: 1px solid var(--border); /* vertical separator line */
+  border-right: 1px solid var(--border);     /* vertical separators */
+  border-radius: 0;                          /* square edges to glue seamlessly */
   background: var(--surface-2, #f7f7f8);
   color: var(--text);
   white-space: nowrap;
   cursor: pointer;
 }
 
-/* First/last visual polish (optional) */
 .disagreements-strip .chip:first-child{
   border-left: 1px solid var(--border);
 }
-.disagreements-strip .chip:last-child{
-  /* keeps right edge crisp if scrolled fully */
-}
 
-/* Active tab look */
 .disagreements-strip .chip[aria-pressed="true"]{
   background: var(--surface-3, #ececf1);
   font-weight: 600;
 }
 
-/* Hover/Focus */
-.disagreements-strip .chip:hover,
-.disagreements-strip .chip:focus-visible{
-  background: var(--surface-3, #ececf1);
-  outline: none;
-}
-
-/* Tiny badge for new counts */
+/* Badge (if you use it) */
 .menu-badge{
   display:inline-flex; align-items:center; justify-content:center;
   margin-left:8px; padding:2px 8px; min-width:18px;
@@ -306,11 +295,8 @@
   background: linear-gradient(145deg, var(--primary), var(--primary-2));
 }
 
-/* Because the bar is sticky, add top padding to content so it doesn't hide under it */
-body.has-sticky-bar{
-  --bar-h: 48px;             /* adjust if you change chip padding/size */
-  padding-top: var(--bar-h);
-}
+/* Content offset so the sticky bar doesn't cover it */
+body.has-sticky-bar{ --bar-h: 48px; padding-top: var(--bar-h); }
 
   </style>
 </head>
