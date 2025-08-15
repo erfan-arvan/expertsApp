@@ -381,16 +381,21 @@ body.has-sticky-bar{ --bar-h: 48px; padding-top: var(--bar-h); }
     };
 
     /* ===== App state ===== */
-    const state = {
-    user: {
-        name: sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'You'
-    },
-    disagreements: [],
-    currentId: null,
-    chatsByDisagreement: {},
-    newMessageCounts: {},   
-    pollHandle: null
-    };
+const state = {
+  user: {
+    name: sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'You'
+  },
+  disagreements: [],
+  currentId: null,
+  chatsByDisagreement: {},
+  previousLatestAt: '',      // from server (do not mutate)
+  nowLatestAt: '',
+  oldestReturnedAt: '',
+  lastSeenByDis: {},         // ⬅️ per-disagreement baseline
+  currentOpenedAt: '',       // ⬅️ baseline for currently open disagreement (set on switch)
+  pollHandle: null
+};
+
 
 
     /* ===== Utility ===== */
@@ -462,30 +467,36 @@ function renderDisagreementsMenu() {
 
 
 
-function switchDisagreement(id){
-  state.currentId = id;
+function switchDisagreement(newId){
+  const prevId = state.currentId;
+
+  // mark the one we're leaving as seen-now
+  if (prevId != null) {
+    state.lastSeenByDis[String(prevId)] = new Date(Date.now() - 1000).toISOString(); // now - 1s
+  }
+
+  state.currentId = newId;
+  state.currentOpenedAt = new Date().toISOString();  // baseline for "arrived-while-open"
+  saveSeenToStorage();
 
   // update pressed states
   document.querySelectorAll('#disagreements-menu .chip')
-    .forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id == id)));
+    .forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id == newId)));
 
-  // scroll active into view
-  const active = document.querySelector(`#disagreements-menu .chip[data-id="${id}"]`);
+  const active = document.querySelector(`#disagreements-menu .chip[data-id="${newId}"]`);
   active?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
 
-  // existing stuff:
-  const d = state.disagreements.find(x => String(x.id) === String(id));
+  const d = state.disagreements.find(x => String(x.id) === String(newId));
   if (d) {
-    document.getElementById('topic-title').textContent = d.title;
-    document.getElementById('topic-description')?.setAttribute('aria-live','polite');
-    document.getElementById('topic-description').innerHTML = d.htmltext || '';
-    const meta = document.getElementById('topic-meta');
-    meta.innerHTML = `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>`;
+    $('#topic-title').textContent = d.title;
+    $('#topic-description').innerHTML = d.htmltext || '';
+    $('#topic-meta').innerHTML = `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>`;
   }
 
   renderCurrentThread();
-  updateDisagreementBadges?.();
+  updateDisagreementBadges();
 }
+
 
 
     function renderCurrentThread() {
@@ -504,9 +515,11 @@ function renderMessage(msg) {
   el.dataset.id = msg.id;
 
   const isRoot = !msg.parentId; // only roots can be replied to
-    const newBadge = isNewForUser(msg.createdAt)
+    const isNew = isNewForUserIn(state.currentId, msg.createdAt);
+    const newBadge = isNew
     ? `<span class="badge" style="border-color:transparent; background:linear-gradient(145deg,#ef4444,#dc2626); color:#fff;">NEW</span>`
     : '';
+
 
 
 
@@ -600,29 +613,29 @@ function loadDisagreements() {
 async function fetchLatestChat() {
   const payload = { username: state.user.name };
   const res = await fetch(CONFIG.GET_LATEST_CHAT_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
   });
   if (!res.ok) throw new Error('Failed to get latest chat');
-  
   const data = await res.json();
 
-  // 📝 Debug logs
-  console.log("📥 Received chat data:", data);
-  console.log("📅 previousLatestAt:", data.previousLatestAt);
-  console.log("📅 nowLatestAt:", data.nowLatestAt);
-  console.log("📅 oldestReturnedAt:", data.oldestReturnedAt);
-
-  // Store chats and meta times
   state.chatsByDisagreement = data.chats || {};
-  state.previousLatestAt = data.previousLatestAt || ''; 
-  state.nowLatestAt = data.nowLatestAt || '';          
-  state.oldestReturnedAt = data.oldestReturnedAt || '';
+  state.previousLatestAt    = data.previousLatestAt || '';
+  state.nowLatestAt         = data.nowLatestAt || '';
+  state.oldestReturnedAt    = data.oldestReturnedAt || '';
+
+  // ⬅️ Initialize per-disagreement baselines only if missing
+  for (const d of state.disagreements) {
+    const key = String(d.id);
+    if (!state.lastSeenByDis[key]) {
+      state.lastSeenByDis[key] = state.previousLatestAt || '';  // first-time baseline
+    }
+  }
+  saveSeenToStorage();
 
   renderCurrentThread();
-  updateDisagreementBadges();
+  updateDisagreementBadges();   // uses per-disagreement baselines now
 }
+
 
 
 
@@ -692,15 +705,26 @@ async function fetchLatestChat() {
       });
     }
 
-    async function init() {
-      checkLogin();
-      $('#you-avatar').textContent = (state.user.name || 'YOU').slice(0,3).toUpperCase();
-      bindRootComposer();
-      await loadDisagreements();
-      await fetchLatestChat().catch(console.error);
-      if (state.pollHandle) clearInterval(state.pollHandle);
-      state.pollHandle = setInterval(() => fetchLatestChat().catch(console.error), CONFIG.POLL_MS);
-    }
+async function init() {
+  checkLogin();
+  $('#you-avatar').textContent = (state.user.name || 'YOU').slice(0,3).toUpperCase();
+
+  loadSeenFromStorage();          // ⬅️ load persisted per-thread baselines first
+  bindRootComposer();
+
+  await loadDisagreements();
+  if (!state.currentId && state.disagreements.length) {
+    state.currentId = state.disagreements[0].id;
+  }
+  // mark we opened the initial tab
+  state.currentOpenedAt = new Date().toISOString();
+
+  await fetchLatestChat().catch(console.error);
+
+  if (state.pollHandle) clearInterval(state.pollHandle);
+  state.pollHandle = setInterval(() => fetchLatestChat().catch(console.error), CONFIG.POLL_MS);
+}
+
 
     document.addEventListener('DOMContentLoaded', init);
   </script>
@@ -798,40 +822,76 @@ function updateDisagreementBadges(){
   const menu = document.getElementById('disagreements-menu');
   if(!menu) return;
 
-  // If we don't have a baseline yet, clear badges and bail
-  if(!state.previousLatestAt){
-    menu.querySelectorAll('.menu-badge').forEach(b=>b.remove());
-    return;
-  }
+  // Clear old badges
+  menu.querySelectorAll('.menu-badge').forEach(b => b.remove());
 
-  // Count new messages per disagreement
-  for(const [id, msgs] of Object.entries(state.chatsByDisagreement || {})){
+  const chats = state.chatsByDisagreement || {};
+  for (const [id, list] of Object.entries(chats)) {
+    const btn = menu.querySelector(`.chip[data-id="${id}"]`);
+    if (!btn) continue;
+
     let count = 0;
-    for(const m of (msgs || [])){
-      if (!m?.is_deleted && isNewForUser(m.createdAt)) count++;
+    const baseline = (String(id) === String(state.currentId) && state.currentOpenedAt)
+      ? state.currentOpenedAt
+      : (state.lastSeenByDis[String(id)] || state.previousLatestAt || '');
+
+    if (baseline) {
+      const bt = new Date(baseline).getTime();
+      for (const m of (list || [])) {
+        if (!m || m.is_deleted) continue;
+        const mt = new Date(m.createdAt).getTime();
+        if (!isNaN(mt) && mt > bt) count++;
+      }
     }
 
-    const btn = menu.querySelector(`.chip[data-id="${id}"]`);
-    if(!btn) continue;
-
-    let badge = btn.querySelector('.menu-badge');
-
-    if(count > 0){
-      if(!badge){
-        badge = document.createElement('span');
-        badge.className = 'menu-badge';
-        btn.appendChild(badge);
-      }
-      const text = count > 99 ? '99+' : String(count);
-      badge.textContent = text;
-      btn.setAttribute('aria-label', `${btn.textContent.trim()} (${text} new)`);
-      badge.hidden = false;
-    }else{
-      // no new → remove/hide badge
-      if(badge) badge.remove();
+    if (count > 0) {
+      const badge = document.createElement('span');
+      badge.className = 'menu-badge';
+      badge.textContent = count > 99 ? '99+' : String(count);
+      btn.appendChild(badge);
+      btn.setAttribute('aria-label', `${btn.textContent.trim()} (${badge.textContent} new)`);
+    } else {
       btn.removeAttribute('aria-label');
     }
   }
+}
+
+
+</script>
+
+<script>
+    function seenStorageKey(){
+  const u = (state.user.name || 'anon').trim().toLowerCase();
+  return `chat_seen_${u}`;
+}
+function loadSeenFromStorage(){
+  try {
+    const raw = localStorage.getItem(seenStorageKey());
+    if (raw) state.lastSeenByDis = JSON.parse(raw) || {};
+  } catch {}
+}
+function saveSeenToStorage(){
+  try {
+    localStorage.setItem(seenStorageKey(), JSON.stringify(state.lastSeenByDis || {}));
+  } catch {}
+}
+
+</script>
+
+<script>
+    function isNewForUserIn(disagreementId, iso){
+  if (!iso) return false;
+  // If it's the current thread, use open time; else, use that thread's lastSeen baseline
+  let baseline = '';
+  if (String(disagreementId) === String(state.currentId) && state.currentOpenedAt) {
+    baseline = state.currentOpenedAt;
+  } else {
+    baseline = state.lastSeenByDis[String(disagreementId)] || state.previousLatestAt || '';
+  }
+  if (!baseline) return false;
+  const mt = new Date(iso).getTime();
+  const bt = new Date(baseline).getTime();
+  return !isNaN(mt) && !isNaN(bt) && mt > bt;
 }
 
 </script>
