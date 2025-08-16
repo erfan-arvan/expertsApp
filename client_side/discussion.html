@@ -661,6 +661,7 @@
             lastSeenByDis: {},         // ⬅️ per-disagreement baseline
             view: 'home',
             currentOpenedAt: '',       // ⬅️ baseline for currently open disagreement (set on switch)
+            currentBaseline,
             pollHandle: null
         };
 
@@ -1166,49 +1167,50 @@
         }
 
         /** Update number badges on the disagreement menu */
-        function updateDisagreementBadges() {
-            const menu = document.getElementById('disagreements-menu');
-            if (!menu) return;
+function updateDisagreementBadges(){
+  const menu = document.getElementById('disagreements-menu');
+  if(!menu) return;
 
-            // Clear old badges
-            menu.querySelectorAll('.menu-badge').forEach(b => b.remove());
+  // Clear old
+  menu.querySelectorAll('.menu-badge').forEach(b => b.remove());
 
-            const chats = state.chatsByDisagreement || {};
-            const me = currentHandle();
+  const chats = state.chatsByDisagreement || {};
+  const me = currentHandle();
 
-            for (const [id, list] of Object.entries(chats)) {
-                const btn = menu.querySelector(`.chip[data-id="${id}"]`);
-                if (!btn) continue;
+  for (const [id, list] of Object.entries(chats)) {
+    const idStr = String(id);
+    const btn = menu.querySelector(`.chip[data-id="${idStr}"]`);
+    if (!btn) continue;
 
-                // ✅ Use currentOpenedAt only while in chat view AND for the active id
-                const useOpenBaseline = state.view === 'chat' && String(id) === String(state.currentId) && state.currentOpenedAt;
-                const baseline = useOpenBaseline
-                    ? state.currentOpenedAt
-                    : (state.lastSeenByDis[String(id)] || state.previousLatestAt || defaultBaselineISO(1));
+    const isActive = (state.view === 'chat' && idStr === String(state.currentId));
+    const baseline = isActive
+      ? (state.currentBaseline || state.lastSeenByDis[idStr] || state.previousLatestAt || defaultBaselineISO(1))
+      : (state.lastSeenByDis[idStr] || state.previousLatestAt || defaultBaselineISO(1));
 
-                let count = 0;
-                if (baseline) {
-                    const bt = new Date(baseline).getTime();
-                    for (const m of (list || [])) {
-                        if (!m || m.is_deleted) continue;
-                        const author = (m.username || '').trim().toLowerCase();
-                        if (author && author === currentHandle()) continue; // skip own messages
-                        const mt = new Date(m.createdAt).getTime();
-                        if (!isNaN(mt) && mt > bt) count++;
-                    }
-                }
+    let count = 0;
+    if (baseline) {
+      const bt = new Date(baseline).getTime();
+      for (const m of (list || [])) {
+        if (!m || m.is_deleted) continue;
+        const author = (m.username || '').trim().toLowerCase();
+        if (author && author === me) continue; // don't count your own
+        const mt = new Date(m.createdAt).getTime();
+        if (!isNaN(mt) && mt > bt) count++;
+      }
+    }
 
-                if (count > 0) {
-                    const badge = document.createElement('span');
-                    badge.className = 'menu-badge';
-                    badge.textContent = count > 99 ? '99+' : String(count);
-                    btn.appendChild(badge);
-                    btn.setAttribute('aria-label', `${btn.textContent.trim()} (${badge.textContent} new)`);
-                } else {
-                    btn.removeAttribute('aria-label');
-                }
-            }
-        }
+    if (count > 0) {
+      const badge = document.createElement('span');
+      badge.className = 'menu-badge';
+      badge.textContent = count > 99 ? '99+' : String(count);
+      btn.appendChild(badge);
+      btn.setAttribute('aria-label', `${btn.textContent.trim()} (${badge.textContent} new)`);
+    } else {
+      btn.removeAttribute('aria-label');
+    }
+  }
+}
+
 
 
 
@@ -1239,26 +1241,25 @@
     </script>
 
     <script>
-        function isNewForUserIn(disagreementId, msg) {
-            if (!msg?.createdAt) return false;
+function isNewForUserIn(disagreementId, msg){
+  if(!msg?.createdAt) return false;
 
-            // don't count your own messages
-            const author = (msg.username || '').trim().toLowerCase();
-            if (author && author === currentHandle()) return false;
+  // Don't flag your own posts as NEW
+  const author = (msg.username || '').trim().toLowerCase();
+  if (author && author === currentHandle()) return false;
 
-            // pick baseline: currentOpenedAt for the open thread, otherwise lastSeenByDis or previousLatestAt
-            let baseline = '';
-            if (String(disagreementId) === String(state.currentId) && state.currentOpenedAt) {
-                baseline = state.currentOpenedAt;
-            } else {
-                baseline = state.lastSeenByDis[String(disagreementId)] || state.previousLatestAt || '';
-            }
-            if (!baseline) return false;
+  const idStr = String(disagreementId);
+  // While the active thread is open, use the captured baseline (last seen)
+  const baseline =
+    (state.view === 'chat' && idStr === String(state.currentId) && state.currentBaseline)
+      ? state.currentBaseline
+      : (state.lastSeenByDis[idStr] || state.previousLatestAt || defaultBaselineISO(1));
 
-            const mt = new Date(msg.createdAt).getTime();
-            const bt = new Date(baseline).getTime();
-            return !isNaN(mt) && !isNaN(bt) && mt > bt;
-        }
+  const mt = new Date(msg.createdAt).getTime();
+  const bt = new Date(baseline).getTime();
+  return !isNaN(mt) && !isNaN(bt) && mt > bt;
+}
+
 
 
     </script>
@@ -1300,12 +1301,13 @@
         }
 
 
-        document.addEventListener('DOMContentLoaded', () => {
-            document.body.classList.add('has-sticky-bar');
-            document.getElementById('home-btn')?.addEventListener('click', () => {
-                showView('home');
-            });
-        });
+document.getElementById('home-btn')?.addEventListener('click', () => {
+  if (state.view === 'chat' && state.currentId != null) {
+    state.lastSeenByDis[String(state.currentId)] = new Date().toISOString();
+    saveSeenToStorage();
+  }
+  showView('home');
+});
 
         function currentHandle() {
             const h = sessionStorage.getItem('username')
@@ -1371,17 +1373,24 @@
         }
 
 function openDisagreement(id) {
-  // mark the currently open one (if any) as seen now
+  // If a thread was open, stamp it as seen NOW before switching away
   if (state.currentId != null) {
-    state.lastSeenByDis[String(state.currentId)] = new Date(Date.now() - 1000).toISOString();
-    try { localStorage.setItem(seenStorageKey(), JSON.stringify(state.lastSeenByDis)); } catch {}
+    state.lastSeenByDis[String(state.currentId)] = new Date().toISOString();
+    saveSeenToStorage();
   }
 
-  state.currentId = toId(id);
-  state.currentOpenedAt = new Date().toISOString();
+  const idStr   = String(id);
+  const baseline = state.lastSeenByDis[idStr] || state.previousLatestAt || defaultBaselineISO(1);
 
-  // ensure topic header shows correct info
-  const d = state.disagreements.find(x => toId(x.id) === state.currentId);
+  state.currentId        = idStr;
+  state.currentOpenedAt  = new Date().toISOString(); // informational
+  state.currentBaseline  = baseline;                  // ⬅️ use last-seen while open
+
+  // Show chat view first so renderCurrentThread doesn't early-return
+  showView('chat');
+
+  // Update topic header
+  const d = state.disagreements.find(x => String(x.id) === idStr);
   if (d) {
     $('#topic-title').textContent = d.title;
     $('#topic-description').innerHTML = d.htmltext || '';
@@ -1389,19 +1398,13 @@ function openDisagreement(id) {
       `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>`;
   }
 
-  // ✅ switch to chat view BEFORE rendering (renderCurrentThread checks state.view)
-  showView('chat');
-
-  // update chip pressed states after view switch
+  // Update menu pressed state
   document.querySelectorAll('#disagreements-menu .chip')
-    .forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id == state.currentId)));
+    .forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id == idStr)));
 
+  // Paint
   renderCurrentThread();
   updateDisagreementBadges();
-
-  // (optional debug)
-  console.log('[openDisagreement] currentId=', state.currentId,
-              'msgs=', (state.chatsByDisagreement[state.currentId] || []).length);
 }
 
 
