@@ -938,7 +938,7 @@
 
             // ⬅️ Initialize per-disagreement baselines only if missing
             for (const d of state.disagreements) {
-                const key = String(d.id);
+                const key = toId(d.id);
                 if (!state.lastSeenByDis[key]) {
                     state.lastSeenByDis[key] = state.previousLatestAt || '';  // first-time baseline
                 }
@@ -946,7 +946,7 @@
             saveSeenToStorage();
 
             // Store chats and meta times
-            state.chatsByDisagreement = data.chats || {};
+            // state.chatsByDisagreement = data.chats || {};
             state.previousLatestAt = data.previousLatestAt || defaultBaselineISO(1);
             state.nowLatestAt = data.nowLatestAt || '';
             state.oldestReturnedAt = data.oldestReturnedAt || '';
@@ -961,7 +961,7 @@
             // Initialize per-disagreement baselines ONLY if missing
             state.lastSeenByDis ||= {};
             for (const d of state.disagreements) {
-                const key = String(d.id);
+                const key = toId(d.id);
                 if (!state.lastSeenByDis[key]) {
                     state.lastSeenByDis[key] = state.previousLatestAt || '';
                     console.log('🧭 init baseline for', key, '→', state.lastSeenByDis[key]);
@@ -1370,32 +1370,40 @@
             });
         }
 
-        function openDisagreement(id) {
-            // mark the currently open one (if any) as seen now
-            if (state.currentId != null) {
-                state.lastSeenByDis[String(state.currentId)] = new Date(Date.now() - 1000).toISOString();
-                try { localStorage.setItem(seenStorageKey(), JSON.stringify(state.lastSeenByDis)); } catch { }
-            }
+function openDisagreement(id) {
+  // mark the currently open one (if any) as seen now
+  if (state.currentId != null) {
+    state.lastSeenByDis[String(state.currentId)] = new Date(Date.now() - 1000).toISOString();
+    try { localStorage.setItem(seenStorageKey(), JSON.stringify(state.lastSeenByDis)); } catch {}
+  }
 
-            state.currentId = toId(id);
-            state.currentOpenedAt = new Date().toISOString();
+  state.currentId = toId(id);
+  state.currentOpenedAt = new Date().toISOString();
 
-            // update chip pressed states
-            document.querySelectorAll('#disagreements-menu .chip')
-                .forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id == id)));
+  // ensure topic header shows correct info
+  const d = state.disagreements.find(x => toId(x.id) === state.currentId);
+  if (d) {
+    $('#topic-title').textContent = d.title;
+    $('#topic-description').innerHTML = d.htmltext || '';
+    $('#topic-meta').innerHTML =
+      `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>`;
+  }
 
-            // ensure topic header shows correct info
-            const d = state.disagreements.find(x => String(x.id) === String(id));
-            if (d) {
-                $('#topic-title').textContent = d.title;
-                $('#topic-description').innerHTML = d.htmltext || '';
-                $('#topic-meta').innerHTML = `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>`;
-            }
+  // ✅ switch to chat view BEFORE rendering (renderCurrentThread checks state.view)
+  showView('chat');
 
-            renderCurrentThread();
-            updateDisagreementBadges();
-            showView('chat');
-        }
+  // update chip pressed states after view switch
+  document.querySelectorAll('#disagreements-menu .chip')
+    .forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id == state.currentId)));
+
+  renderCurrentThread();
+  updateDisagreementBadges();
+
+  // (optional debug)
+  console.log('[openDisagreement] currentId=', state.currentId,
+              'msgs=', (state.chatsByDisagreement[state.currentId] || []).length);
+}
+
 
 
     </script>
