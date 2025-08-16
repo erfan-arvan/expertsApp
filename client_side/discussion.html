@@ -551,9 +551,8 @@
         }
 
         /* When on Home view, hide the strip but keep the bar + Home button */
-        body.is-home #disagreements-menu {
-            display: none;
-        }
+body.is-home #disagreements-menu { display: none; }
+
     </style>
 </head>
 
@@ -914,29 +913,58 @@
         }
 
         async function fetchLatestChat() {
-            const res = await fetch(CONFIG.GET_LATEST_CHAT_URL, { /* ... */ });
+            const payload = { username: state.user.name };
+            const res = await fetch(CONFIG.GET_LATEST_CHAT_URL, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+            });
             if (!res.ok) throw new Error('Failed to get latest chat');
             const data = await res.json();
 
+            state.chatsByDisagreement = data.chats || {};
+            state.previousLatestAt = data.previousLatestAt || '';
+            state.nowLatestAt = data.nowLatestAt || '';
+            state.oldestReturnedAt = data.oldestReturnedAt || '';
+
+            // ⬅️ Initialize per-disagreement baselines only if missing
+            for (const d of state.disagreements) {
+                const key = String(d.id);
+                if (!state.lastSeenByDis[key]) {
+                    state.lastSeenByDis[key] = state.previousLatestAt || '';  // first-time baseline
+                }
+            }
+            saveSeenToStorage();
+
+            // Store chats and meta times
             state.chatsByDisagreement = data.chats || {};
             state.previousLatestAt = data.previousLatestAt || defaultBaselineISO(1);
             state.nowLatestAt = data.nowLatestAt || '';
             state.oldestReturnedAt = data.oldestReturnedAt || '';
 
-            // init baselines only if missing
+            console.groupCollapsed('📥 fetchLatestChat meta');
+            console.log('previousLatestAt:', state.previousLatestAt);
+            console.log('nowLatestAt:', state.nowLatestAt);
+            console.log('oldestReturnedAt:', state.oldestReturnedAt);
+            console.log('threads(keys):', Object.keys(state.chatsByDisagreement || {}));
+            console.groupEnd();
+
+            // Initialize per-disagreement baselines ONLY if missing
             state.lastSeenByDis ||= {};
             for (const d of state.disagreements) {
                 const key = String(d.id);
-                if (!state.lastSeenByDis[key]) state.lastSeenByDis[key] = state.previousLatestAt;
+                if (!state.lastSeenByDis[key]) {
+                    state.lastSeenByDis[key] = state.previousLatestAt || '';
+                    console.log('🧭 init baseline for', key, '→', state.lastSeenByDis[key]);
+                }
             }
+            // persist
+            try { localStorage.setItem(`chat_seen_${(state.user.name || 'anon').toLowerCase()}`, JSON.stringify(state.lastSeenByDis)); } catch { }
             saveSeenToStorage();
 
-            // repaint
-            if (state.view === 'home') renderHomeGrid();
-            renderDisagreementsMenu();   // rebuild chips (no active pressed on Home)
-            updateDisagreementBadges();
-        }
 
+            renderCurrentThread();
+            updateDisagreementBadges();
+
+        }
 
 
 
@@ -1127,49 +1155,49 @@
         }
 
         /** Update number badges on the disagreement menu */
-        function updateDisagreementBadges() {
-            const menu = document.getElementById('disagreements-menu');
-            if (!menu) return;
+function updateDisagreementBadges(){
+  const menu = document.getElementById('disagreements-menu');
+  if(!menu) return;
 
-            // Clear old badges
-            menu.querySelectorAll('.menu-badge').forEach(b => b.remove());
+  // Clear old badges
+  menu.querySelectorAll('.menu-badge').forEach(b => b.remove());
 
-            const chats = state.chatsByDisagreement || {};
-            const me = currentHandle();
+  const chats = state.chatsByDisagreement || {};
+  const me = currentHandle();
 
-            for (const [id, list] of Object.entries(chats)) {
-                const btn = menu.querySelector(`.chip[data-id="${id}"]`);
-                if (!btn) continue;
+  for (const [id, list] of Object.entries(chats)) {
+    const btn = menu.querySelector(`.chip[data-id="${id}"]`);
+    if (!btn) continue;
 
-                // ✅ Use currentOpenedAt only while in chat view AND for the active id
-                const useOpenBaseline = state.view === 'chat' && String(id) === String(state.currentId) && state.currentOpenedAt;
-                const baseline = useOpenBaseline
-                    ? state.currentOpenedAt
-                    : (state.lastSeenByDis[String(id)] || state.previousLatestAt || defaultBaselineISO(1));
+    // ✅ Use currentOpenedAt only while in chat view AND for the active id
+    const useOpenBaseline = state.view === 'chat' && String(id) === String(state.currentId) && state.currentOpenedAt;
+    const baseline = useOpenBaseline
+      ? state.currentOpenedAt
+      : (state.lastSeenByDis[String(id)] || state.previousLatestAt || defaultBaselineISO(1));
 
-                let count = 0;
-                if (baseline) {
-                    const bt = new Date(baseline).getTime();
-                    for (const m of (list || [])) {
-                        if (!m || m.is_deleted) continue;
-                        const author = (m.username || '').trim().toLowerCase();
-                        if (author && author === currentHandle()) continue; // skip own messages
-                        const mt = new Date(m.createdAt).getTime();
-                        if (!isNaN(mt) && mt > bt) count++;
-                    }
-                }
+    let count = 0;
+    if (baseline) {
+      const bt = new Date(baseline).getTime();
+      for (const m of (list || [])) {
+        if (!m || m.is_deleted) continue;
+        const author = (m.username || '').trim().toLowerCase();
+        if (author && author === currentHandle()) continue; // skip own messages
+        const mt = new Date(m.createdAt).getTime();
+        if (!isNaN(mt) && mt > bt) count++;
+      }
+    }
 
-                if (count > 0) {
-                    const badge = document.createElement('span');
-                    badge.className = 'menu-badge';
-                    badge.textContent = count > 99 ? '99+' : String(count);
-                    btn.appendChild(badge);
-                    btn.setAttribute('aria-label', `${btn.textContent.trim()} (${badge.textContent} new)`);
-                } else {
-                    btn.removeAttribute('aria-label');
-                }
-            }
-        }
+    if (count > 0) {
+      const badge = document.createElement('span');
+      badge.className = 'menu-badge';
+      badge.textContent = count > 99 ? '99+' : String(count);
+      btn.appendChild(badge);
+      btn.setAttribute('aria-label', `${btn.textContent.trim()} (${badge.textContent} new)`);
+    } else {
+      btn.removeAttribute('aria-label');
+    }
+  }
+}
 
 
 
@@ -1236,28 +1264,28 @@
     </script>
 
     <script>
-        function showView(view) {
-            state.view = view;
-            const homeGrid = document.getElementById('home-grid');
-            const chatView = document.getElementById('chat-view');
-            const homeBtn = document.getElementById('home-btn');
-            const strip = document.getElementById('disagreements-menu');
+function showView(view){
+  state.view = view;
+  const homeGrid = document.getElementById('home-grid');
+  const chatView = document.getElementById('chat-view');
+  const homeBtn  = document.getElementById('home-btn');
+  const strip    = document.getElementById('disagreements-menu');
 
-            const isHome = view === 'home';
+  const isHome = view === 'home';
 
-            // toggle main panes
-            homeGrid.hidden = !isHome;
-            chatView.hidden = isHome;
+  // toggle main panes
+  homeGrid.hidden = !isHome;
+  chatView.hidden =  isHome;
 
-            // mark pressed + body class (drives CSS)
-            homeBtn?.setAttribute('aria-pressed', String(isHome));
-            document.body.classList.toggle('is-home', isHome);
+  // mark pressed + body class (drives CSS)
+  homeBtn?.setAttribute('aria-pressed', String(isHome));
+  document.body.classList.toggle('is-home', isHome);
 
-            // (optional) if you prefer JS instead of CSS: strip.hidden = isHome;
+  // (optional) if you prefer JS instead of CSS: strip.hidden = isHome;
 
-            // repaint Home cards when entering Home
-            if (isHome) renderHomeGrid();
-        }
+  // repaint Home cards when entering Home
+  if (isHome) renderHomeGrid();
+}
 
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1274,29 +1302,29 @@
             return (h || '').trim().toLowerCase();
         }
 
-        function newCountForDisagreement(id) {
-            const list = state.chatsByDisagreement?.[String(id)] || [];
-            const me = currentHandle();
+function newCountForDisagreement(id){
+  const list = state.chatsByDisagreement?.[String(id)] || [];
+  const me = currentHandle();
 
-            // On Home, this will use lastSeen; in Chat for active id, it can use currentOpenedAt
-            const useOpenBaseline = state.view === 'chat' && String(id) === String(state.currentId) && state.currentOpenedAt;
-            const baseline = useOpenBaseline
-                ? state.currentOpenedAt
-                : (state.lastSeenByDis[String(id)] || state.previousLatestAt || defaultBaselineISO(1));
+  // On Home, this will use lastSeen; in Chat for active id, it can use currentOpenedAt
+  const useOpenBaseline = state.view === 'chat' && String(id) === String(state.currentId) && state.currentOpenedAt;
+  const baseline = useOpenBaseline
+    ? state.currentOpenedAt
+    : (state.lastSeenByDis[String(id)] || state.previousLatestAt || defaultBaselineISO(1));
 
-            if (!baseline) return 0;
-            const bt = new Date(baseline).getTime();
+  if (!baseline) return 0;
+  const bt = new Date(baseline).getTime();
 
-            let count = 0;
-            for (const m of list) {
-                if (!m || m.is_deleted) continue;
-                const author = (m.username || '').trim().toLowerCase();
-                if (author && author === me) continue;
-                const mt = new Date(m.createdAt).getTime();
-                if (!isNaN(mt) && mt > bt) count++;
-            }
-            return count;
-        }
+  let count = 0;
+  for (const m of list) {
+    if (!m || m.is_deleted) continue;
+    const author = (m.username || '').trim().toLowerCase();
+    if (author && author === me) continue;
+    const mt = new Date(m.createdAt).getTime();
+    if (!isNaN(mt) && mt > bt) count++;
+  }
+  return count;
+}
 
 
         function renderHomeGrid() {
@@ -1331,21 +1359,21 @@
         }
 
         function openDisagreement(id) {
-            // stamp the one we’re leaving (if any)
+            // mark the currently open one (if any) as seen now
             if (state.currentId != null) {
                 state.lastSeenByDis[String(state.currentId)] = new Date(Date.now() - 1000).toISOString();
-                saveSeenToStorage();
+                try { localStorage.setItem(seenStorageKey(), JSON.stringify(state.lastSeenByDis)); } catch { }
             }
 
-            state.currentId = String(id);
+            state.currentId = id;
             state.currentOpenedAt = new Date().toISOString();
 
             // update chip pressed states
             document.querySelectorAll('#disagreements-menu .chip')
-                .forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id == state.currentId)));
+                .forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id == id)));
 
-            // update header + thread
-            const d = state.disagreements.find(x => String(x.id) === state.currentId);
+            // ensure topic header shows correct info
+            const d = state.disagreements.find(x => String(x.id) === String(id));
             if (d) {
                 $('#topic-title').textContent = d.title;
                 $('#topic-description').innerHTML = d.htmltext || '';
