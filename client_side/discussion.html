@@ -447,39 +447,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function renderDisagreementsMenu() {
   const menu = document.getElementById('disagreements-menu');
-  if (!menu) return;
+  if (!menu) {
+    console.warn('🚫 renderDisagreementsMenu: #disagreements-menu not found');
+    return;
+  }
   menu.innerHTML = '';
 
+  console.groupCollapsed('🧱 renderDisagreementsMenu');
+  const ids = [];
   state.disagreements.forEach(d => {
+    const id = String(d.id);            // ensure attribute is string
+    ids.push(id);
+
     const btn = document.createElement('button');
     btn.className = 'chip';
     btn.type = 'button';
     btn.role = 'tab';
-    btn.dataset.id = String(d.id);
+    btn.dataset.id = id;                // <button data-id="...">
     btn.setAttribute('aria-pressed', String(d.id === state.currentId));
-    btn.textContent = d.title;          // ✅ title only; badges added later
+    btn.textContent = d.title;
     btn.onclick = () => switchDisagreement(d.id);
     menu.appendChild(btn);
   });
+  console.log('chips rendered:', ids);
+  console.log('chip elements count:', menu.querySelectorAll('.chip').length);
+  console.groupEnd();
 
-  updateDisagreementBadges();           // ✅ add badges after buttons exist
+  updateDisagreementBadges();           // badges only after chips exist
 }
+
 
 
 
 function switchDisagreement(newId){
   const prevId = state.currentId;
+  const nowIso = new Date().toISOString();
 
-  // mark the one we're leaving as seen-now
+  console.groupCollapsed('🔁 switchDisagreement');
+  console.log('prevId:', prevId, '→ newId:', newId);
+
   if (prevId != null) {
-    state.lastSeenByDis[String(prevId)] = new Date(Date.now() - 1000).toISOString(); // now - 1s
+    const stamp = new Date(Date.now() - 1000).toISOString();
+    state.lastSeenByDis[String(prevId)] = stamp;
+    console.log('marked previous as seen:', String(prevId), '→', stamp);
   }
 
   state.currentId = newId;
-  state.currentOpenedAt = new Date().toISOString();  // baseline for "arrived-while-open"
-  saveSeenToStorage();
+  state.currentOpenedAt = nowIso;
+  console.log('currentOpenedAt set to:', nowIso);
+  console.log('lastSeenByDis snapshot:', JSON.parse(JSON.stringify(state.lastSeenByDis)));
+  console.groupEnd();
 
-  // update pressed states
   document.querySelectorAll('#disagreements-menu .chip')
     .forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id == newId)));
 
@@ -496,6 +514,7 @@ function switchDisagreement(newId){
   renderCurrentThread();
   updateDisagreementBadges();
 }
+
 
 
 
@@ -632,8 +651,34 @@ async function fetchLatestChat() {
   }
   saveSeenToStorage();
 
-  renderCurrentThread();
-  updateDisagreementBadges();   // uses per-disagreement baselines now
+// Store chats and meta times
+state.chatsByDisagreement = data.chats || {};
+state.previousLatestAt    = data.previousLatestAt || '';
+state.nowLatestAt         = data.nowLatestAt || '';
+state.oldestReturnedAt    = data.oldestReturnedAt || '';
+
+console.groupCollapsed('📥 fetchLatestChat meta');
+console.log('previousLatestAt:', state.previousLatestAt);
+console.log('nowLatestAt:',      state.nowLatestAt);
+console.log('oldestReturnedAt:', state.oldestReturnedAt);
+console.log('threads(keys):',    Object.keys(state.chatsByDisagreement || {}));
+console.groupEnd();
+
+// Initialize per-disagreement baselines ONLY if missing
+state.lastSeenByDis ||= {};
+for (const d of state.disagreements) {
+  const key = String(d.id);
+  if (!state.lastSeenByDis[key]) {
+    state.lastSeenByDis[key] = state.previousLatestAt || '';
+    console.log('🧭 init baseline for', key, '→', state.lastSeenByDis[key]);
+  }
+}
+// persist
+try { localStorage.setItem(`chat_seen_${(state.user.name||'anon').toLowerCase()}`, JSON.stringify(state.lastSeenByDis)); } catch {}
+
+renderCurrentThread();
+updateDisagreementBadges();
+
 }
 
 
@@ -707,17 +752,17 @@ async function fetchLatestChat() {
 
 async function init() {
   checkLogin();
+  document.body.classList.add('has-sticky-bar');
   $('#you-avatar').textContent = (state.user.name || 'YOU').slice(0,3).toUpperCase();
 
-  loadSeenFromStorage();          // ⬅️ load persisted per-thread baselines first
-  bindRootComposer();
+  loadSeenFromStorage();         // ⬅️ do this first
 
+  bindRootComposer();
   await loadDisagreements();
   if (!state.currentId && state.disagreements.length) {
     state.currentId = state.disagreements[0].id;
   }
-  // mark we opened the initial tab
-  state.currentOpenedAt = new Date().toISOString();
+  state.currentOpenedAt = new Date().toISOString();  // opening the first tab now
 
   await fetchLatestChat().catch(console.error);
 
@@ -820,21 +865,37 @@ function isNewForUser(iso){
 /** Update number badges on the disagreement menu */
 function updateDisagreementBadges(){
   const menu = document.getElementById('disagreements-menu');
-  if(!menu) return;
+  if(!menu){
+    console.warn('🚫 updateDisagreementBadges: #disagreements-menu not found');
+    return;
+  }
+
+  console.groupCollapsed('🔔 updateDisagreementBadges');
+  console.log('currentId:', state.currentId);
+  console.log('currentOpenedAt:', state.currentOpenedAt);
+  console.log('previousLatestAt:', state.previousLatestAt);
+  console.log('lastSeenByDis:', JSON.parse(JSON.stringify(state.lastSeenByDis)));
 
   // Clear old badges
   menu.querySelectorAll('.menu-badge').forEach(b => b.remove());
 
   const chats = state.chatsByDisagreement || {};
+  const rows = [];
+
   for (const [id, list] of Object.entries(chats)) {
     const btn = menu.querySelector(`.chip[data-id="${id}"]`);
-    if (!btn) continue;
+    if (!btn) {
+      console.warn('⚠️ no chip found for disagreement id=', id);
+      continue;
+    }
 
-    let count = 0;
+    // Choose baseline
     const baseline = (String(id) === String(state.currentId) && state.currentOpenedAt)
       ? state.currentOpenedAt
       : (state.lastSeenByDis[String(id)] || state.previousLatestAt || '');
 
+    // Count
+    let count = 0;
     if (baseline) {
       const bt = new Date(baseline).getTime();
       for (const m of (list || [])) {
@@ -843,6 +904,8 @@ function updateDisagreementBadges(){
         if (!isNaN(mt) && mt > bt) count++;
       }
     }
+
+    rows.push({ id, msgs: (list || []).length, baseline, count });
 
     if (count > 0) {
       const badge = document.createElement('span');
@@ -854,7 +917,11 @@ function updateDisagreementBadges(){
       btn.removeAttribute('aria-label');
     }
   }
+
+  console.table(rows);
+  console.groupEnd();
 }
+
 
 
 </script>
@@ -866,10 +933,13 @@ function updateDisagreementBadges(){
 }
 function loadSeenFromStorage(){
   try {
-    const raw = localStorage.getItem(seenStorageKey());
+    const key = `chat_seen_${(state.user.name || 'anon').toLowerCase()}`;
+    const raw = localStorage.getItem(key);
     if (raw) state.lastSeenByDis = JSON.parse(raw) || {};
-  } catch {}
+    console.log('📦 loaded lastSeenByDis from storage:', state.lastSeenByDis);
+  } catch (e) { console.warn('lastSeen load failed', e); }
 }
+
 function saveSeenToStorage(){
   try {
     localStorage.setItem(seenStorageKey(), JSON.stringify(state.lastSeenByDis || {}));
