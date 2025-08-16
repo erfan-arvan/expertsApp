@@ -41,6 +41,12 @@ public class SubmissionController {
         "nadeeshan", "xGAXPnnLD3yH"
     );
 
+    private static final Map<String, String> userEmails = Map.of(
+    "erfan",     "ea442@njit.edu",
+    "nadeeshan", "e.arvan@yahoo.com"
+);
+
+
     private static final Map<String, String> userNames = Map.of(
         "martin", "Martin Kellogg",
         "oscar", "Oscar Chaparro",
@@ -54,6 +60,13 @@ public class SubmissionController {
         "erfan", List.of(6, 7, 8, 1, 2, 3, 4, 5),
         "nadeeshan", List.of(7, 6, 8, 1, 2, 3, 4, 5)
     );
+
+    // Helper: case-insensitive lookup
+    private String emailForUser(String handle) {
+        if (handle == null) return null;
+        String h = handle.trim().toLowerCase(Locale.ROOT);
+        return userEmails.getOrDefault(h, null);
+    }
 
     @PostMapping("/get_snippet_order")
     public Map<String, Object> getSnippetOrder(@RequestBody Map<String, String> credentials) {
@@ -802,6 +815,49 @@ public synchronized Map<String, Object> submitChat(@RequestBody Map<String, Obje
         List<Map<String,Object>> list = chats.computeIfAbsent(String.valueOf(disagreementId), k -> new ArrayList<>());
         list.add(msg);
         writeChatStore(mapper, store);
+
+        // === Email notifications for mentions ===
+try {
+    // Who to notify? everyone mentioned, except the author
+    Set<String> recipients = new HashSet<>();
+    for (String m : mentions) {
+        String mh = m == null ? "" : m.trim().toLowerCase(Locale.ROOT);
+        if (!mh.isEmpty() && !mh.equals(username)) {
+            recipients.add(mh);
+        }
+    }
+
+    if (!recipients.isEmpty()) {
+        // Optional: fetch disagreement title (if you keep it server-side; otherwise show ID)
+        String disagreeTitle = "Disagreement " + disagreementId;
+
+        String link = "https://codecomprehensibility.site/discussion.html?disagreement=" 
+                      + java.net.URLEncoder.encode(disagreementId, java.nio.charset.StandardCharsets.UTF_8);
+
+        String subject = "[Code Comprehensibility] You were mentioned in chat";
+        String preview = content.length() > 140 ? content.substring(0, 140) + "…" : content;
+
+        String body = ""
+            + "Hi,\n\n"
+            + "@" + username + " mentioned you in the discussion.\n\n"
+            + "Topic: " + disagreeTitle + "\n"
+            + "Message preview:\n"
+            + preview + "\n\n"
+            + "Open the discussion: " + link + "\n\n"
+            + "— Code Comprehensibility Study";
+
+        for (String u : recipients) {
+            String to = emailForUser(u);
+            if (to != null && !to.isBlank()) {
+                sendEmailViaPython(to, subject, body);
+            }
+        }
+    }
+} catch (Exception notifyEx) {
+    // Don't fail the request if email fails—just log it.
+    System.err.println(">>> Mention notification failed: " + notifyEx.getMessage());
+    notifyEx.printStackTrace();
+}
 
         // return latest snapshot (or just the new message)
         return store;
