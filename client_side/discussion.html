@@ -423,6 +423,11 @@ const state = {
   return (h || '').trim().toLowerCase();
 }
 
+function defaultBaselineISO(yearsAgo = 1) {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - yearsAgo);
+  return d.toISOString(); // UTC ISO string
+}
 
 
     // Build a thread tree from flat messages
@@ -664,7 +669,7 @@ async function fetchLatestChat() {
 
 // Store chats and meta times
 state.chatsByDisagreement = data.chats || {};
-state.previousLatestAt    = data.previousLatestAt || '';
+state.previousLatestAt = data.previousLatestAt || defaultBaselineISO(1);
 state.nowLatestAt         = data.nowLatestAt || '';
 state.oldestReturnedAt    = data.oldestReturnedAt || '';
 
