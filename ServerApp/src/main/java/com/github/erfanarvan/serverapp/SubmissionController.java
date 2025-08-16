@@ -690,9 +690,9 @@ public synchronized Map<String, Object> getLatestChat(@RequestBody Map<String, S
     ObjectMapper mapper = new ObjectMapper();
     try {
         // Load shared chat
-        Map<String, Object> store = readChatStore(mapper); // your existing helper that reads CHAT_FILE
+        Map<String, Object> store = readChatStore(mapper); // your helper that reads CHAT_FILE
 
-        // Compute current oldest & latest message timestamps in UTC
+        // Compute oldest & latest timestamps (unchanged)
         List<Map<String, Object>> msgs = allMessages(store);
         java.time.Instant oldest = java.time.Instant.MAX;
         java.time.Instant latest = java.time.Instant.EPOCH;
@@ -709,13 +709,22 @@ public synchronized Map<String, Object> getLatestChat(@RequestBody Map<String, S
         if (userState == null) userState = new HashMap<>();
 
         String previousLatestAt = Objects.toString(userState.getOrDefault("previousLatestAt", ""), "");
-        // Prepare response: include hints for client
+
+        // Build list of handles we allow to be tagged
+        List<String> handles = userPasswords.keySet()
+            .stream()
+            .map(String::toLowerCase)
+            .sorted()
+            .collect(Collectors.toList());
+
+        // Prepare response
         Map<String, Object> response = new HashMap<>(store);
-        response.put("previousLatestAt", previousLatestAt);                 // ⬅️ what user had seen last time
+        response.put("previousLatestAt", previousLatestAt);
         response.put("oldestReturnedAt", oldest.equals(java.time.Instant.EPOCH) ? "" : oldest.toString());
         response.put("nowLatestAt", latest.equals(java.time.Instant.EPOCH) ? "" : latest.toString());
+        response.put("usernames", handles); // ⬅️ send allowed usernames
 
-        // Update user's previousLatestAt to "now" (current latest)
+        // Update user's previousLatestAt to "now"
         userState.put("previousLatestAt", latest.equals(java.time.Instant.EPOCH) ? "" : latest.toString());
         seen.put(username, userState);
         writeJsonFile(CHAT_SEEN_FILE, seen);
@@ -728,59 +737,80 @@ public synchronized Map<String, Object> getLatestChat(@RequestBody Map<String, S
 }
 
 
+private static final java.util.regex.Pattern MENTION_RE =
+    java.util.regex.Pattern.compile("(?<=^|\\s)@([a-z0-9_]+)", java.util.regex.Pattern.CASE_INSENSITIVE);
+
+private List<String> extractMentions(String text, Set<String> allowed) {
+    if (text == null) return List.of();
+    java.util.regex.Matcher m = MENTION_RE.matcher(text);
+    Set<String> out = new HashSet<>();
+    while (m.find()) {
+        String h = m.group(1).toLowerCase();
+        if (allowed.contains(h)) out.add(h);
+    }
+    return new ArrayList<>(out);
+}
+
+
 @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
 @PostMapping("/submit_chat")
-public synchronized Map<String, Object> submitChat(@RequestBody Map<String, Object> req) {
-    String username = Objects.toString(req.get("username"), "").trim();
-    String disagreementId = Objects.toString(req.get("disagreementId"), "").trim();
-    String parentId = req.get("parentId") == null ? null : Objects.toString(req.get("parentId"), "").trim();
-    String content = Objects.toString(req.get("content"), "").trim();
+public synchronized Map<String, Object> submitChat(@RequestBody Map<String, Object> body) {
+    String username = Objects.toString(body.get("username"), "").trim().toLowerCase();
+    String disagreementId = Objects.toString(body.get("disagreementId"), "").trim();
+    String parentId = Objects.toString(body.get("parentId"), "").trim();
+    String content = Objects.toString(body.get("content"), "");
 
-    if (username.isEmpty() || disagreementId.isEmpty()) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username and disagreementId are required");
-    }
-    if (content.isEmpty()) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "content is required");
+    if (username.isEmpty() || disagreementId.isEmpty() || content.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "missing fields");
     }
 
-    ObjectMapper mapper = new ObjectMapper();
+    // Allowed handles
+    Set<String> allowed = new HashSet<>(userPasswords.keySet()
+        .stream().map(String::toLowerCase).collect(Collectors.toSet()));
+
+    // Mentions from body (optional), else extract from content
+    @SuppressWarnings("unchecked")
+    List<String> mentionsReq = (List<String>) body.get("mentions");
+    List<String> mentions = (mentionsReq != null && !mentionsReq.isEmpty())
+        ? mentionsReq.stream().map(s -> s.toLowerCase(Locale.ROOT))
+            .filter(allowed::contains).distinct().toList()
+        : extractMentions(content, allowed);
+
+    // Build message object
+    Map<String, Object> msg = new LinkedHashMap<>();
+    msg.put("id", UUID.randomUUID().toString());
+    msg.put("username", username);
+    msg.put("parentId", parentId.isEmpty() ? null : parentId);
+    msg.put("content", content);
+    msg.put("createdAt", java.time.Instant.now().toString()); // UTC
+    msg.put("is_deleted", false);
+    msg.put("up", 0);
+    msg.put("down", 0);
+    msg.put("mentions", mentions); // ⬅️ store mentions
+
+    // Persist to your chat store under the disagreementId (your existing logic)
+    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
     try {
-        Map<String, Object> store = readChatStore(mapper);
-
-        @SuppressWarnings("unchecked")
-        Map<String, List<Map<String, Object>>> chats =
-                (Map<String, List<Map<String, Object>>>) store.get("chats");
-
-        List<Map<String, Object>> thread =
-                chats.computeIfAbsent(disagreementId, k -> new ArrayList<>());
-
-        // If replying, parent must exist within the same disagreement thread
-        if (parentId != null && !parentId.isBlank()) {
-            boolean parentExists = thread.stream().anyMatch(m -> parentId.equals(m.get("id")));
-            if (!parentExists) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "parentId not found in this disagreement thread");
-            }
+        Map<String,Object> store = readChatStore(mapper);
+        // store structure assumed { "chats": { "<id>": [ messages... ] } }
+        Map<String, List<Map<String,Object>>> chats =
+            (Map<String, List<Map<String,Object>>>) store.get("chats");
+        if (chats == null) {
+            chats = new HashMap<>();
+            store.put("chats", chats);
         }
-
-        Map<String, Object> msg = new HashMap<>();
-        msg.put("id", UUID.randomUUID().toString());
-        msg.put("parentId", parentId);          // null for root
-        msg.put("username", username);
-        msg.put("content", content);
-        msg.put("createdAt", nowIsoUtc());
-        msg.put("is_deleted", false);
-        msg.put("up", 0);
-        msg.put("down", 0);
-
-        thread.add(msg);
+        List<Map<String,Object>> list = chats.computeIfAbsent(String.valueOf(disagreementId), k -> new ArrayList<>());
+        list.add(msg);
         writeChatStore(mapper, store);
 
-        return store; // return full shared chat so client can refresh state easily
+        // return latest snapshot (or just the new message)
+        return store;
     } catch (IOException e) {
         e.printStackTrace();
         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to write chat.");
     }
 }
+
 
 @CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
 @PostMapping("/delete_chat")
