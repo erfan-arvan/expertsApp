@@ -837,7 +837,7 @@ try {
         String subject = "[Code Comprehensibility] You were mentioned in chat";
         String preview = content.length() > 140 ? content.substring(0, 140) + "…" : content;
 
-        String body = ""
+        String emailbody = ""
             + "Hi,\n\n"
             + "@" + username + " mentioned you in the discussion.\n\n"
             + "Topic: " + disagreeTitle + "\n"
@@ -849,7 +849,7 @@ try {
         for (String u : recipients) {
             String to = emailForUser(u);
             if (to != null && !to.isBlank()) {
-                sendEmailViaPython(to, subject, body);
+                sendEmailViaPython(to, subject, emailbody);
             }
         }
     }
