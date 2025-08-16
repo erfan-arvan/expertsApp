@@ -554,6 +554,50 @@
         body.is-home #disagreements-menu {
             display: none;
         }
+
+        /* Mention chips in text */
+.mention {
+  font-weight: 600;
+  color: var(--primary);
+  background: rgba(124,92,255,.12);
+  border: 1px solid var(--border);
+  padding: 0 6px;
+  border-radius: 999px;
+}
+.mention.me {
+  color: #fff;
+  background: linear-gradient(145deg, var(--primary), var(--primary-2));
+  border-color: transparent;
+}
+
+/* Suggestions dropdown */
+.mention-suggest {
+  position: absolute;
+  z-index: 2000;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 4px;
+  min-width: 180px;
+}
+.mention-suggest button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 8px;
+  background: transparent;
+  color: inherit;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.mention-suggest button:hover,
+.mention-suggest button[aria-selected="true"] {
+  background: rgba(124,92,255,.12);
+}
+
     </style>
 </head>
 
@@ -662,6 +706,7 @@
             view: 'home',
             currentOpenedAt: '',       // ⬅️ baseline for currently open disagreement (set on switch)
             currentBaseline: '',
+            usernames: [],
             pollHandle: null
         };
 
@@ -837,9 +882,11 @@
         ${msg.role ? `<span class="badge">${msg.role}</span>` : ''}
         <time class="time" datetime="${msg.createdAt || ''}">${fmtTime(msg.createdAt)}</time>
       </div>
-      <div class="content">
-        ${msg.is_deleted ? '<em style="color:var(--muted)">[message deleted]</em>' : escapeHtml(msg.content || '')}
-      </div>
+        <div class="content">
+        ${msg.is_deleted ? '<em style="color:var(--muted)">[message deleted]</em>'
+                        : linkMentions(escapeHtml(msg.content || ''))}
+        </div>
+
       <div class="post-actions">
         <button class="btn" onclick="vote(this, 1)">👍</button>
         <button class="btn" onclick="vote(this, -1)">👎</button>
@@ -884,6 +931,9 @@
         </div>
       </div>`;
                 el.querySelector('.post-body').appendChild(composer);
+                  // enable @ on this reply textarea
+                const ta = composer.querySelector('textarea.input');
+                if (ta) enableMentions(ta);
             }
 
             return el;
@@ -933,6 +983,10 @@
             const normalized = {};
             for (const [k, v] of Object.entries(rawChats)) normalized[toId(k)] = v;
             state.chatsByDisagreement = normalized;
+            //usernaes
+              if (Array.isArray(data.usernames)) {
+                state.usernames = [...new Set(data.usernames.map(s => (s||'').toLowerCase()))];
+            }
             state.previousLatestAt = data.previousLatestAt || '';
             state.nowLatestAt = data.nowLatestAt || '';
             state.oldestReturnedAt = data.oldestReturnedAt || '';
@@ -980,22 +1034,19 @@
 
 
 
+async function sendMessage({ disagreementId, parentId=null, content }) {
+  const mentions = extractMentions(content, state.usernames);
+  const payload = { username: state.user.name, disagreementId, parentId, content, mentions };
+  const res = await fetch(CONFIG.SUBMIT_CHAT_URL, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+  });
+  if (!res.ok) { alert('Failed to send message'); return; }
+  const data = await res.json();
+  state.chatsByDisagreement = data.chats || state.chatsByDisagreement;
+  await fetchLatestChat().catch(()=>{});
+  renderCurrentThread();
+}
 
-        async function sendMessage({ disagreementId, parentId = null, content }) {
-            const payload = { username: state.user.name, disagreementId, parentId, content };
-            const res = await fetch(CONFIG.SUBMIT_CHAT_URL, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
-            });
-            if (!res.ok) { alert('Failed to send message'); return; }
-            const data = await res.json();
-            // Assume server returns updated structure compatible with fetchLatestChat
-            if (data?.chats) {
-                state.chatsByDisagreement = data.chats;
-            } else {
-                await fetchLatestChat();
-            }
-            renderCurrentThread();
-        }
 
         async function deleteMessage(id) {
             const payload = { username: state.user.name, messageId: id };
@@ -1038,14 +1089,16 @@
 
         // Root composer
         function bindRootComposer() {
-            $('#post-root').addEventListener('click', () => {
-                const ta = $('#new-opinion');
-                const text = ta.value.trim();
-                if (!text) return;
-                sendMessage({ disagreementId: state.currentId, parentId: null, content: text });
-                ta.value = '';
-            });
+        const ta = $('#new-opinion');
+        if (ta) enableMentions(ta); // ⬅️ enable @ for root
+        $('#post-root').addEventListener('click', () => {
+            const text = ta.value.trim();
+            if (!text) return;
+            sendMessage({ disagreementId: state.currentId, parentId: null, content: text });
+            ta.value = '';
+        });
         }
+
 
         async function init() {
             checkLogin();
@@ -1413,6 +1466,157 @@ function openDisagreement(id) {
 
     <script>
         function toId(v){ return String(v); }
+
+    </script>
+
+    <script>
+        //for adding username taggings
+        function extractMentions(text, allowed = []) {
+  // Only match at start or after whitespace; token = [a-z0-9_]+
+  const re = /(^|\s)@([a-z0-9_]+)/gi;
+  const out = new Set();
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const handle = (m[2] || '').toLowerCase();
+    if (allowed.length === 0 || allowed.includes(handle)) out.add(handle);
+  }
+  return [...out];
+}
+
+function linkMentions(text) {
+  if (!text) return '';
+  const me = currentHandle();
+  // Replace only standalone-style mentions; don’t touch emails "a@b.com" (no preceding space)
+  return text.replace(/(^|\s)@([a-z0-9_]+)/gi, (full, lead, h) => {
+    const handle = h.toLowerCase();
+    const cls = (handle === me) ? 'mention me' : 'mention';
+    return `${lead}<span class="${cls}">@${h}</span>`;
+  });
+}
+
+    </script>
+
+    <script>
+        //username tagging in messages
+        let mentionUI = { box: null, items: [], idx: -1, ta: null };
+
+function ensureSuggestBox() {
+  if (mentionUI.box) return mentionUI.box;
+  const div = document.createElement('div');
+  div.className = 'mention-suggest';
+  div.hidden = true;
+  document.body.appendChild(div);
+  mentionUI.box = div;
+  return div;
+}
+
+function positionSuggestBox(ta) {
+  // simple: place under the textarea’s bottom-left (no caret math)
+  const r = ta.getBoundingClientRect();
+  const top = r.bottom + window.scrollY + 4;
+  const left = r.left + window.scrollX + 0;
+  mentionUI.box.style.top = `${top}px`;
+  mentionUI.box.style.left = `${left}px`;
+  mentionUI.box.style.minWidth = `${Math.min(r.width, 280)}px`;
+}
+
+function openMentionSuggest(ta, query) {
+  const opts = state.usernames
+    .filter(u => u.startsWith((query||'').toLowerCase()))
+    .slice(0, 8);
+  const box = ensureSuggestBox();
+  box.innerHTML = '';
+  mentionUI.items = [];
+  mentionUI.idx = -1;
+  mentionUI.ta = ta;
+
+  if (opts.length === 0) { box.hidden = true; return; }
+
+  opts.forEach((u, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = `@${u}`;
+    b.setAttribute('aria-selected', 'false');
+    b.addEventListener('click', () => applyMention(ta, u));
+    box.appendChild(b);
+    mentionUI.items.push(b);
+  });
+
+  positionSuggestBox(ta);
+  box.hidden = false;
+}
+
+function closeMentionSuggest() {
+  if (mentionUI.box) mentionUI.box.hidden = true;
+  mentionUI.items = [];
+  mentionUI.idx = -1;
+  mentionUI.ta = null;
+}
+
+function moveMentionSel(delta) {
+  if (!mentionUI.items.length) return;
+  mentionUI.idx = (mentionUI.idx + delta + mentionUI.items.length) % mentionUI.items.length;
+  mentionUI.items.forEach((b, i) => b.setAttribute('aria-selected', String(i===mentionUI.idx)));
+}
+
+function applyMention(ta, handle) {
+  // replace the trailing "@query" token before caret with "@handle "
+  const start = ta.selectionStart;
+  const before = ta.value.slice(0, start);
+  const after  = ta.value.slice(start);
+
+  const m = before.match(/(^|\s)@([a-z0-9_]*)$/i);
+  if (!m) return closeMentionSuggest();
+
+  const replaceFrom = start - (m[2] || '').length - 1; // include '@'
+  const lead = m[1] || '';
+  const newBefore = before.slice(0, replaceFrom) + lead + '@' + handle + ' ';
+  ta.value = newBefore + after;
+
+  const caret = newBefore.length;
+  ta.focus();
+  ta.setSelectionRange(caret, caret);
+
+  closeMentionSuggest();
+}
+
+function enableMentions(ta) {
+  if (!ta) return;
+  ta.addEventListener('input', () => {
+    const pos = ta.selectionStart;
+    const before = ta.value.slice(0, pos);
+    // Only trigger when token is at start or after whitespace
+    const m = before.match(/(^|\s)@([a-z0-9_]*)$/i);
+    if (m) {
+      const q = m[2] || '';
+      // don’t show for your own handle only when empty? we can still show all
+      openMentionSuggest(ta, q);
+    } else {
+      closeMentionSuggest();
+    }
+  });
+  ta.addEventListener('keydown', (e) => {
+    if (mentionUI.box && !mentionUI.box.hidden) {
+      if (e.key === 'ArrowDown') { moveMentionSel(1); e.preventDefault(); }
+      else if (e.key === 'ArrowUp') { moveMentionSel(-1); e.preventDefault(); }
+      else if (e.key === 'Enter' || e.key === 'Tab') {
+        if (mentionUI.idx >= 0 && mentionUI.items[mentionUI.idx]) {
+          e.preventDefault();
+          const label = mentionUI.items[mentionUI.idx].textContent || '';
+          applyMention(ta, label.replace(/^@/, ''));
+        } else {
+          closeMentionSuggest();
+        }
+      } else if (e.key === 'Escape') {
+        closeMentionSuggest();
+      }
+    }
+  });
+  ta.addEventListener('blur', () => {
+    // delay so click can register
+    setTimeout(closeMentionSuggest, 150);
+  });
+}
 
     </script>
 </body>
