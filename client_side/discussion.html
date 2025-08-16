@@ -414,6 +414,16 @@ const state = {
     }).format(d);
     }
 
+    function currentHandle(){
+  // prefer the short handle if you store it; fall back to display name
+  const h = sessionStorage.getItem('username')
+        || localStorage.getItem('username')
+        || state.user.name
+        || '';
+  return (h || '').trim().toLowerCase();
+}
+
+
 
     // Build a thread tree from flat messages
     function buildThread(messages) {
@@ -535,7 +545,7 @@ function renderMessage(msg) {
   el.dataset.id = msg.id;
 
   const isRoot = !msg.parentId; // only roots can be replied to
-    const isNew = isNewForUserIn(state.currentId, msg.createdAt);
+    const isNew = isNewForUserIn(state.currentId, msg);
     const newBadge = isNew
     ? `<span class="badge" style="border-color:transparent; background:linear-gradient(145deg,#ef4444,#dc2626); color:#fff;">NEW</span>`
     : '';
@@ -868,47 +878,37 @@ function isNewForUser(iso){
 /** Update number badges on the disagreement menu */
 function updateDisagreementBadges(){
   const menu = document.getElementById('disagreements-menu');
-  if(!menu){
-    console.warn('🚫 updateDisagreementBadges: #disagreements-menu not found');
-    return;
-  }
-
-  console.groupCollapsed('🔔 updateDisagreementBadges');
-  console.log('currentId:', state.currentId);
-  console.log('currentOpenedAt:', state.currentOpenedAt);
-  console.log('previousLatestAt:', state.previousLatestAt);
-  console.log('lastSeenByDis:', JSON.parse(JSON.stringify(state.lastSeenByDis)));
+  if(!menu) return;
 
   // Clear old badges
   menu.querySelectorAll('.menu-badge').forEach(b => b.remove());
 
   const chats = state.chatsByDisagreement || {};
-  const rows = [];
+  const me = currentHandle();
 
   for (const [id, list] of Object.entries(chats)) {
     const btn = menu.querySelector(`.chip[data-id="${id}"]`);
-    if (!btn) {
-      console.warn('⚠️ no chip found for disagreement id=', id);
-      continue;
-    }
+    if (!btn) continue;
 
-    // Choose baseline
+    // baseline per the design
     const baseline = (String(id) === String(state.currentId) && state.currentOpenedAt)
       ? state.currentOpenedAt
       : (state.lastSeenByDis[String(id)] || state.previousLatestAt || '');
 
-    // Count
     let count = 0;
     if (baseline) {
       const bt = new Date(baseline).getTime();
       for (const m of (list || [])) {
         if (!m || m.is_deleted) continue;
+
+        // 🚫 skip own messages
+        const author = (m.username || '').trim().toLowerCase();
+        if (author && author === me) continue;
+
         const mt = new Date(m.createdAt).getTime();
         if (!isNaN(mt) && mt > bt) count++;
       }
     }
-
-    rows.push({ id, msgs: (list || []).length, baseline, count });
 
     if (count > 0) {
       const badge = document.createElement('span');
@@ -920,10 +920,8 @@ function updateDisagreementBadges(){
       btn.removeAttribute('aria-label');
     }
   }
-
-  console.table(rows);
-  console.groupEnd();
 }
+
 
 
 
@@ -952,9 +950,14 @@ function saveSeenToStorage(){
 </script>
 
 <script>
-    function isNewForUserIn(disagreementId, iso){
-  if (!iso) return false;
-  // If it's the current thread, use open time; else, use that thread's lastSeen baseline
+function isNewForUserIn(disagreementId, msg){
+  if (!msg?.createdAt) return false;
+
+  // don't count your own messages
+  const author = (msg.username || '').trim().toLowerCase();
+  if (author && author === currentHandle()) return false;
+
+  // pick baseline: currentOpenedAt for the open thread, otherwise lastSeenByDis or previousLatestAt
   let baseline = '';
   if (String(disagreementId) === String(state.currentId) && state.currentOpenedAt) {
     baseline = state.currentOpenedAt;
@@ -962,10 +965,12 @@ function saveSeenToStorage(){
     baseline = state.lastSeenByDis[String(disagreementId)] || state.previousLatestAt || '';
   }
   if (!baseline) return false;
-  const mt = new Date(iso).getTime();
+
+  const mt = new Date(msg.createdAt).getTime();
   const bt = new Date(baseline).getTime();
   return !isNaN(mt) && !isNaN(bt) && mt > bt;
 }
+
 
 </script>
 
