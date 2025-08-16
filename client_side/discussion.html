@@ -490,6 +490,7 @@ function switchDisagreement(newId){
     const stamp = new Date(Date.now() - 1000).toISOString();
     state.lastSeenByDis[String(prevId)] = stamp;
     console.log('marked previous as seen:', String(prevId), '→', stamp);
+    saveSeenToStorage();
   }
 
   state.currentId = newId;
@@ -675,6 +676,8 @@ for (const d of state.disagreements) {
 }
 // persist
 try { localStorage.setItem(`chat_seen_${(state.user.name||'anon').toLowerCase()}`, JSON.stringify(state.lastSeenByDis)); } catch {}
+saveSeenToStorage();
+
 
 renderCurrentThread();
 updateDisagreementBadges();
@@ -963,6 +966,17 @@ function saveSeenToStorage(){
   const bt = new Date(baseline).getTime();
   return !isNaN(mt) && !isNaN(bt) && mt > bt;
 }
+
+</script>
+
+<script>
+    window.addEventListener('beforeunload', () => {
+  // also stamp the one currently open as seen now
+  if (state.currentId != null) {
+    state.lastSeenByDis[String(state.currentId)] = new Date().toISOString();
+  }
+  saveSeenToStorage();
+});
 
 </script>
 
