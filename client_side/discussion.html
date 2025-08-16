@@ -551,8 +551,9 @@
         }
 
         /* When on Home view, hide the strip but keep the bar + Home button */
-body.is-home #disagreements-menu { display: none; }
-
+        body.is-home #disagreements-menu {
+            display: none;
+        }
     </style>
 </head>
 
@@ -748,7 +749,7 @@ body.is-home #disagreements-menu { display: none; }
                 btn.dataset.id = id;                // <button data-id="...">
                 btn.setAttribute('aria-pressed', String(d.id === state.currentId));
                 btn.textContent = d.title;
-                btn.onclick = () => switchDisagreement(d.id);
+                btn.onclick = () => openDisagreement(d.id);
                 menu.appendChild(btn);
             });
             console.log('chips rendered:', ids);
@@ -802,6 +803,7 @@ body.is-home #disagreements-menu { display: none; }
 
 
         function renderCurrentThread() {
+            if (state.view !== 'chat' || state.currentId == null) return;
             const posts = $('#posts');
             posts.innerHTML = '';
             const msgs = state.chatsByDisagreement[state.currentId] || [];
@@ -900,17 +902,22 @@ body.is-home #disagreements-menu { display: none; }
                 snippet_id: d["snippet-id"] ?? d.snippet_id,
                 htmltext: d.htmltext
             }));
-            if (!state.currentId && state.disagreements.length) {
-                state.currentId = state.disagreements[0].id;
-            }
-            renderDisagreementsMenu();
-            const first = state.disagreements.find(x => x.id === state.currentId);
-            if (first) {
-                $('#topic-title').textContent = first.title;
-                $('#topic-description').innerHTML = first.htmltext || '';
-            }
 
+            // ❌ Do NOT set state.currentId here
+            // if (!state.currentId && state.disagreements.length) {
+            //   state.currentId = state.disagreements[0].id;
+            // }
+
+            renderDisagreementsMenu();
+
+            // ❌ Do NOT prime topic header here; we are on Home
+            // const first = state.disagreements.find(x => x.id === state.currentId);
+            // if (first) {
+            //   $('#topic-title').textContent = first.title;
+            //   $('#topic-description').innerHTML = first.htmltext || '';
+            // }
         }
+
 
         async function fetchLatestChat() {
             const payload = { username: state.user.name };
@@ -1155,49 +1162,49 @@ body.is-home #disagreements-menu { display: none; }
         }
 
         /** Update number badges on the disagreement menu */
-function updateDisagreementBadges(){
-  const menu = document.getElementById('disagreements-menu');
-  if(!menu) return;
+        function updateDisagreementBadges() {
+            const menu = document.getElementById('disagreements-menu');
+            if (!menu) return;
 
-  // Clear old badges
-  menu.querySelectorAll('.menu-badge').forEach(b => b.remove());
+            // Clear old badges
+            menu.querySelectorAll('.menu-badge').forEach(b => b.remove());
 
-  const chats = state.chatsByDisagreement || {};
-  const me = currentHandle();
+            const chats = state.chatsByDisagreement || {};
+            const me = currentHandle();
 
-  for (const [id, list] of Object.entries(chats)) {
-    const btn = menu.querySelector(`.chip[data-id="${id}"]`);
-    if (!btn) continue;
+            for (const [id, list] of Object.entries(chats)) {
+                const btn = menu.querySelector(`.chip[data-id="${id}"]`);
+                if (!btn) continue;
 
-    // ✅ Use currentOpenedAt only while in chat view AND for the active id
-    const useOpenBaseline = state.view === 'chat' && String(id) === String(state.currentId) && state.currentOpenedAt;
-    const baseline = useOpenBaseline
-      ? state.currentOpenedAt
-      : (state.lastSeenByDis[String(id)] || state.previousLatestAt || defaultBaselineISO(1));
+                // ✅ Use currentOpenedAt only while in chat view AND for the active id
+                const useOpenBaseline = state.view === 'chat' && String(id) === String(state.currentId) && state.currentOpenedAt;
+                const baseline = useOpenBaseline
+                    ? state.currentOpenedAt
+                    : (state.lastSeenByDis[String(id)] || state.previousLatestAt || defaultBaselineISO(1));
 
-    let count = 0;
-    if (baseline) {
-      const bt = new Date(baseline).getTime();
-      for (const m of (list || [])) {
-        if (!m || m.is_deleted) continue;
-        const author = (m.username || '').trim().toLowerCase();
-        if (author && author === currentHandle()) continue; // skip own messages
-        const mt = new Date(m.createdAt).getTime();
-        if (!isNaN(mt) && mt > bt) count++;
-      }
-    }
+                let count = 0;
+                if (baseline) {
+                    const bt = new Date(baseline).getTime();
+                    for (const m of (list || [])) {
+                        if (!m || m.is_deleted) continue;
+                        const author = (m.username || '').trim().toLowerCase();
+                        if (author && author === currentHandle()) continue; // skip own messages
+                        const mt = new Date(m.createdAt).getTime();
+                        if (!isNaN(mt) && mt > bt) count++;
+                    }
+                }
 
-    if (count > 0) {
-      const badge = document.createElement('span');
-      badge.className = 'menu-badge';
-      badge.textContent = count > 99 ? '99+' : String(count);
-      btn.appendChild(badge);
-      btn.setAttribute('aria-label', `${btn.textContent.trim()} (${badge.textContent} new)`);
-    } else {
-      btn.removeAttribute('aria-label');
-    }
-  }
-}
+                if (count > 0) {
+                    const badge = document.createElement('span');
+                    badge.className = 'menu-badge';
+                    badge.textContent = count > 99 ? '99+' : String(count);
+                    btn.appendChild(badge);
+                    btn.setAttribute('aria-label', `${btn.textContent.trim()} (${badge.textContent} new)`);
+                } else {
+                    btn.removeAttribute('aria-label');
+                }
+            }
+        }
 
 
 
@@ -1254,38 +1261,39 @@ function updateDisagreementBadges(){
 
     <script>
         window.addEventListener('beforeunload', () => {
-            // also stamp the one currently open as seen now
-            if (state.currentId != null) {
+            // Only stamp when the user is actually viewing a thread
+            if (state.view === 'chat' && state.currentId != null) {
                 state.lastSeenByDis[String(state.currentId)] = new Date().toISOString();
+                saveSeenToStorage();
             }
-            saveSeenToStorage();
         });
+
 
     </script>
 
     <script>
-function showView(view){
-  state.view = view;
-  const homeGrid = document.getElementById('home-grid');
-  const chatView = document.getElementById('chat-view');
-  const homeBtn  = document.getElementById('home-btn');
-  const strip    = document.getElementById('disagreements-menu');
+        function showView(view) {
+            state.view = view;
+            const homeGrid = document.getElementById('home-grid');
+            const chatView = document.getElementById('chat-view');
+            const homeBtn = document.getElementById('home-btn');
+            const strip = document.getElementById('disagreements-menu');
 
-  const isHome = view === 'home';
+            const isHome = view === 'home';
 
-  // toggle main panes
-  homeGrid.hidden = !isHome;
-  chatView.hidden =  isHome;
+            // toggle main panes
+            homeGrid.hidden = !isHome;
+            chatView.hidden = isHome;
 
-  // mark pressed + body class (drives CSS)
-  homeBtn?.setAttribute('aria-pressed', String(isHome));
-  document.body.classList.toggle('is-home', isHome);
+            // mark pressed + body class (drives CSS)
+            homeBtn?.setAttribute('aria-pressed', String(isHome));
+            document.body.classList.toggle('is-home', isHome);
 
-  // (optional) if you prefer JS instead of CSS: strip.hidden = isHome;
+            // (optional) if you prefer JS instead of CSS: strip.hidden = isHome;
 
-  // repaint Home cards when entering Home
-  if (isHome) renderHomeGrid();
-}
+            // repaint Home cards when entering Home
+            if (isHome) renderHomeGrid();
+        }
 
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1302,29 +1310,29 @@ function showView(view){
             return (h || '').trim().toLowerCase();
         }
 
-function newCountForDisagreement(id){
-  const list = state.chatsByDisagreement?.[String(id)] || [];
-  const me = currentHandle();
+        function newCountForDisagreement(id) {
+            const list = state.chatsByDisagreement?.[String(id)] || [];
+            const me = currentHandle();
 
-  // On Home, this will use lastSeen; in Chat for active id, it can use currentOpenedAt
-  const useOpenBaseline = state.view === 'chat' && String(id) === String(state.currentId) && state.currentOpenedAt;
-  const baseline = useOpenBaseline
-    ? state.currentOpenedAt
-    : (state.lastSeenByDis[String(id)] || state.previousLatestAt || defaultBaselineISO(1));
+            // On Home, this will use lastSeen; in Chat for active id, it can use currentOpenedAt
+            const useOpenBaseline = state.view === 'chat' && String(id) === String(state.currentId) && state.currentOpenedAt;
+            const baseline = useOpenBaseline
+                ? state.currentOpenedAt
+                : (state.lastSeenByDis[String(id)] || state.previousLatestAt || defaultBaselineISO(1));
 
-  if (!baseline) return 0;
-  const bt = new Date(baseline).getTime();
+            if (!baseline) return 0;
+            const bt = new Date(baseline).getTime();
 
-  let count = 0;
-  for (const m of list) {
-    if (!m || m.is_deleted) continue;
-    const author = (m.username || '').trim().toLowerCase();
-    if (author && author === me) continue;
-    const mt = new Date(m.createdAt).getTime();
-    if (!isNaN(mt) && mt > bt) count++;
-  }
-  return count;
-}
+            let count = 0;
+            for (const m of list) {
+                if (!m || m.is_deleted) continue;
+                const author = (m.username || '').trim().toLowerCase();
+                if (author && author === me) continue;
+                const mt = new Date(m.createdAt).getTime();
+                if (!isNaN(mt) && mt > bt) count++;
+            }
+            return count;
+        }
 
 
         function renderHomeGrid() {
