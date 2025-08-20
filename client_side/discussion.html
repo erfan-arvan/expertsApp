@@ -823,6 +823,8 @@
                 state.lastSeenByDis[String(prevId)] = stamp;
                 console.log('marked previous as seen:', String(prevId), '→', stamp);
                 saveSeenToStorage();
+                pushSeenToServer();
+                
             }
 
             state.currentId = toId(newId);
@@ -1313,6 +1315,7 @@
             if (state.view === 'chat' && state.currentId != null) {
                 state.lastSeenByDis[String(state.currentId)] = new Date().toISOString();
                 saveSeenToStorage();
+                pushSeenToServer();
             }
         });
 
