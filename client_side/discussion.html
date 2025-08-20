@@ -1613,6 +1613,7 @@
 
     <script>
         function logout() {
+            pushSeenToServer();
             sessionStorage.clear();
             localStorage.clear();
 
