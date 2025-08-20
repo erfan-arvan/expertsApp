@@ -617,7 +617,7 @@
         <nav id="disagreements-bar" aria-label="Disagreements switcher">
             <div class="bar-inner">
                 <button id="home-btn" class="chip home-chip" type="button" aria-pressed="true">🏠 Home</button>
-                <button id="logout-btn"  class="chip home-chip" type="button" onclick="logout()">🚪 Logout</button>
+                <button id="logout-btn" class="chip home-chip" type="button" onclick="logout()">🚪 Logout</button>
                 <div id="disagreements-menu" class="disagreements-strip" role="tablist" aria-label="Disagreements">
                     <!-- chips injected by JS -->
                 </div>
@@ -974,66 +974,53 @@
 
 
         async function fetchLatestChat() {
-            const payload = { username: state.user.name };
             const res = await fetch(CONFIG.GET_LATEST_CHAT_URL, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: currentHandle() || state.user.name })
             });
             if (!res.ok) throw new Error('Failed to get latest chat');
+
             const data = await res.json();
 
-            // Normalize chat map keys to strings
-            const rawChats = data.chats || {};
+            // 1) Normalize chats
             const normalized = {};
-            for (const [k, v] of Object.entries(rawChats)) normalized[toId(k)] = v;
+            for (const [k, v] of Object.entries(data.chats || {})) normalized[String(k)] = v || [];
             state.chatsByDisagreement = normalized;
-            //usernaes
-            if (Array.isArray(data.usernames)) {
-                state.usernames = [...new Set(data.usernames.map(s => (s || '').toLowerCase()))];
-            }
+
+            // 2) Meta
             state.previousLatestAt = data.previousLatestAt || '';
             state.nowLatestAt = data.nowLatestAt || '';
             state.oldestReturnedAt = data.oldestReturnedAt || '';
 
-            // ⬅️ Initialize per-disagreement baselines only if missing
-            for (const d of state.disagreements) {
-                const key = toId(d.id);
-                if (!state.lastSeenByDis[key]) {
-                    state.lastSeenByDis[key] = state.previousLatestAt || '';  // first-time baseline
-                }
-            }
-            saveSeenToStorage();
+            // 3) Mentions allowlist
+            state.usernames = Array.isArray(data.usernames)
+                ? [...new Set(data.usernames.map(s => (s || '').toLowerCase()))]
+                : [];
 
-            // Store chats and meta times
-            // state.chatsByDisagreement = data.chats || {};
-            state.previousLatestAt = data.previousLatestAt || defaultBaselineISO(1);
-            state.nowLatestAt = data.nowLatestAt || '';
-            state.oldestReturnedAt = data.oldestReturnedAt || '';
-
-            console.groupCollapsed('📥 fetchLatestChat meta');
-            console.log('previousLatestAt:', state.previousLatestAt);
-            console.log('nowLatestAt:', state.nowLatestAt);
-            console.log('oldestReturnedAt:', state.oldestReturnedAt);
-            console.log('threads(keys):', Object.keys(state.chatsByDisagreement || {}));
-            console.groupEnd();
-
-            // Initialize per-disagreement baselines ONLY if missing
+            // 4) Ensure we have a local map (so merge works)
             state.lastSeenByDis ||= {};
-            for (const d of state.disagreements) {
-                const key = toId(d.id);
-                if (!state.lastSeenByDis[key]) {
-                    state.lastSeenByDis[key] = state.previousLatestAt || '';
-                    console.log('🧭 init baseline for', key, '→', state.lastSeenByDis[key]);
-                }
+
+            // 5) 🔑 Merge the server’s per-disagreement last-seen (newer wins)
+            //    (This is what you asked about.)
+            if (data.lastSeenByDis) {
+                mergeServerSeen(data.lastSeenByDis);
             }
-            // persist
-            try { localStorage.setItem(`chat_seen_${(state.user.name || 'anon').toLowerCase()}`, JSON.stringify(state.lastSeenByDis)); } catch { }
+
+            // 6) Initialize any missing disagreements to a fallback baseline
+            const fallback = state.previousLatestAt || defaultBaselineISO(1);
+            for (const d of state.disagreements) {
+                const key = String(d.id);
+                if (!state.lastSeenByDis[key]) state.lastSeenByDis[key] = fallback;
+            }
             saveSeenToStorage();
 
-
-            renderCurrentThread();
+            // 7) Paint after state is consistent
+            if (state.view === 'chat') renderCurrentThread();
             updateDisagreementBadges();
-
+            if (state.view === 'home') renderHomeGrid();
         }
+
 
 
 
@@ -1433,6 +1420,7 @@
             if (state.currentId != null) {
                 state.lastSeenByDis[String(state.currentId)] = new Date().toISOString();
                 saveSeenToStorage();
+                pushSeenToServer();
             }
 
             const idStr = String(id);
@@ -1624,19 +1612,78 @@
     </script>
 
     <script>
-          function logout() {
-    sessionStorage.clear();
-    localStorage.clear();
+        function logout() {
+            sessionStorage.clear();
+            localStorage.clear();
 
 
-    // Clear all cookies
-    document.cookie.split(";").forEach(cookie => {
-      const name = cookie.split("=")[0].trim();
-      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-    });
+            // Clear all cookies
+            document.cookie.split(";").forEach(cookie => {
+                const name = cookie.split("=")[0].trim();
+                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+            });
 
-    window.location.href = 'discussion-round.html';
-  }
+            window.location.href = 'discussion-round.html';
+        }
+    </script>
+
+    <script>
+        async function pushSeenToServer() {
+            const payload = {
+                username: currentHandle() || (state.user.name || '').toLowerCase(),
+                seen: state.lastSeenByDis || {}
+            };
+            try {
+                const res = await fetch('https://codecomprehensibility.site/set_last_seen_disagreement', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) throw new Error('pushSeenToServer failed');
+                const data = await res.json();
+                // Optional: reconcile with server-confirmed merged map
+                if (data && data.perDisagreement) {
+                    mergeServerSeen(data.perDisagreement);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+
+        function mergeServerSeen(serverMap) {
+            if (!serverMap || typeof serverMap !== 'object') return;
+
+            const local = state.lastSeenByDis || {};
+            const time = (iso) => {
+                const t = new Date(iso).getTime();
+                return Number.isFinite(t) ? t : 0;
+            };
+
+            let changed = false;
+            for (const [id, iso] of Object.entries(serverMap)) {
+                const sid = String(id);
+                const sIso = String(iso || '');
+                if (!sIso) continue;
+
+                const lt = time(local[sid]);
+                const rt = time(sIso);
+                if (rt > lt) {
+                    local[sid] = sIso;
+                    changed = true;
+                }
+            }
+
+            if (changed) {
+                state.lastSeenByDis = local;
+                saveSeenToStorage();
+                // Refresh any UI elements that depend on these baselines
+                if (state.view === 'chat') renderCurrentThread();
+                updateDisagreementBadges();
+                if (state.view === 'home') renderHomeGrid();
+            }
+        }
+
     </script>
 </body>
 

@@ -702,43 +702,35 @@ public synchronized Map<String, Object> getLatestChat(@RequestBody Map<String, S
 
     ObjectMapper mapper = new ObjectMapper();
     try {
-        // Load shared chat
-        Map<String, Object> store = readChatStore(mapper); // your helper that reads CHAT_FILE
+        Map<String, Object> store = readChatStore(mapper);
 
-        // Compute oldest & latest timestamps (unchanged)
         List<Map<String, Object>> msgs = allMessages(store);
-        java.time.Instant oldest = java.time.Instant.MAX;
-        java.time.Instant latest = java.time.Instant.EPOCH;
+        Instant oldest = Instant.MAX, latest = Instant.EPOCH;
         for (Map<String, Object> m : msgs) {
-            java.time.Instant t = parseInstant(m.get("createdAt"));
+            Instant t = parseInstant(m.get("createdAt"));
             if (t.isBefore(oldest)) oldest = t;
             if (t.isAfter(latest)) latest = t;
         }
-        if (msgs.isEmpty()) { oldest = java.time.Instant.EPOCH; latest = java.time.Instant.EPOCH; }
+        if (msgs.isEmpty()) { oldest = Instant.EPOCH; latest = Instant.EPOCH; }
 
-        // Load per-user seen state
         Map<String, Object> seen = readJsonFile(CHAT_SEEN_FILE);
+        @SuppressWarnings("unchecked")
         Map<String, Object> userState = (Map<String, Object>) seen.get(username);
         if (userState == null) userState = new HashMap<>();
 
         String previousLatestAt = Objects.toString(userState.getOrDefault("previousLatestAt", ""), "");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> perDis = (Map<String, Object>) userState.getOrDefault("perDisagreement", Collections.emptyMap());
 
-        // Build list of handles we allow to be tagged
-        List<String> handles = userPasswords.keySet()
-            .stream()
-            .map(String::toLowerCase)
-            .sorted()
-            .collect(Collectors.toList());
-
-        // Prepare response
         Map<String, Object> response = new HashMap<>(store);
         response.put("previousLatestAt", previousLatestAt);
-        response.put("oldestReturnedAt", oldest.equals(java.time.Instant.EPOCH) ? "" : oldest.toString());
-        response.put("nowLatestAt", latest.equals(java.time.Instant.EPOCH) ? "" : latest.toString());
-        response.put("usernames", handles); // ⬅️ send allowed usernames
+        response.put("oldestReturnedAt", oldest.equals(Instant.EPOCH) ? "" : oldest.toString());
+        response.put("nowLatestAt", latest.equals(Instant.EPOCH) ? "" : latest.toString());
+        response.put("usernames", userPasswords.keySet().stream().map(String::toLowerCase).sorted().toList());
+        response.put("lastSeenByDis", perDis); // ⬅️ include per-disagreement seen map
 
-        // Update user's previousLatestAt to "now"
-        userState.put("previousLatestAt", latest.equals(java.time.Instant.EPOCH) ? "" : latest.toString());
+        // Keep your existing behavior of advancing previousLatestAt
+        userState.put("previousLatestAt", latest.equals(Instant.EPOCH) ? "" : latest.toString());
         seen.put(username, userState);
         writeJsonFile(CHAT_SEEN_FILE, seen);
 
@@ -748,6 +740,7 @@ public synchronized Map<String, Object> getLatestChat(@RequestBody Map<String, S
         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read chat.");
     }
 }
+
 
 
 private static final java.util.regex.Pattern MENTION_RE =
@@ -989,6 +982,75 @@ public synchronized Map<String, Object> voteChat(@RequestBody Map<String, Object
         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update vote.");
     }
 }
+
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/set_last_seen_disagreement")
+public synchronized Map<String, Object> setLastSeenDisagreement(@RequestBody Map<String, Object> body) {
+    String username = Objects.toString(body.get("username"), "").trim().toLowerCase(Locale.ROOT);
+    if (username.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username is required");
+    }
+
+    @SuppressWarnings("unchecked")
+    Map<String, Object> seenMapIn = (Map<String, Object>) body.get("seen"); // {"12":"2024-08-20T21:46:59.860Z", ...}
+    if (seenMapIn == null) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "seen map is required");
+    }
+
+    // Normalize keys to strings and values to ISO strings
+    Map<String, String> normalized = new HashMap<>();
+    for (Map.Entry<String, Object> e : seenMapIn.entrySet()) {
+        String key = String.valueOf(e.getKey());
+        String iso = Objects.toString(e.getValue(), "").trim();
+        if (!iso.isEmpty()) normalized.put(key, iso);
+    }
+
+    try {
+        // Load existing seen state file
+        Map<String, Object> seenRoot = readJsonFile(CHAT_SEEN_FILE);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> userState = (Map<String, Object>) seenRoot.get(username);
+        if (userState == null) userState = new HashMap<>();
+
+        // Merge strategy: keep the newer timestamp per disagreement
+        @SuppressWarnings("unchecked")
+        Map<String, Object> existing = (Map<String, Object>) userState.get("perDisagreement");
+        Map<String, String> merged = new HashMap<>();
+        if (existing != null) {
+            for (Map.Entry<String, Object> e : existing.entrySet()) {
+                String k = String.valueOf(e.getKey());
+                String v = Objects.toString(e.getValue(), "");
+                if (!v.isEmpty()) merged.put(k, v);
+            }
+        }
+        for (Map.Entry<String, String> e : normalized.entrySet()) {
+            String k = e.getKey();
+            String newIso = e.getValue();
+            String oldIso = merged.get(k);
+            if (oldIso == null) {
+                merged.put(k, newIso);
+            } else {
+                Instant ni = parseInstant(newIso);
+                Instant oi = parseInstant(oldIso);
+                if (ni.isAfter(oi)) merged.put(k, newIso);
+            }
+        }
+
+        userState.put("perDisagreement", merged);
+        seenRoot.put(username, userState);
+        writeJsonFile(CHAT_SEEN_FILE, seenRoot);
+
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("ok", true);
+        resp.put("username", username);
+        resp.put("perDisagreement", merged);
+        return resp;
+    } catch (IOException ioe) {
+        ioe.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to persist seen state");
+    }
+}
+
 
 
 }
