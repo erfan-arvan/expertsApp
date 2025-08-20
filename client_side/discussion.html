@@ -697,7 +697,7 @@
         /* ===== App state ===== */
         const state = {
             user: {
-                name: sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'You'
+                name: sessionStorage.getItem('username') || localStorage.getItem('username') || 'You'
             },
             disagreements: [],
             currentId: null,
