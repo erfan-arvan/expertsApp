@@ -824,7 +824,7 @@
                 console.log('marked previous as seen:', String(prevId), '→', stamp);
                 saveSeenToStorage();
                 pushSeenToServer();
-                
+
             }
 
             state.currentId = toId(newId);
@@ -1442,7 +1442,7 @@
                 $('#topic-title').textContent = d.title;
                 $('#topic-description').innerHTML = d.htmltext || '';
                 $('#topic-meta').innerHTML =
-                    `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>`;
+                    `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>   <a href="#" id="sync-now" style="margin-left:8px; font-size:0.9em; color:var(--primary)">Sync now</a>`;
             }
 
             // Update menu pressed state
@@ -1687,6 +1687,18 @@
                 if (state.view === 'home') renderHomeGrid();
             }
         }
+
+    </script>
+
+    <script>
+        document.getElementById('sync-now').addEventListener('click', (e) => {
+            e.preventDefault();
+            // call your existing sync function
+            fetchLatestChat().then(() => {
+                const t = new Date().toLocaleTimeString();
+                document.getElementById('last-sync-time').textContent = t;
+            });
+        });
 
     </script>
 </body>
