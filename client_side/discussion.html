@@ -1691,16 +1691,22 @@
     </script>
 
     <script>
-        document.getElementById('sync-now').addEventListener('click', (e) => {
-            e.preventDefault();
-            // call your existing sync function
-            fetchLatestChat().then(() => {
-                const t = new Date().toLocaleTimeString();
-                document.getElementById('last-sync-time').textContent = t;
-            });
+        document.addEventListener('DOMContentLoaded', () => {
+            const syncNow = document.getElementById('sync-now');
+            if (syncNow) {
+                syncNow.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    fetchLatestChat().then(() => {
+                        const t = new Date().toLocaleTimeString();
+                        document.getElementById('last-sync').textContent = t;
+                    });
+                });
+            }
         });
 
     </script>
+
+
 </body>
 
 </html>
