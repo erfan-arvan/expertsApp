@@ -1712,14 +1712,11 @@
             if (syncNow) {
                 syncNow.addEventListener('click', (e) => {
                     e.preventDefault();
-                    fetchLatestChat()
-                        .then(() => {
-                            if (state.view === 'home') renderHomeGrid(); // refresh counts on cards
-                        })
-                        .catch(console.error);
+                    location.reload();
                 });
             }
         });
+
 
 
     </script>
