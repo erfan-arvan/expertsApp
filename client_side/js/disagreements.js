@@ -5,7 +5,7 @@ window.DISAGREEMENTS = [
   {
     id: "12",
     title: "Snippet 4 vs Snippet 7",
-    "snippet-id": 4-7,
+    "snippet-id": 4,
     htmltext: "<strong>What specific features make 4 more/less difficult than 7? Can we agree on whether they are comparable (tie) or if one clearly dominates?</strong>"
   },
   {
