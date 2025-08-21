@@ -1458,7 +1458,7 @@
                 $('#topic-title').textContent = d.title;
                 $('#topic-description').innerHTML = d.htmltext || '';
                 $('#topic-meta').innerHTML =
-                    `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>   <span id="sync-now" style="margin-left:8px; font-size:0.9em; color:var(--primary)">Sync now</span>`;
+                    `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>   <span id="sync-now" class="sync-link">Sync now</span>`;
             }
 
             // Update menu pressed state
