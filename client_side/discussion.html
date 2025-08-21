@@ -600,6 +600,22 @@
         .mention-suggest button[aria-selected="true"] {
             background: rgba(124, 92, 255, .12);
         }
+
+        .sync-link {
+            margin-left: 8px;
+            font-size: 0.9em;
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+            /* optional */
+        }
+
+        .sync-link:hover {
+            text-decoration: none;
+            /* optional hover effect */
+            opacity: 0.8;
+            /* subtle feedback */
+        }
     </style>
 </head>
 
@@ -1442,7 +1458,7 @@
                 $('#topic-title').textContent = d.title;
                 $('#topic-description').innerHTML = d.htmltext || '';
                 $('#topic-meta').innerHTML =
-                    `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>   <a href="#" id="sync-now" style="margin-left:8px; font-size:0.9em; color:var(--primary)">Sync now</a>`;
+                    `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>   <span id="sync-now" style="margin-left:8px; font-size:0.9em; color:var(--primary)">Sync now</span>`;
             }
 
             // Update menu pressed state
@@ -1690,7 +1706,7 @@
 
     </script>
 
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', () => {
             const syncNow = document.getElementById('sync-now');
             if (syncNow) {
@@ -1704,7 +1720,7 @@
             }
         });
 
-    </script>
+    </script> -->
 
 
 </body>
