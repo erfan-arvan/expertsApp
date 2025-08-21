@@ -1706,21 +1706,23 @@
 
     </script>
 
-    <!-- <script>
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             const syncNow = document.getElementById('sync-now');
             if (syncNow) {
                 syncNow.addEventListener('click', (e) => {
                     e.preventDefault();
-                    fetchLatestChat().then(() => {
-                        const t = new Date().toLocaleTimeString();
-                        document.getElementById('last-sync').textContent = t;
-                    });
+                    fetchLatestChat()
+                        .then(() => {
+                            if (state.view === 'home') renderHomeGrid(); // refresh counts on cards
+                        })
+                        .catch(console.error);
                 });
             }
         });
 
-    </script> -->
+
+    </script>
 
 
 </body>
