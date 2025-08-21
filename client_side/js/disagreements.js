@@ -4,9 +4,9 @@
 window.DISAGREEMENTS = [
   {
     id: "12",
-    title: "Use of recursion in snippet 4",
-    "snippet-id": 4,
-    htmltext: "<p>Some experts believe recursion makes this snippet less comprehensible, while others argue it’s clearer than an equivalent loop.</p>"
+    title: "Snippet 4 vs Snippet 7",
+    "snippet-id": 4-7,
+    htmltext: "<strong>What specific features make 4 more/less difficult than 7? Can we agree on whether they are comparable (tie) or if one clearly dominates?</strong>"
   },
   {
     id: "13",
