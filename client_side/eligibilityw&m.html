@@ -342,7 +342,7 @@ input.input-error {
     <div class="day-card">
     <h4>Monday, June 10</h4>
     <div>
-      <div class="time-slot" onclick="selectSlot(this)">10:00 to 12:00 AM</div>
+      <div class="time-slot" onclick="selectSlot(this)">10:00 to 12:00 PM</div>
       <div class="time-slot" onclick="selectSlot(this)">1:00 to 2:00 PM</div>
       <div class="time-slot" onclick="selectSlot(this)">2:00 to 4:00 PM</div>
     </div>
@@ -765,7 +765,7 @@ document.getElementById('email').addEventListener('input', function () {
   const value = this.value.trim().toLowerCase();
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-  // If the input is now a valid email OR ends with '@njit.edu', remove error styling
+  // If the input is now a valid email remove error styling
   if (isValidEmail) {
     this.classList.remove('input-error');
   }
