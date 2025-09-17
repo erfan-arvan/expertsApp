@@ -244,134 +244,6 @@
     }
   </script>
 
-  <script>
-    function renderPhase1() {
-  const container = document.getElementById('phase1');
-  container.innerHTML = '';
-  let foundAny = false;
-
-  snippets.forEach(snippet => {
-    const i = snippet.id; // still used for storage keys
-    const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
-    const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
-
-    if (summary || comp) {
-      foundAny = true;
-      container.innerHTML += `
-        <div style="margin-bottom: 15px;">
-          <strong>${snippet.methodName}</strong><br>
-          <strong>Summary:</strong> ${summary || '<em>No summary</em>'}<br>
-          <strong>Comprehensibility:</strong> ${comp || '<em>No explanation</em>'}
-        </div>
-      `;
-    }
-  });
-
-  if (!foundAny) container.innerHTML = '<em>No data found.</em>';
-    }
-
-    function renderPhase2() {
-      const data = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
-      const container = document.getElementById('phase2');
-      if (!data || Object.keys(data).length === 0) {
-        container.innerHTML = '<em>No data found.</em>';
-        return;
-      }
-      Object.entries(data).forEach(([rank, ids]) => {
-        container.innerHTML += `<p><strong>Position ${rank}:</strong> ${ids.map(id => id.replace('snippet-', '')).join(', ')}</p>`;
-      });
-    }
-
-    function renderPhase3() {
-      const data = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
-      const container = document.getElementById('phase3');
-      if (!data || Object.keys(data).length === 0) {
-        container.innerHTML = '<em>No data found.</em>';
-        return;
-      }
-      Object.entries(data).forEach(([key, answer], i) => {
-        container.innerHTML += `<p><strong>Q${i + 1}:</strong> ${answer}</p>`;
-      });
-    }
-
-    function submitAll() {
-      const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
-      const username = localStorage.getItem('username') || 'anonymous';
-
-      // Phase 1
-      const phase1 = {};
-      for (let i = 1; i <= 8; i++) {
-        const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
-        const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
-        phase1[`snippet${i}`] = { summary, comprehensibility: comp };
-      }
-
-      // Phase 2 & 3
-      const phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
-      const phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
-
-      const flags = {
-        phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
-        phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
-        phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
-        codeTheme: localStorage.getItem('codeTheme') || 'light',
-        submitted: '1' // final submission flag
-      };
-
-      const payload = {
-        username,
-        participantName: name,
-        phase1,
-        phase2,
-        phase3,
-        ...flags
-      };
-
-      console.log("🚀 Submitting FINAL payload via Beacon:", payload);
-
-      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-      const success = navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
-
-      if (success) {
-        showSubmissionModal('✅ Submission successful!\n\nWe will notify you about the possible next steps. \n\nYou can still resubmit your responses before the deadline if needed.');
-      } else {
-        showValidationMessage('❌ Submission failed. Beacon transmission failed.');
-      }
-    }
-
-
-    renderPhase1();
-    renderPhase2();
-    renderPhase3();
-  </script>
-
-  <script>
-    window.onload = () => {
-      displayUserName();
-      if (sessionStorage.getItem('phase1Complete') === 'true') {
-        document.getElementById('link-phase2')?.classList.remove('disabled');
-      }
-      if (sessionStorage.getItem('phase2Complete') === 'true') {
-        document.getElementById('link-phase3')?.classList.remove('disabled');
-      }
-      if (sessionStorage.getItem('phase3Complete') === 'true') {
-        document.getElementById('link-review')?.classList.remove('disabled');
-      }
-
-      // Mark current phase active
-      document.getElementById('link-review')?.classList.add('active');
-
-      setInterval(() => {
-        try {
-          saveToServer();
-          console.log("[Auto-Save] Progress saved to server.");
-        } catch (e) {
-          console.warn("[Auto-Save] Failed to save:", e);
-        }
-      }, 120000); // every 2 minutes
-    };
-  </script>
-
 <script>
   const originalSnippets = [
     {
@@ -624,6 +496,135 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   console.log("Applied snippet order:", snippets.map(s => s.title));
 
 </script>
+
+  <script>
+    function renderPhase1() {
+  const container = document.getElementById('phase1');
+  container.innerHTML = '';
+  let foundAny = false;
+
+  snippets.forEach(snippet => {
+    const i = snippet.id; // still used for storage keys
+    const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
+    const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
+
+    if (summary || comp) {
+      foundAny = true;
+      container.innerHTML += `
+        <div style="margin-bottom: 15px;">
+          <strong>${snippet.methodName}</strong><br>
+          <strong>Summary:</strong> ${summary || '<em>No summary</em>'}<br>
+          <strong>Comprehensibility:</strong> ${comp || '<em>No explanation</em>'}
+        </div>
+      `;
+    }
+  });
+
+  if (!foundAny) container.innerHTML = '<em>No data found.</em>';
+    }
+
+    function renderPhase2() {
+      const data = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
+      const container = document.getElementById('phase2');
+      if (!data || Object.keys(data).length === 0) {
+        container.innerHTML = '<em>No data found.</em>';
+        return;
+      }
+      Object.entries(data).forEach(([rank, ids]) => {
+        container.innerHTML += `<p><strong>Position ${rank}:</strong> ${ids.map(id => id.replace('snippet-', '')).join(', ')}</p>`;
+      });
+    }
+
+    function renderPhase3() {
+      const data = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
+      const container = document.getElementById('phase3');
+      if (!data || Object.keys(data).length === 0) {
+        container.innerHTML = '<em>No data found.</em>';
+        return;
+      }
+      Object.entries(data).forEach(([key, answer], i) => {
+        container.innerHTML += `<p><strong>Q${i + 1}:</strong> ${answer}</p>`;
+      });
+    }
+
+    function submitAll() {
+      const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
+      const username = localStorage.getItem('username') || 'anonymous';
+
+      // Phase 1
+      const phase1 = {};
+      for (let i = 1; i <= 8; i++) {
+        const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
+        const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
+        phase1[`snippet${i}`] = { summary, comprehensibility: comp };
+      }
+
+      // Phase 2 & 3
+      const phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
+      const phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
+
+      const flags = {
+        phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
+        phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
+        phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
+        codeTheme: localStorage.getItem('codeTheme') || 'light',
+        submitted: '1' // final submission flag
+      };
+
+      const payload = {
+        username,
+        participantName: name,
+        phase1,
+        phase2,
+        phase3,
+        ...flags
+      };
+
+      console.log("🚀 Submitting FINAL payload via Beacon:", payload);
+
+      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+      const success = navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+
+      if (success) {
+        showSubmissionModal('✅ Submission successful!\n\nWe will notify you about the possible next steps. \n\nYou can still resubmit your responses before the deadline if needed.');
+      } else {
+        showValidationMessage('❌ Submission failed. Beacon transmission failed.');
+      }
+    }
+
+
+    renderPhase1();
+    renderPhase2();
+    renderPhase3();
+  </script>
+
+  <script>
+    window.onload = () => {
+      displayUserName();
+      if (sessionStorage.getItem('phase1Complete') === 'true') {
+        document.getElementById('link-phase2')?.classList.remove('disabled');
+      }
+      if (sessionStorage.getItem('phase2Complete') === 'true') {
+        document.getElementById('link-phase3')?.classList.remove('disabled');
+      }
+      if (sessionStorage.getItem('phase3Complete') === 'true') {
+        document.getElementById('link-review')?.classList.remove('disabled');
+      }
+
+      // Mark current phase active
+      document.getElementById('link-review')?.classList.add('active');
+
+      setInterval(() => {
+        try {
+          saveToServer();
+          console.log("[Auto-Save] Progress saved to server.");
+        } catch (e) {
+          console.warn("[Auto-Save] Failed to save:", e);
+        }
+      }, 120000); // every 2 minutes
+    };
+  </script>
+
 
   <script>
     function displayUserName() {
