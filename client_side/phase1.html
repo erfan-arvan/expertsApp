@@ -587,7 +587,7 @@
 
     function loadSnippet(snippetNumber) {
       const snippet = snippets[snippetNumber - 1];
-      document.getElementById("snippet-title").innerText = snippet.title;
+      document.getElementById("snippet-title").innerText = snippet.methodName;
       const codeLines = snippet.code.trim().split("\n");
       document.getElementById("code-content").innerHTML =
         codeLines.join("\n");
