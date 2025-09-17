@@ -246,31 +246,28 @@
 
   <script>
     function renderPhase1() {
-      const container = document.getElementById('phase1');
-      let foundAny = false;
+  const container = document.getElementById('phase1');
+  container.innerHTML = '';
+  let foundAny = false;
 
-      for (let i = 1; i <= 8; i++) {
-        const summaryKey = `summary${i}`;
-        const compKey = `compSummary${i}`;
+  snippets.forEach(snippet => {
+    const i = snippet.id; // still used for storage keys
+    const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
+    const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
 
-        const summary = sessionStorage.getItem(summaryKey) || localStorage.getItem(summaryKey) || '';
-        const comp = sessionStorage.getItem(compKey) || localStorage.getItem(compKey) || '';
+    if (summary || comp) {
+      foundAny = true;
+      container.innerHTML += `
+        <div style="margin-bottom: 15px;">
+          <strong>${snippet.methodName}</strong><br>
+          <strong>Summary:</strong> ${summary || '<em>No summary</em>'}<br>
+          <strong>Comprehensibility:</strong> ${comp || '<em>No explanation</em>'}
+        </div>
+      `;
+    }
+  });
 
-        if (summary || comp) {
-          foundAny = true;
-          container.innerHTML += `
-            <div style="margin-bottom: 15px;">
-              <strong>Snippet ${i}</strong><br>
-              <strong>Summary:</strong> ${summary || '<em>No summary</em>'}<br>
-              <strong>Comprehensibility:</strong> ${comp || '<em>No explanation</em>'}
-            </div>
-          `;
-        }
-      }
-
-      if (!foundAny) {
-        container.innerHTML = '<em>No data found.</em>';
-      }
+  if (!foundAny) container.innerHTML = '<em>No data found.</em>';
     }
 
     function renderPhase2() {
