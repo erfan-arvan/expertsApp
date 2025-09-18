@@ -1167,6 +1167,57 @@ private void runRound4Renderer() {
     }
 }
 
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/get_latest_round4")
+public Map<String, Object> getLatestRound4Submission(@RequestBody Map<String, String> request) {
+    String username = request.getOrDefault("username", "anonymous");
+    File file = new File("submissions/round4/round4_all.json");
+    ObjectMapper mapper = new ObjectMapper();
+
+    try {
+        if (!file.exists()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Round 4 submissions found.");
+        }
+
+        Map<String, List<Map<String, Object>>> allData = mapper.readValue(file, new TypeReference<>() {});
+        List<Map<String, Object>> userSubs = allData.get(username);
+        if (userSubs == null || userSubs.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Round 4 submission for user.");
+        }
+
+        // Return only the raw payload like in previous rounds
+        return (Map<String, Object>) userSubs.get(userSubs.size() - 1).get("data");
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read Round 4 submission.");
+    }
+}
+
+
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/get_latest_round4_final")
+public Map<String, Object> getLatestRound4Final(@RequestBody Map<String, String> request) {
+    String username = request.getOrDefault("username", "anonymous");
+    File file = new File("submissions/round4/round4_final.json");
+    ObjectMapper mapper = new ObjectMapper();
+
+    try {
+        if (!file.exists()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No final Round 4 submissions found.");
+        }
+
+        Map<String, List<Map<String, Object>>> finalData = mapper.readValue(file, new TypeReference<>() {});
+        List<Map<String, Object>> userSubs = finalData.get(username);
+        if (userSubs == null || userSubs.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No final Round 4 submission for user.");
+        }
+
+        return (Map<String, Object>) userSubs.get(userSubs.size() - 1).get("data");
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read final Round 4 submission.");
+    }
+}
 
 
 }
