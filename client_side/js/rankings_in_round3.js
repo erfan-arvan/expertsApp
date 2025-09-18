@@ -19,7 +19,7 @@ const participantRankings = [
 
     <!-- Rank 1 -->
     <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-1" onclick="show_snippet(1)">${firstChars("isValidProjectName", 10)}..</button>
+      <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
 
       <!-- Comparison: 1 vs 2 -->
       <div class="reasoning-point" onclick="compare([1], [2])" style="position: absolute; top: 10px; right: -12px;"></div>

@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Round 2 — Expert Rankings & Reasonings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --card: #f9fafb;
+      --border: #e5e7eb;
+      --accent: #2563eb;
+      --reason: #10b981;
+    }
+    body {
+      margin: 0; padding: 24px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg); color: var(--text);
+    }
+    h1 { margin: 0 0 16px 0; font-size: 22px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .legend {
+      font-size: 13px; color: var(--muted); margin-bottom: 18px;
+    }
+
+    .participant-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .participant-section > strong {
+      display: inline-block;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .ranking-labels {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .ranking-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .ranking-row {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+    }
+    .ranking-slot {
+      min-height: 96px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: flex-start;
+    }
+    .ranking-slot button {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .ranking-slot button:hover {
+      border-color: var(--accent);
+    }
+
+    .reasoning-point {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--reason);
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+      cursor: pointer;
+      z-index: 2;
+    }
+    .tooltip-box {
+      position: absolute;
+      background: #111827;
+      color: #fff;
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      max-width: 260px;
+      display: none;
+      z-index: 3;
+    }
+    /* Show tooltip when hovering the dot */
+    .reasoning-point:hover + .tooltip-box {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Round 2 — Expert Rankings & Reasonings</h1>
+    <div class="legend">Click the green dots to see the expert's reasoning. Buttons call <code>show_snippet(n)</code>. Comparison dots call <code>compare([..],[..])</code>.</div>
+
+    
+  <div class="participant-section">
+    <strong>Martin Kellogg</strong>
+    <div class="ranking-labels">
+      <div class="ranking-label">1 (easiest)</div>
+    <div class="ranking-label">2</div>
+    <div class="ranking-label">3</div>
+    <div class="ranking-label">4</div>
+    <div class="ranking-label">5</div>
+    <div class="ranking-label">6</div>
+    <div class="ranking-label">7</div>
+    <div class="ranking-label">8 (hardest)</div>
+    </div>
+    <div class="ranking-row">
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+        <div class="reasoning-point" onclick="compare([1],[2])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">isRemote involves a little more domain knowledge.</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
+        <div class="reasoning-point" onclick="compare([2],[4,7,5])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">These three snippets each involve a method with a clear specification but a complicated implementation. Snippet 2 has both a clear spec and a clear impl.</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
+<button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
+<button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
+        <div class="reasoning-point" onclick="compare([4],[7,5])" style="position: absolute; top: -7px; right: 50px;"></div>
+        <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>Each implements a moderately complex operation that&#x27;s easy to specify but involves getting a bunch of details right.</div>
+        <div class="reasoning-point" onclick="compare([4,7,5],[3])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">Reflection.</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
+        <div class="reasoning-point" onclick="compare([3],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">encodedLength requires domain knowledge of encodings. isMachineTypeDefined&#x27;s semantics can at least be understood without any background, though its purpose remains mysterious.</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
+        <div class="reasoning-point" onclick="compare([6],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">Both require line-by-line reasoning, but `atan2` requires _two_ kinds of domain-specific knowledge (numerical methods + trig) vs just one for `encodedLength` (encodings).</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="participant-section">
+    <strong>De Silva, Nadeeshan</strong>
+    <div class="ranking-labels">
+      <div class="ranking-label">1 (easiest)</div>
+    <div class="ranking-label">2</div>
+    <div class="ranking-label">3</div>
+    <div class="ranking-label">4</div>
+    <div class="ranking-label">5</div>
+    <div class="ranking-label">6</div>
+    <div class="ranking-label">7</div>
+    <div class="ranking-label">8 (hardest)</div>
+    </div>
+    <div class="ranking-row">
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+        <div class="reasoning-point" onclick="compare([1],[2])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">Snippet 1 has straightforward logic; snippet 2&#x27;s URI logic is kinda unclear - (does it handle remote file location or local?)</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
+        <div class="reasoning-point" onclick="compare([2],[7,4])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">Snippet 2 is way shorter than snippet 4, and the logic is much clearer.  Snippet 7 is easier when you have common mathematics knowledge to solve quadratic equations.</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
+<button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
+        <div class="reasoning-point" onclick="compare([7],[4])" style="position: absolute; top: -7px; right: 50px;"></div>
+        <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>Since Snippet 7 requires recalling the solution to a quadratic formula -- which I do know now, and Snippet 4 is straightforward when read from top to bottom, I believe the ranking is appropriate.</div>
+        <div class="reasoning-point" onclick="compare([7,4],[5])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">Snippet 5 uses the Visitor design pattern (which I&#x27;m not very familiar with) and relies on domain knowledge of the Java file visiting API.</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
+        <div class="reasoning-point" onclick="compare([5],[3])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">Since snippet 3 uses Java reflection.</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
+        <div class="reasoning-point" onclick="compare([3],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">Since Snippet 6 requires knowledge of UTF-8 to UTF-16 conversion, it assumes some familiarity with character encoding concepts.</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
+        <div class="reasoning-point" onclick="compare([6],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">Snippet 8 require special domain knowledge--how atan works specifically</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="participant-section">
+    <strong>Erfan Arvan</strong>
+    <div class="ranking-labels">
+      <div class="ranking-label">1 (easiest)</div>
+    <div class="ranking-label">2</div>
+    <div class="ranking-label">3</div>
+    <div class="ranking-label">4</div>
+    <div class="ranking-label">5</div>
+    <div class="ranking-label">6</div>
+    <div class="ranking-label">7</div>
+    <div class="ranking-label">8 (hardest)</div>
+    </div>
+    <div class="ranking-row">
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
+        <div class="reasoning-point" onclick="compare([2],[1])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">s</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+        <div class="reasoning-point" onclick="compare([1],[7,4])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">xnxn</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
+<button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
+        <div class="reasoning-point" onclick="compare([7],[4])" style="position: absolute; top: -7px; right: 50px;"></div>
+        <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>xnxnn</div>
+        <div class="reasoning-point" onclick="compare([7,4],[5])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">x</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
+        <div class="reasoning-point" onclick="compare([5],[3])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">c</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
+        <div class="reasoning-point" onclick="compare([3],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">c</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
+        <div class="reasoning-point" onclick="compare([6],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">s</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="participant-section">
+    <strong>Oscar Chaparro</strong>
+    <div class="ranking-labels">
+      <div class="ranking-label">1 (easiest)</div>
+    <div class="ranking-label">2</div>
+    <div class="ranking-label">3</div>
+    <div class="ranking-label">4</div>
+    <div class="ranking-label">5</div>
+    <div class="ranking-label">6</div>
+    <div class="ranking-label">7</div>
+    <div class="ranking-label">8 (hardest)</div>
+    </div>
+    <div class="ranking-row">
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+        <div class="reasoning-point" onclick="compare([1],[3,5])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">Those in position 2 use more complex implementation patterns than the one in position 1, still, all three are pretty easy to understand to me.</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
+<button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
+        <div class="reasoning-point" onclick="compare([3],[5])" style="position: absolute; top: -7px; right: 50px;"></div>
+        <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>Similar logic and patterns are used to implement their functionality. Hard to distinguish them for me.</div>
+        <div class="reasoning-point" onclick="compare([3,5],[7])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">Here low domain knowledge proficiency would make snippet 7 more difficult to understand. But actually, the logic is pretty simple in snippet 7. If we don&#x27;t factor in the domain knowledge, I would put snippet 7 before snippets 3 and 5.</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
+        <div class="reasoning-point" onclick="compare([7],[2])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">The reason a ranked snippet 2 after snippet 7 is that I am not familiar with an URI&#x27;s scheme and why implementing that logic (in snippet 2) is enough to check if it is remote. Snippet 7 is straightforward to understand if we remember/know the quadratic formula.</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
+        <div class="reasoning-point" onclick="compare([2],[4])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">While there is missing context in both snippets required to help me understand the snippets, I think snippet 4 implements more complex logic.</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
+        <div class="reasoning-point" onclick="compare([4],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">Snippet 6 is harder to understand for me because I don&#x27;t know what the bit shifts are doing to check or determine the sequence length in UT8. Snippet 4 is easier to understand, despite it is unclear what regionMatches is doing -- overall, I understand what the method is doing.</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
+        <div class="reasoning-point" onclick="compare([6],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">atan2 is just very hard to understand because I don&#x27;t remember how arctan&#x27;s math works.</div>
+      </div>
+
+      <div class="ranking-slot" style="position: relative;">
+      <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <script>
+    // Stubs so the page doesn't error — wire these to your real UI.
+    function show_snippet(n) {
+      console.log("show_snippet", n);
+    }
+    function compare(leftIds, rightIds) {
+      console.log("compare", leftIds, rightIds);
+    }
+  </script>
+</body>
+</html>
