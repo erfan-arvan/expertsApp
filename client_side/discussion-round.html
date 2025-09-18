@@ -542,7 +542,7 @@ to complete this round is approximately <strong>50 minutes</strong>.
     return Promise.reject("No username");
   }
 
-  return fetch('https://codecomprehensibility.site/get_latest_round3', {
+  return fetch('https://codecomprehensibility.site/get_latest_round4', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username })
@@ -588,9 +588,9 @@ to complete this round is approximately <strong>50 minutes</strong>.
       localStorage.setItem('snippetOrder', order);
     }
 
-    // Restore round3 responses
+    // Restore round4 responses
     for (let i = 0; i <= 4; i++) {
-      const key = `round3_response_${i}`;
+      const key = `round4_response_${i}`;
       if (data[key]) {
         const stringified = typeof data[key] === 'string' ? data[key] : JSON.stringify(data[key]);
         sessionStorage.setItem(key, stringified);
@@ -598,9 +598,9 @@ to complete this round is approximately <strong>50 minutes</strong>.
       }
     }
 
-    // Restore round3 phase completion flags
+    // Restore round4 phase completion flags
     for (let i = 1; i <= 5; i++) {
-      const key = `round3-phase${i}-complete`;
+      const key = `round4-phase${i}-complete`;
       if (key in data) {
         sessionStorage.setItem(key, data[key]);
         localStorage.setItem(key, data[key]);
