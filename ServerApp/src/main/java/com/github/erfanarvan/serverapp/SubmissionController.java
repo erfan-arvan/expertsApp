@@ -1051,6 +1051,122 @@ public synchronized Map<String, Object> setLastSeenDisagreement(@RequestBody Map
     }
 }
 
+private static final String R4_RENDER_IN  = "/home/ubuntu/expertsApp/ServerApp/submissions/round4/round4_final_transfered.json";
+private static final String R4_RENDER_OUT = "/home/ubuntu/expertsApp/ServerApp/client_side/live-ranking.html";
+private static final String R4_TOHTML     = "/home/ubuntu/scripts/tohtml.py";
+
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/submit_round4")
+public synchronized String handleRound4Submission(@RequestBody Map<String, Object> body) {
+    String username = (String) body.getOrDefault("username", "anonymous");
+    String timestamp = ZonedDateTime.now(ZoneId.of("America/New_York"))
+                                    .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+    boolean isFinal = "1".equals(String.valueOf(body.get("submitted")));
+
+    System.out.println(">>> [submit_round4] Submission received from: " + username);
+
+    File directory = new File("submissions/round4");
+    if (!directory.exists()) {
+        directory.mkdirs();
+        System.out.println(">>> Created 'submissions/round4' directory.");
+    }
+
+    File allFile = new File(directory, "round4_all.json");
+    File finalFile = new File(directory, "round4_final.json");
+
+    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
+    try {
+        Map<String, Object> wrapped = new HashMap<>();
+        wrapped.put("timestamp", timestamp);
+        wrapped.put("isFinal", isFinal);
+        wrapped.put("data", body);
+
+        Map<String, List<Map<String, Object>>> allData = allFile.exists()
+            ? mapper.readValue(allFile, new TypeReference<>() {})
+            : new HashMap<>();
+        allData.computeIfAbsent(username, k -> new ArrayList<>()).add(wrapped);
+        mapper.writeValue(allFile, allData);
+        System.out.println(">>> Saved to round4_all.json");
+
+        if (isFinal) {
+            Map<String, List<Map<String, Object>>> finalData = finalFile.exists()
+                ? mapper.readValue(finalFile, new TypeReference<>() {})
+                : new HashMap<>();
+            finalData.computeIfAbsent(username, k -> new ArrayList<>()).add(wrapped);
+            mapper.writeValue(finalFile, finalData);
+            System.out.println(">>> Saved to round4_final.json");
+        }
+
+        // ⬇️ Always attempt to run the HTML renderer after each submission (final or not)
+        //     This is non-fatal: any error is logged but won't break the submission API.
+        runRound4Renderer();
+
+        return "Round 4 submission saved.";
+    } catch (IOException e) {
+        System.err.println(">>> ERROR saving round4 submission for: " + username);
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save round4 submission.");
+    }
+}
+
+/** Runs: python3 /home/ubuntu/scripts/tohtml.py --in R4_RENDER_IN --out R4_RENDER_OUT
+ *  Non-fatal: logs errors and returns. 180s timeout, stdout+stderr captured to logs.
+ */
+private void runRound4Renderer() {
+    try {
+        File inFile = new File(R4_RENDER_IN);
+        if (!inFile.exists()) {
+            System.err.println(">>> [render_round4_html] Skip: Input not found: " + R4_RENDER_IN);
+            return;
+        }
+        // Ensure output dir exists
+        File outFile = new File(R4_RENDER_OUT);
+        File outDir = outFile.getParentFile();
+        if (outDir != null && !outDir.exists()) {
+            outDir.mkdirs();
+        }
+
+        List<String> cmd = List.of(
+            "python3", R4_TOHTML,
+            "--in", R4_RENDER_IN,
+            "--out", R4_RENDER_OUT
+        );
+        System.out.println(">>> [render_round4_html] Running: " + String.join(" ", cmd));
+
+        ProcessBuilder pb = new ProcessBuilder(cmd);
+        pb.redirectErrorStream(true);
+
+        Process p = pb.start();
+        StringBuilder output = new StringBuilder();
+        try (java.util.Scanner sc = new java.util.Scanner(p.getInputStream())) {
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                output.append(line).append("\n");
+                System.out.println(">>> tohtml.py: " + line);
+            }
+        }
+
+        boolean finished = p.waitFor(180, java.util.concurrent.TimeUnit.SECONDS);
+        if (!finished) {
+            p.destroyForcibly();
+            System.err.println(">>> [render_round4_html] Timed out after 180s");
+            return;
+        }
+
+        int exit = p.exitValue();
+        if (exit != 0) {
+            System.err.println(">>> [render_round4_html] Non-zero exit (" + exit + "). Output:\n" + output);
+        } else {
+            System.out.println(">>> [render_round4_html] OK. Output written to: " + R4_RENDER_OUT);
+        }
+    } catch (Exception e) {
+        System.err.println(">>> [render_round4_html] Failed to run renderer: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
+
 
 
 }
