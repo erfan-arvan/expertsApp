@@ -124,15 +124,15 @@
     </div>
     <div class="ranking-row">
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+      <button class="snippet-1" onclick="show_snippet(1)">isValidProjectName</button>
         <div class="reasoning-point" onclick="compare([1],[2])" style="position: absolute; top: 10px; right: -12px;"></div>
         <div class="tooltip-box" style="top: 35px; right: -160px;">isRemote involves a little more domain knowledge.</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
+      <button class="snippet-2" onclick="show_snippet(2)">isRemote</button>
         <div class="reasoning-point" onclick="compare([2],[4,7,5])" style="position: absolute; top: 10px; right: -12px;"></div>
-        <div class="tooltip-box" style="top: 35px; right: -160px;">These three snippets each involve a method with a clear specification but a complicated implementation. Snippet 2 has both a clear spec and a clear impl.</div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">These three snippets each involve a method with a clear specification but a complicated implementation. isRemote has both a clear spec and a clear impl.</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
@@ -140,9 +140,9 @@
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
-<button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
-<button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
+      <button class="snippet-4" onclick="show_snippet(4)">indexOfIgnoreCase</button>
+<button class="snippet-7" onclick="show_snippet(7)">lowestPositiveRoot</button>
+<button class="snippet-5" onclick="show_snippet(5)">deleteRecursively</button>
         <div class="reasoning-point" onclick="compare([4],[7,5])" style="position: absolute; top: -7px; right: 50px;"></div>
         <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>Each implements a moderately complex operation that&#x27;s easy to specify but involves getting a bunch of details right.</div>
         <div class="reasoning-point" onclick="compare([4,7,5],[3])" style="position: absolute; top: 10px; right: -12px;"></div>
@@ -150,7 +150,7 @@
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
+      <button class="snippet-3" onclick="show_snippet(3)">isMachineTypeDefined</button>
         <div class="reasoning-point" onclick="compare([3],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
         <div class="tooltip-box" style="top: 35px; right: -160px;">encodedLength requires domain knowledge of encodings. isMachineTypeDefined&#x27;s semantics can at least be understood without any background, though its purpose remains mysterious.</div>
       </div>
@@ -160,13 +160,13 @@
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
+      <button class="snippet-6" onclick="show_snippet(6)">encodedLength</button>
         <div class="reasoning-point" onclick="compare([6],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
         <div class="tooltip-box" style="top: 35px; right: -160px;">Both require line-by-line reasoning, but `atan2` requires _two_ kinds of domain-specific knowledge (numerical methods + trig) vs just one for `encodedLength` (encodings).</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
+      <button class="snippet-8" onclick="show_snippet(8)">atan2</button>
       </div>
     </div>
   </div>
@@ -186,24 +186,24 @@
     </div>
     <div class="ranking-row">
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+      <button class="snippet-1" onclick="show_snippet(1)">isValidProjectName</button>
         <div class="reasoning-point" onclick="compare([1],[2])" style="position: absolute; top: 10px; right: -12px;"></div>
-        <div class="tooltip-box" style="top: 35px; right: -160px;">Snippet 1 has straightforward logic; snippet 2&#x27;s URI logic is kinda unclear - (does it handle remote file location or local?)</div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">isValidProjectName has straightforward logic; isRemote&#x27;s URI logic is kinda unclear - (does it handle remote file location or local?)</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
+      <button class="snippet-2" onclick="show_snippet(2)">isRemote</button>
         <div class="reasoning-point" onclick="compare([2],[7,4])" style="position: absolute; top: 10px; right: -12px;"></div>
-        <div class="tooltip-box" style="top: 35px; right: -160px;">Snippet 2 is way shorter than snippet 4, and the logic is much clearer.  Snippet 7 is easier when you have common mathematics knowledge to solve quadratic equations.</div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">isRemote is way shorter than indexOfIgnoreCase, and the logic is much clearer.  lowestPositiveRoot is easier when you have common mathematics knowledge to solve quadratic equations.</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
-<button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
+      <button class="snippet-4" onclick="show_snippet(4)">indexOfIgnoreCase</button>
+<button class="snippet-7" onclick="show_snippet(7)">lowestPositiveRoot</button>
         <div class="reasoning-point" onclick="compare([7],[4])" style="position: absolute; top: -7px; right: 50px;"></div>
-        <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>Since Snippet 7 requires recalling the solution to a quadratic formula -- which I do know now, and Snippet 4 is straightforward when read from top to bottom, I believe the ranking is appropriate.</div>
+        <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>Since lowestPositiveRoot requires recalling the solution to a quadratic formula -- which I do know now, and indexOfIgnoreCase is straightforward when read from top to bottom, I believe the ranking is appropriate.</div>
         <div class="reasoning-point" onclick="compare([7,4],[5])" style="position: absolute; top: 10px; right: -12px;"></div>
-        <div class="tooltip-box" style="top: 35px; right: -160px;">Snippet 5 uses the Visitor design pattern (which I&#x27;m not very familiar with) and relies on domain knowledge of the Java file visiting API.</div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">deleteRecursively uses the Visitor design pattern (which I&#x27;m not very familiar with) and relies on domain knowledge of the Java file visiting API.</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
@@ -211,25 +211,25 @@
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
+      <button class="snippet-5" onclick="show_snippet(5)">deleteRecursively</button>
         <div class="reasoning-point" onclick="compare([5],[3])" style="position: absolute; top: 10px; right: -12px;"></div>
-        <div class="tooltip-box" style="top: 35px; right: -160px;">Since snippet 3 uses Java reflection.</div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">Since isMachineTypeDefined uses Java reflection.</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
+      <button class="snippet-3" onclick="show_snippet(3)">isMachineTypeDefined</button>
         <div class="reasoning-point" onclick="compare([3],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
-        <div class="tooltip-box" style="top: 35px; right: -160px;">Since Snippet 6 requires knowledge of UTF-8 to UTF-16 conversion, it assumes some familiarity with character encoding concepts.</div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">Since encodedLength requires knowledge of UTF-8 to UTF-16 conversion, it assumes some familiarity with character encoding concepts.</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
+      <button class="snippet-6" onclick="show_snippet(6)">encodedLength</button>
         <div class="reasoning-point" onclick="compare([6],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
-        <div class="tooltip-box" style="top: 35px; right: -160px;">Snippet 8 require special domain knowledge--how atan works specifically</div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">atan2 require special domain knowledge--how atan works specifically</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
+      <button class="snippet-8" onclick="show_snippet(8)">atan2</button>
       </div>
     </div>
   </div>
@@ -249,20 +249,20 @@
     </div>
     <div class="ranking-row">
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
+      <button class="snippet-2" onclick="show_snippet(2)">isRemote</button>
         <div class="reasoning-point" onclick="compare([2],[1])" style="position: absolute; top: 10px; right: -12px;"></div>
         <div class="tooltip-box" style="top: 35px; right: -160px;">s</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+      <button class="snippet-1" onclick="show_snippet(1)">isValidProjectName</button>
         <div class="reasoning-point" onclick="compare([1],[7,4])" style="position: absolute; top: 10px; right: -12px;"></div>
         <div class="tooltip-box" style="top: 35px; right: -160px;">xnxn</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
-<button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
+      <button class="snippet-7" onclick="show_snippet(7)">lowestPositiveRoot</button>
+<button class="snippet-4" onclick="show_snippet(4)">indexOfIgnoreCase</button>
         <div class="reasoning-point" onclick="compare([7],[4])" style="position: absolute; top: -7px; right: 50px;"></div>
         <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>xnxnn</div>
         <div class="reasoning-point" onclick="compare([7,4],[5])" style="position: absolute; top: 10px; right: -12px;"></div>
@@ -270,13 +270,13 @@
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
+      <button class="snippet-5" onclick="show_snippet(5)">deleteRecursively</button>
         <div class="reasoning-point" onclick="compare([5],[3])" style="position: absolute; top: 10px; right: -12px;"></div>
         <div class="tooltip-box" style="top: 35px; right: -160px;">c</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
+      <button class="snippet-3" onclick="show_snippet(3)">isMachineTypeDefined</button>
         <div class="reasoning-point" onclick="compare([3],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
         <div class="tooltip-box" style="top: 35px; right: -160px;">c</div>
       </div>
@@ -286,13 +286,13 @@
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
+      <button class="snippet-6" onclick="show_snippet(6)">encodedLength</button>
         <div class="reasoning-point" onclick="compare([6],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
         <div class="tooltip-box" style="top: 35px; right: -160px;">s</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
+      <button class="snippet-8" onclick="show_snippet(8)">atan2</button>
       </div>
     </div>
   </div>
@@ -312,30 +312,30 @@
     </div>
     <div class="ranking-row">
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-1" onclick="show_snippet(1)">Snippet 1</button>
+      <button class="snippet-1" onclick="show_snippet(1)">isValidProjectName</button>
         <div class="reasoning-point" onclick="compare([1],[3,5])" style="position: absolute; top: 10px; right: -12px;"></div>
         <div class="tooltip-box" style="top: 35px; right: -160px;">Those in position 2 use more complex implementation patterns than the one in position 1, still, all three are pretty easy to understand to me.</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-5" onclick="show_snippet(5)">Snippet 5</button>
-<button class="snippet-3" onclick="show_snippet(3)">Snippet 3</button>
+      <button class="snippet-5" onclick="show_snippet(5)">deleteRecursively</button>
+<button class="snippet-3" onclick="show_snippet(3)">isMachineTypeDefined</button>
         <div class="reasoning-point" onclick="compare([3],[5])" style="position: absolute; top: -7px; right: 50px;"></div>
         <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>Similar logic and patterns are used to implement their functionality. Hard to distinguish them for me.</div>
         <div class="reasoning-point" onclick="compare([3,5],[7])" style="position: absolute; top: 10px; right: -12px;"></div>
-        <div class="tooltip-box" style="top: 35px; right: -160px;">Here low domain knowledge proficiency would make snippet 7 more difficult to understand. But actually, the logic is pretty simple in snippet 7. If we don&#x27;t factor in the domain knowledge, I would put snippet 7 before snippets 3 and 5.</div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">Here low domain knowledge proficiency would make lowestPositiveRoot more difficult to understand. But actually, the logic is pretty simple in lowestPositiveRoot. If we don&#x27;t factor in the domain knowledge, I would put lowestPositiveRoot before snippets 3 and 5.</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-7" onclick="show_snippet(7)">Snippet 7</button>
+      <button class="snippet-7" onclick="show_snippet(7)">lowestPositiveRoot</button>
         <div class="reasoning-point" onclick="compare([7],[2])" style="position: absolute; top: 10px; right: -12px;"></div>
-        <div class="tooltip-box" style="top: 35px; right: -160px;">The reason a ranked snippet 2 after snippet 7 is that I am not familiar with an URI&#x27;s scheme and why implementing that logic (in snippet 2) is enough to check if it is remote. Snippet 7 is straightforward to understand if we remember/know the quadratic formula.</div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">The reason a ranked isRemote after lowestPositiveRoot is that I am not familiar with an URI&#x27;s scheme and why implementing that logic (in isRemote) is enough to check if it is remote. lowestPositiveRoot is straightforward to understand if we remember/know the quadratic formula.</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-2" onclick="show_snippet(2)">Snippet 2</button>
+      <button class="snippet-2" onclick="show_snippet(2)">isRemote</button>
         <div class="reasoning-point" onclick="compare([2],[4])" style="position: absolute; top: 10px; right: -12px;"></div>
-        <div class="tooltip-box" style="top: 35px; right: -160px;">While there is missing context in both snippets required to help me understand the snippets, I think snippet 4 implements more complex logic.</div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">While there is missing context in both snippets required to help me understand the snippets, I think indexOfIgnoreCase implements more complex logic.</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
@@ -343,19 +343,19 @@
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-4" onclick="show_snippet(4)">Snippet 4</button>
+      <button class="snippet-4" onclick="show_snippet(4)">indexOfIgnoreCase</button>
         <div class="reasoning-point" onclick="compare([4],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
-        <div class="tooltip-box" style="top: 35px; right: -160px;">Snippet 6 is harder to understand for me because I don&#x27;t know what the bit shifts are doing to check or determine the sequence length in UT8. Snippet 4 is easier to understand, despite it is unclear what regionMatches is doing -- overall, I understand what the method is doing.</div>
+        <div class="tooltip-box" style="top: 35px; right: -160px;">encodedLength is harder to understand for me because I don&#x27;t know what the bit shifts are doing to check or determine the sequence length in UT8. indexOfIgnoreCase is easier to understand, despite it is unclear what regionMatches is doing -- overall, I understand what the method is doing.</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-6" onclick="show_snippet(6)">Snippet 6</button>
+      <button class="snippet-6" onclick="show_snippet(6)">encodedLength</button>
         <div class="reasoning-point" onclick="compare([6],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
         <div class="tooltip-box" style="top: 35px; right: -160px;">atan2 is just very hard to understand because I don&#x27;t remember how arctan&#x27;s math works.</div>
       </div>
 
       <div class="ranking-slot" style="position: relative;">
-      <button class="snippet-8" onclick="show_snippet(8)">Snippet 8</button>
+      <button class="snippet-8" onclick="show_snippet(8)">atan2</button>
       </div>
     </div>
   </div>
