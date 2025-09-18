@@ -209,114 +209,118 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 `        
       }
     ];
-  
 
-  function getStoredSnippetOrder() {
-    const stored = sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder');
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length === 8) return parsed;
-      } catch {}
-    }
-    return null;
+
+function getStoredSnippetOrder() {
+  const stored = sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder');
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length === 8) return parsed;
+    } catch {}
   }
+  return null;
+}
 
-  // Apply the stored snippet order
-  const order = getStoredSnippetOrder();
-  const snippets = [];
+// Apply the stored snippet order
+const order = getStoredSnippetOrder();
+const snippets = [];
 
-  if (order) {
-    order.forEach((index, newId) => {
-      snippet = { ...originalSnippets[index - 1] }; 
-      snippet.id = newId + 1;
-      snippet.title = `Snippet ${newId + 1}`;
-      snippets.push(snippet);
-    });
+if (order) {
+  order.forEach((index, newId) => {
+    const snippet = { ...originalSnippets[index - 1] };
+    snippet.id = newId + 1;
+    snippet.title = `Snippet ${newId + 1}`;
+    snippets.push(snippet);
+  });
+} else {
+  alert("⚠️ Missing snippet order. Please login again.");
+  window.location.href = '/';
+}
+
+console.log("Applied snippet order:", snippets.map(s => s.title));
+
+function openJavadocModal(url) {
+  window.open(url, "_blank");
+}
+
+function show_snippet(id) {
+  const snippet = snippets.find(s => s.id === id);
+  if (!snippet) return;
+
+  document.getElementById('modal-snippet-title').innerText = snippet.title;
+
+  const codeLines = snippet.code.trim().split('\n');
+
+  // Render styled spans
+  document.getElementById('modal-code-content').innerHTML = codeLines.join('\n');
+
+  // Line numbers
+  document.getElementById('modal-line-numbers').innerHTML = codeLines.map((_, i) => i + 1).join('<br>');
+
+  document.getElementById('snippet-modal').style.display = 'block';
+  applyModalTheme();
+}
+
+function toggleModalTheme() {
+  const body = document.body;
+  const isLight = body.classList.contains("light-mode");
+
+  if (isLight) {
+    body.classList.remove("light-mode");
+    body.classList.add("dark-mode");
+    localStorage.setItem("codeTheme", "dark");
+    document.getElementById('modal-theme-toggle').textContent = "Switch to Light Mode";
   } else {
-    alert("⚠️ Missing snippet order. Please login again.");
-    window.location.href = '/';
+    body.classList.remove("dark-mode");
+    body.classList.add("light-mode");
+    localStorage.setItem("codeTheme", "light");
+    document.getElementById('modal-theme-toggle').textContent = "Switch to Dark Mode";
   }
+}
 
-  console.log("Applied snippet order:", snippets.map(s => s.title));
+function applyModalTheme() {
+  const theme = localStorage.getItem('codeTheme') || 'light';
+  document.body.classList.remove('light-mode', 'dark-mode');
+  document.body.classList.add(theme + '-mode');
+  const btn = document.getElementById('modal-theme-toggle');
+  if (btn) {
+    btn.textContent = theme === 'light' ? "Switch to Dark Mode" : "Switch to Light Mode";
+  }
+}
 
-
-
-        function show_snippet(id) {{
-        // id=id-1;
-    const snippet = snippets.find(s => s.id === id);
-    if (!snippet) return;
-
-    document.getElementById('modal-snippet-title').innerText = snippet.title;
-
-    const codeLines = snippet.code.trim().split('\n');
-
-    // ✅ Use innerHTML here to render styled spans correctly
-    document.getElementById('modal-code-content').innerHTML = codeLines.join('\n');
-
-    // ✅ Line numbers are just plain numbers
-    document.getElementById('modal-line-numbers').innerHTML = codeLines.map((_, i) => i + 1).join('<br>');
-
-    document.getElementById('snippet-modal').style.display = 'block';
-
-    applyModalTheme(); // Keep the theme consistent
-    }}
-
-    
-    function toggleModalTheme() {{
-      const body = document.body;
-      const isLight = body.classList.contains("light-mode");
-    
-      if (isLight) {{
-        body.classList.remove("light-mode");
-        body.classList.add("dark-mode");
-        localStorage.setItem("codeTheme", "dark");
-        document.getElementById('modal-theme-toggle').textContent = "Switch to Light Mode";
-      }} else {{
-        body.classList.remove("dark-mode");
-        body.classList.add("light-mode");
-        localStorage.setItem("codeTheme", "light");
-        document.getElementById('modal-theme-toggle').textContent = "Switch to Dark Mode";
-      }}
-    }}
-    
-    function applyModalTheme() {{
-      const theme = localStorage.getItem('codeTheme') || 'light';
-      document.body.classList.remove('light-mode', 'dark-mode');
-      document.body.classList.add(theme + '-mode');
-      document.getElementById('modal-theme-toggle').textContent =
-        theme === 'light' ? "Switch to Dark Mode" : "Switch to Light Mode";
-    }}
-
-          function compare(leftIds, rightIds) {{
+function compare(leftIds, rightIds) {
   const leftContainer = document.getElementById('compare-left');
   const rightContainer = document.getElementById('compare-right');
+  if (!leftContainer || !rightContainer) return;
+
   leftContainer.innerHTML = '';
   rightContainer.innerHTML = '';
 
   const getSnippet = id => snippets.find(s => s.id === id);
 
   // Left side: stacked
-  leftIds.forEach(id => {{
+  leftIds.forEach(id => {
     const snippet = getSnippet(id);
-    if (snippet) {{
+    if (snippet) {
       const box = document.createElement('div');
       box.className = 'snippet-box';
-      box.innerHTML = `<h4>${{snippet.title}}</h4><pre class="code-content">${{snippet.code}}</pre>`;
+      box.innerHTML = `<h4>${snippet.title}</h4><pre class="code-content">${snippet.code}</pre>`;
       leftContainer.appendChild(box);
-    }}
-  }});
+    }
+  });
 
   // Right side: stacked
-  rightIds.forEach(id => {{
+  rightIds.forEach(id => {
     const snippet = getSnippet(id);
-    if (snippet) {{
+    if (snippet) {
       const box = document.createElement('div');
       box.className = 'snippet-box';
-      box.innerHTML = `<h4>${{snippet.title}}</h4><pre class="code-content">${{snippet.code}}</pre>`;
+      box.innerHTML = `<h4>${snippet.title}</h4><pre class="code-content">${snippet.code}</pre>`;
       rightContainer.appendChild(box);
-    }}
-  }});
+    }
+  });
 
-  document.getElementById('compare-modal').style.display = 'block';
-}}
+  const modal = document.getElementById('compare-modal');
+  if (modal) modal.style.display = 'block';
+}
