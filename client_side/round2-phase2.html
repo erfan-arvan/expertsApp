@@ -1062,6 +1062,11 @@ window.addEventListener('scroll', () => {
     }, 120000); // every 2 minutes
   };
 
+  function firstChars(name, count = 5) {
+  if (!name) return "";
+  return name.slice(0, count);
+}
+
   function loadCards() {
     const container = document.getElementById('cards');
     snippets.forEach(snippet => {
@@ -1070,7 +1075,7 @@ window.addEventListener('scroll', () => {
       card.draggable = true;
       card.id = `snippet-${snippet.id}`;
       card.innerHTML = `
-          <strong>${snippet.title}</strong>
+          <strong>${firstChars(snippet.methodName, 10)}..</strong>
           <br><label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
         `;
       card.addEventListener('dragstart', () => card.classList.add('dragging'));
