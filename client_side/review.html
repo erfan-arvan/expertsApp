@@ -523,17 +523,41 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   if (!foundAny) container.innerHTML = '<em>No data found.</em>';
     }
 
-    function renderPhase2() {
-      const data = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
-      const container = document.getElementById('phase2');
-      if (!data || Object.keys(data).length === 0) {
-        container.innerHTML = '<em>No data found.</em>';
-        return;
-      }
-      Object.entries(data).forEach(([rank, ids]) => {
-        container.innerHTML += `<p><strong>Position ${rank}:</strong> ${ids.map(id => id.replace('snippet-', '')).join(', ')}</p>`;
-      });
+    // Build quick lookup: "1" -> snippet object
+const byId = Object.fromEntries(snippets.map(s => [String(s.id), s]));
+
+function renderPhase2() {
+  const data = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
+  const container = document.getElementById('phase2');
+  container.innerHTML = '';
+
+  if (!data || Object.keys(data).length === 0) {
+    container.innerHTML = '<em>No data found.</em>';
+    return;
+  }
+
+  // ensure positions are shown 1..8 in order
+  const positions = Object.keys(data).map(Number).sort((a, b) => a - b);
+
+  positions.forEach(pos => {
+    const ids = data[String(pos)] || [];
+    if (!ids.length) {
+      container.innerHTML += `<p><strong>Position ${pos}:</strong> <em>(none)</em></p>`;
+      return;
     }
+
+    const labels = ids.map(raw => {
+      // raw is like "snippet-7"
+      const num = String(raw).replace(/^snippet-/, '');
+      const s = byId[num];
+      return s ? s.methodName : `Snippet ${num}`;
+    });
+
+    // If multiple, they’re tied at this position
+    container.innerHTML += `<p><strong>Position ${pos}:</strong> ${labels.join(', ')}</p>`;
+  });
+}
+
 
     function renderPhase3() {
       const data = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
