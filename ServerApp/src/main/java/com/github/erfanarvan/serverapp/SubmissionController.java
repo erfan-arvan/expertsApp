@@ -1053,7 +1053,7 @@ public synchronized Map<String, Object> setLastSeenDisagreement(@RequestBody Map
 
 private static final String R4_TRANSFER   = "/home/ubuntu/expertsApp/ServerApp/submissions/round4/transfer4.py";
 private static final String R4_RENDER_IN  = "/home/ubuntu/expertsApp/ServerApp/submissions/round4/round4_final_transfered.json";
-private static final String R4_RENDER_OUT = "/home/ubuntu/expertsApp/client_side/live-ranking.html";
+private static final String R4_RENDER_OUT = "/var/www/html/live-ranking.html";
 private static final String R4_TOHTML     = "/home/ubuntu/scripts/tohtml.py";
 
 
