@@ -1590,38 +1590,61 @@ function renderParticipantRankings() {
 </script>
 
 <script>
-      function compare(leftIds, rightIds) {
+// O(1) lookup: "1" -> snippet object
+const byId = Object.fromEntries(snippets.map(s => [String(s.id), s]));
+
+// Accepts "snippet-7", "7", 7  ->  7
+function normalizeId(token) {
+  if (typeof token === 'string') {
+    const m = token.match(/^snippet-(\d+)$/);
+    if (m) return Number(m[1]);
+    const n = Number(token);
+    if (!Number.isNaN(n)) return n;
+    return null;
+  }
+  if (typeof token === 'number') return token;
+  return null;
+}
+
+function compare(leftIds, rightIds) {
   const leftContainer = document.getElementById('compare-left');
   const rightContainer = document.getElementById('compare-right');
   leftContainer.innerHTML = '';
   rightContainer.innerHTML = '';
 
-  const getSnippet = id => snippets.find(s => s.id === id);
+  const makeBox = (snippet) => {
+    const box = document.createElement('div');
+    box.className = 'snippet-box';
+    box.innerHTML = `
+      <h4 title="${snippet.methodName}">${snippet.methodName} <span style="opacity:.6">(S${snippet.id})</span></h4>
+      <pre class="code-content">${snippet.code}</pre>
+    `;
+    return box;
+  };
 
-  // Left side: stacked
-  leftIds.forEach(id => {
-    const snippet = getSnippet(id);
-    if (snippet) {
-      const box = document.createElement('div');
-      box.className = 'snippet-box';
-      box.innerHTML = `<h4>${snippet.methodName}</h4><pre class="code-content">${snippet.code}</pre>`;
-      leftContainer.appendChild(box);
-    }
-  });
+  const renderSide = (ids, container) => {
+    const frag = document.createDocumentFragment();
+    ids.forEach(tok => {
+      const id = normalizeId(tok);
+      const sn = id != null ? byId[String(id)] : null;
+      if (sn) frag.appendChild(makeBox(sn));
+      else {
+        // optional: show a small warning if an id isn't found
+        // const warn = document.createElement('div');
+        // warn.textContent = `Unknown snippet: ${tok}`;
+        // warn.style.color = 'crimson';
+        // frag.appendChild(warn);
+      }
+    });
+    container.appendChild(frag);
+  };
 
-  // Right side: stacked
-  rightIds.forEach(id => {
-    const snippet = getSnippet(id);
-    if (snippet) {
-      const box = document.createElement('div');
-      box.className = 'snippet-box';
-      box.innerHTML = `<h4>${snippet.methodName}</h4><pre class="code-content">${snippet.code}</pre>`;
-      rightContainer.appendChild(box);
-    }
-  });
+  renderSide(leftIds, leftContainer);
+  renderSide(rightIds, rightContainer);
 
   document.getElementById('compare-modal').style.display = 'block';
 }
+
 </script>
 
 <script>
