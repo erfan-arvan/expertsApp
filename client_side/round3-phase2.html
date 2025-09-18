@@ -755,6 +755,11 @@ border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
     document.getElementById('validation-message').innerText = msg;
     document.getElementById('validation-modal').style.display = 'block';
   }
+
+  function firstChars(name, count = 5) {
+  if (!name) return "";
+  return name.slice(0, count);
+}
 </script>
 
 <script>
