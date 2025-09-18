@@ -248,7 +248,7 @@ function show_snippet(id) {
   const snippet = snippets.find(s => s.id === id);
   if (!snippet) return;
 
-  document.getElementById('modal-snippet-title').innerText = snippet.title;
+  document.getElementById('modal-snippet-title').innerText = snippet.methodName;
 
   const codeLines = snippet.code.trim().split('\n');
 
@@ -305,7 +305,7 @@ function compare(leftIds, rightIds) {
     if (snippet) {
       const box = document.createElement('div');
       box.className = 'snippet-box';
-      box.innerHTML = `<h4>${snippet.title}</h4><pre class="code-content">${snippet.code}</pre>`;
+      box.innerHTML = `<h4>${snippet.methodName}</h4><pre class="code-content">${snippet.code}</pre>`;
       leftContainer.appendChild(box);
     }
   });
@@ -316,7 +316,7 @@ function compare(leftIds, rightIds) {
     if (snippet) {
       const box = document.createElement('div');
       box.className = 'snippet-box';
-      box.innerHTML = `<h4>${snippet.title}</h4><pre class="code-content">${snippet.code}</pre>`;
+      box.innerHTML = `<h4>${snippet.methodName}</h4><pre class="code-content">${snippet.code}</pre>`;
       rightContainer.appendChild(box);
     }
   });
