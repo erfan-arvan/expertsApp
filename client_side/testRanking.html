@@ -104,6 +104,16 @@
       -ms-user-select: none;
       user-select: none;
     }
+
+    #close-btn {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0 6px;
+    }
+    #close-btn:hover { color: #f66; }
   </style>
 </head>
 <body>
@@ -114,7 +124,10 @@
   <!-- Sliding panel with iframe -->
   <div id="panel" aria-hidden="true">
     <div id="resizer" title="Drag to resize"></div>
-    <div id="panel-header">Live Ranking</div>
+    <div id="panel-header">
+      <span>Live Ranking</span>
+      <button id="close-btn">✖</button>
+    </div>
     <iframe id="ranking-frame" src="live-ranking.html"></iframe>
   </div>
 
@@ -123,6 +136,12 @@
     const resizer = document.getElementById('resizer');
     const toggleBar = document.getElementById('toggle-bar');
     const iframe = document.getElementById('ranking-frame');
+    const closeBtn = document.getElementById("close-btn");
+
+    // Close panel
+    closeBtn.addEventListener("click", () => {
+      panel.classList.remove("open");
+    });
 
     // Toggle open/close with same sticky button
     function setOpen(isOpen) {
