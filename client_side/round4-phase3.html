@@ -1843,7 +1843,7 @@ function renderParticipantRankings() {
  <script>
     const disagreements = [
       {
-        snippet: 3,
+        snippet: 2,
         textold:
                 `Snippet 3 (isMachineTypeDefined) appears to be a point of disagreement among the experts.
 <br>*Oscar ranked it as one of the easiest (Position 1), describing it as having straightforward logic. He noted that the presence of nested if statements or loops did not make it harder to understand. However, in his detailed comments, he did mention that it was unclear what a "synthetic field" is, and that the snippet might be harder to understand for someone unfamiliar with the constants used.
@@ -1906,7 +1906,7 @@ function renderParticipantRankings() {
 “I am not familiar with a URI's scheme and why implementing that logic (in Snippet 2) is enough to check if it is remote.”
 <br>*Martin also places Snippet 2 in Position 1 (easiest) and describes it as generally clear. He notes:
 “There are some subtleties here (how do we know that 'jar' and 'file' are the only URI schemes that are not remote? I think that's domain knowledge...), but overall the purpose is clear and easy to understand from the code's structure.” However, unlike Nadeeshan and Oscar, Martin ranked Snippet 1 slightly lower, placing it in Position 2, indicating that he finds Snippet 2 just a bit easier due to its shorter and simpler set of rules.`,
-        text: `In round 2, the experts disagreed about how understandable Snippet 2 would be for a typical software engineer, especially in terms of the background knowledge it assumes about URI schemes.
+        textold: `In round 2, the experts disagreed about how understandable Snippet 2 would be for a typical software engineer, especially in terms of the background knowledge it assumes about URI schemes.
 <ul>
   <li><strong>Oscar</strong> placed the snippet in Position 4, indicating that he found it more difficult than most others. He questioned whether checking if the scheme is "jar" or "file" is enough to determine whether a URI is remote. Although he found the logic structurally simple, he felt the method’s purpose was unclear without understanding the significance of those schemes. For him, knowing what counts as a remote URI is not necessarily common knowledge, and that gap affects how easily the method can be understood.</li>
   <li><strong>Martin</strong> placed the snippet in Position 2, seeing it as relatively easy. He acknowledged that the method relies on domain knowledge about URI schemes but believed that most engineers would still be able to follow the logic. He found the structure clean and the intent straightforward once the scheme check is interpreted correctly. From his perspective, the need for external knowledge was minimal and did not prevent comprehension.</li>
