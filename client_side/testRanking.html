@@ -126,7 +126,7 @@
     <div id="resizer" title="Drag to resize"></div>
     <div id="panel-header">
       <span>Live Ranking</span>
-      <button id="close-btn">✖</button>
+      <!-- <button id="close-btn">✖</button> -->
     </div>
     <iframe id="ranking-frame" src="live-ranking.html"></iframe>
   </div>
@@ -139,9 +139,9 @@
     const closeBtn = document.getElementById("close-btn");
 
     // Close panel
-    closeBtn.addEventListener("click", () => {
-      panel.classList.remove("open");
-    });
+    // closeBtn.addEventListener("click", () => {
+    //   panel.classList.remove("open");
+    // });
 
     // Toggle open/close with same sticky button
     function setOpen(isOpen) {
