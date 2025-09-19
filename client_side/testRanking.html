@@ -30,7 +30,8 @@
       position: fixed;
       top: 0;
       right: -100%;
-      width: 100%;
+      /* Panel leaves space on left */
+      width: calc(100% - 250px); /* adjust left margin */
       height: 100%;
       background: #fff;
       box-shadow: -3px 0 6px rgba(0,0,0,0.3);
@@ -40,7 +41,8 @@
       transition: right 0.4s ease;
       resize: horizontal;
       overflow: auto;
-      min-width: 300px; /* prevent collapse to nothing */
+      min-width: 400px; /* prevents collapsing too small */
+      max-width: 100%;
     }
 
     #panel.open {
