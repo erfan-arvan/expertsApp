@@ -23,6 +23,11 @@
       z-index: 1001;
       border-radius: 8px 0 0 8px;
       user-select: none;
+      transition: background 0.3s;
+    }
+
+    #toggle-bar:hover {
+      background: #555;
     }
 
     /* Sliding panel container */
@@ -30,8 +35,7 @@
       position: fixed;
       top: 0;
       right: -100%;
-      /* Panel leaves space on left */
-      width: calc(100% - 250px); /* adjust left margin */
+      width: calc(100% - 250px); /* leaves some space on the left */
       height: 100%;
       background: #fff;
       box-shadow: -3px 0 6px rgba(0,0,0,0.3);
@@ -41,7 +45,7 @@
       transition: right 0.4s ease;
       resize: horizontal;
       overflow: auto;
-      min-width: 400px; /* prevents collapsing too small */
+      min-width: 400px;
       max-width: 100%;
     }
 
@@ -49,7 +53,7 @@
       right: 0;
     }
 
-    /* Panel header with close button */
+    /* Panel header (optional, can be removed) */
     #panel-header {
       flex-shrink: 0;
       background: #444;
@@ -76,7 +80,6 @@
   <div id="panel">
     <div id="panel-header">
       <span>Live Ranking</span>
-      <button id="close-btn">✖</button>
     </div>
     <iframe id="ranking-frame" src="live-ranking.html"></iframe>
   </div>
@@ -84,16 +87,10 @@
   <script>
     const toggleBar = document.getElementById("toggle-bar");
     const panel = document.getElementById("panel");
-    const closeBtn = document.getElementById("close-btn");
 
-    // Open panel
+    // Toggle open/close on same button
     toggleBar.addEventListener("click", () => {
-      panel.classList.add("open");
-    });
-
-    // Close panel
-    closeBtn.addEventListener("click", () => {
-      panel.classList.remove("open");
+      panel.classList.toggle("open");
     });
 
     // Auto refresh iframe every 30s
