@@ -693,7 +693,7 @@
             if (!name) return "";
             return name.slice(0, count);
         }
-
+        
         /* ===== Auth helpers (provided) ===== */
         function isLoggedIn() {
             const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
@@ -819,7 +819,7 @@
                 btn.role = 'tab';
                 btn.dataset.id = id;                // <button data-id="...">
                 btn.setAttribute('aria-pressed', String(d.id === state.currentId));
-                btn.textContent = firstChars(d.title);
+                btn.textContent = d.title;
                 btn.onclick = () => openDisagreement(toId(d.id));
                 menu.appendChild(btn);
             });
@@ -863,7 +863,7 @@
 
             const d = state.disagreements.find(x => String(x.id) === String(newId));
             if (d) {
-                $('#topic-title').textContent = firstChars(d.title);
+                $('#topic-title').textContent = d.title;
                 $('#topic-description').innerHTML = d.htmltext || '';
                 $('#topic-meta').innerHTML = `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>`;
             }
@@ -1425,7 +1425,7 @@
                 card.dataset.id = id;
 
                 card.innerHTML = `
-      <div class="home-card-title">${firstChars(d.title)}</div>
+      <div class="home-card-title">${d.title}</div>
       <div class="home-card-meta">
         <span>Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'}</span>
         ${count > 0 ? `<span class="card-badge">${count > 99 ? '99+' : count}</span>` : ''}
@@ -1461,7 +1461,7 @@
             // Update topic header
             const d = state.disagreements.find(x => String(x.id) === idStr);
             if (d) {
-                $('#topic-title').textContent = firstChars(d.title);
+                $('#topic-title').textContent = d.title;
                 $('#topic-description').innerHTML = d.htmltext || '';
                 $('#topic-meta').innerHTML =
                     `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>   <span id="sync-now" class="sync-link" onclick="syncNow()">Sync now</span>`;
