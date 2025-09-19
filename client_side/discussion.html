@@ -689,11 +689,11 @@
 
     <script>
 
-        function firstChars(name, count = 5) {
+        function firstChars(name, count = 20) {
             if (!name) return "";
             return name.slice(0, count);
         }
-        
+
         /* ===== Auth helpers (provided) ===== */
         function isLoggedIn() {
             const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName');
@@ -819,7 +819,7 @@
                 btn.role = 'tab';
                 btn.dataset.id = id;                // <button data-id="...">
                 btn.setAttribute('aria-pressed', String(d.id === state.currentId));
-                btn.textContent = d.title;
+                btn.textContent = firstChars(d.title);
                 btn.onclick = () => openDisagreement(toId(d.id));
                 menu.appendChild(btn);
             });
