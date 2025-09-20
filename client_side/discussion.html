@@ -623,58 +623,45 @@
             justify-content: flex-end;
         }
 
+        /* Make the toggle pop in both themes */
         .done-toggle-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 14px;
-            border-radius: 10px;
+            font-weight: 600;
             border: 1px solid var(--border);
-            background: var(--panel);
-            color: var(--text);
-            cursor: pointer;
-            font-size: 14px;
+            transition: transform .06s ease, box-shadow .15s ease, opacity .2s ease;
         }
 
+        /* NOT DONE → primary gradient + white text */
+        .done-toggle-btn:not(.done) {
+            border-color: transparent;
+            background: linear-gradient(145deg, var(--primary), var(--primary-2));
+            color: #fff;
+            box-shadow: var(--shadow);
+        }
+
+        /* DONE → green gradient (you already had this) */
         .done-toggle-btn.done {
             border-color: transparent;
             background: linear-gradient(145deg, var(--success), #47d16f);
             color: #0b0c10;
+            box-shadow: var(--shadow);
         }
 
-        .done-toggle-btn[disabled] {
-            opacity: .6;
-            cursor: not-allowed;
+        /* Hover/active states for both */
+        .done-toggle-btn:not([disabled]):hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, .25);
         }
 
-        .done-toggle-wrap {
-            margin-top: 12px;
-            display: flex;
-            justify-content: flex-end;
+        .done-toggle-btn:not([disabled]):active {
+            transform: translateY(0);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, .2);
         }
 
-        .done-toggle-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 14px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--panel);
-            color: var(--text);
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .done-toggle-btn.done {
-            border-color: transparent;
-            background: linear-gradient(145deg, var(--success), #47d16f);
-            color: #0b0c10;
-        }
-
-        .done-toggle-btn[disabled] {
-            opacity: .6;
-            cursor: not-allowed;
+        /* Keyboard focus ring */
+        .done-toggle-btn:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 2px;
+            border-radius: 12px;
         }
     </style>
 </head>
