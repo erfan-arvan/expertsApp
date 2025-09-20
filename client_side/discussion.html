@@ -979,7 +979,7 @@
             //Add the Done/Re-open toggle at the very end
             posts.appendChild(renderDoneToggleRow(state.currentId));
 
-            // 🔒 disable composers if finished
+            // disable composers if finished
             if (isChatFinished(state.currentId)) {
                 disableChatInputs();
             } else {
@@ -1241,19 +1241,11 @@
             if (state.pollHandle) clearInterval(state.pollHandle);
             state.pollHandle = setInterval(() => {
                 fetchLatestChat().then(() => {
-                    if (state.view === 'home') renderHomeGrid(); // refresh counts on cards
+                    if (state.view === 'home') renderHomeGrid();
+                    if (state.view === 'chat') ensureDoneFooterVisible();
                 }).catch(console.error);
             }, CONFIG.POLL_MS);
 
-            state.pollHandle = setInterval(() => {
-                fetchLatestChat().then(() => {
-                    if (state.view === 'home') renderHomeGrid();
-                    if (state.view === 'chat') {
-                        // Chat may have re-rendered; keep the footer visible and labeled
-                        ensureDoneFooterVisible();
-                    }
-                }).catch(console.error);
-            }, CONFIG.POLL_MS);
 
         }
 
