@@ -623,46 +623,61 @@
             justify-content: flex-end;
         }
 
-/* Special toggle button: bigger, bolder, different shape */
-.done-toggle-btn {
-  font-weight: 700;
-  font-size: 16px;
-  padding: 14px 20px;
-  border-radius: 999px;           /* pill shape */
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(0,0,0,.25);
-}
+        /* Special toggle button: bigger, bolder, different shape */
+        .done-toggle-btn {
+            font-weight: 700;
+            font-size: 16px;
+            padding: 14px 20px;
+            border-radius: 999px;
+            /* pill shape */
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .25);
+        }
 
-/* When chat is NOT finished → bright orange */
-.done-toggle-btn:not(.done) {
-  background: linear-gradient(135deg, #ff8a00, #ff4d4d);
-  color: #fff;
-}
+        /* When chat is NOT finished → bright orange */
+        .done-toggle-btn:not(.done) {
+            background: linear-gradient(135deg, #ff8a00, #ff4d4d);
+            color: #fff;
+        }
 
-/* When chat IS finished → bold green */
-.done-toggle-btn.done {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: #fff;
-}
+        /* When chat IS finished → bold green */
+        .done-toggle-btn.done {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #fff;
+        }
 
-/* Hover / focus pop */
-.done-toggle-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,.35);
-}
+        /* Hover / focus pop */
+        .done-toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .35);
+        }
 
-.done-toggle-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(0,0,0,.25);
-}
+        .done-toggle-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+        }
 
-.done-toggle-btn:focus-visible {
-  outline: 3px solid #fff;
-  outline-offset: 3px;
-}
+        .done-toggle-btn:focus-visible {
+            outline: 3px solid #fff;
+            outline-offset: 3px;
+        }
 
+        .desc-btn {
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--primary);
+            color: #fff;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .desc-btn:hover {
+            background: var(--primary-2);
+        }
     </style>
 </head>
 
@@ -728,6 +743,9 @@
                                 id="opinion-count">0</span>
                             opinions • Last sync <span id="last-sync">—</span></div>
                     </div>
+                    <button id="desc-toggle" onclick="toggleDescription()" class="desc-btn">
+                        Hide description
+                    </button>
                 </div>
 
                 <div id="topic-description" class="topic-description"></div>
@@ -2013,33 +2031,33 @@
     </script>
 
     <script>
-function mountDoneFooter() {
-  // Remove any old one
-  document.getElementById('chat-done-footer')?.remove();
+        function mountDoneFooter() {
+            // Remove any old one
+            document.getElementById('chat-done-footer')?.remove();
 
-  // Find the root composer section
-  const composerSection = document.querySelector('section.list-card[aria-label="Add new opinion"]');
-  if (!composerSection) return null;
+            // Find the root composer section
+            const composerSection = document.querySelector('section.list-card[aria-label="Add new opinion"]');
+            if (!composerSection) return null;
 
-  // Create footer container
-  const footer = document.createElement('div');
-  footer.id = 'chat-done-footer';
-  footer.className = 'done-toggle-wrap';
+            // Create footer container
+            const footer = document.createElement('div');
+            footer.id = 'chat-done-footer';
+            footer.className = 'done-toggle-wrap';
 
-  // Create button
-  const btn = document.createElement('button');
-  btn.id = 'done-toggle-btn';
-  btn.className = 'done-toggle-btn';
-  btn.type = 'button';
-  btn.addEventListener('click', () => toggleFinishedForCurrent(btn));
+            // Create button
+            const btn = document.createElement('button');
+            btn.id = 'done-toggle-btn';
+            btn.className = 'done-toggle-btn';
+            btn.type = 'button';
+            btn.addEventListener('click', () => toggleFinishedForCurrent(btn));
 
-  footer.appendChild(btn);
+            footer.appendChild(btn);
 
-  // Insert right after the composer section
-  composerSection.insertAdjacentElement('afterend', footer);
+            // Insert right after the composer section
+            composerSection.insertAdjacentElement('afterend', footer);
 
-  return footer;
-}
+            return footer;
+        }
 
 
         function refreshDoneToggleButton(chatId = state.currentId) {
@@ -2061,6 +2079,24 @@ function mountDoneFooter() {
                 mountDoneFooter();
             }
             refreshDoneToggleButton();
+        }
+
+    </script>
+
+    <script>
+        function toggleDescription() {
+            const desc = document.getElementById("topic-description");
+            const btn = document.getElementById("desc-toggle");
+
+            if (!desc || !btn) return;
+
+            if (desc.style.display === "none") {
+                desc.style.display = "block";
+                btn.textContent = "Hide description";
+            } else {
+                desc.style.display = "none";
+                btn.textContent = "Show description";
+            }
         }
 
     </script>
