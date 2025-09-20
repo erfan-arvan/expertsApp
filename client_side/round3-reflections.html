@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Round 3 Reflections — Expert Disagreement Summary</title>
+  <style>
+    :root{
+      --bg:#0b0c10; --panel:#151821; --panel2:#10131a; --text:#e6e9ef; --muted:#a3aab9; --accent:#7c5cff; --accent2:#a590ff; --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444; --border:#232735;
+      --chip:#1e2230; --chip2:#2a2f42;
+    }
+    html,body{background:var(--bg); color:var(--text); margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;}
+    a{color:var(--accent2)}
+    .wrap{max-width:1100px; margin:0 auto; padding:28px 16px 60px}
+    header{
+      position:sticky; top:0; z-index:5; backdrop-filter: blur(6px);
+      background:linear-gradient(180deg, rgba(11,12,16,0.95), rgba(11,12,16,0.70));
+      border-bottom:1px solid var(--border);
+    }
+    .bar{display:flex; gap:12px; align-items:center; justify-content:space-between; padding:12px 16px}
+    .title{font-size:20px; font-weight:700}
+    .controls{display:flex; flex-wrap:wrap; gap:8px}
+    button, .btn{background:var(--chip); color:var(--text); border:1px solid var(--border); padding:8px 12px; border-radius:999px; cursor:pointer}
+    button:hover{background:var(--chip2)}
+    .pill{font-size:12px; padding:6px 10px}
+    .grid{display:grid; grid-template-columns: 280px 1fr; gap:18px;}
+    @media (max-width: 900px){.grid{grid-template-columns:1fr}}
+    .toc{position:sticky; top:64px; align-self:start; background:var(--panel2); border:1px solid var(--border); border-radius:16px; padding:12px}
+    .toc h3{margin:6px 8px 12px; font-size:14px; color:var(--muted)}
+    .toc a{display:block; padding:8px 10px; margin:4px 0; border-radius:10px; text-decoration:none; color:var(--text); border:1px solid transparent}
+    .toc a:hover{background:var(--panel); border-color:var(--border)}
+
+    .card{background:var(--panel); border:1px solid var(--border); border-radius:18px; padding:16px}
+    .disagreement{margin-bottom:16px}
+    .disagreement h2{font-size:18px; margin:0 0 6px}
+    .meta{display:flex; gap:8px; flex-wrap:wrap; color:var(--muted); font-size:13px}
+    details{background:var(--panel2); border:1px solid var(--border); border-radius:14px; padding:10px 12px; margin:10px 0}
+    summary{cursor:pointer; font-weight:600}
+    .experts{display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-top:12px}
+    @media (max-width: 1000px){.experts{grid-template-columns:1fr}}
+    .expert{background:var(--panel2); border:1px solid var(--border); border-radius:14px; padding:12px}
+    .expert h4{margin:0 0 10px; font-size:15px}
+    .qa{margin:8px 0}
+    .qa .q{color:var(--muted); font-size:13px; margin-bottom:4px}
+    .qa .a{white-space:pre-wrap}
+
+    .chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px}
+    .chip{font-size:12px; background:var(--chip); border:1px solid var(--border); padding:4px 8px; border-radius:999px}
+
+    .footer{color:var(--muted); font-size:12px; margin-top:24px}
+    code {background:#0f1220; border:1px solid var(--border); padding:0 4px; border-radius:6px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <div class="title">Round 3 Reflections — Expert Disagreement Summary</div>
+      <div class="controls">
+        <button id="btn-expand" class="pill" title="Expand all details">Expand all</button>
+        <button id="btn-collapse" class="pill" title="Collapse all details">Collapse all</button>
+        <button id="btn-print" class="pill" title="Print or save to PDF">Print</button>
+        <select id="expert-filter" class="pill" title="Filter by expert">
+          <option value="all">Show all experts</option>
+          <option value="Martin">Martin only</option>
+          <option value="Oscar">Oscar only</option>
+          <option value="Nadeeshan">Nadeeshan only</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="grid">
+      <nav class="toc" id="toc">
+        <h3>Disagreements</h3>
+        <!-- dynamically populated -->
+      </nav>
+
+      <main id="content"></main>
+    </div>
+
+    <div class="footer">Generated summary uses the exact discussion-point text and the exact Round 3 questions and answers provided by each expert.</div>
+  </div>
+
+<script>
+// ========= Source Data =========
+// Exact Round 3 questions (verbatim)
+const QUESTIONS = [
+  "1. Did any of the other experts’ perspectives seem reasonable or worth reflecting on, even if you don’t fully agree with them?",
+  "2. Did the other experts’ feedback affect your understanding of the snippet’s difficulty or its comprehensibility for typical software engineers?",
+  "3. Would you consider revising your ranking for this snippet later, after completing all the disagreement reflections?"
+];
+
+// Exact disagreement texts (the 'text' body used for Round 2 recap is preserved verbatim)
+const disagreements = [
+  {
+    snippet: 3,
+    text: `The experts disagreed significantly on the comprehensibility of Snippet 3, particularly in how much the use of Java reflection and the unclear method purpose should affect its difficulty rating.
+<ul>
+  <li><strong>Oscar</strong> ranked the snippet as one of the easiest in round 1 (Position 1), describing its logic as straightforward and noting that nested control flow did not add complexity. In round 2, he acknowledged that reflection might introduce difficulty for some readers but continued to view the snippet as relatively simple, adjusting his ranking only slightly to Position 2.</li>
+  <li><strong>Martin</strong> placed the snippet in Position 6 in round 1 and emphasized that the use of reflection, unfamiliar constants, and a vague method purpose made it difficult to understand. In round 2, he reinforced these concerns and suggested that Oscar’s view understated the complexity introduced by reflection and lack of context.</li>
+  <li><strong>Nadeeshan</strong> also found the snippet confusing, particularly due to the unexplained use of a getter method with a null argument and unfamiliar class-level elements. While he initially ranked it higher, in round 2 he revised his ranking downward to Position 6 to align more closely with Martin’s view.</li>
+</ul>
+<p>The core disagreement remains: Oscar sees the snippet as fundamentally simple despite the use of reflection, while Martin and Nadeeshan believe the reliance on reflection and unclear semantics make it significantly harder for a typical software engineer to understand.</p>
+<details>
+  <summary style="cursor: pointer; font-weight: bold; margin-top: 1em;">View Round 2 Reflections</summary>
+  <div style="margin-top: 0.5em;">
+
+    <details>
+      <summary style="cursor: pointer; font-weight: bold;">View Summary of Disagreement</summary>
+      <div style="margin-top: 0.5em;">
+        Snippet 3 (<code>isMachineTypeDefined</code>) appears to be a point of disagreement among the experts.
+        <br><strong>Oscar</strong> ranked it as one of the easiest (Position 1), describing it as having straightforward logic. He noted that the presence of nested if statements or loops did not make it harder to understand. However, in his detailed comments, he did mention that it was unclear what a "synthetic field" is, and that the snippet might be harder to understand for someone unfamiliar with the constants used.
+        <br><strong>Nadeeshan</strong> placed it in Position 4, stating that it was relatively hard to understand due to unfamiliarity with <code>CoffMachineType</code>. He emphasized that the snippet needs more context to be understood, and highlighted an unusual use of a getter with an argument — specifically pointing to a line where <code>null</code> is passed, which he found unnecessary and confusing.
+        <br><strong>Martin</strong>, who placed it in Position 6, noted that the method required bottom-up reasoning, meaning it was necessary to carefully examine each line to figure out what the method was doing. He pointed to the use of Java’s reflective features and the unclear nature of the <code>type</code> variable (possibly representing a non-standard enumeration) as contributing factors to its complexity. He also remarked that the overall purpose of the method was not easily discernible from the code alone.
+      </div>
+    </details>
+
+    <p><strong>Martin:</strong></p>
+    <ul>
+      <li><strong>Q1:</strong> I agree with Nadeeshan that this snippet needs more context for complete understanding. I think that Oscar's detailed comments suggest that he agrees that there is some subtlety here, even if his initial ranking is that it's an easy snippet.</li>
+      <li><strong>Q2:</strong> I think that I may have overestimated the difficulty a bit. Nadeeshan's ranking (position 4 or thereabouts) seems like a reasonable place to settle, given that it's between Oscar's and mine. I do think that Oscar's ranking is too low, and I don't buy his argument that the logic is straightforward: the use of reflection complicates it significantly, and the overall purpose is hard to understand (even if some of the logic is simple).</li>
+      <li><strong>Q3:</strong> Yes.</li>
+    </ul>
+
+    <p><strong>Nadeeshan:</strong></p>
+    <ul>
+      <li><strong>Q1:</strong> I agree with Martin's point that "overall purpose of the method was not easily discernible from the code alone".</li>
+      <li><strong>Q2:</strong> Yes. Confirming my understanding, I am on the same page as Martin that he mentioned usage of Java's reflection contributes to the code's complexity.</li>
+      <li><strong>Q3:</strong> I'd like to change the rank of snippet 3 -- from rank 4 to rank 6</li>
+    </ul>
+
+    <p><strong>Oscar:</strong></p>
+    <ul>
+      <li><strong>Q1:</strong> Yes, the use of reflection is definitely a key thing here. If a person doesn't know the method, it might be hard to understand.</li>
+      <li><strong>Q2:</strong> Not really. I think I understand the snippet pretty well, but their feedback made me understand that for other people unfamiliar with this implementation pattern (reflection + checking numerical constants defined in a class), the method may be a little harder to understand.</li>
+      <li><strong>Q3:</strong> Yes, I would move it to the right a bit.</li>
+    </ul>
+
+  </div>
+</details>
+`
+  },
+  {
+    snippet: 2,
+    text: `In round 2, the experts disagreed about how understandable Snippet 2 would be for a typical software engineer, especially in terms of the background knowledge it assumes about URI schemes.
+<ul>
+  <li><strong>Oscar</strong> placed the snippet in Position 4, indicating that he found it more difficult than most others. He questioned whether checking if the scheme is "jar" or "file" is enough to determine whether a URI is remote. Although he found the logic structurally simple, he felt the method’s purpose was unclear without understanding the significance of those schemes. For him, knowing what counts as a remote URI is not necessarily common knowledge, and that gap affects how easily the method can be understood.</li>
+  <li><strong>Martin</strong> placed the snippet in Position 2, seeing it as relatively easy. He acknowledged that the method relies on domain knowledge about URI schemes but believed that most engineers would still be able to follow the logic. He found the structure clean and the intent straightforward once the scheme check is interpreted correctly. From his perspective, the need for external knowledge was minimal and did not prevent comprehension.</li>
+  <li><strong>Nadeeshan</strong> originally placed the snippet in Position 1, seeing it as the easiest. After considering Oscar’s comments, he moved it to Position 2, recognizing that the use of "jar" and "file" might not be immediately intuitive to everyone. However, he still felt that the overall purpose of the method remained understandable and that the control flow supported clarity.</li>
+</ul>
+<p>The disagreement reflects a broader question: To what extent does familiarity with concepts like URI schemes affect how understandable this method would be for the average software engineer? Oscar believed this knowledge gap adds meaningful difficulty. Martin and Nadeeshan judged the snippet to be accessible in spite of it.</p>
+<p>The disagreement also raises a related but distinct point that was not directly discussed: how much familiarity with URI schemes can reasonably be assumed of typical software engineers. While the experts differed in how much this knowledge mattered for understanding the snippet, they did not explicitly address whether such knowledge is commonly held.</p>
+
+<details>
+  <summary style="cursor: pointer; font-weight: bold; margin-top: 1em;">View Round 2 Reflections</summary>
+  <div style="margin-top: 0.5em;">
+
+    <details>
+      <summary style="cursor: pointer; font-weight: bold;">View Summary of Disagreement</summary>
+      <div style="margin-top: 0.5em;">
+        Snippet 2 (<code>isRemote</code>) appears to be a point of partial disagreement among the experts.
+        <br><strong>Nadeeshan</strong> considers it easy to understand and places it in the easiest position, alongside Snippet 1. He believes it has a meaningful method name, clear internal method invocations, and a straightforward switch statement.
+        <br><strong>Oscar</strong> also finds the snippet relatively easy, but slightly more difficult than Snippet 1 (<code>isValidProjectName</code>). He expressed uncertainty about the meaning of <code>isFilesystemPath</code> and the use of the URI scheme, stating:
+        <br><em>“I am not familiar with a URI's scheme and why implementing that logic (in Snippet 2) is enough to check if it is remote.”</em>
+        <br><strong>Martin</strong> also places Snippet 2 in Position 1 (easiest) and describes it as generally clear. He notes:
+        <br><em>“There are some subtleties here (how do we know that 'jar' and 'file' are the only URI schemes that are not remote? I think that's domain knowledge...), but overall the purpose is clear and easy to understand from the code's structure.”</em>
+        <br>However, unlike Nadeeshan and Oscar, Martin ranked Snippet 1 slightly lower, placing it in Position 2, indicating that he finds Snippet 2 just a bit easier due to its shorter and simpler set of rules.
+      </div>
+    </details>
+
+    <p><strong>Martin:</strong></p>
+    <ul>
+      <li><strong>Q1:</strong> We broadly agree. I think it's worth differentiating this snippet from snippet 1, and Oscar and I agree that this one is a little bit trickier. I think Nadeeshan would agree that, if he had to choose between this one and snippet 1, this one is a little more complex. So, I think we'll agree here on Snippet 1 at the bottom, and this one above it.</li>
+      <li><strong>Q2:</strong> No.</li>
+      <li><strong>Q3:</strong> No.</li>
+    </ul>
+
+    <p><strong>Nadeeshan:</strong></p>
+    <ul>
+      <li><strong>Q1:</strong> I agree with Oscar on snippet 2's URI implementation logic. However, despite that uncertainty, the purpose of the method remains clear to me.</li>
+      <li><strong>Q2:</strong> Yes.</li>
+      <li><strong>Q3:</strong> I would change rank of snippet 2 -- from rank 1 to 2</li>
+    </ul>
+
+    <p><strong>Oscar:</strong></p>
+    <ul>
+      <li><strong>Q1:</strong> I think the other experts rated with less importance the fact that it is unclear why the implemented logic is enough to achieve that intended functionality (check that the URI is remote).</li>
+      <li><strong>Q2:</strong> I agree with them that the logic is simple, but I found it more complicated than other snippets because the intention of the code is not clear (i.e., why checking the scheme is jar or file is enough to check that the URI is or isn't remote).</li>
+      <li><strong>Q3:</strong> I don't think I would change the ranking for this snippet: simple logic does not equate entirely to simplicity of understanding the code, i.e., the code intention is also important to understand.</li>
+    </ul>
+
+  </div>
+</details>
+`
+  },
+  {
+    snippet: 5,
+    text: `In round 2, the experts disagreed on how understandable Snippet 5 would be for a typical software engineer, particularly in relation to the prior experience it assumes with Java’s file system APIs and the Visitor design pattern.
+<ul>
+  <li><strong>Oscar</strong> placed the snippet in Position 2, continuing to view it as relatively easy. He acknowledged that engineers unfamiliar with the Visitor pattern might find it harder to understand, but he still believed the structure and naming made the method accessible. He did not express strong motivation to move it out of the "easy" tier and suggested only a slight shift to the right in his ranking.</li>
+  <li><strong>Nadeeshan</strong> placed the snippet in Position 5, moving it slightly up from his initial ranking but continuing to see it as significantly more difficult than Oscar did. He agreed with Martin’s earlier point that understanding the method depends on prior familiarity with Java’s file-handling APIs, including the role of <code>postVisitDirectory</code> and the behavior of <code>FileVisitor</code>. For him, these assumptions limit how easily the method can be understood by engineers who have not worked with this part of the API.</li>
+  <li><strong>Martin</strong> placed the snippet in Position 4 and shared a similar view. He found the method’s specification clear, but believed that understanding its behavior relies on recognizing the idiomatic use of <code>walkFileTree</code> and overridden visitor methods. He was willing to shift the snippet slightly lower in his ranking, but still saw it as easier than others that rely on reflection or encoding logic.</li>
+</ul>
+<p>The disagreement reflects two underlying questions. First, how much familiarity with the Java file system API and the Visitor pattern can reasonably be assumed of typical software engineers? Second, to what extent does that familiarity, or lack of it, impact how easily this method can be understood? Oscar believed that clear structure and naming could compensate for unfamiliarity. Martin and Nadeeshan viewed comprehension as closely tied to experience with the underlying API.</p>
+
+<details>
+  <summary style="cursor: pointer; font-weight: bold; margin-top: 1em;">View Round 2 Reflections</summary>
+  <div style="margin-top: 0.5em;">
+
+    <details>
+      <summary style="cursor: pointer; font-weight: bold;">View Summary of Disagreement</summary>
+      <div style="margin-top: 0.5em;">
+        Snippet 5 (<code>deleteRecursively</code>) is another point of disagreement among the experts.
+        <br><strong>Oscar</strong> placed it in the easiest position (Position 1). He stated that he is “familiar with the visitor pattern” and that “identifiers help clarify.” He described the snippet as having straightforward logic and noted that it was hard for him to distinguish between Snippets 1, 3, and 5 in terms of comprehensibility, as all seemed similarly clear to him.
+        <br><strong>Nadeeshan</strong>, who placed it in Position 6, described it as:
+        <br><em>“Harder due to unclear postVisitDirectory. Assumes dir is a Path object passed from FileVisitor.”</em>
+        <br>However, he also acknowledged that <em>“Snippet 5 has clear logic.”</em>
+        This suggests that while the overall intent was understandable, specific implementation details (e.g., method assumptions and API context) made it more difficult for him.
+        <br><strong>Martin</strong> placed Snippet 5 in Position 5 and offered a nuanced perspective:
+        <br><em>“This was easy for me to understand, but it required domain-specific knowledge of how Java handles file system operations that I do have: I immediately recognized the structure of the walkFileTree call with the anonymous visitor, and knew that I only needed to look at the names of the overridden methods and their bodies (i.e., lines 8 and 13) to figure out what the method does.”</em>
+        <br>He also grouped this snippet with Snippets 4 and 7, noting:
+        <br><em>“These three snippets are actually pretty similar: all are implementations of some kind of simple specification that's a bit tricky to get right in practice.”</em>
+      </div>
+    </details>
+
+    <p><strong>Martin:</strong></p>
+    <ul>
+      <li><strong>Q1:</strong> I think Nadeeshan and I broadly agree on this snippet's comprehensibility: we both see the difficulty with the implementation but agree on the clear spec. Oscar also agrees that the spec is clear, but I think he (like me) is familiar with this Java idiom and so ranks the snippet as very easy. But for a non-expert, I think this would be a bit tricky. So, I prefer the ranking in the middle somewhere, as Nadeeshan and I have it; I think this is definitely trickier to understand than e.g., isRemote or the validation method that I ranked at the bottom.</li>
+      <li><strong>Q2:</strong> We all agree on what's there, but not on how to interpret it.</li>
+      <li><strong>Q3:</strong> Yes: I'm willing to shift it a bit downwards, but not below snippets 4 and 7.</li>
+    </ul>
+
+    <p><strong>Nadeeshan:</strong></p>
+    <ul>
+      <li><strong>Q1:</strong> I agree with Martin's comment that understanding Snippet 5 properly requires knowledge of Java's file system handling.</li>
+      <li><strong>Q2:</strong> Yes.</li>
+      <li><strong>Q3:</strong> Yes I would. From rank 6 to 5. However, I still believe that a person familiar with the Visitor design pattern, as Oscar pointed out, and with specific domain knowledge of Java file handling is required to fully understand the method. Therefore, I think the ranking is valid in this case.</li>
+    </ul>
+
+    <p><strong>Oscar:</strong></p>
+    <ul>
+      <li><strong>Q1:</strong> Same as with the reflection-based method, I recognize the method would be harder to understand for people unfamiliar with the visitor pattern and its usage with file systems.</li>
+      <li><strong>Q2:</strong> Not really.</li>
+      <li><strong>Q3:</strong> I may rank it more to the right.</li>
+    </ul>
+
+  </div>
+</details>
+`
+  },
+  {
+    snippet: 4,
+    text: `In round 2, the experts disagreed on how difficult Snippet 4 would be for a typical software engineer to understand, especially in terms of how much prior knowledge of Java’s string APIs is required.
+<ul>
+  <li><strong>Oscar</strong> placed Snippet 4 in Position 6, suggesting that many engineers might find it hard to follow. He pointed to missing context and uncertainty about what <code>regionMatches</code> is doing, indicating that the method depends on familiarity with less common API behavior. Although he understood the overall purpose, he believed the logic was more complex than in other snippets and that many engineers might struggle to follow it precisely.</li>
+  <li><strong>Martin</strong> placed Snippet 4 in Position 4 and grouped it with Snippets <code>lowestPositiveRoot</code> and <code>deleteRecursively</code>. He argued that all three have clear specifications but complicated implementations that require attention to detail. While not trivial, he considered Snippet 4 to be understandable for most engineers, assuming they read it carefully. He viewed it as more accessible than snippets like Snippet 3, which involve reflection.</li>
+  <li><strong>Nadeeshan</strong> placed Snippet 4 even higher, in Position 3, and similarly judged it to be approachable for engineers. He described the logic as straightforward when read from top to bottom and noted that it did not rely on specialized domain knowledge. Compared to Snippet 5, which uses a design pattern he thought many engineers might not know well, Snippet 4 seemed easier to understand.</li>
+</ul>
+<p>The main disagreement in round 2 concerns whether engineers unfamiliar with specific Java APIs would find Snippet 4 hard to follow. Oscar believed API familiarity would be a barrier, while Martin and Nadeeshan considered the logic clear enough for most engineers with basic Java experience.</p>`
+  }
+];
+
+// Exact Round 3 answers by expert, aligned to disagreements order above (index 0..3)
+const expertResponses = {
+  Martin: [
+    { q1: `Oscar's point that the method is easy to understand _for him_ makes sense. However, I stand by my claim that _for an average engineer_ this snippet belongs to the right of snippets 3, 4, 6, and 8, because it uses a complex and rare language feature that they don't, and none of those snippets are particularly hard to understand, either.`, q2: `No.`, q3: `No.` },
+    { q1: `I think there are two more-fundamental questions about this snippet that are driving the disagreement between me/Nadeeshan and Oscar:\n1. is this snippet correctly checking whether a URI is remote?\n2. does its correctness actually matter to understanding it?\n\nOn reflection, I think Oscar's concern is that the answer to question 1 might be "no". He's likely right about that: this seems like a coarse heuristic for "remoteness". Without some other artifact (e.g., Javadoc or a PR description) we can't know whether that was intentional or not.\n\nI think Nadeeshan and I would agree that the answer to question 2 is "not really", though: the snippet's logic is pretty straightforward; it's only the name that is misleading. Given that misleadingness, I'm willing to compromise on this snippet and rank it a bit higher in difficulty (e.g., above snippet 4).`, q2: `Yes.`, q3: `Yes, see above.` },
+    { q1: `> First, how much familiarity with the Java file system API and the Visitor pattern can reasonably be assumed of typical software engineers? Second, to what extent does that familiarity, or lack of it, impact how easily this method can be understood?\n\nThese points are key. Typical engineers who are working in Java _should_ be familiar with these APIs, and so I'm willing to adjust my ranking here to shift this snippet even lower. Really, I think that _the Java File API_ is hard to understand/confusing and could've been better designed, and I'm punishing this snippet in my ranking for that. But actually if you know that API then this snippet itself is easy, as Oscar suggested.\n\nAnother interesting point of comparison is how this snippet's use of the File API differs from Snippet 1's use of reflection. I would argue that reflection is trickier to reason about than the file API, generally, but both feel a bit similar in the sense that they're both APIs that have plenty of footguns.`, q2: `Yes.`, q3: `Yes.` },
+    { q1: `I stand by my round 2 response: this snippet isn't too hard to follow. The only tricky part is regionMatches, and IRL any engineer who's unfamiliar with that would immediately look it up if they wanted to understand this method. I read its Javadoc (https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#regionMatches-int-java.lang.String-int-int-), and it's not that complex.`, q2: `No.`, q3: `Yes: I think I agree with Nadeeshan that it could be shifted left, below snippet 8 and maybe snippet 3.` }
+  ],
+  Oscar: [
+    { q1: `Since both Nadeeshan and Martin think that reflection introduces complexity, I think I would move this snippet to the right, depending on how I rank the other snippets`, q2: `yep`, q3: `yeah` },
+    { q1: `Yeah, maybe I'm giving too much importance to understanding the intention of checking the scheme is jar or file to check that the URI is or isn't remote.`, q2: `yep`, q3: `yep, need to see the other snippets.` },
+    { q1: `I guess the visitor pattern may specialized knowledge that not everybody has, so I may be willing to change my ranking (move the snippet to the right)`, q2: `yes`, q3: `yes, see above (Q1)` },
+    { q1: `Tend to agree with Nadeeshan about S4 and S5: S4 doesn't require a lot of specialized knowledge, despite some API calls may be unknown, but S5 requires this knowledge (about visitors), which may make the code look more obscure.`, q2: `yeah`, q3: `yeah, I will factor in more the specialized knowledge needed to understand the code` }
+  ],
+  Nadeeshan: [
+    { q1: `Since both Oscar and Martin agree that using Java reflection makes the method harder to understand, it confirms my understanding of the snippet, and I think their perspectives are reasonable. I agree with them.`, q2: `Yes`, q3: `Yes. I believe the suitable position for snippet 6 would be 5 or 6. But I'll keep it at position 6.` },
+    { q1: `Yes. Considering both Oscar and Martin's comments, I would think that snippet 5 requires some basic knowledge about how remote file schemes work in Java.`, q2: `From the perspective of a typical average software engineer, I’d say simply understanding the snippet from top to bottom would be sufficient, even without prior knowledge of the Java file system API manipulation. However, when it comes to performing any related software engineering task, a deeper understanding would be required. Given the snippet’s simple, synthetic structure and the assumption of no access to the Java API documentation, I’d say achieving that deeper understanding could be somewhat challenging.`, q3: `Yes. Matching to both other expert's I'd change the rank of Snippet 5 from rank 2 to rank 3.` },
+    { q1: `We can roughly agree that developers unfamiliar with the Visitor pattern may find the snippet harder to understand. I also share Oscar’s view that while the structure and naming make the method easy to "read", they do not necessarily make it easy to fully comprehend.`, q2: `As I mentioned for snippet 5, the method is easy to read even without knowledge of Java file system APIs or design patterns. However, when it comes to working with or extending that method, such knowledge becomes critical. In contrast, I find snippet 8 far more complex in terms of structure.`, q3: `I would adjust the ranking of snippet 8 from 5 to 4 to align with Martin’s judgment.` },
+    { q1: `I agree on the point that the overall purpose of the code is clear.`, q2: `From the perspective of a typical software engineer, if one carefully reads the code, I would say the logic behind it is straightforward to understand. Even without documentation for the "regionMatches method", simply examining its parameters makes it relatively easy to infer what the method is supposed to do.`, q3: `No I would not change the rank of snippet 7.` }
+  ]
+};
+
+// ========= Rendering =========
+const content = document.getElementById('content');
+const toc = document.getElementById('toc');
+
+function render(){
+  content.innerHTML = '';
+  toc.innerHTML = '<h3>Disagreements</h3>';
+
+  disagreements.forEach((d, idx) => {
+    const anchor = `d-${idx+1}`;
+    const card = document.createElement('section');
+    card.className = 'card disagreement';
+    card.id = anchor;
+
+    const h = document.createElement('h2');
+    h.textContent = `Disagreement ${idx+1} — Snippet ${d.snippet}`;
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.innerHTML = `<span>Round 2 discussion point:</span>`;
+
+    const point = document.createElement('div');
+    point.innerHTML = d.text; // intentionally HTML to preserve exact text structure
+
+    const chips = document.createElement('div');
+    chips.className = 'chips';
+    ['Exact recap','Reflection Q&A included','Printable'].forEach(c=>{
+      const span = document.createElement('span');
+      span.className = 'chip';
+      span.textContent = c; chips.appendChild(span);
+    });
+
+    const expertsWrap = document.createElement('div');
+    expertsWrap.className = 'experts';
+
+    const filterVal = document.getElementById('expert-filter')?.value || 'all';
+
+    Object.entries(expertResponses).forEach(([name, arr]) => {
+      const resp = arr[idx];
+      if(!resp) return;
+      if(filterVal !== 'all' && filterVal !== name) return;
+
+      const box = document.createElement('article');
+      box.className = 'expert';
+      box.dataset.expert = name;
+      box.innerHTML = `<h4>${name}</h4>`;
+
+      // Render the three Q/A exactly, using the provided QUESTION labels
+      QUESTIONS.forEach((q, qi) =>{
+        const qa = document.createElement('div');
+        qa.className = 'qa';
+        const qEl = document.createElement('div'); qEl.className = 'q'; qEl.textContent = q;
+        const aEl = document.createElement('div'); aEl.className = 'a'; aEl.textContent = String(resp[`q${qi+1}`] ?? '');
+        qa.appendChild(qEl); qa.appendChild(aEl); box.appendChild(qa);
+      });
+
+      expertsWrap.appendChild(box);
+    });
+
+    card.appendChild(h);
+    card.appendChild(meta);
+    card.appendChild(point);
+    card.appendChild(chips);
+
+    const hr = document.createElement('div'); hr.style.height='8px';
+    card.appendChild(hr);
+    const qaTitle = document.createElement('h3'); qaTitle.textContent = 'Round 3 — Exact Answers'; qaTitle.style.margin='0 0 8px'; qaTitle.style.fontSize='16px';
+    card.appendChild(qaTitle);
+    card.appendChild(expertsWrap);
+
+    content.appendChild(card);
+
+    const link = document.createElement('a');
+    link.href = `#${anchor}`; link.textContent = `Snippet ${d.snippet}`; toc.appendChild(link);
+  });
+}
+
+render();
+
+// ========= UI Actions =========
+const btnExpand = document.getElementById('btn-expand');
+const btnCollapse = document.getElementById('btn-collapse');
+const btnPrint = document.getElementById('btn-print');
+const expertFilter = document.getElementById('expert-filter');
+
+btnExpand.addEventListener('click', () => {
+  document.querySelectorAll('details').forEach(d=> d.open = true);
+});
+btnCollapse.addEventListener('click', () => {
+  document.querySelectorAll('details').forEach(d=> d.open = false);
+});
+btnPrint.addEventListener('click', () => window.print());
+expertFilter.addEventListener('change', render);
+</script>
+</body>
+</html>
