@@ -283,6 +283,23 @@ const expertResponses = {
   ]
 };
 
+</script>
+
+<script>
+// ---- names -> use these instead of indices/ids ----
+const SNIPPET_NAMES = {
+  1: "isValidProjectName",
+  2: "isRemote",
+  3: "isMachineTypeDefined",
+  4: "indexOfIgnoreCase",
+  5: "deleteRecursively",
+  6: "encodedLength",
+  7: "lowestPositiveRoot",
+  8: "atan2",
+};
+const nameFor = id => SNIPPET_NAMES[id] || `Snippet ${id}`;
+const slugify = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
 // ========= Rendering =========
 const content = document.getElementById('content');
 const toc = document.getElementById('toc');
@@ -292,20 +309,31 @@ function render(){
   toc.innerHTML = '<h3>Disagreements</h3>';
 
   disagreements.forEach((d, idx) => {
-    const anchor = `d-${idx+1}`;
+    const snippetName = nameFor(d.snippet);
+    const anchor = `d-${slugify(snippetName)}`;
+
     const card = document.createElement('section');
     card.className = 'card disagreement';
     card.id = anchor;
 
     const h = document.createElement('h2');
-    h.textContent = `Disagreement ${idx+1} — Snippet ${d.snippet}`;
+    // show the name, not the numeric id
+    h.textContent = `Disagreement ${idx+1} — ${snippetName}`;
 
     const meta = document.createElement('div');
     meta.className = 'meta';
     meta.innerHTML = `<span>Round 2 discussion point:</span>`;
 
+    // OPTIONAL fallback: if d.text still contains "Snippet X", rewrite to names here.
+    // (You can remove this block if you already ran the Python replacer on the HTML.)
+    let html = d.text;
+    Object.entries(SNIPPET_NAMES).forEach(([id, nm]) => {
+      const re = new RegExp(`\\b[Ss]nippet\\s+${id}(?![0-9A-Za-z])`, 'g'); // singular only
+      html = html.replace(re, nm);
+    });
+
     const point = document.createElement('div');
-    point.innerHTML = d.text; // intentionally HTML to preserve exact text structure
+    point.innerHTML = html; // preserve exact structure (post-rewrite if fallback used)
 
     const chips = document.createElement('div');
     chips.className = 'chips';
@@ -321,7 +349,7 @@ function render(){
     const filterVal = document.getElementById('expert-filter')?.value || 'all';
 
     Object.entries(expertResponses).forEach(([name, arr]) => {
-      const resp = arr[idx];
+      const resp = arr[idx]; // keeps your existing alignment by disagreement order
       if(!resp) return;
       if(filterVal !== 'all' && filterVal !== name) return;
 
@@ -355,8 +383,11 @@ function render(){
 
     content.appendChild(card);
 
+    // TOC entry uses the name, not the id
     const link = document.createElement('a');
-    link.href = `#${anchor}`; link.textContent = `Snippet ${d.snippet}`; toc.appendChild(link);
+    link.href = `#${anchor}`;
+    link.textContent = snippetName;
+    toc.appendChild(link);
   });
 }
 
@@ -377,5 +408,7 @@ btnCollapse.addEventListener('click', () => {
 btnPrint.addEventListener('click', () => window.print());
 expertFilter.addEventListener('change', render);
 </script>
+
+
 </body>
 </html>
