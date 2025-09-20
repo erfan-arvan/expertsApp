@@ -2013,32 +2013,34 @@
     </script>
 
     <script>
-        function mountDoneFooter() {
-            // Create a persistent footer right after the section that holds #posts
-            let footer = document.getElementById('chat-done-footer');
-            if (footer) return footer;
+function mountDoneFooter() {
+  // Remove any old one
+  document.getElementById('chat-done-footer')?.remove();
 
-            const listCard = document.querySelector('section.list-card'); // the section that wraps #posts
-            if (!listCard) return null;
+  // Find the root composer section
+  const composerSection = document.querySelector('section.list-card[aria-label="Add new opinion"]');
+  if (!composerSection) return null;
 
-            footer = document.createElement('div');
-            footer.id = 'chat-done-footer';
-            footer.className = 'done-toggle-wrap'; // uses your CSS
-            // Create the button once
-            const btn = document.createElement('button');
-            btn.id = 'done-toggle-btn';
-            btn.className = 'done-toggle-btn';
-            btn.type = 'button';
-            btn.addEventListener('click', () => toggleFinishedForCurrent(btn));
-            footer.appendChild(btn);
+  // Create footer container
+  const footer = document.createElement('div');
+  footer.id = 'chat-done-footer';
+  footer.className = 'done-toggle-wrap';
 
-            // Insert AFTER the list that contains #posts (i.e., after the first .list-card, which holds the thread)
-            // Your markup has two consecutive .list-card sections; the first is the thread list with #posts.
-            // We mount right after that specific one:
-            const postsCard = document.querySelector('section.list-card:has(#posts)') || listCard;
-            postsCard.insertAdjacentElement('afterend', footer);
-            return footer;
-        }
+  // Create button
+  const btn = document.createElement('button');
+  btn.id = 'done-toggle-btn';
+  btn.className = 'done-toggle-btn';
+  btn.type = 'button';
+  btn.addEventListener('click', () => toggleFinishedForCurrent(btn));
+
+  footer.appendChild(btn);
+
+  // Insert right after the composer section
+  composerSection.insertAdjacentElement('afterend', footer);
+
+  return footer;
+}
+
 
         function refreshDoneToggleButton(chatId = state.currentId) {
             const btn = document.getElementById('done-toggle-btn');
