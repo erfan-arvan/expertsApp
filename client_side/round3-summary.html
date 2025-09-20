@@ -1,0 +1,1134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Round 3 Rankings & Reasonings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --card: #f9fafb;
+      --border: #e5e7eb;
+      --accent: #2563eb;
+      --reason: #10b981;
+    }
+    body {
+      margin: 0; padding: 24px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--bg); color: var(--text);
+    }
+    h1 { margin: 0 0 16px 0; font-size: 22px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .legend { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+    .last-updated { color: var(--muted); font-size: 13px; margin: -6px 0 12px; }
+
+    .participant-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .participant-section > strong {
+      display: inline-block;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .ranking-labels {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .ranking-label {
+      font-size: 12px; color: var(--muted); text-align: center;
+    }
+    .ranking-row {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+    }
+    .ranking-slot {
+      min-height: 96px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: flex-start;
+    }
+    .ranking-slot button {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .ranking-slot button:hover { border-color: var(--accent); }
+
+    .reasoning-point {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--reason);
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+      cursor: pointer; z-index: 2;
+    }
+    .tooltip-box {
+      position: absolute; background: #111827; color: #fff;
+      font-size: 12px; padding: 8px 10px; border-radius: 8px;
+      max-width: 260px; display: none; z-index: 3;
+    }
+
+        body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0 40px 40px 40px;
+      /* top right bottom left */
+      background-color: #f4f4f4;
+      color: #333;
+    }
+  
+    .instructions {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+  
+    .ranking-row {
+      display: flex;
+      gap: 10px;
+      overflow-x: visible;
+      margin-bottom: 10px;
+    }
+  
+    .ranking-row-numbers {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 0;
+    }
+
+    .ranking-number {
+      flex: 1;
+      text-align: center;
+      color: #009999;
+    }
+  
+    .card {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px;
+      margin: 5px;
+      cursor: grab;
+    }
+  
+    .card.dragging {
+      opacity: 0.5;
+    }
+  
+    .preview-area {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+  
+    .snippet-preview-box {
+      flex: 1 1 45%;
+      min-width: 300px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+    }
+  
+    .snippet-header {
+      background-color: #f5f5f5;
+      padding: 10px 15px;
+      font-weight: bold;
+      font-size: 16px;
+      border-bottom: 1px solid #ccc;
+    }
+  
+    .code-box {
+      font-family: 'Courier New', Courier, monospace;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      padding: 15px;
+      font-size: 14px;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+  
+    #theme-toggle {
+      background-color: #333;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+  
+    #continueBtn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #4CAF50;
+    }
+  
+    #continueBtn:hover {
+      background-color: #45a049;
+      animation: glowPulse 1.5s infinite alternate;
+    }
+  
+    @keyframes glowPulse {
+      0% {
+        box-shadow: 0 0 10px #4CAF50;
+      }
+  
+      100% {
+        box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+      }
+    }
+  
+    /*.status-bar {
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 0;
+        position: static; 
+      }*/
+  
+    .status-bar {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+  
+    .phase-link {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+  
+    .phase-link:hover:not(.disabled) {
+      background-color: #4CAF50;
+    }
+  
+    .phase-link.active {
+      background-color: #4CAF50;
+    }
+  
+    .phase-link.disabled {
+      pointer-events: none;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  
+    /*For snippet cards*/
+    #cards {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px 0;
+      flex-wrap: nowrap;
+    }
+  
+    button {
+      padding: 10px 20px;
+      margin-right: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+  
+    button:hover {
+      background-color: #45a049;
+    }
+  
+    button[disabled] {
+      background-color: #888;
+      cursor: not-allowed;
+    }
+  
+    /*dark/light mode*/
+    /* === Default (light mode) === */
+    .card {
+      background-color: #ffffff;
+      border-color: #ccc;
+      color: #333;
+    }
+  
+    .snippet-preview-box {
+      background-color: #fefefe;
+      border: 1px solid #bbb;
+    }
+  
+    .code-box {
+      background-color: #f9f9f9;
+      color: #222;
+    }
+  
+    /* === Dark mode overrides === */
+    body.dark-mode .card {
+      background-color: #2a2a2a;
+      border-color: #555;
+      color: #ddd;
+    }
+  
+    body.dark-mode .snippet-preview-box {
+      background-color: #1e1e1e;
+      border: 1px solid #444;
+    }
+  
+    body.dark-mode .code-box {
+      background-color: #2d2d2d;
+      color: #ddd;
+    }
+  
+    /* Basic syntax highlighting classes */
+    .keyword {
+      color: #0000ff;
+      font-weight: bold;
+    }
+  
+    .type {
+      color: #007070;
+    }
+  
+    .function {
+      color: #7928a1;
+      font-weight: bold;
+    }
+  
+    .literal {
+      color: #009999;
+    }
+  
+    .string {
+      color: #a31515;
+    }
+  
+    .comment {
+      color: #6a9955;
+      font-style: italic;
+    }
+  
+    .number {
+      color: #098658;
+    }
+  
+    /* Dark mode overrides */
+    .dark-mode .keyword {
+      color: #82aaff;
+    }
+  
+    .dark-mode .type {
+      color: #89ddff;
+    }
+  
+    .dark-mode .function {
+      color: #c792ea;
+    }
+  
+    .dark-mode .literal {
+      color: #ffcb6b;
+    }
+  
+    .dark-mode .string {
+      color: #c3e88d;
+    }
+  
+    .dark-mode .comment {
+      color: #7f848e;
+    }
+  
+    .dark-mode .number {
+      color: #f78c6c;
+    }
+  
+    html {
+      scroll-behavior: smooth;
+    }
+  
+    a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+  
+    a:hover {
+      text-decoration: underline;
+    }
+
+      .participant-section {
+      margin-bottom: 10px;
+    }
+
+    .participant-section-wide{
+      height: 100px;
+    }
+
+    .ranking-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .ranking-labels {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+
+    .ranking-label {
+      flex: 1;
+      text-align: center;
+      font-weight: bold;
+      color: #009999;
+    }
+
+    .ranking-slot {
+      flex: 1;
+      min-height: 30px;
+      border: 2px dashed #4CAF50;
+      background-color: #e8f5e9;
+      border-radius: 6px;
+      padding-left: 1px;
+      padding-right: 1px;
+
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .ranking-slot button {
+      display: inline-block;
+      width: auto;
+      margin: 1px;
+      padding: 1px 5px;
+      border: none;
+      border-radius: 4px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .ranking-slot button:hover {
+      background-color: #45a049;
+      position: relative;
+    }
+
+    .ranking-label:last-child {
+      color: red;
+    }
+
+    .snippet-1 { background-color: #4CAF50; color: white; }
+    .snippet-2 { background-color: #2196F3; color: white; }
+    .snippet-3 { background-color: #f44336; color: white; }
+    .snippet-4 { background-color: #FF9800; color: white; }
+    .snippet-5 { background-color: #9C27B0; color: white; }
+    .snippet-6 { background-color: #3F51B5; color: white; }
+    .snippet-7 { background-color: #009688; color: white; }
+    .snippet-8 { background-color: #795548; color: white; }
+
+    button.snippet-1 { background-color: #4CAF50; color: white; }
+    button.snippet-2 { background-color: #2196F3; color: white; }
+    button.snippet-3 { background-color: #f44336; color: white; }
+    button.snippet-4 { background-color: #FF9800; color: white; }
+    button.snippet-5 { background-color: #9C27B0; color: white; }
+    button.snippet-6 { background-color: #3F51B5; color: white; }
+    button.snippet-7 { background-color: #009688; color: white; }
+    button.snippet-8 { background-color: #795548; color: white; }
+
+.reasoning-point {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: white;
+  border: 2px solid black;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.2s ease;
+}
+
+.reasoning-point:hover {
+  transform: scale(1.2);
+}
+
+.tooltip-box {
+  position: absolute;
+  background-color: #333;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  display: none;
+  z-index: 99;
+}
+
+.reasoning-container {
+  position: relative;
+}
+
+/* Show tooltip on hover */
+.reasoning-point:hover + .tooltip-box {
+  display: block;
+}
+
+.snippet-box {
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-family: 'Courier New', monospace;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.participant {
+  background: #f9f9f9;
+  border-left: 4px solid #aaa;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.participant h4 {
+  margin-top: 0;
+}
+
+#modal-code {
+  background-color: #2d2d2d;
+  color: #ccc;
+  padding: 20px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.light-mode #modal-code {
+  background-color: #f0f0f0;
+  color: #333;
+}
+.code-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  background-color: inherit;
+  color: inherit;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.line-numbers {
+  text-align: right;
+  padding-right: 10px;
+  user-select: none;
+  color: #888;
+}
+
+.code-content {
+  white-space: pre;
+}
+
+#code {
+  background-color: #2d2d2d;
+  color: #ccc;
+  padding: 20px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.light-mode #code {
+  background-color: #f0f0f0;
+  color: #333;
+}
+/* LIGHT MODE styles */
+.keyword     { color: #0000ff; font-weight: bold; }
+.type        { color: #007070; }
+.function    { color: #7928a1; font-weight: bold; }
+.literal     { color: #009999; }
+.string      { color: #a31515; }
+.comment     { color: #6a9955; font-style: italic; }
+.number      { color: #098658; }
+
+/* DARK MODE overrides */
+.dark-mode .keyword  { color: #82aaff; }
+.dark-mode .type     { color: #89ddff; }
+.dark-mode .function { color: #c792ea; }
+.dark-mode .literal  { color: #ffcb6b; }
+.dark-mode .string   { color: #c3e88d; }
+.dark-mode .comment  { color: #7f848e; }
+.dark-mode .number   { color: #f78c6c; }
+
+a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+.sticky-menu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  padding: 10px 0;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  z-index: 1000;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.06);
+}
+
+.sticky-menu button {
+  background: #ffffff;
+  color: #333;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.sticky-menu button:hover {
+  background: #f3f3f3;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.disagreement-box {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+textarea {
+  width: 100%;
+  height: 120px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-top: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #45a049;
+}
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.content-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.disagreement-box, .question-box {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+textarea {
+  width: 100%;
+  height: 120px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.question-box .navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+.content-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.disagreement-box, .right-panel {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.question-box textarea {
+  width: 100%;
+  height: 120px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+}
+
+.right-panel .navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.toggle-btn {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 5px;
+  background-color: #ffc800;
+  border: 1px solid #aaa;
+  cursor: pointer;
+  color: #222;
+}
+
+.phase-bar {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  right: 0;
+  background: #fff;
+  z-index: 999;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-bottom: 1px solid #ccc;
+  transition: max-height 0.3s ease;
+}
+
+.phase-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.phase-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+}
+
+.phase-title {
+  font-weight: 600;
+  color: #333;
+}
+
+#scroll-trigger-element {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+#scroll-trigger-element.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#phase-section-content {
+  overflow: auto;
+  min-height: 50px;
+  height: 200px; /* default */
+  resize: none;  /* disable built-in resizing — we use custom handle */
+  overflow-y: visible;
+  padding: 10px 20px;
+}
+
+#phase2-resize-handle {
+  height: 10px;
+  background: #ccc;
+  cursor: ns-resize;
+  position: relative;
+}
+
+.fade {
+  transition: opacity 0.4s ease;
+  opacity: 1;
+}
+.fade.hidden {
+  opacity: 0;
+}
+.reasoning-point:hover + .tooltip-box { display: block; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Expert Rankings & Reasonings (Latest Submissions)</h1>
+    <div class="last-updated">
+      Last updated: <time id="last-updated" datetime="2025-09-19T06:47:32.337309+00:00"></time>
+    </div>
+    <div class="legend">
+      <ol>
+        <li>
+          Hover your mouse over the
+          <strong><span style="font-size: 18px;">○</span> icons above the positions</strong> to see the reasoning behind
+          grouping the snippets. You can also hover over the
+          <strong><span style="font-size: 18px;">○</span> icons between two positions</strong> to see the reasoning behind
+          placing snippets in those positions.
+        </li>
+        <li>
+          <strong>Click on a <span style="font-size: 18px;">○</span> icon</strong> to view the related snippets or compare
+          them.
+        </li>
+      </ol>
+    </div>
+
+
+    <div class="participant-section">
+      <strong>martin</strong>
+      <div class="ranking-labels">
+        <div class="ranking-label">1 (easiest)</div>
+        <div class="ranking-label">2</div>
+        <div class="ranking-label">3</div>
+        <div class="ranking-label">4</div>
+        <div class="ranking-label">5</div>
+        <div class="ranking-label">6</div>
+        <div class="ranking-label">7</div>
+        <div class="ranking-label">8 (hardest)</div>
+      </div>
+      <div class="ranking-row">
+        <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-1" onclick="show_snippet(1)">isValidProjectN</button>
+            <div class="reasoning-point" onclick="compare([1],[2])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">isRemote involves a little more domain knowledge, but both have simple structure and similar purpose: check some arbitrary conditions.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-2" onclick="show_snippet(2)">isRemote</button>
+            <div class="reasoning-point" onclick="compare([2],[4])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">isRemote has simpler control flow. indexOfIgnoreCase has a clearer specification (i.e., is easier to understand without reading the code), but once you get into the details it&#x27;s a bit trickier. For both, you need to know something about the standard library (for isRemote, URIs; for indexOfIgnoreCase, String#regionMatches)</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-4" onclick="show_snippet(4)">indexOfIgnoreCa</button>
+            <div class="reasoning-point" onclick="compare([4],[5])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">The File API is confusing and easy to get wrong. And, fewer engineers work in codebases that need to deal with files compared to codebases that need to deal with Strings. But, both of these methods have simple high-level specifications and there&#x27;s really only one tricky thing about them, so they&#x27;re easy to follow overall.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-5" onclick="show_snippet(5)">deleteRecursive</button>
+            <div class="reasoning-point" onclick="compare([5],[7])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">deleteRecursively is pretty easy to understand at a high-level without much domain knowledge. lowestPositiveRoot has a lot more going on, but the spec is also pretty simple.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-7" onclick="show_snippet(7)">lowestPositiveR</button>
+            <div class="reasoning-point" onclick="compare([7],[3])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">reflection</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-3" onclick="show_snippet(3)">isMachineTypeDe</button>
+            <div class="reasoning-point" onclick="compare([3],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">encodings require serious, rare domain knowledge</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-6" onclick="show_snippet(6)">encodedLength</button>
+            <div class="reasoning-point" onclick="compare([6],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">Both require line-by-line reasoning, but `atan2` requires _two_ kinds of domain-specific knowledge (numerical methods + trig) vs just one for `encodedLength` (encodings).</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-8" onclick="show_snippet(8)">atan2</button>
+          </div>
+      </div>
+    </div>
+
+    <div class="participant-section">
+      <strong>oscar</strong>
+      <div class="ranking-labels">
+        <div class="ranking-label">1 (easiest)</div>
+        <div class="ranking-label">2</div>
+        <div class="ranking-label">3</div>
+        <div class="ranking-label">4</div>
+        <div class="ranking-label">5</div>
+        <div class="ranking-label">6</div>
+        <div class="ranking-label">7</div>
+        <div class="ranking-label">8 (hardest)</div>
+      </div>
+      <div class="ranking-row">
+        <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-1" onclick="show_snippet(1)">isValidProjectN</button>
+            <div class="reasoning-point" onclick="compare([1],[2])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">both snippets implement simple logic and their overall intent is easy to understand -- the identifiers help quite a bit. <br><br>S2 is slightly harder to understand because it is unclear why checking for file and jar is enough to determine that the URI is not remote. I guess my familiarity with the URI&#x27;s scheme is not enough to fully understand the method.<br><br>This ordering is also consistent with the one from my colleagues.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-2" onclick="show_snippet(2)">isRemote</button>
+            <div class="reasoning-point" onclick="compare([2],[7])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">Both implement simple logic as well, but S7 requires people to understand/remember the quadratic formula, hence it is slightly harder to understand than S2.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-7" onclick="show_snippet(7)">lowestPositiveR</button>
+            <div class="reasoning-point" onclick="compare([7],[4])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">I think the logic of S4 is more complex, although I understand what it does -- it requires more nuanced understanding</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-4" onclick="show_snippet(4)">indexOfIgnoreCa</button>
+            <div class="reasoning-point" onclick="compare([4],[5])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">S5 requires knowing the visitor pattern to fully understand what it does -- it can be obscure for people unfamiliar with the pattern. S4, on the other hand, doesn&#x27;t implement any patterns: it is just regular code.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-5" onclick="show_snippet(5)">deleteRecursive</button>
+            <div class="reasoning-point" onclick="compare([5],[3])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">I guess reflection is harder to understand than the visitor pattern, as my colleagues point out. To me, both are pretty straightforward to understand, though, because I am familiar with these concepts and the identifiers make both pretty easy to understand.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-3" onclick="show_snippet(3)">isMachineTypeDe</button>
+            <div class="reasoning-point" onclick="compare([3],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">not idea what the UFT8-2-UT16 entails, so for sure S6 is harder to understand than S3</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-6" onclick="show_snippet(6)">encodedLength</button>
+            <div class="reasoning-point" onclick="compare([6],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">atan2 is just very hard to understand because I don&#x27;t remember how arctan&#x27;s math works -- this is by far the hardest to understand for me.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-8" onclick="show_snippet(8)">atan2</button>
+          </div>
+      </div>
+    </div>
+
+    <div class="participant-section">
+      <strong>nadeeshan</strong>
+      <div class="ranking-labels">
+        <div class="ranking-label">1 (easiest)</div>
+        <div class="ranking-label">2</div>
+        <div class="ranking-label">3</div>
+        <div class="ranking-label">4</div>
+        <div class="ranking-label">5</div>
+        <div class="ranking-label">6</div>
+        <div class="ranking-label">7</div>
+        <div class="ranking-label">8 (hardest)</div>
+      </div>
+      <div class="ranking-row">
+        <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-1" onclick="show_snippet(1)">isValidProjectN</button>
+            <div class="reasoning-point" onclick="compare([1],[7,2,4])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">lowestPositiveR is way shorter than lowestPositiveR</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-4" onclick="show_snippet(4)">indexOfIgnoreCa</button>
+<button class="snippet-7" onclick="show_snippet(7)">lowestPositiveR</button>
+<button class="snippet-2" onclick="show_snippet(2)">isRemote</button>
+            <div class="reasoning-point" onclick="compare([7],[2,4])" style="position: absolute; top: -7px; right: 50px;"></div>
+            <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>All of them require some background knowledge about maths or Java APIs.</div>
+            <div class="reasoning-point" onclick="compare([7,2,4],[5])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">The complex structure of isRemote makes it harder to understand.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-5" onclick="show_snippet(5)">deleteRecursive</button>
+            <div class="reasoning-point" onclick="compare([5],[3])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">Without identifying the isMachineTypeDe uses Java reflection, it is hard to understand the logic straightforwardly.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-3" onclick="show_snippet(3)">isMachineTypeDe</button>
+            <div class="reasoning-point" onclick="compare([3],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">Since encodedLength requires knowledge of UTF-8 to UTF-16 conversion, it assumes some familiarity with character encoding concepts.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-6" onclick="show_snippet(6)">encodedLength</button>
+            <div class="reasoning-point" onclick="compare([6],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">atan2 require special domain knowledge--how atan works specifically</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-8" onclick="show_snippet(8)">atan2</button>
+          </div>
+      </div>
+    </div>
+  </div>
+
+ <div id="validation-modal" style="
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff0f0;
+  color: #660000;
+  border: 1px solid #ff9999;
+  padding: 20px;
+  border-radius: 10px;
+  width: 440px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  z-index: 1002;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  ">
+    <p id="validation-message" style="font-weight: bold;"></p>
+    <button onclick="document.getElementById('validation-modal').style.display = 'none';" style="
+      margin-top: 15px;
+      padding: 8px 14px;
+      background-color: #ff9999;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    ">OK</button>
+  </div>
+
+<div id="snippet-modal" style="display:none; position:fixed; top:10%;
+left:50%; transform:translateX(-50%); width:80%; max-height:80%;
+overflow-y:auto; background:#fff; border:1px solid #ccc; padding:0px 20px;
+border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
+  <div style="position: sticky; top: 0; background: #fff; z-index: 10; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd;">
+    <h3 id="modal-snippet-title" style="margin:0;">Snippet</h3>
+    <div>
+      <button onclick="toggleModalTheme()" id="modal-theme-toggle" style="margin-right: 10px; padding: 6px 12px; border-radius: 5px; border: none; background-color: #333; color: white; cursor: pointer;">Switch to Light Mode</button>
+      <span onclick="document.getElementById('snippet-modal').style.display='none'" style="cursor:pointer; font-size:20px; font-weight:bold;">&times;</span>
+    </div>
+  </div>
+
+  <div class="code-container" id="modal-code">
+    <div class="line-numbers" id="modal-line-numbers"></div>
+    <div class="code-content" id="modal-code-content"></div>
+  </div>
+</div>
+
+<div id="compare-modal" style="display:none; position:fixed; top:10%;
+left:50%; transform:translateX(-50%); width:90%; max-height:80%;
+overflow-y:auto; background:#fff; border:1px solid #ccc;
+padding: 0px 20px!important;
+border-radius:8px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
+  <div style="position: sticky; top: 0; background: #fff; display: flex;
+  justify-content: space-between; align-items: center; margin-bottom: 15px;
+  padding: 10px 0px; z-index: 0; border-bottom: 1px solid #ddd;">
+    <h3 style="margin: 0;">Compare Snippets</h3>
+    <span onclick="document.getElementById('compare-modal').style.display='none'" style="cursor: pointer; font-size: 20px; font-weight: bold;">&times;</span>
+  </div>
+
+  <div id="compare-columns" style="display: flex; gap: 20px; ">
+    <div id="compare-left" style="flex: 1; overflow-x: auto;" ></div>
+    <div id="compare-right" style="flex: 1; overflow-x: auto;"></div>
+  </div>
+</div>
+
+  <!-- Localize Last Updated into client timezone -->
+  <script>
+  (function () {
+    var t = document.getElementById('last-updated');
+    if (!t) return;
+    var iso = t.getAttribute('datetime');
+    if (!iso) return;
+    var d = new Date(iso);
+    if (isNaN(d)) return;
+    try {
+      var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      var formatted = new Intl.DateTimeFormat(undefined, {
+        year:'numeric', month:'short', day:'2-digit',
+        hour:'2-digit', minute:'2-digit', second:'2-digit',
+        hour12:false, timeZoneName:'short', timeZone: tz
+      }).format(d);
+      t.textContent = formatted;
+      t.title = new Date(iso).toISOString(); // UTC tooltip
+    } catch (e) {}
+  })();
+  </script>
+
+  <script src="js/dataForLive.js"></script>
+
+</body>
+</html>
