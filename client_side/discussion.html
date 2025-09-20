@@ -646,6 +646,36 @@
             opacity: .6;
             cursor: not-allowed;
         }
+
+        .done-toggle-wrap {
+            margin-top: 12px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .done-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--panel);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .done-toggle-btn.done {
+            border-color: transparent;
+            background: linear-gradient(145deg, var(--success), #47d16f);
+            color: #0b0c10;
+        }
+
+        .done-toggle-btn[disabled] {
+            opacity: .6;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -955,6 +985,11 @@
             } else {
                 enableChatInputs();
             }
+
+            // Ensure persistent footer exists and is labeled correctly
+            mountDoneFooter();
+            // Run after DOM paint to avoid race with reflows on slow devices
+            queueMicrotask(() => refreshDoneToggleButton(state.currentId));
         }
 
         function renderMessage(msg) {
@@ -1209,6 +1244,17 @@
                     if (state.view === 'home') renderHomeGrid(); // refresh counts on cards
                 }).catch(console.error);
             }, CONFIG.POLL_MS);
+
+            state.pollHandle = setInterval(() => {
+                fetchLatestChat().then(() => {
+                    if (state.view === 'home') renderHomeGrid();
+                    if (state.view === 'chat') {
+                        // Chat may have re-rendered; keep the footer visible and labeled
+                        ensureDoneFooterVisible();
+                    }
+                }).catch(console.error);
+            }, CONFIG.POLL_MS);
+
         }
 
 
@@ -1545,6 +1591,7 @@
             // Paint
             renderCurrentThread();
             refreshDoneToggleButton(String(id));
+            ensureDoneFooterVisible();
             updateDisagreementBadges();
         }
 
@@ -1982,6 +2029,57 @@
             return (state.completedIds || []).includes(String(disId));
         }
 
+
+    </script>
+
+    <script>
+        function mountDoneFooter() {
+            // Create a persistent footer right after the section that holds #posts
+            let footer = document.getElementById('chat-done-footer');
+            if (footer) return footer;
+
+            const listCard = document.querySelector('section.list-card'); // the section that wraps #posts
+            if (!listCard) return null;
+
+            footer = document.createElement('div');
+            footer.id = 'chat-done-footer';
+            footer.className = 'done-toggle-wrap'; // uses your CSS
+            // Create the button once
+            const btn = document.createElement('button');
+            btn.id = 'done-toggle-btn';
+            btn.className = 'done-toggle-btn';
+            btn.type = 'button';
+            btn.addEventListener('click', () => toggleFinishedForCurrent(btn));
+            footer.appendChild(btn);
+
+            // Insert AFTER the list that contains #posts (i.e., after the first .list-card, which holds the thread)
+            // Your markup has two consecutive .list-card sections; the first is the thread list with #posts.
+            // We mount right after that specific one:
+            const postsCard = document.querySelector('section.list-card:has(#posts)') || listCard;
+            postsCard.insertAdjacentElement('afterend', footer);
+            return footer;
+        }
+
+        function refreshDoneToggleButton(chatId = state.currentId) {
+            const btn = document.getElementById('done-toggle-btn');
+            if (!btn) return; // not mounted yet
+            const done = isFinished(chatId);
+            btn.classList.toggle('done', done);
+            btn.textContent = done ? '🔓 Re-open this discussion' : '✅ I am done with this discussion';
+            btn.setAttribute('aria-pressed', String(done));
+            // Also lock/unlock the composers to match state
+            if (state.view === 'chat' && chatId != null) {
+                if (done) disableChatInputs(); else enableChatInputs();
+            }
+        }
+
+        // If the footer somehow got removed (rare), re-mount and refresh
+        function ensureDoneFooterVisible() {
+            if (!document.getElementById('chat-done-footer')) {
+                mountDoneFooter();
+            }
+            refreshDoneToggleButton();
+        }
 
     </script>
 </body>
