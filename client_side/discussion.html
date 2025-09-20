@@ -616,6 +616,31 @@
             opacity: 0.8;
             /* subtle feedback */
         }
+
+        .done-toggle-wrap {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+.done-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 14px;
+}
+.done-toggle-btn.done {
+  border-color: transparent;
+  background: linear-gradient(145deg, var(--success), #47d16f);
+  color: #0b0c10;
+}
+.done-toggle-btn[disabled] { opacity: .6; cursor: not-allowed; }
+
     </style>
 </head>
 
@@ -732,12 +757,15 @@
 
         /* ===== Config ===== */
         const CONFIG = {
-            DISAGREEMENTS_URL: 'js/disagreements.json',
-            GET_LATEST_CHAT_URL: 'https://codecomprehensibility.site/get_latest_chat',
-            SUBMIT_CHAT_URL: 'https://codecomprehensibility.site/submit_chat',   // TODO: confirm
-            DELETE_CHAT_URL: 'https://codecomprehensibility.site/delete_chat',   // TODO: confirm
-            POLL_MS: 120000
+        DISAGREEMENTS_URL: 'js/disagreements.json',
+        GET_LATEST_CHAT_URL: 'https://codecomprehensibility.site/get_latest_chat',
+        SUBMIT_CHAT_URL: 'https://codecomprehensibility.site/submit_chat',
+        DELETE_CHAT_URL: 'https://codecomprehensibility.site/delete_chat',
+        POLL_MS: 120000,
+        UPDATE_FINISHED_URL: 'https://codecomprehensibility.site/update_finished_chat',
+        GET_FINISHED_URL: 'https://codecomprehensibility.site/get_finished_chats'
         };
+
 
         /* ===== App state ===== */
         const state = {
@@ -907,6 +935,8 @@
             $('#opinion-count').textContent = msgs.length;
             $('#last-sync').textContent = new Date().toLocaleTimeString();
             thread.forEach(node => posts.appendChild(renderMessage(node)));
+            //Add the Done/Re-open toggle at the very end
+            posts.appendChild(renderDoneToggleRow(state.currentId));
         }
 
         function renderMessage(msg) {
@@ -1496,6 +1526,7 @@
 
             // Paint
             renderCurrentThread();
+            refreshDoneToggleButton(String(id)); 
             updateDisagreementBadges();
         }
 
@@ -1758,6 +1789,125 @@
                 button.textContent = "Show";
             }
         }
+    </script>
+
+    <script>
+        function getFinishedArray() {
+  const raw = sessionStorage.getItem('finishedChatIds')
+           || localStorage.getItem('finishedChatIds')
+           || '[]';
+  try { return JSON.parse(raw) || []; } catch { return []; }
+}
+
+function getFinishedSet() {
+  const arr = getFinishedArray();
+  const set = {};
+  arr.forEach(id => { set[String(id)] = true; });
+  return set;
+}
+
+function saveFinished(arr) {
+  const unique = Array.from(new Set(arr.map(String)));
+  const json = JSON.stringify(unique);
+  sessionStorage.setItem('finishedChatIds', json);
+  localStorage.setItem('finishedChatIds', json);
+
+  // also maintain the set cache (optional but handy)
+  const set = {};
+  unique.forEach(id => { set[id] = true; });
+  const setJson = JSON.stringify(set);
+  sessionStorage.setItem('finishedChatIdsSet', setJson);
+  localStorage.setItem('finishedChatIdsSet', setJson);
+}
+
+function isFinished(chatId) {
+  const raw = sessionStorage.getItem('finishedChatIdsSet')
+           || localStorage.getItem('finishedChatIdsSet')
+           || '{}';
+  try {
+    const set = JSON.parse(raw) || {};
+    return !!set[String(chatId)];
+  } catch {
+    return getFinishedArray().includes(String(chatId));
+  }
+}
+
+function setFinishedLocal(chatId, done) {
+  const id = String(chatId);
+  const arr = getFinishedArray();
+  const s = new Set(arr.map(String));
+  if (done) s.add(id); else s.delete(id);
+  saveFinished(Array.from(s));
+}
+
+    </script>
+
+    <script>
+        async function updateFinishedOnServer({ username, chatId, done }) {
+  const payload = { username, chatId, done: !!done };
+  const res = await fetch(CONFIG.UPDATE_FINISHED_URL, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) throw new Error('update_finished_chat failed');
+  const data = await res.json();
+  // server returns `finishedIds` — trust it to avoid drift
+  if (data && Array.isArray(data.finishedIds)) saveFinished(data.finishedIds);
+  return data;
+}
+
+function renderDoneToggleRow(chatId) {
+  const wrap = document.createElement('div');
+  wrap.className = 'done-toggle-wrap';
+
+  const btn = document.createElement('button');
+  btn.id = 'done-toggle-btn';
+  btn.className = 'done-toggle-btn';
+  btn.type = 'button';
+  btn.addEventListener('click', () => toggleFinishedForCurrent(btn));
+
+  wrap.appendChild(btn);
+  refreshDoneToggleButton(chatId); // set initial label/state
+  return wrap;
+}
+
+function refreshDoneToggleButton(chatId = state.currentId) {
+  const btn = document.getElementById('done-toggle-btn');
+  if (!btn) return;
+  const done = isFinished(chatId);
+  btn.classList.toggle('done', done);
+  btn.textContent = done ? '🔓 Re-open this discussion' : '✅ I am done with this discussion';
+  btn.setAttribute('aria-pressed', String(done));
+}
+
+
+async function toggleFinishedForCurrent(btn) {
+  const chatId = String(state.currentId);
+  const username = currentHandle() || state.user.name;
+  if (!chatId || !username) return;
+
+  const wantDone = !isFinished(chatId); // if not finished, we want to finish; else re-open
+  btn.disabled = true;
+
+  // optimistic: update local immediately
+  setFinishedLocal(chatId, wantDone);
+  refreshDoneToggleButton(chatId);
+
+  try {
+    await updateFinishedOnServer({ username, chatId, done: wantDone });
+    // server returns the authoritative list and saveFinished() is already called in updateFinishedOnServer
+    refreshDoneToggleButton(chatId);
+  } catch (e) {
+    console.error(e);
+    // revert optimistic on failure
+    setFinishedLocal(chatId, !wantDone);
+    refreshDoneToggleButton(chatId);
+    alert('Could not update finished state. Please try again.');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
     </script>
 </body>
 
