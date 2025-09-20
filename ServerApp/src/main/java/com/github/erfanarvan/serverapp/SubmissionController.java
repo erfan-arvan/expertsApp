@@ -1218,5 +1218,132 @@ public Map<String, Object> getLatestRound4Final(@RequestBody Map<String, String>
     }
 }
 
+private static final File CHAT_FINISHED_FILE = new File("submissions/chat/finished.json");
+
+@SuppressWarnings("unchecked")
+private Map<String, Object> readFinishedStore() throws IOException {
+    if (!CHAT_DIR.exists()) CHAT_DIR.mkdirs();
+    if (!CHAT_FINISHED_FILE.exists()) {
+        Map<String, Object> init = new HashMap<>();
+        init.put("updatedAt", nowIsoUtc());
+        init.put("users", new HashMap<String, List<String>>()); // username -> [chatId, ...]
+        writeJsonFile(CHAT_FINISHED_FILE, init);
+    }
+    return readJsonFile(CHAT_FINISHED_FILE);
+}
+
+private void writeFinishedStore(Map<String, Object> store) throws IOException {
+    store.put("updatedAt", nowIsoUtc());
+    writeJsonFile(CHAT_FINISHED_FILE, store);
+}
+
+@SuppressWarnings("unchecked")
+private List<String> getFinishedIdsForUser(Map<String, Object> store, String usernameLc) {
+    Map<String, Object> users = (Map<String, Object>) store.get("users");
+    if (users == null) return Collections.emptyList();
+    Object raw = users.get(usernameLc);
+    if (raw == null) return Collections.emptyList();
+    List<String> list = new ArrayList<>();
+    if (raw instanceof List<?>) {
+        for (Object o : (List<?>) raw) if (o != null) list.add(String.valueOf(o));
+    }
+    // stable sort (by insertion order json might not keep), but we'll sort for determinism
+    Collections.sort(list);
+    return list;
+}
+
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/update_finished_chat")
+public synchronized Map<String, Object> updateFinishedChat(@RequestBody Map<String, Object> body) {
+    String username = Objects.toString(body.get("username"), "").trim().toLowerCase(Locale.ROOT);
+    String chatId   = Objects.toString(body.get("chatId"), "").trim();
+    String op       = Objects.toString(body.get("op"), "").trim().toLowerCase(Locale.ROOT);
+
+    if (username.isEmpty() || chatId.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username and chatId are required");
+    }
+    // Optionally restrict to known users (comment this out if you want to allow anyone)
+    if (!userPasswords.keySet().stream().map(String::toLowerCase).collect(Collectors.toSet()).contains(username)) {
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "unknown user");
+    }
+
+    // derive action
+    Boolean doneFlag = (body.get("done") instanceof Boolean) ? (Boolean) body.get("done") : null;
+    boolean add;
+    if ("add".equals(op)) add = true;
+    else if ("remove".equals(op)) add = false;
+    else if (doneFlag != null) add = doneFlag;
+    else {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "must include either done:true/false or op:add/remove");
+    }
+
+    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+    try {
+        Map<String, Object> store = readFinishedStore();
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> users = (Map<String, Object>) store.get("users");
+        if (users == null) {
+            users = new HashMap<>();
+            store.put("users", users);
+        }
+
+        @SuppressWarnings("unchecked")
+        List<String> current = (List<String>) users.get(username);
+        if (current == null) current = new ArrayList<>();
+
+        // operate using a set for uniqueness
+        Set<String> s = new LinkedHashSet<>(current);
+        boolean changed;
+        if (add) {
+            changed = s.add(chatId);
+        } else {
+            changed = s.remove(chatId);
+        }
+
+        if (changed) {
+            users.put(username, new ArrayList<>(s)); // back to list for JSON
+            writeFinishedStore(store);
+        }
+
+        Map<String, Object> resp = new LinkedHashMap<>();
+        resp.put("ok", true);
+        resp.put("username", username);
+        resp.put("action", add ? "added" : "removed");
+        resp.put("chatId", chatId);
+        resp.put("finishedIds", getFinishedIdsForUser(store, username));
+        resp.put("updatedAt", store.get("updatedAt"));
+        return resp;
+
+    } catch (IOException ioe) {
+        ioe.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update finished chat state");
+    }
+}
+
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/get_finished_chats")
+public Map<String, Object> getFinishedChats(@RequestBody Map<String, Object> body) {
+    String username = Objects.toString(body.get("username"), "").trim().toLowerCase(Locale.ROOT);
+    if (username.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username is required");
+    }
+
+    try {
+        Map<String, Object> store = readFinishedStore();
+        Map<String, Object> resp = new LinkedHashMap<>();
+        resp.put("ok", true);
+        resp.put("username", username);
+        resp.put("finishedIds", getFinishedIdsForUser(store, username));
+        resp.put("updatedAt", store.get("updatedAt"));
+        return resp;
+    } catch (IOException ioe) {
+        ioe.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read finished chats");
+    }
+}
+
+
+
 
 }
