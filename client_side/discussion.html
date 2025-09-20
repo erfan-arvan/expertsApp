@@ -1978,6 +1978,11 @@
             }
         }
 
+        function isChatFinished(disId) {
+            return (state.completedIds || []).includes(String(disId));
+        }
+
+
     </script>
 </body>
 
