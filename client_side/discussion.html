@@ -977,7 +977,7 @@
             $('#last-sync').textContent = new Date().toLocaleTimeString();
             thread.forEach(node => posts.appendChild(renderMessage(node)));
             //Add the Done/Re-open toggle at the very end
-            posts.appendChild(renderDoneToggleRow(state.currentId));
+            // posts.appendChild(renderDoneToggleRow(state.currentId));
 
             // disable composers if finished
             if (isChatFinished(state.currentId)) {
@@ -2018,8 +2018,9 @@
         }
 
         function isChatFinished(disId) {
-            return (state.completedIds || []).includes(String(disId));
+            return isFinished(disId);
         }
+
 
 
     </script>
