@@ -436,13 +436,17 @@ to complete this round is approximately <strong>50 minutes</strong>.
       localStorage.setItem('snippetOrder', JSON.stringify(snippetOrder));
       localStorage.setItem('username', username);
       loadPreviousData()
+        .then(() => loadPreviousData2())
+        .then(() => fetchAndStoreFinishedChats())
         .then(() => {
           window.location.href = 'discussion.html';
-          // only after data is fully loaded
         })
-        .catch(() => {
-          alert("⚠️ Could not load previous data. Redirecting anyway.");
-          window.location.href = 'discussion.html';
+        .catch((e) => {
+          console.warn("⚠️ Preload chain issue:", e);
+          // Try to at least fetch finished chats before going
+          fetchAndStoreFinishedChats().finally(() => {
+            window.location.href = 'discussion.html';
+          });
         });
     } catch (err) {
       console.error(err);
@@ -673,5 +677,64 @@ function logout() {
   window.location.href = 'discussion.html';
 }
 </script>
+
+<script>
+  async function fetchAndStoreFinishedChats() {
+    const username = sessionStorage.getItem('username') || localStorage.getItem('username');
+    if (!username) return;
+
+    try {
+      const res = await fetch('https://codecomprehensibility.site/get_finished_chats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username })
+      });
+
+      if (!res.ok) throw new Error('finished-chats not found');
+      const data = await res.json();
+      // Expected: { ok: true, username, finishedIds: [...], updatedAt: "..." }
+
+      const ids = Array.isArray(data.finishedIds) ? data.finishedIds : [];
+      const idsJson = JSON.stringify(ids);
+      const updatedAt = data.updatedAt || '';
+
+      // Save array
+      sessionStorage.setItem('finishedChatIds', idsJson);
+      localStorage.setItem('finishedChatIds', idsJson);
+
+      // Also save a fast lookup set (as an object map)
+      const asSet = {};
+      ids.forEach(id => { asSet[id] = true; });
+      const setJson = JSON.stringify(asSet);
+      sessionStorage.setItem('finishedChatIdsSet', setJson);
+      localStorage.setItem('finishedChatIdsSet', setJson);
+
+      // Save timestamp (optional)
+      sessionStorage.setItem('finishedChatIdsUpdatedAt', updatedAt);
+      localStorage.setItem('finishedChatIdsUpdatedAt', updatedAt);
+
+      console.log('✅ Finished chats loaded:', ids);
+    } catch (e) {
+      console.warn('⚠️ Could not load finished chats', e);
+      // Keep keys consistent even on failure
+      sessionStorage.setItem('finishedChatIds', '[]');
+      localStorage.setItem('finishedChatIds', '[]');
+      sessionStorage.setItem('finishedChatIdsSet', '{}');
+      localStorage.setItem('finishedChatIdsSet', '{}');
+    }
+  }
+
+  // Tiny utility for later use anywhere in your app:
+  function isDiscussionDone(chatId) {
+    try {
+      const raw = sessionStorage.getItem('finishedChatIdsSet') || localStorage.getItem('finishedChatIdsSet') || '{}';
+      const set = JSON.parse(raw);
+      return !!set[chatId];
+    } catch {
+      return false;
+    }
+  }
+</script>
+
 </body>
 </html>
