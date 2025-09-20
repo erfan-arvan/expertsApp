@@ -625,18 +625,21 @@
 
     <div class="shell" role="application" aria-label="Threaded opinions" id="app">
 
-        <div id="instructions-box" style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 15px;">
+<div id="instructions-box"
+    style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 15px;">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2 style="margin: 0;">Phase 1: Reviewing Summaries and Comprehensibility Assessments</h2>
-        <button onclick="toggleInstructions()" style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ffffff; border: none; cursor: pointer; color: #222; border: solid;">Hide</button>
+        <h2 style="margin: 0;">Last round: Let’s chat and resolve disagreements, if possible.</h2>
+        <button onclick="toggleInstructions()"
+            style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ffffff; border: none; cursor: pointer; color: #222; border: solid;">Hide</button>
     </div>
 
-  <div id="instructions-content" style="margin-top: 15px;">
-      <p>In this phase, you will review your own and other experts’ summaries of code snippets, along with their comprehensibility assessments.</p>
-      <p>For each snippet, please read the summaries and assessments carefully, then click “Next.”</p>
-  </div>
-
+    <div id="instructions-content" style="margin-top: 15px;">
+        <p>You are here because some disagreements between snippets remain.</p>
+        <p>For each discussion point, please talk it through and try to reach a consensus on the ranking of snippets, if possible.</p>
+        <p>Reaching agreement is not required. This is the final round, even if consensus cannot be reached. However, we encourage discussion to resolve disagreements that may still be solvable.</p>
+    </div>
 </div>
+
 
         <!-- Home grid (default visible) -->
         <section id="home-grid" class="list-card" aria-label="All disagreements">
