@@ -852,6 +852,30 @@
   background: color-mix(in srgb, var(--accent2, #4f46e5) 6%, transparent);
 }
 
+.panel-close{
+  margin-left: auto;
+  background: transparent;
+  color: var(--text, #0b1220);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease, transform .08s ease;
+}
+.panel-close:hover{
+  background: color-mix(in srgb, var(--accent2, #4f46e5) 12%, transparent);
+  border-color: var(--border, #e5e7eb);
+}
+.panel-close:active{
+  transform: translateY(1px);
+}
+.panel-close:focus-visible{
+  outline: 3px solid color-mix(in srgb, white 70%, var(--accent2, #4f46e5));
+  outline-offset: 2px;
+}
+
 
     </style>
 </head>
@@ -865,20 +889,26 @@
 
 
     <!-- Sliding panel with iframe -->
-    <div id="panel" aria-hidden="true">
-        <div id="resizer" title="Drag to resize"></div>
-        <div id="panel-header">
-            <span>Live Ranking</span>
-            <!-- <button id="close-btn" aria-label="Close panel">✖</button> -->
-        </div>
-        <iframe id="ranking-frame" src="live-ranking.html" title="Live ranking"></iframe>
-    </div>
+<!-- Live Ranking panel (existing) -->
+<div id="panel" aria-hidden="true">
+  <div id="resizer" title="Drag to resize"></div>
+  <div id="panel-header">
+    <span>Live Ranking</span>
+    <button id="close-btn" class="panel-close" aria-label="Close live ranking panel">✖</button>
+  </div>
+  <iframe id="ranking-frame" src="live-ranking.html" title="Live ranking"></iframe>
+</div>
 
-    <div id="panel-update" aria-hidden="true">
+<!-- Update Ranking panel (new) -->
+<div id="panel-update" aria-hidden="true">
   <div id="resizer-update" title="Drag to resize"></div>
-  <div id="panel-update-header"><span>Update Ranking</span></div>
+  <div id="panel-update-header">
+    <span>Update Ranking</span>
+    <button id="close-btn-update" class="panel-close" aria-label="Close update ranking panel">✖</button>
+  </div>
   <iframe id="update-frame" src="update-ranking.html" title="Update ranking"></iframe>
 </div>
+
 
     <!-- New header (appearance only) -->
     <header>
@@ -2461,6 +2491,19 @@ window.addEventListener('resize', () => {
   panelUpdate.style.width = Math.min(Math.max(current, minWidth), vw) + 'px';
 });
 
+const closeBtn1 = document.getElementById('close-btn');
+const closeBtnUpdate = document.getElementById('close-btn-update');
+
+closeBtn1?.addEventListener('click', () => setOpenRanking(false));
+closeBtnUpdate?.addEventListener('click', () => setOpenUpdate(false));
+
+// Optional: ESC closes whichever is open (from the parent, not inside iframes)
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (panel.classList.contains('open')) setOpenRanking(false);
+    if (panelUpdate.classList.contains('open')) setOpenUpdate(false);
+  }
+});
 
     </script>
 </body>
