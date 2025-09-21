@@ -852,28 +852,44 @@
   background: color-mix(in srgb, var(--accent2, #4f46e5) 6%, transparent);
 }
 
+/* Header close button (right side of header bar) */
 .panel-close{
   margin-left: auto;
   background: transparent;
+  border: 1px solid var(--border, #e5e7eb);
   color: var(--text, #0b1220);
-  border: 1px solid transparent;
-  border-radius: 8px;
-  padding: 4px 8px;
-  font-size: 18px;
+  width: 28px; height: 28px;
   line-height: 1;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background .15s ease, color .15s ease, border-color .15s ease, transform .08s ease;
+  font-weight: 800;
 }
 .panel-close:hover{
-  background: color-mix(in srgb, var(--accent2, #4f46e5) 12%, transparent);
-  border-color: var(--border, #e5e7eb);
+  background: color-mix(in srgb, var(--accent2, #4f46e5) 8%, transparent);
+  border-color: color-mix(in srgb, var(--accent2, #4f46e5) 40%, var(--border, #e5e7eb));
+  color: var(--text, #0b1220);
 }
-.panel-close:active{
-  transform: translateY(1px);
+
+/* Overlay close button that sits above the iframe */
+#panel, #panel-update{ position: fixed; } /* ensure positioned ancestor */
+.frame-close-btn{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;             /* above iframe */
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--border, #e5e7eb);
+  background: var(--panel2, #f6f8fb);
+  color: var(--text, #0b1220);
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: var(--shadow, 0 6px 20px rgba(0,0,0,.15));
 }
-.panel-close:focus-visible{
-  outline: 3px solid color-mix(in srgb, white 70%, var(--accent2, #4f46e5));
-  outline-offset: 2px;
+.frame-close-btn:hover{
+  background: color-mix(in srgb, var(--accent2, #4f46e5) 10%, var(--panel2, #f6f8fb));
+  border-color: color-mix(in srgb, var(--accent2, #4f46e5) 35%, var(--border, #e5e7eb));
 }
 
 
@@ -894,18 +910,26 @@
   <div id="resizer" title="Drag to resize"></div>
   <div id="panel-header">
     <span>Live Ranking</span>
-    <button id="close-btn" class="panel-close" aria-label="Close live ranking panel">✖</button>
+    <button id="close-btn" class="panel-close" aria-label="Close Live Ranking">X</button>
   </div>
+
+  <!-- NEW overlay close button that sits on top of the iframe -->
+  <button id="frame-close-ranking" class="frame-close-btn" aria-label="Close Live Ranking">X</button>
+
   <iframe id="ranking-frame" src="live-ranking.html" title="Live ranking"></iframe>
 </div>
 
-<!-- Update Ranking panel (new) -->
+<!-- Update Ranking panel (existing) -->
 <div id="panel-update" aria-hidden="true">
   <div id="resizer-update" title="Drag to resize"></div>
   <div id="panel-update-header">
     <span>Update Ranking</span>
-    <button id="close-btn-update" class="panel-close" aria-label="Close update ranking panel">✖</button>
+    <button id="close-btn-update" class="panel-close" aria-label="Close Update Ranking">X</button>
   </div>
+
+  <!-- NEW overlay close button that sits on top of the iframe -->
+  <button id="frame-close-update" class="frame-close-btn" aria-label="Close Update Ranking">X</button>
+
   <iframe id="update-frame" src="update-ranking.html" title="Update ranking"></iframe>
 </div>
 
@@ -2294,7 +2318,6 @@
         const resizer = document.getElementById('resizer');
         const toggleBar = document.getElementById('toggle-bar');
         const iframe = document.getElementById('ranking-frame');
-        const closeBtn = document.getElementById("close-btn");
 
         // Toggle open/close with the sticky button
         function setOpen(isOpen) {
@@ -2491,19 +2514,20 @@ window.addEventListener('resize', () => {
   panelUpdate.style.width = Math.min(Math.max(current, minWidth), vw) + 'px';
 });
 
-const closeBtn1 = document.getElementById('close-btn');
-const closeBtnUpdate = document.getElementById('close-btn-update');
+// existing:
+const closeBtn = document.getElementById("close-btn");
 
-closeBtn1?.addEventListener('click', () => setOpenRanking(false));
-closeBtnUpdate?.addEventListener('click', () => setOpenUpdate(false));
+// NEW:
+const closeBtnUpdate = document.getElementById("close-btn-update");
+const frameCloseRanking = document.getElementById("frame-close-ranking");
+const frameCloseUpdate  = document.getElementById("frame-close-update");
 
-// Optional: ESC closes whichever is open (from the parent, not inside iframes)
-window.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    if (panel.classList.contains('open')) setOpenRanking(false);
-    if (panelUpdate.classList.contains('open')) setOpenUpdate(false);
-  }
-});
+// Close handlers
+closeBtn?.addEventListener("click", () => setOpenRanking(false));
+closeBtnUpdate?.addEventListener("click", () => setOpenUpdate(false));
+
+frameCloseRanking?.addEventListener("click", () => setOpenRanking(false));
+frameCloseUpdate?.addEventListener("click", () => setOpenUpdate(false));
 
     </script>
 </body>
