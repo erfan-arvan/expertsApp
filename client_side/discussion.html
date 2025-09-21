@@ -698,6 +698,55 @@
                 display: none !important;
             }
         }
+
+        /* Reuse the same visual style as #toggle-bar */
+#update-bar{
+  position: fixed;
+  top: calc(50% + 56px);   /* sits just below the Ranking button */
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 1001;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  background: linear-gradient(145deg, var(--accent, #6e59f9), var(--accent2, #4f46e5));
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 12px 0 0 12px;
+  border: 1px solid transparent;
+  box-shadow: var(--shadow, 0 6px 20px rgba(0,0,0,.15));
+  cursor: pointer;
+  user-select: none;
+  font-weight: 700;
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+
+#update-bar:hover{
+  transform: translateY(calc(-50% - 1px));
+  box-shadow: 0 10px 28px rgba(0,0,0,.22);
+  filter: brightness(1.02);
+}
+
+#update-bar:active{
+  transform: translateY(-50%);
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+}
+
+#update-bar:focus-visible{
+  outline: 3px solid color-mix(in srgb, white 70%, var(--accent2, #4f46e5));
+  outline-offset: 2px;
+}
+
+/* tiny “busy” feedback */
+#update-bar.busy{ filter: saturate(1.15) brightness(1.03); }
+
+/* Hide in print */
+@media print{
+  #update-bar{ display:none !important; }
+}
+
     </style>
 </head>
 
@@ -706,6 +755,8 @@
 
     <!-- Sticky toggle bar -->
     <div id="toggle-bar" aria-controls="panel" aria-expanded="false">☰ Live Ranking</div>
+    <div id="update-bar" aria-label="Refresh live ranking">↻ Update</div>
+
 
     <!-- Sliding panel with iframe -->
     <div id="panel" aria-hidden="true">
@@ -2193,6 +2244,26 @@
             const current = panel.getBoundingClientRect().width;
             panel.style.width = clamp(current, minWidth, vw) + 'px';
         });
+
+        const updateBar = document.getElementById('update-bar');
+
+function refreshNow(){
+  // Use your existing cache-busting reload
+  refreshFrame();
+
+  // quick visual feedback
+  updateBar.classList.add('busy');
+  setTimeout(() => updateBar.classList.remove('busy'), 500);
+}
+
+updateBar.addEventListener('click', refreshNow);
+updateBar.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); refreshNow(); }
+});
+updateBar.setAttribute('role', 'button');
+updateBar.setAttribute('tabindex', '0');
+updateBar.setAttribute('title', 'Refresh live ranking');
+
     </script>
 </body>
 
