@@ -747,6 +747,112 @@
   #update-bar{ display:none !important; }
 }
 
+/* Second sticky button mirrors #toggle-bar */
+#update-bar{
+  position: fixed;
+  top: calc(50% + 56px);
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 1001;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  background: linear-gradient(145deg, var(--accent, #6e59f9), var(--accent2, #4f46e5));
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 12px 0 0 12px;
+  border: 1px solid transparent;
+  box-shadow: var(--shadow, 0 6px 20px rgba(0,0,0,.15));
+  cursor: pointer;
+  user-select: none;
+  font-weight: 700;
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+#update-bar:hover{
+  transform: translateY(calc(-50% - 1px));
+  box-shadow: 0 10px 28px rgba(0,0,0,.22);
+  filter: brightness(1.02);
+}
+#update-bar:active{
+  transform: translateY(-50%);
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+}
+#update-bar:focus-visible{
+  outline: 3px solid color-mix(in srgb, white 70%, var(--accent2, #4f46e5));
+  outline-offset: 2px;
+}
+@media print{ #update-bar{ display:none !important; } }
+
+/* Second slide panel mirrors #panel */
+#panel-update{
+  position: fixed;
+  top: 0;
+  right: -100%;
+  height: 100%;
+  width: calc(100% - var(--left-gap));
+  max-width: 100%;
+  min-width: var(--panel-min);
+
+  background: var(--panel, #fff);
+  color: var(--text, #0b1220);
+  box-shadow: -4px 0 14px rgba(0,0,0,0.25);
+  border-left: 1px solid var(--border, #e5e7eb);
+
+  z-index: 999; /* sit just below the live panel so they don't fight for top */
+  display: flex;
+  flex-direction: column;
+  transition: right 0.35s ease;
+  overflow: hidden;
+}
+#panel-update.open{ right: 0; }
+
+#panel-update-header{
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--panel2, #f6f8fb);
+  color: var(--text, #0b1220);
+  border-bottom: 1px solid var(--border, #e5e7eb);
+  font-weight: 700;
+}
+
+#panel-update iframe{
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: var(--panel, #fff);
+}
+
+/* Resizer for the update panel */
+#resizer-update{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 100%;
+  cursor: col-resize;
+  background: transparent;
+}
+#resizer-update::after{
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: color-mix(in srgb, var(--border, #e5e7eb) 70%, transparent);
+}
+#resizer-update:hover{
+  background: color-mix(in srgb, var(--accent2, #4f46e5) 6%, transparent);
+}
+
+
     </style>
 </head>
 
@@ -767,6 +873,12 @@
         </div>
         <iframe id="ranking-frame" src="live-ranking.html" title="Live ranking"></iframe>
     </div>
+
+    <div id="panel-update" aria-hidden="true">
+  <div id="resizer-update" title="Drag to resize"></div>
+  <div id="panel-update-header"><span>Update Ranking</span></div>
+  <iframe id="update-frame" src="update-ranking.html" title="Update ranking"></iframe>
+</div>
 
     <!-- New header (appearance only) -->
     <header>
@@ -2245,24 +2357,110 @@
             panel.style.width = clamp(current, minWidth, vw) + 'px';
         });
 
-        const updateBar = document.getElementById('update-bar');
 
-function refreshNow(){
-  // Use your existing cache-busting reload
-  refreshFrame();
+        
 
-  // quick visual feedback
-  updateBar.classList.add('busy');
-  setTimeout(() => updateBar.classList.remove('busy'), 500);
+        // Elements
+const updateBar = document.getElementById('update-bar');
+const panelUpdate = document.getElementById('panel-update');
+const resizerUpdate = document.getElementById('resizer-update');
+const iframeUpdate = document.getElementById('update-frame');
+
+// Helpers: open/close each panel; closing one when the other opens to avoid overlap
+function setOpenRanking(isOpen){
+  if (isOpen){
+    panel.classList.add('open');
+    panel.setAttribute('aria-hidden', 'false');
+    toggleBar.textContent = '✖ Close';
+    toggleBar.setAttribute('aria-expanded', 'true');
+    // close the other panel if open
+    setOpenUpdate(false);
+  }else{
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
+    toggleBar.textContent = '☰ Ranking';
+    toggleBar.setAttribute('aria-expanded', 'false');
+  }
+}
+function setOpenUpdate(isOpen){
+  if (isOpen){
+    panelUpdate.classList.add('open');
+    panelUpdate.setAttribute('aria-hidden', 'false');
+    // close the other panel if open
+    setOpenRanking(false);
+  }else{
+    panelUpdate.classList.remove('open');
+    panelUpdate.setAttribute('aria-hidden', 'true');
+  }
 }
 
-updateBar.addEventListener('click', refreshNow);
+// Replace previous toggle handler to use new function
+toggleBar.removeEventListener?.('click', ()=>{});
+toggleBar.addEventListener('click', () => setOpenRanking(!panel.classList.contains('open')));
+
+// Update button toggles update panel
+updateBar.addEventListener('click', () => setOpenUpdate(!panelUpdate.classList.contains('open')));
 updateBar.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); refreshNow(); }
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpenUpdate(!panelUpdate.classList.contains('open')); }
 });
 updateBar.setAttribute('role', 'button');
 updateBar.setAttribute('tabindex', '0');
-updateBar.setAttribute('title', 'Refresh live ranking');
+updateBar.setAttribute('title', 'Open Update Ranking');
+
+// Optional: auto-refresh update iframe every 30s (separate timer)
+function refreshUpdateFrame(){
+  const base = iframeUpdate.src.split('?')[0];
+  iframeUpdate.src = base + '?t=' + Date.now();
+}
+setInterval(refreshUpdateFrame, 30000);
+
+// --- Drag-to-resize for the UPDATE panel (same logic as the main panel) ---
+let draggingUpdate = false;
+
+function startDragUpdate(e){
+  if (!panelUpdate.classList.contains('open')) return;
+  draggingUpdate = true;
+  document.body.classList.add('no-select');
+  iframeUpdate.style.pointerEvents = 'none';
+  e.preventDefault();
+}
+function onDragUpdate(e){
+  if (!draggingUpdate) return;
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const viewportWidth = window.innerWidth;
+  const desiredWidth = viewportWidth - clientX;
+
+  const cs = getComputedStyle(panelUpdate);
+  const minWidth = parseInt(cs.minWidth, 10) || 400;
+  const maxWidth = viewportWidth;
+
+  const newWidth = Math.min(Math.max(desiredWidth, minWidth), maxWidth);
+  panelUpdate.style.width = newWidth + 'px';
+}
+function endDragUpdate(){
+  if (!draggingUpdate) return;
+  draggingUpdate = false;
+  document.body.classList.remove('no-select');
+  iframeUpdate.style.pointerEvents = '';
+}
+// Bind events
+resizerUpdate.addEventListener('mousedown', startDragUpdate);
+window.addEventListener('mousemove', onDragUpdate);
+window.addEventListener('mouseup', endDragUpdate);
+resizerUpdate.addEventListener('touchstart', startDragUpdate, { passive:false });
+window.addEventListener('touchmove', onDragUpdate, { passive:false });
+window.addEventListener('touchend', endDragUpdate);
+
+// Keep width sane on viewport resize
+window.addEventListener('resize', () => {
+  if (!panelUpdate.classList.contains('open')) return;
+  const vw = window.innerWidth;
+  const cs = getComputedStyle(panelUpdate);
+  const minWidth = parseInt(cs.minWidth, 10) || 400;
+  const current = panelUpdate.getBoundingClientRect().width;
+  panelUpdate.style.width = Math.min(Math.max(current, minWidth), vw) + 'px';
+});
+
 
     </script>
 </body>
