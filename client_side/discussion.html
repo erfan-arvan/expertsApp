@@ -2529,6 +2529,49 @@ closeBtnUpdate?.addEventListener("click", () => setOpenUpdate(false));
 frameCloseRanking?.addEventListener("click", () => setOpenRanking(false));
 frameCloseUpdate?.addEventListener("click", () => setOpenUpdate(false));
 
+
+// === Robust toggle wiring for Live Ranking ===
+(function () {
+  const btn  = document.getElementById('toggle-bar');
+  const pane = document.getElementById('panel');
+
+  if (!btn || !pane) return;
+
+  // Single source of truth for opening/closing the Live Ranking panel
+  window.setOpenRanking = function (isOpen) {
+    if (isOpen) {
+      pane.classList.add('open');
+      pane.setAttribute('aria-hidden', 'false');
+      btn.textContent = '✖ Close';
+      btn.setAttribute('aria-expanded', 'true');
+      // Optional: close the Update panel if open
+      if (typeof window.setOpenUpdate === 'function') window.setOpenUpdate(false);
+    } else {
+      pane.classList.remove('open');
+      pane.setAttribute('aria-hidden', 'true');
+      btn.textContent = '☰ Ranking';
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  };
+
+  function onToggleClick(e) {
+    e.preventDefault();
+    setOpenRanking(!pane.classList.contains('open'));
+  }
+
+  // Remove any previous handler we attached and rebind deterministically
+  if (btn._clickHandler) btn.removeEventListener('click', btn._clickHandler);
+  btn.addEventListener('click', onToggleClick);
+  btn._clickHandler = onToggleClick;
+
+  // Keyboard support & a11y
+  btn.setAttribute('role', 'button');
+  btn.setAttribute('tabindex', '0');
+  btn.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggleClick(e); }
+  });
+})();
+
     </script>
 </body>
 
