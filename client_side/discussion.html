@@ -2414,167 +2414,18 @@
         
 
         // Elements
-const updateBar = document.getElementById('update-bar');
-const panelUpdate = document.getElementById('panel-update');
-const resizerUpdate = document.getElementById('resizer-update');
-const iframeUpdate = document.getElementById('update-frame');
-
-// Helpers: open/close each panel; closing one when the other opens to avoid overlap
-function setOpenRanking(isOpen){
-  if (isOpen){
-    panel.classList.add('open');
-    panel.setAttribute('aria-hidden', 'false');
-    toggleBar.textContent = '✖ Close';
-    toggleBar.setAttribute('aria-expanded', 'true');
-    // close the other panel if open
-    setOpenUpdate(false);
-  }else{
-    panel.classList.remove('open');
-    panel.setAttribute('aria-hidden', 'true');
-    toggleBar.textContent = '☰ Ranking';
-    toggleBar.setAttribute('aria-expanded', 'false');
-  }
-}
-function setOpenUpdate(isOpen){
-  if (isOpen){
-    panelUpdate.classList.add('open');
-    panelUpdate.setAttribute('aria-hidden', 'false');
-    // close the other panel if open
-    setOpenRanking(false);
-  }else{
-    panelUpdate.classList.remove('open');
-    panelUpdate.setAttribute('aria-hidden', 'true');
-  }
-}
-
-// Replace previous toggle handler to use new function
-toggleBar.removeEventListener?.('click', ()=>{});
-toggleBar.addEventListener('click', () => setOpenRanking(!panel.classList.contains('open')));
-
-// Update button toggles update panel
-updateBar.addEventListener('click', () => setOpenUpdate(!panelUpdate.classList.contains('open')));
-updateBar.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpenUpdate(!panelUpdate.classList.contains('open')); }
-});
-updateBar.setAttribute('role', 'button');
-updateBar.setAttribute('tabindex', '0');
-updateBar.setAttribute('title', 'Open Update Ranking');
-
-// Optional: auto-refresh update iframe every 30s (separate timer)
-function refreshUpdateFrame(){
-  const base = iframeUpdate.src.split('?')[0];
-  iframeUpdate.src = base + '?t=' + Date.now();
-}
-setInterval(refreshUpdateFrame, 30000);
-
-// --- Drag-to-resize for the UPDATE panel (same logic as the main panel) ---
-let draggingUpdate = false;
-
-function startDragUpdate(e){
-  if (!panelUpdate.classList.contains('open')) return;
-  draggingUpdate = true;
-  document.body.classList.add('no-select');
-  iframeUpdate.style.pointerEvents = 'none';
-  e.preventDefault();
-}
-function onDragUpdate(e){
-  if (!draggingUpdate) return;
-  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-  const viewportWidth = window.innerWidth;
-  const desiredWidth = viewportWidth - clientX;
-
-  const cs = getComputedStyle(panelUpdate);
-  const minWidth = parseInt(cs.minWidth, 10) || 400;
-  const maxWidth = viewportWidth;
-
-  const newWidth = Math.min(Math.max(desiredWidth, minWidth), maxWidth);
-  panelUpdate.style.width = newWidth + 'px';
-}
-function endDragUpdate(){
-  if (!draggingUpdate) return;
-  draggingUpdate = false;
-  document.body.classList.remove('no-select');
-  iframeUpdate.style.pointerEvents = '';
-}
-// Bind events
-resizerUpdate.addEventListener('mousedown', startDragUpdate);
-window.addEventListener('mousemove', onDragUpdate);
-window.addEventListener('mouseup', endDragUpdate);
-resizerUpdate.addEventListener('touchstart', startDragUpdate, { passive:false });
-window.addEventListener('touchmove', onDragUpdate, { passive:false });
-window.addEventListener('touchend', endDragUpdate);
-
-// Keep width sane on viewport resize
-window.addEventListener('resize', () => {
-  if (!panelUpdate.classList.contains('open')) return;
-  const vw = window.innerWidth;
-  const cs = getComputedStyle(panelUpdate);
-  const minWidth = parseInt(cs.minWidth, 10) || 400;
-  const current = panelUpdate.getBoundingClientRect().width;
-  panelUpdate.style.width = Math.min(Math.max(current, minWidth), vw) + 'px';
-});
-
-// existing:
-const closeBtn = document.getElementById("close-btn");
-
-// NEW:
-const closeBtnUpdate = document.getElementById("close-btn-update");
-const frameCloseRanking = document.getElementById("frame-close-ranking");
-const frameCloseUpdate  = document.getElementById("frame-close-update");
-
-// Close handlers
-closeBtn?.addEventListener("click", () => setOpenRanking(false));
-closeBtnUpdate?.addEventListener("click", () => setOpenUpdate(false));
-
-frameCloseRanking?.addEventListener("click", () => setOpenRanking(false));
-frameCloseUpdate?.addEventListener("click", () => setOpenUpdate(false));
-
-
-// === Robust toggle wiring for Live Ranking ===
+/* ===== Update panel (safe wiring) ===== */
 (function () {
-  const btn  = document.getElementById('toggle-bar');
-  const pane = document.getElementById('panel');
+  const updateBar     = document.getElementById('update-bar');
+  const panelUpdate   = document.getElementById('panel-update');
+  const resizerUpdate = document.getElementById('resizer-update');
+  const iframeUpdate  = document.getElementById('update-frame');
 
-  if (!btn || !pane) return;
-
-  // Single source of truth for opening/closing the Live Ranking panel
-  window.setOpenRanking = function (isOpen) {
-    if (isOpen) {
-      pane.classList.add('open');
-      pane.setAttribute('aria-hidden', 'false');
-      btn.textContent = '✖ Close';
-      btn.setAttribute('aria-expanded', 'true');
-      // Optional: close the Update panel if open
-      if (typeof window.setOpenUpdate === 'function') window.setOpenUpdate(false);
-    } else {
-      pane.classList.remove('open');
-      pane.setAttribute('aria-hidden', 'true');
-      btn.textContent = '☰ Ranking';
-      btn.setAttribute('aria-expanded', 'false');
-    }
-  };
-
-  function onToggleClick(e) {
-    e.preventDefault();
-    setOpenRanking(!pane.classList.contains('open'));
+  if (!updateBar || !panelUpdate) {
+    console.warn('[update-panel] Missing #update-bar or #panel-update — skipping init.');
+    return;
   }
 
-  // Remove any previous handler we attached and rebind deterministically
-  if (btn._clickHandler) btn.removeEventListener('click', btn._clickHandler);
-  btn.addEventListener('click', onToggleClick);
-  btn._clickHandler = onToggleClick;
-
-  // Keyboard support & a11y
-  btn.setAttribute('role', 'button');
-  btn.setAttribute('tabindex', '0');
-  btn.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggleClick(e); }
-  });
-})();
-
-
-// Guard if the elements aren't on this page
-if (panelUpdate && updateBar) {
   // Open/close the Update Ranking slide-over
   function setOpenUpdate(isOpen) {
     if (isOpen) {
@@ -2583,10 +2434,9 @@ if (panelUpdate && updateBar) {
       updateBar.textContent = '✖ Close';
       updateBar.setAttribute('aria-expanded', 'true');
 
-      // Optional: close the Live Ranking panel if it uses setOpen(...)
-      if (typeof setOpen === 'function') setOpen(false);
-      // Or, if you renamed it to setOpenRanking, use:
-      // if (typeof setOpenRanking === 'function') setOpenRanking(false);
+      // Close the live panel if either API name exists
+      if (typeof window.setOpenRanking === 'function') window.setOpenRanking(false);
+      else if (typeof window.setOpen === 'function') window.setOpen(false);
     } else {
       panelUpdate.classList.remove('open');
       panelUpdate.setAttribute('aria-hidden', 'true');
@@ -2594,21 +2444,89 @@ if (panelUpdate && updateBar) {
       updateBar.setAttribute('aria-expanded', 'false');
     }
   }
+  // expose (optional)
+  window.setOpenUpdate = setOpenUpdate;
 
-  // Click + keyboard toggle
-  updateBar.addEventListener('click', () => {
+  // Toggle handler (click + keyboard)
+  function onUpdateToggle(e) {
+    if (e) e.preventDefault();
     setOpenUpdate(!panelUpdate.classList.contains('open'));
-  });
+  }
+
+  if (updateBar._clickHandler) updateBar.removeEventListener('click', updateBar._clickHandler);
+  updateBar.addEventListener('click', onUpdateToggle);
+  updateBar._clickHandler = onUpdateToggle;
+
   updateBar.setAttribute('role', 'button');
   updateBar.setAttribute('tabindex', '0');
   updateBar.setAttribute('aria-controls', 'panel-update');
   updateBar.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      setOpenUpdate(!panelUpdate.classList.contains('open'));
-    }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onUpdateToggle(e); }
   });
-}
+
+  // Optional: auto-refresh just the update iframe every 30s
+  if (iframeUpdate) {
+    function refreshUpdateFrame() {
+      const base = iframeUpdate.src.split('?')[0];
+      iframeUpdate.src = base + '?t=' + Date.now();
+    }
+    setInterval(refreshUpdateFrame, 30000);
+  }
+
+  // --- Drag-to-resize for UPDATE panel (guarded) ---
+  if (resizerUpdate && iframeUpdate) {
+    let draggingUpdate = false;
+
+    const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
+
+    function startDragUpdate(e) {
+      if (!panelUpdate.classList.contains('open')) return;
+      draggingUpdate = true;
+      document.body.classList.add('no-select');
+      iframeUpdate.style.pointerEvents = 'none';
+      e.preventDefault();
+    }
+
+    function onDragUpdate(e) {
+      if (!draggingUpdate) return;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const vw = window.innerWidth;
+      const desired = vw - clientX;
+      const min = parseInt(getComputedStyle(panelUpdate).minWidth, 10) || 400;
+      panelUpdate.style.width = clamp(desired, min, vw) + 'px';
+    }
+
+    function endDragUpdate() {
+      if (!draggingUpdate) return;
+      draggingUpdate = false;
+      document.body.classList.remove('no-select');
+      iframeUpdate.style.pointerEvents = '';
+    }
+
+    resizerUpdate.addEventListener('mousedown', startDragUpdate);
+    window.addEventListener('mousemove', onDragUpdate);
+    window.addEventListener('mouseup', endDragUpdate);
+
+    resizerUpdate.addEventListener('touchstart', startDragUpdate, { passive: false });
+    window.addEventListener('touchmove', onDragUpdate, { passive: false });
+    window.addEventListener('touchend', endDragUpdate);
+
+    window.addEventListener('resize', () => {
+      if (!panelUpdate.classList.contains('open')) return;
+      const vw = window.innerWidth;
+      const min = parseInt(getComputedStyle(panelUpdate).minWidth, 10) || 400;
+      const cur = panelUpdate.getBoundingClientRect().width;
+      panelUpdate.style.width = clamp(cur, min, vw) + 'px';
+    });
+  }
+
+  // Wire the "X" buttons (header + overlay), if present
+  document.getElementById('close-btn-update')?.addEventListener('click', () => setOpenUpdate(false));
+  document.getElementById('frame-close-update')?.addEventListener('click', () => setOpenUpdate(false));
+})();
+
+
+
 
     </script>
 </body>
