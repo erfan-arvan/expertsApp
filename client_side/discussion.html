@@ -517,146 +517,205 @@
 
 
         /* Mention suggestions: pin to viewport to avoid clipping */
-.mention-suggest{
-  position: fixed;        /* was absolute */
-  z-index: 4000;          /* above sticky header/sidebars */
-  background: var(--panel);
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-  padding: 4px;
-  min-width: 180px;
-}
+        .mention-suggest {
+            position: fixed;
+            /* was absolute */
+            z-index: 4000;
+            /* above sticky header/sidebars */
+            background: var(--panel);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 4px;
+            min-width: 180px;
+        }
 
-    :root {
-      --left-gap: 250px;   /* how much of the page stays visible on the left when fully open */
-      --panel-min: 400px;  /* minimum panel width */
-    }
+        /*Live ranking*/
+        /* Layout-only variables for this panel */
+        :root {
+            --left-gap: 250px;
+            /* how much of the page stays visible on the left when fully open */
+            --panel-min: 400px;
+            /* minimum panel width */
+        }
 
-    html, body {
-      margin: 0;
-      height: 100%;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      overflow-x: hidden;
-    }
+        /* Inherit your site fonts/colors; do not override page background */
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            overflow-x: hidden;
+        }
 
-    /* Sticky toggle bar on the right */
-    #toggle-bar {
-      position: fixed;
-      top: 50%;
-      right: 0;
-      transform: translateY(-50%);
-      background: #333;
-      color: #fff;
-      padding: 10px 12px;
-      cursor: pointer;
-      z-index: 1001;
-      border-radius: 8px 0 0 8px;
-      user-select: none;
-      transition: background 0.25s ease;
-      font-weight: 600;
-    }
-    #toggle-bar:hover { background: #444; }
+        /* Sticky toggle bar on the right — themed */
+        #toggle-bar {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            z-index: 1001;
 
-    /* Sliding panel anchored to the right */
-    #panel {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      height: 100%;
-      width: calc(100% - var(--left-gap)); /* default open width leaves gap on left */
-      max-width: 100%;
-      min-width: var(--panel-min);
-      background: #fff;
-      box-shadow: -4px 0 14px rgba(0,0,0,0.25);
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      transition: right 0.35s ease;
-      overflow: hidden; /* keep content clipped to panel */
-    }
-    #panel.open { right: 0; }
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
 
-    /* Header (optional) */
-    #panel-header {
-      flex-shrink: 0;
-      background: #222;
-      color: #fff;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 600;
-    }
+            background: linear-gradient(145deg, var(--accent, #6e59f9), var(--accent2, #4f46e5));
+            color: #fff;
+            padding: 10px 12px;
+            border-radius: 12px 0 0 12px;
+            border: 1px solid transparent;
+            box-shadow: var(--shadow, 0 6px 20px rgba(0, 0, 0, .15));
+            cursor: pointer;
+            user-select: none;
+            font-weight: 700;
+            transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+        }
 
-    /* The iframe fills the remaining space */
-    #panel iframe {
-      flex: 1 1 auto;
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
-    }
+        #toggle-bar:hover {
+            transform: translateY(calc(-50% - 1px));
+            box-shadow: 0 10px 28px rgba(0, 0, 0, .22);
+            filter: brightness(1.02);
+        }
 
-    /* The draggable left edge (true resize handle) */
-    #resizer {
-      position: absolute;
-      top: 0;
-      left: 0;              /* left edge of the panel */
-      width: 8px;           /* visual width of handle */
-      height: 100%;
-      cursor: col-resize;   /* proper column-resize cursor */
-      background: transparent; /* keep it invisible by default */
+        #toggle-bar:active {
+            transform: translateY(-50%);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, .18);
+        }
 
-      /* Slightly easier to grab on hover */
-    }
-    #resizer::after {
-      content: "";
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 2px;
-      height: 100%;
-      background: rgba(0,0,0,0.08); /* a subtle guideline */
-    }
-    #resizer:hover { background: rgba(0,0,0,0.03); }
+        #toggle-bar:focus-visible {
+            outline: 3px solid color-mix(in srgb, white 70%, var(--accent2, #4f46e5));
+            outline-offset: 2px;
+        }
 
-    /* While dragging, prevent text selection */
-    .no-select {
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
+        /* Sliding panel anchored to the right — themed */
+        #panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            height: 100%;
+            width: calc(100% - var(--left-gap));
+            /* default open width leaves gap on left */
+            max-width: 100%;
+            min-width: var(--panel-min);
 
-    #close-btn {
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 20px;
-      cursor: pointer;
-      padding: 0 6px;
-    }
-    #close-btn:hover { color: #f66; }
+            background: var(--panel, #fff);
+            color: var(--text, #0b1220);
+            box-shadow: -4px 0 14px rgba(0, 0, 0, 0.25);
+            border-left: 1px solid var(--border, #e5e7eb);
 
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.35s ease;
+            overflow: hidden;
+            /* keep content clipped to panel */
+        }
 
+        #panel.open {
+            right: 0;
+        }
+
+        /* Header */
+        #panel-header {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+
+            background: var(--panel2, #f6f8fb);
+            color: var(--text, #0b1220);
+            border-bottom: 1px solid var(--border, #e5e7eb);
+            font-weight: 700;
+        }
+
+        /* The iframe fills the remaining space */
+        #panel iframe {
+            flex: 1 1 auto;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+            background: var(--panel, #fff);
+        }
+
+        /* Draggable left edge */
+        #resizer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* left edge of the panel */
+            width: 8px;
+            height: 100%;
+            cursor: col-resize;
+            background: transparent;
+        }
+
+        #resizer::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: color-mix(in srgb, var(--border, #e5e7eb) 70%, transparent);
+        }
+
+        #resizer:hover {
+            background: color-mix(in srgb, var(--accent2, #4f46e5) 6%, transparent);
+        }
+
+        /* While dragging, prevent text selection */
+        .no-select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* (Optional) Close button style if you un-comment it later */
+        #close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text, #0b1220);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0 6px;
+            margin-left: auto;
+        }
+
+        #close-btn:hover {
+            color: var(--danger, #dc2626);
+        }
+
+        /* Respect printing */
+        @media print {
+
+            #toggle-bar,
+            #panel {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-      <div id="toggle-bar">☰ Ranking</div>
 
-  <!-- Sliding panel with iframe -->
-  <div id="panel" aria-hidden="true">
-    <div id="resizer" title="Drag to resize"></div>
-    <div id="panel-header">
-      <span>Live Ranking</span>
-      <!-- <button id="close-btn">✖</button> -->
+    <!-- Sticky toggle bar -->
+    <div id="toggle-bar" aria-controls="panel" aria-expanded="false">☰ Ranking</div>
+
+    <!-- Sliding panel with iframe -->
+    <div id="panel" aria-hidden="true">
+        <div id="resizer" title="Drag to resize"></div>
+        <div id="panel-header">
+            <span>Live Ranking</span>
+            <!-- <button id="close-btn" aria-label="Close panel">✖</button> -->
+        </div>
+        <iframe id="ranking-frame" src="live-ranking.html" title="Live ranking"></iframe>
     </div>
-    <iframe id="ranking-frame" src="live-ranking.html"></iframe>
-  </div>
 
     <!-- New header (appearance only) -->
     <header>
@@ -1545,24 +1604,24 @@
             return div;
         }
 
-function positionSuggestBox(ta) {
-  const r = ta.getBoundingClientRect();
-  // Since the box is FIXED, use viewport coords (no scroll offsets)
-  mentionUI.box.style.top = `${r.bottom + 4}px`;
-  mentionUI.box.style.left = `${r.left}px`;
-  mentionUI.box.style.minWidth = `${Math.min(r.width, 280)}px`;
-}
+        function positionSuggestBox(ta) {
+            const r = ta.getBoundingClientRect();
+            // Since the box is FIXED, use viewport coords (no scroll offsets)
+            mentionUI.box.style.top = `${r.bottom + 4}px`;
+            mentionUI.box.style.left = `${r.left}px`;
+            mentionUI.box.style.minWidth = `${Math.min(r.width, 280)}px`;
+        }
 
-function ensureSuggestBox() {
-  if (mentionUI.box) return mentionUI.box;
-  const div = document.createElement('div');
-  div.className = 'mention-suggest';
-  div.style.position = 'fixed'; // ensure fixed even if CSS loads late
-  div.hidden = true;
-  document.body.appendChild(div);
-  mentionUI.box = div;
-  return div;
-}
+        function ensureSuggestBox() {
+            if (mentionUI.box) return mentionUI.box;
+            const div = document.createElement('div');
+            div.className = 'mention-suggest';
+            div.style.position = 'fixed'; // ensure fixed even if CSS loads late
+            div.hidden = true;
+            document.body.appendChild(div);
+            mentionUI.box = div;
+            return div;
+        }
 
 
         function openMentionSuggest(ta, query) {
@@ -1676,12 +1735,12 @@ function ensureSuggestBox() {
 
 
         window.addEventListener('scroll', () => {
-  if (mentionUI.ta && mentionUI.box && !mentionUI.box.hidden) positionSuggestBox(mentionUI.ta);
-}, { passive: true });
+            if (mentionUI.ta && mentionUI.box && !mentionUI.box.hidden) positionSuggestBox(mentionUI.ta);
+        }, { passive: true });
 
-window.addEventListener('resize', () => {
-  if (mentionUI.ta && mentionUI.box && !mentionUI.box.hidden) positionSuggestBox(mentionUI.ta);
-});
+        window.addEventListener('resize', () => {
+            if (mentionUI.ta && mentionUI.box && !mentionUI.box.hidden) positionSuggestBox(mentionUI.ta);
+        });
 
     </script>
 
@@ -2037,111 +2096,104 @@ window.addEventListener('resize', () => {
     </footer>
 
 
-      <script>
-    const panel = document.getElementById('panel');
-    const resizer = document.getElementById('resizer');
-    const toggleBar = document.getElementById('toggle-bar');
-    const iframe = document.getElementById('ranking-frame');
-    const closeBtn = document.getElementById("close-btn");
+    <script>
+        const panel = document.getElementById('panel');
+        const resizer = document.getElementById('resizer');
+        const toggleBar = document.getElementById('toggle-bar');
+        const iframe = document.getElementById('ranking-frame');
+        const closeBtn = document.getElementById("close-btn");
 
-    // Close panel
-    // closeBtn.addEventListener("click", () => {
-    //   panel.classList.remove("open");
-    // });
+        // Toggle open/close with the sticky button
+        function setOpen(isOpen) {
+            if (isOpen) {
+                panel.classList.add('open');
+                panel.setAttribute('aria-hidden', 'false');
+                toggleBar.textContent = '✖ Close';
+                toggleBar.setAttribute('aria-expanded', 'true');
+            } else {
+                panel.classList.remove('open');
+                panel.setAttribute('aria-hidden', 'true');
+                toggleBar.textContent = '☰ Ranking';
+                toggleBar.setAttribute('aria-expanded', 'false');
+            }
+        }
+        toggleBar.addEventListener('click', () => {
+            setOpen(!panel.classList.contains('open'));
+        });
 
-    // Toggle open/close with same sticky button
-    function setOpen(isOpen) {
-      if (isOpen) {
-        panel.classList.add('open');
-        panel.setAttribute('aria-hidden', 'false');
-        toggleBar.textContent = '✖ Close';
-      } else {
-        panel.classList.remove('open');
-        panel.setAttribute('aria-hidden', 'true');
-        toggleBar.textContent = '☰ Ranking';
-      }
-    }
-    toggleBar.addEventListener('click', () => {
-      setOpen(!panel.classList.contains('open'));
-    });
+        // Close panel (if you enable the button)
+        // closeBtn?.addEventListener("click", () => setOpen(false));
 
-    // Auto refresh iframe every 30s (cache-busted)
-    function refreshFrame() {
-      const base = iframe.src.split('?')[0];
-      iframe.src = base + '?t=' + Date.now();
-    }
-    setInterval(refreshFrame, 30000);
+        // Auto refresh iframe every 30s (cache-busted)
+        function refreshFrame() {
+            const base = iframe.src.split('?')[0];
+            iframe.src = base + '?t=' + Date.now();
+        }
+        setInterval(refreshFrame, 30000);
 
-    // --- Drag-to-resize logic for left edge ---
-    let dragging = false;
+        // --- Drag-to-resize logic for left edge ---
+        let dragging = false;
 
-    function clamp(value, min, max) {
-      return Math.min(Math.max(value, min), max);
-    }
+        function clamp(value, min, max) {
+            return Math.min(Math.max(value, min), max);
+        }
 
-    function startDrag(e) {
-      if (!panel.classList.contains('open')) return;
-      dragging = true;
-      document.body.classList.add('no-select');
-      // Prevent iframe from eating mouse events while dragging
-      iframe.style.pointerEvents = 'none';
-      e.preventDefault();
-    }
+        function startDrag(e) {
+            if (!panel.classList.contains('open')) return;
+            dragging = true;
+            document.body.classList.add('no-select');
+            // Prevent iframe from eating mouse events while dragging
+            iframe.style.pointerEvents = 'none';
+            e.preventDefault();
+        }
 
-    function onDrag(e) {
-      if (!dragging) return;
+        function onDrag(e) {
+            if (!dragging) return;
 
-      // Current mouse X (supports touch)
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const viewportWidth = window.innerWidth;
+            const desiredWidth = viewportWidth - clientX;
 
-      // We anchor the panel to the RIGHT edge. New width is the distance from mouse X to the right edge.
-      const viewportWidth = window.innerWidth;
-      const desiredWidth = viewportWidth - clientX;
+            const cs = getComputedStyle(panel);
+            const minWidth = parseInt(cs.minWidth, 10) || 400;
+            const maxWidth = viewportWidth;
 
-      // Respect min and "max" (full viewport)
-      const minWidth = parseInt(getComputedStyle(panel).minWidth, 10) || 400;
-      // Keep at least --left-gap of the page visible if you want
-      const leftGap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--left-gap'), 10) || 0;
-      const maxWidth = viewportWidth; // hard cap at full width
-      const effectiveMax = Math.min(maxWidth, viewportWidth - 0); // adjust if you want a hard left gap
+            let newWidth = clamp(desiredWidth, minWidth, maxWidth);
 
-      let newWidth = clamp(desiredWidth, minWidth, effectiveMax);
+            // If you want to enforce a constant left gap, uncomment:
+            // const leftGap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--left-gap'), 10) || 0;
+            // newWidth = Math.min(newWidth, viewportWidth - leftGap);
 
-      // If you want to ENFORCE the left gap at all times, uncomment:
-      // newWidth = Math.min(newWidth, viewportWidth - leftGap);
+            panel.style.width = newWidth + 'px';
+        }
 
-      panel.style.width = newWidth + 'px';
-    }
+        function endDrag() {
+            if (!dragging) return;
+            dragging = false;
+            document.body.classList.remove('no-select');
+            iframe.style.pointerEvents = '';
+        }
 
-    function endDrag() {
-      if (!dragging) return;
-      dragging = false;
-      document.body.classList.remove('no-select');
-      iframe.style.pointerEvents = '';
-    }
+        // Mouse events
+        resizer.addEventListener('mousedown', startDrag);
+        window.addEventListener('mousemove', onDrag);
+        window.addEventListener('mouseup', endDrag);
 
-    // Mouse events
-    resizer.addEventListener('mousedown', startDrag);
-    window.addEventListener('mousemove', onDrag);
-    window.addEventListener('mouseup', endDrag);
+        // Touch events
+        resizer.addEventListener('touchstart', startDrag, { passive: false });
+        window.addEventListener('touchmove', onDrag, { passive: false });
+        window.addEventListener('touchend', endDrag);
 
-    // Touch events
-    resizer.addEventListener('touchstart', startDrag, { passive: false });
-    window.addEventListener('touchmove', onDrag, { passive: false });
-    window.addEventListener('touchend', endDrag);
-
-    // Optional: keep panel width reasonable on resize
-    window.addEventListener('resize', () => {
-      if (!panel.classList.contains('open')) return;
-      const vw = window.innerWidth;
-      const leftGap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--left-gap'), 10) || 0;
-      const minWidth = parseInt(getComputedStyle(panel).minWidth, 10) || 400;
-      // Clamp to viewport width and desired left gap if enforcing it
-      const current = panel.getBoundingClientRect().width;
-      const maxAllow = vw; // or (vw - leftGap) if enforcing constant gap
-      panel.style.width = clamp(current, minWidth, maxAllow) + 'px';
-    });
-  </script>
+        // Keep panel width reasonable on viewport resize
+        window.addEventListener('resize', () => {
+            if (!panel.classList.contains('open')) return;
+            const vw = window.innerWidth;
+            const cs = getComputedStyle(panel);
+            const minWidth = parseInt(cs.minWidth, 10) || 400;
+            const current = panel.getBoundingClientRect().width;
+            panel.style.width = clamp(current, minWidth, vw) + 'px';
+        });
+    </script>
 </body>
 
 </html>
