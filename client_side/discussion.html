@@ -2572,6 +2572,44 @@ frameCloseUpdate?.addEventListener("click", () => setOpenUpdate(false));
   });
 })();
 
+
+// Guard if the elements aren't on this page
+if (panelUpdate && updateBar) {
+  // Open/close the Update Ranking slide-over
+  function setOpenUpdate(isOpen) {
+    if (isOpen) {
+      panelUpdate.classList.add('open');
+      panelUpdate.setAttribute('aria-hidden', 'false');
+      updateBar.textContent = '✖ Close';
+      updateBar.setAttribute('aria-expanded', 'true');
+
+      // Optional: close the Live Ranking panel if it uses setOpen(...)
+      if (typeof setOpen === 'function') setOpen(false);
+      // Or, if you renamed it to setOpenRanking, use:
+      // if (typeof setOpenRanking === 'function') setOpenRanking(false);
+    } else {
+      panelUpdate.classList.remove('open');
+      panelUpdate.setAttribute('aria-hidden', 'true');
+      updateBar.textContent = '↻ Update';
+      updateBar.setAttribute('aria-expanded', 'false');
+    }
+  }
+
+  // Click + keyboard toggle
+  updateBar.addEventListener('click', () => {
+    setOpenUpdate(!panelUpdate.classList.contains('open'));
+  });
+  updateBar.setAttribute('role', 'button');
+  updateBar.setAttribute('tabindex', '0');
+  updateBar.setAttribute('aria-controls', 'panel-update');
+  updateBar.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setOpenUpdate(!panelUpdate.classList.contains('open'));
+    }
+  });
+}
+
     </script>
 </body>
 
