@@ -3,272 +3,198 @@
 
 <head>
     <meta charset="utf-8" />
-
-    <!-- no-flash: apply stored theme ASAP -->
-    <script>
-        (function () {
-            try {
-                var t = sessionStorage.getItem('codeTheme') || localStorage.getItem('codeTheme');
-                if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
-            } catch (e) { }
-        })();
-    </script>
-
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Threaded Opinions — Modern Chat Layout</title>
-
-    <!-- ===== Updated appearance (theme + layout) ONLY ===== -->
     <style>
-        /* ===== THEME TOKENS (Light default, Dark via data-theme or OS) ===== */
         :root {
-            --bg: #f7f9fc;
-            --panel: #fff;
-            --panel2: #f6f8fb;
-            --text: #0b1220;
-            --muted: #667085;
-            --accent: #6e59f9;
-            --accent2: #4f46e5;
-            --ok: #16a34a;
-            --warn: #d97706;
-            --danger: #dc2626;
-            --border: #e5e7eb;
-            --chip: #f3f4f6;
-            --chip2: #eef2ff;
-            --shadow: 0 1px 2px rgba(16, 24, 40, .06);
-            --shadow-soft: 0 1px 1px rgba(16, 24, 40, .04);
-        }
-
-        :root[data-theme="dark"] {
             --bg: #0b0c10;
             --panel: #151821;
-            --panel2: #10131a;
+            --panel-2: #10131a;
             --text: #e6e9ef;
             --muted: #a3aab9;
-            --accent: #7c5cff;
-            --accent2: #a590ff;
-            --ok: #22c55e;
-            --warn: #f59e0b;
-            --danger: #ef4444;
             --border: #232735;
-            --chip: #1e2230;
-            --chip2: #2a2f42;
-            --shadow: 0 1px 2px rgba(0, 0, 0, .35);
-            --shadow-soft: 0 1px 1px rgba(0, 0, 0, .25);
+            --primary: #7c5cff;
+            --primary-2: #a590ff;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+            --radius: 16px;
+            --radius-sm: 12px;
+            --radius-xs: 10px;
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root:not([data-theme="light"]) {
-                --bg: #0b0c10;
-                --panel: #151821;
-                --panel2: #10131a;
-                --text: #e6e9ef;
-                --muted: #a3aab9;
-                --accent: #7c5cff;
-                --accent2: #a590ff;
-                --ok: #22c55e;
-                --warn: #f59e0b;
-                --danger: #ef4444;
-                --border: #232735;
-                --chip: #1e2230;
-                --chip2: #2a2f42;
-                --shadow: 0 1px 2px rgba(0, 0, 0, .35);
-                --shadow-soft: 0 1px 1px rgba(0, 0, 0, .25);
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg: #f6f7fb;
+                --panel: #ffffff;
+                --panel-2: #fbfbfe;
+                --text: #0b1020;
+                --muted: #606a80;
+                --border: #e6e8ee;
+                --shadow: 0 10px 30px rgba(9, 12, 22, .08);
             }
         }
 
-        /* ===== BASE ===== */
         * {
-            box-sizing: border-box
+            box-sizing: border-box;
         }
 
         html,
         body {
-            height: 100%
+            height: 100%;
         }
 
         body {
             margin: 0;
-            font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, Noto Sans, "Apple Color Emoji", "Segoe UI Emoji";
             color: var(--text);
-            background: var(--bg);
+            background: radial-gradient(1200px 700px at 80% -200px, rgba(124, 92, 255, .18), transparent 60%),
+                radial-gradient(1000px 500px at -200px 80%, rgba(79, 209, 197, .18), transparent 60%),
+                var(--bg);
             line-height: 1.5;
         }
 
-        a {
-            color: var(--accent2);
-            text-underline-offset: 2px
-        }
-
-        /* Header (sticky) */
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            backdrop-filter: blur(6px);
-            background: linear-gradient(180deg,
-                    color-mix(in srgb, var(--panel) 92%, transparent),
-                    color-mix(in srgb, var(--panel) 78%, transparent));
-            border-bottom: 1px solid var(--border);
-        }
-
-        .bar {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px
-        }
-
-        .title {
-            font-size: 20px;
-            font-weight: 700
-        }
-
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px
-        }
-
-        button,
-        .btn {
-            background: var(--chip);
-            color: var(--text);
-            border: 1px solid var(--border);
-            padding: 8px 12px;
-            border-radius: 999px;
-            cursor: pointer;
-            box-shadow: var(--shadow-soft);
-        }
-
-        button:hover {
-            background: var(--chip2)
-        }
-
-        .pill {
-            font-size: 12px;
-            padding: 6px 10px
-        }
-
-        /* Two-column shell (left TOC + main) */
-        .wrap {
+        /* Layout */
+        .shell {
             max-width: 1100px;
-            margin: 0 auto;
-            padding: 28px 16px 60px
-        }
-
-        .grid {
+            margin: min(6vh, 48px) auto;
+            padding: 0 20px;
             display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 18px
-        }
-
-        @media (max-width:900px) {
-            .grid {
-                grid-template-columns: 1fr
-            }
-        }
-
-        /* Left pane (TOC) */
-        .toc {
-            position: sticky;
-            top: 64px;
-            align-self: start;
-            background: var(--panel2);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 12px;
-            box-shadow: var(--shadow);
-        }
-
-        .toc h3 {
-            margin: 6px 8px 12px;
-            font-size: 14px;
-            color: var(--muted)
-        }
-
-        .toc .chip {
-            display: block;
-            padding: 8px 10px;
-            margin: 4px 0;
-            border-radius: 10px;
-            text-decoration: none;
-            color: var(--text);
-            border: 1px solid transparent;
-            background: transparent;
-            width: 100%;
-            text-align: left;
-            cursor: pointer;
-        }
-
-        .toc .chip:hover {
-            background: color-mix(in srgb, var(--accent2) 10%, transparent);
-            border-color: var(--border)
-        }
-
-        /* Cards */
-        .card,
-        .topic-card,
-        .list-card,
-        .home-card {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            box-shadow: var(--shadow);
+            grid-template-columns: 1fr;
+            gap: 18px;
         }
 
         .topic-card {
-            padding: 16px
+            background: linear-gradient(180deg, var(--panel), var(--panel-2));
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 38px 18px 2px 38px;
+            position: sticky;
+            top: 10px;
+            z-index: 1;
+        }
+
+        .topic-heading {
+            display: flex;
+            align-items: start;
+            gap: 14px;
+        }
+
+        .topic-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(145deg, rgba(124, 92, 255, .25), rgba(124, 92, 255, .05));
+            border: 1px solid var(--border);
+            flex: 0 0 auto;
+        }
+
+        .topic-title {
+            margin: 0;
+            font-size: clamp(22px, 2.5vw, 28px);
+            letter-spacing: -0.01em;
+        }
+
+        .topic-meta {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .toolbar {
+            margin-top: 14px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toolbar .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .select {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            font-size: 14px;
+            cursor: pointer;
         }
 
         .list-card {
-            padding: 12px
-        }
-
-        .home-card {
+            background: linear-gradient(180deg, var(--panel), var(--panel-2));
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
             padding: 12px;
-            cursor: pointer
         }
 
-        .home-card:hover {
-            box-shadow: var(--shadow)
-        }
-
-        /* Keep your existing chat visuals, harmonized to tokens */
+        /* Post item */
         .post {
             display: grid;
             grid-template-columns: 48px 1fr;
             gap: 12px;
-            padding: 8px;
-            border-radius: 12px;
-            border: 1px solid transparent
+            padding: 5px;
+            border-radius: var(--radius-sm);
+            border: 1px solid transparent;
+            transition: border-color .2s ease, background .2s ease;
+        }
+
+        .post+.post {
+            margin-top: 6px;
         }
 
         .post:hover {
             border-color: var(--border);
-            background: var(--panel2)
+            background: rgba(124, 92, 255, .03);
         }
 
         .avatar {
             width: 48px;
             height: 48px;
             border-radius: 50%;
+            background: linear-gradient(145deg, #d1d5db, #9ca3af);
             display: grid;
             place-items: center;
-            background: var(--chip);
-            color: var(--text);
-            font-weight: 700
+            color: #0b0c10;
+            font-weight: 700;
+            user-select: none;
+        }
+
+        .post-body {
+            min-width: 0;
         }
 
         .post-head {
             display: flex;
             align-items: center;
             gap: 10px;
-            flex-wrap: wrap
+            flex-wrap: wrap;
         }
 
         .name {
-            font-weight: 700
+            font-weight: 700;
         }
 
         .badge {
@@ -276,25 +202,25 @@
             padding: 2px 8px;
             border-radius: 999px;
             border: 1px solid var(--border);
-            color: var(--muted)
+            color: var(--muted);
         }
 
         .time {
             color: var(--muted);
             font-size: 13px;
-            margin-left: auto
+            margin-left: auto;
         }
 
         .content {
             margin-top: 6px;
-            font-size: 15.5px
+            font-size: 15.5px;
         }
 
         .attachments {
             margin-top: 8px;
             display: flex;
             gap: 8px;
-            flex-wrap: wrap
+            flex-wrap: wrap;
         }
 
         .pill {
@@ -302,7 +228,7 @@
             border: 1px dashed var(--border);
             color: var(--muted);
             padding: 6px 10px;
-            border-radius: 999px
+            border-radius: 999px;
         }
 
         .post-actions {
@@ -310,21 +236,34 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            flex-wrap: wrap
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 14px;
         }
 
         .btn.primary {
             border-color: transparent;
-            background: linear-gradient(145deg, var(--accent), var(--accent2));
-            color: #fff
+            background: linear-gradient(145deg, var(--primary), var(--primary-2));
+            color: white;
         }
 
         .btn.ghost {
-            opacity: .85
+            opacity: .85;
         }
 
         .btn[aria-pressed="true"] {
-            box-shadow: inset 0 0 0 2px currentColor
+            box-shadow: inset 0 0 0 2px currentColor;
         }
 
         .score {
@@ -333,25 +272,27 @@
             gap: 6px;
             font-size: 14px;
             color: var(--muted);
-            margin-left: 2px
+            margin-left: 2px;
         }
 
         .score .up {
-            color: var(--ok)
+            color: var(--success);
         }
 
         .score .down {
-            color: var(--danger)
+            color: var(--danger);
         }
 
+        /* Replies */
         .replies {
             margin-top: 10px;
             padding-left: 18px;
             border-left: 2px dashed var(--border);
             display: grid;
-            gap: 8px
+            gap: 8px;
         }
 
+        /* Composer */
         .composer {
             margin-top: 12px;
             display: grid;
@@ -359,20 +300,20 @@
             gap: 12px;
             padding: 12px;
             border: 1px dashed var(--border);
-            border-radius: 12px;
-            background: var(--panel2)
+            border-radius: var(--radius-sm);
+            background: rgba(124, 92, 255, .05);
         }
 
         textarea.input {
             width: 100%;
             min-height: 64px;
             resize: vertical;
-            background: var(--panel);
+            background: var(--panel-2);
             color: var(--text);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 10px 12px;
-            font: inherit
+            font: inherit;
         }
 
         .composer-actions {
@@ -380,60 +321,67 @@
             display: flex;
             gap: 8px;
             align-items: center;
-            justify-content: flex-end
+            justify-content: flex-end;
         }
 
-        .mention {
-            font-weight: 600;
-            color: var(--accent2);
-            background: color-mix(in srgb, var(--accent2) 12%, transparent);
-            border: 1px solid var(--border);
-            padding: 0 6px;
-            border-radius: 999px
+        /* Utilities */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 1px, 1px);
+            border: 0;
         }
 
-        .mention.me {
-            color: #fff;
-            background: linear-gradient(145deg, var(--accent), var(--accent2));
-            border-color: transparent
+        .spacer {
+            flex: 1;
         }
 
-        /* Home grid */
-        .home-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 12px
+        /* Responsive tweaks */
+        @media (max-width: 720px) {
+            .topic-card {
+                position: static;
+            }
+
+            .time {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .composer {
+                grid-template-columns: 36px 1fr;
+            }
+
+            .avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 12px;
+            }
+
+            .post {
+                grid-template-columns: 36px 1fr;
+            }
         }
 
-        .home-card-title {
-            font-weight: 700;
-            font-size: 15px;
-            line-height: 1.2
-        }
-
-        .home-card-meta {
+        .topic-description {
+            margin-top: 10px;
+            font-size: 14px;
             color: var(--muted);
-            font-size: 13px;
-            display: flex;
-            gap: 8px;
-            align-items: center
         }
 
-        .card-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2px 8px;
-            min-width: 18px;
-            line-height: 1;
-            font-weight: 600;
-            border-radius: 999px;
-            color: #fff;
-            font-size: 12px;
-            background: linear-gradient(145deg, var(--accent), var(--accent2))
+        .topic-description p {
+            margin: 0;
         }
 
-        /* Unread badge (kept) */
+        .post.new-for-user {
+            background: rgba(124, 92, 255, .08);
+            border-color: var(--border);
+        }
+
+        /* tiny pill on disagreement buttons */
         .menu-badge {
             display: inline-flex;
             align-items: center;
@@ -446,212 +394,395 @@
             font-weight: 600;
             border-radius: 999px;
             color: #fff;
-            background: linear-gradient(145deg, var(--accent), var(--accent2));
+            background: linear-gradient(145deg, var(--primary), var(--primary-2));
         }
 
-        /* Desktop: hide top strip; Mobile: hide left sidebar */
-        @media (min-width:901px) {
-            #disagreements-bar {
-                display: none
-            }
+
+        /* Sticky bar wrapper */
+        /* Sticky bar wrapper (keep as you had it) */
+        #disagreements-bar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--panel, var(--surface));
+            border-bottom: 1px solid var(--border);
         }
 
-        @media (max-width:900px) {
-            #left-nav {
-                display: none
-            }
+        /* Use grid so items fill 100% width when few, but scroll when many */
+        .disagreements-strip {
+            display: grid;
+            grid-auto-flow: column;
+            /* lay chips in columns horizontally */
+            grid-auto-columns: minmax(160px, 1fr);
+            /* each chip at least 160px, otherwise stretch equally */
+            overflow-x: auto;
+            /* scroll when too many chips to fit */
+            scrollbar-width: thin;
         }
 
-        /* Print */
-        @media print {
-
-            header,
-            .controls,
-            #left-nav {
-                display: none !important
-            }
-
-            .wrap {
-                padding: 0
-            }
-
-            .grid {
-                grid-template-columns: 1fr
-            }
-        }
-
-        /* Make instructions-box follow theme (override inline) */
-        #instructions-box {
-            background: var(--panel) !important;
-            color: var(--text) !important;
-            border: 1px solid var(--border) !important;
-            border-radius: 16px !important;
-            box-shadow: var(--shadow) !important;
-        }
-
-        #instructions-box button {
-            background: var(--chip) !important;
-            color: var(--text) !important;
-            border: 1px solid var(--border) !important;
-        }
-
-        #instructions-box button:hover {
-            background: var(--chip2) !important;
-        }
-
-        .site-footer {
-            margin-top: 28px;
-            padding: 16px 12px;
-            border-top: 1px solid var(--border);
-            color: var(--muted);
-            font-size: 14px;
+        /* Glued rectangular segments */
+        .disagreements-strip .chip {
+            width: 100%;
+            /* make each chip fill its grid column */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            /* room for title + badge */
+            padding: 12px 14px;
+            margin: 0;
+            /* glue: no gaps */
+            border: 0;
+            border-right: 1px solid var(--border);
+            /* vertical separators */
+            border-radius: 0;
+            /* square edges to glue seamlessly */
+            background: var(--surface-2, #f7f7f8);
+            color: var(--text);
+            white-space: nowrap;
+            cursor: pointer;
             text-align: center;
-            background: var(--panel);
         }
 
-        .site-footer a {
-            color: var(--accent2);
+        .disagreements-strip .chip:first-child {
+            border-left: 1px solid var(--border);
+        }
+
+        .disagreements-strip .chip[aria-pressed="true"] {
+            background: var(--surface-3, #ececf1);
+            font-weight: 600;
+        }
+
+        /* Badge (if you use it) */
+        .menu-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 8px;
+            padding: 2px 8px;
+            min-width: 18px;
+            font-size: 12px;
+            line-height: 1;
+            font-weight: 600;
+            border-radius: 999px;
+            color: #fff;
+            background: linear-gradient(145deg, var(--primary), var(--primary-2));
+        }
+
+        /* Content offset so the sticky bar doesn't cover it */
+        body.has-sticky-bar {
+            --bar-h: 48px;
+            padding-top: var(--bar-h);
+        }
+
+        /* Bar inner layout: Home button + glued strip */
+        #disagreements-bar .bar-inner {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+        }
+
+        /* Home chip: fixed-ish width so it stands apart */
+        .home-chip {
+            flex: 0 0 auto;
+            width: 120px;
+            /* adjust if you like */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid var(--border);
+            border-radius: 0;
+            background: var(--surface-2, #f7f7f8);
+        }
+
+        .home-chip[aria-pressed="true"] {
+            background: var(--surface-3, #ececf1);
+            font-weight: 600;
+        }
+
+        /* Home cards grid */
+        .home-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 12px;
+        }
+
+        .home-card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: linear-gradient(180deg, var(--panel), var(--panel-2));
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .home-card:hover {
+            box-shadow: var(--shadow);
+        }
+
+        .home-card-title {
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 1.2;
+        }
+
+        .home-card-meta {
+            color: var(--muted);
+            font-size: 13px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        /* Reuse the same badge look for counts on cards */
+        .card-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 8px;
+            min-width: 18px;
+            line-height: 1;
+            font-weight: 600;
+            border-radius: 999px;
+            color: #fff;
+            font-size: 12px;
+            background: linear-gradient(145deg, var(--primary), var(--primary-2));
+        }
+
+        /* When on Home view, hide the strip but keep the bar + Home button */
+        body.is-home #disagreements-menu {
+            display: none;
+        }
+
+        /* Mention chips in text */
+        .mention {
+            font-weight: 600;
+            color: var(--primary);
+            background: rgba(124, 92, 255, .12);
+            border: 1px solid var(--border);
+            padding: 0 6px;
+            border-radius: 999px;
+        }
+
+        .mention.me {
+            color: #fff;
+            background: linear-gradient(145deg, var(--primary), var(--primary-2));
+            border-color: transparent;
+        }
+
+        /* Suggestions dropdown */
+        .mention-suggest {
+            position: absolute;
+            z-index: 2000;
+            background: var(--panel);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 4px;
+            min-width: 180px;
+        }
+
+        .mention-suggest button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 6px 8px;
+            background: transparent;
+            color: inherit;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .mention-suggest button:hover,
+        .mention-suggest button[aria-selected="true"] {
+            background: rgba(124, 92, 255, .12);
+        }
+
+        .sync-link {
+            margin-left: 8px;
+            font-size: 0.9em;
+            color: var(--primary);
+            cursor: pointer;
             text-decoration: underline;
-            text-underline-offset: 2px;
+            /* optional */
+        }
+
+        .sync-link:hover {
+            text-decoration: none;
+            /* optional hover effect */
+            opacity: 0.8;
+            /* subtle feedback */
+        }
+
+        .done-toggle-wrap {
+            margin-top: 12px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* Special toggle button: bigger, bolder, different shape */
+        .done-toggle-btn {
+            font-weight: 700;
+            font-size: 16px;
+            padding: 14px 20px;
+            border-radius: 999px;
+            /* pill shape */
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .25);
+        }
+
+        /* When chat is NOT finished → bright orange */
+        .done-toggle-btn:not(.done) {
+            background: linear-gradient(135deg, #ff8a00, #ff4d4d);
+            color: #fff;
+        }
+
+        /* When chat IS finished → bold green */
+        .done-toggle-btn.done {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #fff;
+        }
+
+        /* Hover / focus pop */
+        .done-toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .35);
+        }
+
+        .done-toggle-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+        }
+
+        .done-toggle-btn:focus-visible {
+            outline: 3px solid #fff;
+            outline-offset: 3px;
+        }
+
+        .desc-btn {
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--primary);
+            color: #fff;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .desc-btn:hover {
+            background: var(--primary-2);
         }
     </style>
 </head>
 
 <body>
 
-    <!-- New header (appearance only) -->
-    <header>
-        <div class="bar">
-            <div class="title">Threaded Opinions</div>
-            <div class="controls">
-                <button id="btn-theme" class="pill" title="Theme mode">Theme: Auto 🌗</button>
-                <button class="pill" onclick="syncNow()">Sync</button>
-                <button class="pill" onclick="logout()">Logout</button>
+
+
+    <div class="shell" role="application" aria-label="Threaded opinions" id="app">
+
+        <div id="instructions-box"
+            style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="margin: 0;">Last round: Let’s chat and resolve disagreements, if possible.</h2>
+                <button onclick="toggleInstructions()"
+                    style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ffffff; border: none; cursor: pointer; color: #222; border: solid;">Hide</button>
             </div>
+
+            <div id="instructions-content" style="margin-top: 15px;">
+                <ul style="margin: 0; padding-left: 20px;">
+                    <li>You are here because some disagreements remain about the positions of certain snippets in the
+                        rankings among experts.</li>
+                    <li>There are four forums below. Click on each, read the discussion point, and provide your answers.
+                    </li>
+                    <li>You can see the live rankings from all experts by clicking the <strong>Rankings</strong> button
+                        on the right-center of the screen.</li>
+                    <li>You will receive email notifications about new chat activity.</li>
+                    <li>You can tag other experts by typing "@" in the chat and selecting their name.</li>
+                    <li>For each discussion point, please discuss and try to reach a consensus on the ranking of
+                        snippets, if possible.</li>
+                    <li>Reaching agreement is not required. This is the final round, even if consensus cannot be
+                        reached. However, we encourage discussion to resolve disagreements that may still be solvable.
+                    </li>
+                </ul>
+            </div>
+
         </div>
-    </header>
 
-    <!-- Updated layout wrapper: keep your id + role; add appearance classes -->
-    <div class="shell wrap grid" role="application" aria-label="Threaded opinions" id="app">
 
-        <!-- New left sidebar (appearance only). We will move the existing #disagreements-menu into #left-nav-slot on desktop -->
-        <nav class="toc" id="left-nav" aria-label="Disagreements sidebar">
-            <h3>Disagreements</h3>
-            <div class="controls" style="padding:8px 8px 12px;">
-                <button id="home-btn-left" class="pill" type="button"
-                    onclick="document.getElementById('home-btn')?.click()">🏠 Home</button>
-                <button id="logout-btn-left" class="pill" type="button" onclick="logout()">🚪 Logout</button>
+        <!-- Home grid (default visible) -->
+        <section id="home-grid" class="list-card" aria-label="All disagreements">
+            <div id="home-cards" class="home-cards"></div>
+        </section>
+        <!-- Top sticky disagreements bar -->
+        <nav id="disagreements-bar" aria-label="Disagreements switcher">
+            <div class="bar-inner">
+                <button id="home-btn" class="chip home-chip" type="button" aria-pressed="true">🏠 Home</button>
+                <button id="logout-btn" class="chip home-chip" type="button" onclick="logout()">🚪 Logout</button>
+                <div id="disagreements-menu" class="disagreements-strip" role="tablist" aria-label="Disagreements">
+                    <!-- chips injected by JS -->
+                </div>
             </div>
-            <div id="left-nav-slot"></div>
         </nav>
 
-        <!-- Main column (your original content preserved) -->
-        <main id="main-col">
 
-            <div id="instructions-box"
-                style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 15px;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h2 style="margin: 0;">Last round: Let’s chat and resolve disagreements, if possible.</h2>
-                    <button onclick="toggleInstructions()"
-                        style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ffffff; border: none; cursor: pointer; color: #222; border: solid;">
-                        Hide
+        <div id="chat-view" hidden>
+            <!-- Topic/Header + Disagreement Switcher -->
+            <section class="topic-card" aria-labelledby="topic-title">
+                <div class="topic-heading">
+                    <div class="topic-icon" aria-hidden="true">💬</div>
+                    <div>
+                        <h1 id="topic-title" class="topic-title">Loading disagreements…</h1>
+                        <div class="topic-meta" id="topic-meta">Single-subject thread • <span
+                                id="opinion-count">0</span>
+                            opinions • Last sync <span id="last-sync">—</span></div>
+                    </div>
+                    <button id="desc-toggle" onclick="toggleDescription()" class="desc-btn">
+                        - Hide description
                     </button>
                 </div>
 
-                <div id="instructions-content" style="margin-top: 15px;">
-                    <ul style="margin: 0; padding-left: 20px;">
-                        <li>You are here because some disagreements remain about the positions of certain snippets in
-                            the
-                            rankings among experts.</li>
-                        <li>
-                            <a href="round3-summary.html" target="_blank" rel="noopener noreferrer">Click here</a>
-                            to see the rankings and rationales from each expert in the previous round.
-                        </li>
-                        <li>
-                            You are not obligated to, but we suggest you read all experts’ answers to the reflection
-                            questions from the previous round
-                            <a href="round3-reflections.html" target="_blank" rel="noopener noreferrer">here</a>.
-                        </li>
+                <div id="topic-description" class="topic-description"></div>
 
-                        <li>There are four forums below. Click on each, read the discussion point, and provide your
-                            answers.</li>
-                        <li>You can see the live rankings from all experts by clicking the <strong>Rankings</strong>
-                            button
-                            on the right-center of the screen.</li>
-                        <li>You will receive email notifications about new chat activity.</li>
-                        <li>You can tag other experts by typing "@" in the chat and selecting their name.</li>
-                        <li>For each discussion point, please discuss and try to reach a consensus on the ranking of
-                            snippets, if possible.</li>
-                        <li>Reaching agreement is not required. This is the final round, even if consensus cannot be
-                            reached. However, we encourage discussion to resolve disagreements that may still be
-                            solvable.</li>
-                    </ul>
-                </div>
+                <!-- <div class="toolbar" aria-label="Disagreements switcher">
+            <div class="controls" id="disagreements-menu" style="overflow:auto; white-space:nowrap; padding-bottom:6px; width:100%">
             </div>
-
-            <!-- Home grid (default visible) -->
-            <section id="home-grid" class="list-card" aria-label="All disagreements">
-                <div id="home-cards" class="home-cards"></div>
+        </div> -->
             </section>
 
-            <!-- Top sticky disagreements bar (kept; auto-hidden on desktop by CSS) -->
-            <nav id="disagreements-bar" aria-label="Disagreements switcher">
-                <div class="bar-inner">
-                    <button id="home-btn" class="chip home-chip" type="button" aria-pressed="true">🏠 Home</button>
-                    <button id="logout-btn" class="chip home-chip" type="button" onclick="logout()">🚪 Logout</button>
-                    <div id="disagreements-menu" class="disagreements-strip" role="tablist" aria-label="Disagreements">
-                        <!-- chips injected by JS -->
+            <!-- Opinions List (dynamic) -->
+            <section class="list-card" aria-live="polite">
+                <div id="posts"></div>
+            </section>
+
+            <!-- New Opinion Composer (root-level) -->
+            <section class="list-card" aria-label="Add new opinion">
+                <div class="composer">
+                    <div class="avatar" aria-hidden="true" id="you-avatar">YOU</div>
+                    <div style="width:100%">
+                        <label class="sr-only" for="new-opinion">Share your opinion</label>
+                        <textarea id="new-opinion" class="input" placeholder="Share your opinion…"></textarea>
+                        <div class="composer-actions">
+                            <button class="btn" id="attach-btn" disabled>Attach</button>
+                            <span class="spacer"></span>
+                            <button class="btn primary" id="post-root">Post opinion</button>
+                        </div>
                     </div>
                 </div>
-            </nav>
-
-            <div id="chat-view" hidden>
-                <!-- Topic/Header + Disagreement Switcher -->
-                <section class="topic-card" aria-labelledby="topic-title">
-                    <div class="topic-heading">
-                        <div class="topic-icon" aria-hidden="true">💬</div>
-                        <div>
-                            <h1 id="topic-title" class="topic-title">Loading disagreements…</h1>
-                            <div class="topic-meta" id="topic-meta">Single-subject thread • <span
-                                    id="opinion-count">0</span>
-                                opinions • Last sync <span id="last-sync">—</span></div>
-                        </div>
-                        <button id="desc-toggle" onclick="toggleDescription()" class="desc-btn">
-                            - Hide description
-                        </button>
-                    </div>
-
-                    <div id="topic-description" class="topic-description"></div>
-                </section>
-
-                <!-- Opinions List (dynamic) -->
-                <section class="list-card" aria-live="polite">
-                    <div id="posts"></div>
-                </section>
-
-                <!-- New Opinion Composer (root-level) -->
-                <section class="list-card" aria-label="Add new opinion">
-                    <div class="composer">
-                        <div class="avatar" aria-hidden="true" id="you-avatar">YOU</div>
-                        <div style="width:100%">
-                            <label class="sr-only" for="new-opinion">Share your opinion</label>
-                            <textarea id="new-opinion" class="input" placeholder="Share your opinion…"></textarea>
-                            <div class="composer-actions">
-                                <button class="btn" id="attach-btn" disabled>Attach</button>
-                                <span class="spacer"></span>
-                                <button class="btn primary" id="post-root">Post opinion</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </main>
+            </section>
+        </div>
     </div>
 
-    <!-- ===== Your original scripts (kept as-is) ===== -->
     <script src="js/disagreements.js"></script>
 
     <script>
+
         function firstChars(name, count = 20) {
             if (!name) return "";
             return name.slice(0, count);
@@ -681,6 +812,7 @@
             GET_FINISHED_URL: 'https://codecomprehensibility.site/get_finished_chats'
         };
 
+
         /* ===== App state ===== */
         const state = {
             user: {
@@ -700,13 +832,18 @@
             pollHandle: null
         };
 
+
+
         /* ===== Utility ===== */
         const $ = (sel, root = document) => root.querySelector(sel);
         const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
         function fmtTime(iso) {
             if (!iso) return '';
+            // Ensure string like "2025-08-14T16:03:25Z" or "...-04:00"
+            // The Date ctor understands both and converts to the user's local tz for output.
             const d = new Date(iso);
-            if (isNaN(d.getTime())) return '';
+            if (isNaN(d.getTime())) return ''; // safeguard
+            // Use Intl to respect user locale + local time zone automatically
             return new Intl.DateTimeFormat(undefined, {
                 year: 'numeric', month: 'short', day: '2-digit',
                 hour: '2-digit', minute: '2-digit',
@@ -714,6 +851,7 @@
         }
 
         function currentHandle() {
+            // prefer the short handle if you store it; fall back to display name
             const h = sessionStorage.getItem('username')
                 || localStorage.getItem('username')
                 || state.user.name
@@ -724,8 +862,9 @@
         function defaultBaselineISO(yearsAgo = 1) {
             const d = new Date();
             d.setFullYear(d.getFullYear() - yearsAgo);
-            return d.toISOString();
+            return d.toISOString(); // UTC ISO string
         }
+
 
         // Build a thread tree from flat messages
         function buildThread(messages) {
@@ -738,11 +877,12 @@
             messages.forEach(m => {
                 if (m.parentId) {
                     const p = byId.get(m.parentId);
-                    if (p) p.children.push(m); else roots.push(m);
+                    if (p) p.children.push(m); else roots.push(m); // orphan safeguard
                 } else {
                     roots.push(m);
                 }
             });
+            // sort by time ascending within each level (server may already do)
             const sortRec = nodes => {
                 nodes.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
                 nodes.forEach(n => sortRec(n.children));
@@ -767,14 +907,14 @@
             console.groupCollapsed('🧱 renderDisagreementsMenu');
             const ids = [];
             state.disagreements.forEach(d => {
-                const id = String(d.id);
+                const id = String(d.id);            // ensure attribute is string
                 ids.push(id);
 
                 const btn = document.createElement('button');
                 btn.className = 'chip';
                 btn.type = 'button';
                 btn.role = 'tab';
-                btn.dataset.id = id;
+                btn.dataset.id = id;                // <button data-id="...">
                 btn.setAttribute('aria-pressed', String(d.id === state.currentId));
                 btn.textContent = firstChars(d.title);
                 btn.onclick = () => openDisagreement(toId(d.id));
@@ -784,8 +924,11 @@
             console.log('chip elements count:', menu.querySelectorAll('.chip').length);
             console.groupEnd();
 
-            updateDisagreementBadges();
+            updateDisagreementBadges();           // badges only after chips exist
         }
+
+
+
 
         function switchDisagreement(newId) {
             const prevId = state.currentId;
@@ -800,6 +943,7 @@
                 console.log('marked previous as seen:', String(prevId), '→', stamp);
                 saveSeenToStorage();
                 pushSeenToServer();
+
             }
 
             state.currentId = toId(newId);
@@ -825,6 +969,9 @@
             updateDisagreementBadges();
         }
 
+
+
+
         function renderCurrentThread() {
             if (state.view !== 'chat' || state.currentId == null) return;
             const posts = $('#posts');
@@ -834,14 +981,19 @@
             $('#opinion-count').textContent = msgs.length;
             $('#last-sync').textContent = new Date().toLocaleTimeString();
             thread.forEach(node => posts.appendChild(renderMessage(node)));
+            //Add the Done/Re-open toggle at the very end
+            // posts.appendChild(renderDoneToggleRow(state.currentId));
 
+            // disable composers if finished
             if (isChatFinished(state.currentId)) {
                 disableChatInputs();
             } else {
                 enableChatInputs();
             }
 
+            // Ensure persistent footer exists and is labeled correctly
             mountDoneFooter();
+            // Run after DOM paint to avoid race with reflows on slow devices
             queueMicrotask(() => refreshDoneToggleButton(state.currentId));
         }
 
@@ -850,11 +1002,14 @@
             el.className = 'post';
             el.dataset.id = msg.id;
 
-            const isRoot = !msg.parentId;
+            const isRoot = !msg.parentId; // only roots can be replied to
             const isNew = isNewForUserIn(state.currentId, msg);
             const newBadge = isNew
                 ? `<span class="badge" style="border-color:transparent; background:linear-gradient(145deg,#ef4444,#dc2626); color:#fff;">NEW</span>`
                 : '';
+
+
+
 
             el.innerHTML = `
     <div class="avatar" aria-hidden="true">${(msg.username || '?').slice(0, 2).toUpperCase()}</div>
@@ -875,11 +1030,15 @@
         <button class="btn" onclick="vote(this, -1)">👎</button>
         <span class="score"><span class="up" data-up>${msg.up || 0}</span>/<span class="down" data-down>${msg.down || 0}</span></span>
         <span class="spacer"></span>
-        ${(isRoot && !msg.is_deleted)
+        ${
+                // ✅ show Reply ONLY for root, non-deleted
+                (isRoot && !msg.is_deleted)
                     ? `<button class="btn ghost" onclick="toggleReply(this)">↩︎ Reply</button>`
                     : ``
                 }
-        ${(msg.username === state.user.name && !msg.is_deleted)
+        ${
+                // keep delete for the author if not deleted
+                (msg.username === state.user.name && !msg.is_deleted)
                     ? `<button class="btn ghost hidden" onclick="requestDelete('${msg.id}')" style="display: none;">🗑 Delete</button>`
                     : ``
                 }
@@ -888,15 +1047,17 @@
     </div>
   `;
 
+            // Replies container (always render so children show under any message)
             const repliesWrap = document.createElement('div');
             repliesWrap.className = 'replies';
             (msg.children || []).forEach(c => repliesWrap.appendChild(renderMessage(c)));
             el.querySelector('.post-body').appendChild(repliesWrap);
 
+            // ✅ Only roots get a composer, and only if not deleted
             if (isRoot && !msg.is_deleted) {
                 const composer = document.createElement('div');
                 composer.className = 'composer';
-                composer.hidden = false;
+                composer.hidden = false; // start hidden
                 composer.innerHTML = `
       <div class="avatar" aria-hidden="true">${(state.user.name || 'YO').slice(0, 3).toUpperCase()}</div>
       <div>
@@ -908,12 +1069,14 @@
         </div>
       </div>`;
                 el.querySelector('.post-body').appendChild(composer);
+                // enable @ on this reply textarea
                 const ta = composer.querySelector('textarea.input');
                 if (ta) enableMentions(ta);
             }
 
             return el;
         }
+
 
         function escapeHtml(s) {
             return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', '\'': '&#39;' }[c]));
@@ -928,8 +1091,22 @@
                 snippet_id: d["snippet-id"] ?? d.snippet_id,
                 htmltext: d.htmltext
             }));
+
+            // ❌ Do NOT set state.currentId here
+            // if (!state.currentId && state.disagreements.length) {
+            //   state.currentId = state.disagreements[0].id;
+            // }
+
             renderDisagreementsMenu();
+
+            // ❌ Do NOT prime topic header here; we are on Home
+            // const first = state.disagreements.find(x => x.id === state.currentId);
+            // if (first) {
+            //   $('#topic-title').textContent = first.title;
+            //   $('#topic-description').innerHTML = first.htmltext || '';
+            // }
         }
+
 
         async function fetchLatestChat() {
             const res = await fetch(CONFIG.GET_LATEST_CHAT_URL, {
@@ -941,24 +1118,31 @@
 
             const data = await res.json();
 
+            // 1) Normalize chats
             const normalized = {};
             for (const [k, v] of Object.entries(data.chats || {})) normalized[String(k)] = v || [];
             state.chatsByDisagreement = normalized;
 
+            // 2) Meta
             state.previousLatestAt = data.previousLatestAt || '';
             state.nowLatestAt = data.nowLatestAt || '';
             state.oldestReturnedAt = data.oldestReturnedAt || '';
 
+            // 3) Mentions allowlist
             state.usernames = Array.isArray(data.usernames)
                 ? [...new Set(data.usernames.map(s => (s || '').toLowerCase()))]
                 : [];
 
+            // 4) Ensure we have a local map (so merge works)
             state.lastSeenByDis ||= {};
 
+            // 5) 🔑 Merge the server’s per-disagreement last-seen (newer wins)
+            //    (This is what you asked about.)
             if (data.lastSeenByDis) {
                 mergeServerSeen(data.lastSeenByDis);
             }
 
+            // 6) Initialize any missing disagreements to a fallback baseline
             const fallback = state.previousLatestAt || defaultBaselineISO(1);
             for (const d of state.disagreements) {
                 const key = String(d.id);
@@ -966,10 +1150,14 @@
             }
             saveSeenToStorage();
 
+            // 7) Paint after state is consistent
             if (state.view === 'chat') renderCurrentThread();
             updateDisagreementBadges();
             if (state.view === 'home') renderHomeGrid();
         }
+
+
+
 
         async function sendMessage({ disagreementId, parentId = null, content }) {
             const mentions = extractMentions(content, state.usernames);
@@ -984,6 +1172,7 @@
             renderCurrentThread();
         }
 
+
         async function deleteMessage(id) {
             const payload = { username: state.user.name, messageId: id };
             const res = await fetch(CONFIG.DELETE_CHAT_URL, {
@@ -993,6 +1182,7 @@
             await fetchLatestChat();
         }
 
+        // Button handlers exposed globally
         window.vote = function (el, delta) {
             const post = el.closest('.post');
             const up = post.querySelector('[data-up]');
@@ -1022,9 +1212,10 @@
             if (confirm('Delete your message? It will appear as [message deleted] but replies remain.')) deleteMessage(id);
         }
 
+        // Root composer
         function bindRootComposer() {
             const ta = $('#new-opinion');
-            if (ta) enableMentions(ta);
+            if (ta) enableMentions(ta); // ⬅️ enable @ for root
             $('#post-root').addEventListener('click', () => {
                 const text = ta.value.trim();
                 if (!text) return;
@@ -1033,21 +1224,24 @@
             });
         }
 
+
         async function init() {
             checkLogin();
             document.body.classList.add('has-sticky-bar');
             $('#you-avatar').textContent = (state.user.name || 'YOU').slice(0, 3).toUpperCase();
 
-            loadSeenFromStorage();
+            loadSeenFromStorage();          // ⬅️ you already have this helper
             bindRootComposer();
 
-            await loadDisagreements();
-            renderDisagreementsMenu();
+            await loadDisagreements();      // builds chip titles
+            renderDisagreementsMenu();      // create chips early (so badges can attach)
 
+            // Do NOT set state.currentId here; we start on Home
             await fetchLatestChat().catch(console.error);
 
+            // First paint of Home grid
             renderHomeGrid();
-            showView('home');
+            showView('home');               // ⬅️ default to Home
 
             if (state.pollHandle) clearInterval(state.pollHandle);
             state.pollHandle = setInterval(() => {
@@ -1056,10 +1250,15 @@
                     if (state.view === 'chat') ensureDoneFooterVisible();
                 }).catch(console.error);
             }, CONFIG.POLL_MS);
+
+
         }
+
+
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
+
 
     <script>
         async function vote(el, delta) {
@@ -1068,18 +1267,20 @@
             if (!messageId) return;
 
             try {
+                // Send to server
                 const res = await fetch('https://codecomprehensibility.site/vote_chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        username: state.user.name,
+                        username: state.user.name, // already set from session/localStorage
                         messageId,
-                        delta
+                        delta // +1 for like, -1 for dislike
                     })
                 });
 
                 if (!res.ok) throw new Error('Vote failed');
 
+                //re-pull full chat
                 await fetchLatestChat();
 
             } catch (e) {
@@ -1087,6 +1288,7 @@
                 alert('Could not register your vote.');
             }
         }
+
     </script>
 
     <script>
@@ -1094,6 +1296,7 @@
             const post = btn.closest('.post');
             if (!post) return;
 
+            // Close other open composers
             document.querySelectorAll('.composer:not([hidden])').forEach(c => {
                 if (!post.contains(c)) c.hidden = true;
             });
@@ -1105,6 +1308,7 @@
 
             if (!composer.hidden) {
                 const ta = composer.querySelector('textarea');
+                // Put cursor at end
                 if (ta) {
                     ta.focus();
                     ta.selectionStart = ta.value.length;
@@ -1120,6 +1324,19 @@
             if (ta) ta.value = '';
             composer.hidden = true;
         };
+
+
+    </script>
+
+    <script>
+        //     function isNewForUser(iso) {
+        //   if (!iso || !state.previousLatestAt) return false;
+        //   const msgTime = new Date(iso).getTime();
+        //   const prevLatest = new Date(state.previousLatestAt).getTime();
+        //   console.log("NEW NEW", !isNaN(msgTime) && !isNaN(prevLatest) && msgTime > prevLatest);
+        //   return !isNaN(msgTime) && !isNaN(prevLatest) && msgTime > prevLatest;
+        // }
+
     </script>
 
     <script>
@@ -1135,6 +1352,7 @@
             const menu = document.getElementById('disagreements-menu');
             if (!menu) return;
 
+            // Clear old
             menu.querySelectorAll('.menu-badge').forEach(b => b.remove());
 
             const chats = state.chatsByDisagreement || {};
@@ -1156,7 +1374,7 @@
                     for (const m of (list || [])) {
                         if (!m || m.is_deleted) continue;
                         const author = (m.username || '').trim().toLowerCase();
-                        if (author && author === me) continue;
+                        if (author && author === me) continue; // don't count your own
                         const mt = new Date(m.createdAt).getTime();
                         if (!isNaN(mt) && mt > bt) count++;
                     }
@@ -1173,6 +1391,12 @@
                 }
             }
         }
+
+
+
+
+
+
     </script>
 
     <script>
@@ -1194,16 +1418,19 @@
                 localStorage.setItem(seenStorageKey(), JSON.stringify(state.lastSeenByDis || {}));
             } catch { }
         }
+
     </script>
 
     <script>
         function isNewForUserIn(disagreementId, msg) {
             if (!msg?.createdAt) return false;
 
+            // Don't flag your own posts as NEW
             const author = (msg.username || '').trim().toLowerCase();
             if (author && author === currentHandle()) return false;
 
             const idStr = String(disagreementId);
+            // While the active thread is open, use the captured baseline (last seen)
             const baseline =
                 (state.view === 'chat' && idStr === String(state.currentId) && state.currentBaseline)
                     ? state.currentBaseline
@@ -1213,16 +1440,22 @@
             const bt = new Date(baseline).getTime();
             return !isNaN(mt) && !isNaN(bt) && mt > bt;
         }
+
+
+
     </script>
 
     <script>
         window.addEventListener('beforeunload', () => {
+            // Only stamp when the user is actually viewing a thread
             if (state.view === 'chat' && state.currentId != null) {
                 state.lastSeenByDis[String(state.currentId)] = new Date().toISOString();
                 saveSeenToStorage();
                 pushSeenToServer();
             }
         });
+
+
     </script>
 
     <script>
@@ -1231,17 +1464,24 @@
             const homeGrid = document.getElementById('home-grid');
             const chatView = document.getElementById('chat-view');
             const homeBtn = document.getElementById('home-btn');
+            const strip = document.getElementById('disagreements-menu');
 
             const isHome = view === 'home';
 
+            // toggle main panes
             homeGrid.hidden = !isHome;
             chatView.hidden = isHome;
 
+            // mark pressed + body class (drives CSS)
             homeBtn?.setAttribute('aria-pressed', String(isHome));
             document.body.classList.toggle('is-home', isHome);
 
+            // (optional) if you prefer JS instead of CSS: strip.hidden = isHome;
+
+            // repaint Home cards when entering Home
             if (isHome) renderHomeGrid();
         }
+
 
         document.getElementById('home-btn')?.addEventListener('click', () => {
             if (state.view === 'chat' && state.currentId != null) {
@@ -1262,6 +1502,7 @@
             const list = state.chatsByDisagreement?.[String(id)] || [];
             const me = currentHandle();
 
+            // On Home, this will use lastSeen; in Chat for active id, it can use currentOpenedAt
             const useOpenBaseline = state.view === 'chat' && String(id) === String(state.currentId) && state.currentOpenedAt;
             const baseline = useOpenBaseline
                 ? state.currentOpenedAt
@@ -1280,6 +1521,7 @@
             }
             return count;
         }
+
 
         function renderHomeGrid() {
             const wrap = document.getElementById('home-cards');
@@ -1313,6 +1555,7 @@
         }
 
         function openDisagreement(id) {
+            // If a thread was open, stamp it as seen NOW before switching away
             if (state.currentId != null) {
                 state.lastSeenByDis[String(state.currentId)] = new Date().toISOString();
                 saveSeenToStorage();
@@ -1323,11 +1566,13 @@
             const baseline = state.lastSeenByDis[idStr] || state.previousLatestAt || defaultBaselineISO(1);
 
             state.currentId = idStr;
-            state.currentOpenedAt = new Date().toISOString();
-            state.currentBaseline = baseline;
+            state.currentOpenedAt = new Date().toISOString(); // informational
+            state.currentBaseline = baseline;                  // ⬅️ use last-seen while open
 
+            // Show chat view first so renderCurrentThread doesn't early-return
             showView('chat');
 
+            // Update topic header
             const d = state.disagreements.find(x => String(x.id) === idStr);
             if (d) {
                 $('#topic-title').textContent = d.title;
@@ -1336,23 +1581,30 @@
                     `Snippet ${d['snippet-id'] ?? d.snippet_id ?? '—'} • <span id="opinion-count">0</span> opinions • Last sync <span id="last-sync">—</span>   <span id="sync-now" class="sync-link" onclick="syncNow()">Sync now</span>`;
             }
 
+            // Update menu pressed state
             document.querySelectorAll('#disagreements-menu .chip')
                 .forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id == idStr)));
 
+            // Paint
             renderCurrentThread();
             refreshDoneToggleButton(String(id));
             ensureDoneFooterVisible();
             updateDisagreementBadges();
         }
+
+
+
     </script>
 
     <script>
         function toId(v) { return String(v); }
+
     </script>
 
     <script>
         //for adding username taggings
         function extractMentions(text, allowed = []) {
+            // Only match at start or after whitespace; token = [a-z0-9_]+
             const re = /(^|\s)@([a-z0-9_]+)/gi;
             const out = new Set();
             let m;
@@ -1366,12 +1618,14 @@
         function linkMentions(text) {
             if (!text) return '';
             const me = currentHandle();
+            // Replace only standalone-style mentions; don’t touch emails "a@b.com" (no preceding space)
             return text.replace(/(^|\s)@([a-z0-9_]+)/gi, (full, lead, h) => {
                 const handle = h.toLowerCase();
                 const cls = (handle === me) ? 'mention me' : 'mention';
                 return `${lead}<span class="${cls}">@${h}</span>`;
             });
         }
+
     </script>
 
     <script>
@@ -1389,6 +1643,7 @@
         }
 
         function positionSuggestBox(ta) {
+            // simple: place under the textarea’s bottom-left (no caret math)
             const r = ta.getBoundingClientRect();
             const top = r.bottom + window.scrollY + 4;
             const left = r.left + window.scrollX + 0;
@@ -1437,6 +1692,7 @@
         }
 
         function applyMention(ta, handle) {
+            // replace the trailing "@query" token before caret with "@handle "
             const start = ta.selectionStart;
             const before = ta.value.slice(0, start);
             const after = ta.value.slice(start);
@@ -1444,7 +1700,7 @@
             const m = before.match(/(^|\s)@([a-z0-9_]*)$/i);
             if (!m) return closeMentionSuggest();
 
-            const replaceFrom = start - (m[2] || '').length - 1;
+            const replaceFrom = start - (m[2] || '').length - 1; // include '@'
             const lead = m[1] || '';
             const newBefore = before.slice(0, replaceFrom) + lead + '@' + handle + ' ';
             ta.value = newBefore + after;
@@ -1461,9 +1717,11 @@
             ta.addEventListener('input', () => {
                 const pos = ta.selectionStart;
                 const before = ta.value.slice(0, pos);
+                // Only trigger when token is at start or after whitespace
                 const m = before.match(/(^|\s)@([a-z0-9_]*)$/i);
                 if (m) {
                     const q = m[2] || '';
+                    // don’t show for your own handle only when empty? we can still show all
                     openMentionSuggest(ta, q);
                 } else {
                     closeMentionSuggest();
@@ -1487,9 +1745,11 @@
                 }
             });
             ta.addEventListener('blur', () => {
+                // delay so click can register
                 setTimeout(closeMentionSuggest, 150);
             });
         }
+
     </script>
 
     <script>
@@ -1498,6 +1758,8 @@
             sessionStorage.clear();
             localStorage.clear();
 
+
+            // Clear all cookies
             document.cookie.split(";").forEach(cookie => {
                 const name = cookie.split("=")[0].trim();
                 document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
@@ -1521,6 +1783,7 @@
                 });
                 if (!res.ok) throw new Error('pushSeenToServer failed');
                 const data = await res.json();
+                // Optional: reconcile with server-confirmed merged map
                 if (data && data.perDisagreement) {
                     mergeServerSeen(data.perDisagreement);
                 }
@@ -1528,6 +1791,7 @@
                 console.error(e);
             }
         }
+
 
         function mergeServerSeen(serverMap) {
             if (!serverMap || typeof serverMap !== 'object') return;
@@ -1555,18 +1819,24 @@
             if (changed) {
                 state.lastSeenByDis = local;
                 saveSeenToStorage();
+                // Refresh any UI elements that depend on these baselines
                 if (state.view === 'chat') renderCurrentThread();
                 updateDisagreementBadges();
                 if (state.view === 'home') renderHomeGrid();
             }
         }
+
     </script>
 
     <script>
         function syncNow() {
             location.reload();
         }
+
+
+
     </script>
+
 
     <script>
         function toggleInstructions() {
@@ -1604,6 +1874,7 @@
             sessionStorage.setItem('finishedChatIds', json);
             localStorage.setItem('finishedChatIds', json);
 
+            // also maintain the set cache (optional but handy)
             const set = {};
             unique.forEach(id => { set[id] = true; });
             const setJson = JSON.stringify(set);
@@ -1630,6 +1901,7 @@
             if (done) s.add(id); else s.delete(id);
             saveFinished(Array.from(s));
         }
+
     </script>
 
     <script>
@@ -1641,6 +1913,7 @@
             });
             if (!res.ok) throw new Error('update_finished_chat failed');
             const data = await res.json();
+            // server returns `finishedIds` — trust it to avoid drift
             if (data && Array.isArray(data.finishedIds)) saveFinished(data.finishedIds);
             return data;
         }
@@ -1656,7 +1929,7 @@
             btn.addEventListener('click', () => toggleFinishedForCurrent(btn));
 
             wrap.appendChild(btn);
-            refreshDoneToggleButton(chatId);
+            refreshDoneToggleButton(chatId); // set initial label/state
             return wrap;
         }
 
@@ -1669,22 +1942,26 @@
             btn.setAttribute('aria-pressed', String(done));
         }
 
+
         async function toggleFinishedForCurrent(btn) {
             const chatId = String(state.currentId);
             const username = currentHandle() || state.user.name;
             if (!chatId || !username) return;
 
-            const wantDone = !isFinished(chatId);
+            const wantDone = !isFinished(chatId); // if not finished, we want to finish; else re-open
             btn.disabled = true;
 
+            // optimistic: update local immediately
             setFinishedLocal(chatId, wantDone);
             refreshDoneToggleButton(chatId);
 
             try {
                 await updateFinishedOnServer({ username, chatId, done: wantDone });
+                // server returns the authoritative list and saveFinished() is already called in updateFinishedOnServer
                 refreshDoneToggleButton(chatId);
             } catch (e) {
                 console.error(e);
+                // revert optimistic on failure
                 setFinishedLocal(chatId, !wantDone);
                 refreshDoneToggleButton(chatId);
                 alert('Could not update finished state. Please try again.');
@@ -1692,6 +1969,7 @@
                 btn.disabled = false;
             }
         }
+
     </script>
 
     <script>
@@ -1699,14 +1977,18 @@
             return isFinished(state.currentId);
         }
 
+
         function disableChatInputs() {
+            // Root composer
             const rootTa = document.getElementById('new-opinion');
             if (rootTa) rootTa.disabled = true;
             document.getElementById('post-root')?.setAttribute('disabled', 'true');
 
+            // Reply composers
             document.querySelectorAll('#posts .composer textarea').forEach(ta => ta.disabled = true);
             document.querySelectorAll('#posts .composer .btn').forEach(btn => btn.setAttribute('disabled', 'true'));
 
+            // Hide reply buttons
             document.querySelectorAll('#posts .btn.ghost').forEach(btn => {
                 if (btn.textContent.includes('Reply')) btn.style.display = 'none';
             });
@@ -1725,36 +2007,44 @@
             });
         }
 
+
         function markDone(id) {
             const idx = state.completedIds.indexOf(id);
             if (idx >= 0) {
-                state.completedIds.splice(idx, 1);
+                state.completedIds.splice(idx, 1); // re-open
             } else {
-                state.completedIds.push(id);
+                state.completedIds.push(id);       // mark done
             }
             saveCompletedIds();
             renderHomeGrid();
             if (state.view === 'chat' && state.currentId === id) {
-                renderCurrentThread();
+                renderCurrentThread(); // will disable/enable composers accordingly
             }
         }
 
         function isChatFinished(disId) {
             return isFinished(disId);
         }
+
+
+
     </script>
 
     <script>
         function mountDoneFooter() {
+            // Remove any old one
             document.getElementById('chat-done-footer')?.remove();
 
+            // Find the root composer section
             const composerSection = document.querySelector('section.list-card[aria-label="Add new opinion"]');
             if (!composerSection) return null;
 
+            // Create footer container
             const footer = document.createElement('div');
             footer.id = 'chat-done-footer';
             footer.className = 'done-toggle-wrap';
 
+            // Create button
             const btn = document.createElement('button');
             btn.id = 'done-toggle-btn';
             btn.className = 'done-toggle-btn';
@@ -1762,29 +2052,35 @@
             btn.addEventListener('click', () => toggleFinishedForCurrent(btn));
 
             footer.appendChild(btn);
+
+            // Insert right after the composer section
             composerSection.insertAdjacentElement('afterend', footer);
 
             return footer;
         }
 
+
         function refreshDoneToggleButton(chatId = state.currentId) {
             const btn = document.getElementById('done-toggle-btn');
-            if (!btn) return;
+            if (!btn) return; // not mounted yet
             const done = isFinished(chatId);
             btn.classList.toggle('done', done);
             btn.textContent = done ? '🔓 Re-open this discussion' : '✅ I am done with this discussion';
             btn.setAttribute('aria-pressed', String(done));
+            // Also lock/unlock the composers to match state
             if (state.view === 'chat' && chatId != null) {
                 if (done) disableChatInputs(); else enableChatInputs();
             }
         }
 
+        // If the footer somehow got removed (rare), re-mount and refresh
         function ensureDoneFooterVisible() {
             if (!document.getElementById('chat-done-footer')) {
                 mountDoneFooter();
             }
             refreshDoneToggleButton();
         }
+
     </script>
 
     <script>
@@ -1802,62 +2098,8 @@
                 btn.textContent = "+ Show description";
             }
         }
+
     </script>
-
-    <!-- ===== Appearance-only helpers below ===== -->
-
-    <!-- Move the existing #disagreements-menu into the left sidebar on desktop; back to top bar on mobile -->
-    <script>
-        (function () {
-            const mql = window.matchMedia('(min-width: 901px)');
-            function place() {
-                const menu = document.getElementById('disagreements-menu');
-                const barInner = document.querySelector('#disagreements-bar .bar-inner');
-                const leftSlot = document.getElementById('left-nav-slot');
-                if (!menu || !barInner || !leftSlot) return;
-                if (mql.matches) {
-                    if (menu.parentElement !== leftSlot) leftSlot.appendChild(menu);
-                } else {
-                    if (menu.parentElement !== barInner) barInner.appendChild(menu);
-                }
-            }
-            mql.addEventListener?.('change', place);
-            document.addEventListener('DOMContentLoaded', place);
-            place();
-        })();
-    </script>
-
-    <!-- Theme toggle using your existing 'codeTheme' key -->
-    <script>
-        (function () {
-            const KEY = 'codeTheme', btn = document.getElementById('btn-theme');
-            function read() {
-                try { let s = sessionStorage.getItem(KEY); if (s === 'dark' || s === 'light') return { v: s, store: 'session' }; } catch { }
-                try { let l = localStorage.getItem(KEY); if (l === 'dark' || l === 'light') return { v: l, store: 'local' }; } catch { }
-                return { v: 'auto' };
-            }
-            function write(mode, store) {
-                if (mode === 'auto') { try { sessionStorage.removeItem(KEY) } catch { }; try { localStorage.removeItem(KEY) } catch { }; return; }
-                try { (store === 'session' ? sessionStorage : localStorage).setItem(KEY, mode); } catch { try { localStorage.setItem(KEY, mode) } catch { } }
-            }
-            function apply(v) {
-                if (v === 'dark' || v === 'light') document.documentElement.setAttribute('data-theme', v);
-                else document.documentElement.removeAttribute('data-theme');
-                if (btn) { btn.textContent = 'Theme: ' + (v === 'dark' ? 'Dark 🌙' : v === 'light' ? 'Light 🌞' : 'Auto 🌗'); }
-            }
-            function cycle() { const cur = read(); const next = cur.v === 'auto' ? 'light' : (cur.v === 'light' ? 'dark' : 'auto'); write(next, cur.store); apply(next); }
-            apply(read().v);
-            const mql = window.matchMedia('(prefers-color-scheme: dark)');
-            mql.addEventListener?.('change', () => { if (read().v === 'auto') apply('auto'); });
-            btn?.addEventListener('click', cycle);
-        })();
-    </script>
-
-    <footer class="site-footer">
-        Please contact us if you have any questions or issues:
-        <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
-    </footer>
-
 </body>
 
 </html>
