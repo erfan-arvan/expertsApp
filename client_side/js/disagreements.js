@@ -1,8 +1,8 @@
 window.DISAGREEMENTS = [
   {
     id: "1",
-    title: "Order among indexOfIgnoreCase, lowestPositiveRoot, deleteRecursively",
-    "snippet-id": "lowestPositiveRoot",
+    title: "Main Trio Disagreement",
+    "snippet-id": "lowestPositiveRoot, indexOfIgnoreCase, deleteRecursively",
     htmltext: `
 <p>Experts disagree on the <strong>relative order</strong> of
 <code>indexOfIgnoreCase</code>, <code>lowestPositiveRoot</code>, and <code>deleteRecursively</code>.
