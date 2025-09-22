@@ -2517,7 +2517,7 @@
             btn.classList.toggle('done', done);
             btn.textContent = done
                 ? '🔓 Re-open this discussion'
-                : '✅ I’m done with this discussion (it will close, but you can undo)';
+                : '✅ I’m done with this discussion<br>(it will close, but you can undo)';
             btn.setAttribute('aria-pressed', String(done));
             if (state.view === 'chat' && chatId != null) {
                 if (done) disableChatInputs(); else enableChatInputs();
