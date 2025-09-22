@@ -904,8 +904,8 @@
 
 
     <!-- Sticky toggle bar -->
-    <div id="toggle-bar" aria-controls="panel" aria-expanded="false">☰Live<br>Ranking</div>
-    <div id="update-bar" aria-label="Refresh live ranking">↻Update<br>Ranking</div>
+    <div id="toggle-bar" aria-controls="panel" aria-expanded="false">☰ Live<br>Ranking</div>
+    <div id="update-bar" aria-label="Refresh live ranking">↻ Update<br>Ranking</div>
 
 
     <!-- Sliding panel with iframe -->
@@ -2333,7 +2333,7 @@
             } else {
                 panel.classList.remove('open');
                 panel.setAttribute('aria-hidden', 'true');
-                toggleBar.textContent = '☰ Ranking';
+                toggleBar.textContent = '☰ Live<br>Ranking';
                 toggleBar.setAttribute('aria-expanded', 'false');
             }
         }
@@ -2444,7 +2444,7 @@
     } else {
       panelUpdate.classList.remove('open');
       panelUpdate.setAttribute('aria-hidden', 'true');
-      updateBar.textContent = '↻ Update';
+      updateBar.textContent = '↻ Update<br>Ranking';
       updateBar.setAttribute('aria-expanded', 'false');
     }
   }
