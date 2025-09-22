@@ -1810,6 +1810,8 @@
     document.getElementById('chat-view')
     ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
+
+
         }
     </script>
 
@@ -2624,30 +2626,8 @@ border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
 </div>
 
 <script>
-  // Normalize the text inside <code> (e.g., strip trailing "()")
-  function _normalizeMethod(text) {
-    return (text || "")
-      .trim()
-      .replace(/\(\s*\)$/, ""); // turn "isRemote()" -> "isRemote"
-  }
 
-  // One global delegated click handler for all <code> tags
-  document.addEventListener("click", (e) => {
-    const el = e.target.closest("code");
-    if (!el) return;
-
-    const name = _normalizeMethod(el.textContent);
-    const id = getMethodId(name);
-    if (id) {
-      // Optional: stop link clicks if <code> is inside an <a>
-      e.preventDefault();
-      show_snippet(id);
-    } else {
-      console.warn("No snippet ID for:", name);
-    }
-  });
 </script>
-
 </body>
 
 </html>
