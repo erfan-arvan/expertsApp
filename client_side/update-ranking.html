@@ -770,6 +770,11 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     }, 120000); // every 2 minutes
   };
 
+  function firstChars(name, count = 5) {
+  if (!name) return "";
+  return name.slice(0, count);
+}
+
   function loadCards() {
     const container = document.getElementById('cards');
     snippets.forEach(snippet => {
@@ -778,7 +783,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       card.draggable = true;
       card.id = `snippet-${snippet.id}`;
       card.innerHTML = `
-          <strong>${snippet.methodName}</strong>
+          <strong>${firstChars(snippet.methodName, 10)}..</strong>
           <br><label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
         `;
       card.addEventListener('dragstart', () => card.classList.add('dragging'));
@@ -1144,6 +1149,8 @@ async function saveToServer() {
 
 
 </script>
+
+
 <footer
   style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
   Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
