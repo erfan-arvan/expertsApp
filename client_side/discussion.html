@@ -940,6 +940,68 @@
         code:hover {
             background: #e0e0ff;
         }
+
+        /* for snippet modal */
+        .light-mode #modal-code {
+  background-color: #f0f0f0;
+  color: #333;
+}
+.code-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  background-color: inherit;
+  color: inherit;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.line-numbers {
+  text-align: right;
+  padding-right: 10px;
+  user-select: none;
+  color: #888;
+}
+
+.code-content {
+  white-space: pre;
+}
+
+#code {
+  background-color: #2d2d2d;
+  color: #ccc;
+  padding: 20px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.light-mode #code {
+  background-color: #f0f0f0;
+  color: #333;
+}
+/* LIGHT MODE styles */
+.keyword     { color: #0000ff; font-weight: bold; }
+.type        { color: #007070; }
+.function    { color: #7928a1; font-weight: bold; }
+.literal     { color: #009999; }
+.string      { color: #a31515; }
+.comment     { color: #6a9955; font-style: italic; }
+.number      { color: #098658; }
+
+/* DARK MODE overrides */
+.dark-mode .keyword  { color: #82aaff; }
+.dark-mode .type     { color: #89ddff; }
+.dark-mode .function { color: #c792ea; }
+.dark-mode .literal  { color: #ffcb6b; }
+.dark-mode .string   { color: #c3e88d; }
+.dark-mode .comment  { color: #7f848e; }
+.dark-mode .number   { color: #f78c6c; }
     </style>
 </head>
 
