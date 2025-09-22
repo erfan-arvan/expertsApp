@@ -43,7 +43,9 @@ public class SubmissionController {
 
     private static final Map<String, String> userEmails = Map.of(
     "erfan",     "ea442@njit.edu",
-    "nadeeshan", "e.arvan@yahoo.com"
+    "nadeeshan", "kgdesilva@wm.edu",
+    "oscar", "ojcch1@gmail.com",
+    "martin", "martin.kellogg@njit.edu",
 );
 
 
