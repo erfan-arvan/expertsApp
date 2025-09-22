@@ -783,7 +783,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       card.draggable = true;
       card.id = `snippet-${snippet.id}`;
       card.innerHTML = `
-          <strong>${firstChars(snippet.methodName, 10)}..</strong>
+          <strong>${firstChars(snippet.methodName, 7)}..</strong>
           <br><label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
         `;
       card.addEventListener('dragstart', () => card.classList.add('dragging'));
