@@ -899,6 +899,17 @@
 
 #chat-view { scroll-margin-top: 70px; } 
 
+    code {
+      cursor: pointer;
+      background: #f5f5f5;
+      padding: 2px 4px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    code:hover {
+      background: #e0e0ff;
+    }
 
     </style>
 </head>
@@ -1796,8 +1807,8 @@
         }
         })();
 
-document.getElementById('chat-view')
-  ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('chat-view')
+    ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
 
 
@@ -2554,6 +2565,82 @@ document.getElementById('chat-view')
 
 
     </script>
+
+
+<script>
+    function getMethodId(methodName) {
+  const methodMap = {
+    isValidProjectName: 1,
+    isRemote: 2,
+    isMachineTypeDefined: 3,
+    indexOfIgnoreCase: 4,
+    deleteRecursively: 5,
+    encodedLength: 6,
+    lowestPositiveRoot: 7,
+    atan2: 8
+  };
+
+  return methodMap[methodName] || null; // returns null if not found
+}
+
+// Example usage:
+console.log(getMethodId("isRemote")); // 2
+console.log(getMethodId("atan2"));    // 8
+console.log(getMethodId("foo"));      // null
+
+function show_snippet(id) {
+  const snippet = snippets.find(s => s.id === id);
+  if (!snippet) return;
+
+  document.getElementById('modal-snippet-title').innerText = snippet.methodName;
+
+  const codeLines = snippet.code.trim().split('\n');
+
+  // Render styled spans
+  document.getElementById('modal-code-content').innerHTML = codeLines.join('\n');
+
+  // Line numbers
+  document.getElementById('modal-line-numbers').innerHTML = codeLines.map((_, i) => i + 1).join('<br>');
+
+  document.getElementById('snippet-modal').style.display = 'block';
+  applyModalTheme();
+}
+</script>
+
+<div id="snippet-modal" style="display:none; position:fixed; top:10%;
+left:50%; transform:translateX(-50%); width:80%; max-height:80%;
+overflow-y:auto; background:#fff; border:1px solid #ccc; padding:0px 20px;
+border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
+  <div style="position: sticky; top: 0; background: #fff; z-index: 10; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd;">
+    <h3 id="modal-snippet-title" style="margin:0;">Snippet</h3>
+    <div>
+      <button onclick="toggleModalTheme()" id="modal-theme-toggle" style="margin-right: 10px; padding: 6px 12px; border-radius: 5px; border: none; background-color: #333; color: white; cursor: pointer;">Switch to Light Mode</button>
+      <span onclick="document.getElementById('snippet-modal').style.display='none'" style="cursor:pointer; font-size:20px; font-weight:bold;">&times;</span>
+    </div>
+  </div>
+
+  <div class="code-container" id="modal-code">
+    <div class="line-numbers" id="modal-line-numbers"></div>
+    <div class="code-content" id="modal-code-content"></div>
+  </div>
+</div>
+
+<script>
+        // Attach click handler to all <code> tags
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll("code").forEach(el => {
+        el.addEventListener("click", () => {
+          const text = el.textContent.trim();
+          const id = getMethodId(text);
+          if (id) {
+            show_snippet(id);
+          } else {
+            console.warn("No snippet ID for:", text);
+          }
+        });
+      });
+    });
+</script>
 </body>
 
 </html>
