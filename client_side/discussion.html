@@ -2819,7 +2819,6 @@
             // Wire the "X" buttons (header + overlay), if present
             document.getElementById('close-btn-update')?.addEventListener('click', () => setOpenUpdate(false));
             document.getElementById('frame-close-update')?.addEventListener('click', () => setOpenUpdate(false));
-            document.getElementById('frame-close-ranking')?.addEventListener('click', () => window.setOpenRanking(false));
         })();
 
 
@@ -2978,6 +2977,17 @@ border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
             }
         });
     </script>
+
+<script>
+
+  // Wire BOTH close buttons to close the panel
+  const closeBtnHeader = document.getElementById('close-btn');
+  const closeBtnOverlay = document.getElementById('frame-close-ranking');
+
+  [closeBtnHeader, closeBtnOverlay].forEach(btn => {
+    btn?.addEventListener('click', () => setOpen(false));
+  });
+</script>
 
 </body>
 
