@@ -826,8 +826,12 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       previewArea.removeChild(existing);
     }
 
-    document.querySelector('.ranking-row-numbers')
-  ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+const el = document.querySelector('.ranking-row-numbers');
+if (el) {
+  const top = el.getBoundingClientRect().top + window.scrollY - 100;
+  window.scrollTo({ top, behavior: 'smooth' });
+}
+
   }
 
   function saveState() {
