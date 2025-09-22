@@ -897,6 +897,9 @@
     background-color: rgb(255, 246, 228);
 }
 
+#chat-view { scroll-margin-top: 70px; } 
+
+
     </style>
 </head>
 
@@ -1793,13 +1796,9 @@
         }
         })();
 
-// after: showView('chat'); renderCurrentThread();
-requestAnimationFrame(() => {
-  const el = document.getElementById('chat-view'); // or any selector you want
-  if (!el) return;
-  const top = el.getBoundingClientRect().top + window.scrollY + 70; // +70 px past the element
-  window.scrollTo({ top, behavior: 'smooth' });
-});
+document.getElementById('chat-view')
+  ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
 
 
         }
