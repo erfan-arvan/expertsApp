@@ -45,7 +45,7 @@ public class SubmissionController {
     "erfan",     "ea442@njit.edu",
     "nadeeshan", "kgdesilva@wm.edu",
     "oscar", "ojcch1@gmail.com",
-    "martin", "martin.kellogg@njit.edu",
+    "martin", "martin.kellogg@njit.edu"
 );
 
 
