@@ -1794,9 +1794,12 @@
         })();
 
         requestAnimationFrame(() => {
-        document.getElementById('chat-view')
-            ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const el = document.getElementById('chat-view');
+            if (!el) return;
+            const top = el.getBoundingClientRect().top + window.scrollY - 100;
+            window.scrollTo({ top, behavior: 'smooth' });
         });
+
 
         }
     </script>
