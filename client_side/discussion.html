@@ -700,217 +700,246 @@
         }
 
         /* Reuse the same visual style as #toggle-bar */
-#update-bar{
-  position: fixed;
-  top: calc(50% + 56px);   /* sits just below the Ranking button */
-  right: 0;
-  transform: translateY(-50%);
-  z-index: 1001;
+        #update-bar {
+            position: fixed;
+            top: calc(50% + 56px);
+            /* sits just below the Ranking button */
+            right: 0;
+            transform: translateY(-50%);
+            z-index: 1001;
 
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
 
-  background: linear-gradient(145deg, var(--accent, #6e59f9), var(--accent2, #4f46e5));
-  color: #fff;
-  padding: 10px 12px;
-  border-radius: 12px 0 0 12px;
-  border: 1px solid transparent;
-  box-shadow: var(--shadow, 0 6px 20px rgba(0,0,0,.15));
-  cursor: pointer;
-  user-select: none;
-  font-weight: 700;
-  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
-}
+            background: linear-gradient(145deg, var(--accent, #6e59f9), var(--accent2, #4f46e5));
+            color: #fff;
+            padding: 10px 12px;
+            border-radius: 12px 0 0 12px;
+            border: 1px solid transparent;
+            box-shadow: var(--shadow, 0 6px 20px rgba(0, 0, 0, .15));
+            cursor: pointer;
+            user-select: none;
+            font-weight: 700;
+            transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+        }
 
-#update-bar:hover{
-  transform: translateY(calc(-50% - 1px));
-  box-shadow: 0 10px 28px rgba(0,0,0,.22);
-  filter: brightness(1.02);
-}
+        #update-bar:hover {
+            transform: translateY(calc(-50% - 1px));
+            box-shadow: 0 10px 28px rgba(0, 0, 0, .22);
+            filter: brightness(1.02);
+        }
 
-#update-bar:active{
-  transform: translateY(-50%);
-  box-shadow: 0 6px 16px rgba(0,0,0,.18);
-}
+        #update-bar:active {
+            transform: translateY(-50%);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, .18);
+        }
 
-#update-bar:focus-visible{
-  outline: 3px solid color-mix(in srgb, white 70%, var(--accent2, #4f46e5));
-  outline-offset: 2px;
-}
+        #update-bar:focus-visible {
+            outline: 3px solid color-mix(in srgb, white 70%, var(--accent2, #4f46e5));
+            outline-offset: 2px;
+        }
 
-/* tiny “busy” feedback */
-#update-bar.busy{ filter: saturate(1.15) brightness(1.03); }
+        /* tiny “busy” feedback */
+        #update-bar.busy {
+            filter: saturate(1.15) brightness(1.03);
+        }
 
-/* Hide in print */
-@media print{
-  #update-bar{ display:none !important; }
-}
+        /* Hide in print */
+        @media print {
+            #update-bar {
+                display: none !important;
+            }
+        }
 
-/* Second sticky button mirrors #toggle-bar */
-#update-bar{
-  position: fixed;
-  top: calc(50% + 80px);
-  right: 0;
-  transform: translateY(-50%);
-  z-index: 1001;
+        /* Second sticky button mirrors #toggle-bar */
+        #update-bar {
+            position: fixed;
+            top: calc(50% + 80px);
+            right: 0;
+            transform: translateY(-50%);
+            z-index: 1001;
 
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
 
-  background: linear-gradient(145deg, var(--accent, #6e59f9), var(--accent2, #4f46e5));
-  color: #fff;
-  padding: 10px 12px;
-  border-radius: 12px 0 0 12px;
-  border: 1px solid transparent;
-  box-shadow: var(--shadow, 0 6px 20px rgba(0,0,0,.15));
-  cursor: pointer;
-  user-select: none;
-  font-weight: 700;
-  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
-}
-#update-bar:hover{
-  transform: translateY(calc(-50% - 1px));
-  box-shadow: 0 10px 28px rgba(0,0,0,.22);
-  filter: brightness(1.02);
-}
-#update-bar:active{
-  transform: translateY(-50%);
-  box-shadow: 0 6px 16px rgba(0,0,0,.18);
-}
-#update-bar:focus-visible{
-  outline: 3px solid color-mix(in srgb, white 70%, var(--accent2, #4f46e5));
-  outline-offset: 2px;
-}
-@media print{ #update-bar{ display:none !important; } }
+            background: linear-gradient(145deg, var(--accent, #6e59f9), var(--accent2, #4f46e5));
+            color: #fff;
+            padding: 10px 12px;
+            border-radius: 12px 0 0 12px;
+            border: 1px solid transparent;
+            box-shadow: var(--shadow, 0 6px 20px rgba(0, 0, 0, .15));
+            cursor: pointer;
+            user-select: none;
+            font-weight: 700;
+            transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+        }
 
-/* Second slide panel mirrors #panel */
-#panel-update{
-  position: fixed;
-  top: 0;
-  right: -100%;
-  height: 100%;
-  width: calc(100% - var(--left-gap));
-  max-width: 100%;
-  min-width: var(--panel-min);
+        #update-bar:hover {
+            transform: translateY(calc(-50% - 1px));
+            box-shadow: 0 10px 28px rgba(0, 0, 0, .22);
+            filter: brightness(1.02);
+        }
 
-  background: var(--panel, #fff);
-  color: var(--text, #0b1220);
-  box-shadow: -4px 0 14px rgba(0,0,0,0.25);
-  border-left: 1px solid var(--border, #e5e7eb);
+        #update-bar:active {
+            transform: translateY(-50%);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, .18);
+        }
 
-  z-index: 999; /* sit just below the live panel so they don't fight for top */
-  display: flex;
-  flex-direction: column;
-  transition: right 0.35s ease;
-  overflow: hidden;
-}
-#panel-update.open{ right: 0; }
+        #update-bar:focus-visible {
+            outline: 3px solid color-mix(in srgb, white 70%, var(--accent2, #4f46e5));
+            outline-offset: 2px;
+        }
 
-#panel-update-header{
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  background: var(--panel2, #f6f8fb);
-  color: var(--text, #0b1220);
-  border-bottom: 1px solid var(--border, #e5e7eb);
-  font-weight: 700;
-}
+        @media print {
+            #update-bar {
+                display: none !important;
+            }
+        }
 
-#panel-update iframe{
-  flex: 1 1 auto;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  display: block;
-  background: var(--panel, #fff);
-}
+        /* Second slide panel mirrors #panel */
+        #panel-update {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            height: 100%;
+            width: calc(100% - var(--left-gap));
+            max-width: 100%;
+            min-width: var(--panel-min);
 
-/* Resizer for the update panel */
-#resizer-update{
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 8px;
-  height: 100%;
-  cursor: col-resize;
-  background: transparent;
-}
-#resizer-update::after{
-  content: "";
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 2px;
-  height: 100%;
-  background: color-mix(in srgb, var(--border, #e5e7eb) 70%, transparent);
-}
-#resizer-update:hover{
-  background: color-mix(in srgb, var(--accent2, #4f46e5) 6%, transparent);
-}
+            background: var(--panel, #fff);
+            color: var(--text, #0b1220);
+            box-shadow: -4px 0 14px rgba(0, 0, 0, 0.25);
+            border-left: 1px solid var(--border, #e5e7eb);
 
-/* Header close button (right side of header bar) */
-.panel-close{
-  margin-left: auto;
-  background: transparent;
-  border: 1px solid var(--border, #e5e7eb);
-  color: var(--text, #0b1220);
-  width: 28px; height: 28px;
-  line-height: 1;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 800;
-}
-.panel-close:hover{
-  background: color-mix(in srgb, var(--accent2, #4f46e5) 8%, transparent);
-  border-color: color-mix(in srgb, var(--accent2, #4f46e5) 40%, var(--border, #e5e7eb));
-  color: var(--text, #0b1220);
-}
+            z-index: 999;
+            /* sit just below the live panel so they don't fight for top */
+            display: flex;
+            flex-direction: column;
+            transition: right 0.35s ease;
+            overflow: hidden;
+        }
 
-/* Overlay close button that sits above the iframe */
-#panel, #panel-update{ position: fixed; } /* ensure positioned ancestor */
-.frame-close-btn{
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 2;             /* above iframe */
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  border: 1px solid var(--border, #e5e7eb);
-  background: var(--panel2, #f6f8fb);
-  color: var(--text, #0b1220);
-  font-weight: 900;
-  cursor: pointer;
-  box-shadow: var(--shadow, 0 6px 20px rgba(0,0,0,.15));
-}
-.frame-close-btn:hover{
-  background: color-mix(in srgb, var(--accent2, #4f46e5) 10%, var(--panel2, #f6f8fb));
-  border-color: color-mix(in srgb, var(--accent2, #4f46e5) 35%, var(--border, #e5e7eb));
-}
+        #panel-update.open {
+            right: 0;
+        }
 
-.done-toggle-btn{
-    margin-top: 30px;
-    background-color: rgb(255, 246, 228);
-}
+        #panel-update-header {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: var(--panel2, #f6f8fb);
+            color: var(--text, #0b1220);
+            border-bottom: 1px solid var(--border, #e5e7eb);
+            font-weight: 700;
+        }
 
-#chat-view { scroll-margin-top: 70px; } 
+        #panel-update iframe {
+            flex: 1 1 auto;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+            background: var(--panel, #fff);
+        }
 
-    code {
-      cursor: pointer;
-      background: #f5f5f5;
-      padding: 2px 4px;
-      border-radius: 4px;
-      transition: background 0.2s;
-    }
+        /* Resizer for the update panel */
+        #resizer-update {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 100%;
+            cursor: col-resize;
+            background: transparent;
+        }
 
-    code:hover {
-      background: #e0e0ff;
-    }
+        #resizer-update::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: color-mix(in srgb, var(--border, #e5e7eb) 70%, transparent);
+        }
 
+        #resizer-update:hover {
+            background: color-mix(in srgb, var(--accent2, #4f46e5) 6%, transparent);
+        }
+
+        /* Header close button (right side of header bar) */
+        .panel-close {
+            margin-left: auto;
+            background: transparent;
+            border: 1px solid var(--border, #e5e7eb);
+            color: var(--text, #0b1220);
+            width: 28px;
+            height: 28px;
+            line-height: 1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .panel-close:hover {
+            background: color-mix(in srgb, var(--accent2, #4f46e5) 8%, transparent);
+            border-color: color-mix(in srgb, var(--accent2, #4f46e5) 40%, var(--border, #e5e7eb));
+            color: var(--text, #0b1220);
+        }
+
+        /* Overlay close button that sits above the iframe */
+        #panel,
+        #panel-update {
+            position: fixed;
+        }
+
+        /* ensure positioned ancestor */
+        .frame-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+            /* above iframe */
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            border: 1px solid var(--border, #e5e7eb);
+            background: var(--panel2, #f6f8fb);
+            color: var(--text, #0b1220);
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: var(--shadow, 0 6px 20px rgba(0, 0, 0, .15));
+        }
+
+        .frame-close-btn:hover {
+            background: color-mix(in srgb, var(--accent2, #4f46e5) 10%, var(--panel2, #f6f8fb));
+            border-color: color-mix(in srgb, var(--accent2, #4f46e5) 35%, var(--border, #e5e7eb));
+        }
+
+        .done-toggle-btn {
+            margin-top: 30px;
+            background-color: rgb(255, 246, 228);
+        }
+
+        #chat-view {
+            scroll-margin-top: 70px;
+        }
+
+        code {
+            cursor: pointer;
+            background: #f5f5f5;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        code:hover {
+            background: #e0e0ff;
+        }
     </style>
 </head>
 
@@ -923,33 +952,33 @@
 
 
     <!-- Sliding panel with iframe -->
-<!-- Live Ranking panel (existing) -->
-<div id="panel" aria-hidden="true">
-  <div id="resizer" title="Drag to resize"></div>
-  <div id="panel-header">
-    <span>Live Ranking</span>
-    <button id="close-btn" class="panel-close" aria-label="Close Live Ranking">X</button>
-  </div>
+    <!-- Live Ranking panel (existing) -->
+    <div id="panel" aria-hidden="true">
+        <div id="resizer" title="Drag to resize"></div>
+        <div id="panel-header">
+            <span>Live Ranking</span>
+            <button id="close-btn" class="panel-close" aria-label="Close Live Ranking">X</button>
+        </div>
 
-  <!-- NEW overlay close button that sits on top of the iframe -->
-  <button id="frame-close-ranking" class="frame-close-btn" aria-label="Close Live Ranking">X</button>
+        <!-- NEW overlay close button that sits on top of the iframe -->
+        <button id="frame-close-ranking" class="frame-close-btn" aria-label="Close Live Ranking">X</button>
 
-  <iframe id="ranking-frame" src="live-ranking.html" title="Live ranking"></iframe>
-</div>
+        <iframe id="ranking-frame" src="live-ranking.html" title="Live ranking"></iframe>
+    </div>
 
-<!-- Update Ranking panel (existing) -->
-<div id="panel-update" aria-hidden="true">
-  <div id="resizer-update" title="Drag to resize"></div>
-  <div id="panel-update-header">
-    <span>Update Ranking</span>
-    <button id="close-btn-update" class="panel-close" aria-label="Close Update Ranking">X</button>
-  </div>
+    <!-- Update Ranking panel (existing) -->
+    <div id="panel-update" aria-hidden="true">
+        <div id="resizer-update" title="Drag to resize"></div>
+        <div id="panel-update-header">
+            <span>Update Ranking</span>
+            <button id="close-btn-update" class="panel-close" aria-label="Close Update Ranking">X</button>
+        </div>
 
-  <!-- NEW overlay close button that sits on top of the iframe -->
-  <button id="frame-close-update" class="frame-close-btn" aria-label="Close Update Ranking">X</button>
+        <!-- NEW overlay close button that sits on top of the iframe -->
+        <button id="frame-close-update" class="frame-close-btn" aria-label="Close Update Ranking">X</button>
 
-  <iframe id="update-frame" src="update-ranking.html" title="Update ranking"></iframe>
-</div>
+        <iframe id="update-frame" src="update-ranking.html" title="Update ranking"></iframe>
+    </div>
 
 
     <!-- New header (appearance only) -->
@@ -1796,20 +1825,20 @@
             ensureDoneFooterVisible();
             updateDisagreementBadges();
 
-        (() => {
-        const content = document.getElementById('instructions-content');
-        if (!content) return;
-        const isHidden = getComputedStyle(content).display === 'none';
-        if (!isHidden) {
-            content.style.display = 'none';
-            // update the button label if present
-            const btn = document.querySelector('#instructions-box button');
-            if (btn) btn.textContent = 'Show';
-        }
-        })();
+            (() => {
+                const content = document.getElementById('instructions-content');
+                if (!content) return;
+                const isHidden = getComputedStyle(content).display === 'none';
+                if (!isHidden) {
+                    content.style.display = 'none';
+                    // update the button label if present
+                    const btn = document.querySelector('#instructions-box button');
+                    if (btn) btn.textContent = 'Show';
+                }
+            })();
 
-    document.getElementById('chat-view')
-    ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.getElementById('chat-view')
+                ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
 
 
@@ -2448,119 +2477,119 @@
         });
 
 
-        
+
 
         // Elements
-/* ===== Update panel (safe wiring) ===== */
-(function () {
-  const updateBar     = document.getElementById('update-bar');
-  const panelUpdate   = document.getElementById('panel-update');
-  const resizerUpdate = document.getElementById('resizer-update');
-  const iframeUpdate  = document.getElementById('update-frame');
+        /* ===== Update panel (safe wiring) ===== */
+        (function () {
+            const updateBar = document.getElementById('update-bar');
+            const panelUpdate = document.getElementById('panel-update');
+            const resizerUpdate = document.getElementById('resizer-update');
+            const iframeUpdate = document.getElementById('update-frame');
 
-  if (!updateBar || !panelUpdate) {
-    console.warn('[update-panel] Missing #update-bar or #panel-update — skipping init.');
-    return;
-  }
+            if (!updateBar || !panelUpdate) {
+                console.warn('[update-panel] Missing #update-bar or #panel-update — skipping init.');
+                return;
+            }
 
-  // Open/close the Update Ranking slide-over
-  function setOpenUpdate(isOpen) {
-    if (isOpen) {
-      panelUpdate.classList.add('open');
-      panelUpdate.setAttribute('aria-hidden', 'false');
-      updateBar.textContent = '✖ Close';
-      updateBar.setAttribute('aria-expanded', 'true');
+            // Open/close the Update Ranking slide-over
+            function setOpenUpdate(isOpen) {
+                if (isOpen) {
+                    panelUpdate.classList.add('open');
+                    panelUpdate.setAttribute('aria-hidden', 'false');
+                    updateBar.textContent = '✖ Close';
+                    updateBar.setAttribute('aria-expanded', 'true');
 
-      // Close the live panel if either API name exists
-      if (typeof window.setOpenRanking === 'function') window.setOpenRanking(false);
-      else if (typeof window.setOpen === 'function') window.setOpen(false);
-    } else {
-      panelUpdate.classList.remove('open');
-      panelUpdate.setAttribute('aria-hidden', 'true');
-      updateBar.innerHTML = '↻ Update<br>Ranking';
-      updateBar.setAttribute('aria-expanded', 'false');
-    }
-  }
-  // expose (optional)
-  window.setOpenUpdate = setOpenUpdate;
+                    // Close the live panel if either API name exists
+                    if (typeof window.setOpenRanking === 'function') window.setOpenRanking(false);
+                    else if (typeof window.setOpen === 'function') window.setOpen(false);
+                } else {
+                    panelUpdate.classList.remove('open');
+                    panelUpdate.setAttribute('aria-hidden', 'true');
+                    updateBar.innerHTML = '↻ Update<br>Ranking';
+                    updateBar.setAttribute('aria-expanded', 'false');
+                }
+            }
+            // expose (optional)
+            window.setOpenUpdate = setOpenUpdate;
 
-  // Toggle handler (click + keyboard)
-  function onUpdateToggle(e) {
-    if (e) e.preventDefault();
-    setOpenUpdate(!panelUpdate.classList.contains('open'));
-  }
+            // Toggle handler (click + keyboard)
+            function onUpdateToggle(e) {
+                if (e) e.preventDefault();
+                setOpenUpdate(!panelUpdate.classList.contains('open'));
+            }
 
-  if (updateBar._clickHandler) updateBar.removeEventListener('click', updateBar._clickHandler);
-  updateBar.addEventListener('click', onUpdateToggle);
-  updateBar._clickHandler = onUpdateToggle;
+            if (updateBar._clickHandler) updateBar.removeEventListener('click', updateBar._clickHandler);
+            updateBar.addEventListener('click', onUpdateToggle);
+            updateBar._clickHandler = onUpdateToggle;
 
-  updateBar.setAttribute('role', 'button');
-  updateBar.setAttribute('tabindex', '0');
-  updateBar.setAttribute('aria-controls', 'panel-update');
-  updateBar.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onUpdateToggle(e); }
-  });
+            updateBar.setAttribute('role', 'button');
+            updateBar.setAttribute('tabindex', '0');
+            updateBar.setAttribute('aria-controls', 'panel-update');
+            updateBar.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onUpdateToggle(e); }
+            });
 
-  // Optional: auto-refresh just the update iframe every 30s
-  if (iframeUpdate) {
-    function refreshUpdateFrame() {
-      const base = iframeUpdate.src.split('?')[0];
-      iframeUpdate.src = base + '?t=' + Date.now();
-    }
-    setInterval(refreshUpdateFrame, 300000);
-  }
+            // Optional: auto-refresh just the update iframe every 30s
+            if (iframeUpdate) {
+                function refreshUpdateFrame() {
+                    const base = iframeUpdate.src.split('?')[0];
+                    iframeUpdate.src = base + '?t=' + Date.now();
+                }
+                setInterval(refreshUpdateFrame, 300000);
+            }
 
-  // --- Drag-to-resize for UPDATE panel (guarded) ---
-  if (resizerUpdate && iframeUpdate) {
-    let draggingUpdate = false;
+            // --- Drag-to-resize for UPDATE panel (guarded) ---
+            if (resizerUpdate && iframeUpdate) {
+                let draggingUpdate = false;
 
-    const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
+                const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
 
-    function startDragUpdate(e) {
-      if (!panelUpdate.classList.contains('open')) return;
-      draggingUpdate = true;
-      document.body.classList.add('no-select');
-      iframeUpdate.style.pointerEvents = 'none';
-      e.preventDefault();
-    }
+                function startDragUpdate(e) {
+                    if (!panelUpdate.classList.contains('open')) return;
+                    draggingUpdate = true;
+                    document.body.classList.add('no-select');
+                    iframeUpdate.style.pointerEvents = 'none';
+                    e.preventDefault();
+                }
 
-    function onDragUpdate(e) {
-      if (!draggingUpdate) return;
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const vw = window.innerWidth;
-      const desired = vw - clientX;
-      const min = parseInt(getComputedStyle(panelUpdate).minWidth, 10) || 400;
-      panelUpdate.style.width = clamp(desired, min, vw) + 'px';
-    }
+                function onDragUpdate(e) {
+                    if (!draggingUpdate) return;
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    const vw = window.innerWidth;
+                    const desired = vw - clientX;
+                    const min = parseInt(getComputedStyle(panelUpdate).minWidth, 10) || 400;
+                    panelUpdate.style.width = clamp(desired, min, vw) + 'px';
+                }
 
-    function endDragUpdate() {
-      if (!draggingUpdate) return;
-      draggingUpdate = false;
-      document.body.classList.remove('no-select');
-      iframeUpdate.style.pointerEvents = '';
-    }
+                function endDragUpdate() {
+                    if (!draggingUpdate) return;
+                    draggingUpdate = false;
+                    document.body.classList.remove('no-select');
+                    iframeUpdate.style.pointerEvents = '';
+                }
 
-    resizerUpdate.addEventListener('mousedown', startDragUpdate);
-    window.addEventListener('mousemove', onDragUpdate);
-    window.addEventListener('mouseup', endDragUpdate);
+                resizerUpdate.addEventListener('mousedown', startDragUpdate);
+                window.addEventListener('mousemove', onDragUpdate);
+                window.addEventListener('mouseup', endDragUpdate);
 
-    resizerUpdate.addEventListener('touchstart', startDragUpdate, { passive: false });
-    window.addEventListener('touchmove', onDragUpdate, { passive: false });
-    window.addEventListener('touchend', endDragUpdate);
+                resizerUpdate.addEventListener('touchstart', startDragUpdate, { passive: false });
+                window.addEventListener('touchmove', onDragUpdate, { passive: false });
+                window.addEventListener('touchend', endDragUpdate);
 
-    window.addEventListener('resize', () => {
-      if (!panelUpdate.classList.contains('open')) return;
-      const vw = window.innerWidth;
-      const min = parseInt(getComputedStyle(panelUpdate).minWidth, 10) || 400;
-      const cur = panelUpdate.getBoundingClientRect().width;
-      panelUpdate.style.width = clamp(cur, min, vw) + 'px';
-    });
-  }
+                window.addEventListener('resize', () => {
+                    if (!panelUpdate.classList.contains('open')) return;
+                    const vw = window.innerWidth;
+                    const min = parseInt(getComputedStyle(panelUpdate).minWidth, 10) || 400;
+                    const cur = panelUpdate.getBoundingClientRect().width;
+                    panelUpdate.style.width = clamp(cur, min, vw) + 'px';
+                });
+            }
 
-  // Wire the "X" buttons (header + overlay), if present
-  document.getElementById('close-btn-update')?.addEventListener('click', () => setOpenUpdate(false));
-  document.getElementById('frame-close-update')?.addEventListener('click', () => setOpenUpdate(false));
-})();
+            // Wire the "X" buttons (header + overlay), if present
+            document.getElementById('close-btn-update')?.addEventListener('click', () => setOpenUpdate(false));
+            document.getElementById('frame-close-update')?.addEventListener('click', () => setOpenUpdate(false));
+        })();
 
 
 
@@ -2568,88 +2597,156 @@
     </script>
 
 
-<script>
-    function getMethodId(methodName) {
-  const methodMap = {
-    isValidProjectName: 1,
-    isRemote: 2,
-    isMachineTypeDefined: 3,
-    indexOfIgnoreCase: 4,
-    deleteRecursively: 5,
-    encodedLength: 6,
-    lowestPositiveRoot: 7,
-    atan2: 8
-  };
+    <script>
+        function getMethodId(methodName) {
+            const methodMap = {
+                isValidProjectName: 1,
+                isRemote: 2,
+                isMachineTypeDefined: 3,
+                indexOfIgnoreCase: 4,
+                deleteRecursively: 5,
+                encodedLength: 6,
+                lowestPositiveRoot: 7,
+                atan2: 8
+            };
 
-  return methodMap[methodName] || null; // returns null if not found
-}
+            return methodMap[methodName] || null; // returns null if not found
+        }
 
-// Example usage:
-console.log(getMethodId("isRemote")); // 2
-console.log(getMethodId("atan2"));    // 8
-console.log(getMethodId("foo"));      // null
+        // Example usage:
+        console.log(getMethodId("isRemote")); // 2
+        console.log(getMethodId("atan2"));    // 8
+        console.log(getMethodId("foo"));      // null
 
-function show_snippet(id) {
-  const snippet = snippets.find(s => s.id === id);
-  if (!snippet) return;
+        function show_snippet(id) {
+            const snippet = snippets.find(s => s.id === id);
+            if (!snippet) return;
 
-  document.getElementById('modal-snippet-title').innerText = snippet.methodName;
+            document.getElementById('modal-snippet-title').innerText = snippet.methodName;
 
-  const codeLines = snippet.code.trim().split('\n');
+            const codeLines = snippet.code.trim().split('\n');
 
-  // Render styled spans
-  document.getElementById('modal-code-content').innerHTML = codeLines.join('\n');
+            // Render styled spans
+            document.getElementById('modal-code-content').innerHTML = codeLines.join('\n');
 
-  // Line numbers
-  document.getElementById('modal-line-numbers').innerHTML = codeLines.map((_, i) => i + 1).join('<br>');
+            // Line numbers
+            document.getElementById('modal-line-numbers').innerHTML = codeLines.map((_, i) => i + 1).join('<br>');
 
-  document.getElementById('snippet-modal').style.display = 'block';
-  applyModalTheme();
-}
-</script>
+            document.getElementById('snippet-modal').style.display = 'block';
+            applyModalTheme();
+        }
 
-<div id="snippet-modal" style="display:none; position:fixed; top:10%;
+        function toggleModalTheme() {
+            const body = document.body;
+            const isLight = body.classList.contains("light-mode");
+
+            if (isLight) {
+                body.classList.remove("light-mode");
+                body.classList.add("dark-mode");
+                localStorage.setItem("codeTheme", "dark");
+                document.getElementById('modal-theme-toggle').textContent = "Switch to Light Mode";
+            } else {
+                body.classList.remove("dark-mode");
+                body.classList.add("light-mode");
+                localStorage.setItem("codeTheme", "light");
+                document.getElementById('modal-theme-toggle').textContent = "Switch to Dark Mode";
+            }
+        }
+
+        function applyModalTheme() {
+            const theme = localStorage.getItem('codeTheme') || 'light';
+            document.body.classList.remove('light-mode', 'dark-mode');
+            document.body.classList.add(theme + '-mode');
+            const btn = document.getElementById('modal-theme-toggle');
+            if (btn) {
+                btn.textContent = theme === 'light' ? "Switch to Dark Mode" : "Switch to Light Mode";
+            }
+        }
+
+        function compare(leftIds, rightIds) {
+            const leftContainer = document.getElementById('compare-left');
+            const rightContainer = document.getElementById('compare-right');
+            if (!leftContainer || !rightContainer) return;
+
+            leftContainer.innerHTML = '';
+            rightContainer.innerHTML = '';
+
+            const getSnippet = id => snippets.find(s => s.id === id);
+
+            // Left side: stacked
+            leftIds.forEach(id => {
+                const snippet = getSnippet(id);
+                if (snippet) {
+                    const box = document.createElement('div');
+                    box.className = 'snippet-box';
+                    box.innerHTML = `<h4>${snippet.methodName}</h4><pre class="code-content">${snippet.code}</pre>`;
+                    leftContainer.appendChild(box);
+                }
+            });
+
+            // Right side: stacked
+            rightIds.forEach(id => {
+                const snippet = getSnippet(id);
+                if (snippet) {
+                    const box = document.createElement('div');
+                    box.className = 'snippet-box';
+                    box.innerHTML = `<h4>${snippet.methodName}</h4><pre class="code-content">${snippet.code}</pre>`;
+                    rightContainer.appendChild(box);
+                }
+            });
+
+            const modal = document.getElementById('compare-modal');
+            if (modal) modal.style.display = 'block';
+        }
+
+    </script>
+
+    <div id="snippet-modal" style="display:none; position:fixed; top:10%;
 left:50%; transform:translateX(-50%); width:80%; max-height:80%;
 overflow-y:auto; background:#fff; border:1px solid #ccc; padding:0px 20px;
 border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
-  <div style="position: sticky; top: 0; background: #fff; z-index: 10; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd;">
-    <h3 id="modal-snippet-title" style="margin:0;">Snippet</h3>
-    <div>
-      <button onclick="toggleModalTheme()" id="modal-theme-toggle" style="margin-right: 10px; padding: 6px 12px; border-radius: 5px; border: none; background-color: #333; color: white; cursor: pointer;">Switch to Light Mode</button>
-      <span onclick="document.getElementById('snippet-modal').style.display='none'" style="cursor:pointer; font-size:20px; font-weight:bold;">&times;</span>
+        <div
+            style="position: sticky; top: 0; background: #fff; z-index: 10; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd;">
+            <h3 id="modal-snippet-title" style="margin:0;">Snippet</h3>
+            <div>
+                <button onclick="toggleModalTheme()" id="modal-theme-toggle"
+                    style="margin-right: 10px; padding: 6px 12px; border-radius: 5px; border: none; background-color: #333; color: white; cursor: pointer;">Switch
+                    to Light Mode</button>
+                <span onclick="document.getElementById('snippet-modal').style.display='none'"
+                    style="cursor:pointer; font-size:20px; font-weight:bold;">&times;</span>
+            </div>
+        </div>
+
+        <div class="code-container" id="modal-code">
+            <div class="line-numbers" id="modal-line-numbers"></div>
+            <div class="code-content" id="modal-code-content"></div>
+        </div>
     </div>
-  </div>
 
-  <div class="code-container" id="modal-code">
-    <div class="line-numbers" id="modal-line-numbers"></div>
-    <div class="code-content" id="modal-code-content"></div>
-  </div>
-</div>
+    <script>
+        // Normalize the text inside <code> (e.g., strip trailing "()")
+        function _normalizeMethod(text) {
+            return (text || "")
+                .trim()
+                .replace(/\(\s*\)$/, ""); // turn "isRemote()" -> "isRemote"
+        }
 
-<script>
-  // Normalize the text inside <code> (e.g., strip trailing "()")
-  function _normalizeMethod(text) {
-    return (text || "")
-      .trim()
-      .replace(/\(\s*\)$/, ""); // turn "isRemote()" -> "isRemote"
-  }
+        // One global delegated click handler for all <code> tags
+        document.addEventListener("click", (e) => {
+            const el = e.target.closest("code");
+            if (!el) return;
 
-  // One global delegated click handler for all <code> tags
-  document.addEventListener("click", (e) => {
-    const el = e.target.closest("code");
-    if (!el) return;
-
-    const name = _normalizeMethod(el.textContent);
-    const id = getMethodId(name);
-    if (id) {
-      // Optional: stop link clicks if <code> is inside an <a>
-      e.preventDefault();
-      show_snippet(id);
-    } else {
-      console.warn("No snippet ID for:", name);
-    }
-  });
-</script>
+            const name = _normalizeMethod(el.textContent);
+            const id = getMethodId(name);
+            if (id) {
+                // Optional: stop link clicks if <code> is inside an <a>
+                e.preventDefault();
+                show_snippet(id);
+            } else {
+                console.warn("No snippet ID for:", name);
+            }
+        });
+    </script>
 
 </body>
 
