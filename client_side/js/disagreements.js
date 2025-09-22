@@ -16,6 +16,8 @@ The crux is how much API/pattern familiarity (e.g., <em>regionMatches</em>, Visi
   <summary style="cursor:pointer; font-weight:bold; margin-top:1em;">View Round 3 Reflections</summary>
   <div style="margin-top:0.5em;">
     <p><strong>Highlights:</strong> Martin: “<em>regionMatches</em> isn’t complex once looked up.” Oscar: “Visitor pattern adds real difficulty.” Nadeeshan: “Purpose is clear; careful reading narrows gaps.”</p>
+    <a href="round3-reflections.html" target="_blank"
+                                rel="noopener noreferrer">read all experts’ reflection answers</a>
   </div>
 </details>
 `
@@ -34,7 +36,8 @@ The crux is how much API/pattern familiarity (e.g., <em>regionMatches</em>, Visi
 <details>
   <summary style="cursor:pointer; font-weight:bold; margin-top:1em;">View Round 3 Reflections</summary>
   <div style="margin-top:0.5em;">
-    <p><strong>Highlights:</strong> Agreement that purpose is clear; debate is about whether brevity alone justifies a lower difficulty rank.</p>
+    <p><strong>Highlights:</strong> Agreement that purpose is clear; debate is about whether brevity alone justifies a lower difficulty rank.</p>     <a href="round3-reflections.html" target="_blank"
+                                rel="noopener noreferrer">read all experts’ reflection answers</a>
   </div>
 </details>
 `
