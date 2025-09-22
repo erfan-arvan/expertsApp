@@ -2515,7 +2515,7 @@
             if (!btn) return;
             const done = isFinished(chatId);
             btn.classList.toggle('done', done);
-            btn.textContent = done
+            btn.innerHTML = done
                 ? '🔓 Re-open this discussion'
                 : '✅ I’m done with this discussion<br>(it will close, but you can undo)';
             btn.setAttribute('aria-pressed', String(done));
