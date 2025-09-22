@@ -2392,15 +2392,6 @@
             return wrap;
         }
 
-        function refreshDoneToggleButton(chatId = state.currentId) {
-            const btn = document.getElementById('done-toggle-btn');
-            if (!btn) return;
-            const done = isFinished(chatId);
-            btn.classList.toggle('done', done);
-            btn.textContent = done ? '🔓 Re-open this discussion' : '✅ I am done with this discussion (Close it for you, you can undo this)';
-            btn.setAttribute('aria-pressed', String(done));
-        }
-
         async function toggleFinishedForCurrent(btn) {
             const chatId = String(state.currentId);
             const username = currentHandle() || state.user.name;
@@ -2504,7 +2495,9 @@
             if (!btn) return;
             const done = isFinished(chatId);
             btn.classList.toggle('done', done);
-            btn.textContent = done ? '🔓 Re-open this discussion' : '✅ I am done with this discussion';
+            btn.textContent = done
+                ? '🔓 Re-open this discussion'
+                : '✅ I’m done with this discussion (it will close, but you can undo)';
             btn.setAttribute('aria-pressed', String(done));
             if (state.view === 'chat' && chatId != null) {
                 if (done) disableChatInputs(); else enableChatInputs();
