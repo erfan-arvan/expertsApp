@@ -1811,6 +1811,20 @@
     ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
 
+            // Attach click handler to all <code> tags
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll("code").forEach(el => {
+        el.addEventListener("click", () => {
+          const text = el.textContent.trim();
+          const id = getMethodId(text);
+          if (id) {
+            show_snippet(id);
+          } else {
+            console.warn("No snippet ID for:", text);
+          }
+        });
+      });
+    });
 
         }
     </script>
@@ -2625,22 +2639,6 @@ border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
   </div>
 </div>
 
-<script>
-        // Attach click handler to all <code> tags
-    document.addEventListener("DOMContentLoaded", () => {
-      document.querySelectorAll("code").forEach(el => {
-        el.addEventListener("click", () => {
-          const text = el.textContent.trim();
-          const id = getMethodId(text);
-          if (id) {
-            show_snippet(id);
-          } else {
-            console.warn("No snippet ID for:", text);
-          }
-        });
-      });
-    });
-</script>
 </body>
 
 </html>
