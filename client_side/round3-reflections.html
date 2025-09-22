@@ -15,8 +15,8 @@
         })();
     </script>
     <style>
-
-        html, body {
+        html,
+        body {
             max-width: 100%;
             /* overflow-x: hidden;  */
         }
@@ -448,37 +448,180 @@
         }
 
         /* 1) The critical fix: allow grid children to shrink */
-.grid > * { min-width: 0; }
-main, nav.toc { min-width: 0; }
+        .grid>* {
+            min-width: 0;
+        }
 
-/* 2) Prevent the page itself from scrolling horizontally */
-html, body { overflow-x: hidden; max-width: 100vw; }
+        main,
+        nav.toc {
+            min-width: 0;
+        }
 
-/* 3) Contain long words/links inside cards and details */
-.card, details, .expert, .qa .a {
-  overflow-wrap: anywhere;      /* let very long tokens wrap */
-  word-break: break-word;       /* older fallback */
-}
+        /* 2) Prevent the page itself from scrolling horizontally */
+        html,
+        body {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
 
-/* 4) Code/pre blocks shouldn't push the layout */
-pre, code {
-  max-width: 100%;
-}
-pre {
-  white-space: pre;             /* keep code formatting */
-  overflow-x: auto;             /* scroll INSIDE the pre, not the page */
-}
+        /* 3) Contain long words/links inside cards and details */
+        .card,
+        details,
+        .expert,
+        .qa .a {
+            overflow-wrap: anywhere;
+            /* let very long tokens wrap */
+            word-break: break-word;
+            /* older fallback */
+        }
 
-/* 5) Defensive: never let media exceed the container */
-img, iframe, video {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
+        /* 4) Code/pre blocks shouldn't push the layout */
+        pre,
+        code {
+            max-width: 100%;
+        }
 
-/* 6) If something still squeaks by, clip it at the container edge */
-.wrap { overflow-x: clip; }     /* modern, safer than hidden */
+        pre {
+            white-space: pre;
+            /* keep code formatting */
+            overflow-x: auto;
+            /* scroll INSIDE the pre, not the page */
+        }
 
+        /* 5) Defensive: never let media exceed the container */
+        img,
+        iframe,
+        video {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* 6) If something still squeaks by, clip it at the container edge */
+        .wrap {
+            overflow-x: clip;
+        }
+
+        /* modern, safer than hidden */
+
+        /* === Top sheet (themed) === */
+        .top-sheet {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 50vh;
+            /* default half page */
+            min-height: 240px;
+            max-height: 95vh;
+
+            background: var(--panel, #fff);
+            color: var(--text, #0b1220);
+            border-bottom: 1px solid var(--border, #e5e7eb);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, .28);
+            z-index: 3000;
+
+            transform: translateY(-100%);
+            transition: transform .35s ease;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            overflow: hidden;
+        }
+
+        .top-sheet.open {
+            transform: translateY(0);
+        }
+
+        /* Header */
+        .top-sheet-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: var(--panel2, #f6f8fb);
+            color: var(--text, #0b1220);
+            border-bottom: 1px solid var(--border, #e5e7eb);
+            font-weight: 700;
+        }
+
+        .panel-close {
+            margin-left: auto;
+            background: transparent;
+            border: 1px solid var(--border, #e5e7eb);
+            color: var(--text, #0b1220);
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .panel-close:hover {
+            background: color-mix(in srgb, var(--accent2, #4f46e5) 8%, transparent);
+            border-color: color-mix(in srgb, var(--accent2, #4f46e5) 40%, var(--border, #e5e7eb));
+        }
+
+        /* Iframe fills remaining space */
+        #summary-frame {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            background: var(--panel, #fff);
+            display: block;
+        }
+
+        /* Overlay close button on top-right of the sheet (above iframe) */
+        .frame-close-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 2;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            border: 1px solid var(--border, #e5e7eb);
+            background: var(--panel2, #f6f8fb);
+            color: var(--text, #0b1220);
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: var(--shadow, 0 6px 20px rgba(0, 0, 0, .15));
+        }
+
+        .frame-close-btn:hover {
+            background: color-mix(in srgb, var(--accent2, #4f46e5) 10%, var(--panel2, #f6f8fb));
+            border-color: color-mix(in srgb, var(--accent2, #4f46e5) 35%, var(--border, #e5e7eb));
+        }
+
+        /* Drag handle at the bottom edge */
+        .top-sheet-resizer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 10px;
+            cursor: ns-resize;
+            background: transparent;
+        }
+
+        .top-sheet-resizer::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 3px;
+            width: 60px;
+            height: 4px;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--border, #e5e7eb) 70%, transparent);
+        }
+
+        /* Hide when printing */
+        @media print {
+            .top-sheet {
+                display: none !important;
+            }
+        }
     </style>
 
 </head>
@@ -509,6 +652,10 @@ img, iframe, video {
     <div class="wrap">
         <div class="grid">
             <nav class="toc" id="toc">
+                <button id="summary-open-btn" type="button" class="done-toggle-btn" aria-controls="summary-top-sheet"
+                    aria-expanded="false">
+                    Round 3 Summary
+                </button>
                 <h3>Disagreements</h3>
                 <!-- dynamically populated -->
             </nav>
@@ -928,6 +1075,116 @@ img, iframe, video {
         })();
     </script>
 
+    <!-- Top sheet: slides from the top, half-screen by default -->
+    <div id="summary-top-sheet" class="top-sheet" aria-hidden="true">
+        <div class="top-sheet-header">
+            <span>Round 3 Summary</span>
+            <button id="summary-sheet-close" class="panel-close" aria-label="Close">X</button>
+        </div>
+
+        <!-- “X” overlay on the iframe itself (handy when scrolled) -->
+        <button id="summary-frame-close" class="frame-close-btn" aria-label="Close">X</button>
+
+        <iframe id="summary-frame" src="about:blank" title="Round 3 Summary"></iframe>
+
+        <!-- Drag handle to resize vertically -->
+        <div id="summary-resizer" class="top-sheet-resizer" title="Drag to resize"></div>
+    </div>
+
+    <script>
+        (function () {
+            const openBtn = document.getElementById('summary-open-btn');
+            const sheet = document.getElementById('summary-top-sheet');
+            const closeHdr = document.getElementById('summary-sheet-close');
+            const closeFab = document.getElementById('summary-frame-close');
+            const resizer = document.getElementById('summary-resizer');
+            const frame = document.getElementById('summary-frame');
+
+            if (!openBtn || !sheet || !frame) return;
+
+            function setOpenSummary(isOpen) {
+                if (isOpen) {
+                    // load the page (cache-busted) only when opening
+                    const base = 'round3-summary.html';
+                    frame.src = base + '?t=' + Date.now();
+
+                    sheet.classList.add('open');
+                    sheet.setAttribute('aria-hidden', 'false');
+                    openBtn.setAttribute('aria-expanded', 'true');
+                } else {
+                    sheet.classList.remove('open');
+                    sheet.setAttribute('aria-hidden', 'true');
+                    openBtn.setAttribute('aria-expanded', 'false');
+                    // optional: clear src to stop timers in the iframe
+                    // frame.src = 'about:blank';
+                }
+            }
+            // Expose if you want to control it elsewhere
+            window.setOpenSummary = setOpenSummary;
+
+            // Open button
+            openBtn.addEventListener('click', () => setOpenSummary(true));
+            openBtn.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpenSummary(true); }
+            });
+
+            // Close buttons
+            closeHdr?.addEventListener('click', () => setOpenSummary(false));
+            closeFab?.addEventListener('click', () => setOpenSummary(false));
+
+            // Escape to close
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && sheet.classList.contains('open')) setOpenSummary(false);
+            });
+
+            // Vertical resize (drag bottom edge)
+            if (resizer) {
+                let dragging = false;
+                function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
+
+                function start(e) {
+                    if (!sheet.classList.contains('open')) return;
+                    dragging = true;
+                    document.body.classList.add('no-select');
+                    // prevent iframe from stealing events while dragging
+                    frame.style.pointerEvents = 'none';
+                    e.preventDefault();
+                }
+                function move(e) {
+                    if (!dragging) return;
+                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                    const vh = window.innerHeight;
+                    const min = 240;
+                    const max = Math.round(vh * 0.95);
+                    const newH = clamp(clientY, min, max); // distance from top to cursor
+                    sheet.style.height = newH + 'px';
+                }
+                function end() {
+                    if (!dragging) return;
+                    dragging = false;
+                    document.body.classList.remove('no-select');
+                    frame.style.pointerEvents = '';
+                }
+
+                resizer.addEventListener('mousedown', start);
+                window.addEventListener('mousemove', move);
+                window.addEventListener('mouseup', end);
+
+                resizer.addEventListener('touchstart', start, { passive: false });
+                window.addEventListener('touchmove', move, { passive: false });
+                window.addEventListener('touchend', end);
+            }
+
+            // Keep height reasonable on viewport resize
+            window.addEventListener('resize', () => {
+                if (!sheet.classList.contains('open')) return;
+                const h = sheet.getBoundingClientRect().height;
+                const max = Math.round(window.innerHeight * 0.95);
+                sheet.style.height = Math.min(h, max) + 'px';
+            });
+        })();
+
+    </script>
 
 </body>
 
