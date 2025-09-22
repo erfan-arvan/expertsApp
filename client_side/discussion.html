@@ -1780,6 +1780,11 @@
             refreshDoneToggleButton(String(id));
             ensureDoneFooterVisible();
             updateDisagreementBadges();
+
+            const content = document.getElementById("instructions-content");
+            const button = event.target;
+
+            if (content.style.display === "none") {toggleInstructions();}
         }
     </script>
 
