@@ -641,7 +641,7 @@
                 <button id="btn-theme" class="pill" title="Theme mode">Theme: Auto 🌗</button>
                 <button style="color: white; background: linear-gradient(145deg, var(--accent), var(--accent2));
 " id="summary-open-btn" type="button" class="done-toggle-btn" aria-controls="summary-top-sheet" aria-expanded="false">
-                    <strong>Round 3 Rankings</strong>
+                    <strong>Round 2 Rankings</strong>
                 </button>
                 <select id="expert-filter" class="pill" title="Filter by expert">
                     <option value="all">Show all experts</option>
@@ -1105,7 +1105,7 @@
             function setOpenSummary(isOpen) {
                 if (isOpen) {
                     // load the page (cache-busted) only when opening
-                    const base = 'round3-summary.html';
+                    const base = 'round2-rankings.html';
                     frame.src = base + '?t=' + Date.now();
 
                     sheet.classList.add('open');
