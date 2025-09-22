@@ -1,6 +1,6 @@
 window.DISAGREEMENTS = [
   {
-    id: "15",
+    id: "1",
     title: "lowestPositiveRoot — central conflicts",
     "snippet-id": "lowestPositiveRoot",
     htmltext: `<code>lowestPositiveRoot</code> sits at the center of multiple disagreements:
@@ -35,7 +35,7 @@ window.DISAGREEMENTS = [
 </details>`
   },
   {
-    id: "13",
+    id: "2",
     title: "indexOfIgnoreCase vs lowestPositiveRoot (and vs isRemote)",
     "snippet-id": "indexOfIgnoreCase",
     htmltext: `Experts diverged on whether <code>indexOfIgnoreCase</code> should be above, below, or tied with <code>lowestPositiveRoot</code>, and whether it is distinct from or tied with <code>isRemote</code>. A key point is how much <span style="font-style: italic;">regionMatches</span> (and similar APIs) create real barriers for typical engineers.
@@ -73,7 +73,7 @@ window.DISAGREEMENTS = [
 </details>`
   },
   {
-    id: "14",
+    id: "3",
     title: "deleteRecursively vs lowestPositiveRoot",
     "snippet-id": "deleteRecursively",
     htmltext: `Experts disagreed on whether <code>deleteRecursively</code> should be ranked above or below <code>lowestPositiveRoot</code>. The crux is how much specialized knowledge of the Java File API and the Visitor pattern should be assumed for typical engineers.
@@ -110,7 +110,7 @@ window.DISAGREEMENTS = [
 </details>`
   },
     {
-    id: "12",
+    id: "4",
     title: "isRemote vs indexOfIgnoreCase & lowestPositiveRoot",
     "snippet-id": "isRemote",
     htmltext: `In previous rounds, experts disagreed on whether <code>isRemote</code> is distinctly simpler than <code>indexOfIgnoreCase</code> and <code>lowestPositiveRoot</code>, or about the same level.
