@@ -1793,6 +1793,11 @@
         }
         })();
 
+        requestAnimationFrame(() => {
+        document.getElementById('chat-view')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
         }
     </script>
 
