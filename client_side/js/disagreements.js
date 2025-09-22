@@ -40,9 +40,9 @@ window.DISAGREEMENTS = [
     id: "13",
     title: "indexOfIgnoreCase vs lowestPositiveRoot (and vs isRemote)",
     "snippet-id": "indexOfIgnoreCase",
-    htmltext: `Experts diverged on whether <code>indexOfIgnoreCase</code> should be above, below, or tied with <code>lowestPositiveRoot</code>, and whether it is distinct from or tied with <code>isRemote</code>. A key point is how much <code>regionMatches</code> (and similar APIs) create real barriers for typical engineers.
+    htmltext: `Experts diverged on whether <code>indexOfIgnoreCase</code> should be above, below, or tied with <code>lowestPositiveRoot</code>, and whether it is distinct from or tied with <code>isRemote</code>. A key point is how much <span style="font-style: italic;">regionMatches</span> (and similar APIs) create real barriers for typical engineers.
 <ul>
-  <li><strong>Martin</strong> placed <code>indexOfIgnoreCase</code> above <code>lowestPositiveRoot</code>, noting <code>regionMatches</code> can be looked up and the rest is straightforward.</li>
+  <li><strong>Martin</strong> placed <code>indexOfIgnoreCase</code> above <code>lowestPositiveRoot</code>, noting <span style="font-style: italic;">regionMatches</span> can be looked up and the rest is straightforward.</li>
   <li><strong>Oscar</strong> placed <code>indexOfIgnoreCase</code> below <code>lowestPositiveRoot</code>, concerned unfamiliar APIs may hinder comprehension.</li>
   <li><strong>Nadeeshan</strong> tied <code>indexOfIgnoreCase</code> with <code>lowestPositiveRoot</code>, and also tied it with <code>isRemote</code>, suggesting comparable difficulty after careful reading.</li>
 </ul>
@@ -53,7 +53,7 @@ window.DISAGREEMENTS = [
   <div style="margin-top: 0.5em;">
     <p><strong>Martin:</strong></p>
     <ul>
-      <li><strong>Q1:</strong> I stand by my round 2 response: <code>indexOfIgnoreCase</code> isn't too hard to follow. The only tricky part is <code>regionMatches</code>, and IRL any engineer unfamiliar with that would immediately look it up. I read its Javadoc, and it's not that complex.</li>
+      <li><strong>Q1:</strong> I stand by my round 2 response: <code>indexOfIgnoreCase</code> isn't too hard to follow. The only tricky part is <span style="font-style: italic;">regionMatches</span>, and IRL any engineer unfamiliar with that would immediately look it up. I read its Javadoc, and it's not that complex.</li>
       <li><strong>Q2:</strong> No.</li>
       <li><strong>Q3:</strong> Yes: I think I agree with Nadeeshan that it could be shifted left, below <code>atan2</code> and maybe <code>isMachineTypeDefined</code>.</li>
     </ul>
@@ -68,7 +68,7 @@ window.DISAGREEMENTS = [
     <p><strong>Nadeeshan:</strong></p>
     <ul>
       <li><strong>Q1:</strong> I agree on the point that the overall purpose of <code>indexOfIgnoreCase</code> is clear.</li>
-      <li><strong>Q2:</strong> From a typical engineer’s perspective, if one carefully reads the code, the logic is straightforward. Even without documentation for <code>regionMatches</code>, its parameters make the intent inferable.</li>
+      <li><strong>Q2:</strong> From a typical engineer’s perspective, if one carefully reads the code, the logic is straightforward. Even without documentation for <span style="font-style: italic;">regionMatches</span>, its parameters make the intent inferable.</li>
       <li><strong>Q3:</strong> No, I would not change the rank of <code>lowestPositiveRoot</code>.</li>
     </ul>
   </div>
@@ -140,7 +140,7 @@ window.DISAGREEMENTS = [
     <p><strong>Nadeeshan:</strong></p>
     <ul>
       <li><strong>Q1:</strong> The overall purpose of <code>lowestPositiveRoot</code> is clear.</li>
-      <li><strong>Q2:</strong> From a typical engineer’s perspective, if carefully read, the logic is straightforward. Even without documentation for <code>regionMatches</code>, its parameters make the intent clear.</li>
+      <li><strong>Q2:</strong> From a typical engineer’s perspective, if carefully read, the logic is straightforward. Even without documentation for <span style="font-style: italic;">regionMatches</span>, its parameters make the intent clear.</li>
       <li><strong>Q3:</strong> No, I would not change the rank of <code>lowestPositiveRoot</code>.</li>
     </ul>
   </div>
