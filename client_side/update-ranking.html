@@ -825,6 +825,9 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     } else if (!checkbox.checked && existing) {
       previewArea.removeChild(existing);
     }
+
+    document.querySelector('.ranking-row-numbers')
+  ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   function saveState() {
