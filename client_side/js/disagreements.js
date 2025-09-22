@@ -1,7 +1,7 @@
 window.DISAGREEMENTS = [
   {
     id: "1",
-    title: "lowestPositiveRoot — central conflicts",
+    title: "lowestPositiveRoot",
     "snippet-id": "lowestPositiveRoot",
     htmltext: `<code>lowestPositiveRoot</code> sits at the center of multiple disagreements:
 <ul>
