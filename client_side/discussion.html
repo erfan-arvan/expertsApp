@@ -1781,10 +1781,18 @@
             ensureDoneFooterVisible();
             updateDisagreementBadges();
 
-            const content = document.getElementById("instructions-content");
-            const button = event.target;
+        (() => {
+        const content = document.getElementById('instructions-content');
+        if (!content) return;
+        const isHidden = getComputedStyle(content).display === 'none';
+        if (!isHidden) {
+            content.style.display = 'none';
+            // update the button label if present
+            const btn = document.querySelector('#instructions-box button');
+            if (btn) btn.textContent = 'Show';
+        }
+        })();
 
-            if (content.style.display === "none") {toggleInstructions();}
         }
     </script>
 
