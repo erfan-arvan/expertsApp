@@ -1690,6 +1690,21 @@
             updateDisagreementBadges();
         }
 
+        function checkEmptyPosts() {
+  const posts = document.getElementById("posts");
+  if (!posts) return; // no such div
+
+  // Trim innerHTML to ignore stray whitespace/comments
+  if (posts.innerHTML.trim() === "") {
+    posts.innerHTML = `
+      <div style="padding: 16px; text-align: center; color: var(--muted); font-style: italic;">
+        There are no discussions in this forum yet. <br>
+        Be the first one to express your opinion.
+      </div>
+    `;
+  }
+}
+
         function renderCurrentThread() {
             if (state.view !== 'chat' || state.currentId == null) return;
             const posts = $('#posts');
@@ -1708,6 +1723,7 @@
 
             mountDoneFooter();
             queueMicrotask(() => refreshDoneToggleButton(state.currentId));
+            checkEmptyPosts();
         }
 
         function renderMessage(msg) {
