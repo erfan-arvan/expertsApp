@@ -1,37 +1,35 @@
 window.DISAGREEMENTS = [
   {
-    id: "12",
-    title: "isRemote vs indexOfIgnoreCase & lowestPositiveRoot",
-    "snippet-id": "isRemote",
-    htmltext: `In previous rounds, experts disagreed on whether <code>isRemote</code> is distinctly simpler than <code>indexOfIgnoreCase</code> and <code>lowestPositiveRoot</code>, or about the same level.
+    id: "15",
+    title: "lowestPositiveRoot — central conflicts",
+    "snippet-id": "lowestPositiveRoot",
+    htmltext: `<code>lowestPositiveRoot</code> sits at the center of multiple disagreements:
 <ul>
-  <li><strong>Martin</strong> and <strong>Oscar</strong> ranked <code>isRemote</code> higher than both, citing short, direct logic without deep API/pattern knowledge.</li>
-  <li><strong>Nadeeshan</strong> tied <code>isRemote</code> with <code>indexOfIgnoreCase</code> and <code>lowestPositiveRoot</code>, arguing all three are comparably straightforward when read carefully.</li>
+  <li>Against <code>indexOfIgnoreCase</code>: Martin has <code>indexOfIgnoreCase</code> &gt; <code>lowestPositiveRoot</code>; Oscar has the opposite; Nadeeshan ties them.</li>
+  <li>Against <code>deleteRecursively</code>: Martin has <code>deleteRecursively</code> &gt; <code>lowestPositiveRoot</code>; Oscar and Nadeeshan have the opposite.</li>
+  <li>Against <code>isRemote</code>: Martin & Oscar have <code>isRemote</code> &gt; <code>lowestPositiveRoot</code>; Nadeeshan ties them.</li>
 </ul>
-<p>The disagreement centers on whether <code>isRemote</code>’s brevity justifies placing it above the others, or tying them.</p>
+<p>The open questions are: (1) Is <code>lowestPositiveRoot</code> clearly harder than <code>deleteRecursively</code> (majority view) or not (Martin)? (2) Should it be tied with <code>indexOfIgnoreCase</code> (Nadeeshan) or clearly above/below (Martin/Oscar)? (3) Is it distinct from <code>isRemote</code> or tied?</p>
 
 <details>
   <summary style="cursor: pointer; font-weight: bold; margin-top: 1em;">View Round 3 Reflections</summary>
   <div style="margin-top: 0.5em;">
-    <p><strong>Martin:</strong></p>
+    <p><strong>Martin (via indexOfIgnoreCase/deleteRecursively reflections):</strong></p>
     <ul>
-      <li><strong>Q1:</strong> We broadly agree. I think it's worth differentiating <code>isRemote</code> from <code>isValidProjectName</code>, and Oscar and I agree that this one is a little bit trickier. I think Nadeeshan would agree that, if he had to choose, <code>isRemote</code> is a little more complex. So, I think we'll agree on <code>isValidProjectName</code> at the bottom, and <code>isRemote</code> above it.</li>
-      <li><strong>Q2:</strong> No.</li>
-      <li><strong>Q3:</strong> No.</li>
+      <li>On <code>indexOfIgnoreCase</code>: “not too hard to follow ... regionMatches ... not that complex.”</li>
+      <li>On <code>deleteRecursively</code>: “willing to shift it downwards, but not below <code>indexOfIgnoreCase</code> and <code>lowestPositiveRoot</code>.”</li>
     </ul>
 
-    <p><strong>Oscar:</strong></p>
+    <p><strong>Oscar (via reflections):</strong></p>
     <ul>
-      <li><strong>Q1:</strong> Yeah, maybe I'm giving too much importance to understanding the intention of checking the scheme is jar or file to check that the URI is or isn't remote.</li>
-      <li><strong>Q2:</strong> yep</li>
-      <li><strong>Q3:</strong> yep, need to see the other methods.</li>
+      <li>“<code>indexOfIgnoreCase</code> doesn’t require specialized knowledge ... <code>deleteRecursively</code> does (visitor pattern), which makes it more obscure.”</li>
     </ul>
 
     <p><strong>Nadeeshan:</strong></p>
     <ul>
-      <li><strong>Q1:</strong> I agree with Oscar on <code>isRemote</code>’s URI implementation logic. However, despite that uncertainty, the purpose of the method remains clear to me.</li>
-      <li><strong>Q2:</strong> Yes.</li>
-      <li><strong>Q3:</strong> I would change rank of <code>isRemote</code> from 1 to 2</li>
+      <li><strong>Q1:</strong> The overall purpose of <code>lowestPositiveRoot</code> is clear.</li>
+      <li><strong>Q2:</strong> From a typical engineer’s perspective, if carefully read, the logic is straightforward. Even without documentation for <span style="font-style: italic;">regionMatches</span>, its parameters make the intent clear.</li>
+      <li><strong>Q3:</strong> No, I would not change the rank of <code>lowestPositiveRoot</code>.</li>
     </ul>
   </div>
 </details>`
@@ -111,37 +109,39 @@ window.DISAGREEMENTS = [
   </div>
 </details>`
   },
-  {
-    id: "15",
-    title: "lowestPositiveRoot — central conflicts",
-    "snippet-id": "lowestPositiveRoot",
-    htmltext: `<code>lowestPositiveRoot</code> sits at the center of multiple disagreements:
+    {
+    id: "12",
+    title: "isRemote vs indexOfIgnoreCase & lowestPositiveRoot",
+    "snippet-id": "isRemote",
+    htmltext: `In previous rounds, experts disagreed on whether <code>isRemote</code> is distinctly simpler than <code>indexOfIgnoreCase</code> and <code>lowestPositiveRoot</code>, or about the same level.
 <ul>
-  <li>Against <code>indexOfIgnoreCase</code>: Martin has <code>indexOfIgnoreCase</code> &gt; <code>lowestPositiveRoot</code>; Oscar has the opposite; Nadeeshan ties them.</li>
-  <li>Against <code>deleteRecursively</code>: Martin has <code>deleteRecursively</code> &gt; <code>lowestPositiveRoot</code>; Oscar and Nadeeshan have the opposite.</li>
-  <li>Against <code>isRemote</code>: Martin & Oscar have <code>isRemote</code> &gt; <code>lowestPositiveRoot</code>; Nadeeshan ties them.</li>
+  <li><strong>Martin</strong> and <strong>Oscar</strong> ranked <code>isRemote</code> higher than both, citing short, direct logic without deep API/pattern knowledge.</li>
+  <li><strong>Nadeeshan</strong> tied <code>isRemote</code> with <code>indexOfIgnoreCase</code> and <code>lowestPositiveRoot</code>, arguing all three are comparably straightforward when read carefully.</li>
 </ul>
-<p>The open questions are: (1) Is <code>lowestPositiveRoot</code> clearly harder than <code>deleteRecursively</code> (majority view) or not (Martin)? (2) Should it be tied with <code>indexOfIgnoreCase</code> (Nadeeshan) or clearly above/below (Martin/Oscar)? (3) Is it distinct from <code>isRemote</code> or tied?</p>
+<p>The disagreement centers on whether <code>isRemote</code>’s brevity justifies placing it above the others, or tying them.</p>
 
 <details>
   <summary style="cursor: pointer; font-weight: bold; margin-top: 1em;">View Round 3 Reflections</summary>
   <div style="margin-top: 0.5em;">
-    <p><strong>Martin (via indexOfIgnoreCase/deleteRecursively reflections):</strong></p>
+    <p><strong>Martin:</strong></p>
     <ul>
-      <li>On <code>indexOfIgnoreCase</code>: “not too hard to follow ... regionMatches ... not that complex.”</li>
-      <li>On <code>deleteRecursively</code>: “willing to shift it downwards, but not below <code>indexOfIgnoreCase</code> and <code>lowestPositiveRoot</code>.”</li>
+      <li><strong>Q1:</strong> We broadly agree. I think it's worth differentiating <code>isRemote</code> from <code>isValidProjectName</code>, and Oscar and I agree that this one is a little bit trickier. I think Nadeeshan would agree that, if he had to choose, <code>isRemote</code> is a little more complex. So, I think we'll agree on <code>isValidProjectName</code> at the bottom, and <code>isRemote</code> above it.</li>
+      <li><strong>Q2:</strong> No.</li>
+      <li><strong>Q3:</strong> No.</li>
     </ul>
 
-    <p><strong>Oscar (via reflections):</strong></p>
+    <p><strong>Oscar:</strong></p>
     <ul>
-      <li>“<code>indexOfIgnoreCase</code> doesn’t require specialized knowledge ... <code>deleteRecursively</code> does (visitor pattern), which makes it more obscure.”</li>
+      <li><strong>Q1:</strong> Yeah, maybe I'm giving too much importance to understanding the intention of checking the scheme is jar or file to check that the URI is or isn't remote.</li>
+      <li><strong>Q2:</strong> yep</li>
+      <li><strong>Q3:</strong> yep, need to see the other methods.</li>
     </ul>
 
     <p><strong>Nadeeshan:</strong></p>
     <ul>
-      <li><strong>Q1:</strong> The overall purpose of <code>lowestPositiveRoot</code> is clear.</li>
-      <li><strong>Q2:</strong> From a typical engineer’s perspective, if carefully read, the logic is straightforward. Even without documentation for <span style="font-style: italic;">regionMatches</span>, its parameters make the intent clear.</li>
-      <li><strong>Q3:</strong> No, I would not change the rank of <code>lowestPositiveRoot</code>.</li>
+      <li><strong>Q1:</strong> I agree with Oscar on <code>isRemote</code>’s URI implementation logic. However, despite that uncertainty, the purpose of the method remains clear to me.</li>
+      <li><strong>Q2:</strong> Yes.</li>
+      <li><strong>Q3:</strong> I would change rank of <code>isRemote</code> from 1 to 2</li>
     </ul>
   </div>
 </details>`
