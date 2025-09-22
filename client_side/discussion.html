@@ -1810,22 +1810,6 @@
     document.getElementById('chat-view')
     ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-
-            // Attach click handler to all <code> tags
-    document.addEventListener("DOMContentLoaded", () => {
-      document.querySelectorAll("code").forEach(el => {
-        el.addEventListener("click", () => {
-          const text = el.textContent.trim();
-          const id = getMethodId(text);
-          if (id) {
-            show_snippet(id);
-          } else {
-            console.warn("No snippet ID for:", text);
-          }
-        });
-      });
-    });
-
         }
     </script>
 
@@ -2638,6 +2622,31 @@ border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
     <div class="code-content" id="modal-code-content"></div>
   </div>
 </div>
+
+<script>
+  // Normalize the text inside <code> (e.g., strip trailing "()")
+  function _normalizeMethod(text) {
+    return (text || "")
+      .trim()
+      .replace(/\(\s*\)$/, ""); // turn "isRemote()" -> "isRemote"
+  }
+
+  // One global delegated click handler for all <code> tags
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest("code");
+    if (!el) return;
+
+    const name = _normalizeMethod(el.textContent);
+    const id = getMethodId(name);
+    if (id) {
+      // Optional: stop link clicks if <code> is inside an <a>
+      e.preventDefault();
+      show_snippet(id);
+    } else {
+      console.warn("No snippet ID for:", name);
+    }
+  });
+</script>
 
 </body>
 
