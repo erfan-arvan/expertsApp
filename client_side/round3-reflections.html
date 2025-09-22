@@ -680,7 +680,10 @@
         const disagreements = [
             {
                 snippet: 3,
-                text: `The experts disagreed significantly on the comprehensibility of isMachineTypeDefined, particularly in how much the use of Java reflection and the unclear method purpose should affect its difficulty rating.
+                text: `The experts disagreed significantly on the comprehensibility of isMachineTypeDefined, particularly in how much the use of Java reflection and the unclear method purpose should affect its difficulty rating.                <br> <button style="color: white; background: linear-gradient(145deg, var(--accent), var(--accent2));
+" id="summary-open-btn" type="button" class="done-toggle-btn" aria-controls="summary-top-sheet" aria-expanded="false">
+                    <strong>Round 2 Rankings</strong>
+                </button>
 <ul>
   <li><strong>Oscar</strong> ranked the snippet as one of the easiest in round 1 (Position 1), describing its logic as straightforward and noting that nested control flow did not add complexity. In round 2, he acknowledged that reflection might introduce difficulty for some readers but continued to view the snippet as relatively simple, adjusting his ranking only slightly to Position 2.</li>
   <li><strong>Martin</strong> placed the snippet in Position 6 in round 1 and emphasized that the use of reflection, unfamiliar constants, and a vague method purpose made it difficult to understand. In round 2, he reinforced these concerns and suggested that Oscar’s view understated the complexity introduced by reflection and lack of context.</li>
