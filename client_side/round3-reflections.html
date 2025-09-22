@@ -622,19 +622,6 @@
                 display: none !important;
             }
         }
-
-                .done-toggle-btn {
-            background: linear-gradient(145deg, var(--accent), var(--accent2));
-            color: #fff;
-            border: none;
-            border-radius: 999px;
-            padding: 8px 14px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: var(--shadow);
-            transition: background 0.2s, box-shadow 0.2s;
-            margin-top: 30px;
-        }
     </style>
 
 </head>
@@ -652,7 +639,8 @@
                 <button id="btn-collapse" class="pill" title="Collapse all details">Collapse all</button>
                 <button id="btn-print" class="pill" title="Print or save to PDF">Print</button>
                 <button id="btn-theme" class="pill" title="Theme mode">Theme: Auto 🌗</button>
-                                <button id="summary-open-btn" type="button" class="done-toggle-btn" aria-controls="summary-top-sheet"
+                                <button style="            background: linear-gradient(145deg, var(--accent), var(--accent2));
+" id="summary-open-btn" type="button" class="done-toggle-btn" aria-controls="summary-top-sheet"
                     aria-expanded="false">
                     Round 3 Summary
             </button>
