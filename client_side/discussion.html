@@ -1793,10 +1793,14 @@
         }
         })();
 
-        requestAnimationFrame(() => {
-    document.getElementById('desc-toggle')
-        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
+// after: showView('chat'); renderCurrentThread();
+requestAnimationFrame(() => {
+  const el = document.getElementById('chat-view'); // or any selector you want
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.scrollY + 70; // +70 px past the element
+  window.scrollTo({ top, behavior: 'smooth' });
+});
+
 
         }
     </script>
