@@ -1796,7 +1796,7 @@
         requestAnimationFrame(() => {
             const el = document.getElementById('chat-view');
             if (!el) return;
-            const top = el.getBoundingClientRect().top + window.scrollY - 100;
+            const top = el.getBoundingClientRect().top + window.scrollY - 30;
             window.scrollTo({ top, behavior: 'smooth' });
         });
 
