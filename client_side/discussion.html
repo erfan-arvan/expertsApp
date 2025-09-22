@@ -1035,6 +1035,58 @@
   background-color: #f0f0f0;
   color: #333;
 }
+
+/* Inline <code> that feels like a clickable chip and honors your theme tokens */
+:not(pre) > code {
+  cursor: pointer;
+  font: 500 0.92em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  padding: 2px 6px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--chip);
+  color: var(--text);
+  box-shadow: var(--shadow-soft);
+  transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;
+}
+
+/* Hover/active states use your accent + chip tokens */
+:not(pre) > code:hover {
+  background: color-mix(in srgb, var(--chip2) 70%, transparent);
+  border-color: color-mix(in srgb, var(--accent2) 35%, var(--border));
+  color: var(--accent2);
+  box-shadow: var(--shadow);
+}
+
+:not(pre) > code:active {
+  background: color-mix(in srgb, var(--accent2) 14%, var(--chip));
+  border-color: var(--accent2);
+  color: #fff;
+}
+
+/* Keyboard focus ring (accessible) */
+:not(pre) > code:focus-visible {
+  outline: 3px solid color-mix(in srgb, white 70%, var(--accent2));
+  outline-offset: 2px;
+}
+
+/* If a <code> sits inside a link, let the link control text color/underline */
+a > code {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/* Optional: only add “clickable” affordance when it maps to a known method */
+:not(pre) > code.clickable-method {
+  cursor: pointer;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  :not(pre) > code {
+    transition: none;
+  }
+}
+
     </style>
 </head>
 
