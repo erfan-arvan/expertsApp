@@ -3429,7 +3429,7 @@ border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
             // Position near the target
             const r = targetEl.getBoundingClientRect();
             const pad = 8;
-            const top = Math.max(6, r.top + window.scrollY - tip.offsetHeight - pad);
+            const top = r.bottom + window.scrollY + pad;
             const left = Math.min(
                 window.scrollX + r.left,
                 window.scrollX + document.documentElement.clientWidth - tip.offsetWidth - 6
