@@ -1160,5 +1160,33 @@ async function saveToServer() {
   style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
   Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
 </footer>
+
+
+<script>
+  const saveToServerDebounced = (() => {
+    let t;
+    return () => {
+      clearTimeout(t);
+      t = setTimeout(() => saveToServer(), 300); // 300ms buffer
+    };
+  })();
+
+  document.querySelectorAll('.ranking-slot').forEach(slot => {
+    slot.addEventListener('dragover', e => {
+      e.preventDefault(); // needed so drop works
+    });
+
+    slot.addEventListener('drop', e => {
+      e.preventDefault();
+      const dragging = document.querySelector('.dragging');
+      if (dragging) {
+        slot.appendChild(dragging);
+        saveState();              // local/session storage update
+        saveToServerDebounced();  // schedule server submit after drag
+      }
+    });
+  });
+</script>
+
 </body>
 </html>
