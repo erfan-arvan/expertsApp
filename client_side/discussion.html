@@ -1810,7 +1810,7 @@
             const downUsers = Object.keys(votes).filter(u => Number(votes[u]) === -1);
 
             console.log("Votes for message", msg.id, ":", votes);
-console.log("Upvoters:", upUsers, "Downvoters:", downUsers);
+            console.log("Upvoters:", upUsers, "Downvoters:", downUsers);
 
             const upEl = el.querySelector('[data-up]');
             const downEl = el.querySelector('[data-down]');
