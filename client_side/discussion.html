@@ -3419,45 +3419,45 @@ border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
             document.body.appendChild(tip);
         })();
 
-        function showVotersTooltip(targetEl, heading, users) {
-            const tip = document.getElementById('voters-tooltip');
-            if (!tip) return;
+function showVotersTooltip(targetEl, heading, users) {
+  const tip = document.getElementById('voters-tooltip');
+  if (!tip) return;
 
-            const safe = (s) => String(s).replace(/[&<>"']/g, c => (
-                { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-            ));
-            const list = users && users.length
-                ? `<ul>${users.map(u => `<li>${safe(u)}</li>`).join('')}</ul>`
-                : '<div>No one yet</div>';
-            tip.innerHTML = `<h4>${safe(heading)}</h4>${list}`;
+  const safe = (s) => String(s).replace(/[&<>"']/g, c => (
+    {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]
+  ));
+  const list = users && users.length
+    ? `<ul>${users.map(u=>`<li>${safe(u)}</li>`).join('')}</ul>`
+    : '<div>No one yet</div>';
+  tip.innerHTML = `<h4>${safe(heading)}</h4>${list}`;
 
-            // Make it renderable so we can measure width/height
-            tip.style.visibility = 'hidden';
-            tip.hidden = false;
+  // Make it renderable so we can measure width/height
+  tip.style.visibility = 'hidden';
+  tip.hidden = false;
 
-            const r = targetEl.getBoundingClientRect();
-            const pad = 40;
+  const r = targetEl.getBoundingClientRect();
+  const pad = 50; 
 
-            // Since .voters-tooltip is position: fixed, DO NOT add window.scrollY/X.
-            // Try centering under the target; clamp to viewport.
-            const vw = document.documentElement.clientWidth;
-            const vh = document.documentElement.clientHeight;
+  // Since .voters-tooltip is position: fixed, DO NOT add window.scrollY/X.
+  // Try centering under the target; clamp to viewport.
+  const vw = document.documentElement.clientWidth;
+  const vh = document.documentElement.clientHeight;
 
-            let top = r.bottom + pad;
-            let left = r.left + (r.width - tip.offsetWidth) / 2; // center horizontally
+  let top = r.bottom + pad; 
+  let left = r.left + (r.width - tip.offsetWidth) / 2; // center horizontally
 
-            // Clamp inside viewport with a tiny margin
-            const margin = 6;
-            left = Math.max(margin, Math.min(left, vw - tip.offsetWidth - margin));
-            // If it would go off the bottom, flip above
-            if (top + tip.offsetHeight + margin > vh) {
-                top = Math.max(margin, r.top - tip.offsetHeight - pad);
-            }
+  // Clamp inside viewport with a tiny margin
+  const margin = 6;
+  left = Math.max(margin, Math.min(left, vw - tip.offsetWidth - margin));
+  // If it would go off the bottom, flip above
+  if (top + tip.offsetHeight + margin > vh) {
+    top = Math.max(margin, r.top - tip.offsetHeight - pad);
+  }
 
-            tip.style.top = `${top}px`;
-            tip.style.left = `${left}px`;
-            tip.style.visibility = 'visible';
-        }
+  tip.style.top = `${top}px`;
+  tip.style.left = `${left}px`;
+  tip.style.visibility = 'visible';
+}
 
         function hideVotersTooltip() {
             const tip = document.getElementById('voters-tooltip');
