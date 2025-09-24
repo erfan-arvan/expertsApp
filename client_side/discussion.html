@@ -1812,21 +1812,27 @@
             console.log("Votes for message", msg.id, ":", votes);
             console.log("Upvoters:", upUsers, "Downvoters:", downUsers);
 
+            // counters
             const upEl = el.querySelector('[data-up]');
             const downEl = el.querySelector('[data-down]');
 
-            if (upEl) {
-                const t = upUsers.length ? `Liked by: ${upUsers.join(', ')}` : 'No likes yet';
-                upEl.title = t;                   // native tooltip
-                upEl.setAttribute('aria-label', t);
-                upEl.dataset.voters = JSON.stringify(upUsers); // handy if you later want a custom tooltip
-            }
-            if (downEl) {
-                const t = downUsers.length ? `Disliked by: ${downUsers.join(', ')}` : 'No dislikes yet';
-                downEl.title = t;
-                downEl.setAttribute('aria-label', t);
-                downEl.dataset.voters = JSON.stringify(downUsers);
-            }
+            // buttons (first two buttons inside .post-actions are 👍 then 👎)
+            const actionBtns = el.querySelectorAll('.post-actions > button.btn');
+            const likeBtn = actionBtns[0];
+            const dislikeBtn = actionBtns[1];
+
+            // build titles
+            const upTitle = upUsers.length ? `Liked by: ${upUsers.join(', ')}` : 'No likes yet';
+            const downTitle = downUsers.length ? `Disliked by: ${downUsers.join(', ')}` : 'No dislikes yet';
+
+            // attach to numbers
+            if (upEl) { upEl.title = upTitle; upEl.setAttribute('aria-label', upTitle); }
+            if (downEl) { downEl.title = downTitle; downEl.setAttribute('aria-label', downTitle); }
+
+            // attach to icon buttons too (this is what you hover most)
+            if (likeBtn) { likeBtn.title = upTitle; likeBtn.setAttribute('aria-label', upTitle); }
+            if (dislikeBtn) { dislikeBtn.title = downTitle; dislikeBtn.setAttribute('aria-label', downTitle); }
+
             const repliesWrap = document.createElement('div');
             repliesWrap.className = 'replies';
             (msg.children || []).forEach(c => repliesWrap.appendChild(renderMessage(c)));
