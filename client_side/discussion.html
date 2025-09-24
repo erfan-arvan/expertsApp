@@ -1321,40 +1321,36 @@
             font-style: italic;
         }
 
-        .voters-tooltip {
-            position: fixed;
-            z-index: 4000;
-            max-width: 280px;
-            background: var(--panel, #fff);
-            color: var(--text, #0b1220);
-            border: 1px solid var(--border, #e5e7eb);
-            border-radius: 10px;
-            padding: 10px 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .18);
-            font-size: 13px;
-            line-height: 1.35;
-            pointer-events: none;
-            /* let mouse pass through */
-        }
-
-        .voters-tooltip h4 {
-            margin: 0 0 6px 0;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--muted, #667085);
-            text-transform: uppercase;
-            letter-spacing: .02em;
-        }
-
-        .voters-tooltip ul {
-            margin: 0;
-            padding: 0 0 0 14px;
-        }
-
-        .voters-tooltip li {
-            margin: 2px 0;
-            word-break: break-word;
-        }
+          .voters-tooltip {
+    position: fixed;
+    z-index: 4000;
+    max-width: 280px;
+    background: var(--panel, #fff);
+    color: var(--text, #0b1220);
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: 10px;
+    padding: 10px 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    font-size: 13px;
+    line-height: 1.35;
+    pointer-events: none; /* let mouse pass through */
+  }
+  .voters-tooltip h4 {
+    margin: 0 0 6px 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted, #667085);
+    text-transform: uppercase;
+    letter-spacing: .02em;
+  }
+  .voters-tooltip ul {
+    margin: 0;
+    padding: 0 0 0 14px;
+  }
+  .voters-tooltip li {
+    margin: 2px 0;
+    word-break: break-word;
+  }
     </style>
 </head>
 
@@ -1839,32 +1835,32 @@
     </div>
   `;
 
-            // Gather voter names
-            const votes = msg.votes || {}; // { username: +1|-1 }
-            const upUsers = Object.keys(votes).filter(u => Number(votes[u]) === 1);
-            const downUsers = Object.keys(votes).filter(u => Number(votes[u]) === -1);
+// Gather voter names
+const votes = msg.votes || {}; // { username: +1|-1 }
+const upUsers = Object.keys(votes).filter(u => Number(votes[u]) === 1);
+const downUsers = Object.keys(votes).filter(u => Number(votes[u]) === -1);
 
-            // Grab elements
-            const upCount = el.querySelector('[data-up]');
-            const downCount = el.querySelector('[data-down]');
-            const actionBtns = el.querySelectorAll('.post-actions > button.btn');
-            const likeBtn = actionBtns[0];
-            const dislikeBtn = actionBtns[1];
+// Grab elements
+const upCount = el.querySelector('[data-up]');
+const downCount = el.querySelector('[data-down]');
+const actionBtns = el.querySelectorAll('.post-actions > button.btn');
+const likeBtn = actionBtns[0];
+const dislikeBtn = actionBtns[1];
 
-            // Helper to attach hover
-            function bindHover(elm, heading, users) {
-                if (!elm) return;
-                elm.addEventListener('mouseenter', () => showVotersTooltip(elm, heading, users));
-                elm.addEventListener('mouseleave', hideVotersTooltip);
-                elm.addEventListener('blur', hideVotersTooltip);
-                elm.addEventListener('focus', () => showVotersTooltip(elm, heading, users)); // keyboard
-            }
+// Helper to attach hover
+function bindHover(elm, heading, users) {
+  if (!elm) return;
+  elm.addEventListener('mouseenter', () => showVotersTooltip(elm, heading, users));
+  elm.addEventListener('mouseleave', hideVotersTooltip);
+  elm.addEventListener('blur', hideVotersTooltip);
+  elm.addEventListener('focus', () => showVotersTooltip(elm, heading, users)); // keyboard
+}
 
-            // Wire up like/dislike controls and counts
-            bindHover(likeBtn, 'Liked by', upUsers);
-            bindHover(upCount, 'Liked by', upUsers);
-            bindHover(dislikeBtn, 'Disliked by', downUsers);
-            bindHover(downCount, 'Disliked by', downUsers);
+// Wire up like/dislike controls and counts
+bindHover(likeBtn, 'Liked by', upUsers);
+bindHover(upCount, 'Liked by', upUsers);
+bindHover(dislikeBtn, 'Disliked by', downUsers);
+bindHover(downCount, 'Disliked by', downUsers);
 
             const repliesWrap = document.createElement('div');
             repliesWrap.className = 'replies';
@@ -3408,16 +3404,36 @@ border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
 
     </script>
 
-    <script>
-        // Singleton tooltip element
-        (function ensureTooltipSingleton() {
-            if (document.getElementById('voters-tooltip')) return;
-            const tip = document.createElement('div');
-            tip.id = 'voters-tooltip';
-            tip.className = 'voters-tooltip';
-            tip.hidden = true;
-            document.body.appendChild(tip);
-        })();
+<script>
+  // Singleton tooltip element
+  (function ensureTooltipSingleton(){
+    if (document.getElementById('voters-tooltip')) return;
+    const tip = document.createElement('div');
+    tip.id = 'voters-tooltip';
+    tip.className = 'voters-tooltip';
+    tip.hidden = true;
+    document.body.appendChild(tip);
+  })();
+
+  function hideVotersTooltip() {
+    const tip = document.getElementById('voters-tooltip');
+    if (tip) tip.hidden = true;
+  }
+
+  // Optional: hide on scroll/resize
+  ['scroll','resize'].forEach(ev => window.addEventListener(ev, hideVotersTooltip, {passive:true}));
+</script>
+
+<script>
+  // Singleton tooltip element
+  (function ensureTooltipSingleton(){
+    if (document.getElementById('voters-tooltip')) return;
+    const tip = document.createElement('div');
+    tip.id = 'voters-tooltip';
+    tip.className = 'voters-tooltip';
+    tip.hidden = true;
+    document.body.appendChild(tip);
+  })();
 
 function showVotersTooltip(targetEl, heading, users) {
   const tip = document.getElementById('voters-tooltip');
@@ -3436,14 +3452,14 @@ function showVotersTooltip(targetEl, heading, users) {
   tip.hidden = false;
 
   const r = targetEl.getBoundingClientRect();
-  const pad = 50; 
+  const pad = 10; // try changing this; it will now actually move
 
   // Since .voters-tooltip is position: fixed, DO NOT add window.scrollY/X.
   // Try centering under the target; clamp to viewport.
   const vw = document.documentElement.clientWidth;
   const vh = document.documentElement.clientHeight;
 
-  let top = r.bottom + pad; 
+  let top = r.bottom + pad; // place BELOW the icon
   let left = r.left + (r.width - tip.offsetWidth) / 2; // center horizontally
 
   // Clamp inside viewport with a tiny margin
@@ -3459,54 +3475,15 @@ function showVotersTooltip(targetEl, heading, users) {
   tip.style.visibility = 'visible';
 }
 
-        function hideVotersTooltip() {
-            const tip = document.getElementById('voters-tooltip');
-            if (tip) tip.hidden = true;
-        }
 
-        // Optional: hide on scroll/resize
-        ['scroll', 'resize'].forEach(ev => window.addEventListener(ev, hideVotersTooltip, { passive: true }));
-    </script>
+  function hideVotersTooltip() {
+    const tip = document.getElementById('voters-tooltip');
+    if (tip) tip.hidden = true;
+  }
 
-    <script>
-        // Singleton tooltip element
-        (function ensureTooltipSingleton() {
-            if (document.getElementById('voters-tooltip')) return;
-            const tip = document.createElement('div');
-            tip.id = 'voters-tooltip';
-            tip.className = 'voters-tooltip';
-            tip.hidden = true;
-            document.body.appendChild(tip);
-        })();
-
-        function showVotersTooltip(targetEl, heading, users) {
-            const tip = document.getElementById('voters-tooltip');
-            if (!tip) return;
-            // Build content
-            const safe = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-            const list = users && users.length ? `<ul>${users.map(u => `<li>${safe(u)}</li>`).join('')}</ul>` : '<div>No one yet</div>';
-            tip.innerHTML = `<h4>${safe(heading)}</h4>${list}`;
-            // Position near the target
-            const r = targetEl.getBoundingClientRect();
-            const pad = 8;
-            const top = Math.max(6, r.top + window.scrollY - tip.offsetHeight - pad);
-            const left = Math.min(
-                window.scrollX + r.left,
-                window.scrollX + document.documentElement.clientWidth - tip.offsetWidth - 6
-            );
-            tip.style.top = `${top}px`;
-            tip.style.left = `${left}px`;
-            tip.hidden = false;
-        }
-
-        function hideVotersTooltip() {
-            const tip = document.getElementById('voters-tooltip');
-            if (tip) tip.hidden = true;
-        }
-
-        // Optional: hide on scroll/resize
-        ['scroll', 'resize'].forEach(ev => window.addEventListener(ev, hideVotersTooltip, { passive: true }));
-    </script>
+  // Optional: hide on scroll/resize
+  ['scroll','resize'].forEach(ev => window.addEventListener(ev, hideVotersTooltip, {passive:true}));
+</script>
 
 </body>
 
