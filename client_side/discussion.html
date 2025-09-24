@@ -1822,7 +1822,7 @@
 
               // if the user is typing, skip overwriting
   if (isAnyTextboxActive()) {
-    console.log("⏸ Skipping update: user is typing");
+    console.log("Skipping update: user is typing");
     return;
   }
             const res = await fetch(CONFIG.GET_LATEST_CHAT_URL, {
@@ -2668,27 +2668,39 @@
     </script>
 
     <script>
-        function mountDoneFooter() {
-            document.getElementById('chat-done-footer')?.remove();
+function mountDoneFooter() {
+  document.getElementById('chat-done-footer')?.remove();
 
-            const composerSection = document.querySelector('section.list-card[aria-label="Add new opinion"]');
-            if (!composerSection) return null;
+  const composerSection = document.querySelector(
+    'section.list-card[aria-label="Add new opinion"]'
+  );
+  if (!composerSection) return null;
 
-            const footer = document.createElement('div');
-            footer.id = 'chat-done-footer';
-            footer.className = 'done-toggle-wrap';
+  const footer = document.createElement('div');
+  footer.id = 'chat-done-footer';
+  footer.className = 'done-toggle-wrap';
 
-            const btn = document.createElement('button');
-            btn.id = 'done-toggle-btn';
-            btn.className = 'done-toggle-btn';
-            btn.type = 'button';
-            btn.addEventListener('click', () => toggleFinishedForCurrent(btn));
+  const btn = document.createElement('button');
+  btn.id = 'done-toggle-btn';
+  btn.className = 'done-toggle-btn';
+  btn.type = 'button';
+  btn.addEventListener('click', () => toggleFinishedForCurrent(btn));
+  btn.textContent = "I'm done with this discussion";
 
-            footer.appendChild(btn);
-            composerSection.insertAdjacentElement('afterend', footer);
+  footer.appendChild(btn);
 
-            return footer;
-        }
+  // Clarifying note
+  const note = document.createElement('div');
+  note.className = 'done-clarify';
+  note.textContent =
+    "(You can still return and add more comments later if you wish.)";
+  footer.appendChild(note);
+
+  composerSection.insertAdjacentElement('afterend', footer);
+
+  return footer;
+}
+
 
         function refreshDoneToggleButton(chatId = state.currentId) {
             const btn = document.getElementById('done-toggle-btn');
