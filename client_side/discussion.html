@@ -1819,6 +1819,12 @@
         }
 
         async function fetchLatestChat() {
+
+              // if the user is typing, skip overwriting
+  if (isAnyTextboxActive()) {
+    console.log("⏸ Skipping update: user is typing");
+    return;
+  }
             const res = await fetch(CONFIG.GET_LATEST_CHAT_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -3279,6 +3285,23 @@ border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
                 sheet.style.height = Math.min(h, max) + 'px';
             });
         })();
+
+    </script>
+
+    <script>
+        /**
+ * Check if any textareas on the page contain text.
+ * Returns true if at least one textarea has non-empty value.
+ */
+function isAnyTextboxActive() {
+  const textareas = document.querySelectorAll("textarea");
+  for (const ta of textareas) {
+    if (ta.value.trim().length > 0) {
+      return true;
+    }
+  }
+  return false;
+}
 
     </script>
 </body>
