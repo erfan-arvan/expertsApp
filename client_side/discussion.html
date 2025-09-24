@@ -1804,6 +1804,26 @@
     </div>
   `;
 
+            // Add voter hover tooltips
+            const votes = msg.votes || {}; // { username: +1|-1 }
+            const upUsers = Object.keys(votes).filter(u => Number(votes[u]) === 1);
+            const downUsers = Object.keys(votes).filter(u => Number(votes[u]) === -1);
+
+            const upEl = el.querySelector('[data-up]');
+            const downEl = el.querySelector('[data-down]');
+
+            if (upEl) {
+                const t = upUsers.length ? `Liked by: ${upUsers.join(', ')}` : 'No likes yet';
+                upEl.title = t;                   // native tooltip
+                upEl.setAttribute('aria-label', t);
+                upEl.dataset.voters = JSON.stringify(upUsers); // handy if you later want a custom tooltip
+            }
+            if (downEl) {
+                const t = downUsers.length ? `Disliked by: ${downUsers.join(', ')}` : 'No dislikes yet';
+                downEl.title = t;
+                downEl.setAttribute('aria-label', t);
+                downEl.dataset.voters = JSON.stringify(downUsers);
+            }
             const repliesWrap = document.createElement('div');
             repliesWrap.className = 'replies';
             (msg.children || []).forEach(c => repliesWrap.appendChild(renderMessage(c)));
