@@ -1301,6 +1301,13 @@
                 display: none !important;
             }
         }
+
+        .done-clarify {
+            margin-top: 6px;
+            font-size: 0.9em;
+            color: var(--muted);
+            font-style: italic;
+        }
     </style>
 </head>
 
@@ -1338,9 +1345,10 @@
         <!-- NEW overlay close button that sits on top of the iframe -->
         <button id="frame-close-update" class="frame-close-btn" aria-label="Close Update Ranking">X</button>
 
-<iframe id="update-frame" data-src="update-ranking.html" src="update-ranking.html" title="Update ranking"></iframe>
+        <iframe id="update-frame" data-src="update-ranking.html" src="update-ranking.html"
+            title="Update ranking"></iframe>
 
-</div>
+    </div>
 
 
     <!-- New header (appearance only) -->
@@ -1407,29 +1415,38 @@
                         <li>A mediator from the research team, <strong>Erfan</strong>, will also be in the chat to help
                             clarify or resolve disagreements.</li>
 
-                        <li>You can always check the <strong style="cursor: none;font-size: 10px;" class="done-toggle-btn">☰ live rankings</strong> from all experts by using the button
+                        <li>You can always check the <strong style="cursor: none;font-size: 10px;"
+                                class="done-toggle-btn">☰ live rankings</strong> from all experts by using the button
                             on the right-hand side of the screen.</li>
 
-                        <li>Use the <strong style="cursor: none;font-size: 10px;" class="done-toggle-btn">Update Ranking</strong> button on the right side of the screen to adjust
+                        <li>Use the <strong style="cursor: none;font-size: 10px;" class="done-toggle-btn">Update
+                                Ranking</strong> button on the right side of the screen to adjust
                             your ranking at any time.</li>
 
-                        <li>If you need to compare snippets, click the <strong style="cursor: none;font-size: 10px;" class="done-toggle-btn">↻ Update Ranking</strong> button and select the view checkboxes to compare them.</li>
+                        <li>If you need to compare snippets, click the <strong style="cursor: none;font-size: 10px;"
+                                class="done-toggle-btn">↻ Update Ranking</strong> button and select the view checkboxes
+                            to compare them.</li>
 
 
-                        <li>You’ll also receive <strong>email notifications</strong> about new chat activity, typically within a couple of hours.</li>
+                        <li>You’ll also receive <strong>email notifications</strong> about new chat activity, typically
+                            within a couple of hours.</li>
 
 
-                        <li>You can tag other experts in the chat by typing <code>@</code> and selecting their name. They will be notified immediately.</li>
+                        <li>You can tag other experts in the chat by typing <code>@</code> and selecting their name.
+                            They will be notified immediately.</li>
 
 
                         <li>Your goal is to <strong>discuss and seek consensus</strong> on snippet rankings if possible.
                         </li>
 
-                        <li style="color: rgb(62, 0, 0); background-color: #ddd;">⚠️ <strong>Consensus is not required</strong>. This is the final round anyway, but thoughtful discussion can still help resolve disagreements.</li>
+                        <li style="color: rgb(62, 0, 0); background-color: #ddd;">⚠️ <strong>Consensus is not
+                                required</strong>. This is the final round anyway, but thoughtful discussion can still
+                            help resolve disagreements.</li>
 
 
                         <li>If you’re finished with a discussion, click the
-                            <strong class="done-toggle-btn" style="cursor: none; font-size: 10px;">“I'm done with this discussion”</strong> button at the bottom of that forum.
+                            <strong class="done-toggle-btn" style="cursor: none; font-size: 10px;">“I'm done with this
+                                discussion”</strong> button at the bottom of that forum.
                         </li>
 
                         <li>
@@ -1447,7 +1464,7 @@
 
             <!-- Home grid (default visible) -->
             <section id="home-grid" class="list-card" aria-label="All disagreements">
-            <h3>Forums (Click to open)</h3>
+                <h3>Forums (Click to open)</h3>
                 <div id="home-cards" class="home-cards"></div>
             </section>
 
@@ -1697,19 +1714,19 @@
         }
 
         function checkEmptyPosts() {
-  const posts = document.getElementById("posts");
-  if (!posts) return; // no such div
+            const posts = document.getElementById("posts");
+            if (!posts) return; // no such div
 
-  // Trim innerHTML to ignore stray whitespace/comments
-  if (posts.innerHTML.trim() === "") {
-    posts.innerHTML = `
+            // Trim innerHTML to ignore stray whitespace/comments
+            if (posts.innerHTML.trim() === "") {
+                posts.innerHTML = `
       <div style="padding: 16px; text-align: center; color: var(--muted); font-style: italic;">
         There are no discussions in this forum yet. <br>
         Be the first one to express your opinion.
       </div>
     `;
-  }
-}
+            }
+        }
 
         function renderCurrentThread() {
             if (state.view !== 'chat' || state.currentId == null) return;
@@ -1820,11 +1837,11 @@
 
         async function fetchLatestChat() {
 
-              // if the user is typing, skip overwriting
-  if (isAnyTextboxActive()) {
-    console.log("Skipping update: user is typing");
-    return;
-  }
+            // if the user is typing, skip overwriting
+            if (isAnyTextboxActive()) {
+                console.log("Skipping update: user is typing");
+                return;
+            }
             const res = await fetch(CONFIG.GET_LATEST_CHAT_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -2668,38 +2685,38 @@
     </script>
 
     <script>
-function mountDoneFooter() {
-  document.getElementById('chat-done-footer')?.remove();
+        function mountDoneFooter() {
+            document.getElementById('chat-done-footer')?.remove();
 
-  const composerSection = document.querySelector(
-    'section.list-card[aria-label="Add new opinion"]'
-  );
-  if (!composerSection) return null;
+            const composerSection = document.querySelector(
+                'section.list-card[aria-label="Add new opinion"]'
+            );
+            if (!composerSection) return null;
 
-  const footer = document.createElement('div');
-  footer.id = 'chat-done-footer';
-  footer.className = 'done-toggle-wrap';
+            const footer = document.createElement('div');
+            footer.id = 'chat-done-footer';
+            footer.className = 'done-toggle-wrap';
 
-  const btn = document.createElement('button');
-  btn.id = 'done-toggle-btn';
-  btn.className = 'done-toggle-btn';
-  btn.type = 'button';
-  btn.addEventListener('click', () => toggleFinishedForCurrent(btn));
-  btn.textContent = "I'm done with this discussion";
+            const btn = document.createElement('button');
+            btn.id = 'done-toggle-btn';
+            btn.className = 'done-toggle-btn';
+            btn.type = 'button';
+            btn.addEventListener('click', () => toggleFinishedForCurrent(btn));
+            btn.textContent = "I'm done with this discussion";
 
-  footer.appendChild(btn);
+            footer.appendChild(btn);
 
-  // Clarifying note
-  const note = document.createElement('div');
-  note.className = 'done-clarify';
-  note.textContent =
-    "(You can still return and add more comments later if you wish.)";
-  footer.appendChild(note);
+            // Clarifying note
+            const note = document.createElement('div');
+            note.className = 'done-clarify';
+            note.textContent =
+                "(You can still return and add more comments later if you wish.)";
+            footer.appendChild(note);
 
-  composerSection.insertAdjacentElement('afterend', footer);
+            composerSection.insertAdjacentElement('afterend', footer);
 
-  return footer;
-}
+            return footer;
+        }
 
 
         function refreshDoneToggleButton(chatId = state.currentId) {
@@ -2914,31 +2931,31 @@ function mountDoneFooter() {
             }
 
             // Open/close the Update Ranking slide-over
-function setOpenUpdate(isOpen) {
-  if (isOpen) {
-    panelUpdate.classList.add('open');
-    panelUpdate.setAttribute('aria-hidden', 'false');
-    updateBar.textContent = '✖ Close';
-    updateBar.setAttribute('aria-expanded', 'true');
+            function setOpenUpdate(isOpen) {
+                if (isOpen) {
+                    panelUpdate.classList.add('open');
+                    panelUpdate.setAttribute('aria-hidden', 'false');
+                    updateBar.textContent = '✖ Close';
+                    updateBar.setAttribute('aria-expanded', 'true');
 
-    // force a fresh load of the Update Ranking iframe
-    const base = iframeUpdate.getAttribute('data-src') || iframeUpdate.src.split('?')[0];
-    // use a cache-buster to bypass any caches (browser, SW, proxy, CDN)
-    const nonce = (crypto && crypto.getRandomValues) 
-      ? Array.from(crypto.getRandomValues(new Uint32Array(1)))[0] 
-      : Date.now();
-    iframeUpdate.src = `${base}?v=${nonce}`;
+                    // force a fresh load of the Update Ranking iframe
+                    const base = iframeUpdate.getAttribute('data-src') || iframeUpdate.src.split('?')[0];
+                    // use a cache-buster to bypass any caches (browser, SW, proxy, CDN)
+                    const nonce = (crypto && crypto.getRandomValues)
+                        ? Array.from(crypto.getRandomValues(new Uint32Array(1)))[0]
+                        : Date.now();
+                    iframeUpdate.src = `${base}?v=${nonce}`;
 
-    // Close the live panel if either API name exists
-    if (typeof window.setOpenRanking === 'function') window.setOpenRanking(false);
-    else if (typeof window.setOpen === 'function') window.setOpen(false);
-  } else {
-    panelUpdate.classList.remove('open');
-    panelUpdate.setAttribute('aria-hidden', 'true');
-    updateBar.innerHTML = '↻ Update<br>Ranking';
-    updateBar.setAttribute('aria-expanded', 'false');
-  }
-}
+                    // Close the live panel if either API name exists
+                    if (typeof window.setOpenRanking === 'function') window.setOpenRanking(false);
+                    else if (typeof window.setOpen === 'function') window.setOpen(false);
+                } else {
+                    panelUpdate.classList.remove('open');
+                    panelUpdate.setAttribute('aria-hidden', 'true');
+                    updateBar.innerHTML = '↻ Update<br>Ranking';
+                    updateBar.setAttribute('aria-expanded', 'false');
+                }
+            }
 
             // expose
             window.setOpenUpdate = setOpenUpdate;
@@ -3305,15 +3322,15 @@ border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:1002;">
  * Check if any textareas on the page contain text.
  * Returns true if at least one textarea has non-empty value.
  */
-function isAnyTextboxActive() {
-  const textareas = document.querySelectorAll("textarea");
-  for (const ta of textareas) {
-    if (ta.value.trim().length > 0) {
-      return true;
-    }
-  }
-  return false;
-}
+        function isAnyTextboxActive() {
+            const textareas = document.querySelectorAll("textarea");
+            for (const ta of textareas) {
+                if (ta.value.trim().length > 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
     </script>
 </body>
