@@ -653,6 +653,93 @@
   border-color: #aaa;
 }
 
+/* === Referrals FINAL overrides (place at the end) === */
+
+/* unify the row layout */
+.referrals-box .referral-field {
+  display: flex;
+  align-items: center;   /* align the minus with inputs */
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* inputs in a row; wrap on small screens */
+.referrals-box .referral-field input[type="text"],
+.referrals-box .referral-field input[type="email"] {
+  flex: 1 1 45%;
+  min-width: 220px;      /* keep them from shrinking too small */
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95em;
+  box-sizing: border-box;
+}
+.referrals-box .referral-field input:focus {
+  outline: none;
+  border-color: #007acc;
+  box-shadow: 0 0 4px rgba(0,122,204,0.4);
+}
+
+/* make the small "−" button actually look small and round */
+.referrals-box .referral-remove {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  border: 1px solid #ccc;
+
+  /* override global and .referrals-box button rules */
+  background: #eee !important;
+  color: #333 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+.referrals-box .referral-remove:hover {
+  background: #e2e2e2 !important;
+  border-color: #aaa;
+}
+
+/* style the action buttons inside the box (Add more / Submit) */
+.referrals-box .actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+.referrals-box .actions button {
+  padding: 6px 12px;
+  font-size: 0.9em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #007acc;
+  color: white;
+  transition: background 0.2s ease-in-out;
+}
+.referrals-box .actions button:hover {
+  background-color: #005a99;
+}
+
+/* mobile tweaks */
+@media (max-width: 480px) {
+  .referrals-box .referral-field input[type="text"],
+  .referrals-box .referral-field input[type="email"] {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  .referrals-box .referral-remove {
+    margin-bottom: 4px !important; /* a touch of spacing when rows wrap */
+  }
+}
+
+
     </style>
 </head>
 
