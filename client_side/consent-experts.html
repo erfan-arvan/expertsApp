@@ -66,27 +66,46 @@
             display: none;
         }
 
+        /* Allow the overlay itself to scroll if content is tall */
         .modal {
             position: fixed;
-            top: 0;
-            left: 0;
+            inset: 0;
+            /* shorthand for top/left/right/bottom: 0 */
             width: 100%;
             height: 100%;
-            background-color: rgb(255, 255, 255);
+            background-color: #ffffff;
+            /* you can use rgba(0,0,0,.4) if you want a dim backdrop */
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow-y: auto;
+            /* <— key */
+            padding: 24px;
+            /* breathing room so content isn’t flush to edges */
         }
 
+        /* Constrain modal content height so it can scroll inside if needed */
         .modal-content {
-            background-color: white;
+            background-color: #fff;
             padding: 30px;
             border-radius: 10px;
-            max-width: 400px;
-            text-align: center;
+            max-width: 600px;
+            /* was 400px; a bit wider for the referral rows */
+            width: 100%;
+            max-height: 90vh;
+            /* <— key */
+            overflow-y: auto;
+            /* <— key */
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-            /* subtle shadow */
+            text-align: left;
+            /* optional: left-align body text */
         }
+
+        /* Keep the hidden behavior strong */
+        .modal.hidden {
+            display: none !important;
+        }
+
 
         .input-field {
             width: 100%;
@@ -545,69 +564,68 @@
         }
 
         /* Referral Box Container */
-.referrals-box {
-  margin-top: 20px;
-  padding: 15px 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: #f9f9f9;
-}
+        .referrals-box {
+            margin-top: 20px;
+            padding: 15px 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
 
-/* Headings inside the referral box */
-.referrals-box h4 {
-  margin-top: 0;
-  font-size: 1.1em;
-  color: #333;
-}
+        /* Headings inside the referral box */
+        .referrals-box h4 {
+            margin-top: 0;
+            font-size: 1.1em;
+            color: #333;
+        }
 
-/* Each row of inputs */
-.referral-field {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 10px;
-}
+        /* Each row of inputs */
+        .referral-field {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
 
-/* Text + email inputs */
-.referral-field input[type="text"],
-.referral-field input[type="email"] {
-  flex: 1 1 45%;
-  padding: 8px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 0.95em;
-  box-sizing: border-box;
-}
+        /* Text + email inputs */
+        .referral-field input[type="text"],
+        .referral-field input[type="email"] {
+            flex: 1 1 45%;
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95em;
+            box-sizing: border-box;
+        }
 
-/* Inputs focus state */
-.referral-field input:focus {
-  outline: none;
-  border-color: #007acc;
-  box-shadow: 0 0 4px rgba(0,122,204,0.4);
-}
+        /* Inputs focus state */
+        .referral-field input:focus {
+            outline: none;
+            border-color: #007acc;
+            box-shadow: 0 0 4px rgba(0, 122, 204, 0.4);
+        }
 
-/* Buttons inside the referral box */
-.referrals-box button {
-  padding: 6px 12px;
-  font-size: 0.9em;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: #007acc;
-  color: white;
-  transition: background 0.2s ease-in-out;
-}
+        /* Buttons inside the referral box */
+        .referrals-box button {
+            padding: 6px 12px;
+            font-size: 0.9em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #007acc;
+            color: white;
+            transition: background 0.2s ease-in-out;
+        }
 
-.referrals-box button:hover {
-  background-color: #005a99;
-}
+        .referrals-box button:hover {
+            background-color: #005a99;
+        }
 
-/* Small note text */
-.referrals-box small {
-  color: #666;
-  font-size: 0.85em;
-}
-
+        /* Small note text */
+        .referrals-box small {
+            color: #666;
+            font-size: 0.85em;
+        }
     </style>
 </head>
 
@@ -862,7 +880,7 @@
                     <br><br>
                     <p>A confirmation email has been sent to <strong id="emailHolder"></strong>.</p>
                     <br><br>
-                   <!-- Optional referrals section -->
+                    <!-- Optional referrals section -->
                     <div class="referrals-box"
                         style="margin-top:20px; padding:15px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
                         <h4>Optional: Recommend Colleagues</h4>
@@ -1539,9 +1557,13 @@ Date: ${date}
 
     <script>
         function addReferralField() {
-            const container = document.getElementById("referral-fields");
-            const div = document.createElement("div");
-            div.className = "referral-field";
+            const modal = getOpenModal();
+            if (!modal) return;
+            const container = modal.querySelector('#referral-fields, #referral-fields-appointment, #referral-fields-consent');
+            if (!container) return;
+
+            const div = document.createElement('div');
+            div.className = 'referral-field';
             div.innerHTML = `
     <input type="text" placeholder="Colleague Name" style="margin:5px; padding:6px; width:45%;">
     <input type="email" placeholder="Colleague Email" style="margin:5px; padding:6px; width:45%;">
