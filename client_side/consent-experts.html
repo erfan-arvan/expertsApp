@@ -876,49 +876,13 @@
             </div>
 
             <!-- Final Box Modal: Appointment Acknowledgement -->
-            <div id="final-box" class="modal">
+            <div id="final-box" class="modal hidden">
                 <div class="modal-content">
                     <h3>✅ Your Request Has Been Received!</h3>
                     <p>Thank you! We'll reach out to you via email soon to schedule a meeting based on your specified
                         availability.</p>
                     <p><strong>Selected availability:</strong> <span id="confirmed-session"></span></p>
                     <!-- <button onclick="closeModal('final-box')">Close</button> -->
-
-                    <!-- Optional referrals section -->
-<div class="referrals-box" style="margin-top:20px; padding:15px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
-  <h4>Optional: Recommend Colleagues</h4>
-  <p>If you know colleagues who might be good experts for this study, you may enter their names and email addresses below.</p>
-
-  <div id="referral-fields">
-    <!-- Initial 3 rows -->
-    <div class="referral-field">
-      <button type="button" class="referral-remove" onclick="removeReferralField(this)" aria-label="Remove this referral">−</button>
-      <input type="text" placeholder="Colleague Name" style="margin:5px; padding:6px; width:45%;">
-      <input type="email" placeholder="Colleague Email" style="margin:5px; padding:6px; width:45%;">
-    </div>
-    <div class="referral-field">
-      <button type="button" class="referral-remove" onclick="removeReferralField(this)" aria-label="Remove this referral">−</button>
-      <input type="text" placeholder="Colleague Name" style="margin:5px; padding:6px; width:45%;">
-      <input type="email" placeholder="Colleague Email" style="margin:5px; padding:6px; width:45%;">
-    </div>
-  </div>
-
-  <!-- Add More button -->
-  <button type="button" onclick="addReferralField(this)" style="margin-top:10px; padding:6px 10px; cursor:pointer;">
-    ➕ Add more
-  </button>
-
-  <!-- Submit Referrals button -->
-  <button type="button" onclick="submitReferrals(this)" style="margin-top:10px; margin-left:10px; padding:6px 10px; cursor:pointer;">
-    ✅ Submit Referrals
-  </button>
-
-  <br><br>
-  <small style="color:#666;">Leaving this section blank is completely fine.</small>
-</div>
-
-
-
                     <p>You can now close the tab!</p>
                 </div>
             </div>
@@ -983,6 +947,39 @@
                     <p>You can now close the tab!</p>
                 </div>
             </div>
+
+                                <!-- Optional referrals section -->
+<div class="referrals-box" style="margin-top:20px; padding:15px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
+  <h4>Optional: Recommend Colleagues</h4>
+  <p>If you know colleagues who might be good experts for this study, you may enter their names and email addresses below.</p>
+
+  <div id="referral-fields">
+    <!-- Initial 3 rows -->
+    <div class="referral-field">
+      <button type="button" class="referral-remove" onclick="removeReferralField(this)" aria-label="Remove this referral">−</button>
+      <input type="text" placeholder="Colleague Name" style="margin:5px; padding:6px; width:45%;">
+      <input type="email" placeholder="Colleague Email" style="margin:5px; padding:6px; width:45%;">
+    </div>
+    <div class="referral-field">
+      <button type="button" class="referral-remove" onclick="removeReferralField(this)" aria-label="Remove this referral">−</button>
+      <input type="text" placeholder="Colleague Name" style="margin:5px; padding:6px; width:45%;">
+      <input type="email" placeholder="Colleague Email" style="margin:5px; padding:6px; width:45%;">
+    </div>
+  </div>
+
+  <!-- Add More button -->
+  <button type="button" onclick="addReferralField(this)" style="margin-top:10px; padding:6px 10px; cursor:pointer;">
+    ➕ Add more
+  </button>
+
+  <!-- Submit Referrals button -->
+  <button type="button" onclick="submitReferrals(this)" style="margin-top:10px; margin-left:10px; padding:6px 10px; cursor:pointer;">
+    ✅ Submit Referrals
+  </button>
+
+  <br><br>
+  <small style="color:#666;">Leaving this section blank is completely fine.</small>
+</div>
 
 
 
