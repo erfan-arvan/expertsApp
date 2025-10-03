@@ -908,7 +908,7 @@
 
                     <div id="referrals-embed">
                         <!-- Pass via query param (cleanest) -->
-                        <iframe id="referralsIframe"
+                        <iframe class="referralsIframe" id="referralsIframe"
                             src="/referrals.html?referrer=${encodeURIComponent(localStorage.getItem('expert_email')||'')}"
                             style="width:100%;border:0;display:block;overflow:hidden" scrolling="no"></iframe>
 
@@ -1608,7 +1608,7 @@ Date: ${date}
 
     <script>
         // auto-resize
-        const iframe = document.getElementById('referralsIframe');
+        const iframe = document.getElementsByClassName('.referralsIframe');
         window.addEventListener('message', (e) => {
             const d = e.data || {};
             if (d.type === 'referral-iframe-height' && typeof d.height === 'number') {
