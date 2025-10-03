@@ -1345,6 +1345,101 @@ public Map<String, Object> getFinishedChats(@RequestBody Map<String, Object> bod
     }
 }
 
+@CrossOrigin(origins = {"http://localhost:8000", "http://codecomprehensibility.site"})
+@PostMapping("/submit_referrals")
+public synchronized String handleExpertReferrals(@RequestBody Map<String, Object> body) {
+    String referrerEmail = String.valueOf(body.getOrDefault("referrerEmail", "unknown")).trim();
+    String timestamp = ZonedDateTime.now(ZoneId.of("America/New_York"))
+                                    .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+    System.out.println(">>> [submit_referrals] Referrals received from: " + referrerEmail);
+    System.out.println(">>> Timestamp: " + timestamp);
+
+    // Ensure directory exists
+    File directory = new File("submissions");
+    if (!directory.exists()) {
+        directory.mkdirs();
+        System.out.println(">>> Created 'submissions' directory.");
+    }
+
+    File referralsFile = new File("submissions/expert_referrals.json");
+    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
+    try {
+        // Extract and sanitize referrals
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> rawReferrals =
+                (List<Map<String, Object>>) body.getOrDefault("referrals", new ArrayList<>());
+
+        List<Map<String, String>> cleaned = new ArrayList<>();
+        for (Object o : rawReferrals) {
+            if (!(o instanceof Map)) continue;
+            @SuppressWarnings("unchecked")
+            Map<String, Object> r = (Map<String, Object>) o;
+
+            String name  = r.getOrDefault("name",  "").toString().trim();
+            String email = r.getOrDefault("email", "").toString().trim();
+
+            // Skip completely empty rows
+            if (name.isEmpty() && email.isEmpty()) continue;
+
+            // Optional: skip rows with clearly invalid emails (but don't be too strict)
+            if (!email.isEmpty() && !looksLikeEmail(email)) {
+                System.out.println(">>> Skipping invalid email: " + email);
+                continue;
+            }
+
+            Map<String, String> entry = new HashMap<>();
+            entry.put("name", name);
+            entry.put("email", email);
+            cleaned.add(entry);
+        }
+
+        // Optionally cap to avoid abuse (keep the first 50)
+        if (cleaned.size() > 50) {
+            cleaned = cleaned.subList(0, 50);
+        }
+
+        // Build wrapped record
+        Map<String, Object> wrapped = new HashMap<>();
+        wrapped.put("timestamp", timestamp);
+        wrapped.put("referrerEmail", referrerEmail);
+        wrapped.put("referrals", cleaned);
+
+        // Append to file
+        List<Map<String, Object>> allData = referralsFile.exists()
+                ? mapper.readValue(referralsFile, new TypeReference<>() {})
+                : new ArrayList<>();
+        allData.add(wrapped);
+        mapper.writeValue(referralsFile, allData);
+
+        System.out.println(">>> Saved to expert_referrals.json (" + cleaned.size() + " items)");
+
+        // Send confirmation email to the referrer (optional)
+        String subject = "Thanks for your colleague recommendations";
+        String message = "Thank you for recommending colleagues for the Code Comprehension Study.\n\n"
+                + "We have received " + cleaned.size() + " entr" + (cleaned.size() == 1 ? "y" : "ies") + ". "
+                + "If you’d like to add or update suggestions, just reply to this email.\n\n"
+                + "— Code Comprehension Study Team";
+        if (!"unknown".equalsIgnoreCase(referrerEmail)) {
+            System.out.println(">>> Sending referral receipt email to: " + referrerEmail);
+            sendEmailViaPython(referrerEmail, subject, message);
+        }
+
+        return "Referrals saved.";
+    } catch (IOException e) {
+        System.err.println(">>> ERROR saving referrals from: " + referrerEmail);
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save referrals.");
+    }
+}
+
+/** Minimal email sanity check (not strict). */
+private static boolean looksLikeEmail(String s) {
+    return s != null && s.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
+}
+
+
 
 
 
