@@ -543,6 +543,71 @@
                 font-size: 1rem;
             }
         }
+
+        /* Referral Box Container */
+.referrals-box {
+  margin-top: 20px;
+  padding: 15px 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+
+/* Headings inside the referral box */
+.referrals-box h4 {
+  margin-top: 0;
+  font-size: 1.1em;
+  color: #333;
+}
+
+/* Each row of inputs */
+.referral-field {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* Text + email inputs */
+.referral-field input[type="text"],
+.referral-field input[type="email"] {
+  flex: 1 1 45%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95em;
+  box-sizing: border-box;
+}
+
+/* Inputs focus state */
+.referral-field input:focus {
+  outline: none;
+  border-color: #007acc;
+  box-shadow: 0 0 4px rgba(0,122,204,0.4);
+}
+
+/* Buttons inside the referral box */
+.referrals-box button {
+  padding: 6px 12px;
+  font-size: 0.9em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #007acc;
+  color: white;
+  transition: background 0.2s ease-in-out;
+}
+
+.referrals-box button:hover {
+  background-color: #005a99;
+}
+
+/* Small note text */
+.referrals-box small {
+  color: #666;
+  font-size: 0.85em;
+}
+
     </style>
 </head>
 
