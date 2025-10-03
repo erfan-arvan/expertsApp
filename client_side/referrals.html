@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Recommend Colleagues</title>
+<style>
+  :root { --blue:#007acc; --blueH:#005a99; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color:#333; }
+  .referrals-box {
+    padding: 16px 18px; background:#f9f9f9; border:1px solid #ddd; border-radius: 8px;
+  }
+  .referrals-box h4 { margin: 0 0 8px; font-size: 1.1rem; }
+  .referrals-box p { margin-top: 0; margin-bottom: 14px; }
+
+  .referral-field {
+    display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap: nowrap;
+  }
+  .referral-remove {
+    flex:0 0 28px; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center;
+    border-radius:50%; border:1px solid #ccc; background:#eee; color:#333; font-weight:700; line-height:1; cursor:pointer;
+  }
+  .referral-remove:hover { background:#e2e2e2; border-color:#aaa; }
+
+  .referral-field input[type="text"],
+  .referral-field input[type="email"] {
+    width:auto; margin:0; flex:1 1 0; min-width:0;
+    padding:8px 10px; border:1px solid #ccc; border-radius:4px; font-size:.95rem; box-sizing:border-box;
+  }
+  .referral-field input:focus { outline:none; border-color:var(--blue); box-shadow:0 0 4px rgba(0,122,204,.4); }
+
+  .actions { margin-top:10px; display:flex; gap:10px; }
+  .actions button {
+    padding:6px 12px; font-size:.9rem; border:none; border-radius:4px; cursor:pointer; color:#fff; background:var(--blue);
+  }
+  .actions button:hover { background:var(--blueH); }
+
+  small { color:#666; font-size:.85em; display:block; margin-top:10px; }
+  .note { margin:8px 0 0; font-size:.9rem; color:#2e7d32; display:none; }
+  .error { color:#b00020; font-size:.9rem; display:none; }
+  @media (max-width:520px){
+    .referral-field { flex-wrap:wrap; }
+    .referral-remove { margin-bottom:4px; }
+    .actions { flex-wrap:wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="referrals-box" role="group" aria-label="Recommend colleagues">
+  <h4>Optional: Recommend Colleagues</h4>
+  <p>If you know colleagues who might be good experts for this study, you may enter their names and email addresses below.</p>
+
+  <div class="referral-fields" id="referralFields">
+    <!-- initial 3 rows -->
+  </div>
+
+  <div class="actions">
+    <button type="button" id="addBtn">➕ Add more</button>
+    <button type="button" id="submitBtn">✅ Submit Referrals</button>
+  </div>
+
+  <small>Leaving this section blank is completely fine.</small>
+  <div class="note" id="okMsg">Thanks! Your referrals were submitted.</div>
+  <div class="error" id="errMsg">There was a problem sending referrals. Please try again.</div>
+</div>
+
+<script>
+  // ========= Helpers =========
+  const qs = (sel, sc=document) => sc.querySelector(sel);
+  const qsa = (sel, sc=document) => Array.from(sc.querySelectorAll(sel));
+
+  function rowTemplate() {
+    const div = document.createElement('div');
+    div.className = 'referral-field';
+    div.innerHTML = `
+      <button type="button" class="referral-remove" aria-label="Remove this referral">−</button>
+      <input type="text" placeholder="Colleague Name" autocomplete="off">
+      <input type="email" placeholder="Colleague Email" autocomplete="off">
+    `;
+    // attach remove handler
+    div.querySelector('.referral-remove').addEventListener('click', () => {
+      div.remove();
+      postHeight();
+    });
+    return div;
+  }
+
+  function ensureInitialRows(n=3) {
+    const container = qs('#referralFields');
+    for (let i = 0; i < n; i++) container.appendChild(rowTemplate());
+  }
+
+  // ========= iframe auto-height =========
+  function postHeight() {
+    const h = document.documentElement.scrollHeight;
+    parent.postMessage({ type:'referral-iframe-height', height: h }, '*');
+  }
+  const ro = new ResizeObserver(() => postHeight());
+  ro.observe(document.body);
+
+  // ========= Referrer email source =========
+  // Option A: from query param ?referrer=email
+  let referrerEmail = new URLSearchParams(location.search).get('referrer') || '';
+
+  // Option B: parent can send it via postMessage
+  window.addEventListener('message', (e) => {
+    // You may restrict e.origin to your site for safety:
+    // if (e.origin !== 'https://codecomprehensibility.site') return;
+    const data = e.data || {};
+    if (data.type === 'setReferrerEmail' && typeof data.email === 'string') {
+      referrerEmail = data.email.trim();
+    }
+  });
+
+  // ========= Add / Submit =========
+  function collectPayload() {
+    const referrals = qsa('.referral-field').map(row => {
+      const inputs = qsa('input', row);
+      const name = (inputs[0]?.value || '').trim();
+      const email = (inputs[1]?.value || '').trim();
+      return { name, email };
+    }).filter(r => r.name || r.email); // ignore empty rows
+    return { referrerEmail, referrals };
+  }
+
+  async function submitReferrals() {
+    qs('#okMsg').style.display = 'none';
+    qs('#errMsg').style.display = 'none';
+
+    const payload = collectPayload();
+
+    try {
+      const res = await fetch('/submit_referrals', {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error('Bad response');
+      qs('#okMsg').style.display = 'block';
+      // tell parent (optional)
+      parent.postMessage({ type:'referral-submitted', count: payload.referrals.length }, '*');
+    } catch (e) {
+      qs('#errMsg').style.display = 'block';
+    }
+  }
+
+  // ========= Init =========
+  document.addEventListener('DOMContentLoaded', () => {
+    ensureInitialRows(3);
+    qs('#addBtn').addEventListener('click', () => { 
+      const row = rowTemplate();
+      qs('#referralFields').appendChild(row);
+      row.querySelector('input[type="text"]').focus();
+      postHeight();
+    });
+    qs('#submitBtn').addEventListener('click', submitReferrals);
+    postHeight();
+  });
+</script>
+</body>
+</html>
