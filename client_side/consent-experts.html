@@ -811,7 +811,7 @@
             </div>
 
             <!-- Final Box Modal: Appointment Acknowledgement -->
-            <div id="final-box" class="modal hidden">
+            <div id="final-box" class="modal">
                 <div class="modal-content">
                     <h3>✅ Your Request Has Been Received!</h3>
                     <p>Thank you! We'll reach out to you via email soon to schedule a meeting based on your specified
@@ -847,16 +847,19 @@
                                     style="margin:5px; padding:6px; width:45%;">
                             </div>
                         </div>
+<!-- AFTER -->
+<button type="button" onclick="addReferralField(this)"
+        style="margin-top:10px; padding:6px 10px; cursor:pointer;">
+  ➕ Add more
+</button>
 
-                        <!-- Add More button -->
-                        <button type="button" onclick="addReferralField(this)">➕ Add more</button>
+<button type="button" onclick="submitReferrals(this)"
+        style="margin-top:10px; margin-left:10px; padding:6px 10px; cursor:pointer;">
+  ✅ Submit Referrals
+</button>
 
 
-                        <!-- Submit Referrals button -->
-                        <button type="button" onclick="submitReferrals(this)">✅ Submit Referrals</button>
-
-
-                        <br><br>
+                        <br>
                         <small style="color:#666;">Leaving this section blank is completely fine.</small>
                     </div>
 
