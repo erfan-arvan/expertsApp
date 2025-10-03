@@ -849,16 +849,12 @@
                         </div>
 
                         <!-- Add More button -->
-                        <button type="button" onclick="addReferralField(this)"
-                            style="margin-top:10px; padding:6px 10px; cursor:pointer;">
-                            ➕ Add more
-                        </button>
+                        <button type="button" onclick="addReferralField(this)">➕ Add more</button>
+
 
                         <!-- Submit Referrals button -->
-                        <button type="button" onclick="submitReferrals()"
-                            style="margin-top:10px; margin-left:10px; padding:6px 10px; cursor:pointer;">
-                            ✅ Submit Referrals
-                        </button>
+                        <button type="button" onclick="submitReferrals(this)">✅ Submit Referrals</button>
+
 
                         <br><br>
                         <small style="color:#666;">Leaving this section blank is completely fine.</small>
@@ -1555,11 +1551,14 @@ Date: ${date}
         }
     </script>
 
+
     <script>
-        function addReferralField() {
-            const modal = getOpenModal();
-            if (!modal) return;
-            const container = modal.querySelector('#referral-fields, #referral-fields-appointment, #referral-fields-consent');
+        function addReferralField(btn) {
+            // find the referral container within the same referrals box as the button
+            const box = btn.closest('.referrals-box');
+            if (!box) return;
+            // even if IDs are duplicated globally, this finds the right one under this box
+            const container = box.querySelector('#referral-fields');
             if (!container) return;
 
             const div = document.createElement('div');
@@ -1570,7 +1569,34 @@ Date: ${date}
   `;
             container.appendChild(div);
         }
+
+        function submitReferrals(btn) {
+            // scope collection to the same modal/box as the button
+            const box = btn ? btn.closest('.referrals-box') : document;
+            const rows = Array.from(box.querySelectorAll('.referral-field'));
+            const referrerEmail = document.getElementById('emailHolder')?.textContent?.trim() || '';
+
+            const referrals = rows.map(row => {
+                const [nameInput, emailInput] = row.querySelectorAll('input');
+                return {
+                    name: (nameInput?.value || '').trim(),
+                    email: (emailInput?.value || '').trim()
+                };
+            });
+
+            const payload = { referrerEmail, referrals };
+
+            fetch('/submit_referrals', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+                .then(r => r.text())
+                .then(t => console.log('Referral response:', t))
+                .catch(e => console.error('Failed to submit referrals', e));
+        }
     </script>
+
 
     <footer
         style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
