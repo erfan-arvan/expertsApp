@@ -628,69 +628,73 @@
         }
 
         .referral-field {
-  display: flex;
-  align-items: center;   /* so the minus button aligns with inputs */
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 10px;
-}
+            display: flex;
+            align-items: center;
+            /* so the minus button aligns with inputs */
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
 
-.referral-remove {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 1px solid #ccc;
-  background: #eee;
-  color: #333;
-  font-weight: 700;
-  line-height: 26px;     /* centers the minus vertically */
-  text-align: center;
-  cursor: pointer;
-  padding: 0 !important;
-  margin: 0 !important;
+        .referral-remove {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            background: #eee;
+            color: #333;
+            font-weight: 700;
+            line-height: 26px;
+            /* centers the minus vertically */
+            text-align: center;
+            cursor: pointer;
+            padding: 0 !important;
+            margin: 0 !important;
 
-}
-.referral-remove:hover {
-  background: #e2e2e2;
-  border-color: #aaa;
-}
+        }
 
-/* Force referral inputs to share one line */
-.referrals-box .referral-field {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: nowrap;          /* keep on one line by default */
-}
+        .referral-remove:hover {
+            background: #e2e2e2;
+            border-color: #aaa;
+        }
 
-.referrals-box .referral-remove {
-  flex: 0 0 28px;
-}
+        /* Force referral inputs to share one line */
+        .referrals-box .referral-field {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: nowrap;
+            /* keep on one line by default */
+        }
 
-.referrals-box .referral-field input[type="text"],
-.referrals-box .referral-field input[type="email"] {
-  /* override inline width/margins */
-  width: auto !important;
-  margin: 0 !important;
+        .referrals-box .referral-remove {
+            flex: 0 0 28px;
+        }
 
-  /* make them split remaining space evenly */
-  flex: 1 1 0;
-  min-width: 0;               /* allow shrinking instead of wrapping */
-  box-sizing: border-box;
-}
+        .referrals-box .referral-field input[type="text"],
+        .referrals-box .referral-field input[type="email"] {
+            /* override inline width/margins */
+            width: auto !important;
+            margin: 0 !important;
 
-/* On small screens, allow wrapping to avoid squish */
-@media (max-width: 520px) {
-  .referrals-box .referral-field {
-    flex-wrap: wrap;
-  }
-  .referrals-box .referral-field input[type="text"],
-  .referrals-box .referral-field input[type="email"] {
-    flex: 1 1 100%;
-  }
-}
+            /* make them split remaining space evenly */
+            flex: 1 1 0;
+            min-width: 0;
+            /* allow shrinking instead of wrapping */
+            box-sizing: border-box;
+        }
 
+        /* On small screens, allow wrapping to avoid squish */
+        @media (max-width: 520px) {
+            .referrals-box .referral-field {
+                flex-wrap: wrap;
+            }
 
+            .referrals-box .referral-field input[type="text"],
+            .referrals-box .referral-field input[type="email"] {
+                flex: 1 1 100%;
+            }
+        }
     </style>
 </head>
 
@@ -902,38 +906,15 @@
                     <p>A confirmation email has been sent to <strong id="emailHolder"></strong>.</p>
                     <br><br>
 
-                                        <!-- Optional referrals section -->
-<div class="referrals-box" style="margin-top:20px; padding:15px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
-  <h4>Optional: Recommend Colleagues</h4>
-  <p>If you know colleagues who might be good experts for this study, you may enter their names and email addresses below.</p>
+                    <div id="referrals-embed">
+                        <!-- Pass via query param (cleanest) -->
+                        <iframe id="referralsIframe"
+                            src="/widgets/referrals.html?referrer=${encodeURIComponent(localStorage.getItem('expert_email')||'')}"
+                            style="width:100%;border:0;display:block;overflow:hidden" scrolling="no"></iframe>
 
-  <div id="referral-fields">
-    <!-- Initial 3 rows -->
-    <div class="referral-field">
-      <button type="button" class="referral-remove" onclick="removeReferralField(this)" aria-label="Remove this referral">−</button>
-      <input type="text" placeholder="Colleague Name" style="margin:5px; padding:6px; width:45%;">
-      <input type="email" placeholder="Colleague Email" style="margin:5px; padding:6px; width:45%;">
-    </div>
-    <div class="referral-field">
-      <button type="button" class="referral-remove" onclick="removeReferralField(this)" aria-label="Remove this referral">−</button>
-      <input type="text" placeholder="Colleague Name" style="margin:5px; padding:6px; width:45%;">
-      <input type="email" placeholder="Colleague Email" style="margin:5px; padding:6px; width:45%;">
-    </div>
-  </div>
+                    </div>
 
-  <!-- Add More button -->
-  <button type="button" onclick="addReferralField(this)" style="margin-top:10px; padding:6px 10px; cursor:pointer;">
-    ➕ Add more
-  </button>
 
-  <!-- Submit Referrals button -->
-  <button type="button" onclick="submitReferrals(this)" style="margin-top:10px; margin-left:10px; padding:6px 10px; cursor:pointer;">
-    ✅ Submit Referrals
-  </button>
-
-  <br><br>
-  <small style="color:#666;">Leaving this section blank is completely fine.</small>
-</div>
 
                     <!-- <button onclick="closeModal('final-box-consent')">Close</button> -->
                     <p>You can now close the tab!</p>
@@ -991,40 +972,6 @@
 
 
         </div>
-
-
-                    <!-- Optional referrals section -->
-<div class="referrals-box" style="margin-top:20px; padding:15px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
-  <h4>Optional: Recommend Colleagues</h4>
-  <p>If you know colleagues who might be good experts for this study, you may enter their names and email addresses below.</p>
-
-  <div id="referral-fields">
-    <!-- Initial 3 rows -->
-    <div class="referral-field">
-      <button type="button" class="referral-remove" onclick="removeReferralField(this)" aria-label="Remove this referral">−</button>
-      <input type="text" placeholder="Colleague Name" style="margin:5px; padding:6px; width:45%;">
-      <input type="email" placeholder="Colleague Email" style="margin:5px; padding:6px; width:45%;">
-    </div>
-    <div class="referral-field">
-      <button type="button" class="referral-remove" onclick="removeReferralField(this)" aria-label="Remove this referral">−</button>
-      <input type="text" placeholder="Colleague Name" style="margin:5px; padding:6px; width:45%;">
-      <input type="email" placeholder="Colleague Email" style="margin:5px; padding:6px; width:45%;">
-    </div>
-  </div>
-
-  <!-- Add More button -->
-  <button type="button" onclick="addReferralField(this)" style="margin-top:10px; padding:6px 10px; cursor:pointer;">
-    ➕ Add more
-  </button>
-
-  <!-- Submit Referrals button -->
-  <button type="button" onclick="submitReferrals(this)" style="margin-top:10px; margin-left:10px; padding:6px 10px; cursor:pointer;">
-    ✅ Submit Referrals
-  </button>
-
-  <br><br>
-  <small style="color:#666;">Leaving this section blank is completely fine.</small>
-</div>
 
 
     </div>
@@ -1597,37 +1544,37 @@ Date: ${date}
         }
     </script>
 
-<script>
-  function addReferralField(btn) {
-    // scope to the same referrals box as the clicked button
-    const box = btn?.closest('.referrals-box') || document;
-    const container = box.querySelector('#referral-fields, .referral-fields');
-    if (!container) return;
+    <script>
+        function addReferralField(btn) {
+            // scope to the same referrals box as the clicked button
+            const box = btn?.closest('.referrals-box') || document;
+            const container = box.querySelector('#referral-fields, .referral-fields');
+            if (!container) return;
 
-    const row = document.createElement('div');
-    row.className = 'referral-field';
-    row.innerHTML = `
+            const row = document.createElement('div');
+            row.className = 'referral-field';
+            row.innerHTML = `
       <button type="button" class="referral-remove" onclick="removeReferralField(this)" aria-label="Remove this referral">−</button>
       <input type="text" placeholder="Colleague Name" style="margin:5px; padding:6px; width:45%;">
       <input type="email" placeholder="Colleague Email" style="margin:5px; padding:6px; width:45%;">
     `;
-    container.appendChild(row);
+            container.appendChild(row);
 
-    // optional: focus the new name input
-    const firstInput = row.querySelector('input[type="text"]');
-    if (firstInput) firstInput.focus();
-  }
+            // optional: focus the new name input
+            const firstInput = row.querySelector('input[type="text"]');
+            if (firstInput) firstInput.focus();
+        }
 
-  function removeReferralField(btn) {
-    const row = btn?.closest('.referral-field');
-    if (!row) return;
-    row.remove();
-  }
+        function removeReferralField(btn) {
+            const row = btn?.closest('.referral-field');
+            if (!row) return;
+            row.remove();
+        }
 
-  // If you have two referral boxes on the page, consider changing both
-  // containers from id="referral-fields" to class="referral-fields"
-  // and keep the selector '#referral-fields, .referral-fields' above.
-</script>
+        // If you have two referral boxes on the page, consider changing both
+        // containers from id="referral-fields" to class="referral-fields"
+        // and keep the selector '#referral-fields, .referral-fields' above.
+    </script>
 
 
     <script>
@@ -1659,6 +1606,16 @@ Date: ${date}
         }
     </script>
 
+    <script>
+        // auto-resize
+        const iframe = document.getElementById('referralsIframe');
+        window.addEventListener('message', (e) => {
+            const d = e.data || {};
+            if (d.type === 'referral-iframe-height' && typeof d.height === 'number') {
+                iframe.style.height = Math.max(220, d.height) + 'px';
+            }
+        });
+    </script>
 
     <footer
         style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
