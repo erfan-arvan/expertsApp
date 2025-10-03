@@ -86,7 +86,7 @@
     return div;
   }
 
-  function ensureInitialRows(n=3) {
+  function ensureInitialRows(n=2) {
     const container = qs('#referralFields');
     for (let i = 0; i < n; i++) container.appendChild(rowTemplate());
   }
@@ -147,7 +147,7 @@
 
   // ========= Init =========
   document.addEventListener('DOMContentLoaded', () => {
-    ensureInitialRows(3);
+    ensureInitialRows(2);
     qs('#addBtn').addEventListener('click', () => { 
       const row = rowTemplate();
       qs('#referralFields').appendChild(row);
