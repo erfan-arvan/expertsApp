@@ -1608,7 +1608,7 @@ Date: ${date}
 
     <script>
         // auto-resize
-        const iframe = document.getElementsByClassName('referralsIframe');
+        const iframe = document.getElementById('referralsIframe');
         window.addEventListener('message', (e) => {
             const d = e.data || {};
             if (d.type === 'referral-iframe-height' && typeof d.height === 'number') {
