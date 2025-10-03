@@ -797,6 +797,51 @@
                     <br><br>
                     <p>A confirmation email has been sent to <strong id="emailHolder"></strong>.</p>
                     <br><br>
+                   <!-- Optional referrals section -->
+                    <div class="referrals-box"
+                        style="margin-top:20px; padding:15px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
+                        <h4>Optional: Recommend Colleagues</h4>
+                        <p>If you know colleagues who might be good experts for this study, you may enter their names
+                            and email addresses below.</p>
+
+                        <div id="referral-fields">
+                            <!-- Initial 3 rows -->
+                            <div class="referral-field">
+                                <input type="text" placeholder="Colleague Name"
+                                    style="margin:5px; padding:6px; width:45%;">
+                                <input type="email" placeholder="Colleague Email"
+                                    style="margin:5px; padding:6px; width:45%;">
+                            </div>
+                            <div class="referral-field">
+                                <input type="text" placeholder="Colleague Name"
+                                    style="margin:5px; padding:6px; width:45%;">
+                                <input type="email" placeholder="Colleague Email"
+                                    style="margin:5px; padding:6px; width:45%;">
+                            </div>
+                            <div class="referral-field">
+                                <input type="text" placeholder="Colleague Name"
+                                    style="margin:5px; padding:6px; width:45%;">
+                                <input type="email" placeholder="Colleague Email"
+                                    style="margin:5px; padding:6px; width:45%;">
+                            </div>
+                        </div>
+
+                        <!-- Add More button -->
+                        <button type="button" onclick="addReferralField()"
+                            style="margin-top:10px; padding:6px 10px; cursor:pointer;">
+                            ➕ Add more
+                        </button>
+
+                        <!-- Submit Referrals button -->
+                        <button type="button" onclick="submitReferrals()"
+                            style="margin-top:10px; margin-left:10px; padding:6px 10px; cursor:pointer;">
+                            ✅ Submit Referrals
+                        </button>
+
+                        <br><br>
+                        <small style="color:#666;">Leaving this section blank is completely fine.</small>
+                    </div>
+                    <br><br>
                     <!-- <button onclick="closeModal('final-box-consent')">Close</button> -->
                     <p>You can now close the tab!</p>
                 </div>
