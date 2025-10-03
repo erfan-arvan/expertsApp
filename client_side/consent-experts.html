@@ -847,72 +847,6 @@
                     <!-- <button onclick="closeModal('final-box')">Close</button> -->
 
                     <!-- Optional referrals section -->
-                    <div class="referrals-box"
-                        style="margin-top:20px; padding:15px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
-                        <h4>Optional: Recommend Colleagues</h4>
-                        <p>If you know colleagues who might be good experts for this study, you may enter their names
-                            and email addresses below.</p>
-
-                        <div id="referral-fields">
-                            <!-- Initial 3 rows -->
-                            <div class="referral-field">
-                                <input type="text" placeholder="Colleague Name"
-                                    style="margin:5px; padding:6px; width:45%;">
-                                <input type="email" placeholder="Colleague Email"
-                                    style="margin:5px; padding:6px; width:45%;">
-                            </div>
-                            <div class="referral-field">
-                                <input type="text" placeholder="Colleague Name"
-                                    style="margin:5px; padding:6px; width:45%;">
-                                <input type="email" placeholder="Colleague Email"
-                                    style="margin:5px; padding:6px; width:45%;">
-                            </div>
-                            <div class="referral-field">
-                                <input type="text" placeholder="Colleague Name"
-                                    style="margin:5px; padding:6px; width:45%;">
-                                <input type="email" placeholder="Colleague Email"
-                                    style="margin:5px; padding:6px; width:45%;">
-                            </div>
-                        </div>
-<!-- AFTER -->
-<button type="button" onclick="addReferralField(this)"
-        style="margin-top:10px; padding:6px 10px; cursor:pointer;">
-  ➕ Add more
-</button>
-
-<button type="button" onclick="submitReferrals(this)"
-        style="margin-top:10px; margin-left:10px; padding:6px 10px; cursor:pointer;">
-  ✅ Submit Referrals
-</button>
-
-
-                        <br>
-                        <small style="color:#666;">Leaving this section blank is completely fine.</small>
-                    </div>
-
-
-                    <p>You can now close the tab!</p>
-                </div>
-            </div>
-
-            <!-- Final Box Modal: Consent Confirmation -->
-            <div id="final-box-consent" class="modal hidden">
-                <div class="modal-content">
-                    <h3>✅ Your registration in this study has been completed!</h3>
-                    <p>Thank you! We'll reach out to you via email soon to coordinate the next steps.</p>
-                    <a href="#" onclick="generateAndDownloadConsentPDF()">📄 Click to download a copy of your signed
-                        consent form
-                        (PDF)</a>
-                    <br><br>
-                    <p>A confirmation email has been sent to <strong id="emailHolder"></strong>.</p>
-                    <br><br>
-                    <!-- Optional referrals section -->
-                    <div class="referrals-box"
-                        style="margin-top:20px; padding:15px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
-                        <h4>Optional: Recommend Colleagues</h4>
-                        <p>If you know colleagues who might be good experts for this study, you may enter their names
-                            and email addresses below.</p>
-
 <div class="referrals-box" style="margin-top:20px; padding:15px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
   <h4>Optional: Recommend Colleagues</h4>
   <p>If you know colleagues who might be good experts for this study, you may enter their names and email addresses below.</p>
@@ -950,6 +884,51 @@
   <small style="color:#666;">Leaving this section blank is completely fine.</small>
 </div>
 
+
+
+                    <p>You can now close the tab!</p>
+                </div>
+            </div>
+
+            <!-- Final Box Modal: Consent Confirmation -->
+            <div id="final-box-consent" class="modal hidden">
+                <div class="modal-content">
+                    <h3>✅ Your registration in this study has been completed!</h3>
+                    <p>Thank you! We'll reach out to you via email soon to coordinate the next steps.</p>
+                    <a href="#" onclick="generateAndDownloadConsentPDF()">📄 Click to download a copy of your signed
+                        consent form
+                        (PDF)</a>
+                    <br><br>
+                    <p>A confirmation email has been sent to <strong id="emailHolder"></strong>.</p>
+                    <br><br>
+                    <!-- Optional referrals section -->
+                    <div class="referrals-box"
+                        style="margin-top:20px; padding:15px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
+                        <h4>Optional: Recommend Colleagues</h4>
+                        <p>If you know colleagues who might be good experts for this study, you may enter their names
+                            and email addresses below.</p>
+
+                        <div id="referral-fields">
+                            <!-- Initial 3 rows -->
+                            <div class="referral-field">
+                                <input type="text" placeholder="Colleague Name"
+                                    style="margin:5px; padding:6px; width:45%;">
+                                <input type="email" placeholder="Colleague Email"
+                                    style="margin:5px; padding:6px; width:45%;">
+                            </div>
+                            <div class="referral-field">
+                                <input type="text" placeholder="Colleague Name"
+                                    style="margin:5px; padding:6px; width:45%;">
+                                <input type="email" placeholder="Colleague Email"
+                                    style="margin:5px; padding:6px; width:45%;">
+                            </div>
+                            <div class="referral-field">
+                                <input type="text" placeholder="Colleague Name"
+                                    style="margin:5px; padding:6px; width:45%;">
+                                <input type="email" placeholder="Colleague Email"
+                                    style="margin:5px; padding:6px; width:45%;">
+                            </div>
+                        </div>
 
                         <!-- Add More button -->
                         <button type="button" onclick="addReferralField()"
@@ -1597,24 +1576,40 @@ Date: ${date}
         }
     </script>
 
+<script>
+  function addReferralField(btn) {
+    // scope to the same referrals box as the clicked button
+    const box = btn?.closest('.referrals-box') || document;
+    const container = box.querySelector('#referral-fields, .referral-fields');
+    if (!container) return;
+
+    const row = document.createElement('div');
+    row.className = 'referral-field';
+    row.innerHTML = `
+      <button type="button" class="referral-remove" onclick="removeReferralField(this)" aria-label="Remove this referral">−</button>
+      <input type="text" placeholder="Colleague Name" style="margin:5px; padding:6px; width:45%;">
+      <input type="email" placeholder="Colleague Email" style="margin:5px; padding:6px; width:45%;">
+    `;
+    container.appendChild(row);
+
+    // optional: focus the new name input
+    const firstInput = row.querySelector('input[type="text"]');
+    if (firstInput) firstInput.focus();
+  }
+
+  function removeReferralField(btn) {
+    const row = btn?.closest('.referral-field');
+    if (!row) return;
+    row.remove();
+  }
+
+  // If you have two referral boxes on the page, consider changing both
+  // containers from id="referral-fields" to class="referral-fields"
+  // and keep the selector '#referral-fields, .referral-fields' above.
+</script>
+
 
     <script>
-        function addReferralField(btn) {
-            // find the referral container within the same referrals box as the button
-            const box = btn.closest('.referrals-box');
-            if (!box) return;
-            // even if IDs are duplicated globally, this finds the right one under this box
-            const container = box.querySelector('#referral-fields');
-            if (!container) return;
-
-            const div = document.createElement('div');
-            div.className = 'referral-field';
-            div.innerHTML = `
-    <input type="text" placeholder="Colleague Name" style="margin:5px; padding:6px; width:45%;">
-    <input type="email" placeholder="Colleague Email" style="margin:5px; padding:6px; width:45%;">
-  `; 
-            container.appendChild(div);
-        }
 
         function submitReferrals(btn) {
             // scope collection to the same modal/box as the button
