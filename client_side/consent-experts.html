@@ -906,13 +906,10 @@
                     <p>A confirmation email has been sent to <strong id="emailHolder"></strong>.</p>
                     <br><br>
 
-                    <div id="referrals-embed">
-                        <!-- Pass via query param (cleanest) -->
-                        <iframe class="referralsIframe" id="referralsIframe"
-                            src="/referrals.html?referrer=${encodeURIComponent(localStorage.getItem('expert_email')||'')}"
-                            style="width:100%;border:0;display:block;overflow:hidden" scrolling="no"></iframe>
-
+                    <div class="referrals-section">
+                        <iframe class="referrals-widget" src="/widgets/referrals.html" scrolling="no"></iframe>
                     </div>
+
 
 
 
@@ -1611,12 +1608,44 @@ Date: ${date}
     </script>
 
     <script>
-        // auto-resize
-        const iframe = document.getElementById('referralsIframe');
+        // Find all widgets
+        const widgets = Array.from(document.querySelectorAll('iframe.referrals-widget'));
+
+        // Initialize each iframe
+        widgets.forEach((frame, idx) => {
+            // Set basic styles
+            frame.style.width = '100%';
+            frame.style.border = '0';
+            frame.style.display = 'block';
+            frame.style.overflow = 'hidden';
+            frame.style.height = '240px'; // safe initial height
+
+            // Decide the referrer email per iframe
+            const perFrameEmail = frame.dataset.referrer || localStorage.getItem('expert_email') || '';
+            // Append it to the iframe src
+            const url = new URL(frame.getAttribute('src'), location.origin);
+            if (perFrameEmail) url.searchParams.set('referrer', perFrameEmail);
+            frame.src = url.toString();
+        });
+
+        // Listen for height / submitted messages from ANY referral iframe
         window.addEventListener('message', (e) => {
-            const d = e.data || {};
-            if (d.type === 'referral-iframe-height' && typeof d.height === 'number') {
-                iframe.style.height = Math.max(220, d.height) + 'px';
+            const data = e.data || {};
+            if (!data.type) return;
+
+            // Find which iframe sent the message
+            const sender = widgets.find(f => f.contentWindow === e.source);
+            if (!sender) return;
+
+            if (data.type === 'referral-iframe-height' && typeof data.height === 'number') {
+                sender.style.height = Math.max(220, data.height) + 'px';
+            }
+
+            if (data.type === 'referral-submitted') {
+                // Optional: show a toast or mark that specific section as done
+                // Example:
+                sender.closest('.referrals-section')?.classList.add('submitted');
+                console.log('Referral widget submitted from this iframe:', data.count, 'rows');
             }
         });
     </script>
