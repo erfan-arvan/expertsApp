@@ -5,17 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Recommend Colleagues</title>
 <style>
-  :root { --blue:#007acc; --blueH:#005a99; }
+  :root { --blue:#007acc; --blueH:#005a99; --ok:#1b5e20; --okBg:#e6f4ea; --err:#b00020; --errBg:#fdecea; }
   body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color:#333; }
-  .referrals-box {
-    padding: 16px 18px; background:#f9f9f9; border:1px solid #ddd; border-radius: 8px;
-  }
-  .referrals-box h4 { margin: 0 0 8px; font-size: 1.1rem; }
-  .referrals-box p { margin-top: 0; margin-bottom: 14px; }
+  .referrals-box { padding:16px 18px; background:#f9f9f9; border:1px solid #ddd; border-radius:8px; }
 
-  .referral-field {
-    display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap: nowrap;
-  }
+  .referrals-box h4 { margin:0 0 8px; font-size:1.1rem; }
+  .referrals-box p  { margin:0 0 14px; }
+
+  /* Banners */
+  .banner { display:none; padding:10px 12px; border-radius:8px; margin:12px 0; font-weight:600; }
+  .banner--success { display:none; color:var(--ok); background:var(--okBg); border:1px solid var(--ok); }
+  .banner--error   { display:none; color:var(--err); background:var(--errBg); border:1px solid var(--err); }
+  .banner ul { margin:6px 0 0 18px; }
+
+  .referral-field { display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:nowrap; }
   .referral-remove {
     flex:0 0 28px; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center;
     border-radius:50%; border:1px solid #ccc; background:#eee; color:#333; font-weight:700; line-height:1; cursor:pointer;
@@ -29,19 +32,32 @@
   }
   .referral-field input:focus { outline:none; border-color:var(--blue); box-shadow:0 0 4px rgba(0,122,204,.4); }
 
-  .actions { margin-top:10px; display:flex; gap:10px; }
+  /* invalid highlights */
+  .input-error { border-color: var(--err) !important; background: #fff6f6; }
+  .row-error   { outline: 2px solid var(--errBg); border-radius:6px; padding:4px 4px; }
+
+  .actions { margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; }
   .actions button {
-    padding:6px 12px; font-size:.9rem; border:none; border-radius:4px; cursor:pointer; color:#fff; background:var(--blue);
+    padding:8px 14px; font-size:.95rem; border:none; border-radius:6px; cursor:pointer; color:#fff; background:var(--blue);
   }
   .actions button:hover { background:var(--blueH); }
+  .actions button[disabled]{ opacity:.65; cursor:not-allowed; }
 
   small { color:#666; font-size:.85em; display:block; margin-top:10px; }
-  .note { margin:8px 0 0; font-size:.9rem; color:#2e7d32; display:none; }
-  .error { color:#b00020; font-size:.9rem; display:none; }
+
+  /* a little shake for visibility on errors */
+  @keyframes shake {
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-3px)}
+    40%{transform:translateX(3px)}
+    60%{transform:translateX(-2px)}
+    80%{transform:translateX(2px)}
+  }
+  .shake { animation: shake .35s linear; }
+
   @media (max-width:520px){
-    .referral-field { flex-wrap:wrap; }
-    .referral-remove { margin-bottom:4px; }
-    .actions { flex-wrap:wrap; }
+    .referral-field{ flex-wrap:wrap; }
+    .referral-remove{ margin-bottom:4px; }
   }
 </style>
 </head>
@@ -49,11 +65,13 @@
 
 <div class="referrals-box" role="group" aria-label="Recommend colleagues">
   <h4>Optional: Recommend Colleagues</h4>
-<p>If you know colleagues who might be eligible to participate as experts in this study, you may enter their names and email addresses below.</p>
+  <p>If you know colleagues who might be eligible to participate as experts in this study, enter their names and emails below.</p>
 
-  <div class="referral-fields" id="referralFields">
-    <!-- initial 3 rows -->
-  </div>
+  <!-- banners -->
+  <div id="errorBanner"   class="banner banner--error"   role="alert" aria-live="assertive"></div>
+  <div id="successBanner" class="banner banner--success" role="status" aria-live="polite"></div>
+
+  <div class="referral-fields" id="referralFields"></div>
 
   <div class="actions">
     <button type="button" id="addBtn">➕ Add more</button>
@@ -61,24 +79,25 @@
   </div>
 
   <small>Leaving this section blank is completely fine.</small>
-  <div class="note" id="okMsg">Thanks! Your referrals were submitted.</div>
-  <div class="error" id="errMsg">There was a problem sending referrals. Please try again.</div>
 </div>
 
 <script>
   // ========= Helpers =========
-  const qs = (sel, sc=document) => sc.querySelector(sel);
+  const qs  = (sel, sc=document) => sc.querySelector(sel);
   const qsa = (sel, sc=document) => Array.from(sc.querySelectorAll(sel));
+
+  // modest email check (good enough for UX)
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
   function rowTemplate() {
     const div = document.createElement('div');
     div.className = 'referral-field';
     div.innerHTML = `
       <button type="button" class="referral-remove" aria-label="Remove this referral">−</button>
-      <input type="text" placeholder="Colleague Name" autocomplete="off">
+      <input type="text"  placeholder="Colleague Name"  autocomplete="off">
       <input type="email" placeholder="Colleague Email" autocomplete="off">
     `;
-    // attach remove handler
+    // remove row
     div.querySelector('.referral-remove').addEventListener('click', () => {
       div.remove();
       postHeight();
@@ -100,55 +119,138 @@
   ro.observe(document.body);
 
   // ========= Referrer email source =========
-  // Option A: from query param ?referrer=email
-  let referrerEmail = new URLSearchParams(location.search).get('referrer') || '';
-
-  // Option B: parent can send it via postMessage
+  // A) ?referrer=alice@example.com
+  let referrerEmail = new URLSearchParams(location.search).get('referrer')?.trim() || '';
+  // B) parent can send it via postMessage
   window.addEventListener('message', (e) => {
-    // You may restrict e.origin to your site for safety:
-    // if (e.origin !== 'https://codecomprehensibility.site') return;
     const data = e.data || {};
     if (data.type === 'setReferrerEmail' && typeof data.email === 'string') {
       referrerEmail = data.email.trim();
     }
   });
 
-  // ========= Add / Submit =========
-  function collectPayload() {
-    const referrals = qsa('.referral-field').map(row => {
-      const inputs = qsa('input', row);
-      const name = (inputs[0]?.value || '').trim();
-      const email = (inputs[1]?.value || '').trim();
-      return { name, email };
-    }).filter(r => r.name || r.email); // ignore empty rows
-    return { referrerEmail, referrals };
+  // ========= Validation / payload =========
+  function clearErrors() {
+    qs('#errorBanner').style.display   = 'none';
+    qs('#errorBanner').innerHTML       = '';
+    qs('#successBanner').style.display = 'none';
+    qsa('.input-error').forEach(el => el.classList.remove('input-error'));
+    qsa('.row-error').forEach(el => el.classList.remove('row-error','shake'));
   }
 
-  async function submitReferrals() {
-    qs('#okMsg').style.display = 'none';
-    qs('#errMsg').style.display = 'none';
+  function showError(messages, focusEl=null) {
+    const banner = qs('#errorBanner');
+    const list = Array.isArray(messages) ? messages : [messages];
+    banner.innerHTML = `<strong>Can’t submit yet:</strong><ul>${list.map(m=>`<li>${m}</li>`).join('')}</ul>`;
+    banner.style.display = 'block';
+    if (focusEl) {
+      focusEl.classList.add('shake');
+      focusEl.focus({ preventScroll:true });
+      setTimeout(()=>focusEl.classList.remove('shake'), 500);
+    }
+    postHeight();
+  }
 
-    const payload = collectPayload();
+  function showSuccess(text) {
+    const banner = qs('#successBanner');
+    banner.textContent = text;
+    banner.style.display = 'block';
+    postHeight();
+  }
+
+  // Build payload and collect validation errors
+  function buildAndValidatePayload() {
+    const rows = qsa('.referral-field');
+    const payload = { referrerEmail, referrals: [] };
+    const errors = [];
+    let firstBadInput = null;
+
+    rows.forEach((row, i) => {
+      const [nameEl, emailEl] = qsa('input', row);
+      const name  = (nameEl?.value || '').trim();
+      const email = (emailEl?.value || '').trim();
+
+      // ignore completely empty rows
+      if (!name && !email) return;
+
+      // require both if one is filled
+      if (name && !email) {
+        errors.push(`Row ${i+1}: please enter the colleague’s email.`);
+        emailEl?.classList.add('input-error');
+        row.classList.add('row-error');
+        if (!firstBadInput) firstBadInput = emailEl;
+        return;
+      }
+      if (!name && email) {
+        errors.push(`Row ${i+1}: please enter the colleague’s name.`);
+        nameEl?.classList.add('input-error');
+        row.classList.add('row-error');
+        if (!firstBadInput) firstBadInput = nameEl;
+        return;
+      }
+
+      // validate email format
+      if (email && !EMAIL_RE.test(email)) {
+        errors.push(`Row ${i+1}: “${email}” doesn’t look like a valid email.`);
+        emailEl?.classList.add('input-error');
+        row.classList.add('row-error');
+        if (!firstBadInput) firstBadInput = emailEl;
+        return;
+      }
+
+      payload.referrals.push({ name, email });
+    });
+
+    if (payload.referrals.length === 0) {
+      errors.push('Add at least one colleague (name + valid email).');
+      if (!firstBadInput) {
+        // try to focus first row name input
+        const firstName = qsa('.referral-field input[type="text"]')[0];
+        if (firstName) firstBadInput = firstName;
+      }
+    }
+
+    return { payload, errors, firstBadInput };
+  }
+
+  // ========= Submit =========
+  async function submitReferrals() {
+    clearErrors();
+    const { payload, errors, firstBadInput } = buildAndValidatePayload();
+    if (errors.length) {
+      showError(errors, firstBadInput);
+      return;
+    }
+
+    const btn = qs('#submitBtn');
+    btn.disabled = true;
 
     try {
-      const res = await fetch('/submit_referrals', {
+      const res  = await fetch('/submit_referrals', {
         method: 'POST',
         headers: { 'Content-Type':'application/json' },
         body: JSON.stringify(payload)
       });
-      if (!res.ok) throw new Error('Bad response');
-      qs('#okMsg').style.display = 'block';
-      // tell parent (optional)
+      const text = await res.text(); // capture any server message
+      if (!res.ok) throw new Error(text || 'Server error');
+
+      showSuccess(`Thanks! Submitted ${payload.referrals.length} referral${payload.referrals.length>1?'s':''}.`);
       parent.postMessage({ type:'referral-submitted', count: payload.referrals.length }, '*');
+
+      // Optional: clear rows and leave one fresh row
+      qs('#referralFields').innerHTML = '';
+      qs('#addBtn').click();
     } catch (e) {
-      qs('#errMsg').style.display = 'block';
+      showError(e.message || 'Could not submit referrals. Please try again.');
+    } finally {
+      btn.disabled = false;
     }
   }
 
   // ========= Init =========
   document.addEventListener('DOMContentLoaded', () => {
     ensureInitialRows(2);
-    qs('#addBtn').addEventListener('click', () => { 
+    qs('#addBtn').addEventListener('click', () => {
       const row = rowTemplate();
       qs('#referralFields').appendChild(row);
       row.querySelector('input[type="text"]').focus();
