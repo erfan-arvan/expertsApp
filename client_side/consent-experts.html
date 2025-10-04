@@ -964,7 +964,7 @@
 
 
 
-            <button id="submitBtn" disabled onclick="submitConsent()">Submit</button>
+            <button id="submitBtn" style="display: block;" onclick="submitConsent()">Submit</button>
             <div id="submitNote" class="submit-note">Please complete all highlighted parts before submitting.</div>
 
 
@@ -1295,6 +1295,12 @@
                     const selectedSlot = localStorage.getItem("selected_slot");
                     const sessionText = `${selectedSlot}`;
                     document.getElementById("confirmed-session").innerText = sessionText;
+
+                const submitBtn = document.getElementById("submitBtn");
+                if (submitBtn) {
+                    submitBtn.style.display = "none";   // completely hide
+                    // OR: submitBtn.disabled = true;   // just disable
+                }
                 } else {
                     alert("❌ Something went wrong while registering. Please try again or contact the research team.");
                 }
