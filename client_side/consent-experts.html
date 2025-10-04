@@ -1066,7 +1066,7 @@
   gap: 10px;
   animation: pulseGlow 1.5s infinite alternate;
 ">
-        <span>📌 Please scroll down to read the informed consent form. If you agree to participate, complete the
+        <span id="guide" class="">📌 Please scroll down to read the informed consent form. If you agree to participate, complete the
             highlighted fields and click the Submit button at the end.</span>
 
         <!-- <button onclick="document.getElementById('consentReminder').style.display='none'" style="background-color: #90caf9; color: #000;">X Close!</button> -->
@@ -1375,6 +1375,7 @@
             const email = localStorage.getItem("expert_email") || "your email";
             document.getElementById("emailHolder").innerText = email;
             document.getElementById("final-box-consent").classList.remove("hidden");
+            document.getElementById("guide").classList.add("hidden");
         }
 
     </script>
