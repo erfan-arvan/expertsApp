@@ -1047,7 +1047,8 @@
     </script>
 
     <!-- Sticky Notification Banner -->
-    <div id="consentReminder" style="
+    <div id="guide" class="">
+        <div id="consentReminder" style="
   position: fixed;
   top: 10px;
   left: 50%;
@@ -1066,12 +1067,13 @@
   gap: 10px;
   animation: pulseGlow 1.5s infinite alternate;
 " class="">
-        <span class="">📌 Please scroll down to read the informed consent form. If you agree to participate, complete the
-            highlighted fields and click the Submit button at the end.</span>
+            <span class="">📌 Please scroll down to read the informed consent form. If you agree to participate,
+                complete the
+                highlighted fields and click the Submit button at the end.</span>
 
-        <!-- <button onclick="document.getElementById('consentReminder').style.display='none'" style="background-color: #90caf9; color: #000;">X Close!</button> -->
-        <p></p>
-        <button onclick="document.getElementById('consentReminder').style.display='none'" style="
+            <!-- <button onclick="document.getElementById('consentReminder').style.display='none'" style="background-color: #90caf9; color: #000;">X Close!</button> -->
+            <p></p>
+            <button onclick="document.getElementById('consentReminder').style.display='none'" style="
     background: none;
     border: none;
     font-size: 18px;
@@ -1082,6 +1084,7 @@
     margin-left: auto;
     margin-top: 0!important;
   " aria-label="Close Reminder">X</button>
+        </div>
     </div>
 
     <!-- <button id="submitConsentBtn" onclick="submitConsent()">Submit</button> -->
@@ -1375,7 +1378,7 @@
             const email = localStorage.getItem("expert_email") || "your email";
             document.getElementById("emailHolder").innerText = email;
             document.getElementById("final-box-consent").classList.remove("hidden");
-            document.getElementById("consentReminder").classList.add("hidden");
+            document.getElementById("guide").classList.add("hidden");
         }
 
     </script>
