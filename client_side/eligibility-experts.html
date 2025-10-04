@@ -416,7 +416,11 @@
     <div class="modal-content">
       <h3>Not Eligible</h3>
       <p>Unfortunately, you are not eligible to participate in this study. Thank you for your interest.</p>
-      <button onclick="document.getElementById('ineligible-modal').classList.add('hidden')">Close</button>
+      <!-- <button onclick="document.getElementById('ineligible-modal').classList.add('hidden')">Close</button> -->
+
+    <div class="referrals-section">
+        <iframe class="referrals-widget" src="/referrals.html" scrolling="no"></iframe>
+    </div>
     </div>
   </div>
 
@@ -887,6 +891,48 @@ function nextQuestion() {
     }
   </script>
 
+   <script>
+        // Find all widgets
+        const widgets = Array.from(document.querySelectorAll('iframe.referrals-widget'));
+
+        // Initialize each iframe
+        widgets.forEach((frame, idx) => {
+            // Set basic styles
+            frame.style.width = '100%';
+            frame.style.border = '0';
+            frame.style.display = 'block';
+            frame.style.overflow = 'hidden';
+            frame.style.height = '240px'; // safe initial height
+
+            // Decide the referrer email per iframe
+            const perFrameEmail = frame.dataset.referrer || localStorage.getItem('expert_email') || '';
+            // Append it to the iframe src
+            const url = new URL(frame.getAttribute('src'), location.origin);
+            if (perFrameEmail) url.searchParams.set('referrer', perFrameEmail);
+            frame.src = url.toString();
+        });
+
+        // Listen for height / submitted messages from ANY referral iframe
+        window.addEventListener('message', (e) => {
+            const data = e.data || {};
+            if (!data.type) return;
+
+            // Find which iframe sent the message
+            const sender = widgets.find(f => f.contentWindow === e.source);
+            if (!sender) return;
+
+            if (data.type === 'referral-iframe-height' && typeof data.height === 'number') {
+                sender.style.height = Math.max(220, data.height) + 'px';
+            }
+
+            if (data.type === 'referral-submitted') {
+                // Optional: show a toast or mark that specific section as done
+                // Example:
+                sender.closest('.referrals-section')?.classList.add('submitted');
+                console.log('Referral widget submitted from this iframe:', data.count, 'rows');
+            }
+        });
+    </script>
   <footer
     style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
     Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
