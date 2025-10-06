@@ -426,7 +426,7 @@ function submitAll() {
   console.log("🚀 Submitting FINAL payload via Beacon:", payload);
 
   const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-  const success = navigator.sendBeacon('https://codecomprehensibility.site/submit_round2', blob);
+  const success = navigator.sendBeacon('/submit_round2', blob);
 
   if (success) {
     showSubmissionModal('✅ Submission successful!\n\nWe will notify you about the possible next steps. \n\nYou can still resubmit your responses before the deadline if needed.');
@@ -489,7 +489,7 @@ function submitAll() {
     function checkLogin() {
       if (!isLoggedIn()) {
         alert('You must be logged in to access this page. Redirecting to the homepage.');
-        window.location.href = 'https://codecomprehensibility.site/';
+        window.location.href = '/';
       }
     }
 
@@ -627,7 +627,7 @@ async function saveToServer() {
   sessionStorage.setItem('lastPayloadHash_round2', currentHash);
 
   const blob = new Blob([payloadStr], { type: 'application/json' });
-  navigator.sendBeacon('https://codecomprehensibility.site/submit_round2', blob);
+  navigator.sendBeacon('/submit_round2', blob);
 
   console.log('✅ Round 2 payload sent to server:', payload);
 }

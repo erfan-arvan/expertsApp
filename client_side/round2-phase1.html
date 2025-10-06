@@ -457,7 +457,7 @@ async function saveToServer() {
   sessionStorage.setItem('lastPayloadHash_round2', currentHash);
 
   const blob = new Blob([payloadStr], { type: 'application/json' });
-  navigator.sendBeacon('https://codecomprehensibility.site/submit_round2', blob);
+  navigator.sendBeacon('/submit_round2', blob);
 
   console.log('✅ Round 2 payload sent to server:', payload);
 }
@@ -755,7 +755,7 @@ if (snippet.responses && Array.isArray(snippet.responses)) {
         allSummaries[key] = sessionVal || localVal || "";
       }
 
-      fetch("https://codecomprehensibility.site/submit", {
+      fetch("/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(allSummaries),
@@ -1109,7 +1109,7 @@ function areAllSnippetsFilled() {
   function checkLogin() {
     if (!isLoggedIn()) {
       alert('You must be logged in to access this page. Redirecting to the homepage.');
-      window.location.href = 'https://codecomprehensibility.site/';
+      window.location.href = '/';
     }
   }
 

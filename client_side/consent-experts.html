@@ -1153,9 +1153,9 @@
         function submitAppointmentRequest() {
             const email = localStorage.getItem("expert_email");
             if (!email) {
-                alert("Email is missing. Please start the eligibility process from the beginning:\n\nhttps://codecomprehensibility.site/eligibility-experts.html");
+                alert("Email is missing. Please start the eligibility process from the beginning:\n\n/eligibility-experts.html");
                 // Optionally redirect the user:
-                window.location.href = "https://codecomprehensibility.site/eligibility-experts.html";
+                window.location.href = "/eligibility-experts.html";
                 return;
             }
             const notify = localStorage.getItem("notify_opt_in") === "true";

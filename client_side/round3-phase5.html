@@ -1021,7 +1021,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   function checkLogin() {
     if (!isLoggedIn()) {
       alert('You must be logged in to access this page. Redirecting to the homepage.');
-      window.location.href = 'https://codecomprehensibility.site/';
+      window.location.href = '/';
     }
   }
 
@@ -1158,7 +1158,7 @@ async function saveToServer() {
   sessionStorage.setItem('lastPayloadHash_round3', currentHash);
 
   const blob = new Blob([payloadStr], { type: 'application/json' });
-  navigator.sendBeacon('https://codecomprehensibility.site/submit_round3', blob);
+  navigator.sendBeacon('/submit_round3', blob);
 
   console.log('✅ Round 2 payload sent to server:', payload);
 }

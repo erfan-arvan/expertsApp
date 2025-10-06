@@ -673,7 +673,7 @@ function submitAll() {
         allSummaries[key] = sessionVal || decodeURIComponent(cookieVal || '');
     }
 
-    fetch("https://codecomprehensibility.site/submit", {
+    fetch("/submit", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(allSummaries)
@@ -1035,7 +1035,7 @@ function logout() {
   function checkLogin() {
     if (!isLoggedIn()) {
       alert('You must be logged in to access this page. Redirecting to the homepage.');
-      window.location.href = 'https://codecomprehensibility.site/';
+      window.location.href = '/';
     }
   }
 
@@ -1083,7 +1083,7 @@ function saveToServer() {
   };
 
   const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-  navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+  navigator.sendBeacon('/submit_final', blob);
 }
 
 window.addEventListener('beforeunload', saveToServer);

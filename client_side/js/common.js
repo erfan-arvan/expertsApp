@@ -47,7 +47,7 @@ function saveToServerQuick() {
   };
 
   const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-  navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+  navigator.sendBeacon('/submit_final', blob);
 }
 
 window.addEventListener('beforeunload', function () {
@@ -114,7 +114,7 @@ async function saveToServer() {
   sessionStorage.setItem('lastPayloadHash', currentHash);
 
   const blob = new Blob([payloadStr], { type: 'application/json' });
-  navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+  navigator.sendBeacon('/submit_final', blob);
 
   console.log('Payload saved to server:', payload);
 }
@@ -154,7 +154,7 @@ function checkLogin() {
     alert(
       "You must be logged in to access this page. Redirecting to the homepage."
     );
-    window.location.href = "https://codecomprehensibility.site/";
+    window.location.href = "/";
   }
 }
 

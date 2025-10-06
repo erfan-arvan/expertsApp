@@ -607,7 +607,7 @@ function renderPhase2() {
       console.log("🚀 Submitting FINAL payload via Beacon:", payload);
 
       const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-      const success = navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+      const success = navigator.sendBeacon('/submit_final', blob);
 
       if (success) {
         showSubmissionModal('✅ Submission successful!\n\nWe will notify you about the possible next steps. \n\nYou can still resubmit your responses before the deadline if needed.');
@@ -669,7 +669,7 @@ function renderPhase2() {
     function checkLogin() {
       if (!isLoggedIn()) {
         alert('You must be logged in to access this page. Redirecting to the homepage.');
-        window.location.href = 'https://codecomprehensibility.site/';
+        window.location.href = '/';
       }
     }
 
@@ -766,7 +766,7 @@ function renderPhase2() {
       };
 
       const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-      navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+      navigator.sendBeacon('/submit_final', blob);
 
       console.log(payload);
     }

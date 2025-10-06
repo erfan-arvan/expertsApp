@@ -971,7 +971,7 @@ function firstChars(name, count = 5) {
   function checkLogin() {
     if (!isLoggedIn()) {
       alert('You must be logged in to access this page. Redirecting to the homepage.');
-      window.location.href = 'https://codecomprehensibility.site/';
+      window.location.href = '/';
     }
   }
 
@@ -1068,7 +1068,7 @@ function firstChars(name, count = 5) {
     };
 
     const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-    navigator.sendBeacon('https://codecomprehensibility.site/submit_final', blob);
+    navigator.sendBeacon('/submit_final', blob);
 
     console.log(payload);
   }

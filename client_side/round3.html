@@ -415,7 +415,7 @@ to complete this round is approximately <strong>50 minutes</strong>.
     }
 
     try {
-      const response = await fetch('https://codecomprehensibility.site/get_snippet_order', {
+      const response = await fetch('/get_snippet_order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -458,7 +458,7 @@ to complete this round is approximately <strong>50 minutes</strong>.
       return Promise.reject("No username");  // return a rejected promise
     }
 
-    return fetch('https://codecomprehensibility.site/get_latest_submission', {
+    return fetch('/get_latest_submission', {
 
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -542,7 +542,7 @@ to complete this round is approximately <strong>50 minutes</strong>.
     return Promise.reject("No username");
   }
 
-  return fetch('https://codecomprehensibility.site/get_latest_round3', {
+  return fetch('/get_latest_round3', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username })

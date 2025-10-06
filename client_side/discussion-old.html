@@ -797,19 +797,19 @@
         function checkLogin() {
             if (!isLoggedIn()) {
                 alert('You must be logged in to access this page. Redirecting to the homepage.');
-                window.location.href = 'https://codecomprehensibility.site/discussion-round.html';
+                window.location.href = '/discussion-round.html';
             }
         }
 
         /* ===== Config ===== */
         const CONFIG = {
             DISAGREEMENTS_URL: 'js/disagreements.json',
-            GET_LATEST_CHAT_URL: 'https://codecomprehensibility.site/get_latest_chat',
-            SUBMIT_CHAT_URL: 'https://codecomprehensibility.site/submit_chat',
-            DELETE_CHAT_URL: 'https://codecomprehensibility.site/delete_chat',
+            GET_LATEST_CHAT_URL: '/get_latest_chat',
+            SUBMIT_CHAT_URL: '/submit_chat',
+            DELETE_CHAT_URL: '/delete_chat',
             POLL_MS: 120000,
-            UPDATE_FINISHED_URL: 'https://codecomprehensibility.site/update_finished_chat',
-            GET_FINISHED_URL: 'https://codecomprehensibility.site/get_finished_chats'
+            UPDATE_FINISHED_URL: '/update_finished_chat',
+            GET_FINISHED_URL: '/get_finished_chats'
         };
 
 
@@ -1268,7 +1268,7 @@
 
             try {
                 // Send to server
-                const res = await fetch('https://codecomprehensibility.site/vote_chat', {
+                const res = await fetch('/vote_chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -1776,7 +1776,7 @@
                 seen: state.lastSeenByDis || {}
             };
             try {
-                const res = await fetch('https://codecomprehensibility.site/set_last_seen_disagreement', {
+                const res = await fetch('/set_last_seen_disagreement', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)

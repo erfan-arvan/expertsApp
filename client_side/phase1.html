@@ -686,7 +686,7 @@
         allSummaries[key] = sessionVal || localVal || "";
       }
 
-      fetch("https://codecomprehensibility.site/submit", {
+      fetch("/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(allSummaries),
