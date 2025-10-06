@@ -25,6 +25,11 @@ import java.util.stream.Collectors;
 
 
 
+@CrossOrigin(origins = {
+  "https://codecomprehensibility.site",
+  "https://panelb.codecomprehensibility.site",
+  "http://localhost:8000"
+})
 @RestController
 public class SubmissionController {
 
