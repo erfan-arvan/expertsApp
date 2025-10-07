@@ -729,9 +729,8 @@
                 comprehension.</p>
 
             <h4>DURATION</h4>
-            <p>My participation in this study consists mainly of two parts. The first part is the comprehensibility
-                task, which takes approximately 90 minutes to complete. The second part involves reaching consensus
-                agreements over up to three rounds, with each round expected to take less than 60 minutes.</p>
+            <p>My participation in this study will consist of three rounds. Round 1 is expected to take about 75 minutes, Round 2 about 45 minutes, and Round 3 (a chat discussion phase) about 40 minutes. I will have up to one week to complete each round on my own schedule before the deadline.</p>
+
 
             <h4>BENEFITS FOR SOCIETY AND THE SUBJECT</h4>
             <p>I have been told that the benefits of this research include advancing knowledge on how code is understood
@@ -743,24 +742,19 @@
             <h4>PROCEDURES</h4>
             <p>I have been told that, during this study, the following will occur:</p>
             <ul>
-                <li>I will participate as one of five expert Java developers in the study. My participation will take
-                    place through a secure web-based application (<a href="https://codecomprehensibility.site"
-                        target="_blank">https://codecomprehensibility.site</a>).</li>
-                <li>I will take part in up to three rounds following the Delphi method, which is designed to gather and
-                    refine expert judgments of a set of Java code snippets.</li>
-                <li>In the first round, I will read the study instructions, log in using a dedicated username and
-                    password. I will then complete three tasks for each of
-                    eight Java code snippets: (1) describe the primary functionality, (2) explain how understandable I
-                    find it, and (3) rank all eight snippets based on difficulty using a drag-and-drop interface. I will
-                    also provide justifications.</li>
-                <li>I can revise my responses before submitting and may update them until the deadline (two weeks after
-                    the study begins).</li>
-                <li>After the deadline, the team will analyze all responses. If no consensus is found, de-identified
-                    summaries and disagreements will be shared.</li>
-                <li>I will then review summaries, revise my rankings if desired, and repeat this process up to three
-                    rounds.</li>
-                <li>If no consensus is reached by round three, a statistical method will be used to create the final
-                    ranking.</li>
+            <li>I will participate as one of five expert Java developers in the study. My participation will take place through a secure web-based application (<a href="https://codecomprehensibility.site" target="_blank">https://codecomprehensibility.site</a>).</li>
+            
+            <li>I will take part in three rounds, following a Delphi-style method designed to collect and compare expert judgments about the comprehensibility of Java code snippets.</li>
+            
+            <li>In Round 1, I will log in using a dedicated username and password. For each of eight Java code snippets, I will (1) provide a short description of its functionality, (2) assess how understandable I find it, and (3) rank all eight snippets from easiest to hardest to understand using a drag-and-drop interface. I will also explain my reasoning.</li>
+            
+            <li>I may revise my responses until I submit them, and I will have up to one week to complete each round before the deadline.</li>
+            
+            <li>After each round, the research team will share de-identified feedback and reasoning from other experts. In Round 2, I will review this feedback, reflect on points of disagreement, and, if I wish, update my rankings and explanations.</li>
+            
+            <li>Round 3 will be a chat-based discussion phase, where I can review prior feedback, participate in focused discussions with other experts, and, if I wish, update my ranking.</li>
+            
+            <li>If no agreement is reached by the end of Round 3, a statistical aggregation method will be applied to produce the final expert-informed ranking.</li>
             </ul>
 
             <h4>PARTICIPANTS</h4>
@@ -769,18 +763,14 @@
             <h4>EXCLUSIONS</h4>
             <p>I will inform the researcher if any of the following apply:</p>
             <ul>
-                <li>I am under 18 years of age.</li>
-                <li>I have a reading disability or impairment affecting code comprehension tasks.</li>
-                <li>I am not comfortable reading English text.</li>
-                <li>My background does not include:
-                    <ul>
-                        <li>Holding a Senior Software Engineer title or a more advanced role (e.g., Staff Engineer, Tech
-                            Lead, Engineering Manager),</li>
-                        <li>Using Java as one of my primary programming languages, and</li>
-                        <li>Mentoring at least one junior software engineer in a professional setting.</li>
-                    </ul>
-                </li>
+            <li>I am under 18 years of age.</li>
+            <li>I have been diagnosed with a reading or learning disability, or another condition that affects my ability to read or understand code or instructions.</li>
+            <li>I am not comfortable reading English text.</li>
+            <li>I have not received a significant promotion in a software engineering role (e.g., from entry level to a more independent role such as Apple ICT3, Facebook E4, Uber L4, Microsoft 61, Amazon L5, or Walmart L3).</li>
+            <li>I have no professional experience with Java.</li>
+            <li>I have not mentored at least one junior software engineer in a professional setting.</li>
             </ul>
+
 
             <h4>RISKS/DISCOMFORTS</h4>
             <p>This study may involve mild discomfort or fatigue from focusing for extended periods. Breaks will be
@@ -795,8 +785,7 @@
                 identifying information.</p>
 
             <h4>PAYMENT FOR PARTICIPATION</h4>
-            <p>I will receive a $50 Amazon gift card after completing the study. If I do not complete all tasks, I will
-                receive partial compensation proportional to my participation.</p>
+            <p>I will receive a $50 Amazon gift card and a certificate of participation from NJIT and William &amp; Mary after completing the study.</p>
 
             <h4>RIGHT TO REFUSE OR WITHDRAW</h4>
             <p>Participation is voluntary. I may withdraw at any time without consequence. The investigator may also
@@ -1421,7 +1410,7 @@
             const signature = document.getElementById('signatureConfirm')?.innerText.trim() || '';
             const date = document.getElementById('signatureDate')?.innerText.trim() || '';
 
-            const fullText = `
+ const fullText = `
 NEW JERSEY INSTITUTE OF TECHNOLOGY
 323 MARTIN LUTHER KING BLVD.
 NEWARK, NJ 07102
@@ -1432,39 +1421,35 @@ TITLE OF STUDY: Comparing Proxies for Code Comprehension
 I, ${consentName}, have been asked to participate in a research study under the direction of Dr. Martin Kellogg.
 
 PURPOSE
-The purpose of this study is to investigate the effectiveness of existing code comprehension measures in assessing the difficulty in understanding Java code snippets (i.e., code comprehensibility). Specifically, this research aims to determine whether these measures can reliably predict expert-determined rankings of code comprehensibility, contributing to improved methods for studying code comprehension.
-
+The purpose of this study is to investigate the effectiveness of existing code comprehension measures in assessing the difficulty of understanding Java code snippets (i.e., code comprehensibility). Specifically, this research aims to determine whether these measures can reliably predict expert-determined rankings of code comprehensibility, contributing to improved methods for studying code comprehension.
 
 DURATION
-My participation in this study consists mainly of two parts. The first part is the comprehensibility task, which takes approximately 90 minutes to complete. The second part involves reaching consensus agreements over up to three rounds, with each round expected to take less than 60 minutes.
+My participation in this study will consist of three rounds. Round 1 is expected to take about 75 minutes, Round 2 about 45 minutes, and Round 3 (a chat discussion phase) about 40 minutes. I will have up to one week to complete each round on my own schedule before the deadline.
 
 BENEFITS FOR SOCIETY AND THE SUBJECT
-I have been told that the benefits of this research include advancing knowledge on how code is understood by developers, which can advance teaching and research in software engineering. As a participant, I will have the opportunity to contribute my experience and knowledge to code comprehension research and receive a $50 Amazon gift card as compensation for participating in the study. In the event of early withdrawal, I will receive partial compensation proportional to the extent of my participation.
+This research may advance knowledge about how developers understand code, informing teaching and research in software engineering. As a participant, I will contribute my expertise to code comprehension research and, after completing the study, receive a $50 Amazon gift card and a certificate of participation from NJIT and William & Mary.
 
 PROCEDURES
-I have been told that, during this study, the following will occur:
+During this study, the following will occur:
+• I will participate as one of about five expert Java developers. My participation will take place through a secure web-based application (https://codecomprehensibility.site).
+• I will take part in three rounds, following a Delphi-style method designed to collect and compare expert judgments about the comprehensibility of Java code snippets.
+• In Round 1, for each of eight Java code snippets, I will (1) provide a short description of its functionality, (2) assess how understandable I find it, and (3) rank all eight snippets from easiest to hardest to understand using a drag-and-drop interface. I will also explain my reasoning.
+• I may revise my responses until I submit them, and I will have up to one week to complete each round before the deadline.
+• After each round, the research team will share de-identified feedback and reasoning from other experts. In Round 2, I will review this feedback, reflect on points of disagreement, and, if I wish, update my rankings and explanations.
+• Round 3 will be a chat-based discussion phase, where I can review prior feedback, participate in focused discussions with other experts, and, if I wish, update my ranking.
+• If no agreement is reached by the end of Round 3, a statistical aggregation method will be applied to produce the final expert-informed ranking.
 
-I will participate as one of five expert Java developers in the study. My participation will take place through a secure web-based application (https://codecomprehensibility.site).
-I will take part in up to three rounds following the Delphi method, which is designed to gather and refine expert judgments of a set of Java code snippets.
-In the first round, I will read the study instructions, log in using a dedicated username and password. I will then complete three tasks for each of eight Java code snippets: (1) describe the primary functionality, (2) explain how understandable I find it, and (3) rank all eight snippets based on difficulty using a drag-and-drop interface. I will also provide justifications.
-I can revise my responses before submitting and may update them until the deadline (two weeks after the study begins).
-After the deadline, the team will analyze all responses. If no consensus is found, de-identified summaries and disagreements will be shared.
-I will then review summaries, revise my rankings if desired, and repeat this process up to three rounds.
-If no consensus is reached by round three, a statistical method will be used to create the final ranking.
 PARTICIPANTS
 I will be one of about five participants in this study.
 
 EXCLUSIONS
 I will inform the researcher if any of the following apply:
-
-I am under 18 years of age.
-I have a reading disability or impairment affecting code comprehension tasks.
-I am not comfortable reading English text.
-My background does not include:
-Holding a Senior Software Engineer title or a more advanced role (e.g., Staff Engineer, Tech Lead, Engineering Manager),
-Using Java as one of my primary programming languages, and
-Mentoring at least one junior software engineer in a professional setting.
-
+• I am under 18 years of age.
+• I have been diagnosed with a reading or learning disability, or another condition that affects my ability to read or understand code or instructions.
+• I am not comfortable reading English text.
+• I have not received a significant promotion in a software engineering role (e.g., from entry level to a more independent role such as Apple ICT3, Facebook E4, Uber L4, Microsoft 61, Amazon L5, or Walmart L3).
+• I have no professional experience with Java.
+• I have not mentored at least one junior software engineer in a professional setting.
 
 RISKS/DISCOMFORTS
 This study may involve mild discomfort or fatigue from focusing for extended periods. Breaks will be provided. There may be unknown risks. I understand that I am not covered by NJIT’s insurance policy for any injury or loss during participation.
@@ -1473,7 +1458,7 @@ CONFIDENTIALITY
 I understand that my participation is confidential but not anonymous. My responses will be linked to my name and email so the research team can contact me. Responses may be shared (after de-identification) with other experts but not linked to my identity. All data will be stored securely on AWS during the study and then transferred to NJIT servers and deleted from AWS. Only the research team will access identifying information.
 
 PAYMENT FOR PARTICIPATION
-I will receive a $50 Amazon gift card after completing the study. If I do not complete all tasks, I will receive partial compensation proportional to my participation.
+I will receive a $50 Amazon gift card and a certificate of participation from NJIT and William & Mary after completing the study.
 
 RIGHT TO REFUSE OR WITHDRAW
 Participation is voluntary. I may withdraw at any time without consequence. The investigator may also withdraw me at any time.
@@ -1493,9 +1478,7 @@ NJIT, 323 Martin Luther King Boulevard, Newark, NJ 07102
 irb@njit.edu (preferred)
 
 SIGNATURE OF PARTICIPANT
-
- I have read this form and understand it fully. My questions have been answered to my satisfaction. I agree to participate in this study.
-
+I have read this form and understand it fully. My questions have been answered to my satisfaction. I agree to participate in this research study.
 
 SIGNATURE
 Participant Name: ${participantName}
