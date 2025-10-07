@@ -284,65 +284,73 @@
       style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none;color: darkslategrey; cursor: pointer;"
       onclick="toggleInfo(this)">Hide</button>
   </div>
-<div id="study-info">
-<p><strong>📘 Study Overview:</strong>You have been invited to serve as one of five expert participants in a research study. Your expertise will help us conduct foundational research that supports future efforts to make code easier for developers to understand.</p>
+  <div id="study-info">
+    <p><strong>📘 Study Overview:</strong> You have been invited to serve as one of five expert participants in a research study. Your expertise will help us conduct foundational research that supports future efforts to make code easier for developers to understand.</p>
 
-<p><strong>🎯 Goal:</strong> To establish an expert-determined ranking of the comprehensibility of 8 Java code snippets, which will later serve as the ground-truth ranking in a follow-up study involving student participants.</p>
+    <p><strong>🎯 Goal:</strong> To establish an expert-determined ranking of the comprehensibility of 8 Java code snippets, which will later serve as the ground-truth ranking in a follow-up study involving student participants.</p>
 
-<p><strong>🧠 What You'll Do:</strong> You'll review <strong>8 Java code snippets</strong> across up to <strong>3 rounds</strong>, answer a few questions, and rank the snippets based on how easy or difficult they are to understand.</p>
+    <p><strong>🧠 What You'll Do:</strong> You'll review <strong>8 Java code snippets</strong> across <strong>3 rounds</strong>, answer a few questions, rank the snippets, and in the final round, join a discussion phase to help refine consensus.</p>
 
-<p><strong>⏳ Duration:</strong> Round 1 is expected to take less than <strong>90 minutes</strong>, and each subsequent round is expected to take less than <strong>60 minutes</strong>. You’ll be able to complete each round on your own schedule before the deadline.</p>
+    <p><strong>⏳ Duration:</strong> Round 1 is expected to take less than <strong>90 minutes</strong>, Round 2 less than <strong>60 minutes</strong>, and Round 3 (discussion phase) about <strong>40 minutes</strong>. You’ll be able to complete each round on your own schedule before the deadline.</p>
 
-<p><strong>💻 Format:</strong> The study is conducted entirely <strong>online</strong>. You'll complete all tasks through our secure web platform, without any live meetings or direct contact with other participants.</p>
+    <p><strong>💻 Format:</strong> The study is conducted entirely <strong>online</strong>. You'll complete all tasks through our secure web platform, without any live meetings or direct contact with other participants.</p>
 
-<p><strong>🔁 Process:</strong> After each round, we’ll share anonymized feedback from other experts to help guide consensus on a shared ranking. The study concludes once consensus is reached, or after round 3. (This process is based on the <a href="https://en.wikipedia.org/wiki/Delphi_method" target="_blank">Delphi method</a>)</p>
+    <p><strong>🔁 Process:</strong> After each round, we’ll share anonymized feedback from other experts to help guide consensus on a shared ranking. The study concludes once consensus is reached, or after Round 3. (This process is based on the <a href="https://en.wikipedia.org/wiki/Delphi_method" target="_blank">Delphi method</a>)</p>
 
-<p><strong>🎁 Gift:</strong> While we recognize that we cannot fully compensate you for your valuable time and expertise given our limited research budget, you will receive a $50 Amazon gift card as a token of appreciation after the study concludes.</p>
+    <p><strong>🎁 Gift:</strong> While we recognize that we cannot fully compensate you for your valuable time and expertise given our limited research budget, you will receive a $50 Amazon gift card as a token of appreciation after the study concludes.</p>
 
-<p><strong>🔒 Confidentiality:</strong> Your responses will be kept confidential and anonymized in all communications and publications. Only the research team will have access to your identifiable information.</p>
+    <p><strong>🔒 Confidentiality:</strong> Your responses will be kept confidential and anonymized in all communications and publications. Only the research team will have access to your identifiable information.</p>
 
+    <p><a href="#"
+      onclick="document.getElementById('detailed-info').style.display='block'; this.style.display='none'; return false;">📘
+      Learn more about what to expect</a></p>
 
-      <p><a href="#"
-          onclick="document.getElementById('detailed-info').style.display='block'; this.style.display='none'; return false;">📘
-          Learn more about what to expect</a></p>
+    <div id="detailed-info" style="display: none;">
+      <p>Here's what will be involved:</p>
+      <ul>
+        <li>This study will involve five experts like yourself.</li>
+        <li>Our goal is to establish an expert-determined ranking of the comprehensibility of 8 Java code snippets.</li>
+        <li class="summary-text">After agreeing to participate, you will receive an email containing your username, password, and a link to complete Round 1.</li>
 
-      <div id="detailed-info" style="display: none;">
-        <p>Here's what will be involved:</p>
+        <!-- Round 1 -->
+        <li class="detailed-only"><strong>Round 1 (approx. 90 minutes):</strong>
+          <ul>
+            <li><strong>Phase 1:</strong> Review each code snippet and write a short summary. Also provide your assessment of how easy or difficult it is to understand.</li>
+            <li><strong>Phase 2:</strong> Rank all 8 snippets from easiest to hardest to understand. You may group snippets together if you feel they are similarly understandable.</li>
+            <li><strong>Phase 3:</strong> Explain your reasoning behind your ranking and any groupings you formed.</li>
+          </ul>
+        </li>
 
-<ul>
-  <li>This study will involve five experts like yourself.</li>
-<li>Our goal is to establish an expert-determined ranking of the comprehensibility of 8 Java code snippets.</li>
-<li class="summary-text">After agreeing to participate, you will receive an email containing your username, password, and a link to complete Round 1.</li>
-  <li class="detailed-only"><strong>Your task in Round 1 (approximately less than 90 minutes):</strong>
-    <ul>
-      <li class="detailed-only"><strong>Phase 1:</strong> Review each code snippet and write a short summary. Also provide your assessment of how easy or difficult it is to understand.</li>
-      <li class="detailed-only"><strong>Phase 2:</strong> Rank all 8 snippets from easiest to hardest to understand. You may group snippets together if you feel they are similarly understandable.</li>
-      <li class="detailed-only"><strong>Phase 3:</strong> Explain your reasoning behind your ranking and any groupings you formed.</li>
-    </ul>
-  </li>
+        <!-- Round 2 -->
+        <li class="detailed-only"><strong>Round 2 (approx. 60 minutes):</strong>
+          <ul>
+            <li><strong>Phase 1:</strong> Review your own and other experts’ anonymized summaries and assessments from the previous round.</li>
+            <li><strong>Phase 2:</strong> Review your own and other experts’ rankings and the reasoning behind them.</li>
+            <li><strong>Phase 3:</strong> Reflect on major disagreements between experts, as identified by the research team. You’ll be asked a few questions to share your thoughts.</li>
+            <li><strong>Phase 4:</strong> Update your ranking of the code snippets, if desired.</li>
+            <li><strong>Phase 5:</strong> Explain your reasoning behind any changes you made to your ranking or groupings.</li>
+          </ul>
+        </li>
 
-  <li class="detailed-only">After all experts have submitted their Round 1 responses, the research team will assess whether a consensus on a shared ranking has been reached. If so, the study concludes. If not, another round will be initiated via email.</li>
+        <!-- Round 3 -->
+        <li class="detailed-only"><strong>Round 3 (approx. 40 minutes, Discussion Phase):</strong>
+          <p>This final round is conducted because some disagreements may remain among experts. You will:</p>
+          <ul>
+            <li>Review prior feedback and reasoning from earlier rounds.</li>
+            <li>Participate in focused, anonymized discussions with other experts.</li>
+            <li>Update your ranking, if you wish, based on the discussion.</li>
+          </ul>
+          <p>These activities are interconnected. While they are shown separately for clarity, you may move between them freely — they are not strictly sequential.</p>
+        </li>
 
-  <li class="detailed-only"><strong>In Rounds 2 (and possibly 3) (approximately 60 minutes each):</strong>
-    <ul>
-      <li class="detailed-only"><strong>Phase 1:</strong> Review your own and other experts’ anonymized summaries and assessments from the previous round.</li>
-      <li class="detailed-only"><strong>Phase 2:</strong> Review your own and other experts’ rankings and the reasoning behind them.</li>
-      <li class="detailed-only"><strong>Phase 3:</strong> Reflect on major disagreements between experts, as identified by the research team. You’ll be asked a few questions to share your thoughts.</li>
-      <li class="detailed-only"><strong>Phase 4:</strong> Update your ranking of the code snippets, if desired.</li>
-      <li class="detailed-only"><strong>Phase 5:</strong> Explain your reasoning behind any changes you made to your ranking or groupings.</li>
-    </ul>
-  </li>
+        <li class="summary-text">After Round 3, if consensus is still not reached, a statistical aggregation method will be applied to determine the final expert-informed ranking.</li>
+      </ul>
 
-  <li class="summary-text">After each round, the research team will check for consensus among experts. If consensus is reached, the study will conclude early.</li>
-
-  <li class="summary-text">If consensus is not reached after the third round, a statistical aggregation method will be applied to determine a final expert-informed ranking.</li>
-</ul>
-
-
-        <p>We appreciate your interest, your participation helps advance research in software engineering education!</p>
-      </div>
+      <p>We appreciate your interest — your participation helps advance research in software engineering education!</p>
     </div>
   </div>
+</div>
+
 
 
   <div class="email-box" id="email-box">
