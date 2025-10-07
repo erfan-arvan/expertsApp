@@ -287,6 +287,15 @@
   <div id="study-info">
     <p><strong>📘 Study Overview:</strong> You have been invited to serve as one of five expert participants in a research study. Your expertise will help us conduct foundational research that supports future efforts to make code easier for developers to understand.</p>
 
+      <button 
+    style="padding: 10px 20px; font-size: 15px; border: none; border-radius: 6px; background-color: #4CAF50; color: white; cursor: pointer; margin-top: 15px;"
+    onmouseover="this.style.backgroundColor='#45a049'" 
+    onmouseout="this.style.backgroundColor='#4CAF50'"
+    onclick="document.getElementById('email-box').scrollIntoView({ behavior: 'smooth' });">
+    ✅ Check if you are eligible
+  </button>
+
+
     <p><strong>🎯 Goal:</strong> To establish an expert-determined ranking of the comprehensibility of 8 Java code snippets, which will later serve as the ground-truth ranking in a follow-up study involving student participants.</p>
 
     <p><strong>🧠 What You'll Do:</strong> You'll review <strong>8 Java code snippets</strong> across <strong>3 rounds</strong>, answer a few questions, rank the snippets, and in the final round, join a discussion phase to help refine consensus.</p>
@@ -300,13 +309,6 @@
     <p><strong>🎁 Gift:</strong> While we recognize that we cannot fully compensate you for your valuable time and expertise given our limited research budget, you will receive a <strong>$50 Amazon gift card</strong> and a <strong>certificate of participation</strong> from NJIT and William &amp; Mary as tokens of appreciation after the study concludes.</p>
 
     <p><strong>🔒 Confidentiality:</strong> Your responses will be kept confidential and anonymized in all communications and publications. Only the research team will have access to your identifiable information.</p>
-
-    <button
-      style="padding: 10px 16px; font-size: 15px; border-radius: 6px; background-color: #007acc; color: white; border: none; cursor: pointer;"
-      onclick="window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });">
-      ✅ Check if you are eligible
-    </button>
-
 
     <p><a href="#"
       onclick="document.getElementById('detailed-info').style.display='block'; this.style.display='none'; return false;">📘
