@@ -270,6 +270,26 @@
   animation: glowPulse 1.5s infinite alternate;
 }
 
+.container {
+  display: flex;
+  flex-wrap: wrap; /* allows them to stack when needed */
+  gap: 20px;       /* space between boxes */
+}
+
+.email-box {
+  flex: 1;                 /* each box takes equal width */
+  min-width: 280px;        /* prevents shrinking too small */
+  box-sizing: border-box;
+}
+
+/* Responsive rule: stack on smaller screens */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+}
+
+
 
   </style>
 </head>
@@ -368,6 +388,7 @@
 
 
 
+<div class="container">
   <div class="email-box" id="email-box">
     <h2>Check Your Eligibility To Participate</h2>
     <p>To see if you qualify for this study, please enter your email address below and answer a few quick questions.</p>
@@ -376,10 +397,12 @@
   </div>
 
   <div class="email-box">
-        <div class="referrals-section">
-        <iframe class="referrals-widget" src="/referrals.html" ></iframe>
+    <div class="referrals-section">
+      <iframe class="referrals-widget" src="/referrals.html"></iframe>
     </div>
   </div>
+</div>
+
 
   <div class="survey-box hidden" id="survey-box">
     <h3>Eligibility Questions</h3>
