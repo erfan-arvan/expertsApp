@@ -1244,11 +1244,17 @@
             const participantName = participantNameInput?.innerText.trim() || '';
             const signatureName = signatureConfirmSpan?.innerText.trim() || '';
 
-            // Validation: check if names match
-            if (participantName !== signatureName) {
-                alert("The name entered in the signature does not match the participant's name.");
-                return; // Stop submission
+            if (participantName) {
+                localStorage.setItem("referrerName", participantName);
             }
+
+            // Validation: check if names match
+            // Validation: check if names match (ignore case)
+            if (participantName.trim().toLowerCase() !== signatureName.trim().toLowerCase()) {
+            alert("The name entered in the signature does not match the participant's name.");
+            return; // Stop submission
+            }
+
 
             const consentForm = {
                 fullName: participantNameInput?.innerText.trim() || '',
