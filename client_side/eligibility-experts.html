@@ -329,6 +329,14 @@ body.modal-open { overflow: hidden; }
   .modal-content { padding: 20px; }
 }
 
+.shrinked-iframe {
+  transform: scale(0.85);   /* shrink to 85% */
+  transform-origin: top center; /* keep it aligned at top */
+  width: 118%;              /* counteract the shrink so it still fills */
+  height: 500px;            /* fixed or flexible height */
+  border: none;
+}
+
 
   </style>
 </head>
@@ -438,7 +446,7 @@ body.modal-open { overflow: hidden; }
   <div class="email-box" id="referrals-box">
         <h2>I don't want to participate</h2>
     <div class="referrals-section">
-      <iframe class="referrals-widget" src="/referrals2.html"></iframe>
+      <iframe class="referrals-widget shrinked-iframe" src="/referrals2.html"></iframe>
     </div>
   </div>
 </div>
