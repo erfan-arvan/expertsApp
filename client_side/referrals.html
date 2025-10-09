@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Recommend Colleagues</title>
 <style>
   :root { --blue:#007acc; --blueH:#005a99; --ok:#1b5e20; --okBg:#e6f4ea; --err:#b00020; --errBg:#fdecea; }
@@ -14,8 +14,8 @@
 
   /* Banners */
   .banner { display:none; padding:10px 12px; border-radius:8px; margin:12px 0; font-weight:600; }
-  .banner--success { display:none; color:var(--ok); background:var(--okBg); border:1px solid var(--ok); }
-  .banner--error   { display:none; color:var(--err); background:var(--errBg); border:1px solid var(--err); }
+  .banner--success { color:var(--ok); background:var(--okBg); border:1px solid var(--ok); }
+  .banner--error   { color:var(--err); background:var(--errBg); border:1px solid var(--err); }
   .banner ul { margin:6px 0 0 18px; }
 
   .referral-field { display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:nowrap; }
@@ -59,6 +59,27 @@
     .referral-field{ flex-wrap:wrap; }
     .referral-remove{ margin-bottom:4px; }
   }
+
+  /* === Referrer gate === */
+  .referrer-gate {
+    display:none;
+    background:#fff;
+    border:1px dashed #ccc;
+    border-radius:8px;
+    padding:12px;
+    margin:12px 0 6px;
+  }
+  .referrer-gate.show { display:block; }
+  .referrer-gate h5 { margin:0 0 8px; font-size:1rem; }
+  .referrer-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; align-items:center; }
+  .referrer-row input[type="text"],
+  .referrer-row input[type="email"]{
+    min-width:0;
+    padding:8px 10px; border:1px solid #ccc; border-radius:6px; font-size:.95rem;
+  }
+  @media (max-width:520px){
+    .referrer-row { grid-template-columns:1fr; }
+  }
 </style>
 </head>
 <body>
@@ -71,6 +92,17 @@
   <div id="errorBanner"   class="banner banner--error"   role="alert" aria-live="assertive"></div>
   <div id="successBanner" class="banner banner--success" role="status" aria-live="polite"></div>
 
+  <!-- === Referrer info gate (visible until first successful submit) === -->
+<div id="referrerGate" class="referrer-gate show" aria-live="polite">
+    <h5>Your information (required once)</h5>
+    <div class="referrer-row">
+      <input id="referrerNameInput"  type="text"  placeholder="Your full name (optional)" autocomplete="name"/>
+      <input id="referrerEmailInput" type="email" placeholder="you@domain.com (required)" autocomplete="email"/>
+    </div>
+    <small>We only ask this once to link your recommendations to you.</small>
+  </div>
+
+  <!-- referral rows -->
   <div class="referral-fields" id="referralFields"></div>
 
   <div class="actions">
@@ -82,13 +114,69 @@
 </div>
 
 <script>
-  // ========= Helpers =========
+  /* ================== Helpers & constants ================== */
   const qs  = (sel, sc=document) => sc.querySelector(sel);
   const qsa = (sel, sc=document) => Array.from(sc.querySelectorAll(sel));
-
-  // modest email check (good enough for UX)
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+  // Storage keys
+  const KEY_REF_EMAIL   = 'referrerEmail';
+  const KEY_REF_NAME    = 'referrerName';
+  const KEY_FIRST_DONE  = 'referralsFirstSubmitDone';
+
+  /* ---- storage helpers (write to BOTH session/local) ---- */
+  function writeBoth(key, val){
+    try { sessionStorage.setItem(key, val); } catch {}
+    try { localStorage.setItem(key,  val); } catch {}
+  }
+  function readEither(key){
+    const v = (sessionStorage.getItem(key) || localStorage.getItem(key) || '').trim();
+    return v;
+  }
+  function removeBoth(key){
+    try { sessionStorage.removeItem(key); } catch {}
+    try { localStorage.removeItem(key); } catch {}
+  }
+
+  function markFirstSubmitDone(){ 
+    // writeBoth(KEY_FIRST_DONE, '1'); 
+}
+  function isFirstSubmitDone(){ 
+    // return readEither(KEY_FIRST_DONE) === '1';
+    return false; 
+}
+
+  /* ---- iframe auto-height ---- */
+  function postHeight() {
+    const h = document.documentElement.scrollHeight;
+    parent.postMessage({ type:'referral-iframe-height', height:h }, '*');
+  }
+  const ro = new ResizeObserver(() => postHeight());
+  ro.observe(document.body);
+
+  /* ================== Referrer state ================== */
+  let referrerEmail = '';
+  let referrerName  = '';
+
+  function setReferrerEmail(email, {announce=true} = {}){
+    referrerEmail = (email || '').trim();
+    if (referrerEmail) writeBoth(KEY_REF_EMAIL, referrerEmail);
+    if (announce) parent.postMessage({ type:'referrer-email-set', email:referrerEmail }, '*');
+  }
+  function setReferrerName(name, {announce=false} = {}){
+    referrerName = (name || '').trim();
+    if (referrerName) writeBoth(KEY_REF_NAME, referrerName);
+    if (announce) parent.postMessage({ type:'referrer-name-set', name:referrerName }, '*');
+  }
+
+  function toggleGate(){
+    const gate = qs('#referrerGate');
+    gate.classList.add('show'); // always visible
+    postHeight();
+  }
+
+
+  /* ================== UI pieces ================== */
   function rowTemplate() {
     const div = document.createElement('div');
     div.className = 'referral-field';
@@ -97,47 +185,26 @@
       <input type="text"  placeholder="Colleague Name"  autocomplete="off">
       <input type="email" placeholder="Colleague Email" autocomplete="off">
     `;
-    // remove row
     div.querySelector('.referral-remove').addEventListener('click', () => {
       div.remove();
       postHeight();
     });
     return div;
   }
-
   function ensureInitialRows(n=2) {
     const container = qs('#referralFields');
     for (let i = 0; i < n; i++) container.appendChild(rowTemplate());
   }
 
-  // ========= iframe auto-height =========
-  function postHeight() {
-    const h = document.documentElement.scrollHeight;
-    parent.postMessage({ type:'referral-iframe-height', height: h }, '*');
-  }
-  const ro = new ResizeObserver(() => postHeight());
-  ro.observe(document.body);
-
-  // ========= Referrer email source =========
-  // A) ?referrer=alice@example.com
-  let referrerEmail = new URLSearchParams(location.search).get('referrer')?.trim() || '';
-  // B) parent can send it via postMessage
-  window.addEventListener('message', (e) => {
-    const data = e.data || {};
-    if (data.type === 'setReferrerEmail' && typeof data.email === 'string') {
-      referrerEmail = data.email.trim();
-    }
-  });
-
-  // ========= Validation / payload =========
+  /* ================== Banners ================== */
   function clearErrors() {
-    qs('#errorBanner').style.display   = 'none';
-    qs('#errorBanner').innerHTML       = '';
-    qs('#successBanner').style.display = 'none';
+    const eb = qs('#errorBanner');
+    const sb = qs('#successBanner');
+    eb.style.display = 'none'; eb.innerHTML = '';
+    sb.style.display = 'none'; sb.textContent = '';
     qsa('.input-error').forEach(el => el.classList.remove('input-error'));
     qsa('.row-error').forEach(el => el.classList.remove('row-error','shake'));
   }
-
   function showError(messages, focusEl=null) {
     const banner = qs('#errorBanner');
     const list = Array.isArray(messages) ? messages : [messages];
@@ -150,7 +217,6 @@
     }
     postHeight();
   }
-
   function showSuccess(text) {
     const banner = qs('#successBanner');
     banner.textContent = text;
@@ -158,10 +224,41 @@
     postHeight();
   }
 
-  // Build payload and collect validation errors
-  function buildAndValidatePayload() {
+  /* ================== Submit ================== */
+  async function submitReferrals() {
+    clearErrors();
+
+    // Read current inputs (prefer UI, fall back to mem/storage)
+    const nameInp  = qs('#referrerNameInput');
+    const emailInp = qs('#referrerEmailInput');
+
+    const typedName   = (nameInp?.value  || '').trim();
+    const typedEmail  = (emailInp?.value || '').trim();
+
+    const storedName  = readEither(KEY_REF_NAME);
+    const storedEmail = readEither(KEY_REF_EMAIL);
+
+    const effectiveEmail = typedEmail || referrerEmail || storedEmail;
+    const effectiveName  = typedName  || referrerName  || storedName;
+
+    // Validate email (required)
+    if (!EMAIL_RE.test(effectiveEmail)) {
+      if (emailInp) {
+        emailInp.classList.add('input-error');
+        emailInp.focus({ preventScroll:true });
+      }
+      toggleGate();
+      showError('Please enter a valid email for yourself before submitting.');
+      return;
+    }
+
+    // Persist the latest name/email (name is optional, still store it if present)
+    setReferrerEmail(effectiveEmail, {announce:false});
+    if (effectiveName) setReferrerName(effectiveName, {announce:false});
+
+    // Build payload
     const rows = qsa('.referral-field');
-    const payload = { referrerEmail, referrals: [] };
+    const payload = { referrerEmail: effectiveEmail, referrerName: effectiveName || '', referrals: [] };
     const errors = [];
     let firstBadInput = null;
 
@@ -170,10 +267,8 @@
       const name  = (nameEl?.value || '').trim();
       const email = (emailEl?.value || '').trim();
 
-      // ignore completely empty rows
-      if (!name && !email) return;
+      if (!name && !email) return; // ignore empty rows
 
-      // require both if one is filled
       if (name && !email) {
         errors.push(`Row ${i+1}: please enter the colleague’s email.`);
         emailEl?.classList.add('input-error');
@@ -188,8 +283,6 @@
         if (!firstBadInput) firstBadInput = nameEl;
         return;
       }
-
-      // validate email format
       if (email && !EMAIL_RE.test(email)) {
         errors.push(`Row ${i+1}: “${email}” doesn’t look like a valid email.`);
         emailEl?.classList.add('input-error');
@@ -204,42 +297,37 @@
     if (payload.referrals.length === 0) {
       errors.push('Add at least one colleague (name + valid email).');
       if (!firstBadInput) {
-        // try to focus first row name input
         const firstName = qsa('.referral-field input[type="text"]')[0];
         if (firstName) firstBadInput = firstName;
       }
     }
 
-    return { payload, errors, firstBadInput };
-  }
+    if (errors.length) { showError(errors, firstBadInput); return; }
 
-  // ========= Submit =========
-  async function submitReferrals() {
-    clearErrors();
-    const { payload, errors, firstBadInput } = buildAndValidatePayload();
-    if (errors.length) {
-      showError(errors, firstBadInput);
-      return;
-    }
-
+    // Submit
     const btn = qs('#submitBtn');
     btn.disabled = true;
-
     try {
+        console.log('[referrals] payload', JSON.stringify(payload, null, 2));
       const res  = await fetch('/submit_referrals', {
         method: 'POST',
         headers: { 'Content-Type':'application/json' },
         body: JSON.stringify(payload)
       });
-      const text = await res.text(); // capture any server message
+      const text = await res.text();
       if (!res.ok) throw new Error(text || 'Server error');
 
+      // Success: mark first submit done -> hide the gate from now on
+      markFirstSubmitDone();
       showSuccess(`Thanks! Submitted ${payload.referrals.length} referral${payload.referrals.length>1?'s':''}.`);
       parent.postMessage({ type:'referral-submitted', count: payload.referrals.length }, '*');
 
-      // Optional: clear rows and leave one fresh row
+      // Clear rows and leave one fresh row
       qs('#referralFields').innerHTML = '';
       qs('#addBtn').click();
+
+      // Hide the gate henceforth
+      toggleGate();
     } catch (e) {
       showError(e.message || 'Could not submit referrals. Please try again.');
     } finally {
@@ -247,9 +335,76 @@
     }
   }
 
-  // ========= Init =========
+  /* ================== Init ================== */
+  // Accept URL params (optional): ?referrer=me@x.com&refname=First%20Last
+  const params      = new URLSearchParams(location.search);
+  const urlParamRef = (params.get('referrer') || '').trim();
+  const urlParamNam = (params.get('refname')  || '').trim();
+
+  // Accept postMessage from parent (optional)
+  window.addEventListener('message', (e) => {
+    const data = e.data || {};
+    if (data.type === 'setReferrerEmail' && typeof data.email === 'string') {
+      const em = data.email.trim();
+      if (EMAIL_RE.test(em)) setReferrerEmail(em);
+    }
+    if (data.type === 'setReferrerName' && typeof data.name === 'string') {
+      setReferrerName(data.name.trim());
+    }
+    if (data.type === 'clearReferrerEmail') {
+      removeBoth(KEY_REF_EMAIL);
+      setReferrerEmail('', {announce:false});
+      showError('Please enter your email again.');
+    }
+  });
+
+  function attachReferrerAutoSave(){
+    const nameInp  = qs('#referrerNameInput');
+    const emailInp = qs('#referrerEmailInput');
+    if (nameInp) {
+      nameInp.addEventListener('blur', () => {
+        const v = (nameInp.value || '').trim();
+        if (v) setReferrerName(v);
+      });
+      nameInp.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); const v = (nameInp.value || '').trim(); if (v) setReferrerName(v); }
+      });
+    }
+    if (emailInp) {
+      const trySet = () => {
+        const v = (emailInp.value || '').trim();
+        if (EMAIL_RE.test(v)) {
+          setReferrerEmail(v);
+          clearErrors();
+          showSuccess('Saved your email. You can now submit referrals.');
+        }
+      };
+      emailInp.addEventListener('blur', trySet);
+      emailInp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); trySet(); } });
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
-    ensureInitialRows(2);
+    // seed from URL / storage
+    const storedEmail = readEither(KEY_REF_EMAIL);
+    const storedName  = readEither(KEY_REF_NAME);
+
+    if (urlParamRef && EMAIL_RE.test(urlParamRef)) setReferrerEmail(urlParamRef, {announce:false});
+    else if (storedEmail && EMAIL_RE.test(storedEmail)) setReferrerEmail(storedEmail, {announce:false});
+
+    if (urlParamNam) setReferrerName(urlParamNam, {announce:false});
+    else if (storedName) setReferrerName(storedName, {announce:false});
+
+    // prefill visible inputs
+    const nameInp  = qs('#referrerNameInput');
+    const emailInp = qs('#referrerEmailInput');
+    if (nameInp)  nameInp.value  = (referrerName  || storedName  || urlParamNam || '');
+    if (emailInp) emailInp.value = (referrerEmail || storedEmail || urlParamRef || '');
+
+    // keep gate visible until first successful submit
+    toggleGate();
+
+    // add/remove + submit wiring
     qs('#addBtn').addEventListener('click', () => {
       const row = rowTemplate();
       qs('#referralFields').appendChild(row);
@@ -257,7 +412,13 @@
       postHeight();
     });
     qs('#submitBtn').addEventListener('click', submitReferrals);
+
+    // start with two rows
+    ensureInitialRows(2);
     postHeight();
+
+    // autosave name/email on blur/Enter
+    attachReferrerAutoSave();
   });
 </script>
 </body>
