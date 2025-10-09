@@ -286,11 +286,8 @@
         return;
       }
 
-        payload.referrals.push({
-        email: name ? `${name} <${email}>` : email
-        });
-
-});
+      payload.referrals.push({ name, email });
+    });
 
     if (payload.referrals.length === 0) {
       errors.push('Add at least one colleague (name + valid email).');
