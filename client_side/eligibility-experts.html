@@ -388,7 +388,7 @@
 
 
 
-<div class="container" >
+<div class="container" id="referrals-box">
   <div class="email-box" id="email-box">
     <h2>I want to participate</h2>
     <p>To see if you qualify for this study, please enter your email address below and answer a few quick questions.</p>
@@ -396,7 +396,7 @@
     <button onclick="startSurvey()" class="full-width-btn">Check My Eligibility</button>
   </div>
 
-  <div class="email-box">
+  <div class="email-box" >
         <h2>I don't want to participate</h2>
     <div class="referrals-section">
       <iframe class="referrals-widget" src="/referrals2.html"></iframe>
@@ -576,6 +576,10 @@ const questions = [
       document.getElementById('email-box').classList.add('hidden');
       document.getElementById('survey-box').classList.remove('hidden');
       hideStudyInfoIfVisible();
+
+        const referralsBox = document.getElementById('referrals-box');
+        if (referralsBox) referralsBox.classList.add('hidden');
+
       showQuestion();
     }
 
