@@ -249,186 +249,128 @@
     }
 
     @media (max-width: 600px) {
-      body {
-        margin: 16px;
-      }
+  body {
+    margin: 16px;
+  }
 
-      .instructions,
-      .email-box,
-      .survey-box,
-      .slots-box {
-        padding: 16px;
-      }
+  .instructions,
+  .email-box,
+  .survey-box,
+  .slots-box {
+    padding: 16px;
+  }
 
-      .modal-content {
-        max-width: 90%;
-        padding: 20px;
-      }
-    }
+  .modal-content {
+    max-width: 90%;
+    padding: 20px;
+  }
+}
 
-    #gotoconsent {
-      animation: glowPulse 1.5s infinite alternate;
-    }
+#gotoconsent{
+  animation: glowPulse 1.5s infinite alternate;
+}
 
-    .tooltip {
-      position: relative;
-      display: inline-block;
-      cursor: help;
-      border-bottom: 1px dotted #555;
-    }
 
-    .tooltip .tooltip-text {
-      visibility: hidden;
-      width: 260px;
-      background-color: #333;
-      color: #fff;
-      text-align: left;
-      padding: 8px 10px;
-      border-radius: 6px;
-      position: absolute;
-      z-index: 1;
-      bottom: 125%;
-      /* Show above the word */
-      left: 50%;
-      transform: translateX(-50%);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .tooltip:hover .tooltip-text {
-      visibility: visible;
-      opacity: 1;
-    }
   </style>
 </head>
 
 <body>
 
-  <h1 style="text-align: center; font-weight: bold;">
-    Ranking Code Snippets by Comprehension Difficulty
-  </h1>
+
+<div class="instructions">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h3>About This Study</h3>
+    <button
+      style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none;color: darkslategrey; cursor: pointer;"
+      onclick="toggleInfo(this)">Hide</button>
+  </div>
+  <div id="study-info">
+
+          <button 
+    style="padding: 10px 20px; font-size: 15px; border: none; border-radius: 6px; background-color: #4CAF50; color: white; cursor: pointer; margin: 5px;"
+    onmouseover="this.style.backgroundColor='#45a049'" 
+    onmouseout="this.style.backgroundColor='#4CAF50'"
+    onclick="document.getElementById('email-box').scrollIntoView({ behavior: 'smooth' });">
+    ✅ Check if you are eligible
+  </button>
+
+    <p><strong>📘 Study Overview:</strong> You have been invited to serve as one of five expert participants in a research study. Your expertise will help us conduct foundational research that supports future efforts to make code easier for developers to understand.</p>
 
 
-  <div class="instructions">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <h3>About This Study</h3>
-      <button
-        style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none;color: darkslategrey; cursor: pointer;"
-        onclick="toggleInfo(this)">Hide</button>
-    </div>
-    <div id="study-info">
+    <p><strong>🎯 Goal:</strong> To establish an expert-determined ranking of the comprehensibility of 8 Java code snippets, which will later serve as the ground-truth ranking in a follow-up study involving student participants.</p>
 
-      <button
-        style="padding: 10px 20px; font-size: 15px; border: none; border-radius: 6px; background-color: #4CAF50; color: white; cursor: pointer; margin: 5px;"
-        onmouseover="this.style.backgroundColor='#45a049'" onmouseout="this.style.backgroundColor='#4CAF50'"
-        onclick="document.getElementById('email-box').scrollIntoView({ behavior: 'smooth' });">
-        ✅ Check if you are eligible
-      </button>
+    <p><strong>🧠 What You'll Do:</strong> You'll review <strong>8 Java code snippets</strong> across <strong>3 rounds</strong>. You’ll answer a few questions, rank the snippets, reflect on others’ perspectives, and in the final round, join a chat discussion to potentially resolve disagreements.</p>
 
-      <p><strong>📘 Study Overview:</strong> You have been invited to serve as one of five expert participants in a
-        research study. Your expertise will help us conduct foundational research that supports future efforts to make
-        code easier for developers to understand.</p>
+    <p><strong>⏳ Duration:</strong> Round 1 is expected to take about <strong>75 minutes</strong>, Round 2 <strong>45 minutes</strong>, and Round 3 (discussion phase) about <strong>40 minutes</strong>. You’ll have up to <strong>one week</strong> to complete each round on your own schedule before the deadline.</p>
+
+    <p><strong>💻 Format:</strong> The study is conducted entirely <strong>online</strong>. You'll complete all tasks through our secure web platform, without any live meetings or direct contact with other participants.</p>
+
+    <p><strong>🔁 Process:</strong> After each round, we’ll share anonymized feedback from other experts to help guide consensus on a shared ranking. The study concludes once consensus is reached, or after Round 3. (This process is based on the <a href="https://en.wikipedia.org/wiki/Delphi_method" target="_blank">Delphi method</a>)</p>
+
+    <p><strong>🎁 Gift:</strong> While we recognize that we cannot fully compensate you for your valuable time and expertise given our limited research budget, you will receive a <strong>$50 Amazon gift card</strong> and a <strong>certificate of participation</strong> from NJIT and William &amp; Mary as tokens of appreciation after the study concludes.</p>
+
+    <p><strong>🔒 Confidentiality:</strong> Your responses will be kept confidential and anonymized in all communications and publications. Only the research team will have access to your identifiable information.</p>
+
+    <p><strong>🗓️ Start Time:</strong> The study’s start date and time are <strong>TBD</strong>. You’ll be notified by email once finalized.</p>
 
 
-      <p><strong>🎯 Goal:</strong> To establish an expert-determined ranking of the comprehensibility of 8 Java code
-        snippets, which will later serve as the ground-truth ranking in a follow-up study involving student
-        participants.</p>
+    <p><a href="#"
+      onclick="document.getElementById('detailed-info').style.display='block'; this.style.display='none'; return false;">📘
+      Learn more about what to expect</a></p>
 
-      <p><strong>🧠 What You'll Do:</strong> You'll review <strong>8 Java code snippets</strong> across <strong>3
-          rounds</strong>. You’ll answer a few questions, rank the snippets, reflect on others’ perspectives, and in the
-        final round, join a chat discussion to potentially resolve disagreements.</p>
+    <div id="detailed-info" style="display: none;">
+      <p>Here's what will be involved:</p>
+      <ul>
+        <li>This study will involve five experts like yourself.</li>
+        <li>Our goal is to establish an expert-determined ranking of the comprehensibility of 8 Java code snippets.</li>
+        <li class="summary-text">After agreeing to participate, you will receive an email containing your username, password, and a link to complete Round 1.</li>
 
-      <p><strong>⏳ Duration:</strong> Round 1 is expected to take about <strong>75 minutes</strong>, Round 2 <strong>45
-          minutes</strong>, and Round 3 (discussion phase) about <strong>40 minutes</strong>. You’ll have up to
-        <strong>one week</strong> to complete each round on your own schedule before the deadline.</p>
+        <!-- Round 1 -->
+        <li class="detailed-only"><strong>Round 1 (approx. 75 minutes):</strong>
+          <ul>
+            <li><strong>Phase 1:</strong> Review each code snippet and write a short summary. Also provide your assessment of how easy or difficult it is to understand.</li>
+            <li><strong>Phase 2:</strong> Rank all 8 snippets from easiest to hardest to understand. You may group snippets together if you feel they are similarly understandable.</li>
+            <li><strong>Phase 3:</strong> Explain your reasoning behind your ranking and any groupings you formed.</li>
+          </ul>
+        </li>
 
-      <p><strong>💻 Format:</strong> The study is conducted entirely <strong>online</strong>. You'll complete all tasks
-        through our secure web platform, without any live meetings or direct contact with other participants.</p>
+        <!-- Round 2 -->
+        <li class="detailed-only"><strong>Round 2 (approx. 45 minutes):</strong>
+          <ul>
+            <li><strong>Phase 1:</strong> Review your own and other experts’ anonymized summaries and assessments from the previous round.</li>
+            <li><strong>Phase 2:</strong> Review your own and other experts’ rankings and the reasoning behind them.</li>
+            <li><strong>Phase 3:</strong> Reflect on major disagreements between experts, as identified by the research team. You’ll be asked a few questions to share your thoughts.</li>
+            <li><strong>Phase 4:</strong> Update your ranking of the code snippets, if desired.</li>
+            <li><strong>Phase 5:</strong> Explain your reasoning behind any changes you made to your ranking or groupings.</li>
+          </ul>
+        </li>
 
-      <p><strong>🔁 Process:</strong> After each round, we’ll share anonymized feedback from other experts to help guide
-        consensus on a shared ranking. The study concludes once consensus is reached, or after Round 3. (This process is
-        based on the <a href="https://en.wikipedia.org/wiki/Delphi_method" target="_blank">Delphi method</a>)</p>
+        <!-- Round 3 -->
+        <li class="detailed-only"><strong>Round 3 (approx. 40 minutes, Discussion Phase):</strong>
+          <p>This final round will be conducted because some disagreements may remain among experts. You will:</p>
+          <ul>
+            <li>Review prior feedback and reasoning from earlier rounds.</li>
+            <li>Participate in focused, anonymized discussions with other experts.</li>
+            <li>Update your ranking, if you wish, based on the discussion.</li>
+          </ul>
+          <p>These activities are interconnected. While they are shown separately for clarity, you may move between them freely — they are not strictly sequential.</p>
+        </li>
 
-      <p><strong>🎁 Gift:</strong> While we recognize that we cannot fully compensate you for your valuable time and
-        expertise given our limited research budget, you will receive a <strong>$50 Amazon gift card</strong> and a
-        <strong>certificate of participation</strong> from NJIT and William &amp; Mary as tokens of appreciation after
-        the study concludes.</p>
+        <li class="summary-text">After Round 3, if consensus is still not reached, a statistical aggregation method will be applied to determine the final expert-informed ranking.</li>
+      </ul>
 
-      <p><strong>🔒 Confidentiality:</strong> Your responses will be kept confidential and anonymized in all
-        communications and publications. Only the research team will have access to your identifiable information.</p>
+      <p>We appreciate your interest — your participation helps advance research in software engineering education!</p>
 
-      <p><strong>🗓️ Start Time:</strong> The study’s start date and time are <strong>TBD</strong>. You’ll be notified
-        by email once finalized.</p>
-
-
-      <p><a href="#"
-          onclick="document.getElementById('detailed-info').style.display='block'; this.style.display='none'; return false;">📘
-          Learn more about what to expect</a></p>
-
-      <div id="detailed-info" style="display: none;">
-        <p>Here's what will be involved:</p>
-        <ul>
-          <li>This study will involve five experts like yourself.</li>
-          <li>Our goal is to establish an expert-determined ranking of the comprehensibility of 8 Java code snippets.
-          </li>
-          <li class="summary-text">After agreeing to participate, you will receive an email containing your username,
-            password, and a link to complete Round 1.</li>
-
-          <!-- Round 1 -->
-          <li class="detailed-only"><strong>Round 1 (approx. 75 minutes):</strong>
-            <ul>
-              <li><strong>Phase 1:</strong> Review each code snippet and write a short summary. Also provide your
-                assessment of how easy or difficult it is to understand.</li>
-              <li><strong>Phase 2:</strong> Rank all 8 snippets from easiest to hardest to understand. You may group
-                snippets together if you feel they are similarly understandable.</li>
-              <li><strong>Phase 3:</strong> Explain your reasoning behind your ranking and any groupings you formed.
-              </li>
-            </ul>
-          </li>
-
-          <!-- Round 2 -->
-          <li class="detailed-only"><strong>Round 2 (approx. 45 minutes):</strong>
-            <ul>
-              <li><strong>Phase 1:</strong> Review your own and other experts’ anonymized summaries and assessments from
-                the previous round.</li>
-              <li><strong>Phase 2:</strong> Review your own and other experts’ rankings and the reasoning behind them.
-              </li>
-              <li><strong>Phase 3:</strong> Reflect on major disagreements between experts, as identified by the
-                research team. You’ll be asked a few questions to share your thoughts.</li>
-              <li><strong>Phase 4:</strong> Update your ranking of the code snippets, if desired.</li>
-              <li><strong>Phase 5:</strong> Explain your reasoning behind any changes you made to your ranking or
-                groupings.</li>
-            </ul>
-          </li>
-
-          <!-- Round 3 -->
-          <li class="detailed-only"><strong>Round 3 (approx. 40 minutes, Discussion Phase):</strong>
-            <p>This final round will be conducted because some disagreements may remain among experts. You will:</p>
-            <ul>
-              <li>Review prior feedback and reasoning from earlier rounds.</li>
-              <li>Participate in focused, anonymized discussions with other experts.</li>
-              <li>Update your ranking, if you wish, based on the discussion.</li>
-            </ul>
-            <p>These activities are interconnected. While they are shown separately for clarity, you may move between
-              them freely — they are not strictly sequential.</p>
-          </li>
-
-          <li class="summary-text">After Round 3, if consensus is still not reached, a statistical aggregation method
-            will be applied to determine the final expert-informed ranking.</li>
-        </ul>
-
-        <p>We appreciate your interest — your participation helps advance research in software engineering education!
-        </p>
-
-        <button
-          style="padding: 10px 20px; font-size: 15px; border: none; border-radius: 6px; background-color: #4CAF50; color: white; cursor: pointer; margin: 5px;"
-          onmouseover="this.style.backgroundColor='#45a049'" onmouseout="this.style.backgroundColor='#4CAF50'"
-          onclick="document.getElementById('email-box').scrollIntoView({ behavior: 'smooth' });">
-          ✅ Check if you are eligible
-        </button>
-      </div>
+                <button 
+    style="padding: 10px 20px; font-size: 15px; border: none; border-radius: 6px; background-color: #4CAF50; color: white; cursor: pointer; margin: 5px;"
+    onmouseover="this.style.backgroundColor='#45a049'" 
+    onmouseout="this.style.backgroundColor='#4CAF50'"
+    onclick="document.getElementById('email-box').scrollIntoView({ behavior: 'smooth' });">
+    ✅ Check if you are eligible
+  </button>
     </div>
   </div>
+</div>
 
 
 
@@ -449,18 +391,18 @@
 
 
   <div class="slots-box hidden" id="consent-form">
-
+    
   </div>
 
 
-  <div class="slots-box hidden" id="slots-box">
-    <div id="eligibility-success" class="success-message">
-      🎉 You're eligible to participate in the study!
-    </div>
+<div class="slots-box hidden" id="slots-box">
+  <div id="eligibility-success" class="success-message">
+    🎉 You're eligible to participate in the study!
+  </div>
     <strong>Please finalize your participation by reading and signing the informed consent form:</strong>
     <br><br>
     <button id="gotoconsent" onclick="window.location='/consent-experts.html'">Final Step: Review Consent Form</button>
-  </div>
+</div>
 
   <!-- Confirmation Section -->
   <div class="confirm-box hidden" id="confirm-box">
@@ -505,11 +447,11 @@
       <h3>Not Eligible</h3>
       <p>Unfortunately, you are not eligible to participate in this study. Thank you for your interest.</p>
 
-      <div class="referrals-section">
-        <iframe class="referrals-widget" src="/referrals.html"></iframe>
-      </div>
+    <div class="referrals-section">
+        <iframe class="referrals-widget" src="/referrals.html" ></iframe>
+    </div>
 
-      <button onclick="document.getElementById('ineligible-modal').classList.add('hidden')">Close</button>
+    <button onclick="document.getElementById('ineligible-modal').classList.add('hidden')">Close</button>
 
     </div>
   </div>
@@ -523,60 +465,60 @@
 
 
   <script>
-    const questions = [
-      {
-        text: "Have you ever received a significant promotion in a software engineering role—for example, a promotion from an entry-level position to the next level where engineers are expected to operate more independently or lead small projects? Examples include a promotion to: Apple ICT3, Facebook E4, Uber Level 4 (Software Engineer II), Microsoft Level 61, Amazon L5, or Walmart L3. <a style='font-size:10px;' href='https://www.levels.fyi' target='_blank'>Learn more about these levels</a>",
-        options: [
-          { label: "Yes, I have received a promotion like that." },
-          { label: "No, I have not received a promotion like that.", ineligible: true }
-        ]
-      },
-      {
-        text: "How many years of professional experience do you have with Java?",
-        options: [
-          { label: "None", ineligible: true },
-          { label: "Less than 1 year" },
-          { label: "1–2 years" },
-          { label: "3–4 years" },
-          { label: "5+ years" }
-        ]
-      },
-      {
-        text: "Have you mentored at least one junior software engineer in a professional setting?",
-        options: [
-          { label: "Yes" },
-          { label: "No", ineligible: true }
-        ]
-      },
-      {
-        text: "What is your age?",
-        options: [
-          { label: "Under 18", ineligible: true },
-          { label: "18–20", },
-          { label: "21–24" },
-          { label: "25–30" },
-          { label: "31–40" },
-          { label: "Over 40" }
-        ]
-      },
-      {
-        text: "Have you been diagnosed with a reading or learning disability, or any condition that affects your ability to read or understand code or instructions?",
-        options: [
-          { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
-          { label: "No, I have not been diagnosed with any such condition" }
-        ]
-      },
-      {
-        text: "How comfortable are you with reading English-language text?",
-        options: [
-          { label: "Not comfortable", ineligible: true },
-          { label: "Slightly comfortable" },
-          { label: "Moderately comfortable" },
-          { label: "Very comfortable" },
-          { label: "Native speaker / fluent" }
-        ]
-      }
-    ];
+const questions = [
+{
+  text: "Have you ever received a significant promotion in a software engineering role—for example, a promotion from an entry-level position to the next level where engineers are expected to operate more independently or lead small projects? Examples include a promotion to: Apple ICT3, Facebook E4, Uber Level 4 (Software Engineer II), Microsoft Level 61, Amazon L5, or Walmart L3. <a style='font-size:10px;' href='https://www.levels.fyi' target='_blank'>Learn more about these levels</a>",
+  options: [
+    { label: "Yes, I have received a promotion like that." },
+    { label: "No, I have not received a promotion like that.", ineligible: true }
+  ]
+},
+{
+  text: "How many years of professional experience do you have with Java?",
+  options: [
+    { label: "None", ineligible: true },
+    { label: "Less than 1 year" },
+    { label: "1–2 years" },
+    { label: "3–4 years" },
+    { label: "5+ years" }
+  ]
+},
+  {
+    text: "Have you mentored at least one junior software engineer in a professional setting?",
+    options: [
+      { label: "Yes" },
+      { label: "No", ineligible: true }
+    ]
+  },
+  {
+    text: "What is your age?",
+    options: [
+      { label: "Under 18", ineligible: true },
+      { label: "18–20",},
+      { label: "21–24" },
+      { label: "25–30" },
+      { label: "31–40" },
+      { label: "Over 40" }
+    ]
+  },
+  {
+    text: "Have you been diagnosed with a reading or learning disability, or any condition that affects your ability to read or understand code or instructions?",
+    options: [
+      { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
+      { label: "No, I have not been diagnosed with any such condition" }
+    ]
+  },
+  {
+    text: "How comfortable are you with reading English-language text?",
+    options: [
+      { label: "Not comfortable", ineligible: true },
+      { label: "Slightly comfortable" },
+      { label: "Moderately comfortable" },
+      { label: "Very comfortable" },
+      { label: "Native speaker / fluent" }
+    ]
+  }
+];
 
     let currentQuestion = 0;
     let answers = [];
@@ -628,25 +570,25 @@
       document.getElementById('nextBtn').innerText = currentQuestion === questions.length - 1 ? 'Check Eligibility' : 'Next';
     }
 
-    function nextQuestion() {
-      const selected = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
-      if (!selected) return alert("Please select an option.");
+function nextQuestion() {
+  const selected = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
+  if (!selected) return alert("Please select an option.");
 
-      const selectedIndex = parseInt(selected.value);
-      answers[currentQuestion] = selectedIndex;
+  const selectedIndex = parseInt(selected.value);
+  answers[currentQuestion] = selectedIndex;
 
-      // Save the selected option to sessionStorage with a proper key
-      const key = `eligibility_q${currentQuestion}`;
-      const selectedOption = questions[currentQuestion].options[selectedIndex].label;
-      sessionStorage.setItem(key, selectedOption);
+  // Save the selected option to sessionStorage with a proper key
+  const key = `eligibility_q${currentQuestion}`;
+  const selectedOption = questions[currentQuestion].options[selectedIndex].label;
+  sessionStorage.setItem(key, selectedOption);
 
-      if (currentQuestion === questions.length - 1) {
-        checkEligibility();
-      } else {
-        currentQuestion++;
-        showQuestion();
-      }
-    }
+  if (currentQuestion === questions.length - 1) {
+    checkEligibility();
+  } else {
+    currentQuestion++;
+    showQuestion();
+  }
+}
 
 
     function prevQuestion() {
@@ -981,48 +923,48 @@
     }
   </script>
 
-  <script>
-    // Find all widgets
-    const widgets = Array.from(document.querySelectorAll('iframe.referrals-widget'));
+   <script>
+        // Find all widgets
+        const widgets = Array.from(document.querySelectorAll('iframe.referrals-widget'));
 
-    // Initialize each iframe
-    widgets.forEach((frame, idx) => {
-      // Set basic styles
-      frame.style.width = '100%';
-      frame.style.border = '0';
-      frame.style.display = 'block';
-      frame.style.overflow = 'hidden';
-      frame.style.height = '240px'; // safe initial height
+        // Initialize each iframe
+        widgets.forEach((frame, idx) => {
+            // Set basic styles
+            frame.style.width = '100%';
+            frame.style.border = '0';
+            frame.style.display = 'block';
+            frame.style.overflow = 'hidden';
+            frame.style.height = '240px'; // safe initial height
 
-      // Decide the referrer email per iframe
-      const perFrameEmail = frame.dataset.referrer || localStorage.getItem('expert_email') || '';
-      // Append it to the iframe src
-      const url = new URL(frame.getAttribute('src'), location.origin);
-      if (perFrameEmail) url.searchParams.set('referrer', perFrameEmail);
-      frame.src = url.toString();
-    });
+            // Decide the referrer email per iframe
+            const perFrameEmail = frame.dataset.referrer || localStorage.getItem('expert_email') || '';
+            // Append it to the iframe src
+            const url = new URL(frame.getAttribute('src'), location.origin);
+            if (perFrameEmail) url.searchParams.set('referrer', perFrameEmail);
+            frame.src = url.toString();
+        });
 
-    // Listen for height / submitted messages from ANY referral iframe
-    window.addEventListener('message', (e) => {
-      const data = e.data || {};
-      if (!data.type) return;
+        // Listen for height / submitted messages from ANY referral iframe
+        window.addEventListener('message', (e) => {
+            const data = e.data || {};
+            if (!data.type) return;
 
-      // Find which iframe sent the message
-      const sender = widgets.find(f => f.contentWindow === e.source);
-      if (!sender) return;
+            // Find which iframe sent the message
+            const sender = widgets.find(f => f.contentWindow === e.source);
+            if (!sender) return;
 
-      if (data.type === 'referral-iframe-height' && typeof data.height === 'number') {
-        sender.style.height = Math.max(220, data.height) + 'px';
-      }
+            if (data.type === 'referral-iframe-height' && typeof data.height === 'number') {
+                sender.style.height = Math.max(220, data.height) + 'px';
+            }
 
-      if (data.type === 'referral-submitted') {
-        // Optional: show a toast or mark that specific section as done
-        // Example:
-        sender.closest('.referrals-section')?.classList.add('submitted');
-        console.log('Referral widget submitted from this iframe:', data.count, 'rows');
-      }
-    });
-  </script>
+            if (data.type === 'referral-submitted') {
+                // Optional: show a toast or mark that specific section as done
+                // Example:
+                sender.closest('.referrals-section')?.classList.add('submitted');
+                console.log('Referral widget submitted from this iframe:', data.count, 'rows');
+            }
+        });
+    </script>
   <footer
     style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
     Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
