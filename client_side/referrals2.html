@@ -89,14 +89,15 @@
   <div id="successBanner" class="banner banner--success" role="status" aria-live="polite"></div>
 
   <!-- === Referrer email gate (only shown first time or if unknown) === -->
-  <div id="referrerGate" class="referrer-gate" aria-live="polite">
-    <h5>Your email (required once)</h5>
-    <div class="referrer-row">
-      <input id="referrerEmailInput" type="email" placeholder="you@domain.com" autocomplete="email" />
-      <button type="button" id="saveReferrerBtn">Save</button>
-    </div>
-    <small>We’ll only ask once. This links your recommendations to your registration. You can change it later if needed.</small>
+<!-- Replace the referrer gate with just the input -->
+<div id="referrerGate" class="referrer-gate" aria-live="polite">
+  <h5>Your email (required once)</h5>
+  <div class="referrer-row">
+    <input id="referrerEmailInput" type="email" placeholder="you@domain.com" autocomplete="email" />
   </div>
+  <small>We’ll only ask once. This links your recommendations to your registration.</small>
+</div>
+
 
   <div class="referral-fields" id="referralFields"></div>
 
@@ -330,59 +331,45 @@
   }
 
   // ========= Init =========
-  document.addEventListener('DOMContentLoaded', () => {
-    // Determine initial referrer email, in priority order:
-    // 1) URL ?referrer=  -> persists to both storages
-    // 2) session/local storage (from prior visit)
-    // 3) (optional) will accept a postMessage later
-    if (urlParamRef && EMAIL_RE.test(urlParamRef)) {
-      setReferrerEmail(urlParamRef);
+document.addEventListener('DOMContentLoaded', () => {
+  // Determine initial referrer email, in priority order:
+  // 1) URL ?referrer=  -> persists to both storages
+  // 2) session/local storage (from prior visit)
+  // 3) otherwise show the gate and auto-save on input
+  if (urlParamRef && EMAIL_RE.test(urlParamRef)) {
+    setReferrerEmail(urlParamRef);
+  } else {
+    const stored = readReferrerFromStorage();
+    if (stored && EMAIL_RE.test(stored)) {
+      setReferrerEmail(stored);
     } else {
-      const stored = readReferrerFromStorage();
-      if (stored && EMAIL_RE.test(stored)) setReferrerEmail(stored);
-      else toggleGate(); // show the gate to collect it
+      toggleGate();           // show the gate to collect it
+      attachReferrerAutoSave();
     }
+  }
 
-    // Wire up gate
-    const saveBtn = qs('#saveReferrerBtn');
-    const emailInp = qs('#referrerEmailInput');
-    if (saveBtn && emailInp) {
-      saveBtn.addEventListener('click', () => {
-        const val = (emailInp.value || '').trim();
-        if (!EMAIL_RE.test(val)) {
-          emailInp.classList.add('input-error'); emailInp.focus();
-          showError('Please enter a valid email for yourself.');
-          return;
-        }
-        emailInp.classList.remove('input-error');
-        setReferrerEmail(val);
-        clearErrors();
-        showSuccess('Saved your email. You can now submit referrals.');
-      });
-      emailInp.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') { e.preventDefault(); saveBtn.click(); }
-      });
+  // Prevent actions that require the referrer email until it’s set
+  qs('#addBtn').addEventListener('click', () => {
+    if (!referrerEmail) {
+      toggleGate();
+      showError('Please enter your email (top of the form) before adding referrals.');
+      const inp = qs('#referrerEmailInput');
+      if (inp) inp.focus();
+      return;
     }
-
-    // Prevent actions that require the referrer email until it’s set
-    qs('#addBtn').addEventListener('click', () => {
-      if (!referrerEmail) {
-        toggleGate();
-        showError('Please enter your email (top of the form) before adding referrals.');
-        return;
-      }
-      const row = rowTemplate();
-      qs('#referralFields').appendChild(row);
-      row.querySelector('input[type="text"]').focus();
-      postHeight();
-    });
-
-    qs('#submitBtn').addEventListener('click', submitReferrals);
-
-    // Start with two rows if allowed
-    ensureInitialRows(2);
+    const row = rowTemplate();
+    qs('#referralFields').appendChild(row);
+    row.querySelector('input[type="text"]').focus();
     postHeight();
   });
+
+  qs('#submitBtn').addEventListener('click', submitReferrals);
+
+  // Start with two rows if allowed
+  ensureInitialRows(2);
+  postHeight();
+});
+
 
   // Optional helper: allow parent to force-clear and re-ask (e.g., account switch)
   window.addEventListener('message', (e) => {
@@ -393,6 +380,28 @@
       showError('Please enter your email again.');
     }
   });
+</script>
+
+<script>
+  // === Referrer email handling without save button ===
+function attachReferrerAutoSave() {
+  const inp = qs('#referrerEmailInput');
+  if (!inp) return;
+
+  function trySet() {
+    const val = (inp.value || '').trim();
+    if (EMAIL_RE.test(val)) {
+      setReferrerEmail(val);   // writes to both session/local storage
+      clearErrors();
+      showSuccess('Saved your email. You can now submit referrals.');
+    }
+  }
+
+  inp.addEventListener('blur', trySet);
+  inp.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); trySet(); }
+  });
+}
 </script>
 </body>
 </html>
