@@ -117,7 +117,7 @@
   /* ================== Helpers & constants ================== */
   const qs  = (sel, sc=document) => sc.querySelector(sel);
   const qsa = (sel, sc=document) => Array.from(sc.querySelectorAll(sel));
-  const EMAIL_RE = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
   // Storage keys
   const KEY_REF_EMAIL   = 'referrerEmail';
