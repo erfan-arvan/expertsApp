@@ -303,6 +303,7 @@
     const btn = qs('#submitBtn');
     btn.disabled = true;
     try {
+        console.log('[referrals] payload', JSON.stringify(payload, null, 2));
       const res  = await fetch('/submit_referrals', {
         method: 'POST',
         headers: { 'Content-Type':'application/json' },
