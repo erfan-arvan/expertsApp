@@ -922,7 +922,7 @@
             </div>
 
             <!-- Final Box Modal: Consent Confirmation -->
-            <div id="final-box-consent" class="modal hidden">
+            <div id="final-box-consent" style="margin-right: 0 !important;" class="modal hidden">
                 <div class="modal-content">
                     <h3>✅ Your registration in this study has been completed!</h3>
                     <p>Thank you! We'll reach out to you via email soon to coordinate the next steps.</p>
@@ -1251,8 +1251,8 @@
             // Validation: check if names match
             // Validation: check if names match (ignore case)
             if (participantName.trim().toLowerCase() !== signatureName.trim().toLowerCase()) {
-            alert("The name entered in the signature does not match the participant's name.");
-            return; // Stop submission
+                alert("The name entered in the signature does not match the participant's name.");
+                return; // Stop submission
             }
 
 
