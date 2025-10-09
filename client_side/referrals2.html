@@ -229,6 +229,36 @@
       border-radius: 6px;
       font-size: .95rem;
     }
+
+    /* style both name + email in the referrer row */
+.referrer-row input[type="text"],
+.referrer-row input[type="email"] {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: .95rem;
+  box-sizing: border-box;
+}
+
+/* highlight on focus */
+.referrer-row input:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 4px rgba(0,122,204,.4);
+}
+
+/* responsive stacking */
+@media (max-width: 520px) {
+  .referrer-row {
+    flex-wrap: wrap;
+  }
+  .referrer-row input {
+    flex: 1 1 100%;
+  }
+}
+
   </style>
 </head>
 
