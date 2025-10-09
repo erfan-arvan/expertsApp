@@ -93,7 +93,7 @@
   <div id="successBanner" class="banner banner--success" role="status" aria-live="polite"></div>
 
   <!-- === Referrer info gate (visible until first successful submit) === -->
-  <div id="referrerGate" class="referrer-gate" aria-live="polite">
+<div id="referrerGate" class="referrer-gate show" aria-live="polite">
     <h5>Your information (required once)</h5>
     <div class="referrer-row">
       <input id="referrerNameInput"  type="text"  placeholder="Your full name (optional)" autocomplete="name"/>
@@ -138,8 +138,13 @@
     try { localStorage.removeItem(key); } catch {}
   }
 
-  function markFirstSubmitDone(){ writeBoth(KEY_FIRST_DONE, '1'); }
-  function isFirstSubmitDone(){ return readEither(KEY_FIRST_DONE) === '1'; }
+  function markFirstSubmitDone(){ 
+    // writeBoth(KEY_FIRST_DONE, '1'); 
+}
+  function isFirstSubmitDone(){ 
+    // return readEither(KEY_FIRST_DONE) === '1';
+    return false; 
+}
 
   /* ---- iframe auto-height ---- */
   function postHeight() {
@@ -166,10 +171,10 @@
 
   function toggleGate(){
     const gate = qs('#referrerGate');
-    if (isFirstSubmitDone()) gate.classList.remove('show');
-    else gate.classList.add('show');
+    gate.classList.add('show'); // always visible
     postHeight();
   }
+
 
   /* ================== UI pieces ================== */
   function rowTemplate() {
