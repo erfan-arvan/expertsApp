@@ -1660,20 +1660,20 @@ Date: ${document.getElementById('signatureDate')?.innerText.trim() || ''}
         const widgets = Array.from(document.querySelectorAll('iframe.referrals-widget'));
 
         // Initialize each iframe
-        widgets.forEach((frame, idx) => {
-            // Set basic styles
-            frame.style.width = '100%';
-            frame.style.border = '0';
-            frame.style.display = 'block';
-            frame.style.overflow = 'hidden';
-            frame.style.height = '240px'; // safe initial height
+        widgets.forEach((frame) => {
+        frame.style.width = '100%';
+        frame.style.border = '0';
+        frame.style.display = 'block';
+        frame.style.overflow = 'hidden';
+        frame.style.height = '240px';
 
-            // Decide the referrer email per iframe
-            const perFrameEmail = frame.dataset.referrer || localStorage.getItem('expert_email') || '';
-            // Append it to the iframe src
-            const url = new URL(frame.getAttribute('src'), location.origin);
-            if (perFrameEmail) url.searchParams.set('referrer', perFrameEmail);
-            frame.src = url.toString();
+        const perFrameEmail = frame.dataset.referrer || localStorage.getItem('expert_email') || '';
+        const perFrameName  = localStorage.getItem('referrerName') || '';
+
+        const url = new URL(frame.getAttribute('src'), location.origin);
+        if (perFrameEmail) url.searchParams.set('referrer', perFrameEmail);
+        if (perFrameName.trim()) url.searchParams.set('refname', perFrameName.trim()); // <-- add this
+        frame.src = url.toString();
         });
 
         // Listen for height / submitted messages from ANY referral iframe
