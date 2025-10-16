@@ -672,12 +672,14 @@ function nextQuestion() {
       showQuestion();
     }
 
+
     function checkEligibility() {
       for (let i = 0; i < answers.length; i++) {
         const opt = questions[i].options[answers[i]];
         if (opt.ineligible) {
           document.getElementById('survey-box').classList.add('hidden');
           document.getElementById('ineligible-modal').classList.remove('hidden');
+          submitIneligible(i, opt);
           return;
         }
       }
@@ -1041,6 +1043,57 @@ function nextQuestion() {
             }
         });
     </script>
+
+    <script>
+  function buildEligibilityResponsesFromAnswers(answers) {
+    // Mirrors what you did elsewhere: question text + selected label (or "No answer")
+    return questions.map((q, idx) => {
+      const choiceIdx = answers[idx];
+      const choice = typeof choiceIdx === "number" ? q.options[choiceIdx] : null;
+      return {
+        question: q.text,
+        selectedOption: choice?.label || "No answer"
+      };
+    });
+  }
+
+  async function submitIneligible(ineligibleIndex, ineligibleOption) {
+    const email = localStorage.getItem("expert_email") || "unknown";
+    const notify = localStorage.getItem("notify_opt_in") === "true";
+    const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
+
+    const payload = {
+      email,
+      notify,
+      selectedSlot,
+      eligibilityResponses: buildEligibilityResponsesFromAnswers(answers),
+      // extra diagnostics so you can see what tripped the screen
+      ineligible: true,
+      ineligibleAt: ineligibleIndex,
+      ineligibleQuestion: questions[ineligibleIndex]?.text || "",
+      ineligibleOption: ineligibleOption?.label || "",
+      userAgent: navigator.userAgent,
+      timestamp: new Date().toISOString(),
+      submitted: true,
+      event: "ineligible"
+    };
+
+    try {
+      const res = await fetch("/register_expert", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) {
+        // Non-blocking: show the modal either way, but log the failure
+        console.warn("⚠️ Failed to log ineligible:", await res.text());
+      }
+    } catch (e) {
+      console.error("❌ Network error logging ineligible", e);
+    }
+  }
+</script>
+
   <footer
     style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
     Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
