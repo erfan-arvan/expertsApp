@@ -708,7 +708,7 @@
       "Entry Level Software Engineer"
     ];
 
-const questions = [
+ const questions = [
  // 1) Basic gate
  {
    text: "What is your age?",
@@ -724,9 +724,21 @@ const questions = [
  },
 
 
- // 2) Core eligibility signals
  {
-   text: "How many years of professional development experience do you have with Java?",
+   text: "How many years of experience do you have developing or maintaining industry-level software systems?",
+   options: [
+     { label: "No experience" },
+     { label: "<1 year" },
+     { label: "1–2 years" },
+     { label: "3–5 years" },
+     { label: "6–9 years" },
+     { label: "10–14 years" },
+     { label: "15–19 years" },
+     { label: "20+ years" }
+   ]
+ },
+ {
+   text: "How many years of professional development experience do you have with <strong>Java</strong>?",
    options: [
      { label: "No experience", ineligible: true },
      { label: "<1 year" },
@@ -750,22 +762,6 @@ const questions = [
    options: [
      { label: "Yes", eligible: true },
      { label: "No" }
-   ]
- },
-
-
- // 3) Experience depth
- {
-   text: "How many years of experience do you have developing or maintaining industry-level software systems?",
-   options: [
-     { label: "No experience" },
-     { label: "<1 year" },
-     { label: "1–2 years" },
-     { label: "3–5 years" },
-     { label: "6–9 years" },
-     { label: "10–14 years" },
-     { label: "15–19 years" },
-     { label: "20+ years" }
    ]
  },
 {
