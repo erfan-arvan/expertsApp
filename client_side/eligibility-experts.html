@@ -1215,34 +1215,41 @@ function checkEligibility() {
  * 6) SUBMISSION: stringify all types consistently      *
  ********************************************************/
 function submitRegistrationData() {
+  console.log('answers array before submit:', answers);
   const email = localStorage.getItem("expert_email") || "unknown";
   const notify = localStorage.getItem("notify_opt_in") === "true";
   const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
 
-  const eligibilityResponses = questions.map((q, index) => {
-    const a = answers[index];
-    let selectedOption = "No answer";
+const eligibilityResponses = questions.map((q, index) => {
+  const a = answers[index];
+  let selectedOption = "No answer";
+  const t = q.type || "radio";
 
-    const t = q.type || "radio";
+  if (t === "checkbox" && Array.isArray(a)) {
+    const labels = a.map(i => q.options[i]?.label).filter(Boolean);
+    const free = sessionStorage.getItem(`q${index}-free`);
+    selectedOption = [labels.join(", "), free].filter(Boolean).join(" — ") || "No answer";
+  } else if (t === "text" && typeof a === "string") {
+    selectedOption = a || "No answer";
+  } else if (t === "select" && typeof a === "object") {
+    selectedOption = a.select === "__other__" ? (a.other || "Other") : (a.select || "No answer");
+  } else if (t === "combobox" && a && typeof a === "object") {
+    selectedOption = a.combobox || "No answer";
+  } else if (typeof a === "number") { // radio
+    const label = q.options[a]?.label || "No answer";
+    const free = sessionStorage.getItem(`q${index}-free`);
+    selectedOption = free ? `${label} — ${free}` : label;
+  }
 
-    if (t === "checkbox" && Array.isArray(a)) {
-      const labels = a.map(i => q.options[i]?.label).filter(Boolean);
-      const free = sessionStorage.getItem(`q${index}-free`);
-      selectedOption = [labels.join(", "), free].filter(Boolean).join(" — ") || "No answer";
-    } else if (t === "text" && typeof a === "string") {
-      selectedOption = a || "No answer";
-    } else if (t === "select" && typeof a === "object") {
-      selectedOption = a.select === "__other__" ? (a.other || "Other") : (a.select || "No answer");
-    } else if (t === "combobox" && a && typeof a === "object") {
-      selectedOption = a.combobox || "No answer";
-    } else if (typeof a === "number") { // radio
-      const label = q.options[a]?.label || "No answer";
-      const free = sessionStorage.getItem(`q${index}-free`);
-      selectedOption = free ? `${label} — ${free}` : label;
-    }
+  // Fallback: if still "No answer", try the sessionStorage human-readable value
+  if (selectedOption === "No answer") {
+    const ss = sessionStorage.getItem(`eligibility_q${index}`);
+    if (ss && ss.trim()) selectedOption = ss.trim();
+  }
 
-    return { question: q.text, selectedOption };
-  });
+  return { question: q.text, selectedOption };
+});
+
 
   const payload = {
     email,
