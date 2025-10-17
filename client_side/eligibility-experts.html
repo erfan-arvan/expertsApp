@@ -1421,38 +1421,6 @@ function escapeHtml(s) {
     }
 
 
-    function checkEligibility() {
-      for (let i = 0; i < answers.length; i++) {
-        const q = questions[i];
-        const a = answers[i];
-
-        if (q.type === "checkbox" && Array.isArray(a)) {
-          for (const idx of a) {
-            const opt = q.options[idx];
-            if (opt?.ineligible) {
-              document.getElementById('survey-box').classList.add('hidden');
-              document.getElementById('ineligible-modal').classList.remove('hidden');
-              submitIneligible(i, opt);
-              return;
-            }
-          }
-        } else if (typeof a === "number") { // radio
-          const opt = q.options[a];
-          if (opt?.ineligible) {
-            document.getElementById('survey-box').classList.add('hidden');
-            document.getElementById('ineligible-modal').classList.remove('hidden');
-            submitIneligible(i, opt);
-            return;
-          }
-        }
-        // text/select have no ineligible flags by design
-      }
-
-      document.getElementById('survey-box').classList.add('hidden');
-      document.getElementById('eligibility-success').classList.remove('hidden');
-      document.getElementById('slots-box').classList.remove('hidden');
-    }
-
 
 
     // function selectSlot(el) {
