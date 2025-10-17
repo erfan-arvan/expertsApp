@@ -710,8 +710,8 @@
       {
         text: "Have you ever been promoted within a software engineering role to a more senior level—for example, a promotion from an entry-level position to the next level where engineers are expected to operate more independently or lead projects?<br/><br/>Examples include a promotion to: Apple ICT3, Facebook E4, Uber Level 4 (Software Engineer II), Microsoft Level 61, Amazon L5, or Walmart L3. <a style='font-size:10px;' href='https://www.levels.fyi' target='_blank'>Learn more about these levels</a>",
         options: [
-          { label: "Yes, I have received a promotion like that." },
-          { label: "No, I have not received a promotion like that.", ineligible: true }
+          { label: "Yes, I have received a promotion like that.", eligible: true},
+          { label: "No, I have not received a promotion like that."}
         ]
       },
       {
@@ -719,16 +719,16 @@
         options: [
           { label: "None", ineligible: true },
           { label: "Less than 1 year" },
-          { label: "1–2 years" },
-          { label: "3–4 years" },
-          { label: "5+ years" }
+          { label: "1–2 years", eligible: true},
+          { label: "3–4 years", eligible: true},
+          { label: "5+ years", eligible: true}
         ]
       },
       {
         text: "Have you ever mentored one or more junior software engineers in a professional setting?",
         options: [
-          { label: "Yes" },
-          { label: "No", ineligible: true }
+          { label: "Yes", eligible: true},
+          { label: "No"}
         ]
       },
       {
@@ -742,26 +742,6 @@
           { label: "Over 40" }
         ]
       },
-      {
-        text: "Have you been diagnosed with a reading or learning disability, or any condition that affects your ability to read or understand code or instructions?",
-        options: [
-          { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
-          { label: "No, I have not been diagnosed with any such condition" }
-        ]
-      },
-      {
-        text: "How comfortable are you with reading English-language text?",
-        options: [
-          { label: "Not comfortable", ineligible: true },
-          { label: "Slightly comfortable" },
-          { label: "Moderately comfortable" },
-          { label: "Very comfortable" },
-          { label: "Native speaker / fluent" }
-        ]
-      },
-
-      // ---- Added from your HTML (content only) ----
-
       {
         text: "Which of the following best describes your primary role in software engineering?",
         options: [
@@ -1174,40 +1154,58 @@ function humanReadableAnswer(q, value, idx) {
 /*********************************
  * 5) ELIGIBILITY: same logic    *
  *********************************/
+// function checkEligibility() {
+//   for (let i = 0; i < answers.length; i++) {
+//     const q = questions[i];
+//     const a = answers[i];
+
+//     // checkbox: any ineligible checked?
+//     if ((q.type || "radio") === "checkbox" && Array.isArray(a)) {
+//       for (const idx of a) {
+//         const opt = q.options[idx];
+//         if (opt?.ineligible) {
+//           document.getElementById('survey-box').classList.add('hidden');
+//           document.getElementById('ineligible-modal').classList.remove('hidden');
+//           submitIneligible(i, opt);
+//           return;
+//         }
+//       }
+//     }
+
+//     // radio: ineligible?
+//     if (typeof a === "number") {
+//       const opt = q.options[a];
+//       if (opt?.ineligible) {
+//         document.getElementById('survey-box').classList.add('hidden');
+//         document.getElementById('ineligible-modal').classList.remove('hidden');
+//         submitIneligible(i, opt);
+//         return;
+//       }
+//     }
+//     // text / select / combobox: no ineligible flags by design
+//   }
+
+//   document.getElementById('survey-box').classList.add('hidden');
+//   document.getElementById('eligibility-success').classList.remove('hidden');
+//   document.getElementById('slots-box').classList.remove('hidden');
+// }
 function checkEligibility() {
-  for (let i = 0; i < answers.length; i++) {
-    const q = questions[i];
-    const a = answers[i];
+  const result = evaluateGlobalEligibility(questions, answers);
 
-    // checkbox: any ineligible checked?
-    if ((q.type || "radio") === "checkbox" && Array.isArray(a)) {
-      for (const idx of a) {
-        const opt = q.options[idx];
-        if (opt?.ineligible) {
-          document.getElementById('survey-box').classList.add('hidden');
-          document.getElementById('ineligible-modal').classList.remove('hidden');
-          submitIneligible(i, opt);
-          return;
-        }
-      }
-    }
-
-    // radio: ineligible?
-    if (typeof a === "number") {
-      const opt = q.options[a];
-      if (opt?.ineligible) {
-        document.getElementById('survey-box').classList.add('hidden');
-        document.getElementById('ineligible-modal').classList.remove('hidden');
-        submitIneligible(i, opt);
-        return;
-      }
-    }
-    // text / select / combobox: no ineligible flags by design
+  if (result.ok) {
+    // PASS
+    document.getElementById('survey-box').classList.add('hidden');
+    document.getElementById('eligibility-success').classList.remove('hidden');
+    document.getElementById('slots-box').classList.remove('hidden');
+    return;
   }
 
+  // FAIL: show modal + log
   document.getElementById('survey-box').classList.add('hidden');
-  document.getElementById('eligibility-success').classList.remove('hidden');
-  document.getElementById('slots-box').classList.remove('hidden');
+  document.getElementById('ineligible-modal').classList.remove('hidden');
+
+  const idx = typeof result.index === "number" ? result.index : 0;
+  submitIneligible(idx, result.option, result.reason);
 }
 
 
@@ -1801,24 +1799,21 @@ function buildEligibilityResponsesFromAnswers(answers) {
 }
 
 
-// --- Replace your submitIneligible with this ---
-async function submitIneligible(ineligibleIndex, ineligibleOption) {
+async function submitIneligible(ineligibleIndex, ineligibleOption, failureReason) {
   const email = localStorage.getItem("expert_email") || "unknown";
   const notify = localStorage.getItem("notify_opt_in") === "true";
   const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
-
-  // Use the robust builder so all answer types are captured
-  const eligibilityResponses = buildEligibilityResponsesFromAnswers(answers);
 
   const payload = {
     email,
     notify,
     selectedSlot,
-    eligibilityResponses,
+    eligibilityResponses: buildEligibilityResponsesFromAnswers(answers), // robust version
     ineligible: true,
     ineligibleAt: ineligibleIndex,
     ineligibleQuestion: questions[ineligibleIndex]?.text || "",
     ineligibleOption: ineligibleOption?.label || "",
+    failureReason: failureReason || "",
     userAgent: navigator.userAgent,
     timestamp: new Date().toISOString(),
     submitted: true,
@@ -1838,6 +1833,120 @@ async function submitIneligible(ineligibleIndex, ineligibleOption) {
     console.error("❌ Network error logging ineligible", e);
   }
 }
+
+
+
+function norm(s){ return (s||"").toLowerCase().trim(); }
+
+function optByLabel(q, label){
+  if(!q?.options) return null;
+  const L = norm(label);
+  return q.options.find(o => norm(o.label) === L) || null;
+}
+
+function isAnswerIneligibleForQuestion(q, answer){
+  const t = q.type || "radio";
+
+  if (typeof answer === "number") { // radio
+    const opt = q.options?.[answer];
+    return !!opt?.ineligible;
+  }
+
+  if (t === "checkbox" && Array.isArray(answer)) {
+    return answer.some(i => !!q.options?.[i]?.ineligible);
+  }
+
+  if (t === "select" && answer && typeof answer === "object") {
+    if (answer.select === "__other__") return false; // free text isn't flagged
+    const opt = optByLabel(q, answer.select);
+    return !!opt?.ineligible;
+  }
+
+  if (t === "combobox" && answer && typeof answer === "object") {
+    // exact match to a predefined option makes it ineligible if that option is ineligible
+    const opt = optByLabel(q, answer.combobox || "");
+    return !!opt?.ineligible;
+  }
+
+  // text/other types: not flagged
+  return false;
+}
+
+function isAnswerEligibleForQuestion(q, answer){
+  const t = q.type || "radio";
+
+  if (typeof answer === "number") { // radio
+    const opt = q.options?.[answer];
+    return !!opt?.eligible;
+  }
+
+  if (t === "checkbox" && Array.isArray(answer)) {
+    return answer.some(i => !!q.options?.[i]?.eligible);
+  }
+
+  if (t === "select" && answer && typeof answer === "object") {
+    if (answer.select === "__other__") return false; // free text not flagged eligible
+    const opt = optByLabel(q, answer.select);
+    return !!opt?.eligible;
+  }
+
+  if (t === "combobox" && answer && typeof answer === "object") {
+    // exact match to eligible option
+    const opt = optByLabel(q, answer.combobox || "");
+    return !!opt?.eligible;
+  }
+
+  return false;
+}
+
+/**
+ * Evaluate whole screener:
+ * - if ANY ineligible -> fail (captures where it happened)
+ * - else if ANY eligible -> pass
+ * - else -> fail (no eligible answers)
+ */
+function evaluateGlobalEligibility(questions, answers){
+  let firstIneligible = null; // {index, option}
+  let hasEligible = false;
+
+  for (let i = 0; i < answers.length; i++) {
+    const q = questions[i];
+    const a = answers[i];
+
+    // capture first ineligible
+    if (isAnswerIneligibleForQuestion(q, a)) {
+      // find the concrete failing option for logging
+      let failOpt = null;
+      const t = q.type || "radio";
+      if (typeof a === "number") {
+        failOpt = q.options?.[a] || null;
+      } else if (t === "checkbox" && Array.isArray(a)) {
+        const idx = a.find(j => q.options?.[j]?.ineligible);
+        if (typeof idx === "number") failOpt = q.options[idx];
+      } else if (t === "select" && a && typeof a === "object" && a.select !== "__other__") {
+        failOpt = optByLabel(q, a.select);
+      } else if (t === "combobox" && a && typeof a === "object") {
+        failOpt = optByLabel(q, a.combobox || "");
+      }
+      firstIneligible = { index: i, option: failOpt };
+      break;
+    }
+
+    // track eligible
+    if (isAnswerEligibleForQuestion(q, a)) {
+      hasEligible = true;
+    }
+  }
+
+  if (firstIneligible) {
+    return { ok: false, reason: "has_ineligible_selection", ...firstIneligible };
+  }
+  if (hasEligible) {
+    return { ok: true };
+  }
+  return { ok: false, reason: "no_eligible_answers", index: 0, option: null };
+}
+
 
   </script>
 
