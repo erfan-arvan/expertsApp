@@ -880,211 +880,230 @@
 
 
 
-    function showQuestion() {
-      const q = questions[currentQuestion];
-      const container = document.getElementById('question-container');
+function showQuestion() {
+  const q = questions[currentQuestion];
+  const container = document.getElementById('question-container');
 
-      let html = `<p><strong>${q.text}</strong></p>`;
+  // Default types
+  const qType = q.type || "radio";
+  const nameBase = `q${currentQuestion}`;
 
-      const prev = answers[currentQuestion]; // could be number | string | number[] | {select:string, other?:string}
+  const prev = answers[currentQuestion]; // number | string | number[] | {select, other?} | {combobox: string}
+  const esc = (s) => (s ?? "").toString().replace(/"/g, "&quot;");
 
-      const nameBase = `q${currentQuestion}`;
+  let html = `<p><strong>${q.text}</strong></p>`;
 
-      // helpers for prefill
-      const wasChecked = (i) => Array.isArray(prev) ? prev.includes(i) : prev === i;
-      const esc = (s) => (s ?? "").toString().replace(/"/g, "&quot;");
-
-      switch (q.type) {
-        case "checkbox":
-          q.options.forEach((opt, i) => {
-            const checked = Array.isArray(prev) && prev.includes(i) ? "checked" : "";
-            html += `
-          <label>
-            <input type="checkbox" name="${nameBase}[]" value="${i}" ${checked}>
-            ${opt.label}
-          </label><br>
-        `;
-          });
-          // optional free-text on a checkbox option
-          if (q.options.some(o => o.freeText)) {
-            const last = q.options.findIndex(o => o.freeText);
-            const show = Array.isArray(prev) && prev.includes(last);
-            html += `
-          <div id="${nameBase}-free" style="margin-top:6px; ${show ? "" : "display:none;"}">
-            <input id="${nameBase}-free-input" type="text" placeholder="Please specify" value="${esc(sessionStorage.getItem(`${nameBase}-free`) || "")}" style="width:100%;">
-          </div>
-        `;
-          }
-          break;
-
-        case "text":
-          html += `
-        <textarea id="${nameBase}-text" rows="${q.multiline ? 4 : 2}" placeholder="${esc(q.placeholder || "")}" style="width:100%;">${esc(typeof prev === "string" ? prev : "")}</textarea>
+  if (qType === "checkbox") {
+    (q.options || []).forEach((opt, i) => {
+      const checked = Array.isArray(prev) && prev.includes(i) ? "checked" : "";
+      html += `
+        <label>
+          <input type="checkbox" name="${nameBase}[]" value="${i}" ${checked}>
+          ${opt.label}
+        </label><br>
       `;
-          break;
-
-        case "select":
-          html += `
-        <select id="${nameBase}-select" style="width:100%;">
-          <option value="">${esc(q.placeholder || "Select...")}</option>
-          ${q.options.map((opt, i) => {
-            const selected = (prev && typeof prev === "object" && prev.select === opt.label) ? "selected" : "";
-            return `<option value="${esc(opt.label)}" ${selected}>${esc(opt.label)}</option>`;
-          }).join("")}
-          ${q.hasOther ? `<option value="__other__" ${(prev && typeof prev === "object" && prev.select === "__other__") ? "selected" : ""}>Other</option>` : ""}
-        </select>
+    });
+    const freeIdx = (q.options || []).findIndex(o => o.freeText);
+    if (freeIdx >= 0) {
+      const show = Array.isArray(prev) && prev.includes(freeIdx);
+      html += `
+        <div id="${nameBase}-free" style="margin-top:6px; ${show ? "" : "display:none;"}">
+          <input id="${nameBase}-free-input" type="text" placeholder="Please specify" value="${esc(sessionStorage.getItem(`${nameBase}-free`) || "")}" style="width:100%;">
+        </div>
       `;
-          if (q.hasOther) {
-            const showOther = prev && typeof prev === "object" && prev.select === "__other__";
-            html += `
-          <div id="${nameBase}-other-wrap" style="margin-top:6px; ${showOther ? "" : "display:none;"}">
-            <input id="${nameBase}-other" type="text" placeholder="Enter your title" value="${esc(prev?.other || "")}" style="width:100%;">
-          </div>
-        `;
-          }
-          break;
-
-        default: // radio (current default in your app)
-          (q.options || []).forEach((opt, i) => {
-            const checked = (typeof prev === "number" && prev === i) ? "checked" : "";
-            html += `
-          <label>
-            <input type="radio" name="${nameBase}" value="${i}" ${checked}>
-            ${opt.label}
-          </label><br>
-        `;
-          });
-          // optional free-text on radio
-          const freeIdx = (q.options || []).findIndex(o => o.freeText);
-          if (freeIdx >= 0) {
-            const show = prev === freeIdx;
-            html += `
-          <div id="${nameBase}-free" style="margin-top:6px; ${show ? "" : "display:none;"}">
-            <input id="${nameBase}-free-input" type="text" placeholder="Please specify" value="${esc(sessionStorage.getItem(`${nameBase}-free`) || "")}" style="width:100%;">
-          </div>
-        `;
-          }
-      }
-
-      container.innerHTML = html;
-
-      // Wire up “Other/freeText” revealers
-      if (q.type === "select" && q.hasOther) {
-        const sel = document.getElementById(`${nameBase}-select`);
-        const wrap = document.getElementById(`${nameBase}-other-wrap`);
-        sel.addEventListener("change", () => {
-          wrap.style.display = sel.value === "__other__" ? "block" : "none";
-        });
-      }
-
-      if (q.type === "checkbox" && q.options?.some(o => o.freeText)) {
-        const last = q.options.findIndex(o => o.freeText);
-        const checkboxes = [...document.querySelectorAll(`input[name="${nameBase}[]"]`)];
-        const freeDiv = document.getElementById(`${nameBase}-free`);
-        checkboxes.forEach(cb => {
-          cb.addEventListener("change", () => {
-            const any = checkboxes.some(x => x.checked && parseInt(x.value, 10) === last);
-            freeDiv.style.display = any ? "block" : "none";
-          });
-        });
-      }
-
-      if (!["text"].includes(q.type)) {
-        document.getElementById('prevBtn').disabled = currentQuestion === 0;
-        document.getElementById('nextBtn').innerText = currentQuestion === questions.length - 1 ? 'Check Eligibility' : 'Next';
-      } else {
-        document.getElementById('prevBtn').disabled = currentQuestion === 0;
-        document.getElementById('nextBtn').innerText = currentQuestion === questions.length - 1 ? 'Check Eligibility' : 'Next';
-      }
     }
+  }
 
+  if (qType === "text") {
+    html += `
+      <textarea id="${nameBase}-text" rows="${q.multiline ? 4 : 2}" placeholder="${esc(q.placeholder || "")}" style="width:100%;">${esc(typeof prev === "string" ? prev : "")}</textarea>
+    `;
+  }
 
-    function nextQuestion() {
-      const q = questions[currentQuestion];
-      const nameBase = `q${currentQuestion}`;
-
-      let value = null; // will store number | string | number[] | {select, other?}
-
-      switch (q.type) {
-        case "checkbox": {
-          const nodes = [...document.querySelectorAll(`input[name="${nameBase}[]"]:checked`)];
-          if (nodes.length === 0) return alert("Please select at least one option.");
-          value = nodes.map(n => parseInt(n.value, 10));
-
-          // Persist free text if present
-          const freeInput = document.getElementById(`${nameBase}-free-input`);
-          if (freeInput) {
-            sessionStorage.setItem(`${nameBase}-free`, freeInput.value.trim());
-          }
-          break;
-        }
-        case "text": {
-          const t = (document.getElementById(`${nameBase}-text`)?.value || "").trim();
-          if (!t) return alert("Please enter a response.");
-          value = t;
-          break;
-        }
-        case "select": {
-          const sel = document.getElementById(`${nameBase}-select`);
-          const selected = sel?.value || "";
-          if (!selected) return alert("Please select an option.");
-          if (selected === "__other__") {
-            const other = (document.getElementById(`${nameBase}-other`)?.value || "").trim();
-            if (!other) return alert("Please enter your title.");
-            value = { select: "__other__", other };
-          } else {
-            value = { select: selected };
-          }
-          break;
-        }
-        default: { // radio
-          const selected = document.querySelector(`input[name="${nameBase}"]:checked`);
-          if (!selected) return alert("Please select an option.");
-          value = parseInt(selected.value, 10);
-
-          // Persist free text for radio “Other”
-          const freeInput = document.getElementById(`${nameBase}-free-input`);
-          if (freeInput) {
-            sessionStorage.setItem(`${nameBase}-free`, freeInput.value.trim());
-          }
-        }
-      }
-
-      // Save locally
-      answers[currentQuestion] = value;
-
-      // Also store a human-readable string in sessionStorage like before
-      sessionStorage.setItem(`eligibility_q${currentQuestion}`, humanReadableAnswer(q, value));
-
-      if (currentQuestion === questions.length - 1) {
-        checkEligibility();
-      } else {
-        currentQuestion++;
-        showQuestion();
-      }
+  if (qType === "select") {
+    html += `
+      <select id="${nameBase}-select" style="width:100%;">
+        <option value="">${esc(q.placeholder || "Select...")}</option>
+        ${(q.options || []).map((opt) => {
+          const selected = (prev && typeof prev === "object" && prev.select === opt.label) ? "selected" : "";
+          return `<option value="${esc(opt.label)}" ${selected}>${esc(opt.label)}</option>`;
+        }).join("")}
+        ${q.hasOther ? `<option value="__other__" ${(prev && typeof prev === "object" && prev.select === "__other__") ? "selected" : ""}>Other</option>` : ""}
+      </select>
+    `;
+    if (q.hasOther) {
+      const showOther = prev && typeof prev === "object" && prev.select === "__other__";
+      html += `
+        <div id="${nameBase}-other-wrap" style="margin-top:6px; ${showOther ? "" : "display:none;"}">
+          <input id="${nameBase}-other" type="text" placeholder="Enter your title" value="${esc(prev?.other || "")}" style="width:100%;">
+        </div>
+      `;
     }
+  }
 
-    function humanReadableAnswer(q, value) {
-      if (q.type === "checkbox" && Array.isArray(value)) {
-        const labels = value.map(i => q.options[i]?.label).filter(Boolean);
-        // include free text if any
-        const freeStr = sessionStorage.getItem(`q${currentQuestion}-free`);
-        return [labels.join(", "), freeStr].filter(Boolean).join(" — ");
-      }
-      if (q.type === "text" && typeof value === "string") {
-        return value;
-      }
-      if (q.type === "select" && typeof value === "object") {
-        return value.select === "__other__" ? (value.other || "Other") : value.select;
-      }
-      // radio
-      if (typeof value === "number") {
-        const base = q.options[value]?.label || "No answer";
-        const freeStr = sessionStorage.getItem(`q${currentQuestion}-free`);
-        return freeStr ? `${base} — ${freeStr}` : base;
-      }
-      return "No answer";
+  // NEW: combobox (autocomplete + free entry) implemented with <input list>
+  if (qType === "combobox") {
+    const listId = `${nameBase}-list`;
+    const typed = (prev && typeof prev === "object" && "combobox" in prev) ? prev.combobox : "";
+    html += `
+      <input id="${nameBase}-combo" list="${listId}" placeholder="${esc(q.placeholder || "Start typing...")}" value="${esc(typed)}" style="width:100%;" autocomplete="off">
+      <datalist id="${listId}">
+        ${(q.options || []).map(opt => `<option value="${esc(opt.label)}"></option>`).join("")}
+      </datalist>
+      <div class="hint" style="font-size:12px;color:#666;margin-top:4px;">Type to search; you can also enter a custom title.</div>
+    `;
+  }
+
+  // default radio
+  if (qType === "radio") {
+    (q.options || []).forEach((opt, i) => {
+      const checked = (typeof prev === "number" && prev === i) ? "checked" : "";
+      html += `
+        <label>
+          <input type="radio" name="${nameBase}" value="${i}" ${checked}>
+          ${opt.label}
+        </label><br>
+      `;
+    });
+    const freeIdx = (q.options || []).findIndex(o => o.freeText);
+    if (freeIdx >= 0) {
+      const show = prev === freeIdx;
+      html += `
+        <div id="${nameBase}-free" style="margin-top:6px; ${show ? "" : "display:none;"}">
+          <input id="${nameBase}-free-input" type="text" placeholder="Please specify" value="${esc(sessionStorage.getItem(`${nameBase}-free`) || "")}" style="width:100%;">
+        </div>
+      `;
     }
+  }
+
+  container.innerHTML = html;
+
+  // Wire up reveal for “Other” (radio)
+  if (qType === "radio" && q.options?.some(o => o.freeText)) {
+    const freeIdx = q.options.findIndex(o => o.freeText);
+    const radios = [...document.querySelectorAll(`input[name="${nameBase}"]`)];
+    const freeDiv = document.getElementById(`${nameBase}-free`);
+    radios.forEach(r => {
+      r.addEventListener("change", () => {
+        freeDiv.style.display = (parseInt(r.value, 10) === freeIdx && r.checked) ? "block" : "none";
+      });
+    });
+  }
+
+  // Wire up reveal for “Other” (checkbox)
+  if (qType === "checkbox" && q.options?.some(o => o.freeText)) {
+    const freeIdx = q.options.findIndex(o => o.freeText);
+    const boxes = [...document.querySelectorAll(`input[name="${nameBase}[]"]`)];
+    const freeDiv = document.getElementById(`${nameBase}-free`);
+    const update = () => {
+      const on = boxes.some(x => x.checked && parseInt(x.value, 10) === freeIdx);
+      freeDiv.style.display = on ? "block" : "none";
+    };
+    boxes.forEach(cb => cb.addEventListener("change", update));
+  }
+
+  // “Other” for select
+  if (qType === "select" && q.hasOther) {
+    const sel = document.getElementById(`${nameBase}-select`);
+    const wrap = document.getElementById(`${nameBase}-other-wrap`);
+    sel.addEventListener("change", () => {
+      wrap.style.display = sel.value === "__other__" ? "block" : "none";
+    });
+  }
+
+  document.getElementById('prevBtn').disabled = currentQuestion === 0;
+  document.getElementById('nextBtn').innerText =
+    currentQuestion === questions.length - 1 ? 'Check Eligibility' : 'Next';
+}
+
+
+
+function nextQuestion() {
+  const q = questions[currentQuestion];
+  const qType = q.type || "radio";
+  const nameBase = `q${currentQuestion}`;
+
+  let value = null; // number | string | number[] | {select, other?} | {combobox:string}
+
+  if (qType === "checkbox") {
+    const nodes = [...document.querySelectorAll(`input[name="${nameBase}[]"]:checked`)];
+    if (nodes.length === 0) return alert("Please select at least one option.");
+    value = nodes.map(n => parseInt(n.value, 10));
+
+    const freeInput = document.getElementById(`${nameBase}-free-input`);
+    if (freeInput) sessionStorage.setItem(`${nameBase}-free`, freeInput.value.trim());
+  }
+
+  if (qType === "text") {
+    const t = (document.getElementById(`${nameBase}-text`)?.value || "").trim();
+    if (!t) return alert("Please enter a response.");
+    value = t;
+  }
+
+  if (qType === "select") {
+    const sel = document.getElementById(`${nameBase}-select`);
+    const v = sel?.value || "";
+    if (!v) return alert("Please select an option.");
+    if (v === "__other__") {
+      const other = (document.getElementById(`${nameBase}-other`)?.value || "").trim();
+      if (!other) return alert("Please enter your title.");
+      value = { select: "__other__", other };
+    } else {
+      value = { select: v };
+    }
+  }
+
+  if (qType === "combobox") {
+    const input = document.getElementById(`${nameBase}-combo`);
+    const v = (input?.value || "").trim();
+    if (!v) return alert("Please enter or select your job title.");
+    value = { combobox: v }; // record exactly what they typed/selected
+  }
+
+  if (qType === "radio") {
+    const selected = document.querySelector(`input[name="${nameBase}"]:checked`);
+    if (!selected) return alert("Please select an option.");
+    value = parseInt(selected.value, 10);
+
+    const freeInput = document.getElementById(`${nameBase}-free-input`);
+    if (freeInput) sessionStorage.setItem(`${nameBase}-free`, freeInput.value.trim());
+  }
+
+  answers[currentQuestion] = value;
+  sessionStorage.setItem(`eligibility_q${currentQuestion}`, humanReadableAnswer(q, value, currentQuestion));
+
+  if (currentQuestion === questions.length - 1) {
+    checkEligibility();
+  } else {
+    currentQuestion++;
+    showQuestion();
+  }
+}
+
+function humanReadableAnswer(q, value, idx) {
+  const qType = q.type || "radio";
+  if (qType === "checkbox" && Array.isArray(value)) {
+    const labels = value.map(i => q.options[i]?.label).filter(Boolean);
+    const freeStr = sessionStorage.getItem(`q${idx}-free`);
+    return [labels.join(", "), freeStr].filter(Boolean).join(" — ") || "No answer";
+  }
+  if (qType === "text" && typeof value === "string") return value || "No answer";
+  if (qType === "select" && typeof value === "object") {
+    return value.select === "__other__" ? (value.other || "Other") : value.select;
+  }
+  if (qType === "combobox" && typeof value === "object") {
+    return value.combobox || "No answer";
+  }
+  if (typeof value === "number") {
+    const label = q.options[value]?.label || "No answer";
+    const freeStr = sessionStorage.getItem(`q${idx}-free`);
+    return freeStr ? `${label} — ${freeStr}` : label;
+  }
+  return "No answer";
+}
+
+
+
 
 
 
@@ -1251,29 +1270,29 @@
       const notify = localStorage.getItem("notify_opt_in") === "true";
       const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
 
-      const eligibilityResponses = questions.map((q, index) => {
-        const a = answers[index];
-        let selectedOption = "No answer";
+const eligibilityResponses = questions.map((q, index) => {
+  const a = answers[index];
+  let selectedOption = "No answer";
 
-        if (q.type === "checkbox" && Array.isArray(a)) {
-          const labels = a.map(i => q.options[i]?.label).filter(Boolean);
-          const free = sessionStorage.getItem(`q${index}-free`);
-          selectedOption = [labels.join(", "), free].filter(Boolean).join(" — ") || "No answer";
-        } else if (q.type === "text" && typeof a === "string") {
-          selectedOption = a || "No answer";
-        } else if (q.type === "select" && typeof a === "object") {
-          selectedOption = a.select === "__other__" ? (a.other || "Other") : a.select;
-        } else if (typeof a === "number") { // radio
-          const label = q.options[a]?.label || "No answer";
-          const free = sessionStorage.getItem(`q${index}-free`);
-          selectedOption = free ? `${label} — ${free}` : label;
-        }
+  if ((q.type || "radio") === "checkbox" && Array.isArray(a)) {
+    const labels = a.map(i => q.options[i]?.label).filter(Boolean);
+    const free = sessionStorage.getItem(`q${index}-free`);
+    selectedOption = [labels.join(", "), free].filter(Boolean).join(" — ") || "No answer";
+  } else if (q.type === "text" && typeof a === "string") {
+    selectedOption = a || "No answer";
+  } else if (q.type === "select" && typeof a === "object") {
+    selectedOption = a.select === "__other__" ? (a.other || "Other") : a.select;
+  } else if (q.type === "combobox" && typeof a === "object") {
+    selectedOption = a.combobox || "No answer";
+  } else if (typeof a === "number") {
+    const label = q.options[a]?.label || "No answer";
+    const free = sessionStorage.getItem(`q${index}-free`);
+    selectedOption = free ? `${label} — ${free}` : label;
+  }
 
-        return {
-          question: q.text,
-          selectedOption
-        };
-      });
+  return { question: q.text, selectedOption };
+});
+
 
       const payload = {
         email: email,
