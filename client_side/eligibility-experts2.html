@@ -814,6 +814,7 @@ multiline: true
 
     function startSurvey() {
 
+      clearOldSessionData();
       const emailInput = document.getElementById('email');
       const email = emailInput.value.trim().toLowerCase();
 
@@ -1946,6 +1947,21 @@ multiline: true
       }
     }
 
+  </script>
+
+  <script>
+    function clearOldSessionData() {
+  const storedVersion = sessionStorage.getItem("eligibility_version");
+  if (storedVersion !== QUESTIONS_VERSION) {
+    console.log("🔄 Clearing old eligibility data...");
+    Object.keys(sessionStorage).forEach(key => {
+      if (key.startsWith("eligibility_") || key.startsWith("q")) {
+        sessionStorage.removeItem(key);
+      }
+    });
+    sessionStorage.setItem("eligibility_version", QUESTIONS_VERSION);
+  }
+}
   </script>
 
   <footer
