@@ -387,11 +387,13 @@
 
       <p><strong>⏳ Duration:</strong> Round 1 is expected to take about <strong>75 minutes</strong>, Round 2 <strong>45
           minutes</strong>, and Round 3 (discussion phase) about <strong>40 minutes</strong>. You’ll have up to
-        <strong>one week</strong> to complete each round on your own schedule before the deadline.</p>
+        <strong>one week</strong> to complete each round on your own schedule before the deadline.
+      </p>
 
       <p><strong>💻 Format:</strong> The study is conducted entirely <strong>online</strong> and
         <strong>asynchronous</strong>. You'll complete all tasks through our web platform without any live meetings or
-        direct contact with other participants.</p>
+        direct contact with other participants.
+      </p>
 
       <p><strong>🔁 Process:</strong> After each round, we’ll share the rankings and anonymized feedback from other
         experts to help guide consensus on a final ranking. The study concludes once consensus is reached, or after
@@ -706,111 +708,127 @@
       "Entry Level Software Engineer"
     ];
 
-    const questions = [
-      {
-        text: "Have you ever been promoted within a software engineering role to a more senior level—for example, a promotion from an entry-level position to the next level where engineers are expected to operate more independently or lead projects?<br/><br/>Examples include a promotion to: Apple ICT3, Facebook E4, Uber Level 4 (Software Engineer II), Microsoft Level 61, Amazon L5, or Walmart L3. <a style='font-size:10px;' href='https://www.levels.fyi' target='_blank'>Learn more about these levels</a>",
-        options: [
-          { label: "Yes, I have received a promotion like that.", eligible: true},
-          { label: "No, I have not received a promotion like that."}
-        ]
-      },
-      {
-        text: "How many years of professional development experience do you have with Java?",
-        options: [
-          { label: "None", ineligible: true },
-          { label: "Less than 1 year" },
-          { label: "1–2 years", eligible: true},
-          { label: "3–4 years", eligible: true},
-          { label: "5+ years", eligible: true}
-        ]
-      },
-      {
-        text: "Have you ever mentored one or more junior software engineers in a professional setting?",
-        options: [
-          { label: "Yes", eligible: true},
-          { label: "No"}
-        ]
-      },
-      {
-        text: "What is your age?",
-        options: [
-          { label: "Under 18", ineligible: true },
-          { label: "18–20" },
-          { label: "21–24" },
-          { label: "25–30" },
-          { label: "31–40" },
-          { label: "Over 40" }
-        ]
-      },
-      {
-        text: "Which of the following best describes your primary role in software engineering?",
-        options: [
-          { label: "Programmer" },
-          { label: "Tester" },
-          { label: "Software Architect" },
-          { label: "Project Technical Lead" },
-          { label: "Project Manager" },
-          { label: "IT Manager" },
-          { label: "Consultant" },
-          { label: "Educator" },
-          { label: "Researcher" },
-          { label: "Analyst" },
-          { label: "Other (please specify)", freeText: true }
-        ]
-      },
-      {
-        text: "How many years of experience in programming or software development do you have?",
-        options: [
-          { label: "No experience" },
-          { label: "<1 year" },
-          { label: "1–4 years" },
-          { label: "5–9 years" },
-          { label: "10–19 years" },
-          { label: "20+ years" }
-        ]
-      },
-      {
-        text: "How many years of experience do you have developing or maintaining industry-level software systems?",
-        options: [
-          { label: "No experience" },
-          { label: "<1 year" },
-          { label: "1–4 years" },
-          { label: "5–9 years" },
-          { label: "10–19 years" },
-          { label: "20+ years" }
-        ]
-      },
-      {
-        text: "What is the nature of your development work?",
-        type: "checkbox",           // optional hint for your renderer
-        multiple: true,             // indicates multi-select
-        options: [
-          { label: "Proprietary software developer" },
-          { label: "Open-source software developer" },
-          { label: "I am based at a research or educational institution" },
-          { label: "Other (please explain)", freeText: true }
-        ]
-      },
-      {
-        text: "Please indicate which domains you have developed software for (e.g., banking or healthcare).",
-        type: "text",               // optional hint for your renderer
-        placeholder: "List domains (comma-separated)",
-        multiline: true             // if you want a textarea
-      },
-      {
-  text: "What company or organization do you currently work for (if any)?",
-  type: "text",
-  placeholder: "Enter the name of your employer, or write 'None' if not currently employed",
-  multiline: false
-},
-{
-  text: "What is your current job title?",
-  type: "combobox",
-  options: jobTitles.map(t => ({ label: t })),   // suggestions
-  placeholder: "Start typing your job title…"
-}
+const questions = [
+  // 1) Basic gate
+  {
+    text: "What is your age?",
+    options: [
+      { label: "Under 18", ineligible: true },
+      { label: "18–20" },
+      { label: "21–24" },
+      { label: "25–30" },
+      { label: "31–40" },
+      { label: "Over 40" }
+    ]
+  },
 
-    ];
+  // 2) Core eligibility signals up front
+  {
+    text: "How many years of professional development experience do you have with Java?",
+    options: [
+      { label: "No experience", ineligible: true },
+      { label: "<1 year" },
+      { label: "1–2 years" },
+      { label: "3–5 years", eligible: true },
+      { label: "6–9 years", eligible: true },
+      { label: "10–14 years", eligible: true },
+      { label: "15–19 years", eligible: true },
+      { label: "20+ years", eligible: true }
+    ]
+  },
+  {
+    text: "Have you ever been promoted within a software engineering role to a more senior level—for example, a promotion from an entry-level position to the next level where engineers are expected to operate more independently or lead projects?<br/><br/>Examples include a promotion to: Apple ICT3, Facebook E4, Uber Level 4 (Software Engineer II), Microsoft Level 61, Amazon L5, or Walmart L3. <a style='font-size:10px;' href='https://www.levels.fyi' target='_blank'>Learn more about these levels</a>",
+    options: [
+      { label: "Yes, I have received a promotion like that.", eligible: true },
+      { label: "No, I have not received a promotion like that." }
+    ]
+  },
+  {
+    text: "Have you ever mentored one or more junior software engineers in a professional setting?",
+    options: [
+      { label: "Yes", eligible: true },
+      { label: "No" }
+    ]
+  },
+
+  // 3) Experience depth (your requested bins)
+  {
+    text: "How many years of experience do you have developing or maintaining industry-level software systems?",
+    options: [
+      { label: "No experience" },
+      { label: "<1 year" },
+      { label: "1–2 years" },
+      { label: "3–5 years" },
+      { label: "6–9 years" },
+      { label: "10–14 years" },
+      { label: "15–19 years" },
+      { label: "20+ years" }
+    ]
+  },
+  {
+    text: "How many years of experience in programming or software development do you have?",
+    options: [
+      { label: "No experience" },
+      { label: "<1 year" },
+      { label: "1–2 years" },
+      { label: "3–5 years" },
+      { label: "6–9 years" },
+      { label: "10–14 years" },
+      { label: "15–19 years" },
+      { label: "20+ years" }
+    ]
+  },
+
+  // 4) Role + context
+  {
+    text: "Which of the following best describes your primary role in software engineering?",
+    options: [
+      { label: "Programmer" },
+      { label: "Tester" },
+      { label: "Software Architect" },
+      { label: "Project Technical Lead" },
+      { label: "Project Manager" },
+      { label: "IT Manager" },
+      { label: "Consultant" },
+      { label: "Educator" },
+      { label: "Researcher" },
+      { label: "Analyst" },
+      { label: "Other (please specify)", freeText: true }
+    ]
+  },
+  {
+    text: "What is your current job title?",
+    type: "combobox",
+    options: jobTitles.map(t => ({ label: t })),   // suggestions
+    placeholder: "Start typing your job title…"
+  },
+  {
+    text: "What company or organization do you currently work for (if any)?",
+    type: "text",
+    placeholder: "Enter the name of your employer, or write 'None' if not currently employed",
+    multiline: false
+  },
+
+  // 5) Work style and domains
+  {
+    text: "What is the nature of your development work?",
+    type: "checkbox",
+    multiple: true,
+    options: [
+      { label: "Proprietary software developer" },
+      { label: "Open-source software developer" },
+      { label: "I am based at a research or educational institution" },
+      { label: "Other (please explain)", freeText: true }
+    ]
+  },
+  {
+    text: "Please indicate which domains you have developed software for (e.g., banking or healthcare).",
+    type: "text",
+    placeholder: "List domains (comma-separated)",
+    multiline: true
+  }
+];
+
 
 
 
@@ -855,119 +873,119 @@
 
 
 
-/*******************************
- * 1) QUESTION DEFINITION NOTE *
- *******************************
- * Add this question (or ensure it exists) in your `questions` array:
- * 
- * {
- *   text: "What is your current job title?",
- *   type: "combobox",
- *   options: jobTitles.map(t => ({ label: t })),
- *   placeholder: "Start typing your job title…"
- * }
- * 
- * For any question with an “Other (please specify)” choice, include:
- *    { label: "Other (please specify)", freeText: true }
- */
+    /*******************************
+     * 1) QUESTION DEFINITION NOTE *
+     *******************************
+     * Add this question (or ensure it exists) in your `questions` array:
+     * 
+     * {
+     *   text: "What is your current job title?",
+     *   type: "combobox",
+     *   options: jobTitles.map(t => ({ label: t })),
+     *   placeholder: "Start typing your job title…"
+     * }
+     * 
+     * For any question with an “Other (please specify)” choice, include:
+     *    { label: "Other (please specify)", freeText: true }
+     */
 
 
-/*********************************
- * 2) RENDERER: showQuestion()   *
- *********************************/
-function showQuestion() {
-  const q = questions[currentQuestion];
-  const container = document.getElementById('question-container');
+    /*********************************
+     * 2) RENDERER: showQuestion()   *
+     *********************************/
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      const container = document.getElementById('question-container');
 
-  const qType = q.type || "radio";
-  const nameBase = `q${currentQuestion}`;
-  const prev = answers[currentQuestion]; // number | string | number[] | objects (see below)
-  const esc = (s) => (s ?? "").toString().replace(/"/g, "&quot;");
+      const qType = q.type || "radio";
+      const nameBase = `q${currentQuestion}`;
+      const prev = answers[currentQuestion]; // number | string | number[] | objects (see below)
+      const esc = (s) => (s ?? "").toString().replace(/"/g, "&quot;");
 
-  let html = `<p><strong>${q.text}</strong></p>`;
+      let html = `<p><strong>${q.text}</strong></p>`;
 
-  // ---- RADIO (default) ----
-  if (qType === "radio") {
-    (q.options || []).forEach((opt, i) => {
-      const checked = (typeof prev === "number" && prev === i) ? "checked" : "";
-      html += `
+      // ---- RADIO (default) ----
+      if (qType === "radio") {
+        (q.options || []).forEach((opt, i) => {
+          const checked = (typeof prev === "number" && prev === i) ? "checked" : "";
+          html += `
         <label>
           <input type="radio" name="${nameBase}" value="${i}" ${checked}>
           ${opt.label}
         </label><br>
       `;
-    });
+        });
 
-    // Optional free-text box for "Other (please specify)"
-    const freeIdx = (q.options || []).findIndex(o => o.freeText);
-    if (freeIdx >= 0) {
-      const show = prev === freeIdx;
-      html += `
+        // Optional free-text box for "Other (please specify)"
+        const freeIdx = (q.options || []).findIndex(o => o.freeText);
+        if (freeIdx >= 0) {
+          const show = prev === freeIdx;
+          html += `
         <div id="${nameBase}-free" style="margin-top:6px; ${show ? "" : "display:none;"}">
           <input id="${nameBase}-free-input" type="text" placeholder="Please specify" 
                  value="${esc(sessionStorage.getItem(`${nameBase}-free`) || "")}" style="width:100%;">
         </div>
       `;
-    }
-  }
+        }
+      }
 
-  // ---- CHECKBOX ----
-  if (qType === "checkbox") {
-    (q.options || []).forEach((opt, i) => {
-      const checked = Array.isArray(prev) && prev.includes(i) ? "checked" : "";
-      html += `
+      // ---- CHECKBOX ----
+      if (qType === "checkbox") {
+        (q.options || []).forEach((opt, i) => {
+          const checked = Array.isArray(prev) && prev.includes(i) ? "checked" : "";
+          html += `
         <label>
           <input type="checkbox" name="${nameBase}[]" value="${i}" ${checked}>
           ${opt.label}
         </label><br>
       `;
-    });
+        });
 
-    // Optional free-text box for "Other (please specify)"
-    const freeIdx = (q.options || []).findIndex(o => o.freeText);
-    if (freeIdx >= 0) {
-      const show = Array.isArray(prev) && prev.includes(freeIdx);
-      html += `
+        // Optional free-text box for "Other (please specify)"
+        const freeIdx = (q.options || []).findIndex(o => o.freeText);
+        if (freeIdx >= 0) {
+          const show = Array.isArray(prev) && prev.includes(freeIdx);
+          html += `
         <div id="${nameBase}-free" style="margin-top:6px; ${show ? "" : "display:none;"}">
           <input id="${nameBase}-free-input" type="text" placeholder="Please specify" 
                  value="${esc(sessionStorage.getItem(`${nameBase}-free`) || "")}" style="width:100%;">
         </div>
       `;
-    }
-  }
+        }
+      }
 
-  // ---- TEXT ----
-  if (qType === "text") {
-    html += `
+      // ---- TEXT ----
+      if (qType === "text") {
+        html += `
       <textarea id="${nameBase}-text" rows="${q.multiline ? 4 : 2}" placeholder="${esc(q.placeholder || "")}" style="width:100%;">${esc(typeof prev === "string" ? prev : "")}</textarea>
     `;
-  }
+      }
 
-  // ---- SELECT (with optional 'Other') ----
-  if (qType === "select") {
-    const selected = prev && typeof prev === "object" ? prev.select : "";
-    html += `
+      // ---- SELECT (with optional 'Other') ----
+      if (qType === "select") {
+        const selected = prev && typeof prev === "object" ? prev.select : "";
+        html += `
       <select id="${nameBase}-select" style="width:100%;">
         <option value="">${esc(q.placeholder || "Select...")}</option>
-        ${(q.options || []).map(opt => `<option value="${esc(opt.label)}"${selected===opt.label?" selected":""}>${esc(opt.label)}</option>`).join("")}
-        ${q.hasOther ? `<option value="__other__"${selected==="__other__"?" selected":""}>Other</option>` : ""}
+        ${(q.options || []).map(opt => `<option value="${esc(opt.label)}"${selected === opt.label ? " selected" : ""}>${esc(opt.label)}</option>`).join("")}
+        ${q.hasOther ? `<option value="__other__"${selected === "__other__" ? " selected" : ""}>Other</option>` : ""}
       </select>
     `;
-    if (q.hasOther) {
-      const showOther = selected === "__other__";
-      html += `
+        if (q.hasOther) {
+          const showOther = selected === "__other__";
+          html += `
         <div id="${nameBase}-other-wrap" style="margin-top:6px; ${showOther ? "" : "display:none;"}">
           <input id="${nameBase}-other" type="text" placeholder="Enter your answer" 
                  value="${esc(prev?.other || "")}" style="width:100%;">
         </div>
       `;
-    }
-  }
+        }
+      }
 
-  // ---- COMBOBOX (type-ahead textbox with top-5 matches or free text) ----
-  if (qType === "combobox") {
-    const typed = (prev && typeof prev === "object" && "combobox" in prev) ? prev.combobox : "";
-    html += `
+      // ---- COMBOBOX (type-ahead textbox with top-5 matches or free text) ----
+      if (qType === "combobox") {
+        const typed = (prev && typeof prev === "object" && "combobox" in prev) ? prev.combobox : "";
+        html += `
       <div class="cb-wrap" style="position:relative;max-width:600px;">
         <input id="${nameBase}-combo" type="text"
                placeholder="${esc(q.placeholder || "Start typing...")}"
@@ -981,429 +999,429 @@ function showQuestion() {
       </div>
       <div class="hint" style="font-size:12px;color:#666;margin-top:6px;">Type to search; choose a suggestion or keep your own text.</div>
     `;
-  }
-
-  container.innerHTML = html;
-
-  // Wire up dynamic behaviors:
-
-  // Radio "Other"
-  if (qType === "radio" && q.options?.some(o => o.freeText)) {
-    const freeIdx = q.options.findIndex(o => o.freeText);
-    const radios = [...document.querySelectorAll(`input[name="${nameBase}"]`)];
-    const freeDiv = document.getElementById(`${nameBase}-free`);
-    radios.forEach(r => {
-      r.addEventListener("change", () => {
-        freeDiv.style.display = (parseInt(r.value, 10) === freeIdx && r.checked) ? "block" : "none";
-      });
-    });
-  }
-
-  // Checkbox "Other"
-  if (qType === "checkbox" && q.options?.some(o => o.freeText)) {
-    const freeIdx = q.options.findIndex(o => o.freeText);
-    const boxes = [...document.querySelectorAll(`input[name="${nameBase}[]"]`)];
-    const freeDiv = document.getElementById(`${nameBase}-free`);
-    const update = () => {
-      const on = boxes.some(x => x.checked && parseInt(x.value, 10) === freeIdx);
-      freeDiv.style.display = on ? "block" : "none";
-    };
-    boxes.forEach(cb => cb.addEventListener("change", update));
-  }
-
-  // Select "Other"
-  if (qType === "select" && q.hasOther) {
-    const sel = document.getElementById(`${nameBase}-select`);
-    const wrap = document.getElementById(`${nameBase}-other-wrap`);
-    sel.addEventListener("change", () => {
-      wrap.style.display = sel.value === "__other__" ? "block" : "none";
-    });
-  }
-
-  // Combobox attach
-  if (qType === "combobox") {
-    const source = (q.options || []).map(o => o.label);
-    attachCombobox(nameBase, source);
-  }
-
-  document.getElementById('prevBtn').disabled = currentQuestion === 0;
-  document.getElementById('nextBtn').innerText =
-    currentQuestion === questions.length - 1 ? 'Check Eligibility' : 'Next';
-}
-
-
-/*********************************
- * 3) NAVIGATION: next / prev    *
- *********************************/
-function nextQuestion() {
-  const q = questions[currentQuestion];
-  const qType = q.type || "radio";
-  const nameBase = `q${currentQuestion}`;
-
-  let value = null; 
-  // Shapes by type:
-  // radio -> number
-  // checkbox -> number[]
-  // text -> string
-  // select -> {select: string, other?: string}
-  // combobox -> {combobox: string}
-
-  if (qType === "radio") {
-    const selected = document.querySelector(`input[name="${nameBase}"]:checked`);
-    if (!selected) return alert("Please select an option.");
-    value = parseInt(selected.value, 10);
-
-    // Persist free text if present
-    const freeInput = document.getElementById(`${nameBase}-free-input`);
-    if (freeInput) sessionStorage.setItem(`${nameBase}-free`, freeInput.value.trim());
-  }
-
-  if (qType === "checkbox") {
-    const nodes = [...document.querySelectorAll(`input[name="${nameBase}[]"]:checked`)];
-    if (nodes.length === 0) return alert("Please select at least one option.");
-    value = nodes.map(n => parseInt(n.value, 10));
-
-    const freeInput = document.getElementById(`${nameBase}-free-input`);
-    if (freeInput) sessionStorage.setItem(`${nameBase}-free`, freeInput.value.trim());
-  }
-
-  if (qType === "text") {
-    const t = (document.getElementById(`${nameBase}-text`)?.value || "").trim();
-    if (!t) return alert("Please enter a response.");
-    value = t;
-  }
-
-  if (qType === "select") {
-    const sel = document.getElementById(`${nameBase}-select`);
-    const v = sel?.value || "";
-    if (!v) return alert("Please select an option.");
-    if (v === "__other__") {
-      const other = (document.getElementById(`${nameBase}-other`)?.value || "").trim();
-      if (!other) return alert("Please enter your answer.");
-      value = { select: "__other__", other };
-    } else {
-      value = { select: v };
-    }
-  }
-
-  if (qType === "combobox") {
-    const input = document.getElementById(`${nameBase}-combo`);
-    const v = (input?.value || "").trim();
-    if (!v) return alert("Please enter or select your job title.");
-    value = { combobox: v }; // keep exactly what user typed or picked
-  }
-
-  // Store value
-  answers[currentQuestion] = value;
-  // Also store readable string in sessionStorage (like your existing pattern)
-  sessionStorage.setItem(`eligibility_q${currentQuestion}`, humanReadableAnswer(q, value, currentQuestion));
-
-  if (currentQuestion === questions.length - 1) {
-    checkEligibility();
-  } else {
-    currentQuestion++;
-    showQuestion();
-  }
-}
-
-function prevQuestion() {
-  if (currentQuestion > 0) currentQuestion--;
-  showQuestion();
-}
-
-
-/*****************************************
- * 4) ANSWER STRINGIFIER (for storage)   *
- *****************************************/
-function humanReadableAnswer(q, value, idx) {
-  const qType = q.type || "radio";
-
-  if (qType === "checkbox" && Array.isArray(value)) {
-    const labels = value.map(i => q.options[i]?.label).filter(Boolean);
-    const freeStr = sessionStorage.getItem(`q${idx}-free`);
-    return [labels.join(", "), freeStr].filter(Boolean).join(" — ") || "No answer";
-  }
-
-  if (qType === "text" && typeof value === "string") {
-    return value || "No answer";
-  }
-
-  if (qType === "select" && typeof value === "object") {
-    return value.select === "__other__" ? (value.other || "Other") : value.select || "No answer";
-  }
-
-  if (qType === "combobox" && typeof value === "object") {
-    return value.combobox || "No answer";
-  }
-
-  if (typeof value === "number") {
-    const label = q.options[value]?.label || "No answer";
-    const freeStr = sessionStorage.getItem(`q${idx}-free`);
-    return freeStr ? `${label} — ${freeStr}` : label;
-  }
-
-  return "No answer";
-}
-
-
-/*********************************
- * 5) ELIGIBILITY: same logic    *
- *********************************/
-// function checkEligibility() {
-//   for (let i = 0; i < answers.length; i++) {
-//     const q = questions[i];
-//     const a = answers[i];
-
-//     // checkbox: any ineligible checked?
-//     if ((q.type || "radio") === "checkbox" && Array.isArray(a)) {
-//       for (const idx of a) {
-//         const opt = q.options[idx];
-//         if (opt?.ineligible) {
-//           document.getElementById('survey-box').classList.add('hidden');
-//           document.getElementById('ineligible-modal').classList.remove('hidden');
-//           submitIneligible(i, opt);
-//           return;
-//         }
-//       }
-//     }
-
-//     // radio: ineligible?
-//     if (typeof a === "number") {
-//       const opt = q.options[a];
-//       if (opt?.ineligible) {
-//         document.getElementById('survey-box').classList.add('hidden');
-//         document.getElementById('ineligible-modal').classList.remove('hidden');
-//         submitIneligible(i, opt);
-//         return;
-//       }
-//     }
-//     // text / select / combobox: no ineligible flags by design
-//   }
-
-//   document.getElementById('survey-box').classList.add('hidden');
-//   document.getElementById('eligibility-success').classList.remove('hidden');
-//   document.getElementById('slots-box').classList.remove('hidden');
-// }
-async function checkEligibility() {
-  const result = evaluateGlobalEligibility(questions, answers);
-
-  if (result.ok) {
-    // ✅ Log the eligible participant *before* showing consent or slots
-    try {
-      await submitEligibleBeforeConsent();
-    } catch (err) {
-      console.warn("⚠️ Could not log eligibleBeforeConsent:", err);
-    }
-
-    // Now safely proceed to the consent or scheduling UI
-    document.getElementById('survey-box').classList.add('hidden');
-    document.getElementById('eligibility-success').classList.remove('hidden');
-    document.getElementById('slots-box').classList.remove('hidden');
-    return;
-  }
-
-  // ❌ Ineligible: show modal + log
-  document.getElementById('survey-box').classList.add('hidden');
-  document.getElementById('ineligible-modal').classList.remove('hidden');
-
-  const idx = typeof result.index === "number" ? result.index : 0;
-  submitIneligible(idx, result.option, result.reason);
-}
-
-
-
-/********************************************************
- * 6) SUBMISSION: stringify all types consistently      *
- ********************************************************/
-function submitRegistrationData() {
-  console.log('answers array before submit:', answers);
-  const email = localStorage.getItem("expert_email") || "unknown";
-  const notify = localStorage.getItem("notify_opt_in") === "true";
-  const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
-
-const eligibilityResponses = questions.map((q, index) => {
-  const a = answers[index];
-  let selectedOption = "No answer";
-  const t = q.type || "radio";
-
-  if (t === "checkbox" && Array.isArray(a)) {
-    const labels = a.map(i => q.options[i]?.label).filter(Boolean);
-    const free = sessionStorage.getItem(`q${index}-free`);
-    selectedOption = [labels.join(", "), free].filter(Boolean).join(" — ") || "No answer";
-  } else if (t === "text" && typeof a === "string") {
-    selectedOption = a || "No answer";
-  } else if (t === "select" && typeof a === "object") {
-    selectedOption = a.select === "__other__" ? (a.other || "Other") : (a.select || "No answer");
-  } else if (t === "combobox" && a && typeof a === "object") {
-    selectedOption = a.combobox || "No answer";
-  } else if (typeof a === "number") { // radio
-    const label = q.options[a]?.label || "No answer";
-    const free = sessionStorage.getItem(`q${index}-free`);
-    selectedOption = free ? `${label} — ${free}` : label;
-  }
-
-  // Fallback: if still "No answer", try the sessionStorage human-readable value
-  if (selectedOption === "No answer") {
-    const ss = sessionStorage.getItem(`eligibility_q${index}`);
-    if (ss && ss.trim()) selectedOption = ss.trim();
-  }
-
-  return { question: q.text, selectedOption };
-});
-
-
-  const payload = {
-    email,
-    notify,
-    selectedSlot,
-    eligibilityResponses,
-    submitted: true,
-    event: "availability"
-  };
-
-  return fetch("/register_student", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  })
-    .then(res => res.ok)
-    .catch(err => {
-      console.error("❌ Network error:", err);
-      return false;
-    });
-}
-
-
-/****************************************************************
- * 7) COMBOBOX ENGINE (substring match + ranking, top 5, keys)  *
- ****************************************************************/
-function attachCombobox(nameBase, items) {
-  const input = document.getElementById(`${nameBase}-combo`);
-  const list = document.getElementById(`${nameBase}-list`);
-  let activeIndex = -1;    // which <li> is highlighted
-  let currentItems = [];   // rendered suggestions (strings)
-
-  const render = (suggestions) => {
-    currentItems = suggestions.slice(0, 5);
-    if (currentItems.length === 0) {
-      list.style.display = "none";
-      list.innerHTML = "";
-      activeIndex = -1;
-      return;
-    }
-    list.innerHTML = currentItems.map((t, i) =>
-      `<li data-i="${i}" style="padding:8px 10px;cursor:pointer;">${escapeHtml(t)}</li>`
-    ).join("");
-    list.style.display = "block";
-    activeIndex = -1;
-  };
-
-  const update = () => {
-    const q = (input.value || "").trim();
-    if (!q) {
-      list.style.display = "none";
-      list.innerHTML = "";
-      activeIndex = -1;
-      return;
-    }
-    render(rankAndFilter(items, q));
-  };
-
-  input.addEventListener("input", update);
-
-  input.addEventListener("keydown", (e) => {
-    const visible = list.style.display !== "none";
-    if (!visible && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
-      update();
-      return;
-    }
-    if (!visible) return;
-
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      activeIndex = (activeIndex + 1) % currentItems.length;
-      highlight(activeIndex);
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      activeIndex = (activeIndex - 1 + currentItems.length) % currentItems.length;
-      highlight(activeIndex);
-    } else if (e.key === "Enter") {
-      if (activeIndex >= 0 && activeIndex < currentItems.length) {
-        e.preventDefault();
-        input.value = currentItems[activeIndex];
       }
-      list.style.display = "none";
-    } else if (e.key === "Escape") {
-      list.style.display = "none";
+
+      container.innerHTML = html;
+
+      // Wire up dynamic behaviors:
+
+      // Radio "Other"
+      if (qType === "radio" && q.options?.some(o => o.freeText)) {
+        const freeIdx = q.options.findIndex(o => o.freeText);
+        const radios = [...document.querySelectorAll(`input[name="${nameBase}"]`)];
+        const freeDiv = document.getElementById(`${nameBase}-free`);
+        radios.forEach(r => {
+          r.addEventListener("change", () => {
+            freeDiv.style.display = (parseInt(r.value, 10) === freeIdx && r.checked) ? "block" : "none";
+          });
+        });
+      }
+
+      // Checkbox "Other"
+      if (qType === "checkbox" && q.options?.some(o => o.freeText)) {
+        const freeIdx = q.options.findIndex(o => o.freeText);
+        const boxes = [...document.querySelectorAll(`input[name="${nameBase}[]"]`)];
+        const freeDiv = document.getElementById(`${nameBase}-free`);
+        const update = () => {
+          const on = boxes.some(x => x.checked && parseInt(x.value, 10) === freeIdx);
+          freeDiv.style.display = on ? "block" : "none";
+        };
+        boxes.forEach(cb => cb.addEventListener("change", update));
+      }
+
+      // Select "Other"
+      if (qType === "select" && q.hasOther) {
+        const sel = document.getElementById(`${nameBase}-select`);
+        const wrap = document.getElementById(`${nameBase}-other-wrap`);
+        sel.addEventListener("change", () => {
+          wrap.style.display = sel.value === "__other__" ? "block" : "none";
+        });
+      }
+
+      // Combobox attach
+      if (qType === "combobox") {
+        const source = (q.options || []).map(o => o.label);
+        attachCombobox(nameBase, source);
+      }
+
+      document.getElementById('prevBtn').disabled = currentQuestion === 0;
+      document.getElementById('nextBtn').innerText =
+        currentQuestion === questions.length - 1 ? 'Check Eligibility' : 'Next';
     }
-  });
 
-  list.addEventListener("mousedown", (e) => {
-    // use mousedown so we can set the value before blur
-    const li = e.target.closest("li");
-    if (!li) return;
-    const i = parseInt(li.getAttribute("data-i"), 10);
-    if (!isNaN(i) && currentItems[i]) {
-      input.value = currentItems[i];
-      list.style.display = "none";
+
+    /*********************************
+     * 3) NAVIGATION: next / prev    *
+     *********************************/
+    function nextQuestion() {
+      const q = questions[currentQuestion];
+      const qType = q.type || "radio";
+      const nameBase = `q${currentQuestion}`;
+
+      let value = null;
+      // Shapes by type:
+      // radio -> number
+      // checkbox -> number[]
+      // text -> string
+      // select -> {select: string, other?: string}
+      // combobox -> {combobox: string}
+
+      if (qType === "radio") {
+        const selected = document.querySelector(`input[name="${nameBase}"]:checked`);
+        if (!selected) return alert("Please select an option.");
+        value = parseInt(selected.value, 10);
+
+        // Persist free text if present
+        const freeInput = document.getElementById(`${nameBase}-free-input`);
+        if (freeInput) sessionStorage.setItem(`${nameBase}-free`, freeInput.value.trim());
+      }
+
+      if (qType === "checkbox") {
+        const nodes = [...document.querySelectorAll(`input[name="${nameBase}[]"]:checked`)];
+        if (nodes.length === 0) return alert("Please select at least one option.");
+        value = nodes.map(n => parseInt(n.value, 10));
+
+        const freeInput = document.getElementById(`${nameBase}-free-input`);
+        if (freeInput) sessionStorage.setItem(`${nameBase}-free`, freeInput.value.trim());
+      }
+
+      if (qType === "text") {
+        const t = (document.getElementById(`${nameBase}-text`)?.value || "").trim();
+        if (!t) return alert("Please enter a response.");
+        value = t;
+      }
+
+      if (qType === "select") {
+        const sel = document.getElementById(`${nameBase}-select`);
+        const v = sel?.value || "";
+        if (!v) return alert("Please select an option.");
+        if (v === "__other__") {
+          const other = (document.getElementById(`${nameBase}-other`)?.value || "").trim();
+          if (!other) return alert("Please enter your answer.");
+          value = { select: "__other__", other };
+        } else {
+          value = { select: v };
+        }
+      }
+
+      if (qType === "combobox") {
+        const input = document.getElementById(`${nameBase}-combo`);
+        const v = (input?.value || "").trim();
+        if (!v) return alert("Please enter or select your job title.");
+        value = { combobox: v }; // keep exactly what user typed or picked
+      }
+
+      // Store value
+      answers[currentQuestion] = value;
+      // Also store readable string in sessionStorage (like your existing pattern)
+      sessionStorage.setItem(`eligibility_q${currentQuestion}`, humanReadableAnswer(q, value, currentQuestion));
+
+      if (currentQuestion === questions.length - 1) {
+        checkEligibility();
+      } else {
+        currentQuestion++;
+        showQuestion();
+      }
     }
-  });
 
-  input.addEventListener("blur", () => {
-    // close after a tick to allow click selection
-    setTimeout(() => list.style.display = "none", 100);
-  });
-
-  function highlight(i) {
-    [...list.querySelectorAll("li")].forEach((el, idx) => {
-      el.style.background = idx === i ? "#eef5ff" : "";
-    });
-    // ensure active item stays in view
-    const el = list.querySelector(`li[data-i="${i}"]`);
-    if (el) {
-      const r = el.getBoundingClientRect();
-      const Lr = list.getBoundingClientRect();
-      if (r.top < Lr.top) list.scrollTop -= (Lr.top - r.top + 4);
-      if (r.bottom > Lr.bottom) list.scrollTop += (r.bottom - Lr.bottom + 4);
+    function prevQuestion() {
+      if (currentQuestion > 0) currentQuestion--;
+      showQuestion();
     }
-  }
-}
 
-// Ranking: substring match (case-insensitive)
-// Tier 0: startsWith; Tier 1: word-start; Tier 2: anywhere
-// Then shorter length; then alphabetical
-function rankAndFilter(items, query) {
-  const q = normalize(query);
-  if (!q) return [];
-  const scored = [];
-  for (const it of items) {
-    const n = normalize(it);
-    const idx = n.indexOf(q);
-    if (idx === -1) continue;
 
-    let tier = 2;
-    if (idx === 0) tier = 0;
-    else if (/\b/.test(n[idx - 1] || " ")) tier = 1;
+    /*****************************************
+     * 4) ANSWER STRINGIFIER (for storage)   *
+     *****************************************/
+    function humanReadableAnswer(q, value, idx) {
+      const qType = q.type || "radio";
 
-    const score = [tier, n.length, n]; // tuple: lower is better
-    scored.push({ it, score });
-  }
-  scored.sort((a, b) => {
-    for (let i = 0; i < a.score.length; i++) {
-      if (a.score[i] < b.score[i]) return -1;
-      if (a.score[i] > b.score[i]) return 1;
+      if (qType === "checkbox" && Array.isArray(value)) {
+        const labels = value.map(i => q.options[i]?.label).filter(Boolean);
+        const freeStr = sessionStorage.getItem(`q${idx}-free`);
+        return [labels.join(", "), freeStr].filter(Boolean).join(" — ") || "No answer";
+      }
+
+      if (qType === "text" && typeof value === "string") {
+        return value || "No answer";
+      }
+
+      if (qType === "select" && typeof value === "object") {
+        return value.select === "__other__" ? (value.other || "Other") : value.select || "No answer";
+      }
+
+      if (qType === "combobox" && typeof value === "object") {
+        return value.combobox || "No answer";
+      }
+
+      if (typeof value === "number") {
+        const label = q.options[value]?.label || "No answer";
+        const freeStr = sessionStorage.getItem(`q${idx}-free`);
+        return freeStr ? `${label} — ${freeStr}` : label;
+      }
+
+      return "No answer";
     }
-    return 0;
-  });
-  return scored.map(s => s.it).slice(0, 5);
-}
 
-function normalize(s) { return (s || "").toLowerCase().trim(); }
-function escapeHtml(s) { 
-  return (s ?? "").toString().replace(/[&<>"']/g, m => (
-    {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]
-  )); 
-}
+
+    /*********************************
+     * 5) ELIGIBILITY: same logic    *
+     *********************************/
+    // function checkEligibility() {
+    //   for (let i = 0; i < answers.length; i++) {
+    //     const q = questions[i];
+    //     const a = answers[i];
+
+    //     // checkbox: any ineligible checked?
+    //     if ((q.type || "radio") === "checkbox" && Array.isArray(a)) {
+    //       for (const idx of a) {
+    //         const opt = q.options[idx];
+    //         if (opt?.ineligible) {
+    //           document.getElementById('survey-box').classList.add('hidden');
+    //           document.getElementById('ineligible-modal').classList.remove('hidden');
+    //           submitIneligible(i, opt);
+    //           return;
+    //         }
+    //       }
+    //     }
+
+    //     // radio: ineligible?
+    //     if (typeof a === "number") {
+    //       const opt = q.options[a];
+    //       if (opt?.ineligible) {
+    //         document.getElementById('survey-box').classList.add('hidden');
+    //         document.getElementById('ineligible-modal').classList.remove('hidden');
+    //         submitIneligible(i, opt);
+    //         return;
+    //       }
+    //     }
+    //     // text / select / combobox: no ineligible flags by design
+    //   }
+
+    //   document.getElementById('survey-box').classList.add('hidden');
+    //   document.getElementById('eligibility-success').classList.remove('hidden');
+    //   document.getElementById('slots-box').classList.remove('hidden');
+    // }
+    async function checkEligibility() {
+      const result = evaluateGlobalEligibility(questions, answers);
+
+      if (result.ok) {
+        // ✅ Log the eligible participant *before* showing consent or slots
+        try {
+          await submitEligibleBeforeConsent();
+        } catch (err) {
+          console.warn("⚠️ Could not log eligibleBeforeConsent:", err);
+        }
+
+        // Now safely proceed to the consent or scheduling UI
+        document.getElementById('survey-box').classList.add('hidden');
+        document.getElementById('eligibility-success').classList.remove('hidden');
+        document.getElementById('slots-box').classList.remove('hidden');
+        return;
+      }
+
+      // ❌ Ineligible: show modal + log
+      document.getElementById('survey-box').classList.add('hidden');
+      document.getElementById('ineligible-modal').classList.remove('hidden');
+
+      const idx = typeof result.index === "number" ? result.index : 0;
+      submitIneligible(idx, result.option, result.reason);
+    }
+
+
+
+    /********************************************************
+     * 6) SUBMISSION: stringify all types consistently      *
+     ********************************************************/
+    function submitRegistrationData() {
+      console.log('answers array before submit:', answers);
+      const email = localStorage.getItem("expert_email") || "unknown";
+      const notify = localStorage.getItem("notify_opt_in") === "true";
+      const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
+
+      const eligibilityResponses = questions.map((q, index) => {
+        const a = answers[index];
+        let selectedOption = "No answer";
+        const t = q.type || "radio";
+
+        if (t === "checkbox" && Array.isArray(a)) {
+          const labels = a.map(i => q.options[i]?.label).filter(Boolean);
+          const free = sessionStorage.getItem(`q${index}-free`);
+          selectedOption = [labels.join(", "), free].filter(Boolean).join(" — ") || "No answer";
+        } else if (t === "text" && typeof a === "string") {
+          selectedOption = a || "No answer";
+        } else if (t === "select" && typeof a === "object") {
+          selectedOption = a.select === "__other__" ? (a.other || "Other") : (a.select || "No answer");
+        } else if (t === "combobox" && a && typeof a === "object") {
+          selectedOption = a.combobox || "No answer";
+        } else if (typeof a === "number") { // radio
+          const label = q.options[a]?.label || "No answer";
+          const free = sessionStorage.getItem(`q${index}-free`);
+          selectedOption = free ? `${label} — ${free}` : label;
+        }
+
+        // Fallback: if still "No answer", try the sessionStorage human-readable value
+        if (selectedOption === "No answer") {
+          const ss = sessionStorage.getItem(`eligibility_q${index}`);
+          if (ss && ss.trim()) selectedOption = ss.trim();
+        }
+
+        return { question: q.text, selectedOption };
+      });
+
+
+      const payload = {
+        email,
+        notify,
+        selectedSlot,
+        eligibilityResponses,
+        submitted: true,
+        event: "availability"
+      };
+
+      return fetch("/register_student", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+        .then(res => res.ok)
+        .catch(err => {
+          console.error("❌ Network error:", err);
+          return false;
+        });
+    }
+
+
+    /****************************************************************
+     * 7) COMBOBOX ENGINE (substring match + ranking, top 5, keys)  *
+     ****************************************************************/
+    function attachCombobox(nameBase, items) {
+      const input = document.getElementById(`${nameBase}-combo`);
+      const list = document.getElementById(`${nameBase}-list`);
+      let activeIndex = -1;    // which <li> is highlighted
+      let currentItems = [];   // rendered suggestions (strings)
+
+      const render = (suggestions) => {
+        currentItems = suggestions.slice(0, 5);
+        if (currentItems.length === 0) {
+          list.style.display = "none";
+          list.innerHTML = "";
+          activeIndex = -1;
+          return;
+        }
+        list.innerHTML = currentItems.map((t, i) =>
+          `<li data-i="${i}" style="padding:8px 10px;cursor:pointer;">${escapeHtml(t)}</li>`
+        ).join("");
+        list.style.display = "block";
+        activeIndex = -1;
+      };
+
+      const update = () => {
+        const q = (input.value || "").trim();
+        if (!q) {
+          list.style.display = "none";
+          list.innerHTML = "";
+          activeIndex = -1;
+          return;
+        }
+        render(rankAndFilter(items, q));
+      };
+
+      input.addEventListener("input", update);
+
+      input.addEventListener("keydown", (e) => {
+        const visible = list.style.display !== "none";
+        if (!visible && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
+          update();
+          return;
+        }
+        if (!visible) return;
+
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          activeIndex = (activeIndex + 1) % currentItems.length;
+          highlight(activeIndex);
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          activeIndex = (activeIndex - 1 + currentItems.length) % currentItems.length;
+          highlight(activeIndex);
+        } else if (e.key === "Enter") {
+          if (activeIndex >= 0 && activeIndex < currentItems.length) {
+            e.preventDefault();
+            input.value = currentItems[activeIndex];
+          }
+          list.style.display = "none";
+        } else if (e.key === "Escape") {
+          list.style.display = "none";
+        }
+      });
+
+      list.addEventListener("mousedown", (e) => {
+        // use mousedown so we can set the value before blur
+        const li = e.target.closest("li");
+        if (!li) return;
+        const i = parseInt(li.getAttribute("data-i"), 10);
+        if (!isNaN(i) && currentItems[i]) {
+          input.value = currentItems[i];
+          list.style.display = "none";
+        }
+      });
+
+      input.addEventListener("blur", () => {
+        // close after a tick to allow click selection
+        setTimeout(() => list.style.display = "none", 100);
+      });
+
+      function highlight(i) {
+        [...list.querySelectorAll("li")].forEach((el, idx) => {
+          el.style.background = idx === i ? "#eef5ff" : "";
+        });
+        // ensure active item stays in view
+        const el = list.querySelector(`li[data-i="${i}"]`);
+        if (el) {
+          const r = el.getBoundingClientRect();
+          const Lr = list.getBoundingClientRect();
+          if (r.top < Lr.top) list.scrollTop -= (Lr.top - r.top + 4);
+          if (r.bottom > Lr.bottom) list.scrollTop += (r.bottom - Lr.bottom + 4);
+        }
+      }
+    }
+
+    // Ranking: substring match (case-insensitive)
+    // Tier 0: startsWith; Tier 1: word-start; Tier 2: anywhere
+    // Then shorter length; then alphabetical
+    function rankAndFilter(items, query) {
+      const q = normalize(query);
+      if (!q) return [];
+      const scored = [];
+      for (const it of items) {
+        const n = normalize(it);
+        const idx = n.indexOf(q);
+        if (idx === -1) continue;
+
+        let tier = 2;
+        if (idx === 0) tier = 0;
+        else if (/\b/.test(n[idx - 1] || " ")) tier = 1;
+
+        const score = [tier, n.length, n]; // tuple: lower is better
+        scored.push({ it, score });
+      }
+      scored.sort((a, b) => {
+        for (let i = 0; i < a.score.length; i++) {
+          if (a.score[i] < b.score[i]) return -1;
+          if (a.score[i] > b.score[i]) return 1;
+        }
+        return 0;
+      });
+      return scored.map(s => s.it).slice(0, 5);
+    }
+
+    function normalize(s) { return (s || "").toLowerCase().trim(); }
+    function escapeHtml(s) {
+      return (s ?? "").toString().replace(/[&<>"']/g, m => (
+        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]
+      ));
+    }
 
 
 
@@ -1736,221 +1754,221 @@ function escapeHtml(s) {
   </script>
 
   <script>
-// --- Replace your existing helper with this robust version ---
-function buildEligibilityResponsesFromAnswers(answers) {
-  return questions.map((q, index) => {
-    const a = answers[index];
-    const t = q.type || "radio";
-    let selectedOption = "No answer";
+    // --- Replace your existing helper with this robust version ---
+    function buildEligibilityResponsesFromAnswers(answers) {
+      return questions.map((q, index) => {
+        const a = answers[index];
+        const t = q.type || "radio";
+        let selectedOption = "No answer";
 
-    if (t === "checkbox" && Array.isArray(a)) {
-      const labels = a.map(i => q.options[i]?.label).filter(Boolean);
-      const free = sessionStorage.getItem(`q${index}-free`);
-      selectedOption = [labels.join(", "), free].filter(Boolean).join(" — ") || "No answer";
-    } else if (t === "text" && typeof a === "string") {
-      selectedOption = a || "No answer";
-    } else if (t === "select" && typeof a === "object") {
-      selectedOption = a.select === "__other__" ? (a.other || "Other") : (a.select || "No answer");
-    } else if (t === "combobox" && a && typeof a === "object") {
-      selectedOption = a.combobox || "No answer";
-    } else if (typeof a === "number") { // radio
-      const label = q.options[a]?.label || "No answer";
-      const free = sessionStorage.getItem(`q${index}-free`);
-      selectedOption = free ? `${label} — ${free}` : label;
+        if (t === "checkbox" && Array.isArray(a)) {
+          const labels = a.map(i => q.options[i]?.label).filter(Boolean);
+          const free = sessionStorage.getItem(`q${index}-free`);
+          selectedOption = [labels.join(", "), free].filter(Boolean).join(" — ") || "No answer";
+        } else if (t === "text" && typeof a === "string") {
+          selectedOption = a || "No answer";
+        } else if (t === "select" && typeof a === "object") {
+          selectedOption = a.select === "__other__" ? (a.other || "Other") : (a.select || "No answer");
+        } else if (t === "combobox" && a && typeof a === "object") {
+          selectedOption = a.combobox || "No answer";
+        } else if (typeof a === "number") { // radio
+          const label = q.options[a]?.label || "No answer";
+          const free = sessionStorage.getItem(`q${index}-free`);
+          selectedOption = free ? `${label} — ${free}` : label;
+        }
+
+        // Fallback to the human-readable value cached in sessionStorage
+        if (selectedOption === "No answer") {
+          const ss = sessionStorage.getItem(`eligibility_q${index}`);
+          if (ss && ss.trim()) selectedOption = ss.trim();
+        }
+
+        return { question: q.text, selectedOption };
+      });
     }
 
-    // Fallback to the human-readable value cached in sessionStorage
-    if (selectedOption === "No answer") {
-      const ss = sessionStorage.getItem(`eligibility_q${index}`);
-      if (ss && ss.trim()) selectedOption = ss.trim();
-    }
 
-    return { question: q.text, selectedOption };
-  });
-}
+    async function submitIneligible(ineligibleIndex, ineligibleOption, failureReason) {
+      const email = localStorage.getItem("expert_email") || "unknown";
+      const notify = localStorage.getItem("notify_opt_in") === "true";
+      const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
 
+      const payload = {
+        email,
+        notify,
+        selectedSlot,
+        eligibilityResponses: buildEligibilityResponsesFromAnswers(answers), // robust version
+        ineligible: true,
+        ineligibleAt: ineligibleIndex,
+        ineligibleQuestion: questions[ineligibleIndex]?.text || "",
+        ineligibleOption: ineligibleOption?.label || "",
+        failureReason: failureReason || "",
+        userAgent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+        submitted: true,
+        event: "ineligible"
+      };
 
-async function submitIneligible(ineligibleIndex, ineligibleOption, failureReason) {
-  const email = localStorage.getItem("expert_email") || "unknown";
-  const notify = localStorage.getItem("notify_opt_in") === "true";
-  const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
-
-  const payload = {
-    email,
-    notify,
-    selectedSlot,
-    eligibilityResponses: buildEligibilityResponsesFromAnswers(answers), // robust version
-    ineligible: true,
-    ineligibleAt: ineligibleIndex,
-    ineligibleQuestion: questions[ineligibleIndex]?.text || "",
-    ineligibleOption: ineligibleOption?.label || "",
-    failureReason: failureReason || "",
-    userAgent: navigator.userAgent,
-    timestamp: new Date().toISOString(),
-    submitted: true,
-    event: "ineligible"
-  };
-
-  try {
-    const res = await fetch("/register_expert", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    if (!res.ok) {
-      console.warn("⚠️ Failed to log ineligible:", await res.text());
-    }
-  } catch (e) {
-    console.error("❌ Network error logging ineligible", e);
-  }
-}
-
-
-
-function norm(s){ return (s||"").toLowerCase().trim(); }
-
-function optByLabel(q, label){
-  if(!q?.options) return null;
-  const L = norm(label);
-  return q.options.find(o => norm(o.label) === L) || null;
-}
-
-function isAnswerIneligibleForQuestion(q, answer){
-  const t = q.type || "radio";
-
-  if (typeof answer === "number") { // radio
-    const opt = q.options?.[answer];
-    return !!opt?.ineligible;
-  }
-
-  if (t === "checkbox" && Array.isArray(answer)) {
-    return answer.some(i => !!q.options?.[i]?.ineligible);
-  }
-
-  if (t === "select" && answer && typeof answer === "object") {
-    if (answer.select === "__other__") return false; // free text isn't flagged
-    const opt = optByLabel(q, answer.select);
-    return !!opt?.ineligible;
-  }
-
-  if (t === "combobox" && answer && typeof answer === "object") {
-    // exact match to a predefined option makes it ineligible if that option is ineligible
-    const opt = optByLabel(q, answer.combobox || "");
-    return !!opt?.ineligible;
-  }
-
-  // text/other types: not flagged
-  return false;
-}
-
-function isAnswerEligibleForQuestion(q, answer){
-  const t = q.type || "radio";
-
-  if (typeof answer === "number") { // radio
-    const opt = q.options?.[answer];
-    return !!opt?.eligible;
-  }
-
-  if (t === "checkbox" && Array.isArray(answer)) {
-    return answer.some(i => !!q.options?.[i]?.eligible);
-  }
-
-  if (t === "select" && answer && typeof answer === "object") {
-    if (answer.select === "__other__") return false; // free text not flagged eligible
-    const opt = optByLabel(q, answer.select);
-    return !!opt?.eligible;
-  }
-
-  if (t === "combobox" && answer && typeof answer === "object") {
-    // exact match to eligible option
-    const opt = optByLabel(q, answer.combobox || "");
-    return !!opt?.eligible;
-  }
-
-  return false;
-}
-
-/**
- * Evaluate whole screener:
- * - if ANY ineligible -> fail (captures where it happened)
- * - else if ANY eligible -> pass
- * - else -> fail (no eligible answers)
- */
-function evaluateGlobalEligibility(questions, answers){
-  let firstIneligible = null; // {index, option}
-  let hasEligible = false;
-
-  for (let i = 0; i < answers.length; i++) {
-    const q = questions[i];
-    const a = answers[i];
-
-    // capture first ineligible
-    if (isAnswerIneligibleForQuestion(q, a)) {
-      // find the concrete failing option for logging
-      let failOpt = null;
-      const t = q.type || "radio";
-      if (typeof a === "number") {
-        failOpt = q.options?.[a] || null;
-      } else if (t === "checkbox" && Array.isArray(a)) {
-        const idx = a.find(j => q.options?.[j]?.ineligible);
-        if (typeof idx === "number") failOpt = q.options[idx];
-      } else if (t === "select" && a && typeof a === "object" && a.select !== "__other__") {
-        failOpt = optByLabel(q, a.select);
-      } else if (t === "combobox" && a && typeof a === "object") {
-        failOpt = optByLabel(q, a.combobox || "");
+      try {
+        const res = await fetch("/register_expert", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) {
+          console.warn("⚠️ Failed to log ineligible:", await res.text());
+        }
+      } catch (e) {
+        console.error("❌ Network error logging ineligible", e);
       }
-      firstIneligible = { index: i, option: failOpt };
-      break;
     }
 
-    // track eligible
-    if (isAnswerEligibleForQuestion(q, a)) {
-      hasEligible = true;
+
+
+    function norm(s) { return (s || "").toLowerCase().trim(); }
+
+    function optByLabel(q, label) {
+      if (!q?.options) return null;
+      const L = norm(label);
+      return q.options.find(o => norm(o.label) === L) || null;
     }
-  }
 
-  if (firstIneligible) {
-    return { ok: false, reason: "has_ineligible_selection", ...firstIneligible };
-  }
-  if (hasEligible) {
-    return { ok: true };
-  }
-  return { ok: false, reason: "no_eligible_answers", index: 0, option: null };
-}
+    function isAnswerIneligibleForQuestion(q, answer) {
+      const t = q.type || "radio";
 
+      if (typeof answer === "number") { // radio
+        const opt = q.options?.[answer];
+        return !!opt?.ineligible;
+      }
 
-async function submitEligibleBeforeConsent() {
-  const email = localStorage.getItem("expert_email") || "unknown";
-  const notify = localStorage.getItem("notify_opt_in") === "true";
-  const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
+      if (t === "checkbox" && Array.isArray(answer)) {
+        return answer.some(i => !!q.options?.[i]?.ineligible);
+      }
 
-  const payload = {
-    email,
-    notify,
-    selectedSlot,
-    eligibilityResponses: buildEligibilityResponsesFromAnswers(answers),
-    eligible: true,
-    userAgent: navigator.userAgent,
-    timestamp: new Date().toISOString(),
-    submitted: true,
-    event: "eligibleBeforeConsent"
-  };
+      if (t === "select" && answer && typeof answer === "object") {
+        if (answer.select === "__other__") return false; // free text isn't flagged
+        const opt = optByLabel(q, answer.select);
+        return !!opt?.ineligible;
+      }
 
-  try {
-    const res = await fetch("/register_expert", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    if (!res.ok) {
-      console.warn("⚠️ Failed to log eligibleBeforeConsent:", await res.text());
-    } else {
-      console.log("✅ Logged eligible participant before consent");
+      if (t === "combobox" && answer && typeof answer === "object") {
+        // exact match to a predefined option makes it ineligible if that option is ineligible
+        const opt = optByLabel(q, answer.combobox || "");
+        return !!opt?.ineligible;
+      }
+
+      // text/other types: not flagged
+      return false;
     }
-  } catch (e) {
-    console.error("❌ Network error logging eligibleBeforeConsent", e);
-  }
-}
+
+    function isAnswerEligibleForQuestion(q, answer) {
+      const t = q.type || "radio";
+
+      if (typeof answer === "number") { // radio
+        const opt = q.options?.[answer];
+        return !!opt?.eligible;
+      }
+
+      if (t === "checkbox" && Array.isArray(answer)) {
+        return answer.some(i => !!q.options?.[i]?.eligible);
+      }
+
+      if (t === "select" && answer && typeof answer === "object") {
+        if (answer.select === "__other__") return false; // free text not flagged eligible
+        const opt = optByLabel(q, answer.select);
+        return !!opt?.eligible;
+      }
+
+      if (t === "combobox" && answer && typeof answer === "object") {
+        // exact match to eligible option
+        const opt = optByLabel(q, answer.combobox || "");
+        return !!opt?.eligible;
+      }
+
+      return false;
+    }
+
+    /**
+     * Evaluate whole screener:
+     * - if ANY ineligible -> fail (captures where it happened)
+     * - else if ANY eligible -> pass
+     * - else -> fail (no eligible answers)
+     */
+    function evaluateGlobalEligibility(questions, answers) {
+      let firstIneligible = null; // {index, option}
+      let hasEligible = false;
+
+      for (let i = 0; i < answers.length; i++) {
+        const q = questions[i];
+        const a = answers[i];
+
+        // capture first ineligible
+        if (isAnswerIneligibleForQuestion(q, a)) {
+          // find the concrete failing option for logging
+          let failOpt = null;
+          const t = q.type || "radio";
+          if (typeof a === "number") {
+            failOpt = q.options?.[a] || null;
+          } else if (t === "checkbox" && Array.isArray(a)) {
+            const idx = a.find(j => q.options?.[j]?.ineligible);
+            if (typeof idx === "number") failOpt = q.options[idx];
+          } else if (t === "select" && a && typeof a === "object" && a.select !== "__other__") {
+            failOpt = optByLabel(q, a.select);
+          } else if (t === "combobox" && a && typeof a === "object") {
+            failOpt = optByLabel(q, a.combobox || "");
+          }
+          firstIneligible = { index: i, option: failOpt };
+          break;
+        }
+
+        // track eligible
+        if (isAnswerEligibleForQuestion(q, a)) {
+          hasEligible = true;
+        }
+      }
+
+      if (firstIneligible) {
+        return { ok: false, reason: "has_ineligible_selection", ...firstIneligible };
+      }
+      if (hasEligible) {
+        return { ok: true };
+      }
+      return { ok: false, reason: "no_eligible_answers", index: 0, option: null };
+    }
+
+
+    async function submitEligibleBeforeConsent() {
+      const email = localStorage.getItem("expert_email") || "unknown";
+      const notify = localStorage.getItem("notify_opt_in") === "true";
+      const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
+
+      const payload = {
+        email,
+        notify,
+        selectedSlot,
+        eligibilityResponses: buildEligibilityResponsesFromAnswers(answers),
+        eligible: true,
+        userAgent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+        submitted: true,
+        event: "eligibleBeforeConsent"
+      };
+
+      try {
+        const res = await fetch("/register_expert", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) {
+          console.warn("⚠️ Failed to log eligibleBeforeConsent:", await res.text());
+        } else {
+          console.log("✅ Logged eligible participant before consent");
+        }
+      } catch (e) {
+        console.error("❌ Network error logging eligibleBeforeConsent", e);
+      }
+    }
 
   </script>
 
