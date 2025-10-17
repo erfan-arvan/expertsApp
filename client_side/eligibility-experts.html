@@ -1559,60 +1559,6 @@ function escapeHtml(s) {
     }
 
 
-
-    function submitRegistrationData() {
-      const email = localStorage.getItem("expert_email") || "unknown";
-      const notify = localStorage.getItem("notify_opt_in") === "true";
-      const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
-
-const eligibilityResponses = questions.map((q, index) => {
-  const a = answers[index];
-  let selectedOption = "No answer";
-
-  if ((q.type || "radio") === "checkbox" && Array.isArray(a)) {
-    const labels = a.map(i => q.options[i]?.label).filter(Boolean);
-    const free = sessionStorage.getItem(`q${index}-free`);
-    selectedOption = [labels.join(", "), free].filter(Boolean).join(" — ") || "No answer";
-  } else if (q.type === "text" && typeof a === "string") {
-    selectedOption = a || "No answer";
-  } else if (q.type === "select" && typeof a === "object") {
-    selectedOption = a.select === "__other__" ? (a.other || "Other") : a.select;
-  } else if (q.type === "combobox" && typeof a === "object") {
-    selectedOption = a.combobox || "No answer";
-  } else if (typeof a === "number") {
-    const label = q.options[a]?.label || "No answer";
-    const free = sessionStorage.getItem(`q${index}-free`);
-    selectedOption = free ? `${label} — ${free}` : label;
-  }
-
-  return { question: q.text, selectedOption };
-});
-
-
-      const payload = {
-        email: email,
-        notify: notify,
-        selectedSlot: selectedSlot,
-        eligibilityResponses: eligibilityResponses,
-        submitted: true,
-        event: "availability" // or "cancel" or "modify"
-      };
-
-
-      return fetch("/register_student", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      })
-        .then(res => res.ok)
-        .catch(err => {
-          console.error("❌ Network error:", err);
-          return false;
-        });
-    }
-
     function showWarningModal(message) {
       document.getElementById("warning-message").textContent = message;
       document.getElementById("warning-modal").classList.remove("hidden");
