@@ -713,12 +713,13 @@ const questions = [
  {
    text: "What is your age?",
    options: [
-     { label: "Under 18", ineligible: true },
-     { label: "18–20" },
-     { label: "21–24" },
-     { label: "25–30" },
-     { label: "31–40" },
-     { label: "Over 40" }
+   { label: "Under 18", ineligible: true },
+   { label: "18–24" },
+   { label: "25–34" },
+   { label: "35–44" },
+   { label: "45–54" },
+   { label: "55–64" },
+   { label: "65 or older" }
    ]
  },
 
@@ -767,38 +768,12 @@ const questions = [
      { label: "20+ years" }
    ]
  },
- {
-   text: "How many years of experience in software development do you have?",
-   options: [
-     { label: "No experience" },
-     { label: "<1 year" },
-     { label: "1–2 years" },
-     { label: "3–5 years" },
-     { label: "6–9 years" },
-     { label: "10–14 years" },
-     { label: "15–19 years" },
-     { label: "20+ years" }
-   ]
- },
-
-
- // 4) Role + context
- {
-   text: "Which of the following best describes your primary role in software engineering?",
-   options: [
-     { label: "Programmer" },
-     { label: "Tester" },
-     { label: "Software Architect" },
-     { label: "Project Technical Lead" },
-     { label: "Project Manager" },
-     { label: "IT Manager" },
-     { label: "Consultant" },
-     { label: "Educator" },
-     { label: "Researcher" },
-     { label: "Analyst" },
-     { label: "Other (please specify)", freeText: true }
-   ]
- },
+{
+text: "Briefly describe the largest or most complex software system you’ve worked on (e.g., its purpose, scale, or your role).",
+type: "text",
+placeholder: "For example: a distributed microservice system for e-commerce, team of 8 developers, deployed to production.",
+multiline: true
+},
  {
    text: "What is your current job title?",
    type: "combobox",
@@ -832,6 +807,7 @@ const questions = [
    multiline: true
  }
 ];
+
 
 
 
