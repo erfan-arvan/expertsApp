@@ -1189,24 +1189,32 @@ function humanReadableAnswer(q, value, idx) {
 //   document.getElementById('eligibility-success').classList.remove('hidden');
 //   document.getElementById('slots-box').classList.remove('hidden');
 // }
-function checkEligibility() {
+async function checkEligibility() {
   const result = evaluateGlobalEligibility(questions, answers);
 
   if (result.ok) {
-    // PASS
+    // ✅ Log the eligible participant *before* showing consent or slots
+    try {
+      await submitEligibleBeforeConsent();
+    } catch (err) {
+      console.warn("⚠️ Could not log eligibleBeforeConsent:", err);
+    }
+
+    // Now safely proceed to the consent or scheduling UI
     document.getElementById('survey-box').classList.add('hidden');
     document.getElementById('eligibility-success').classList.remove('hidden');
     document.getElementById('slots-box').classList.remove('hidden');
     return;
   }
 
-  // FAIL: show modal + log
+  // ❌ Ineligible: show modal + log
   document.getElementById('survey-box').classList.add('hidden');
   document.getElementById('ineligible-modal').classList.remove('hidden');
 
   const idx = typeof result.index === "number" ? result.index : 0;
   submitIneligible(idx, result.option, result.reason);
 }
+
 
 
 /********************************************************
@@ -1947,6 +1955,39 @@ function evaluateGlobalEligibility(questions, answers){
   return { ok: false, reason: "no_eligible_answers", index: 0, option: null };
 }
 
+
+async function submitEligibleBeforeConsent() {
+  const email = localStorage.getItem("expert_email") || "unknown";
+  const notify = localStorage.getItem("notify_opt_in") === "true";
+  const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
+
+  const payload = {
+    email,
+    notify,
+    selectedSlot,
+    eligibilityResponses: buildEligibilityResponsesFromAnswers(answers),
+    eligible: true,
+    userAgent: navigator.userAgent,
+    timestamp: new Date().toISOString(),
+    submitted: true,
+    event: "eligibleBeforeConsent"
+  };
+
+  try {
+    const res = await fetch("/register_expert", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) {
+      console.warn("⚠️ Failed to log eligibleBeforeConsent:", await res.text());
+    } else {
+      console.log("✅ Logged eligible participant before consent");
+    }
+  } catch (e) {
+    console.error("❌ Network error logging eligibleBeforeConsent", e);
+  }
+}
 
   </script>
 
