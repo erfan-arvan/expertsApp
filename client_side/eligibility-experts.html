@@ -1767,53 +1767,78 @@ function escapeHtml(s) {
   </script>
 
   <script>
-    function buildEligibilityResponsesFromAnswers(answers) {
-      // Mirrors what you did elsewhere: question text + selected label (or "No answer")
-      return questions.map((q, idx) => {
-        const choiceIdx = answers[idx];
-        const choice = typeof choiceIdx === "number" ? q.options[choiceIdx] : null;
-        return {
-          question: q.text,
-          selectedOption: choice?.label || "No answer"
-        };
-      });
+// --- Replace your existing helper with this robust version ---
+function buildEligibilityResponsesFromAnswers(answers) {
+  return questions.map((q, index) => {
+    const a = answers[index];
+    const t = q.type || "radio";
+    let selectedOption = "No answer";
+
+    if (t === "checkbox" && Array.isArray(a)) {
+      const labels = a.map(i => q.options[i]?.label).filter(Boolean);
+      const free = sessionStorage.getItem(`q${index}-free`);
+      selectedOption = [labels.join(", "), free].filter(Boolean).join(" — ") || "No answer";
+    } else if (t === "text" && typeof a === "string") {
+      selectedOption = a || "No answer";
+    } else if (t === "select" && typeof a === "object") {
+      selectedOption = a.select === "__other__" ? (a.other || "Other") : (a.select || "No answer");
+    } else if (t === "combobox" && a && typeof a === "object") {
+      selectedOption = a.combobox || "No answer";
+    } else if (typeof a === "number") { // radio
+      const label = q.options[a]?.label || "No answer";
+      const free = sessionStorage.getItem(`q${index}-free`);
+      selectedOption = free ? `${label} — ${free}` : label;
     }
 
-    async function submitIneligible(ineligibleIndex, ineligibleOption) {
-      const email = localStorage.getItem("expert_email") || "unknown";
-      const notify = localStorage.getItem("notify_opt_in") === "true";
-      const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
-
-      const payload = {
-        email,
-        notify,
-        selectedSlot,
-        eligibilityResponses: buildEligibilityResponsesFromAnswers(answers),
-        // extra diagnostics so you can see what tripped the screen
-        ineligible: true,
-        ineligibleAt: ineligibleIndex,
-        ineligibleQuestion: questions[ineligibleIndex]?.text || "",
-        ineligibleOption: ineligibleOption?.label || "",
-        userAgent: navigator.userAgent,
-        timestamp: new Date().toISOString(),
-        submitted: true,
-        event: "ineligible"
-      };
-
-      try {
-        const res = await fetch("/register_expert", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-        if (!res.ok) {
-          // Non-blocking: show the modal either way, but log the failure
-          console.warn("⚠️ Failed to log ineligible:", await res.text());
-        }
-      } catch (e) {
-        console.error("❌ Network error logging ineligible", e);
-      }
+    // Fallback to the human-readable value cached in sessionStorage
+    if (selectedOption === "No answer") {
+      const ss = sessionStorage.getItem(`eligibility_q${index}`);
+      if (ss && ss.trim()) selectedOption = ss.trim();
     }
+
+    return { question: q.text, selectedOption };
+  });
+}
+
+
+// --- Replace your submitIneligible with this ---
+async function submitIneligible(ineligibleIndex, ineligibleOption) {
+  const email = localStorage.getItem("expert_email") || "unknown";
+  const notify = localStorage.getItem("notify_opt_in") === "true";
+  const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
+
+  // Use the robust builder so all answer types are captured
+  const eligibilityResponses = buildEligibilityResponsesFromAnswers(answers);
+
+  const payload = {
+    email,
+    notify,
+    selectedSlot,
+    eligibilityResponses,
+    ineligible: true,
+    ineligibleAt: ineligibleIndex,
+    ineligibleQuestion: questions[ineligibleIndex]?.text || "",
+    ineligibleOption: ineligibleOption?.label || "",
+    userAgent: navigator.userAgent,
+    timestamp: new Date().toISOString(),
+    submitted: true,
+    event: "ineligible"
+  };
+
+  try {
+    const res = await fetch("/register_expert", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) {
+      console.warn("⚠️ Failed to log ineligible:", await res.text());
+    }
+  } catch (e) {
+    console.error("❌ Network error logging ineligible", e);
+  }
+}
+
   </script>
 
   <footer
