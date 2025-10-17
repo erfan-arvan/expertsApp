@@ -249,207 +249,251 @@
     }
 
     @media (max-width: 600px) {
-  body {
-    margin: 16px;
-  }
+      body {
+        margin: 16px;
+      }
 
-  .instructions,
-  .email-box,
-  .survey-box,
-  .slots-box {
-    padding: 16px;
-  }
+      .instructions,
+      .email-box,
+      .survey-box,
+      .slots-box {
+        padding: 16px;
+      }
 
-  .modal-content {
-    max-width: 90%;
-    padding: 20px;
-  }
-}
+      .modal-content {
+        max-width: 90%;
+        padding: 20px;
+      }
+    }
 
-#gotoconsent{
-  animation: glowPulse 1.5s infinite alternate;
-}
+    #gotoconsent {
+      animation: glowPulse 1.5s infinite alternate;
+    }
 
-.container {
-  display: flex;
-  flex-wrap: wrap; /* allows them to stack when needed */
-  gap: 20px;       /* space between boxes */
-}
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      /* allows them to stack when needed */
+      gap: 20px;
+      /* space between boxes */
+    }
 
-.email-box {
-  flex: 1;                 /* each box takes equal width */
-  min-width: 280px;        /* prevents shrinking too small */
-  box-sizing: border-box;
-}
+    .email-box {
+      flex: 1;
+      /* each box takes equal width */
+      min-width: 280px;
+      /* prevents shrinking too small */
+      box-sizing: border-box;
+    }
 
-/* Responsive rule: stack on smaller screens */
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-  }
-}
+    /* Responsive rule: stack on smaller screens */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+    }
 
-/* Overlay: allow page locking + internal scrolling if needed */
-.modal {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0,0,0,.5);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;      /* avoid vertical overflow when tall */
-  overflow: auto;               /* overlay scrolls if content too tall */
-  padding: 16px;                /* breathing room around the box */
-  z-index: 9999;
-}
+    /* Overlay: allow page locking + internal scrolling if needed */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, .5);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      /* avoid vertical overflow when tall */
+      overflow: auto;
+      /* overlay scrolls if content too tall */
+      padding: 16px;
+      /* breathing room around the box */
+      z-index: 9999;
+    }
 
-/* Cap modal box height to viewport and let its content scroll */
-.modal-content {
-  background: #fff;
-  padding: 24px;
-  border-radius: 10px;
-  width: min(600px, 92vw);
-  max-height: calc(100dvh - 32px);  /* safe on mobile browsers */
-  overflow: auto;                   /* the box itself scrolls */
-}
+    /* Cap modal box height to viewport and let its content scroll */
+    .modal-content {
+      background: #fff;
+      padding: 24px;
+      border-radius: 10px;
+      width: min(600px, 92vw);
+      max-height: calc(100dvh - 32px);
+      /* safe on mobile browsers */
+      overflow: auto;
+      /* the box itself scrolls */
+    }
 
-/* Optional: keep the iframe from forcing expansion */
-.modal-content .referrals-section {
-  max-height: 60vh;
-  overflow: auto;
-}
+    /* Optional: keep the iframe from forcing expansion */
+    .modal-content .referrals-section {
+      max-height: 60vh;
+      overflow: auto;
+    }
 
-/* Hide when needed */
-.modal.hidden { display: none !important; }
+    /* Hide when needed */
+    .modal.hidden {
+      display: none !important;
+    }
 
-/* Lock background scroll when a modal is open */
-body.modal-open { overflow: hidden; }
+    /* Lock background scroll when a modal is open */
+    body.modal-open {
+      overflow: hidden;
+    }
 
-/* Small screens tweaks */
-@media (max-width: 600px) {
-  .modal-content { padding: 20px; }
-}
+    /* Small screens tweaks */
+    @media (max-width: 600px) {
+      .modal-content {
+        padding: 20px;
+      }
+    }
 
-.shrinked-iframe {
-  transform: scale(0.90);   /* shrink to 85% */
-  transform-origin: top center; /* keep it aligned at top */
-  width: 118%;              /* counteract the shrink so it still fills */
-  height: 500px;            /* fixed or flexible height */
-  border: none;
-}
-
-
+    .shrinked-iframe {
+      transform: scale(0.90);
+      /* shrink to 85% */
+      transform-origin: top center;
+      /* keep it aligned at top */
+      width: 118%;
+      /* counteract the shrink so it still fills */
+      height: 500px;
+      /* fixed or flexible height */
+      border: none;
+    }
   </style>
 </head>
 
 <body>
 
 
-<div class="instructions">
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-    <h2>Ranking Code Snippets by Comprehension Difficulty</h2>
-    <button
-      style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none;color: darkslategrey; cursor: pointer;"
-      onclick="toggleInfo(this)">Hide</button>
-  </div>
-  <div id="study-info">
+  <div class="instructions">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h2>Ranking Code Snippets by Comprehension Difficulty</h2>
+      <button
+        style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ddd; border: none;color: darkslategrey; cursor: pointer;"
+        onclick="toggleInfo(this)">Hide</button>
+    </div>
+    <div id="study-info">
 
-    <p>👋 Welcome! We are conducting a research study to understand how senior software engineers (<em>aka</em> experts) evaluate the comprehensibility of  Java code snippets. Comprehensibility is defined as the difficulty of understanding a code snippet. You have been invited to serve as one of five experts. Your expertise will help us conduct foundational research to develop methods to make code easier for developers to understand.</p>
+      <p>👋 Welcome! We are conducting a research study to understand how senior software engineers (<em>aka</em>
+        experts) evaluate the comprehensibility of Java code snippets. Comprehensibility is defined as the difficulty of
+        understanding a code snippet. You have been invited to serve as one of five experts. Your expertise will help us
+        conduct foundational research to develop methods to make code easier for developers to understand.</p>
 
-    <h3>Study Overview</h3>
-
-
-    <p><strong>🎯 Goal:</strong> To establish a ranking of 8 Java code snippets according to how difficulty they are for experts to understand. This ranking will later serve as ground-truth data in follow-up studies.</p>
-
-    <p><strong>🧠 What You'll Do:</strong> You'll review <strong>8 Java code snippets</strong> across <strong>3 rounds</strong>. You’ll answer a few questions, rank the snippets, reflect on others’ perspectives, and in the final round, join an online discussion to resolve disagreements.</p>
-
-    <p><strong>⏳ Duration:</strong> Round 1 is expected to take about <strong>75 minutes</strong>, Round 2 <strong>45 minutes</strong>, and Round 3 (discussion phase) about <strong>40 minutes</strong>. You’ll have up to <strong>one week</strong> to complete each round on your own schedule before the deadline.</p>
-
-    <p><strong>💻 Format:</strong> The study is conducted entirely <strong>online</strong> and <strong>asynchronous</strong>. You'll complete all tasks through our web platform without any live meetings or direct contact with other participants.</p>
-
-    <p><strong>🔁 Process:</strong> After each round, we’ll share the rankings and anonymized feedback from other experts to help guide consensus on a final ranking. The study concludes once consensus is reached, or after Round 3. (This process is based on the <a href="https://en.wikipedia.org/wiki/Delphi_method" target="_blank">Delphi method</a>)</p>
-
-    <p><strong>🎁 Compensation:</strong> You will receive a <strong>$50 Amazon gift card</strong> after the study concludes.</p>
-
-    <p><strong>🔒 Confidentiality:</strong> Your responses will be kept confidential and anonymized in all communications and publications. Only the research team will have access to your identifiable information.</p>
-
-    <p><strong>🗓️ Start Time:</strong> The study’s start date and time are <strong>TBD</strong>. You’ll be notified by email once finalized.</p>
+      <h3>Study Overview</h3>
 
 
-    <p><a href="#"
-      onclick="document.getElementById('detailed-info').style.display='block'; this.style.display='none'; return false;">📘
-      Learn more about what to expect</a></p>
+      <p><strong>🎯 Goal:</strong> To establish a ranking of 8 Java code snippets according to how difficulty they are
+        for experts to understand. This ranking will later serve as ground-truth data in follow-up studies.</p>
 
-    <div id="detailed-info" style="display: none;">
-      <p>Here's what will be involved:</p>
-      <ul>
-        <li>This study will involve five experts like yourself.</li>
-        <li>Our goal is to establish an expert-determined ranking of the comprehensibility of 8 Java code snippets.</li>
-        <li class="summary-text">After agreeing to participate, you will receive an email containing your username, password, and a link to complete Round 1.</li>
+      <p><strong>🧠 What You'll Do:</strong> You'll review <strong>8 Java code snippets</strong> across <strong>3
+          rounds</strong>. You’ll answer a few questions, rank the snippets, reflect on others’ perspectives, and in the
+        final round, join an online discussion to resolve disagreements.</p>
 
-        <!-- Round 1 -->
-        <li class="detailed-only"><strong>Round 1 (approx. 75 minutes):</strong>
-          <ul>
-            <li><strong>Phase 1:</strong> Review each code snippet and write a short summary. Also provide your assessment of how easy or difficult it is to understand.</li>
-            <li><strong>Phase 2:</strong> Rank all 8 snippets from easiest to hardest to understand. You may group snippets together if you feel they are similarly understandable.</li>
-            <li><strong>Phase 3:</strong> Explain your reasoning behind your ranking and any groupings you formed.</li>
-          </ul>
-        </li>
+      <p><strong>⏳ Duration:</strong> Round 1 is expected to take about <strong>75 minutes</strong>, Round 2 <strong>45
+          minutes</strong>, and Round 3 (discussion phase) about <strong>40 minutes</strong>. You’ll have up to
+        <strong>one week</strong> to complete each round on your own schedule before the deadline.</p>
 
-        <!-- Round 2 -->
-        <li class="detailed-only"><strong>Round 2 (approx. 45 minutes):</strong>
-          <ul>
-            <li><strong>Phase 1:</strong> Review your own and other experts’ anonymized summaries and assessments from the previous round.</li>
-            <li><strong>Phase 2:</strong> Review your own and other experts’ rankings and the reasoning behind them.</li>
-            <li><strong>Phase 3:</strong> Reflect on major disagreements between experts, as identified by the research team. You’ll be asked a few questions to share your thoughts.</li>
-            <li><strong>Phase 4:</strong> Update your ranking of the code snippets, if desired.</li>
-            <li><strong>Phase 5:</strong> Explain your reasoning behind any changes you made to your ranking or groupings.</li>
-          </ul>
-        </li>
+      <p><strong>💻 Format:</strong> The study is conducted entirely <strong>online</strong> and
+        <strong>asynchronous</strong>. You'll complete all tasks through our web platform without any live meetings or
+        direct contact with other participants.</p>
 
-        <!-- Round 3 -->
-        <li class="detailed-only"><strong>Round 3 (approx. 40 minutes, Discussion Phase):</strong>
-          <p>This final round will be conducted because some disagreements may remain among experts. You will:</p>
-          <ul>
-            <li>Review prior feedback and reasoning from earlier rounds.</li>
-            <li>Participate in focused, anonymized discussions with other experts.</li>
-            <li>Update your ranking, if you wish, based on the discussion.</li>
-          </ul>
-          <p>These phases in each round are interconnected. While they are shown separately for clarity, you may move between them freely — they are not strictly sequential.</p>
-        </li>
+      <p><strong>🔁 Process:</strong> After each round, we’ll share the rankings and anonymized feedback from other
+        experts to help guide consensus on a final ranking. The study concludes once consensus is reached, or after
+        Round 3. (This process is based on the <a href="https://en.wikipedia.org/wiki/Delphi_method"
+          target="_blank">Delphi method</a>)</p>
 
-        <li class="summary-text">After Round 3, if consensus is still not reached, a statistical aggregation method will be applied to determine the final expert-informed ranking.</li>
-      </ul>
+      <p><strong>🎁 Compensation:</strong> You will receive a <strong>$50 Amazon gift card</strong> after the study
+        concludes.</p>
 
-      <p>We appreciate your interest — your participation helps advance research in software engineering!</p>
+      <p><strong>🔒 Confidentiality:</strong> Your responses will be kept confidential and anonymized in all
+        communications and publications. Only the research team will have access to your identifiable information.</p>
 
-                <button 
-    style="padding: 10px 20px; font-size: 15px; border: none; border-radius: 6px; background-color: #4CAF50; color: white; cursor: pointer; margin: 5px;"
-    onmouseover="this.style.backgroundColor='#45a049'" 
-    onmouseout="this.style.backgroundColor='#4CAF50'"
-    onclick="document.getElementById('email-box').scrollIntoView({ behavior: 'smooth' });">
-    ✅ Check if you are eligible
-  </button>
+      <p><strong>🗓️ Start Time:</strong> The study’s start date and time are <strong>TBD</strong>. You’ll be notified
+        by email once finalized.</p>
+
+
+      <p><a href="#"
+          onclick="document.getElementById('detailed-info').style.display='block'; this.style.display='none'; return false;">📘
+          Learn more about what to expect</a></p>
+
+      <div id="detailed-info" style="display: none;">
+        <p>Here's what will be involved:</p>
+        <ul>
+          <li>This study will involve five experts like yourself.</li>
+          <li>Our goal is to establish an expert-determined ranking of the comprehensibility of 8 Java code snippets.
+          </li>
+          <li class="summary-text">After agreeing to participate, you will receive an email containing your username,
+            password, and a link to complete Round 1.</li>
+
+          <!-- Round 1 -->
+          <li class="detailed-only"><strong>Round 1 (approx. 75 minutes):</strong>
+            <ul>
+              <li><strong>Phase 1:</strong> Review each code snippet and write a short summary. Also provide your
+                assessment of how easy or difficult it is to understand.</li>
+              <li><strong>Phase 2:</strong> Rank all 8 snippets from easiest to hardest to understand. You may group
+                snippets together if you feel they are similarly understandable.</li>
+              <li><strong>Phase 3:</strong> Explain your reasoning behind your ranking and any groupings you formed.
+              </li>
+            </ul>
+          </li>
+
+          <!-- Round 2 -->
+          <li class="detailed-only"><strong>Round 2 (approx. 45 minutes):</strong>
+            <ul>
+              <li><strong>Phase 1:</strong> Review your own and other experts’ anonymized summaries and assessments from
+                the previous round.</li>
+              <li><strong>Phase 2:</strong> Review your own and other experts’ rankings and the reasoning behind them.
+              </li>
+              <li><strong>Phase 3:</strong> Reflect on major disagreements between experts, as identified by the
+                research team. You’ll be asked a few questions to share your thoughts.</li>
+              <li><strong>Phase 4:</strong> Update your ranking of the code snippets, if desired.</li>
+              <li><strong>Phase 5:</strong> Explain your reasoning behind any changes you made to your ranking or
+                groupings.</li>
+            </ul>
+          </li>
+
+          <!-- Round 3 -->
+          <li class="detailed-only"><strong>Round 3 (approx. 40 minutes, Discussion Phase):</strong>
+            <p>This final round will be conducted because some disagreements may remain among experts. You will:</p>
+            <ul>
+              <li>Review prior feedback and reasoning from earlier rounds.</li>
+              <li>Participate in focused, anonymized discussions with other experts.</li>
+              <li>Update your ranking, if you wish, based on the discussion.</li>
+            </ul>
+            <p>These phases in each round are interconnected. While they are shown separately for clarity, you may move
+              between them freely — they are not strictly sequential.</p>
+          </li>
+
+          <li class="summary-text">After Round 3, if consensus is still not reached, a statistical aggregation method
+            will be applied to determine the final expert-informed ranking.</li>
+        </ul>
+
+        <p>We appreciate your interest — your participation helps advance research in software engineering!</p>
+
+        <button
+          style="padding: 10px 20px; font-size: 15px; border: none; border-radius: 6px; background-color: #4CAF50; color: white; cursor: pointer; margin: 5px;"
+          onmouseover="this.style.backgroundColor='#45a049'" onmouseout="this.style.backgroundColor='#4CAF50'"
+          onclick="document.getElementById('email-box').scrollIntoView({ behavior: 'smooth' });">
+          ✅ Check if you are eligible
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
 
 
-<div class="container">
-  <div class="email-box" id="email-box">
-    <h2>I want to participate</h2>
-    <p>To see if you qualify for this study, please enter your email address below and answer a few quick questions.</p>
-    <input type="email" id="email" placeholder="Enter your email" class="input-field" autocomplete="email">
-    <button onclick="startSurvey()" class="full-width-btn">Check My Eligibility</button>
-  </div>
+  <div class="container">
+    <div class="email-box" id="email-box">
+      <h2>I want to participate</h2>
+      <p>To see if you qualify for this study, please enter your email address below and answer a few quick questions.
+      </p>
+      <input type="email" id="email" placeholder="Enter your email" class="input-field" autocomplete="email">
+      <button onclick="startSurvey()" class="full-width-btn">Check My Eligibility</button>
+    </div>
 
-  <div class="email-box" id="referrals-box">
-        <h2>I don't want to participate</h2>
-    <div class="referrals-section">
-      <iframe class="referrals-widget" src="/referrals2.html"></iframe>
+    <div class="email-box" id="referrals-box">
+      <h2>I don't want to participate</h2>
+      <div class="referrals-section">
+        <iframe class="referrals-widget" src="/referrals2.html"></iframe>
+      </div>
     </div>
   </div>
-</div>
 
 
   <div class="survey-box hidden" id="survey-box">
@@ -463,18 +507,18 @@ body.modal-open { overflow: hidden; }
 
 
   <div class="slots-box hidden" id="consent-form">
-    
+
   </div>
 
 
-<div class="slots-box hidden" id="slots-box">
-  <div id="eligibility-success" class="success-message">
-    🎉 You're eligible to participate in the study!
-  </div>
+  <div class="slots-box hidden" id="slots-box">
+    <div id="eligibility-success" class="success-message">
+      🎉 You're eligible to participate in the study!
+    </div>
     <strong>Please finalize your participation by reading and signing the informed consent form:</strong>
     <br><br>
     <button id="gotoconsent" onclick="window.location='/consent-experts.html'">Final Step: Review Consent Form</button>
-</div>
+  </div>
 
   <!-- Confirmation Section -->
   <div class="confirm-box hidden" id="confirm-box">
@@ -512,16 +556,16 @@ body.modal-open { overflow: hidden; }
     <button onclick="submitPendingRegistration()">Submit</button>
   </div>
 
-<div class="modal" id="problem-modal">
-  <div class="modal-content">
-    <h3>Sorry</h3>
-    <p>Unfortunately, the eligibility form is currently being updated.</p>
+  <div class="modal" id="problem-modal">
+    <div class="modal-content">
+      <h3>Sorry</h3>
+      <p>Unfortunately, the eligibility form is currently being updated.</p>
 
-    <!-- <div class="referrals-section">
+      <!-- <div class="referrals-section">
       <iframe class="referrals-widget shrinked-iframe" src="/referrals.html"></iframe>
     </div> -->
+    </div>
   </div>
-</div>
 
 
   <div class="modal hidden" id="ineligible-modal">
@@ -529,11 +573,11 @@ body.modal-open { overflow: hidden; }
       <h3>Not Eligible</h3>
       <p>Unfortunately, you are not eligible to participate in this study. Thank you for your interest.</p>
 
-    <div class="referrals-section">
-        <iframe class="referrals-widget shrinked-iframe" src="/referrals.html" ></iframe>
-    </div>
+      <div class="referrals-section">
+        <iframe class="referrals-widget shrinked-iframe" src="/referrals.html"></iframe>
+      </div>
 
-    <button onclick="document.getElementById('ineligible-modal').classList.add('hidden')">Close</button>
+      <button onclick="document.getElementById('ineligible-modal').classList.add('hidden')">Close</button>
 
     </div>
   </div>
@@ -547,60 +591,254 @@ body.modal-open { overflow: hidden; }
 
 
   <script>
-const questions = [
-{
-  text: "Have you ever been promoted within a software engineering role to a more senior level---for example, a promotion from an entry-level position to the next level where engineers are expected to operate more independently or lead projects?<br/><br/>Examples include a promotion to: Apple ICT3, Facebook E4, Uber Level 4 (Software Engineer II), Microsoft Level 61, Amazon L5, or Walmart L3. <a style='font-size:10px;' href='https://www.levels.fyi' target='_blank'>Learn more about these levels</a>",
-  options: [
-    { label: "Yes, I have received a promotion like that." },
-    { label: "No, I have not received a promotion like that.", ineligible: true }
-  ]
-},
-{
-  text: "How many years of professional development experience do you have with Java?",
-  options: [
-    { label: "None", ineligible: true },
-    { label: "Less than 1 year" },
-    { label: "1–2 years" },
-    { label: "3–4 years" },
-    { label: "5+ years" }
-  ]
-},
-  {
-    text: "Have you ever mentored one or more junior software engineers in a professional setting?",
-    options: [
-      { label: "Yes" },
-      { label: "No", ineligible: true }
-    ]
-  },
-  {
-    text: "What is your age?",
-    options: [
-      { label: "Under 18", ineligible: true },
-      { label: "18–20",},
-      { label: "21–24" },
-      { label: "25–30" },
-      { label: "31–40" },
-      { label: "Over 40" }
-    ]
-  },
-  {
-    text: "Have you been diagnosed with a reading or learning disability, or any condition that affects your ability to read/understand code or instructions?",
-    options: [
-      { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
-      { label: "No, I have not been diagnosed with any such condition" }
-    ]
-  },
-  {
-    text: "How comfortable are you with reading English-language text?",
-    options: [
-      { label: "Not comfortable", ineligible: true },
-      { label: "Slightly comfortable" },
-      { label: "Moderately comfortable" },
-      { label: "Very comfortable" },
-      { label: "Native speaker / fluent" }
-    ]
-  }
-];
+
+    const jobTitles = [
+      // Executive / Leadership
+      "CTO",
+      "CIO / Chief Digital Officer / Chief Innovation Officer",
+      "VP of Product Management / Head of Product",
+      "VP of Marketing",
+      "VP of Engineering",
+      "VP of HR",
+      "Chief Architect",
+      "Chief Human Resource Officer",
+
+      // Product & Project
+      "Product Manager",
+      "Engineering Project Manager",
+      "Engineering Manager",
+      "Technical Project Manager",
+      "Project Manager",
+      "Business Account Manager",
+      "Senior Manager IT",
+      "IT Infrastructure Manager",
+      "Procurement Manager",
+
+      // Learning & Development
+      "Learning and Development Manager",
+      "Learning and Development Coordinator",
+
+      // HR / Recruitment
+      "HR Coordinator",
+      "Payroll Coordinator",
+      "Recruiting Coordinator",
+      "HR Specialist",
+      "HR Generalist",
+      "Recruiter",
+      "Human Resource Information Specialist",
+      "HR Manager",
+      "Recruiting Manager",
+      "HR Business Partner",
+      "HR Director",
+      "Recruiting Director",
+      "Career Consultant",
+      "Career Advisor",
+      "Assignment Coordinator",
+      "Placement Coordinator",
+      "Career Development Strategist",
+      "Personnel Agent",
+      "Human Resources Officer",
+
+      // Marketing / SEO / Digital
+      "SEO Manager",
+      "SEO Engineer",
+      "SEO Consultant",
+      "Digital Marketing Manager",
+      "Digital Marketing Analyst",
+      "Social Media Marketing Manager",
+      "Social Media Marketing Analyst",
+      "Marketing Technologist",
+      "Web Analytics Developer",
+      "Social Media Manager",
+      "Growth Hacker",
+      "Content Manager",
+      "Content Strategist",
+
+      // Engineering & IT
+      ".NET Developer",
+      "Android Developer",
+      "Artificial Intelligence / Machine Learning Engineer",
+      "Big Data Engineer",
+      "Build and Release Engineer",
+      "Cloud Architect",
+      "Cloud Engineer",
+      "Computer Hardware Engineer",
+      "Computer Network Architect",
+      "Computer Programmer",
+      "Computer Systems Analyst",
+      "Data Analyst",
+      "Data Architect",
+      "Data Engineer",
+      "Data Scientist",
+      "Database Administrator",
+      "DevOps Engineer",
+      "Full Stack Developer",
+      "Front-End Developer",
+      "Back-End Developer",
+      "Software Developer",
+      "Software Engineer",
+      "Senior Software Engineer",
+      "Site Reliability Engineer",
+      "Systems Engineer",
+      "Systems Administrator",
+      "Network Engineer",
+      "Security Engineer",
+      "QA Engineer",
+      "UI Designer",
+      "UX Designer",
+      "Web Developer",
+      "Mobile App Developer",
+      "Game Developer",
+      "Robotics Engineer",
+      "Technical Lead",
+      "Technical Account Manager",
+      "Technical Sales Engineer",
+      "IT Manager",
+      "IT Support Specialist",
+      "DevSecOps Engineer",
+      "AI Researcher",
+      "Machine Learning Architect",
+      "Research Scientist",
+      "Software Architect",
+      "Principal Engineer",
+      "Junior Developer",
+      "Intern Developer",
+      "Entry Level Software Engineer"
+    ];
+
+    const questions = [
+      {
+        text: "Have you ever been promoted within a software engineering role to a more senior level—for example, a promotion from an entry-level position to the next level where engineers are expected to operate more independently or lead projects?<br/><br/>Examples include a promotion to: Apple ICT3, Facebook E4, Uber Level 4 (Software Engineer II), Microsoft Level 61, Amazon L5, or Walmart L3. <a style='font-size:10px;' href='https://www.levels.fyi' target='_blank'>Learn more about these levels</a>",
+        options: [
+          { label: "Yes, I have received a promotion like that." },
+          { label: "No, I have not received a promotion like that.", ineligible: true }
+        ]
+      },
+      {
+        text: "How many years of professional development experience do you have with Java?",
+        options: [
+          { label: "None", ineligible: true },
+          { label: "Less than 1 year" },
+          { label: "1–2 years" },
+          { label: "3–4 years" },
+          { label: "5+ years" }
+        ]
+      },
+      {
+        text: "Have you ever mentored one or more junior software engineers in a professional setting?",
+        options: [
+          { label: "Yes" },
+          { label: "No", ineligible: true }
+        ]
+      },
+      {
+        text: "What is your age?",
+        options: [
+          { label: "Under 18", ineligible: true },
+          { label: "18–20" },
+          { label: "21–24" },
+          { label: "25–30" },
+          { label: "31–40" },
+          { label: "Over 40" }
+        ]
+      },
+      {
+        text: "Have you been diagnosed with a reading or learning disability, or any condition that affects your ability to read or understand code or instructions?",
+        options: [
+          { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
+          { label: "No, I have not been diagnosed with any such condition" }
+        ]
+      },
+      {
+        text: "How comfortable are you with reading English-language text?",
+        options: [
+          { label: "Not comfortable", ineligible: true },
+          { label: "Slightly comfortable" },
+          { label: "Moderately comfortable" },
+          { label: "Very comfortable" },
+          { label: "Native speaker / fluent" }
+        ]
+      },
+
+      // ---- Added from your HTML (content only) ----
+
+      {
+        text: "Which of the following best describes your primary role in software engineering?",
+        options: [
+          { label: "Programmer" },
+          { label: "Tester" },
+          { label: "Software Architect" },
+          { label: "Project Technical Lead" },
+          { label: "Project Manager" },
+          { label: "IT Manager" },
+          { label: "Consultant" },
+          { label: "Educator" },
+          { label: "Researcher" },
+          { label: "Analyst" },
+          { label: "Other (please specify)", freeText: true }
+        ]
+      },
+      {
+        text: "How many years of experience in programming or software development do you have?",
+        options: [
+          { label: "No experience" },
+          { label: "<1 year" },
+          { label: "1–4 years" },
+          { label: "5–9 years" },
+          { label: "10–19 years" },
+          { label: "20+ years" }
+        ]
+      },
+      {
+        text: "How many years of experience in Java programming or development do you have?",
+        options: [
+          { label: "No experience" },
+          { label: "<1 year" },
+          { label: "1–4 years" },
+          { label: "5–9 years" },
+          { label: "10–19 years" },
+          { label: "20+ years" }
+        ]
+      },
+      {
+        text: "How many years of experience do you have developing or maintaining industry-level software systems?",
+        options: [
+          { label: "No experience" },
+          { label: "<1 year" },
+          { label: "1–4 years" },
+          { label: "5–9 years" },
+          { label: "10–19 years" },
+          { label: "20+ years" }
+        ]
+      },
+      {
+        text: "What is the nature of your development work?",
+        type: "checkbox",           // optional hint for your renderer
+        multiple: true,             // indicates multi-select
+        options: [
+          { label: "Proprietary software developer" },
+          { label: "Open-source software developer" },
+          { label: "I am based at a research or educational institution" },
+          { label: "Other (please explain)", freeText: true }
+        ]
+      },
+      {
+        text: "Please indicate which domains you have developed software for (e.g., banking or healthcare).",
+        type: "text",               // optional hint for your renderer
+        placeholder: "List domains (comma-separated)",
+        multiline: true             // if you want a textarea
+      },
+      {
+        text: "What is your current job title?",
+        type: "select",
+        options: jobTitles.map(t => ({ label: t })), // from your big list
+        hasOther: true,                               // adds 'Other' + free text
+        placeholder: "Select your title"
+      }
+    ];
+
+
+
 
     let currentQuestion = 0;
     let answers = [];
@@ -634,8 +872,8 @@ const questions = [
       document.getElementById('survey-box').classList.remove('hidden');
       hideStudyInfoIfVisible();
 
-        const referralsBox = document.getElementById('referrals-box');
-        if (referralsBox) referralsBox.classList.add('hidden');
+      const referralsBox = document.getElementById('referrals-box');
+      if (referralsBox) referralsBox.classList.add('hidden');
 
       showQuestion();
     }
@@ -645,36 +883,209 @@ const questions = [
     function showQuestion() {
       const q = questions[currentQuestion];
       const container = document.getElementById('question-container');
+
       let html = `<p><strong>${q.text}</strong></p>`;
-      q.options.forEach((opt, i) => {
-        const checked = answers[currentQuestion] === i ? 'checked' : '';
-        html += `<label><input type="radio" name="q${currentQuestion}" value="${i}" ${checked}> ${opt.label}</label><br>`;
-      });
+
+      const prev = answers[currentQuestion]; // could be number | string | number[] | {select:string, other?:string}
+
+      const nameBase = `q${currentQuestion}`;
+
+      // helpers for prefill
+      const wasChecked = (i) => Array.isArray(prev) ? prev.includes(i) : prev === i;
+      const esc = (s) => (s ?? "").toString().replace(/"/g, "&quot;");
+
+      switch (q.type) {
+        case "checkbox":
+          q.options.forEach((opt, i) => {
+            const checked = Array.isArray(prev) && prev.includes(i) ? "checked" : "";
+            html += `
+          <label>
+            <input type="checkbox" name="${nameBase}[]" value="${i}" ${checked}>
+            ${opt.label}
+          </label><br>
+        `;
+          });
+          // optional free-text on a checkbox option
+          if (q.options.some(o => o.freeText)) {
+            const last = q.options.findIndex(o => o.freeText);
+            const show = Array.isArray(prev) && prev.includes(last);
+            html += `
+          <div id="${nameBase}-free" style="margin-top:6px; ${show ? "" : "display:none;"}">
+            <input id="${nameBase}-free-input" type="text" placeholder="Please specify" value="${esc(sessionStorage.getItem(`${nameBase}-free`) || "")}" style="width:100%;">
+          </div>
+        `;
+          }
+          break;
+
+        case "text":
+          html += `
+        <textarea id="${nameBase}-text" rows="${q.multiline ? 4 : 2}" placeholder="${esc(q.placeholder || "")}" style="width:100%;">${esc(typeof prev === "string" ? prev : "")}</textarea>
+      `;
+          break;
+
+        case "select":
+          html += `
+        <select id="${nameBase}-select" style="width:100%;">
+          <option value="">${esc(q.placeholder || "Select...")}</option>
+          ${q.options.map((opt, i) => {
+            const selected = (prev && typeof prev === "object" && prev.select === opt.label) ? "selected" : "";
+            return `<option value="${esc(opt.label)}" ${selected}>${esc(opt.label)}</option>`;
+          }).join("")}
+          ${q.hasOther ? `<option value="__other__" ${(prev && typeof prev === "object" && prev.select === "__other__") ? "selected" : ""}>Other</option>` : ""}
+        </select>
+      `;
+          if (q.hasOther) {
+            const showOther = prev && typeof prev === "object" && prev.select === "__other__";
+            html += `
+          <div id="${nameBase}-other-wrap" style="margin-top:6px; ${showOther ? "" : "display:none;"}">
+            <input id="${nameBase}-other" type="text" placeholder="Enter your title" value="${esc(prev?.other || "")}" style="width:100%;">
+          </div>
+        `;
+          }
+          break;
+
+        default: // radio (current default in your app)
+          (q.options || []).forEach((opt, i) => {
+            const checked = (typeof prev === "number" && prev === i) ? "checked" : "";
+            html += `
+          <label>
+            <input type="radio" name="${nameBase}" value="${i}" ${checked}>
+            ${opt.label}
+          </label><br>
+        `;
+          });
+          // optional free-text on radio
+          const freeIdx = (q.options || []).findIndex(o => o.freeText);
+          if (freeIdx >= 0) {
+            const show = prev === freeIdx;
+            html += `
+          <div id="${nameBase}-free" style="margin-top:6px; ${show ? "" : "display:none;"}">
+            <input id="${nameBase}-free-input" type="text" placeholder="Please specify" value="${esc(sessionStorage.getItem(`${nameBase}-free`) || "")}" style="width:100%;">
+          </div>
+        `;
+          }
+      }
+
       container.innerHTML = html;
 
-      document.getElementById('prevBtn').disabled = currentQuestion === 0;
-      document.getElementById('nextBtn').innerText = currentQuestion === questions.length - 1 ? 'Check Eligibility' : 'Next';
+      // Wire up “Other/freeText” revealers
+      if (q.type === "select" && q.hasOther) {
+        const sel = document.getElementById(`${nameBase}-select`);
+        const wrap = document.getElementById(`${nameBase}-other-wrap`);
+        sel.addEventListener("change", () => {
+          wrap.style.display = sel.value === "__other__" ? "block" : "none";
+        });
+      }
+
+      if (q.type === "checkbox" && q.options?.some(o => o.freeText)) {
+        const last = q.options.findIndex(o => o.freeText);
+        const checkboxes = [...document.querySelectorAll(`input[name="${nameBase}[]"]`)];
+        const freeDiv = document.getElementById(`${nameBase}-free`);
+        checkboxes.forEach(cb => {
+          cb.addEventListener("change", () => {
+            const any = checkboxes.some(x => x.checked && parseInt(x.value, 10) === last);
+            freeDiv.style.display = any ? "block" : "none";
+          });
+        });
+      }
+
+      if (!["text"].includes(q.type)) {
+        document.getElementById('prevBtn').disabled = currentQuestion === 0;
+        document.getElementById('nextBtn').innerText = currentQuestion === questions.length - 1 ? 'Check Eligibility' : 'Next';
+      } else {
+        document.getElementById('prevBtn').disabled = currentQuestion === 0;
+        document.getElementById('nextBtn').innerText = currentQuestion === questions.length - 1 ? 'Check Eligibility' : 'Next';
+      }
     }
 
-function nextQuestion() {
-  const selected = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
-  if (!selected) return alert("Please select an option.");
 
-  const selectedIndex = parseInt(selected.value);
-  answers[currentQuestion] = selectedIndex;
+    function nextQuestion() {
+      const q = questions[currentQuestion];
+      const nameBase = `q${currentQuestion}`;
 
-  // Save the selected option to sessionStorage with a proper key
-  const key = `eligibility_q${currentQuestion}`;
-  const selectedOption = questions[currentQuestion].options[selectedIndex].label;
-  sessionStorage.setItem(key, selectedOption);
+      let value = null; // will store number | string | number[] | {select, other?}
 
-  if (currentQuestion === questions.length - 1) {
-    checkEligibility();
-  } else {
-    currentQuestion++;
-    showQuestion();
-  }
-}
+      switch (q.type) {
+        case "checkbox": {
+          const nodes = [...document.querySelectorAll(`input[name="${nameBase}[]"]:checked`)];
+          if (nodes.length === 0) return alert("Please select at least one option.");
+          value = nodes.map(n => parseInt(n.value, 10));
+
+          // Persist free text if present
+          const freeInput = document.getElementById(`${nameBase}-free-input`);
+          if (freeInput) {
+            sessionStorage.setItem(`${nameBase}-free`, freeInput.value.trim());
+          }
+          break;
+        }
+        case "text": {
+          const t = (document.getElementById(`${nameBase}-text`)?.value || "").trim();
+          if (!t) return alert("Please enter a response.");
+          value = t;
+          break;
+        }
+        case "select": {
+          const sel = document.getElementById(`${nameBase}-select`);
+          const selected = sel?.value || "";
+          if (!selected) return alert("Please select an option.");
+          if (selected === "__other__") {
+            const other = (document.getElementById(`${nameBase}-other`)?.value || "").trim();
+            if (!other) return alert("Please enter your title.");
+            value = { select: "__other__", other };
+          } else {
+            value = { select: selected };
+          }
+          break;
+        }
+        default: { // radio
+          const selected = document.querySelector(`input[name="${nameBase}"]:checked`);
+          if (!selected) return alert("Please select an option.");
+          value = parseInt(selected.value, 10);
+
+          // Persist free text for radio “Other”
+          const freeInput = document.getElementById(`${nameBase}-free-input`);
+          if (freeInput) {
+            sessionStorage.setItem(`${nameBase}-free`, freeInput.value.trim());
+          }
+        }
+      }
+
+      // Save locally
+      answers[currentQuestion] = value;
+
+      // Also store a human-readable string in sessionStorage like before
+      sessionStorage.setItem(`eligibility_q${currentQuestion}`, humanReadableAnswer(q, value));
+
+      if (currentQuestion === questions.length - 1) {
+        checkEligibility();
+      } else {
+        currentQuestion++;
+        showQuestion();
+      }
+    }
+
+    function humanReadableAnswer(q, value) {
+      if (q.type === "checkbox" && Array.isArray(value)) {
+        const labels = value.map(i => q.options[i]?.label).filter(Boolean);
+        // include free text if any
+        const freeStr = sessionStorage.getItem(`q${currentQuestion}-free`);
+        return [labels.join(", "), freeStr].filter(Boolean).join(" — ");
+      }
+      if (q.type === "text" && typeof value === "string") {
+        return value;
+      }
+      if (q.type === "select" && typeof value === "object") {
+        return value.select === "__other__" ? (value.other || "Other") : value.select;
+      }
+      // radio
+      if (typeof value === "number") {
+        const base = q.options[value]?.label || "No answer";
+        const freeStr = sessionStorage.getItem(`q${currentQuestion}-free`);
+        return freeStr ? `${base} — ${freeStr}` : base;
+      }
+      return "No answer";
+    }
+
 
 
     function prevQuestion() {
@@ -685,18 +1096,36 @@ function nextQuestion() {
 
     function checkEligibility() {
       for (let i = 0; i < answers.length; i++) {
-        const opt = questions[i].options[answers[i]];
-        if (opt.ineligible) {
-          document.getElementById('survey-box').classList.add('hidden');
-          document.getElementById('ineligible-modal').classList.remove('hidden');
-          submitIneligible(i, opt);
-          return;
+        const q = questions[i];
+        const a = answers[i];
+
+        if (q.type === "checkbox" && Array.isArray(a)) {
+          for (const idx of a) {
+            const opt = q.options[idx];
+            if (opt?.ineligible) {
+              document.getElementById('survey-box').classList.add('hidden');
+              document.getElementById('ineligible-modal').classList.remove('hidden');
+              submitIneligible(i, opt);
+              return;
+            }
+          }
+        } else if (typeof a === "number") { // radio
+          const opt = q.options[a];
+          if (opt?.ineligible) {
+            document.getElementById('survey-box').classList.add('hidden');
+            document.getElementById('ineligible-modal').classList.remove('hidden');
+            submitIneligible(i, opt);
+            return;
+          }
         }
+        // text/select have no ineligible flags by design
       }
+
       document.getElementById('survey-box').classList.add('hidden');
       document.getElementById('eligibility-success').classList.remove('hidden');
       document.getElementById('slots-box').classList.remove('hidden');
     }
+
 
 
     // function selectSlot(el) {
@@ -823,10 +1252,26 @@ function nextQuestion() {
       const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
 
       const eligibilityResponses = questions.map((q, index) => {
-        const selectedIndex = answers[index];
+        const a = answers[index];
+        let selectedOption = "No answer";
+
+        if (q.type === "checkbox" && Array.isArray(a)) {
+          const labels = a.map(i => q.options[i]?.label).filter(Boolean);
+          const free = sessionStorage.getItem(`q${index}-free`);
+          selectedOption = [labels.join(", "), free].filter(Boolean).join(" — ") || "No answer";
+        } else if (q.type === "text" && typeof a === "string") {
+          selectedOption = a || "No answer";
+        } else if (q.type === "select" && typeof a === "object") {
+          selectedOption = a.select === "__other__" ? (a.other || "Other") : a.select;
+        } else if (typeof a === "number") { // radio
+          const label = q.options[a]?.label || "No answer";
+          const free = sessionStorage.getItem(`q${index}-free`);
+          selectedOption = free ? `${label} — ${free}` : label;
+        }
+
         return {
           question: q.text,
-          selectedOption: q.options[selectedIndex]?.label || "No answer"
+          selectedOption
         };
       });
 
@@ -1011,98 +1456,98 @@ function nextQuestion() {
     }
   </script>
 
-   <script>
-        // Find all widgets
-        const widgets = Array.from(document.querySelectorAll('iframe.referrals-widget'));
+  <script>
+    // Find all widgets
+    const widgets = Array.from(document.querySelectorAll('iframe.referrals-widget'));
 
-        // Initialize each iframe
-        widgets.forEach((frame, idx) => {
-            // Set basic styles
-            frame.style.width = '100%';
-            frame.style.border = '0';
-            frame.style.display = 'block';
-            frame.style.overflow = 'hidden';
-            frame.style.height = '240px'; // safe initial height
+    // Initialize each iframe
+    widgets.forEach((frame, idx) => {
+      // Set basic styles
+      frame.style.width = '100%';
+      frame.style.border = '0';
+      frame.style.display = 'block';
+      frame.style.overflow = 'hidden';
+      frame.style.height = '240px'; // safe initial height
 
-            // Decide the referrer email per iframe
-            const perFrameEmail = frame.dataset.referrer || localStorage.getItem('expert_email') || '';
-            // Append it to the iframe src
-            const url = new URL(frame.getAttribute('src'), location.origin);
-            if (perFrameEmail) url.searchParams.set('referrer', perFrameEmail);
-            frame.src = url.toString();
-        });
-
-        // Listen for height / submitted messages from ANY referral iframe
-        window.addEventListener('message', (e) => {
-            const data = e.data || {};
-            if (!data.type) return;
-
-            // Find which iframe sent the message
-            const sender = widgets.find(f => f.contentWindow === e.source);
-            if (!sender) return;
-
-            if (data.type === 'referral-iframe-height' && typeof data.height === 'number') {
-                sender.style.height = Math.max(220, data.height) + 'px';
-            }
-
-            if (data.type === 'referral-submitted') {
-                // Optional: show a toast or mark that specific section as done
-                // Example:
-                sender.closest('.referrals-section')?.classList.add('submitted');
-                console.log('Referral widget submitted from this iframe:', data.count, 'rows');
-            }
-        });
-    </script>
-
-    <script>
-  function buildEligibilityResponsesFromAnswers(answers) {
-    // Mirrors what you did elsewhere: question text + selected label (or "No answer")
-    return questions.map((q, idx) => {
-      const choiceIdx = answers[idx];
-      const choice = typeof choiceIdx === "number" ? q.options[choiceIdx] : null;
-      return {
-        question: q.text,
-        selectedOption: choice?.label || "No answer"
-      };
+      // Decide the referrer email per iframe
+      const perFrameEmail = frame.dataset.referrer || localStorage.getItem('expert_email') || '';
+      // Append it to the iframe src
+      const url = new URL(frame.getAttribute('src'), location.origin);
+      if (perFrameEmail) url.searchParams.set('referrer', perFrameEmail);
+      frame.src = url.toString();
     });
-  }
 
-  async function submitIneligible(ineligibleIndex, ineligibleOption) {
-    const email = localStorage.getItem("expert_email") || "unknown";
-    const notify = localStorage.getItem("notify_opt_in") === "true";
-    const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
+    // Listen for height / submitted messages from ANY referral iframe
+    window.addEventListener('message', (e) => {
+      const data = e.data || {};
+      if (!data.type) return;
 
-    const payload = {
-      email,
-      notify,
-      selectedSlot,
-      eligibilityResponses: buildEligibilityResponsesFromAnswers(answers),
-      // extra diagnostics so you can see what tripped the screen
-      ineligible: true,
-      ineligibleAt: ineligibleIndex,
-      ineligibleQuestion: questions[ineligibleIndex]?.text || "",
-      ineligibleOption: ineligibleOption?.label || "",
-      userAgent: navigator.userAgent,
-      timestamp: new Date().toISOString(),
-      submitted: true,
-      event: "ineligible"
-    };
+      // Find which iframe sent the message
+      const sender = widgets.find(f => f.contentWindow === e.source);
+      if (!sender) return;
 
-    try {
-      const res = await fetch("/register_expert", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      if (!res.ok) {
-        // Non-blocking: show the modal either way, but log the failure
-        console.warn("⚠️ Failed to log ineligible:", await res.text());
+      if (data.type === 'referral-iframe-height' && typeof data.height === 'number') {
+        sender.style.height = Math.max(220, data.height) + 'px';
       }
-    } catch (e) {
-      console.error("❌ Network error logging ineligible", e);
+
+      if (data.type === 'referral-submitted') {
+        // Optional: show a toast or mark that specific section as done
+        // Example:
+        sender.closest('.referrals-section')?.classList.add('submitted');
+        console.log('Referral widget submitted from this iframe:', data.count, 'rows');
+      }
+    });
+  </script>
+
+  <script>
+    function buildEligibilityResponsesFromAnswers(answers) {
+      // Mirrors what you did elsewhere: question text + selected label (or "No answer")
+      return questions.map((q, idx) => {
+        const choiceIdx = answers[idx];
+        const choice = typeof choiceIdx === "number" ? q.options[choiceIdx] : null;
+        return {
+          question: q.text,
+          selectedOption: choice?.label || "No answer"
+        };
+      });
     }
-  }
-</script>
+
+    async function submitIneligible(ineligibleIndex, ineligibleOption) {
+      const email = localStorage.getItem("expert_email") || "unknown";
+      const notify = localStorage.getItem("notify_opt_in") === "true";
+      const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
+
+      const payload = {
+        email,
+        notify,
+        selectedSlot,
+        eligibilityResponses: buildEligibilityResponsesFromAnswers(answers),
+        // extra diagnostics so you can see what tripped the screen
+        ineligible: true,
+        ineligibleAt: ineligibleIndex,
+        ineligibleQuestion: questions[ineligibleIndex]?.text || "",
+        ineligibleOption: ineligibleOption?.label || "",
+        userAgent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+        submitted: true,
+        event: "ineligible"
+      };
+
+      try {
+        const res = await fetch("/register_expert", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) {
+          // Non-blocking: show the modal either way, but log the failure
+          console.warn("⚠️ Failed to log ineligible:", await res.text());
+        }
+      } catch (e) {
+        console.error("❌ Network error logging ineligible", e);
+      }
+    }
+  </script>
 
   <footer
     style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
