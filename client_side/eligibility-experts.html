@@ -828,13 +828,13 @@
         placeholder: "List domains (comma-separated)",
         multiline: true             // if you want a textarea
       },
-      {
-        text: "What is your current job title?",
-        type: "select",
-        options: jobTitles.map(t => ({ label: t })), // from your big list
-        hasOther: true,                               // adds 'Other' + free text
-        placeholder: "Select your title"
-      }
+{
+  text: "What is your current job title?",
+  type: "combobox",
+  options: jobTitles.map(t => ({ label: t })),   // suggestions
+  placeholder: "Start typing your job title…"
+}
+
     ];
 
 
