@@ -880,81 +880,38 @@
 
 
 
+/*******************************
+ * 1) QUESTION DEFINITION NOTE *
+ *******************************
+ * Add this question (or ensure it exists) in your `questions` array:
+ * 
+ * {
+ *   text: "What is your current job title?",
+ *   type: "combobox",
+ *   options: jobTitles.map(t => ({ label: t })),
+ *   placeholder: "Start typing your job title…"
+ * }
+ * 
+ * For any question with an “Other (please specify)” choice, include:
+ *    { label: "Other (please specify)", freeText: true }
+ */
+
+
+/*********************************
+ * 2) RENDERER: showQuestion()   *
+ *********************************/
 function showQuestion() {
   const q = questions[currentQuestion];
   const container = document.getElementById('question-container');
 
-  // Default types
   const qType = q.type || "radio";
   const nameBase = `q${currentQuestion}`;
-
-  const prev = answers[currentQuestion]; // number | string | number[] | {select, other?} | {combobox: string}
+  const prev = answers[currentQuestion]; // number | string | number[] | objects (see below)
   const esc = (s) => (s ?? "").toString().replace(/"/g, "&quot;");
 
   let html = `<p><strong>${q.text}</strong></p>`;
 
-  if (qType === "checkbox") {
-    (q.options || []).forEach((opt, i) => {
-      const checked = Array.isArray(prev) && prev.includes(i) ? "checked" : "";
-      html += `
-        <label>
-          <input type="checkbox" name="${nameBase}[]" value="${i}" ${checked}>
-          ${opt.label}
-        </label><br>
-      `;
-    });
-    const freeIdx = (q.options || []).findIndex(o => o.freeText);
-    if (freeIdx >= 0) {
-      const show = Array.isArray(prev) && prev.includes(freeIdx);
-      html += `
-        <div id="${nameBase}-free" style="margin-top:6px; ${show ? "" : "display:none;"}">
-          <input id="${nameBase}-free-input" type="text" placeholder="Please specify" value="${esc(sessionStorage.getItem(`${nameBase}-free`) || "")}" style="width:100%;">
-        </div>
-      `;
-    }
-  }
-
-  if (qType === "text") {
-    html += `
-      <textarea id="${nameBase}-text" rows="${q.multiline ? 4 : 2}" placeholder="${esc(q.placeholder || "")}" style="width:100%;">${esc(typeof prev === "string" ? prev : "")}</textarea>
-    `;
-  }
-
-  if (qType === "select") {
-    html += `
-      <select id="${nameBase}-select" style="width:100%;">
-        <option value="">${esc(q.placeholder || "Select...")}</option>
-        ${(q.options || []).map((opt) => {
-          const selected = (prev && typeof prev === "object" && prev.select === opt.label) ? "selected" : "";
-          return `<option value="${esc(opt.label)}" ${selected}>${esc(opt.label)}</option>`;
-        }).join("")}
-        ${q.hasOther ? `<option value="__other__" ${(prev && typeof prev === "object" && prev.select === "__other__") ? "selected" : ""}>Other</option>` : ""}
-      </select>
-    `;
-    if (q.hasOther) {
-      const showOther = prev && typeof prev === "object" && prev.select === "__other__";
-      html += `
-        <div id="${nameBase}-other-wrap" style="margin-top:6px; ${showOther ? "" : "display:none;"}">
-          <input id="${nameBase}-other" type="text" placeholder="Enter your title" value="${esc(prev?.other || "")}" style="width:100%;">
-        </div>
-      `;
-    }
-  }
-
-  // NEW: combobox (autocomplete + free entry) implemented with <input list>
-  if (qType === "combobox") {
-    const listId = `${nameBase}-list`;
-    const typed = (prev && typeof prev === "object" && "combobox" in prev) ? prev.combobox : "";
-    html += `
-      <input id="${nameBase}-combo" list="${listId}" placeholder="${esc(q.placeholder || "Start typing...")}" value="${esc(typed)}" style="width:100%;" autocomplete="off">
-      <datalist id="${listId}">
-        ${(q.options || []).map(opt => `<option value="${esc(opt.label)}"></option>`).join("")}
-      </datalist>
-      <div class="hint" style="font-size:12px;color:#666;margin-top:4px;">Type to search; you can also enter a custom title.</div>
-    `;
-  }
-
-  // default radio
+  // ---- RADIO (default) ----
   if (qType === "radio") {
     (q.options || []).forEach((opt, i) => {
       const checked = (typeof prev === "number" && prev === i) ? "checked" : "";
@@ -965,20 +922,97 @@ function showQuestion() {
         </label><br>
       `;
     });
+
+    // Optional free-text box for "Other (please specify)"
     const freeIdx = (q.options || []).findIndex(o => o.freeText);
     if (freeIdx >= 0) {
       const show = prev === freeIdx;
       html += `
         <div id="${nameBase}-free" style="margin-top:6px; ${show ? "" : "display:none;"}">
-          <input id="${nameBase}-free-input" type="text" placeholder="Please specify" value="${esc(sessionStorage.getItem(`${nameBase}-free`) || "")}" style="width:100%;">
+          <input id="${nameBase}-free-input" type="text" placeholder="Please specify" 
+                 value="${esc(sessionStorage.getItem(`${nameBase}-free`) || "")}" style="width:100%;">
         </div>
       `;
     }
   }
 
+  // ---- CHECKBOX ----
+  if (qType === "checkbox") {
+    (q.options || []).forEach((opt, i) => {
+      const checked = Array.isArray(prev) && prev.includes(i) ? "checked" : "";
+      html += `
+        <label>
+          <input type="checkbox" name="${nameBase}[]" value="${i}" ${checked}>
+          ${opt.label}
+        </label><br>
+      `;
+    });
+
+    // Optional free-text box for "Other (please specify)"
+    const freeIdx = (q.options || []).findIndex(o => o.freeText);
+    if (freeIdx >= 0) {
+      const show = Array.isArray(prev) && prev.includes(freeIdx);
+      html += `
+        <div id="${nameBase}-free" style="margin-top:6px; ${show ? "" : "display:none;"}">
+          <input id="${nameBase}-free-input" type="text" placeholder="Please specify" 
+                 value="${esc(sessionStorage.getItem(`${nameBase}-free`) || "")}" style="width:100%;">
+        </div>
+      `;
+    }
+  }
+
+  // ---- TEXT ----
+  if (qType === "text") {
+    html += `
+      <textarea id="${nameBase}-text" rows="${q.multiline ? 4 : 2}" placeholder="${esc(q.placeholder || "")}" style="width:100%;">${esc(typeof prev === "string" ? prev : "")}</textarea>
+    `;
+  }
+
+  // ---- SELECT (with optional 'Other') ----
+  if (qType === "select") {
+    const selected = prev && typeof prev === "object" ? prev.select : "";
+    html += `
+      <select id="${nameBase}-select" style="width:100%;">
+        <option value="">${esc(q.placeholder || "Select...")}</option>
+        ${(q.options || []).map(opt => `<option value="${esc(opt.label)}"${selected===opt.label?" selected":""}>${esc(opt.label)}</option>`).join("")}
+        ${q.hasOther ? `<option value="__other__"${selected==="__other__"?" selected":""}>Other</option>` : ""}
+      </select>
+    `;
+    if (q.hasOther) {
+      const showOther = selected === "__other__";
+      html += `
+        <div id="${nameBase}-other-wrap" style="margin-top:6px; ${showOther ? "" : "display:none;"}">
+          <input id="${nameBase}-other" type="text" placeholder="Enter your answer" 
+                 value="${esc(prev?.other || "")}" style="width:100%;">
+        </div>
+      `;
+    }
+  }
+
+  // ---- COMBOBOX (type-ahead textbox with top-5 matches or free text) ----
+  if (qType === "combobox") {
+    const typed = (prev && typeof prev === "object" && "combobox" in prev) ? prev.combobox : "";
+    html += `
+      <div class="cb-wrap" style="position:relative;max-width:600px;">
+        <input id="${nameBase}-combo" type="text"
+               placeholder="${esc(q.placeholder || "Start typing...")}"
+               value="${esc(typed)}"
+               autocomplete="off"
+               style="width:100%;">
+        <ul id="${nameBase}-list"
+            class="cb-list"
+            style="position:absolute;left:0;right:0;top:100%;z-index:10;margin:4px 0 0 0;padding:0;list-style:none;display:none;border:1px solid #ccc;background:#fff;max-height:220px;overflow:auto;">
+        </ul>
+      </div>
+      <div class="hint" style="font-size:12px;color:#666;margin-top:6px;">Type to search; choose a suggestion or keep your own text.</div>
+    `;
+  }
+
   container.innerHTML = html;
 
-  // Wire up reveal for “Other” (radio)
+  // Wire up dynamic behaviors:
+
+  // Radio "Other"
   if (qType === "radio" && q.options?.some(o => o.freeText)) {
     const freeIdx = q.options.findIndex(o => o.freeText);
     const radios = [...document.querySelectorAll(`input[name="${nameBase}"]`)];
@@ -990,7 +1024,7 @@ function showQuestion() {
     });
   }
 
-  // Wire up reveal for “Other” (checkbox)
+  // Checkbox "Other"
   if (qType === "checkbox" && q.options?.some(o => o.freeText)) {
     const freeIdx = q.options.findIndex(o => o.freeText);
     const boxes = [...document.querySelectorAll(`input[name="${nameBase}[]"]`)];
@@ -1002,7 +1036,7 @@ function showQuestion() {
     boxes.forEach(cb => cb.addEventListener("change", update));
   }
 
-  // “Other” for select
+  // Select "Other"
   if (qType === "select" && q.hasOther) {
     const sel = document.getElementById(`${nameBase}-select`);
     const wrap = document.getElementById(`${nameBase}-other-wrap`);
@@ -1011,19 +1045,43 @@ function showQuestion() {
     });
   }
 
+  // Combobox attach
+  if (qType === "combobox") {
+    const source = (q.options || []).map(o => o.label);
+    attachCombobox(nameBase, source);
+  }
+
   document.getElementById('prevBtn').disabled = currentQuestion === 0;
   document.getElementById('nextBtn').innerText =
     currentQuestion === questions.length - 1 ? 'Check Eligibility' : 'Next';
 }
 
 
-
+/*********************************
+ * 3) NAVIGATION: next / prev    *
+ *********************************/
 function nextQuestion() {
   const q = questions[currentQuestion];
   const qType = q.type || "radio";
   const nameBase = `q${currentQuestion}`;
 
-  let value = null; // number | string | number[] | {select, other?} | {combobox:string}
+  let value = null; 
+  // Shapes by type:
+  // radio -> number
+  // checkbox -> number[]
+  // text -> string
+  // select -> {select: string, other?: string}
+  // combobox -> {combobox: string}
+
+  if (qType === "radio") {
+    const selected = document.querySelector(`input[name="${nameBase}"]:checked`);
+    if (!selected) return alert("Please select an option.");
+    value = parseInt(selected.value, 10);
+
+    // Persist free text if present
+    const freeInput = document.getElementById(`${nameBase}-free-input`);
+    if (freeInput) sessionStorage.setItem(`${nameBase}-free`, freeInput.value.trim());
+  }
 
   if (qType === "checkbox") {
     const nodes = [...document.querySelectorAll(`input[name="${nameBase}[]"]:checked`)];
@@ -1046,7 +1104,7 @@ function nextQuestion() {
     if (!v) return alert("Please select an option.");
     if (v === "__other__") {
       const other = (document.getElementById(`${nameBase}-other`)?.value || "").trim();
-      if (!other) return alert("Please enter your title.");
+      if (!other) return alert("Please enter your answer.");
       value = { select: "__other__", other };
     } else {
       value = { select: v };
@@ -1057,19 +1115,12 @@ function nextQuestion() {
     const input = document.getElementById(`${nameBase}-combo`);
     const v = (input?.value || "").trim();
     if (!v) return alert("Please enter or select your job title.");
-    value = { combobox: v }; // record exactly what they typed/selected
+    value = { combobox: v }; // keep exactly what user typed or picked
   }
 
-  if (qType === "radio") {
-    const selected = document.querySelector(`input[name="${nameBase}"]:checked`);
-    if (!selected) return alert("Please select an option.");
-    value = parseInt(selected.value, 10);
-
-    const freeInput = document.getElementById(`${nameBase}-free-input`);
-    if (freeInput) sessionStorage.setItem(`${nameBase}-free`, freeInput.value.trim());
-  }
-
+  // Store value
   answers[currentQuestion] = value;
+  // Also store readable string in sessionStorage (like your existing pattern)
   sessionStorage.setItem(`eligibility_q${currentQuestion}`, humanReadableAnswer(q, value, currentQuestion));
 
   if (currentQuestion === questions.length - 1) {
@@ -1080,26 +1131,270 @@ function nextQuestion() {
   }
 }
 
+function prevQuestion() {
+  if (currentQuestion > 0) currentQuestion--;
+  showQuestion();
+}
+
+
+/*****************************************
+ * 4) ANSWER STRINGIFIER (for storage)   *
+ *****************************************/
 function humanReadableAnswer(q, value, idx) {
   const qType = q.type || "radio";
+
   if (qType === "checkbox" && Array.isArray(value)) {
     const labels = value.map(i => q.options[i]?.label).filter(Boolean);
     const freeStr = sessionStorage.getItem(`q${idx}-free`);
     return [labels.join(", "), freeStr].filter(Boolean).join(" — ") || "No answer";
   }
-  if (qType === "text" && typeof value === "string") return value || "No answer";
-  if (qType === "select" && typeof value === "object") {
-    return value.select === "__other__" ? (value.other || "Other") : value.select;
+
+  if (qType === "text" && typeof value === "string") {
+    return value || "No answer";
   }
+
+  if (qType === "select" && typeof value === "object") {
+    return value.select === "__other__" ? (value.other || "Other") : value.select || "No answer";
+  }
+
   if (qType === "combobox" && typeof value === "object") {
     return value.combobox || "No answer";
   }
+
   if (typeof value === "number") {
     const label = q.options[value]?.label || "No answer";
     const freeStr = sessionStorage.getItem(`q${idx}-free`);
     return freeStr ? `${label} — ${freeStr}` : label;
   }
+
   return "No answer";
+}
+
+
+/*********************************
+ * 5) ELIGIBILITY: same logic    *
+ *********************************/
+function checkEligibility() {
+  for (let i = 0; i < answers.length; i++) {
+    const q = questions[i];
+    const a = answers[i];
+
+    // checkbox: any ineligible checked?
+    if ((q.type || "radio") === "checkbox" && Array.isArray(a)) {
+      for (const idx of a) {
+        const opt = q.options[idx];
+        if (opt?.ineligible) {
+          document.getElementById('survey-box').classList.add('hidden');
+          document.getElementById('ineligible-modal').classList.remove('hidden');
+          submitIneligible(i, opt);
+          return;
+        }
+      }
+    }
+
+    // radio: ineligible?
+    if (typeof a === "number") {
+      const opt = q.options[a];
+      if (opt?.ineligible) {
+        document.getElementById('survey-box').classList.add('hidden');
+        document.getElementById('ineligible-modal').classList.remove('hidden');
+        submitIneligible(i, opt);
+        return;
+      }
+    }
+    // text / select / combobox: no ineligible flags by design
+  }
+
+  document.getElementById('survey-box').classList.add('hidden');
+  document.getElementById('eligibility-success').classList.remove('hidden');
+  document.getElementById('slots-box').classList.remove('hidden');
+}
+
+
+/********************************************************
+ * 6) SUBMISSION: stringify all types consistently      *
+ ********************************************************/
+function submitRegistrationData() {
+  const email = localStorage.getItem("expert_email") || "unknown";
+  const notify = localStorage.getItem("notify_opt_in") === "true";
+  const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
+
+  const eligibilityResponses = questions.map((q, index) => {
+    const a = answers[index];
+    let selectedOption = "No answer";
+
+    const t = q.type || "radio";
+
+    if (t === "checkbox" && Array.isArray(a)) {
+      const labels = a.map(i => q.options[i]?.label).filter(Boolean);
+      const free = sessionStorage.getItem(`q${index}-free`);
+      selectedOption = [labels.join(", "), free].filter(Boolean).join(" — ") || "No answer";
+    } else if (t === "text" && typeof a === "string") {
+      selectedOption = a || "No answer";
+    } else if (t === "select" && typeof a === "object") {
+      selectedOption = a.select === "__other__" ? (a.other || "Other") : (a.select || "No answer");
+    } else if (t === "combobox" && a && typeof a === "object") {
+      selectedOption = a.combobox || "No answer";
+    } else if (typeof a === "number") { // radio
+      const label = q.options[a]?.label || "No answer";
+      const free = sessionStorage.getItem(`q${index}-free`);
+      selectedOption = free ? `${label} — ${free}` : label;
+    }
+
+    return { question: q.text, selectedOption };
+  });
+
+  const payload = {
+    email,
+    notify,
+    selectedSlot,
+    eligibilityResponses,
+    submitted: true,
+    event: "availability"
+  };
+
+  return fetch("/register_student", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  })
+    .then(res => res.ok)
+    .catch(err => {
+      console.error("❌ Network error:", err);
+      return false;
+    });
+}
+
+
+/****************************************************************
+ * 7) COMBOBOX ENGINE (substring match + ranking, top 5, keys)  *
+ ****************************************************************/
+function attachCombobox(nameBase, items) {
+  const input = document.getElementById(`${nameBase}-combo`);
+  const list = document.getElementById(`${nameBase}-list`);
+  let activeIndex = -1;    // which <li> is highlighted
+  let currentItems = [];   // rendered suggestions (strings)
+
+  const render = (suggestions) => {
+    currentItems = suggestions.slice(0, 5);
+    if (currentItems.length === 0) {
+      list.style.display = "none";
+      list.innerHTML = "";
+      activeIndex = -1;
+      return;
+    }
+    list.innerHTML = currentItems.map((t, i) =>
+      `<li data-i="${i}" style="padding:8px 10px;cursor:pointer;">${escapeHtml(t)}</li>`
+    ).join("");
+    list.style.display = "block";
+    activeIndex = -1;
+  };
+
+  const update = () => {
+    const q = (input.value || "").trim();
+    if (!q) {
+      list.style.display = "none";
+      list.innerHTML = "";
+      activeIndex = -1;
+      return;
+    }
+    render(rankAndFilter(items, q));
+  };
+
+  input.addEventListener("input", update);
+
+  input.addEventListener("keydown", (e) => {
+    const visible = list.style.display !== "none";
+    if (!visible && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
+      update();
+      return;
+    }
+    if (!visible) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      activeIndex = (activeIndex + 1) % currentItems.length;
+      highlight(activeIndex);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      activeIndex = (activeIndex - 1 + currentItems.length) % currentItems.length;
+      highlight(activeIndex);
+    } else if (e.key === "Enter") {
+      if (activeIndex >= 0 && activeIndex < currentItems.length) {
+        e.preventDefault();
+        input.value = currentItems[activeIndex];
+      }
+      list.style.display = "none";
+    } else if (e.key === "Escape") {
+      list.style.display = "none";
+    }
+  });
+
+  list.addEventListener("mousedown", (e) => {
+    // use mousedown so we can set the value before blur
+    const li = e.target.closest("li");
+    if (!li) return;
+    const i = parseInt(li.getAttribute("data-i"), 10);
+    if (!isNaN(i) && currentItems[i]) {
+      input.value = currentItems[i];
+      list.style.display = "none";
+    }
+  });
+
+  input.addEventListener("blur", () => {
+    // close after a tick to allow click selection
+    setTimeout(() => list.style.display = "none", 100);
+  });
+
+  function highlight(i) {
+    [...list.querySelectorAll("li")].forEach((el, idx) => {
+      el.style.background = idx === i ? "#eef5ff" : "";
+    });
+    // ensure active item stays in view
+    const el = list.querySelector(`li[data-i="${i}"]`);
+    if (el) {
+      const r = el.getBoundingClientRect();
+      const Lr = list.getBoundingClientRect();
+      if (r.top < Lr.top) list.scrollTop -= (Lr.top - r.top + 4);
+      if (r.bottom > Lr.bottom) list.scrollTop += (r.bottom - Lr.bottom + 4);
+    }
+  }
+}
+
+// Ranking: substring match (case-insensitive)
+// Tier 0: startsWith; Tier 1: word-start; Tier 2: anywhere
+// Then shorter length; then alphabetical
+function rankAndFilter(items, query) {
+  const q = normalize(query);
+  if (!q) return [];
+  const scored = [];
+  for (const it of items) {
+    const n = normalize(it);
+    const idx = n.indexOf(q);
+    if (idx === -1) continue;
+
+    let tier = 2;
+    if (idx === 0) tier = 0;
+    else if (/\b/.test(n[idx - 1] || " ")) tier = 1;
+
+    const score = [tier, n.length, n]; // tuple: lower is better
+    scored.push({ it, score });
+  }
+  scored.sort((a, b) => {
+    for (let i = 0; i < a.score.length; i++) {
+      if (a.score[i] < b.score[i]) return -1;
+      if (a.score[i] > b.score[i]) return 1;
+    }
+    return 0;
+  });
+  return scored.map(s => s.it).slice(0, 5);
+}
+
+function normalize(s) { return (s || "").toLowerCase().trim(); }
+function escapeHtml(s) { 
+  return (s ?? "").toString().replace(/[&<>"']/g, m => (
+    {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]
+  )); 
 }
 
 
