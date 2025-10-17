@@ -390,7 +390,7 @@ public class SubmissionController {
 public synchronized String handleExpertRegistration(@RequestBody Map<String, Object> body) {
     String email = (String) body.getOrDefault("email", "unknown");
     String timestamp = ZonedDateTime.now(ZoneId.of("America/New_York"))
-            .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+                                    .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
     System.out.println(">>> [register_expert] Registration received from: " + email);
     System.out.println(">>> Timestamp: " + timestamp);
@@ -405,77 +405,79 @@ public synchronized String handleExpertRegistration(@RequestBody Map<String, Obj
     ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
     try {
-        // Persist all submissions (regardless of event)
         Map<String, Object> wrapped = new HashMap<>();
         wrapped.put("timestamp", timestamp);
         wrapped.put("data", body);
 
         List<Map<String, Object>> allData = registrationFile.exists()
-                ? mapper.readValue(registrationFile, new TypeReference<List<Map<String, Object>>>() {})
-                : new ArrayList<>();
+            ? mapper.readValue(registrationFile, new TypeReference<List<Map<String, Object>>>() {})
+            : new ArrayList<>();
         allData.add(wrapped);
         mapper.writeValue(registrationFile, allData);
         System.out.println(">>> Saved to expert_registration.json");
 
-        // ----- Email routing by event -----
-        String rawEvent = String.valueOf(body.getOrDefault("event", "register"));
-        String event = rawEvent == null ? "register" : rawEvent.toLowerCase().trim();
-
+        // Email Content Logic (extend, do not alter existing content)
+        String event = String.valueOf(body.getOrDefault("event", "register")).toLowerCase().trim();
         String subject;
         String message;
-        boolean shouldSendEmail = true;
-
         String sessionTime = String.valueOf(body.getOrDefault("selectedSlot", "unspecified"));
+
+        boolean shouldSendEmail = true;
 
         switch (event) {
             case "eligiblebeforeconsent":
-                // ✅ DO NOT send any email at this stage
+                // NEW: do not send any email here
                 shouldSendEmail = false;
                 System.out.println(">>> Skipping email for event=eligibleBeforeConsent");
-                break;
-
-            case "appointment":
-                subject = "Availability Received – Expert Participation in Code Comprehension Study";
-                message = "Thank you for providing your available time slots for the Code Comprehension Study.\n\n" +
-                        "📅 Your availability: " + sessionTime + "\n\n" +
-                        "We'll follow up shortly to finalize an appointment.\n\n" +
-                        "If you have any questions, feel free to reply to this email or contact us at ea442@njit.edu.\n\n" +
-                        "— Code Comprehension Study Team";
-                System.out.println(">>> Sending appointment email to: " + email);
-                if (shouldSendEmail) sendEmailViaPython(email, subject, message);
-                break;
-
-            case "consent":
-                subject = "Consent Form Received – Code Comprehension Study";
-                message = "Thank you for signing the consent form for the Code Comprehension Study.\n\n" +
-                        "We’ve received your submission and will contact you soon with further instructions.\n\n" +
-                        "If you have any questions, feel free to reply to this email or contact us at ea442@njit.edu.\n\n" +
-                        "— Code Comprehension Study Team";
-                System.out.println(">>> Sending consent email to: " + email);
-                if (shouldSendEmail) sendEmailViaPython(email, subject, message);
+                subject = null;
+                message = null;
                 break;
 
             case "ineligible":
-                // ✅ Neutral wording — no mention of “ineligible”
+                // NEW: neutral wording, no mention of “ineligible”
                 subject = "Information Received – Code Comprehension Study";
-                message = "Thank you for sharing your information with the Code Comprehension Study.\n\n" +
-                        "We’ve received your responses and our team will review them to determine potential next steps. " +
-                        "If there’s a good fit based on your background, we’ll reach out to you.\n\n" +
-                        "If you have any questions, feel free to reply to this email or contact us at ea442@njit.edu.\n\n" +
-                        "— Code Comprehension Study Team";
-                System.out.println(">>> Sending neutral follow-up email (ineligible flow) to: " + email);
-                if (shouldSendEmail) sendEmailViaPython(email, subject, message);
+                message = "Thank you for sharing your information for the Code Comprehension Study.\n\n" +
+                          "We’ve recorded your responses. Our team will review your submission and may contact you " +
+                          "regarding next steps.\n\n" +
+                          "If you have any questions, feel free to reply to this email or contact us at ea442@njit.edu.\n\n" +
+                          "— Code Comprehension Study Team";
+                System.out.println(">>> Sending neutral info email (ineligible flow) to: " + email);
+                break;
+
+            case "appointment":
+                // UNCHANGED
+                subject = "Availability Received – Expert Participation in Code Comprehension Study";
+                message = "Thank you for providing your available time slots for the Code Comprehension Study.\n\n" +
+                          "📅 Your availability: " + sessionTime + "\n\n" +
+                          "We'll follow up shortly to finalize an appointment.\n\n" +
+                          "If you have any questions, feel free to reply to this email or contact us at ea442@njit.edu.\n\n" +
+                          "— Code Comprehension Study Team";
+                System.out.println(">>> Sending appointment email to: " + email);
+                break;
+
+            case "consent":
+                // UNCHANGED
+                subject = "Consent Form Received – Code Comprehension Study";
+                message = "Thank you for signing the consent form for the Code Comprehension Study.\n\n" +
+                          "We’ve received your submission and will contact you soon with further instructions.\n\n" +
+                          "If you have any questions, feel free to reply to this email or contact us at ea442@njit.edu.\n\n" +
+                          "— Code Comprehension Study Team";
+                System.out.println(">>> Sending consent email to: " + email);
                 break;
 
             default:
+                // UNCHANGED
                 subject = "Expert Registration – Code Comprehension Study";
                 message = "Your registration for the Code Comprehension Study has been received.\n\n" +
-                        "We'll be in touch shortly to coordinate the next steps.\n\n" +
-                        "If you have any questions, feel free to reply to this email or contact us at ea442@njit.edu.\n\n" +
-                        "— Code Comprehension Study Team";
+                          "We'll be in touch shortly to coordinate the next steps.\n\n" +
+                          "If you have any questions, feel free to reply to this email or contact us at ea442@njit.edu.\n\n" +
+                          "— Code Comprehension Study Team";
                 System.out.println(">>> Sending default registration email to: " + email + " (event=" + event + ")");
-                if (shouldSendEmail) sendEmailViaPython(email, subject, message);
                 break;
+        }
+
+        if (shouldSendEmail && subject != null && message != null) {
+            sendEmailViaPython(email, subject, message);
         }
 
         return "Expert registration saved.";
@@ -486,6 +488,7 @@ public synchronized String handleExpertRegistration(@RequestBody Map<String, Obj
         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save expert registration.");
     }
 }
+
 
 
 
