@@ -710,7 +710,6 @@
     ];
 
     const questions = [
-      // 1) Basic gate
       {
         text: "What is your age?",
         options: [
@@ -723,8 +722,6 @@
           { label: "65 or older" }
         ]
       },
-
-
       {
         text: "How many years of experience do you have developing or maintaining industry-level software systems?",
         options: [
@@ -783,20 +780,17 @@
         placeholder: "Enter the name of your employer, or write 'None' if not currently employed",
         multiline: false
       },
-
-
-      // 5) Work style and domains
       {
-        text: "What is the nature of your development work?",
+        text: "Do you develop proprietary or commercial software, open-source software, or both? (Select all that apply.)",
         type: "checkbox",
         multiple: true,
         options: [
-          { label: "Proprietary software developer" },
-          { label: "Open-source software developer" },
-          { label: "I am based at a research or educational institution" },
-          { label: "Other (please explain)", freeText: true }
+          { label: "Proprietary or commercial" },
+          { label: "Open-source" },
+          { label: "Other (please specify)", freeText: true }
         ]
-      },
+      }
+      ,
       {
         text: "What types of systems do you spend time developing more than occasionally? (Select all that apply.)",
         type: "checkbox",
