@@ -695,10 +695,56 @@
                 flex: 1 1 100%;
             }
 
-              .modal { padding: 5px; }
+            .modal {
+                padding: 5px;
+            }
 
         }
     </style>
+
+    <script>
+        /**
+         * Read ?email=... (or ?e=...) from the URL, validate/sanitize it,
+         * and store it for the rest of the page to use.
+         */
+        (function () {
+            const EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+            function pickEmailFromQuery() {
+                const qp = new URLSearchParams(location.search);
+                let v = qp.get("email") || qp.get("e");
+                if (!v) return null;
+
+                // Try raw first
+                v = decodeURIComponent(v.trim());
+                if (EMAIL_RE.test(v)) return v;
+
+                // Optionally support base64-encoded email in the URL (safer for logging)
+                try {
+                    const decoded = atob(v);
+                    if (EMAIL_RE.test(decoded)) return decoded;
+                } catch (_) { }
+
+                return null;
+            }
+
+            const fromQuery = pickEmailFromQuery();
+            if (fromQuery) {
+                localStorage.setItem("expert_email", fromQuery);
+                sessionStorage.setItem("expert_email", fromQuery);
+            }
+
+            // Provide a single source of truth for the rest of the page
+            window.getExpertEmail = function () {
+                return (
+                    localStorage.getItem("expert_email") ||
+                    sessionStorage.getItem("expert_email") ||
+                    ""
+                );
+            };
+        })();
+    </script>
+
 </head>
 
 <body>
@@ -708,7 +754,8 @@
             <h2 style="text-align: center;">NEW JERSEY INSTITUTE OF TECHNOLOGY</h2>
             <p style="text-align: center;">323 MARTIN LUTHER KING BLVD.<br>NEWARK, NJ 07102</p>
             <h4 style="text-align: center;">CONSENT TO PARTICIPATE IN THE RESEARCH STUDY:</h3>
-            <h3 style="text-align: center;">RANKING CODE SNIPPETS BY COMPREHENSION DIFFICULTY</h4>
+                <h3 style="text-align: center;">RANKING CODE SNIPPETS BY COMPREHENSION DIFFICULTY
+            </h4>
 
             <p>
                 I, <span contenteditable="true" id="consentName" style="
@@ -720,18 +767,22 @@
     background-color: #fff9c4; /* light yellow highlight */
     transition: background-color 0.3s;
   " onfocus="this.style.backgroundColor='#fff176'" onblur="this.style.backgroundColor='#fff9c4'">
-                </span>, have been asked to participate in a research study under the direction of Dr. Martin Kellogg from the New Jersey Institute OF Technology (NJIT) and Dr. Oscar Chaparro from the College of William & Mary (W&M).
+                </span>, have been asked to participate in a research study under the direction of Dr. Martin Kellogg
+                from the New Jersey Institute OF Technology (NJIT) and Dr. Oscar Chaparro from the College of William &
+                Mary (W&M).
             </p>
 
 
             <h4>PURPOSE</h4>
-            <p>The overarching goal of our research is to investigate the effectiveness of existing code comprehension measures in
+            <p>The overarching goal of our research is to investigate the effectiveness of existing code comprehension
+                measures in
                 assessing the difficulty in understanding Java code snippets (i.e., code comprehensibility).
                 Specifically, this research aims to determine whether these measures can reliably predict
                 expert-determined rankings of code comprehensibility, contributing to improved methods for studying code
                 comprehension.</p>
 
-            <p>The specific goal of this study is to establish an expert-determined ranking of 8 Java code snippets according to how difficulty they are for experts to understand.</p>
+            <p>The specific goal of this study is to establish an expert-determined ranking of 8 Java code snippets
+                according to how difficulty they are for experts to understand.</p>
 
             <h4>DURATION</h4>
             <p>My participation in this study will consist of three rounds. Round 1 is expected to take about 75
@@ -794,8 +845,10 @@
 
 
             <h4>RISKS/DISCOMFORTS</h4>
-            <p>This study may involve mild discomfort or fatigue from focusing for extended periods. To mitigate this, breaks will be
-                instructed during the study. There may be unknown risks. I understand that I am not covered by our institutions' insurance policy for
+            <p>This study may involve mild discomfort or fatigue from focusing for extended periods. To mitigate this,
+                breaks will be
+                instructed during the study. There may be unknown risks. I understand that I am not covered by our
+                institutions' insurance policy for
                 any injury or loss during participation.</p>
 
             <h4>CONFIDENTIALITY</h4>
@@ -870,7 +923,9 @@
                 style="margin-top: 20px; padding: 12px; background-color: #f9f9f923; border: 1px solid #cccccc59; border-radius: 6px; font-size: 15px; color: #363636;">
                 <p style="margin: 0;">
                     <strong>Or</strong><br>
-                    I am not fully informed by this consent form and the information provided on the study summary page. I will contact the research team to get answers to my questions before deciding whether to participate.
+                    I am not fully informed by this consent form and the information provided on the study summary page.
+                    I will contact the research team to get answers to my questions before deciding whether to
+                    participate.
                     <!-- <a href="javascript:void(0);"
                         onclick="document.getElementById('slots-box').classList.remove('hidden');"
                         style="color: #0d6efd; text-decoration: underline;">
@@ -1455,7 +1510,7 @@
             const signature = document.getElementById('signatureConfirm')?.innerText.trim() || '';
             const date = document.getElementById('signatureDate')?.innerText.trim() || '';
 
-const fullText = `
+            const fullText = `
 NEW JERSEY INSTITUTE OF TECHNOLOGY
 323 MARTIN LUTHER KING BLVD.
 NEWARK, NJ 07102
@@ -1661,19 +1716,19 @@ Date: ${document.getElementById('signatureDate')?.innerText.trim() || ''}
 
         // Initialize each iframe
         widgets.forEach((frame) => {
-        frame.style.width = '100%';
-        frame.style.border = '0';
-        frame.style.display = 'block';
-        frame.style.overflow = 'hidden';
-        frame.style.height = '240px';
+            frame.style.width = '100%';
+            frame.style.border = '0';
+            frame.style.display = 'block';
+            frame.style.overflow = 'hidden';
+            frame.style.height = '240px';
 
-        const perFrameEmail = frame.dataset.referrer || localStorage.getItem('expert_email') || '';
-        const perFrameName  = localStorage.getItem('referrerName') || '';
+            const perFrameEmail = frame.dataset.referrer || localStorage.getItem('expert_email') || '';
+            const perFrameName = localStorage.getItem('referrerName') || '';
 
-        const url = new URL(frame.getAttribute('src'), location.origin);
-        if (perFrameEmail) url.searchParams.set('referrer', perFrameEmail);
-        if (perFrameName.trim()) url.searchParams.set('refname', perFrameName.trim()); // <-- add this
-        frame.src = url.toString();
+            const url = new URL(frame.getAttribute('src'), location.origin);
+            if (perFrameEmail) url.searchParams.set('referrer', perFrameEmail);
+            if (perFrameName.trim()) url.searchParams.set('refname', perFrameName.trim()); // <-- add this
+            frame.src = url.toString();
         });
 
         // Listen for height / submitted messages from ANY referral iframe
