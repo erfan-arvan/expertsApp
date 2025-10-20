@@ -444,7 +444,7 @@ public class SubmissionController {
             switch (event) {
                 case "eligiblebeforeconsent": {
                     // NEW: send consent link so they can open the page directly
-                    final String CONSENT_URL_BASE = "https://codecomprehensibility.site/consent.html";
+                    final String CONSENT_URL_BASE = "https://codecomprehensibility.site/consent-experts.html";
                     String consentUrl = buildConsentLink(CONSENT_URL_BASE, email);
 
                     shouldSendEmail = true;
