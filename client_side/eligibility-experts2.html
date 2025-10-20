@@ -709,118 +709,115 @@
       "Entry Level Software Engineer"
     ];
 
-    const questions = [
-      {
-        text: "What is your age?",
-        options: [
-          { label: "Under 18", ineligible: true },
-          { label: "18–24" },
-          { label: "25–34" },
-          { label: "35–44" },
-          { label: "45–54" },
-          { label: "55–64" },
-          { label: "65 or older" }
-        ]
-      },
-      {
-        text: "How many years of experience do you have developing or maintaining industry-level software systems?",
-        options: [
-          { label: "No experience" },
-          { label: "<1 year" },
-          { label: "1–2 years" },
-          { label: "3–5 years" },
-          { label: "6–9 years" },
-          { label: "10–14 years" },
-          { label: "15–19 years" },
-          { label: "20+ years" }
-        ]
-      },
-      {
-        text: "How many years of professional development experience do you have with <strong>Java</strong>?",
-        options: [
-          { label: "No experience", ineligible: true },
-          { label: "<1 year" },
-          { label: "1–2 years" },
-          { label: "3–5 years", eligible: true },
-          { label: "6–9 years", eligible: true },
-          { label: "10–14 years", eligible: true },
-          { label: "15–19 years", eligible: true },
-          { label: "20+ years", eligible: true }
-        ]
-      },
-      {
-        text: "Have you ever been promoted within a software engineering role to a more senior level—for example, a promotion from an entry-level position to the next level where engineers are expected to operate more independently or lead projects?<br/><br/>Examples include a promotion to: Apple ICT3, Facebook E4, Uber Level 4 (Software Engineer II), Microsoft Level 61, Amazon L5, or Walmart L3. <a style='font-size:10px;' href='https://www.levels.fyi' target='_blank'>Learn more about these levels</a>",
-        options: [
-          { label: "Yes, I have received a promotion like that.", eligible: true },
-          { label: "No, I have not received a promotion like that." }
-        ]
-      },
-      {
-        text: "Have you ever mentored one or more junior software engineers in a professional setting?",
-        options: [
-          { label: "Yes", eligible: true },
-          { label: "No" }
-        ]
-      },
-      {
-        text: "Briefly describe the largest or most complex software system you’ve worked on (e.g., its purpose, scale, users, and development team).",
-        type: "text",
-        placeholder: "For example: a distributed microservice system for e-commerce, composed of hundreds of modules, developed by dozens of developers, and used by millions of users worldwide.",
-        multiline: true
-      },
-      {
-        text: "What is your current job title? (You can select from the list or type your own)",
-        type: "combobox",
-        options: jobTitles.map(t => ({ label: t })),
-        placeholder: "Start typing your job title…"
-      },
-      {
-        text: "What company or organization do you currently work for (if any)?",
-        type: "text",
-        placeholder: "Enter the name of your employer, or write 'None' if not currently employed",
-        multiline: false
-      },
-      {
-        text: "Do you develop proprietary or commercial software, open-source software, or both? (Select all that apply.)",
-        type: "checkbox",
-        multiple: true,
-        options: [
-          { label: "Proprietary or commercial" },
-          { label: "Open-source" },
-          { label: "Other (please specify)", freeText: true }
-        ]
-      }
-      ,
-      {
-        text: "What types of systems do you spend time developing more than occasionally? (Select all that apply.)",
-        type: "checkbox",
-        multiple: true,
-        options: [
-          { label: "Operating systems" },
-          { label: "Web applications" },
-          { label: "Mobile applications" },
-          { label: "Desktop applications" },
-          { label: "Middleware" },
-          { label: "AI-intensive systems" },
-          { label: "Development tools (compilers, programming languages, etc.)" },
-          { label: "Libraries/frameworks" },
-          { label: "Other (please specify)", freeText: true }
-        ]
-      },
-      {
-        text: "Please indicate the domains for which you have developed software (e.g., banking, healthcare, developer tools, …).",
-        type: "text",
-        placeholder: "List domains (comma-separated)",
-        multiline: true
-      }
-    ];
+   const questions = [
+     {
+       text: "What is your age?",
+       options: [
+         { label: "Under 18", ineligible: true },
+         { label: "18–24" },
+         { label: "25–34" },
+         { label: "35–44" },
+         { label: "45–54" },
+         { label: "55–64" },
+         { label: "65 or older" }
+       ]
+     },
+     {
+       text: "How many years of professional development experience do you have (in any language?",
+       options: [
+         { label: "No experience" },
+         { label: "<1 year" },
+         { label: "1–2 years" },
+         { label: "3–5 years" },
+         { label: "6–9 years" },
+         { label: "10–14 years" },
+         { label: "15–19 years" },
+         { label: "20+ years" }
+       ]
+     },
+     {
+       text: "How many years of professional development experience do you have with <strong>Java</strong>?",
+       options: [
+         { label: "No experience", ineligible: true },
+         { label: "<1 year" },
+         { label: "1–2 years" },
+         { label: "3–5 years", eligible: true },
+         { label: "6–9 years", eligible: true },
+         { label: "10–14 years", eligible: true },
+         { label: "15–19 years", eligible: true },
+         { label: "20+ years", eligible: true }
+       ]
+     },
+     {
+       text: "Have you ever been promoted within a software engineering role to a more senior level—for example, a promotion from an entry-level position to the next level where engineers are expected to operate more independently or lead projects?<br/><br/>Examples include a promotion to: Apple ICT3, Facebook E4, Uber Level 4 (Software Engineer II), Microsoft Level 61, Amazon L5, or Walmart L3. <a style='font-size:10px;' href='https://www.levels.fyi' target='_blank'>Learn more about these levels</a>",
+       options: [
+         { label: "Yes, I have received a promotion like that.", eligible: true },
+         { label: "No, I have not received a promotion like that." }
+       ]
+     },
+     {
+       text: "Have you ever mentored one or more junior software engineers in a professional setting?",
+       options: [
+         { label: "Yes", eligible: true },
+         { label: "No" }
+       ]
+     },
+     {
+       text: "Briefly describe the largest or most complex software system you’ve worked on (e.g., its purpose, scale, users, and development team).",
+       type: "text",
+       placeholder: "For example: a distributed microservice system for e-commerce, composed of hundreds of modules, developed by dozens of developers, and used by millions of users worldwide.",
+       multiline: true
+     },
+     {
+       text: "What is your current job title? (You can select from the list or type your own)",
+       type: "combobox",
+       options: jobTitles.map(t => ({ label: t })),
+       placeholder: "Start typing your job title…"
+     },
+     {
+       text: "What company or organization do you currently work for (if any)?",
+       type: "text",
+       placeholder: "Enter the name of your employer, or write 'None' if not currently employed",
+       multiline: false
+     },
+     {
+       text: "Do you develop proprietary or commercial software, open-source software, or both? (Select all that apply.)",
+       type: "checkbox",
+       multiple: true,
+       options: [
+         { label: "Proprietary or commercial" },
+         { label: "Open-source" },
+         { label: "Other (please specify)", freeText: true }
+       ]
+     }
+     ,
+     {
+       text: "What types of systems do you spend time developing more than occasionally? (Select all that apply.)",
+       type: "checkbox",
+       multiple: true,
+       options: [
+         { label: "Operating systems" },
+         { label: "Web applications" },
+         { label: "Mobile applications" },
+         { label: "Desktop applications" },
+         { label: "Middleware" },
+         { label: "AI-intensive systems" },
+         { label: "Development tools (compilers, programming languages, etc.)" },
+         { label: "Libraries/frameworks" },
+         { label: "Other (please specify)", freeText: true }
+       ]
+     },
+     {
+       text: "Please indicate the domains for which you have developed software (e.g., banking, healthcare, developer tools, …).",
+       type: "text",
+       placeholder: "List domains (comma-separated)",
+       multiline: true
+     }
+   ];
 
 
 
-
-
-
-    const QUESTIONS_VERSION = "2025-10-17.3";
+    const QUESTIONS_VERSION = "2025-10-20.1";
     let currentQuestion = 0;
     let answers = [];
 
