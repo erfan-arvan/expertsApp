@@ -1283,13 +1283,12 @@
             const notify = localStorage.getItem("notify_opt_in") === "true";
             const selectedSlot = localStorage.getItem("selected_slot") || "unspecified";
 
-            const eligibilityResponses = questions.map((q, index) => {
+            const eligibilityResponses =
+            JSON.parse(sessionStorage.getItem('eligibilityResponsesJSON') || 'null')
+            ?? questions.map((q, index) => {
                 const key = `eligibility_q${index}`;
                 const storedAnswer = sessionStorage.getItem(key);
-                return {
-                    question: q.text,
-                    selectedOption: storedAnswer || "No answer"
-                };
+                return { question: q.text, selectedOption: storedAnswer || "No answer" };
             });
 
             // Grab consent values from the DOM
