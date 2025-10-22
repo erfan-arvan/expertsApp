@@ -1177,60 +1177,225 @@
     </script>
 
     <script>
-        const questions = [
-            {
-                text: "Have you ever received a significant promotion in a software engineering role—for example, a promotion from an entry-level position to the next level where engineers are expected to operate more independently or lead small projects? Examples include a promotion to: Apple ICT3, Facebook E4, Uber Level 4 (Software Engineer II), Microsoft Level 61, Amazon L5, or Walmart L3.",
-                options: [
-                    { label: "Yes, I have received a promotion like that." },
-                    { label: "No, I have not received a promotion like that.", ineligible: true }
-                ]
-            },
-            {
-                text: "How many years of professional experience do you have with Java?",
-                options: [
-                    { label: "None", ineligible: true },
-                    { label: "Less than 1 year" },
-                    { label: "1–2 years" },
-                    { label: "3–4 years" },
-                    { label: "5+ years" }
-                ]
-            },
-            {
-                text: "Have you mentored at least one junior software engineer in a professional setting?",
-                options: [
-                    { label: "Yes" },
-                    { label: "No", ineligible: true }
-                ]
-            },
-            {
-                text: "What is your age?",
-                options: [
-                    { label: "Under 18", ineligible: true },
-                    { label: "18–20", },
-                    { label: "21–24" },
-                    { label: "25–30" },
-                    { label: "31–40" },
-                    { label: "Over 40" }
-                ]
-            },
-            {
-                text: "Have you been diagnosed with a reading or learning disability, or any condition that affects your ability to read or understand code or instructions?",
-                options: [
-                    { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
-                    { label: "No, I have not been diagnosed with any such condition" }
-                ]
-            },
-            {
-                text: "How comfortable are you with reading English-language text?",
-                options: [
-                    { label: "Not comfortable", ineligible: true },
-                    { label: "Slightly comfortable" },
-                    { label: "Moderately comfortable" },
-                    { label: "Very comfortable" },
-                    { label: "Native speaker / fluent" }
-                ]
-            }
-        ];
+    const jobTitles = [
+      // Executive / Leadership
+      "CTO",
+      "CIO / Chief Digital Officer / Chief Innovation Officer",
+      "VP of Product Management / Head of Product",
+      "VP of Marketing",
+      "VP of Engineering",
+      "VP of HR",
+      "Chief Architect",
+      "Chief Human Resource Officer",
+
+      // Product & Project
+      "Product Manager",
+      "Engineering Project Manager",
+      "Engineering Manager",
+      "Technical Project Manager",
+      "Project Manager",
+      "Business Account Manager",
+      "Senior Manager IT",
+      "IT Infrastructure Manager",
+      "Procurement Manager",
+
+      // Learning & Development
+      "Learning and Development Manager",
+      "Learning and Development Coordinator",
+
+      // HR / Recruitment
+      "HR Coordinator",
+      "Payroll Coordinator",
+      "Recruiting Coordinator",
+      "HR Specialist",
+      "HR Generalist",
+      "Recruiter",
+      "Human Resource Information Specialist",
+      "HR Manager",
+      "Recruiting Manager",
+      "HR Business Partner",
+      "HR Director",
+      "Recruiting Director",
+      "Career Consultant",
+      "Career Advisor",
+      "Assignment Coordinator",
+      "Placement Coordinator",
+      "Career Development Strategist",
+      "Personnel Agent",
+      "Human Resources Officer",
+
+      // Marketing / SEO / Digital
+      "SEO Manager",
+      "SEO Engineer",
+      "SEO Consultant",
+      "Digital Marketing Manager",
+      "Digital Marketing Analyst",
+      "Social Media Marketing Manager",
+      "Social Media Marketing Analyst",
+      "Marketing Technologist",
+      "Web Analytics Developer",
+      "Social Media Manager",
+      "Growth Hacker",
+      "Content Manager",
+      "Content Strategist",
+
+      // Engineering & IT
+      ".NET Developer",
+      "Android Developer",
+      "Artificial Intelligence / Machine Learning Engineer",
+      "Big Data Engineer",
+      "Build and Release Engineer",
+      "Cloud Architect",
+      "Cloud Engineer",
+      "Computer Hardware Engineer",
+      "Computer Network Architect",
+      "Computer Programmer",
+      "Computer Systems Analyst",
+      "Data Analyst",
+      "Data Architect",
+      "Data Engineer",
+      "Data Scientist",
+      "Database Administrator",
+      "DevOps Engineer",
+      "Full Stack Developer",
+      "Front-End Developer",
+      "Back-End Developer",
+      "Software Developer",
+      "Software Engineer",
+      "Senior Software Engineer",
+      "Site Reliability Engineer",
+      "Systems Engineer",
+      "Systems Administrator",
+      "Network Engineer",
+      "Security Engineer",
+      "QA Engineer",
+      "UI Designer",
+      "UX Designer",
+      "Web Developer",
+      "Mobile App Developer",
+      "Game Developer",
+      "Robotics Engineer",
+      "Technical Lead",
+      "Technical Account Manager",
+      "Technical Sales Engineer",
+      "IT Manager",
+      "IT Support Specialist",
+      "DevSecOps Engineer",
+      "AI Researcher",
+      "Machine Learning Architect",
+      "Research Scientist",
+      "Software Architect",
+      "Principal Engineer",
+      "Junior Developer",
+      "Intern Developer",
+      "Entry Level Software Engineer"
+    ];
+
+   const questions = [
+     {
+       text: "What is your age?",
+       options: [
+         { label: "Under 18", ineligible: true },
+         { label: "18–24" },
+         { label: "25–34" },
+         { label: "35–44" },
+         { label: "45–54" },
+         { label: "55–64" },
+         { label: "65 or older" }
+       ]
+     },
+     {
+       text: "How many years of professional development experience do you have (in any language)?",
+       options: [
+         { label: "No experience" },
+         { label: "<1 year" },
+         { label: "1–2 years" },
+         { label: "3–5 years" },
+         { label: "6–9 years" },
+         { label: "10–14 years" },
+         { label: "15–19 years" },
+         { label: "20+ years" }
+       ]
+     },
+     {
+       text: "How many years of professional development experience do you have with <strong>Java</strong>?",
+       options: [
+         { label: "No experience", ineligible: true },
+         { label: "<1 year" },
+         { label: "1–2 years" },
+         { label: "3–5 years", eligible: true },
+         { label: "6–9 years", eligible: true },
+         { label: "10–14 years", eligible: true },
+         { label: "15–19 years", eligible: true },
+         { label: "20+ years", eligible: true }
+       ]
+     },
+     {
+       text: "Have you ever been promoted within a software engineering role to a more senior level—for example, a promotion from an entry-level position to the next level where engineers are expected to operate more independently or lead projects?<br/><br/>Examples include a promotion to: Apple ICT3, Facebook E4, Uber Level 4 (Software Engineer II), Microsoft Level 61, Amazon L5, or Walmart L3. <a style='font-size:10px;' href='https://www.levels.fyi' target='_blank'>Learn more about these levels</a>",
+       options: [
+         { label: "Yes, I have received a promotion like that.", eligible: true },
+         { label: "No, I have not received a promotion like that." }
+       ]
+     },
+     {
+       text: "Have you ever mentored one or more junior software engineers in a professional setting?",
+       options: [
+         { label: "Yes", eligible: true },
+         { label: "No" }
+       ]
+     },
+     {
+       text: "Briefly describe the largest or most complex software system you’ve worked on (e.g., its purpose, scale, users, and development team).",
+       type: "text",
+       placeholder: "For example: a distributed microservice system for e-commerce, composed of hundreds of modules, developed by dozens of developers, and used by millions of users worldwide.",
+       multiline: true
+     },
+     {
+       text: "What is your current job title? (You can select from the list or type your own)",
+       type: "combobox",
+       options: jobTitles.map(t => ({ label: t })),
+       placeholder: "Start typing your job title…"
+     },
+     {
+       text: "What company or organization do you currently work for (if any)?",
+       type: "text",
+       placeholder: "Enter the name of your employer, or write 'None' if not currently employed",
+       multiline: false
+     },
+     {
+       text: "Do you develop proprietary or commercial software, open-source software, or both? (Select all that apply.)",
+       type: "checkbox",
+       multiple: true,
+       options: [
+         { label: "Proprietary or commercial" },
+         { label: "Open-source" },
+         { label: "Other (please specify)", freeText: true }
+       ]
+     }
+     ,
+     {
+       text: "What types of systems do you spend time developing more than occasionally? (Select all that apply.)",
+       type: "checkbox",
+       multiple: true,
+       options: [
+         { label: "Operating systems" },
+         { label: "Web applications" },
+         { label: "Mobile applications" },
+         { label: "Desktop applications" },
+         { label: "Middleware" },
+         { label: "AI-intensive systems" },
+         { label: "Development tools (compilers, programming languages, etc.)" },
+         { label: "Libraries/frameworks" },
+         { label: "Other (please specify)", freeText: true }
+       ]
+     },
+     {
+       text: "Please indicate the domains for which you have developed software (e.g., banking, healthcare, developer tools, …).",
+       type: "text",
+       placeholder: "List domains (comma-separated)",
+       multiline: true
+     }
+   ];
     </script>
     <script>
         function submitAppointmentRequest() {
@@ -1327,7 +1492,7 @@
                 email: email,
                 notify: notify,
                 selectedSlot: selectedSlot,
-                //eligibilityResponses: eligibilityResponses,
+                eligibilityResponses: eligibilityResponses,
                 consentForm: consentForm,
                 submitted: true,
                 event: "consent" // or "cancel" or "modify"
