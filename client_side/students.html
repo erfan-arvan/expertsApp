@@ -398,10 +398,10 @@ a.underline-dotted-pointer {
     <div id="question-box" style="flex: 1;">
         <div id="question-area"></div>
         <div class="buttons">
-          <button id="prev-question" onclick="prevQuestion()">Previous</button>
+          <!-- <button id="prev-question" onclick="prevQuestion()">Previous</button> -->
           <button id="next-question" onclick="nextQuestion()">Next</button>
         </div>
-        <button onclick="showAnswerReview()" style="margin-top: 20px;">Review All Responses</button>
+        <!-- <button onclick="showAnswerReview()" style="margin-top: 20px;">Review All Responses</button> -->
 
   
       <!-- <div class="buttons">
@@ -788,6 +788,7 @@ function updateButtons() {
     <img src="img/relax.gif" alt="Relax..." style="max-width: 100%; height: auto;">
     <br>
     <!-- <p>Please wait <span id="pause-countdown">60</span> seconds before continuing.</p> -->
+    <p>Take a 30 to 60 second in-seat rest, then resume the study.</p>
     <p id="soonShort" style="display: none;">Not so fast! Take a few more seconds to chill.</p>
     <button id="resume-btn-short" onclick="resumeStudy()">Resume</button>
   </div>
@@ -800,7 +801,7 @@ function updateButtons() {
   display: none;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.965);
   z-index: 9999;
   justify-content: center;
   align-items: center;
@@ -810,6 +811,9 @@ function updateButtons() {
     <img src="img/stretch.gif" alt="Relax..." style="width: 400px; height: auto;">
     <br>
     <!-- <p>Please wait <span id="pause-countdown-long">420</span> seconds before continuing.</p> -->
+    <p>You may take a 1 to 7 minute rest, either in your seat or outside, before resuming the study.</p>
+    <p>You are welcome to use the restroom or stretch your legs during this break.</p>
+    <p>If you leave, please do so and return quietly.</p>    
     <p id="soonLong" style="display: none;">No rush! Keep chilling a little longer.</p>
     <button id="resume-btn-long" onclick="resumeStudy()">Resume</button>
   </div>
@@ -1071,10 +1075,12 @@ function pauseStudyLong() {
 
     if (remaining >= 0) {
       // countdownEl.textContent = remaining;
+      console.log("Remaining timne:"+ remaining);
     }
 
     // Show resume button after 180 seconds (when 240 seconds are left)
-    if (remaining === 360) {
+    if (remaining <= 360) {
+      console.log("Less than 360" + remaining);
       resumeBtn.onclick = resumeStudy;
     }
 
@@ -1207,14 +1213,14 @@ if(Ispaused){
   }
 
 
-  setInterval(() => {
-    try {
-      // saveToServer();
-      console.log("[Auto-Save] Progress saved to server.");
-    } catch (e) {
-      console.warn("[Auto-Save] Failed to save:", e);
-    }
-  }, 120000);
+  // setInterval(() => {
+  //   try {
+  //     // saveToServer();
+  //     console.log("[Auto-Save] Progress saved to server.");
+  //   } catch (e) {
+  //     console.warn("[Auto-Save] Failed to save:", e);
+  //   }
+  // }, 120000);
 };
 
 
@@ -1257,17 +1263,24 @@ function getOrCreateQuestionOrder(snippetId, numQuestions) {
     } catch {}
   }
 
-  const order = Array.from({ length: numQuestions }, (_, i) => i+1);
+  // Create array excluding the last question
+  const order = Array.from({ length: numQuestions - 1 }, (_, i) => i + 1);
+
+  // Fisher–Yates shuffle
   for (let i = order.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [order[i], order[j]] = [order[j], order[i]];
   }
+
+  // Append the last question at the end
+  order.push(numQuestions);
 
   const serialized = JSON.stringify(order);
   localStorage.setItem(key, serialized);
   document.cookie = `${key}=${encodeURIComponent(serialized)}; path=/; max-age=2592000`;
   return order;
 }
+
 
 const questionsPerSnippet = {};
 
@@ -1490,8 +1503,11 @@ function loadQuestion() {
     if (currentQuestionIndex === totalQuestions - 1) {
       nextBtn.textContent = 'Go to next snippet';
       if (currentSnippet >= TOTAL_SNIPPETS) {
-        nextBtn.textContent = 'Finish and Submit';
-        nextBtn.onclick = FinishAndSubmit;
+        nextBtn.textContent = 'Go to Post-Study Survey';
+        nextBtn.onclick = () => {
+          localStorage.setItem('FromPrevPage', 'true');
+          window.location = "postStudySurvey.html";
+        };
       }
     } else {
       nextBtn.textContent = 'Next';
@@ -1686,6 +1702,18 @@ function renderLikertScale(container, id, labels, saved = '') {
 
 
 function nextQuestion() {
+
+  //check for read
+    const groupName = `answer-${currentSnippet}-ReadConfirm`;
+    const selected = document.querySelector(`input[name="${groupName}"]:checked`);
+    const confirmed = selected?.value?.trim().toLowerCase() === "yes";
+
+    if (currentQuestionIndex === 0 && !confirmed) {
+      showValidationMessage("⚠️ Please confirm you read the snippet before proceeding.");
+      return;
+    }
+
+    //check for other questions
     if (currentQuestionIndex !== 0 && !isCurrentQuestionAnswered()) {
         showValidationMessage("⚠️ Please answer the question before proceeding.");
         return;
@@ -1977,36 +2005,6 @@ async function submitFinalAnswersToServer() {
 
       payload.answers[snippetKey].questions.push(entry);
     });
-
-    // // General Q5: Function description
-    // const answer5 = localStorage.getItem(`answer-${snippet}-function`) || getCookie(`answer-${snippet}-function`) || '[No answer]';
-    // const time5 = parseInt(localStorage.getItem(`time-q-${snippet}-6`) || getCookie(`time-q-${snippet}-6`) || '0');
-    // payload.answers[snippetKey].questions.push({
-    //   id: 'function',
-    //   prompt: "What does this code snippet do? Briefly describe its main functionality.",
-    //   answer: answer5,
-    //   timeSec: time5
-    // });
-
-    // // General Q6.1: Self-assessed difficulty
-    // const answer6_1 = localStorage.getItem(`answer-${snippet}-scaleSM`) || getCookie(`answer-${snippet}-scaleSM`) || '[No answer]';
-
-    // // General Q6.2: Perceived difficulty
-    // const answer6_2 = localStorage.getItem(`answer-${snippet}-scaleST`) || getCookie(`answer-${snippet}-scaleST`) || '[No answer]';
-    // const time6 = parseInt(localStorage.getItem(`time-q-${snippet}-7`) || getCookie(`time-q-${snippet}-7`) || '0');
-
-    // payload.answers[snippetKey].questions.push({
-    //   id: 'scaleSM',
-    //   prompt: "How easy or difficult were the tasks you performed for this snippet?",
-    //   answer: answer6_1
-    // });
-
-    // payload.answers[snippetKey].questions.push({
-    //   id: 'scaleST',
-    //   prompt: "How easy or difficult was this snippet to understand?",
-    //   answer: answer6_2,
-    //   timeSec: time6
-    // });
   }
 
   try {
