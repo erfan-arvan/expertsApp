@@ -738,7 +738,7 @@ function submitRegistrationData() {
     };
 
 
-  return fetch("/register_student", {
+  return fetch("/register_studentWM", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -861,7 +861,7 @@ function submitPendingRegistration() {
     submitted: true
   };
 
-  fetch("/register_student", {
+  fetch("/register_studentWM", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
