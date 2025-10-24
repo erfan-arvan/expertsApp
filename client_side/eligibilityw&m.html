@@ -272,11 +272,11 @@ input.input-error {
 
         <p><strong>⏱️ Duration:</strong> The session is expected to take <strong>up to 90 minutes</strong>, but there are no strict time limits—you can take breaks as needed.</p>
                 
-        <p><strong>📍 Format:</strong> The study takes place <strong>in person</strong>, and you’ll use your own laptop to complete the tasks online.</p>
+        <p><strong>📍 Format:</strong> The study takes place <strong>in person</strong>, and you’ll use <strong>your own laptop</strong> to complete the tasks online.</p>
 
-        <p><strong>🏫 Location:</strong> The exact room—somewhere on campus—will be shared with you in a follow-up message after registration.</p>
+        <p><strong>🏫 Location:</strong> The exact room—somewhere on the W&M campus—will be shared with you in a follow-up message after registration.</p>
                 
-        <p><strong>🎁 Incentives:</strong> Everyone receives <strong>pizza</strong> at the end of the session, and one participant will win a <strong>$50 gift card</strong> through a post-study dawing.</p>
+        <p><strong>🎁 Incentives:</strong> Everyone receives <strong>snacks</strong> at the end of the session, and one participant will win a <strong>$50 gift card</strong> through a post-study drawing.</p>
         
         <p><strong>🔒 Confidentiality:</strong> All of your responses will be recorded anonymously and used only for research purposes.</p>
         
@@ -300,6 +300,7 @@ input.input-error {
               <li>Answer some questions for each snippet</li>
             </ul>
           </li>
+          <li>📝 A quick post survey
           <li>⏸️ You can pause the study at any time if you need a break</li>
           <li>🚪 You can withdraw at any moment—no worries and no penalty.</li>
           <li>🙋 Need help? Raise your hand and a researcher will assist you</li>
@@ -338,21 +339,65 @@ input.input-error {
   
   
 <div class="slots-box hidden" id="slots-box">
-    <h3>Select All Your Available Time Slots</h3>
-    <div class="day-card">
-    <h4>Monday, June 10</h4>
+  <p><strong>📅 Please select all of your available times:</strong></p>
+
+  <div class="day-card">
+    <h4>Monday</h4>
     <div>
-      <div class="time-slot" onclick="selectSlot(this)">10:00 to 12:00 PM</div>
-      <div class="time-slot" onclick="selectSlot(this)">1:00 to 2:00 PM</div>
-      <div class="time-slot" onclick="selectSlot(this)">2:00 to 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">8:30 AM – 10:30 AM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">10:30 AM – 12:30 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM – 3:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">2:00 PM – 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM – 6:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">6:00 PM – 8:00 PM</div>
     </div>
   </div>
+
   <div class="day-card">
-    <h4>Tuesday, June 11</h4>
+    <h4>Tuesday</h4>
     <div>
-      <div class="time-slot" onclick="selectSlot(this)">10:00 to 12:00 PM</div>
-      <div class="time-slot" onclick="selectSlot(this)">1:00 to 2:00 PM</div>
-      <div class="time-slot" onclick="selectSlot(this)">2:00 to 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">8:30 AM – 10:30 AM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">10:30 AM – 12:30 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM – 3:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">2:00 PM – 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM – 6:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">6:00 PM – 8:00 PM</div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <h4>Wednesday</h4>
+    <div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">8:30 AM – 10:30 AM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">10:30 AM – 12:30 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM – 3:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">2:00 PM – 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM – 6:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">6:00 PM – 8:00 PM</div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <h4>Thursday</h4>
+    <div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">8:30 AM – 10:30 AM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">10:30 AM – 12:30 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM – 3:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">2:00 PM – 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM – 6:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">6:00 PM – 8:00 PM</div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <h4>Friday</h4>
+    <div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">8:30 AM – 10:30 AM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">10:30 AM – 12:30 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM – 3:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">2:00 PM – 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM – 6:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">6:00 PM – 8:00 PM</div>
     </div>
   </div>
 
@@ -362,29 +407,72 @@ input.input-error {
     <a href="#" onclick="toggleCustomTimeBox(); return false;">None of these work for you?</a>
   </p>
   
-  <div id="custom-time-box" style="display: none; margin-top: 1em; border: 1px solid #ccc; padding: 1em; border-radius: 8px;">
-    <p><strong>📅 Please select all of your free times:</strong></p>
-    
-    <div class="day-card">
-      <h4>Wednesday, June 12</h4>
-      <div>
-        <div class="time-slot" onclick="toggleCustomSlot(this)">10:00 AM</div>
-        <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM</div>
-        <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM</div>
-      </div>
+<div id="custom-time-box" style="display: none; margin-top: 1em; border: 1px solid #ccc; padding: 1em; border-radius: 8px;">
+  <p><strong>📅 Please select all of your available times:</strong></p>
+
+  <div class="day-card">
+    <h4>Monday</h4>
+    <div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">8:30 AM – 10:30 AM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">10:30 AM – 12:30 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM – 3:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">2:00 PM – 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM – 6:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">6:00 PM – 8:00 PM</div>
     </div>
-  
-    <div class="day-card">
-      <h4>Thursday, June 13</h4>
-      <div>
-        <div class="time-slot" onclick="toggleCustomSlot(this)">9:00 AM</div>
-        <div class="time-slot" onclick="toggleCustomSlot(this)">12:00 PM</div>
-        <div class="time-slot" onclick="toggleCustomSlot(this)">3:00 PM</div>
-      </div>
-    </div>
-  
-    <button onclick="reviewCustomTime()">Next</button>
   </div>
+
+  <div class="day-card">
+    <h4>Tuesday</h4>
+    <div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">8:30 AM – 10:30 AM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">10:30 AM – 12:30 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM – 3:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">2:00 PM – 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM – 6:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">6:00 PM – 8:00 PM</div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <h4>Wednesday</h4>
+    <div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">8:30 AM – 10:30 AM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">10:30 AM – 12:30 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM – 3:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">2:00 PM – 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM – 6:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">6:00 PM – 8:00 PM</div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <h4>Thursday</h4>
+    <div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">8:30 AM – 10:30 AM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">10:30 AM – 12:30 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM – 3:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">2:00 PM – 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM – 6:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">6:00 PM – 8:00 PM</div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <h4>Friday</h4>
+    <div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">8:30 AM – 10:30 AM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">10:30 AM – 12:30 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM – 3:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">2:00 PM – 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM – 6:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">6:00 PM – 8:00 PM</div>
+    </div>
+  </div>
+
+  <button onclick="reviewCustomTime()">Next</button>
+</div>
+
   
   
 </div>
@@ -404,7 +492,7 @@ input.input-error {
 <!-- Final Success Section -->
 <div class="final-box hidden" id="final-box">
     <h3>✅ Registration Received!</h3>
-    <p>Thank you! We'll reach out to you soon to confirm the final session time and share the exact room location.</p>
+    <p>Thank you! We'll reach out to you soon to confirm the final session time and share the exact room location. It will be in one of the rooms at <strong>W&M</strong>.</p>
     <p><strong>Selected availability:</strong> <span id="confirmed-session"></span></p>
     <!-- <p>You can add a placeholder to your Google Calendar for now:</p>
     <button onclick="addToGoogleCalendar()">📅 Add to Google Calendar</button> -->
@@ -414,7 +502,7 @@ input.input-error {
   <div class="final-box hidden" id="final-box-custom">
     <h3>✅ Submitted!</h3>
     <p>Thank you! Your submission has been received. <strong>We’ll contact you soon to schedule a time.</strong></p>
-    <p>The exact room location will be shared in a separate follow-up.</p>
+    <p>The exact room location will be shared in a separate follow-up—it will be in one of the rooms at <strong>W&M</strong>.</p>
   </div>
 
   <div class="slots-box" id="final-confirmation-panel" style="display: none;">
@@ -443,60 +531,65 @@ input.input-error {
 
 <script>
 const questions = [
-{
-  text: "Where are you studying?",
-  options: [
-    { label: "College of William & Mary" },
-    { label: "NJIT" },
-    { label: "Another university or college", ineligible: true }
-  ]
-}
-,{
-    text: "what's your class standing?",
-    options: [
-        { label: "Freshman" },
-        { label: "Sophomore" },
-        { label: "Junior" },
-        { label: "Senior" },
-        { label: "Graduate student", ineligible: true }
-    ]
-    },
+// {
+//   text: "Where are you studying?",
+//   options: [
+//     { label: "NJIT" },
+//     { label: "College of William & Mary" },
+//     { label: "Another university or college", ineligible: true }
+//   ]
+// }
+// ,
+// {
+//     text: "what's your class standing?",
+//     options: [
+//         { label: "Freshman" },
+//         { label: "Sophomore" },
+//         { label: "Junior" },
+//         { label: "Senior" },
+//         { label: "Graduate student", ineligible: true }
+//     ]
+//     },
   {
     text: "What is your age?",
     options: [
-      { label: "Under 18", ineligible: true },
-      { label: "18–20" }, { label: "21–24" }, { label: "25–30" },
-      { label: "31–40" }, { label: "Over 40" }
+         { label: "Under 18", ineligible: true },
+         { label: "18–24" },
+         { label: "25–34" },
+         { label: "35–44" },
+         { label: "45–54" },
+         { label: "55–64" },
+         { label: "65 or older" }
     ]
   },
   {
-    text: "Have you taken CSCI 301 Software Development?",
+    text: "Have you taken CSCI 301: Software Development?",
     options: [
       { label: "I completed the course with a grade of C or better" },
       { label: "I am currently enrolled in the course" },
       {label: "I have taken the course but did not receive a grade of C or better, and I am not currently enrolled", ineligible:true},
-      { label: "I have not taken CSCI 301", ineligible: true }
+      { label: "I have not taken CS 301", ineligible: true }
     ]
   },
+//   {
+//   text: "Have you been diagnosed with a reading or learning disability, or any condition that affects your ability to read or understand code or instructions??",
+//   options: [
+//     { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
+//     { label: "No, I have not been diagnosed with any such condition" }
+//   ]
+// },
+  // {
+  //   text: "How comfortable are you with reading English-language text?",
+  //   options: [
+  //     { label: "Not comfortable", ineligible: true },
+  //     { label: "Slightly comfortable" },
+  //     { label: "Moderately comfortable" },
+  //     { label: "Very comfortable" },
+  //     { label: "Native speaker / fluent" }
+  //   ]
+  // },
   {
-  text: "Have you been diagnosed with a reading or learning disability, or any condition that affects your ability to read or understand code or instructions??",
-  options: [
-    { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
-    { label: "No, I have not been diagnosed with any such condition" }
-  ]
-},
-  {
-    text: "How comfortable are you with reading English-language text?",
-    options: [
-      { label: "Not comfortable", ineligible: true },
-      { label: "Slightly comfortable" },
-      { label: "Moderately comfortable" },
-      { label: "Very comfortable" },
-      { label: "Native speaker / fluent" }
-    ]
-  },
-  {
-    text: "Do you have access to a personal laptop you can bring to the session?",
+    text: "Are you willing to bring your own laptop to the session?",
     options: [
       { label: "Yes" },
       { label: "No", ineligible: true }
@@ -672,7 +765,7 @@ function addToGoogleCalendar() {
   // Build Google Calendar URL
   const title = encodeURIComponent("Code Comprehension Session");
   const location = encodeURIComponent("To be declared");
-  const details = encodeURIComponent("You registered for a code comprehension session. We'll contact you with the exact room. ");
+  const details = encodeURIComponent("You registered for a code comprehension session. We'll contact you with the exact room. It will be at W&M.");
   const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startTime}/${endTime}&details=${details}&location=${location}`;
 
   window.open(calendarUrl, "_blank");
@@ -765,7 +858,7 @@ document.getElementById('email').addEventListener('input', function () {
   const value = this.value.trim().toLowerCase();
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-  // If the input is now a valid email remove error styling
+  // If the input is now a valid email OR ends with '@njit.edu', remove error styling
   if (isValidEmail) {
     this.classList.remove('input-error');
   }
@@ -910,7 +1003,7 @@ function selectSlot(el) {
 </script>
 
 <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
-    Please contact us if you have any questions or issues: <a href="kgdesilva@wm.edu">kgdesilva@wm.edu</a>
+    Please contact us if you have any questions or issues: <a href="mailto:kgdesilva@wm.edu">kgdesilva@wm.edu</a>
 </footer>
 </body>
 </html>
