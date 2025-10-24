@@ -9,8 +9,8 @@
       --njit-red: #cc0000;
       --dark: #1f2937;
       --muted: #6b7280;
-      --bg: #ffffff;
-      --card: #f9fafb;
+      --bg: #fffbe6;     /* soft yellow background */
+      --card: #fffdf3;   /* slightly lighter card yellow */
     }
     @media print {
       @page { size: Letter; margin: 0.75in; }
@@ -18,6 +18,7 @@
       body { background: #fff !important; }
       .flyer { box-shadow: none !important; }
     }
+
     * { box-sizing: border-box; }
 
     body {
@@ -56,10 +57,11 @@
       margin: 0;
       font-size: 34px;
       line-height: 1.2;
+      color: var(--njit-red);
     }
     .sub {
       margin: 4px 0 0 0;
-      color: var(--muted);
+      color: var(--dark);
       font-size: 16px;
     }
     .hr {
@@ -81,14 +83,16 @@
     /* ---------- IMPORTANT SECTIONS ---------- */
     .section {
       background: var(--card);
-      border: 1px solid #e5e7eb;
+      border: 1px solid #f0d47c;
       border-radius: 14px;
       padding: 18px 20px;
       margin-bottom: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
     .section h2 {
       margin: 0 0 10px 0;
       font-size: 22px;
+      color: var(--dark);
     }
     .item {
       display: grid;
@@ -108,11 +112,12 @@
     .qr-wrap {
       display: grid;
       place-items: center;
-      background: #fff5f5;
-      border: 2px solid var(--njit-red);
+      background: #fffef4;
+      border: 3px solid var(--njit-red);
       border-radius: 16px;
-      padding: 20px;
+      padding: 22px;
       text-align: center;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
     }
     .qr-wrap h3 {
       margin: 0 0 8px 0;
@@ -138,8 +143,8 @@
 
     /* ---------- SECONDARY SECTIONS ---------- */
     .section.minor {
-      background: #fff;
-      border: 1px dashed #e5e7eb;
+      background: #fffdf5;
+      border: 1px dashed #f3d87a;
       padding: 12px 14px;
     }
     .section.minor h2 {
