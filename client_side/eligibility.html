@@ -272,11 +272,11 @@ input.input-error {
 
         <p><strong>⏱️ Duration:</strong> The session is expected to take <strong>up to 90 minutes</strong>, but there are no strict time limits—you can take breaks as needed.</p>
                 
-        <p><strong>📍 Format:</strong> The study takes place <strong>in person</strong>, and you’ll use your own laptop to complete the tasks online.</p>
+        <p><strong>📍 Format:</strong> The study takes place <strong>in person</strong>, and you’ll use <strong>your own laptop</strong> to complete the tasks online.</p>
 
         <p><strong>🏫 Location:</strong> The exact room—somewhere on the NJIT campus—will be shared with you in a follow-up message after registration.</p>
                 
-        <p><strong>🎁 Incentives:</strong> Everyone receives <strong>pizza</strong> at the end of the session, and one participant will win a <strong>$50 gift card</strong> through a post-study dawing.</p>
+        <p><strong>🎁 Incentives:</strong> Everyone receives <strong>snacks</strong> at the end of the session, and one participant will win a <strong>$50 gift card</strong> through a post-study drawing.</p>
         
         <p><strong>🔒 Confidentiality:</strong> All of your responses will be recorded anonymously and used only for research purposes.</p>
         
@@ -300,6 +300,7 @@ input.input-error {
               <li>Answer some questions for each snippet</li>
             </ul>
           </li>
+          <li>📝 A quick post survey
           <li>⏸️ You can pause the study at any time if you need a break</li>
           <li>🚪 You can withdraw at any moment—no worries and no penalty.</li>
           <li>🙋 Need help? Raise your hand and a researcher will assist you</li>
@@ -362,29 +363,72 @@ input.input-error {
     <a href="#" onclick="toggleCustomTimeBox(); return false;">None of these work for you?</a>
   </p>
   
-  <div id="custom-time-box" style="display: none; margin-top: 1em; border: 1px solid #ccc; padding: 1em; border-radius: 8px;">
-    <p><strong>📅 Please select all of your free times:</strong></p>
-    
-    <div class="day-card">
-      <h4>Wednesday, June 12</h4>
-      <div>
-        <div class="time-slot" onclick="toggleCustomSlot(this)">10:00 AM</div>
-        <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM</div>
-        <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM</div>
-      </div>
+<div id="custom-time-box" style="display: none; margin-top: 1em; border: 1px solid #ccc; padding: 1em; border-radius: 8px;">
+  <p><strong>📅 Please select all of your available times:</strong></p>
+
+  <div class="day-card">
+    <h4>Monday</h4>
+    <div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">8:30 AM – 10:30 AM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">10:30 AM – 12:30 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM – 3:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">2:00 PM – 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM – 6:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">6:00 PM – 8:00 PM</div>
     </div>
-  
-    <div class="day-card">
-      <h4>Thursday, June 13</h4>
-      <div>
-        <div class="time-slot" onclick="toggleCustomSlot(this)">9:00 AM</div>
-        <div class="time-slot" onclick="toggleCustomSlot(this)">12:00 PM</div>
-        <div class="time-slot" onclick="toggleCustomSlot(this)">3:00 PM</div>
-      </div>
-    </div>
-  
-    <button onclick="reviewCustomTime()">Next</button>
   </div>
+
+  <div class="day-card">
+    <h4>Tuesday</h4>
+    <div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">8:30 AM – 10:30 AM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">10:30 AM – 12:30 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM – 3:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">2:00 PM – 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM – 6:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">6:00 PM – 8:00 PM</div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <h4>Wednesday</h4>
+    <div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">8:30 AM – 10:30 AM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">10:30 AM – 12:30 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM – 3:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">2:00 PM – 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM – 6:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">6:00 PM – 8:00 PM</div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <h4>Thursday</h4>
+    <div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">8:30 AM – 10:30 AM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">10:30 AM – 12:30 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM – 3:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">2:00 PM – 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM – 6:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">6:00 PM – 8:00 PM</div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <h4>Friday</h4>
+    <div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">8:30 AM – 10:30 AM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">10:30 AM – 12:30 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">1:00 PM – 3:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">2:00 PM – 4:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">4:00 PM – 6:00 PM</div>
+      <div class="time-slot" onclick="toggleCustomSlot(this)">6:00 PM – 8:00 PM</div>
+    </div>
+  </div>
+
+  <button onclick="reviewCustomTime()">Next</button>
+</div>
+
   
   
 </div>
