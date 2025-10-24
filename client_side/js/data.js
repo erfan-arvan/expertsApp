@@ -506,7 +506,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
           {
           "type": "open",
           "id": "function",
-          "prompt": "What does this code snippet do? Briefly describe its main functionality. \n\n<div class=\"assumptions\">\n  <p><strong>Notes:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">atanUnchecked(x)</span> behaves like <a href=\"#\" class=\"underline-dotted-pointer\" onclick=\"openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/Math.html#atan-double-')\">atan(x)</a> but assumes x is finite</li>\n    <li><span class=\"qcode\">atanUnchecked(1.0f)</span> = <span class=\"qcode\">0.7853982f</span></li>\n    <li><span class=\"qcode\">PI</span> = <span class=\"qcode\">3.1415927f</span></li>\n    <li><span class=\"qcode\">HALF_PI</span> = <span class=\"qcode\">1.5707964f</span></li>\n  </ul>\n</div>",
+          "prompt": "What does this code snippet do? Briefly describe its main functionality. \n\n<div class=\"assumptions\">\n  <p><strong>Notes:</strong></p>\n  <ul>\n    <li><span class=\"qcode\">atanUnchecked(x)</span> behaves like <a href=\"#\" class=\"underline-dotted-pointer\" onclick=\"openJavadocModal('https://docs.oracle.com/javase/8/docs/api/java/lang/Math.html#atan-double-')\">atan(x)</a> but assumes x is finite</li>\n    <li><span class=\"qcode\">PI</span> = <span class=\"qcode\">3.1415927f</span></li>\n    <li><span class=\"qcode\">HALF_PI</span> = <span class=\"qcode\">1.5707964f</span></li>\n  </ul>\n</div>",
           "type2": "",
           "id2": "",
           "question2": ""
