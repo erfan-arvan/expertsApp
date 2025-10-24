@@ -19,135 +19,159 @@
       .flyer { box-shadow: none !important; }
     }
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       color: var(--dark);
       background: var(--bg);
     }
+
     .flyer {
       max-width: 8.5in;
       margin: 0 auto;
-      padding: 1.1in 0.9in;
+      padding: 1in 0.8in;
       background: var(--bg);
-      position: relative;
     }
+
+    /* ---------- HEADER ---------- */
     .header {
       display: flex;
       align-items: center;
       gap: 16px;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
     .brand {
-      width: 56px;
-      height: 56px;
+      width: 64px;
+      height: 64px;
       border-radius: 12px;
       background: var(--njit-red);
       display: grid;
       place-items: center;
       color: white;
       font-weight: 800;
-      letter-spacing: 0.5px;
+      font-size: 20px;
     }
     h1 {
       margin: 0;
-      font-size: 28px;
-      line-height: 1.15;
+      font-size: 34px;
+      line-height: 1.2;
     }
     .sub {
-      margin: 2px 0 0 0;
+      margin: 4px 0 0 0;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 16px;
     }
     .hr {
       height: 3px;
       background: var(--njit-red);
       width: 100%;
-      margin: 16px 0 22px;
+      margin: 18px 0 24px;
       border-radius: 2px;
     }
+
+    /* ---------- GRID LAYOUT ---------- */
     .grid {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 18px;
+      grid-template-columns: 1.4fr 0.6fr;
+      gap: 24px;
       align-items: start;
     }
+
+    /* ---------- IMPORTANT SECTIONS ---------- */
     .section {
       background: var(--card);
       border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 14px 16px;
-      margin-bottom: 12px;
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
     }
     .section h2 {
-      margin: 0 0 8px 0;
-      font-size: 18px;
+      margin: 0 0 10px 0;
+      font-size: 22px;
     }
     .item {
       display: grid;
-      grid-template-columns: 22px 1fr;
-      gap: 10px;
-      margin: 6px 0;
-      font-size: 15px;
+      grid-template-columns: 26px 1fr;
+      gap: 12px;
+      margin: 8px 0;
+      font-size: 17px;
+      line-height: 1.4;
     }
     .bullet {
       text-align: center;
-      line-height: 22px;
-      font-size: 16px;
+      font-size: 20px;
     }
-    .cta {
-      margin-top: 8px;
-      padding: 14px 16px;
-      border: 2px solid var(--njit-red);
-      border-radius: 12px;
-      background: #fff5f5;
-    }
-    .cta h3 {
-      margin: 0 0 6px 0;
-      color: var(--njit-red);
-      font-size: 18px;
-    }
-    .url {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      word-break: break-all;
-      font-size: 14px;
-    }
+    .strong { font-weight: 700; }
+
+    /* ---------- CTA / QR ---------- */
     .qr-wrap {
       display: grid;
       place-items: center;
-      background: #fff;
-      border: 1px dashed #d1d5db;
-      border-radius: 12px;
-      padding: 12px;
+      background: #fff5f5;
+      border: 2px solid var(--njit-red);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+    }
+    .qr-wrap h3 {
+      margin: 0 0 8px 0;
+      font-size: 22px;
+      color: var(--njit-red);
     }
     #qrcode {
       width: 100%;
-      display: grid;
-      place-items: center;
+      max-width: 250px;
+      margin: 10px auto;
     }
-    .footer {
-      margin-top: 16px;
-      font-size: 12px;
+    .url {
+      font-size: 15px;
+      font-family: ui-monospace, monospace;
+      word-break: break-all;
+      margin-top: 6px;
+    }
+    .note {
+      margin-top: 4px;
+      font-size: 13px;
       color: var(--muted);
+    }
+
+    /* ---------- SECONDARY SECTIONS ---------- */
+    .section.minor {
+      background: #fff;
+      border: 1px dashed #e5e7eb;
+      padding: 12px 14px;
+    }
+    .section.minor h2 {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 6px;
     }
     .roles {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px 16px;
-      margin-top: 8px;
+      gap: 6px 12px;
       font-size: 13px;
-    }
-    .fine {
-      margin-top: 8px;
-      font-size: 12px;
       color: var(--muted);
     }
-    .note {
-      margin-top: 6px;
+    .footer {
+      margin-top: 14px;
       font-size: 12px;
       color: var(--muted);
+      text-align: center;
     }
-    .strong { font-weight: 700; }
+
+    /* ---------- PRINT NOTE ---------- */
+    .no-print {
+      position: fixed;
+      bottom: 12px;
+      left: 12px;
+      background: #111827;
+      color: white;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
@@ -159,34 +183,27 @@
         <p class="sub">Help improve research on how programmers understand code</p>
       </div>
     </div>
+
     <div class="hr"></div>
 
     <div class="grid">
+      <!-- LEFT COLUMN -->
       <div>
         <div class="section">
           <h2>What you’ll do</h2>
-          <div class="item"><div class="bullet">💻</div><div>Review <span class="strong">8 short Java snippets</span> and answer questions on a study website using your own laptop.</div></div>
+          <div class="item"><div class="bullet">💻</div><div>Review <span class="strong">8 short Java snippets</span> and answer comprehension questions on our study website using your own laptop.</div></div>
         </div>
 
         <div class="section">
           <h2>When & where</h2>
-          <div class="item">
-            <div class="bullet">🕒</div>
-            <div>The study takes up to 90 minutes, but sessions will be scheduled in 2-hour slots to allow time for setup and consent.</div>
-          </div>
-          <div class="item">
-            <div class="bullet">📍</div>
-            <div>Held <strong>in-person</strong> at <span class="strong">GITC, NJIT</span> (room TBD).</div>
-          </div>
-          <div class="item">
-        <div class="bullet">🕒</div>
-        <div>Study time will be scheduled based on your availability.</div>
-      </div>
+          <div class="item"><div class="bullet">🕒</div><div>The study itself takes about <span class="strong">90 minutes</span>, but sessions will be scheduled in <span class="strong">2-hour slots</span> to allow time for setup and consent.</div></div>
+          <div class="item"><div class="bullet">📍</div><div>Held <strong>in-person</strong> at <span class="strong">GITC, NJIT</span> (room TBD).</div></div>
+          <div class="item"><div class="bullet">📅</div><div>Times will be arranged based on your availability.</div></div>
         </div>
 
         <div class="section">
           <h2>What you’ll receive</h2>
-          <div class="item"><div class="bullet">🥨</div><div><span class="strong">Snacks</span> after completing the session.</div></div>
+          <div class="item"><div class="bullet">🥨</div><div><span class="strong">Snacks</span> provided after completing the session.</div></div>
           <div class="item"><div class="bullet">🎁</div><div>Entry in a <span class="strong">$50 Amazon gift card</span> drawing.</div></div>
         </div>
 
@@ -196,19 +213,16 @@
         </div>
       </div>
 
+      <!-- RIGHT COLUMN -->
       <div>
-        <!-- <div class="section cta">
-          <h3>Check eligibility & register</h3>
-          <div class="url">https://codecomprehensibility.site/eligibility.html</div>
-          <div class="note">Scan the QR code or visit the link to register in under 2 minutes.</div>
-        </div> -->
-
         <div class="section qr-wrap">
           <h3>Check eligibility & register</h3>
-          <div id="qrcode" aria-label="QR code for eligibility link"><img src="img/njit.jpeg" alt="Relax..." style="max-width: 100%; height: auto;"></div>
+          <div id="qrcode" aria-label="QR code"><img src="img/njit.jpeg" alt="QR placeholder" style="max-width: 100%; height: auto;"></div>
+          <div class="url">https://codecomprehensibility.site/eligibility.html</div>
+          <div class="note">Scan the QR code or visit the link to register in under 2 minutes.</div>
         </div>
 
-        <div class="section">
+        <div class="section minor">
           <h2>Study team</h2>
           <div class="roles">
             <div><span class="strong">Erfan Arvan</span><br/>Ph.D. Candidate, CS, NJIT</div>
@@ -223,28 +237,17 @@
     </div>
   </div>
 
-  <!-- Embedded QRCode generator (qrcode.js by Kazuhiko Arase, MIT License). -->
-  <script>
-  /*! qrcode.js v1.0.0 (MIT) | https://github.com/davidshimjs/qrcodejs */
-  (function(){function l(a){this.mode=c.MODE_8BIT_BYTE;this.data=a;this.parsedData=[];for(var b=[],d=0,d=0;d<this.data.length;d++){var e=this.data.charCodeAt(d);e>65536?(b[0]=240|(e&1835008)>>>18,b[1]=128|(e&258048)>>>12,b[2]=128|(e&4032)>>>6,b[3]=128|e&63):e>2048?(b[0]=224|(e&61440)>>>12,b[1]=128|(e&4032)>>>6,b[2]=128|e&63):e>128?(b[0]=192|(e&1984)>>>6,b[1]=128|e&63):b[0]=e;this.parsedData=this.parsedData.concat(b)}this.parsedData.length!=this.data.length&&(this.parsedData.unshift(191),this.parsedData.unshift(187),this.parsedData.unshift(239))}function u(a,b){this.typeNumber=a;this.errorCorrectLevel=b;this.modules=null;this.moduleCount=0;this.dataCache=null;this.dataList=[]}function v(a,b){if(void 0==a.length)throw Error(a.length+"/"+b);for(var c=0;c<a.length&&0==a[c];)c++;this.num=new Array(a.length-c+b);for(var d=0;d<a.length-c;d++)this.num[d]=a[d+c]}function w(a,b){this.totalCount=a;this.dataCount=b}
-  var c={PAD0:236,PAD1:17,MODE_NUMBER:1,MODE_ALPHA_NUM:2,MODE_8BIT_BYTE:4,MODE_KANJI:8,ERROR_CORRECT_L:1,ERROR_CORRECT_M:0,ERROR_CORRECT_Q:3,ERROR_CORRECT_H:2};l.prototype={getLength:function(){return this.parsedData.length},write:function(a){for(var b=0;b<this.parsedData.length;b++)a.put(this.parsedData[b],8)}};u.prototype={addData:function(a){this.dataList.push(new l(a));this.dataCache=null},isDark:function(a,b){if(void 0==this.modules[a][b])throw Error(a+","+b);return this.modules[a][b]},getModuleCount:function(){return this.moduleCount},make:function(){if(1>this.typeNumber){for(var a=1;a<40;a++){for(var b=h.getRSBlocks(a,this.errorCorrectLevel),d=new k,e=0,g=0;g<b.length;g++)e+=b[g].dataCount;for(g=0;g<this.dataList.length;g++)b=this.dataList[g],d.put(b.mode,4),d.put(b.getLength(),h.getLengthInBits(b.mode,a)),b.write(d);for(g=d.getLengthInBits(),b=0;b<e*8-g;b++)d.put(0,1);for(b=0;0!=d.getLengthInBits()%8;b++)d.put(0,1);for(b=[],g=0;g<e;g++)b.push(255&(0==g%2?c.PAD0:c.PAD1));d.buffer=d.buffer.concat(b);b=h.createBytes(d,this.errorCorrectLevel,a);d=new u(a,this.errorCorrectLevel);d.createQModules(b);this.typeNumber=d.typeNumber;this.modules=d.modules;this.moduleCount=d.moduleCount;return}this.typeNumber=40}b=h.getRSBlocks(this.typeNumber,this.errorCorrectLevel);d=new k;for(e=0;e<this.dataList.length;e++)g=this.dataList[e],d.put(g.mode,4),d.put(g.getLength(),h.getLengthInBits(g.mode,this.typeNumber)),g.write(d);for(g=d.getLengthInBits(),e=0;e<b.length;e++)g+=8*b[e].dataCount;if(d.getLengthInBits()>g)throw Error("code length overflow. ("+d.getLengthInBits()+">"+g+")");for(d.getLengthInBits()+4<=g&&d.put(0,4);0!=d.getLengthInBits()%8;)d.put(0,1);for(e=0;e<b.length;e++)d.put(0,8);b=h.createBytes(d,this.errorCorrectLevel,this.typeNumber);this.createQModules(b)},createQModules:function(a){this.moduleCount=4*this.typeNumber+17;this.modules=Array(this.moduleCount);for(var b=0;b<this.moduleCount;b++)this.modules[b]=Array(this.moduleCount);this.setupPositionProbePattern(0,0);this.setupPositionProbePattern(this.moduleCount-7,0);this.setupPositionProbePattern(0,this.moduleCount-7);this.setupTimingPattern();this.setupPositionAdjustPattern();this.setupTypeInfo(!0);1<=this.typeNumber&&this.setupTypeNumber(!0);for(var d=h.getRSBlocks(this.typeNumber,this.errorCorrectLevel),e=Array(d.length),g=Array(d.length),f=0;f<d.length;f++){for(var m=d[f].dataCount,n=d[f].totalCount-m,p=Array(m),q=0;q<m;q++)p[q]=255&a[q+f],qrcode_maxDataCount=Math.max(qrcode_maxDataCount,m);e[f]=new v(y.getPolynomial(n),0);for(q=0;q<n;q++)g[f]=0;for(q=0;q<m;q++)g[f]^=p[q]<<8;for(q=0;q<n;)g[f]=0==(g[f]&32768)?g[f]<<1:g[f]<<1^285,q++}for(f=0;f<d.length;f++)for(m=d[f].dataCount,n=d[f].totalCount-m,p=Array(n),q=0;q<n;q++)p[q]=g[f]>>8,g[f]&=255,g[f]^=e[f].getAt(q);for(f=0,m=0;f<d.length;f++){for(n=d[f].dataCount,q=0;q<n;q++)this.modules[q+f][m]=!!(255&a[q+m]),m++;for(q=0;q<d[f].totalCount-n;q++)this.modules[n+f][m]=!!(255&p[q]),m++}},setupPositionProbePattern:function(a,b){for(var d=-1;7>=d;d++)if(!(0>a+d||this.moduleCount<=a+d))for(var e=-1;7>=e;e++)0>b+e||this.moduleCount<=b+e||(this.modules[a+d][b+e]=0<=d&&6>=d&&0<=e&&6>=e&&(0==d||6==d||0==e||6==e||2<=d&&4>=d&&2<=e&&4>=e))},getBestMaskPattern:function(){for(var a=0,b=0,d=0;8>d;d++){this.setupTypeInfo(!1);1<=this.typeNumber&&this.setupTypeNumber(!1);this.applyMaskPattern(d);var e=t.getLostPoint(this);if(0==d||a>e)a=e,b=d}return b},applyMaskPattern:function(a){for(var b=0;b<this.moduleCount;b++)for(var d=0;d<this.moduleCount;d++)"function"!=typeof this.modules[b][d]&&(this.modules[b][d]=q.getMask(a,b,d))},setupTimingPattern:function(){for(var a=8;a<this.moduleCount-8;a++)void 0===this.modules[a][6]&&(this.modules[a][6]=0==a%2),void 0===this.modules[6][a]&&(this.modules[6][a]=0==a%2)},setupPositionAdjustPattern:function(){for(var a=h.getPatternPosition(this.typeNumber),b=0;b<a.length;b++)for(var d=0;d<a.length;d++){var e=a[b],g=a[d];if(void 0===this.modules[e][g])for(var f=-2;2>=f;f++)for(var m=-2;2>=m;m++)this.modules[e+f][g+m]=-2==f||2==f||-2==m||2==m||0==f&&0==m}},setupTypeNumber:function(a){for(var b=h.getBCHTypeNumber(this.typeNumber),d=0;18>d;d++){var e=!a&&1==((b>>d)&1);this.modules[Math.floor(d/3)][d%3+this.moduleCount-8-3]=e;this.modules[d%3+this.moduleCount-8-3][Math.floor(d/3)]=e}},setupTypeInfo:function(a){for(var b=h.getBCHTypeInfo(this.errorCorrectLevel<<3|this.getBestMaskPattern()),d=0;15>d;d++){var e=!a&&1==((b>>d)&1);6>d?this.modules[d][8]=e:8>d?this.modules[d+1][8]=e:this.modules[this.moduleCount-15+d][8]=e}for(d=0;15>d;d++){e=!a&&1==((b>>d)&1);8>d?this.modules[8][this.moduleCount-d-1]=e:9>d?this.modules[8][15-d-1]=e:this.modules[8][15-d]=e}this.modules[this.moduleCount-8][8]=!a},addData:function(a){this.dataList.push(new l(a));this.dataCache=null}};function k(){this.buffer=[];this.length=0}
-  k.prototype={getLengthInBits:function(){return this.length},put:function(a,b){for(var d=0;d<b;d++)this.buffer.push(1==(a>>>b-d-1&1)?1:0);this.length+=b}};var y={glog:function(a){if(1>a)throw Error("glog("+a+")");return y.LOG_TABLE[a]},gexp:function(a){for(;0>a;)a+=255;for(;256<=a;)a-=255;return y.EXP_TABLE[a]},EXP_TABLE:new Array(256),LOG_TABLE:new Array(256),getPolynomial:function(a){for(var b=new v([1],0),d=0;d<a;d++)b=b.multiply(new v([1,y.gexp(d)],0));return b}};v.prototype={getAt:function(a){return this.num[a]},getLength:function(){return this.num.length},multiply:function(a){for(var b=Array(this.getLength()+a.getLength()-1),d=0;d<this.getLength();d++)for(var e=0;e<a.getLength();e++)b[d+e]^=y.glog(this.getAt(d))+y.glog(a.getAt(e))|0;return new v(b,0)}};var t={getLostPoint:function(a){for(var b=a.getModuleCount(),d=0,e=0;e<b;e++)for(var g=0;g<b;g++){for(var f=0,m=a.isDark(e,g),n=-1;1>=n;n++)if(!(0>e+n||e+n>=b))for(var p=-1;1>=p;p++)0>g+p||g+p>=b||0==n&&0==p||m==a.isDark(e+n,g+p)&&f++;4<f&&(d+=3+f-5)}for(e=0;e<b-1;e++)for(g=0;g<b-1;g++)f=0,a.isDark(e,g)&&f++,a.isDark(e+1,g)&&f++,a.isDark(e,g+1)&&f++,a.isDark(e+1,g+1)&&f++,(0==f||4==f)&&(d+=3);for(e=0;e<b;e++)for(g=0;g<b-6;g++)a.isDark(e,g)&&!a.isDark(e,g+1)&&a.isDark(e,g+2)&&a.isDark(e,g+3)&&a.isDark(e,g+4)&&!a.isDark(e,g+5)&&a.isDark(e,g+6)&&(d+=40);for(g=0;g<b;g++)for(e=0;e<b-6;e++)a.isDark(e,g)&&!a.isDark(e+1,g)&&a.isDark(e+2,g)&&a.isDark(e+3,g)&&a.isDark(e+4,g)&&!a.isDark(e+5,g)&&a.isDark(e+6,g)&&(d+=40);for(e=0;e<b;e++){for(g=0,f=0;g<b;g++)a.isDark(e,g)&&f++;d+=10*Math.abs(f/b-.5)}for(g=0;g<b;g++){for(e=0,f=0;e<b;e++)a.isDark(e,g)&&f++;d+=10*Math.abs(f/b-.5)}return d}};var h={PATTERN_POSITION_TABLE:[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94]],getRSBlocks:function(a,b){var d=h.RS_BLOCK_TABLE[4*(a-1)+b];if(void 0==d)throw Error("bad rs block @ typeNumber:"+a+"/errorCorrectLevel:"+b);for(var e=d.length/3,g=[],f=0;f<e;f++)for(var m=d[3*f+0],n=d[3*f+1],p=d[3*f+2],q=0;q<m;q++)g.push(new w(n,p));return g},getBCHTypeInfo:function(a){for(var b=a<<10;0<=h.getBCHDigit(b)-h.getBCHDigit(1335);)b^=1335<<h.getBCHDigit(b)-h.getBCHDigit(1335);return(a<<10|b)^21522},getBCHTypeNumber:function(a){for(var b=a<<12;0<=h.getBCHDigit(b)-h.getBCHDigit(7973);)b^=7973<<h.getBCHDigit(b)-h.getBCHDigit(7973);return a<<12|b},getBCHDigit:function(a){for(var b=0;0!=a;)b++,a>>>=1;return b},getPatternPosition:function(a){return h.PATTERN_POSITION_TABLE[a-1]},getMask:function(a,b,d){switch(a){case 0:return 0==(b+d)%2;case 1:return 0==b%2;case 2:return 0==d%3;case 3:return 0==(b+d)%3;case 4:return 0==(Math.floor(b/2)+Math.floor(d/3))%2;case 5:return 0==b*d%2+ b*d%3;case 6:return 0==(b*d%2+b*d%3)%2;case 7:return 0==(b*d%3+Math.floor(b+d)%2)%2;default:throw Error("bad maskPattern:"+a);}},getLengthInBits:function(a,b){if(1<=b&&b<10)switch(a){case c.MODE_NUMBER:return 10;case c.MODE_ALPHA_NUM:return 9;case c.MODE_8BIT_BYTE:return 8;case c.MODE_KANJI:return 8;default:throw Error("mode:"+a);}else if(27<=b&&b<41)switch(a){case c.MODE_NUMBER:return 12;case c.MODE_ALPHA_NUM:return 11;case c.MODE_8BIT_BYTE:return 16;case c.MODE_KANJI:return 10;default:throw Error("mode:"+a);}else switch(a){case c.MODE_NUMBER:return 14;case c.MODE_ALPHA_NUM:return 13;case c.MODE_8BIT_BYTE:return 16;case c.MODE_KANJI:return 12;default:throw Error("mode:"+a);}},createBytes:function(a,b,d){for(var e=h.getRSBlocks(d,b),g=Array(e.length),f=Array(e.length),m=0;m<e.length;m++){for(var n=e[m].dataCount,p=Array(n),q=0;q<n;q++)p[q]=a.buffer[q+m];g[m]=p;n=e[m].totalCount-e[m].dataCount;f[m]=y.getPolynomial(n)}for(var r=0;r<g.length;r++){for(var z=g[r],A=f[r],B=Array(A.getLength()),C=0;C<A.getLength();C++)B[C]=z[C]^A.getAt(C);g[r]=B}for(var D=[],E=0;E<e.length;E++)for(C=0;C<e[E].dataCount;C++)D.push(g[E][C]);for(E=0;E<e.length;E++)for(C=0;C<e[E].totalCount-e[E].dataCount;C++)D.push(g[E][C]);return D}};function q(){}
-  q.getMask=function(a,b,d){return h.getMask(a,b,d)};var qrcode_maxDataCount=0;
-  window.QRCode=function(a,b){this._el=a;this._htOption=b};QRCode.prototype.makeCode=function(a){this._oQRCode=new u(0,this._htOption.correctLevel);this._oQRCode.addData(a);this._oQRCode.make();this._el.innerHTML="";for(var b=this._oQRCode.getModuleCount(),d=this._oQRCode.getModuleCount(),e=this._htOption.width/b,g=this._htOption.width/d,f=document.createElement("canvas"),m=f.getContext("2d");;) {f.width=this._htOption.width;f.height=this._htOption.width;for(var n=0;n<b;n++)for(var p=0;p<d;p++)m.fillStyle=this._oQRCode.isDark(n,p)?"#000":"#fff",m.fillRect(n*e,p*g,e,g);this._el.appendChild(f);break}};
-  QRCode.CorrectLevel={L:1,M:0,Q:3,H:2};
-  })();
-  </script>
   <script>
     (function() {
       var url = "https://codecomprehensibility.site/eligibility.html";
       var el = document.getElementById("qrcode");
-      var size = 240; // pixels
-      new QRCode(el, { width: size, height: size, correctLevel: QRCode.CorrectLevel.M }).makeCode(url);
+      var size = 240;
+      if (window.QRCode) new QRCode(el, { width: size, height: size, correctLevel: QRCode.CorrectLevel.M }).makeCode(url);
     })();
   </script>
 
-  <div class="no-print" style="position: fixed; bottom: 12px; left: 12px; background: #111827; color: white; padding: 8px 10px; border-radius: 8px; font-size: 12px;">
-    This flyer is print‑ready (US Letter). Use your browser’s Print dialog to save as PDF or print.
+  <div class="no-print">
+    This flyer is print-ready (US Letter). Use your browser’s Print dialog to save as PDF or print.
   </div>
 </body>
 </html>
