@@ -531,30 +531,35 @@ input.input-error {
 
 <script>
 const questions = [
-{
-  text: "Where are you studying?",
-  options: [
-    { label: "NJIT" },
-    { label: "College of William & Mary" },
-    { label: "Another university or college", ineligible: true }
-  ]
-}
-,{
-    text: "what's your class standing?",
-    options: [
-        { label: "Freshman" },
-        { label: "Sophomore" },
-        { label: "Junior" },
-        { label: "Senior" },
-        { label: "Graduate student", ineligible: true }
-    ]
-    },
+// {
+//   text: "Where are you studying?",
+//   options: [
+//     { label: "NJIT" },
+//     { label: "College of William & Mary" },
+//     { label: "Another university or college", ineligible: true }
+//   ]
+// }
+// ,
+// {
+//     text: "what's your class standing?",
+//     options: [
+//         { label: "Freshman" },
+//         { label: "Sophomore" },
+//         { label: "Junior" },
+//         { label: "Senior" },
+//         { label: "Graduate student", ineligible: true }
+//     ]
+//     },
   {
     text: "What is your age?",
     options: [
-      { label: "Under 18", ineligible: true },
-      { label: "18–20" }, { label: "21–24" }, { label: "25–30" },
-      { label: "31–40" }, { label: "Over 40" }
+         { label: "Under 18", ineligible: true },
+         { label: "18–24" },
+         { label: "25–34" },
+         { label: "35–44" },
+         { label: "45–54" },
+         { label: "55–64" },
+         { label: "65 or older" }
     ]
   },
   {
@@ -566,25 +571,25 @@ const questions = [
       { label: "I have not taken CS 288", ineligible: true }
     ]
   },
+//   {
+//   text: "Have you been diagnosed with a reading or learning disability, or any condition that affects your ability to read or understand code or instructions??",
+//   options: [
+//     { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
+//     { label: "No, I have not been diagnosed with any such condition" }
+//   ]
+// },
+  // {
+  //   text: "How comfortable are you with reading English-language text?",
+  //   options: [
+  //     { label: "Not comfortable", ineligible: true },
+  //     { label: "Slightly comfortable" },
+  //     { label: "Moderately comfortable" },
+  //     { label: "Very comfortable" },
+  //     { label: "Native speaker / fluent" }
+  //   ]
+  // },
   {
-  text: "Have you been diagnosed with a reading or learning disability, or any condition that affects your ability to read or understand code or instructions??",
-  options: [
-    { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
-    { label: "No, I have not been diagnosed with any such condition" }
-  ]
-},
-  {
-    text: "How comfortable are you with reading English-language text?",
-    options: [
-      { label: "Not comfortable", ineligible: true },
-      { label: "Slightly comfortable" },
-      { label: "Moderately comfortable" },
-      { label: "Very comfortable" },
-      { label: "Native speaker / fluent" }
-    ]
-  },
-  {
-    text: "Do you have access to a personal laptop you can bring to the session?",
+    text: "Are you willing to bring your own laptop to the session?",
     options: [
       { label: "Yes" },
       { label: "No", ineligible: true }
