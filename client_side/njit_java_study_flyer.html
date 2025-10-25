@@ -60,14 +60,17 @@
       gap: 16px;
       margin-bottom: 20px;
     } */
-     .header {
-  display: flex;
-  flex-direction: column; /* stack vertically */
-  align-items: center;    /* center horizontally */
-  justify-content: center;
-  text-align: center;     /* center the text */
-  margin-bottom: 20px;
-}
+    .header {
+      display: flex;
+      flex-direction: column;
+      /* stack vertically */
+      align-items: center;
+      /* center horizontally */
+      justify-content: center;
+      text-align: center;
+      /* center the text */
+      margin-bottom: 20px;
+    }
 
 
     .brand {
@@ -222,29 +225,27 @@
       font-size: 12px;
     }
 
-  .java-logo {
-    width: 70px;
-    height: auto;
-    object-fit: contain;
-  }
+    .java-logo {
+      width: 70px;
+      height: auto;
+      object-fit: contain;
+    }
 
-@font-face {
-  font-family: 'WantedPoster';
-  src: url('/fonts/WantedPosterRegular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-
-.wanted-title {
-  font-family: 'WantedPoster', serif;
-  font-size: 64px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
+    @font-face {
+      font-family: 'WantedPoster';
+      src: url('/fonts/WantedPosterRegular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
 
 
+    .wanted-title {
+      font-family: 'WantedPoster', serif;
+      font-size: 64px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
   </style>
 </head>
 
@@ -253,10 +254,11 @@
     <div class="header">
       <!-- <div class="brand">NJIT</div> -->
       <div style="flex: 1;">
-        <h1>        <img src="img/java-logo-50.png" alt="Java logo" class="java-logo">
- Java programmers  <span class="wanted-title" style="font-size: 100px; color: black;">wanted!</span>
-</h1>
-        <h1 style="color: var(--njit-red); font-size: 39px; margin-top: 10px;">Participate in a short study on code comprehension. Enjoy 🍕 and Win $50!</h1>
+        <h1> <img src="img/java-logo-50.png" alt="Java logo" class="java-logo">
+          Java programmers </h1>
+        <h1 class="wanted-title" style="font-size: 100px; color: black;">wanted!</h1>
+        <h1 style="color: var(--njit-red); font-size: 39px; margin-top: 10px;">Participate in a short study on code
+          comprehension. Enjoy 🍕 and Win $50!</h1>
         <p class="sub">Help improve research on how programmers understand code</p>
       </div>
       <!-- <img src="img/java-logo-50.png" alt="Java logo" class="java-logo"> -->
