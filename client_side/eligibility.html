@@ -886,12 +886,10 @@ function selectSlot(el) {
     Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
 </footer>
 <script>
-  // Call this after the DOM is ready (e.g., at end of <body> or inside DOMContentLoaded)
-  function createDayCardsNext14(containerId = 'dynamic-cards') {
+  function createDayCardsNext14Weekdays(containerId = 'dynamic-cards') {
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    // Optional: clear previous content
     container.innerHTML = '';
 
     const timeSlots = [
@@ -908,14 +906,22 @@ function selectSlot(el) {
     const fmtMonth = new Intl.DateTimeFormat(undefined, { month: 'short' });
 
     const today = new Date();
+    let generated = 0;
+    let offset = 1; // start from tomorrow
 
-    for (let i = 0; i < 14; i++) {
+    while (generated < 14) {
       const d = new Date(today);
-      d.setDate(today.getDate() + i);
+      d.setDate(today.getDate() + offset);
+      offset++;
+
+      const dayOfWeek = d.getDay(); // 0=Sun, 6=Sat
+      if (dayOfWeek === 0 || dayOfWeek === 6) {
+        continue; // skip weekends
+      }
 
       const card = document.createElement('div');
       card.className = 'day-card';
-      card.setAttribute('data-date', d.toISOString().slice(0, 10)); // YYYY-MM-DD
+      card.setAttribute('data-date', d.toISOString().slice(0, 10));
 
       const h4 = document.createElement('h4');
       h4.textContent = `${fmtWeekday.format(d)} ${fmtDay.format(d)} ${fmtMonth.format(d)}`;
@@ -926,16 +932,18 @@ function selectSlot(el) {
         const slot = document.createElement('div');
         slot.className = 'time-slot';
         slot.textContent = t;
-        slot.onclick = function() { toggleCustomSlot(this); }; // assumes your function exists
+        slot.onclick = function() { toggleCustomSlot(this); };
         slotWrap.appendChild(slot);
       });
 
       card.appendChild(slotWrap);
       container.appendChild(card);
+
+      generated++;
     }
   }
 
-  document.addEventListener('DOMContentLoaded', () => createDayCardsNext14());
+  document.addEventListener('DOMContentLoaded', () => createDayCardsNext14Weekdays());
 </script>
 
 </body>
