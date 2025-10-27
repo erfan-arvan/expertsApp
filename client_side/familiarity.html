@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CS Knowledge Survey</title>
+  <style>
+    :root {
+      --bg: #f4f4f4;
+      --card: #ffffff;
+      --text: #333;
+      --muted: #6b7280;
+      --accent: #4caf50;
+      --accent-2: #45a049;
+      --danger: #c62828;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 40px; background: var(--bg); color: var(--text);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    .card {
+      background: var(--card); border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      padding: 20px; margin-bottom: 20px;
+    }
+    h1 { margin: 0 0 8px; font-size: 24px; }
+    p.lead { color: var(--muted); margin: 0 0 16px; }
+    .question { font-weight: 600; margin-bottom: 12px; }
+    .options { margin: 4px 0 0; }
+    .options label { display: block; padding: 8px 10px; border-radius: 8px; cursor: pointer; }
+    .options input { margin-right: 8px; }
+    .hint { color: var(--muted); font-size: 13px; margin-top: 6px; }
+    .locked { opacity: .7; pointer-events: none; }
+    .btn-row { display: flex; gap: 10px; justify-content: space-between; margin-top: 16px; }
+    .btn {
+      border: 0; border-radius: 8px; padding: 10px 16px; font-size: 15px; cursor: pointer; background: #ddd; color: #111;
+    }
+    .btn.primary { background: var(--accent); color: #fff; }
+    .btn.primary:hover { background: var(--accent-2); }
+    .btn.danger { background: var(--danger); color: #fff; }
+    .btn[disabled] { opacity: .6; cursor: not-allowed; }
+    .progress { height: 6px; background: #e5e7eb; border-radius: 999px; overflow: hidden; margin-top: 8px; }
+    .progress > span { display: block; height: 100%; background: var(--accent); width: 0%; transition: width .25s ease; }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; background: #eef; color: #334; }
+    @media (max-width: 640px) { body { margin: 16px; } }
+    pre.json { background: #0b1020; color: #e9f0ff; border-radius: 8px; padding: 12px; overflow: auto; font-size: 12px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>CS Knowledge Survey</h1>
+    <p class="lead">Binary familiarity questions that <strong>gate</strong> an MCQ. If you answer <em>Yes</em>, you'll see a follow‑up MCQ. Prior answers are locked and can't be changed when the MCQ is shown.</p>
+    <div class="progress" aria-hidden="true"><span id="bar"></span></div>
+    <div class="hint" id="status">&nbsp;</div>
+  </div>
+
+  <div class="card" id="q-card">
+    <div class="pill" id="topic-tag">Topic</div>
+    <div class="question" id="question-text">Loading…</div>
+    <div class="options" id="options"></div>
+    <div class="hint" id="lock-hint" style="display:none;">This answer is locked to preserve gating integrity.</div>
+
+    <div class="btn-row">
+      <div>
+        <button class="btn" id="prevBtn">Previous</button>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn" id="resetBtn" title="Clear answers and restart">Reset</button>
+        <button class="btn" id="downloadBtn" title="Download your responses as JSON">Download JSON</button>
+        <button class="btn primary" id="nextBtn">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="done" style="display:none;">
+    <h2>All set ✅</h2>
+    <p>Your answers were saved to <code>localStorage</code> under the key <code id="storage-key-label"></code>. You can download them now or post them from another page later.</p>
+    <pre class="json" id="json-preview"></pre>
+    <div class="btn-row" style="justify-content:flex-end;">
+      <button class="btn" id="backToLast">Go Back</button>
+      <button class="btn primary" id="downloadBtn2">Download JSON</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/*****************
+ * CONFIG & DATA *
+ *****************/
+const SURVEY_VERSION = "2025-10-26.s1";
+const STORAGE_KEY = `cs_knowledge_survey_${SURVEY_VERSION}`;
+const META = { version: SURVEY_VERSION, timestamp: null, userAgent: navigator.userAgent };
+
+// Topics: each has a familiarity gate and (optionally) an MCQ
+const TOPICS = [
+  {
+    id: "uri_scheme",
+    tag: "URIs",
+    familiarity: { q: "Are you familiar with the concept of Uniform Resource Identifier (URI) schemes?" },
+    mcq: {
+      q: "Which part of \"http://example.com/page.html\" is the URI scheme?",
+      options: ["example.com", "http", "/page.html", "://"],
+      correctIndex: 1
+    }
+  },
+  {
+    id: "file_vs_network_uri",
+    tag: "URIs",
+    familiarity: { q: "Do you know the difference between filesystem URIs and remote/network URIs?" },
+    mcq: {
+      q: "What is the main difference between a file:// URI and http:// or ftp:// URIs?",
+      options: [
+        "file:// URIs are always encrypted, while http:// and ftp:// are not",
+        "file:// URIs can only be used on Linux, while http:// and ftp:// work everywhere",
+        "file:// URIs automatically delete files, while http:// and ftp:// only read them",
+        "file:// URIs refer to local filesystem resources, while http:// and ftp:// URIs refer to network resources"
+      ],
+      correctIndex: 3
+    }
+  },
+  {
+    id: "reflection",
+    tag: "Java",
+    familiarity: { q: "Are you familiar with the Java Reflection API?" },
+    mcq: {
+      q: "Which of the following is an example of reflection?",
+      options: [
+        "Checking if a variable is null",
+        "Writing a loop to iterate over numbers",
+        "Converting an integer to a string",
+        "Listing all methods of an object at runtime"
+      ],
+      correctIndex: 3
+    }
+  },
+  {
+    id: "visitor_walkFileTree",
+    tag: "Java",
+    familiarity: { q: "Are you familiar with the Visitor design pattern, particularly as used in Java’s Files.walkFileTree API?" },
+    mcq: {
+      q: "What is the main purpose of using the Visitor pattern in Files.walkFileTree?",
+      options: [
+        "It lets you define what happens at each file or directory visit while the API handles the traversal logic.",
+        "It automatically performs recursive deletion of directories.",
+        "It provides faster traversal by avoiding recursion.",
+        "It stores metadata about files and directories for later access."
+      ],
+      correctIndex: 0
+    }
+  },
+  {
+    id: "utf8_utf16",
+    tag: "Unicode",
+    familiarity: { q: "Do you know the difference between UTF-8 and UTF-16 Unicode encodings?" },
+    mcq: {
+      q: "Which statement best describes the main difference between UTF-8 and UTF-16?",
+      options: [
+        "UTF-8 is fixed-length, while UTF-16 is variable-length.",
+        "UTF-16 is backward compatible with ASCII, while UTF-8 is not.",
+        "UTF-8 and UTF-16 both use exactly 2 bytes for every character.",
+        "UTF-8 uses 1 to 4 bytes per character, while UTF-16 uses 2 or 4 bytes per character."
+      ],
+      correctIndex: 3
+    }
+  },
+  {
+    id: "bitwise_ops",
+    tag: "Bits",
+    familiarity: { q: "Do you know what bitwise operators (e.g., &, |, ^, >>, >>>) do in programming?" },
+    mcq: {
+      q: "In Java, what does the operator >>> do?",
+      options: [
+        "Signed right shift (preserves the sign bit)",
+        "Unsigned right shift (fills left bits with zeros)",
+        "Left shift (fills right bits with zeros)",
+        "Bitwise OR"
+      ],
+      correctIndex: 1
+    }
+  },
+  {
+    id: "hex_to_dec",
+    tag: "Number Systems",
+    familiarity: { q: "Do you know how to convert between hexadecimal and decimal numbers without using a calculator?" },
+    mcq: {
+      q: "What is the decimal value of the hexadecimal constant 0x7F?",
+      options: ["80", "127", "128", "255"],
+      correctIndex: 1
+    }
+  },
+  {
+    id: "quadratic",
+    tag: "Math",
+    familiarity: { q: "Are you familiar with the quadratic formula?" },
+    mcq: {
+      q: "The quadratic formula gives the roots of ax² + bx + c = 0 as:",
+      options: [
+        "(–b ± √(b² – 4ac)) / (2a)",
+        "(–a ± √(a² – 4bc)) / (2b)",
+        "(–c ± √(c² – 4ab)) / (2a)",
+        "(–b ± √(a² + b² + c²)) / (2)"
+      ],
+      correctIndex: 0
+    }
+  },
+  {
+    id: "atan",
+    tag: "Math",
+    familiarity: { q: "Are you familiar with the arctangent (atan) function?" },
+    mcq: {
+      q: "The function Math.atan(x) is used to:",
+      options: [
+        "Compute the magnitude of a vector",
+        "Compute the angle of a vector in the correct quadrant",
+        "Convert radians to degrees",
+        "Calculate sine and cosine simultaneously"
+      ],
+      correctIndex: 1 // closest among provided options
+    }
+  },
+  {
+    id: "nan",
+    tag: "Floating Point",
+    familiarity: { q: "Are you familiar with the concept of NaN (Not a Number) and its behavior in Java?" },
+    mcq: {
+      q: "In Java, when x is a floating-point variable, which of the following expressions evaluates to true if and only if x is NaN?",
+      options: ["x == NaN", "x != x", "x++ > x", "It is not possible to check for NaN in Java"],
+      correctIndex: 1
+    }
+  },
+  {
+    id: "fp_singularities",
+    tag: "Floating Point",
+    familiarity: { q: "Are you familiar with Java’s handling of floating-point singularities (such as division by zero)?" },
+    mcq: {
+      q: "What is the result of evaluating 1.0 / 0.0 in Java?",
+      options: ["NaN", "Infinity", "0.0", "Throws an exception"],
+      correctIndex: 1
+    }
+  }
+];
+
+/*****************
+ * STATE & MODEL *
+ *****************/
+// answers per topic: { familiar: true/false, familiarAt: ISO, mcq: { selectedIndex, correctIndex, at: ISO } }
+let state = {
+  meta: { ...META },
+  progress: { stepIndex: 0 },
+  topics: Object.fromEntries(TOPICS.map(t => [t.id, { familiar: null, familiarAt: null, mcq: null }]))
+};
+
+// Steps are derived: for each topic -> familiarity step; if fam === true, an MCQ step is shown.
+// We maintain a linear steps array, but dynamically skip MCQ when familiarity === false.
+
+/*****************
+ * DOM HANDLERS  *
+ *****************/
+const els = {
+  topicTag: document.getElementById('topic-tag'),
+  qText: document.getElementById('question-text'),
+  opts: document.getElementById('options'),
+  lockHint: document.getElementById('lock-hint'),
+  prev: document.getElementById('prevBtn'),
+  next: document.getElementById('nextBtn'),
+  reset: document.getElementById('resetBtn'),
+  dl: document.getElementById('downloadBtn'),
+  bar: document.getElementById('bar'),
+  status: document.getElementById('status'),
+  qCard: document.getElementById('q-card'),
+  done: document.getElementById('done'),
+  storageKeyLabel: document.getElementById('storage-key-label'),
+  jsonPreview: document.getElementById('json-preview'),
+  backToLast: document.getElementById('backToLast'),
+  dl2: document.getElementById('downloadBtn2'),
+};
+
+/*****************
+ * UTILITIES     *
+ *****************/
+function save() {
+  state.meta.timestamp = new Date().toISOString();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+function load() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return false;
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed?.meta?.version === SURVEY_VERSION) {
+      state = parsed;
+      return true;
+    }
+  } catch { /* ignore */ }
+  return false;
+}
+function resetAll() {
+  localStorage.removeItem(STORAGE_KEY);
+  state = {
+    meta: { ...META },
+    progress: { stepIndex: 0 },
+    topics: Object.fromEntries(TOPICS.map(t => [t.id, { familiar: null, familiarAt: null, mcq: null }]))
+  };
+  render();
+}
+function downloadJSON() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `survey_answers_${SURVEY_VERSION}.json`;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+// Build the linear steps based on current answers
+function buildSteps() {
+  const steps = [];
+  for (const t of TOPICS) {
+    steps.push({ type: 'familiarity', topicId: t.id });
+    const rec = state.topics[t.id];
+    if (rec && rec.familiar === true) {
+      steps.push({ type: 'mcq', topicId: t.id });
+    }
+  }
+  return steps;
+}
+
+function clampProgress(idx) {
+  const steps = buildSteps();
+  if (idx < 0) idx = 0;
+  if (idx >= steps.length) idx = steps.length - 1;
+  state.progress.stepIndex = idx;
+}
+
+function percentProgress() {
+  const steps = buildSteps();
+  const n = steps.length || 1;
+  const i = Math.min(state.progress.stepIndex, n-1);
+  return Math.round(((i) / n) * 100);
+}
+
+/*****************
+ * RENDER        *
+ *****************/
+function render() {
+  const steps = buildSteps();
+  const idx = state.progress.stepIndex;
+
+  // done state
+  if (steps.length === 0 || idx >= steps.length) {
+    els.qCard.style.display = 'none';
+    els.done.style.display = 'block';
+    els.storageKeyLabel.textContent = STORAGE_KEY;
+    els.jsonPreview.textContent = JSON.stringify(state, null, 2);
+    els.bar.style.width = '100%';
+    els.status.textContent = 'Completed';
+    return;
+  }
+
+  const step = steps[idx];
+  const topic = TOPICS.find(t => t.id === step.topicId);
+  const rec = state.topics[topic.id];
+
+  els.qCard.style.display = 'block';
+  els.done.style.display = 'none';
+  els.topicTag.textContent = topic.tag;
+
+  // progress
+  els.bar.style.width = `${percentProgress()}%`;
+  els.status.textContent = `${idx + 1} / ${steps.length}`;
+
+  // render question
+  els.lockHint.style.display = 'none';
+  els.opts.innerHTML = '';
+
+  if (step.type === 'familiarity') {
+    els.qText.textContent = topic.familiarity.q;
+    const locked = rec.mcq !== null && rec.familiar === true; // once MCQ exists for this topic, lock familiarity
+
+    const yesId = `fam_yes_${topic.id}`;
+    const noId  = `fam_no_${topic.id}`;
+    const yes = document.createElement('label');
+    yes.innerHTML = `<input type="radio" name="fam_${topic.id}" id="${yesId}" value="yes" ${rec.familiar===true? 'checked':''} ${locked? 'disabled':''}/> Yes`;
+    const no = document.createElement('label');
+    no.innerHTML = `<input type="radio" name="fam_${topic.id}" id="${noId}" value="no" ${rec.familiar===false? 'checked':''} ${locked? 'disabled':''}/> No`;
+    els.opts.appendChild(yes); els.opts.appendChild(no);
+
+    if (locked) {
+      els.lockHint.style.display = 'block';
+    }
+
+    // buttons
+    els.prev.disabled = (idx === 0);
+    els.next.textContent = (rec.familiar === true ? 'Continue to MCQ' : 'Next');
+    els.next.disabled = (rec.familiar === null);
+
+    // wire change only when not locked
+    if (!locked) {
+      els.opts.addEventListener('change', (e) => {
+        const v = (e.target && e.target.value) || null;
+        if (!v) return;
+        rec.familiar = (v === 'yes');
+        rec.familiarAt = new Date().toISOString();
+        // if changed to false, clear any prior MCQ
+        if (rec.familiar === false) rec.mcq = null;
+        save();
+        // ensure steps reflect new gating immediately
+        // keep user on current step; the Next button label/enabled updates
+        render();
+      }, { once: true });
+    }
+  }
+
+  if (step.type === 'mcq') {
+    els.qText.textContent = topic.mcq.q;
+    // MCQ options
+    topic.mcq.options.forEach((opt, i) => {
+      const id = `mcq_${topic.id}_${i}`;
+      const lab = document.createElement('label');
+      const checked = rec.mcq && rec.mcq.selectedIndex === i ? 'checked' : '';
+      lab.innerHTML = `<input type="radio" name="mcq_${topic.id}" id="${id}" value="${i}" ${checked}/> ${String.fromCharCode(65+i)}) ${opt}`;
+      els.opts.appendChild(lab);
+    });
+
+    els.prev.disabled = false; // allow going back (familiarity will be locked)
+    els.next.textContent = (isLastLogicalStep(step) ? 'Finish' : 'Next');
+    els.next.disabled = !(rec.mcq && Number.isInteger(rec.mcq.selectedIndex));
+
+    els.opts.addEventListener('change', (e) => {
+      const v = parseInt(e.target && e.target.value, 10);
+      if (!Number.isFinite(v)) return;
+      rec.mcq = { selectedIndex: v, correctIndex: topic.mcq.correctIndex, at: new Date().toISOString() };
+      save();
+      els.next.disabled = false;
+    }, { once: true });
+  }
+
+  // wire nav
+  els.prev.onclick = () => { move(-1); };
+  els.next.onclick = () => { move(+1); };
+  els.reset.onclick = () => {
+    if (confirm('Clear all saved answers and restart?')) resetAll();
+  };
+  els.dl.onclick = downloadJSON;
+  els.dl2.onclick = downloadJSON;
+  els.backToLast.onclick = () => {
+    const steps = buildSteps();
+    if (steps.length === 0) { state.progress.stepIndex = 0; render(); return; }
+    state.progress.stepIndex = steps.length - 1;
+    render();
+  };
+}
+
+function isLastLogicalStep(currentStep) {
+  // Determine if this MCQ is the final step considering gating of subsequent topics
+  const steps = buildSteps();
+  const idx = state.progress.stepIndex;
+  return idx === steps.length - 1;
+}
+
+function move(delta) {
+  const steps = buildSteps();
+  let idx = state.progress.stepIndex;
+
+  // Guard: require answer before advancing from familiarity or MCQ
+  const step = steps[idx];
+  const rec = state.topics[step.topicId];
+  if (delta > 0) {
+    if (step.type === 'familiarity' && rec.familiar === null) return alert('Please select Yes or No.');
+    if (step.type === 'mcq' && !(rec.mcq && Number.isInteger(rec.mcq.selectedIndex))) return alert('Please select an option.');
+  }
+
+  idx += delta;
+
+  // If moving forward from familiarity and answer was YES and mcq not yet inserted, the rebuilt steps will include MCQ next
+  state.progress.stepIndex = Math.max(0, idx);
+  save();
+
+  const rebuilt = buildSteps();
+  if (state.progress.stepIndex >= rebuilt.length) {
+    // finished
+    render();
+    // show done view
+    els.qCard.style.display = 'none';
+    els.done.style.display = 'block';
+    els.storageKeyLabel.textContent = STORAGE_KEY;
+    els.jsonPreview.textContent = JSON.stringify(state, null, 2);
+    els.bar.style.width = '100%';
+    els.status.textContent = 'Completed';
+    return;
+  }
+  render();
+}
+
+/*****************
+ * INIT          *
+ *****************/
+if (load()) {
+  // If there is saved progress, keep it
+} else {
+  save();
+}
+render();
+</script>
+</body>
+</html>
