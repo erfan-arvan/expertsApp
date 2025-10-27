@@ -907,7 +907,7 @@ function selectSlot(el) {
 
     const today = new Date();
     let generated = 0;
-    let offset = 1; // start from tomorrow
+    let offset = 3; // ✅ start from 3 days after the current day
 
     while (generated < 14) {
       const d = new Date(today);
@@ -945,6 +945,7 @@ function selectSlot(el) {
 
   document.addEventListener('DOMContentLoaded', () => createDayCardsNext14Weekdays());
 </script>
+
 
 </body>
 </html>
