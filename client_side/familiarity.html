@@ -392,7 +392,7 @@ function render() {
 
     // buttons
     els.prev.disabled = (idx === 0);
-    els.next.textContent = (rec.familiar === true ? 'Continue to MCQ' : 'Next');
+    els.next.textContent = 'Next';
     els.next.disabled = (rec.familiar === null);
 
     // wire change only when not locked
