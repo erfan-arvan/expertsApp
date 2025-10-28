@@ -564,22 +564,18 @@ function prevQuestion() {
 function checkEligibility() {
   let hasIneligible = false;
   let courseOk = false;
-  let expOk = false;
+  let expOk = false; // lots of experience (accept exp_ok or gt1y)
 
   for (let i = 0; i < answers.length; i++) {
     const q = questions[i];
     const opt = q?.options?.[answers[i]];
     if (!opt) continue;
 
-    if (opt.ineligible === true) {
-      hasIneligible = true;
-      break;
-    }
+    if (opt.ineligible === true) { hasIneligible = true; break; }
     if (opt.course_ok === true) courseOk = true;
-    if (opt.exp_ok === true) expOk = true;
+    if (opt.exp_ok === true || opt.gt1y === true) expOk = true; // <-- key line
   }
 
-  // ✅ Final rule: no disqualifiers AND (course ok OR lots-of-experience ok)
   const eligible = !hasIneligible && (courseOk || expOk);
 
   sendEligibilityOutcome(eligible);
