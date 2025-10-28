@@ -445,7 +445,7 @@ public synchronized String handleStudentRegistrationWM(@RequestBody Map<String, 
         System.out.println(">>> Created 'submissions' directory.");
     }
 
-    File registrationFile = new File("submissions/registration.json");
+    File registrationFile = new File("submissions/registrationWM.json");
     ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
     try {
