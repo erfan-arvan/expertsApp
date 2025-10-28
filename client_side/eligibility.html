@@ -1100,7 +1100,8 @@ function isPlausiblePhone(s) {
 
 
 <script>
-function openSlotConfirmModal() {
+
+  function openSlotConfirmModal() {
   const selectedEls = document.querySelectorAll('.slots-box .time-slot.selected');
   const count = selectedEls.length;
 
@@ -1109,42 +1110,56 @@ function openSlotConfirmModal() {
     return;
   }
 
-  // >10 → skip modal and proceed
   if (count > 10) {
     finalizeMultiSlotSelection();
     return;
   }
 
-  // Build the message
   const msgBase = `You’ve selected <strong>${count}</strong> time slot${count > 1 ? 's' : ''}.`;
   const nudge = (count < 3)
     ? `<br><strong style="color:#d00;">Please select <u>all</u> of your available time slots so we can schedule your session more easily.</strong>`
     : '';
-const finalQ = `<br><br><strong>We recommend selecting <span style="color:red;">at least 5</span> slots.</strong>`;
+    const finalQ = `<br><br><strong>We recommend selecting <span style="color:red;">at least 5</span> slots.</strong>`;
 
   document.getElementById('slot-confirm-text').innerHTML = msgBase + nudge + finalQ;
 
-  // Style the “Yes” button based on count
+  // Style the buttons dynamically
   const yesBtn = document.getElementById('slot-confirm-yes');
+  const noBtn = document.getElementById('slot-confirm-no');
+
   if (count < 3) {
-    // Gray + de-emphasized (not disabled; still clickable if they insist)
+    // Gray submit button (de-emphasized)
     yesBtn.style.background = '#ccc';
     yesBtn.style.color = '#333';
     yesBtn.style.border = 'none';
     yesBtn.style.opacity = '0.9';
     yesBtn.style.cursor = 'pointer';
+
+    // Green "Go back" button (emphasized)
+    noBtn.style.background = '#4CAF50';
+    noBtn.style.color = '#fff';
+    noBtn.style.border = 'none';
+    noBtn.style.opacity = '1';
+    noBtn.style.cursor = 'pointer';
   } else {
-    // Normal/primary look
+    // Normal buttons
     yesBtn.style.background = '#4CAF50';
     yesBtn.style.color = '#fff';
     yesBtn.style.border = 'none';
     yesBtn.style.opacity = '1';
     yesBtn.style.cursor = 'pointer';
+
+    noBtn.style.background = '#ddd';
+    noBtn.style.color = '#333';
+    noBtn.style.border = 'none';
+    noBtn.style.opacity = '1';
+    noBtn.style.cursor = 'pointer';
   }
 
   // Show modal
   document.getElementById('slot-confirm-modal').classList.remove('hidden');
 }
+
 
 function closeSlotConfirmModal() {
   document.getElementById('slot-confirm-modal').classList.add('hidden');
