@@ -429,123 +429,139 @@ public class SubmissionController {
         return defaultIfNull;
     }
 
-    @CrossOrigin(origins = { "http://localhost:8000", "http://codecomprehensibility.site" })
-    @PostMapping("/register_studentWM")
-    public synchronized String handleStudentRegistrationWM(@RequestBody Map<String, Object> body) {
-        String email = (String) body.getOrDefault("email", "unknown");
-        String timestamp = ZonedDateTime.now(ZoneId.of("America/New_York"))
-                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+@CrossOrigin(origins = { "http://localhost:8000", "http://codecomprehensibility.site" })
+@PostMapping("/register_studentWM")
+public synchronized String handleStudentRegistrationWM(@RequestBody Map<String, Object> body) {
+    String email = (String) body.getOrDefault("email", "unknown");
+    String timestamp = ZonedDateTime.now(ZoneId.of("America/New_York"))
+            .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
-        System.out.println(">>> [register_student] Registration received from: " + email);
-        System.out.println(">>> Timestamp: " + timestamp);
+    System.out.println(">>> [register_studentWM] Registration received from: " + email);
+    System.out.println(">>> Timestamp: " + timestamp);
 
-        File directory = new File("submissions");
-        if (!directory.exists()) {
-            directory.mkdirs();
-            System.out.println(">>> Created 'submissions' directory.");
+    File directory = new File("submissions");
+    if (!directory.exists()) {
+        directory.mkdirs();
+        System.out.println(">>> Created 'submissions' directory.");
+    }
+
+    File registrationFile = new File("submissions/registration.json");
+    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
+    try {
+        Map<String, Object> wrapped = new HashMap<>();
+        wrapped.put("timestamp", timestamp);
+        wrapped.put("data", body);
+
+        List<Map<String, Object>> allData = registrationFile.exists()
+                ? mapper.readValue(registrationFile, new TypeReference<>() {})
+                : new ArrayList<>();
+        allData.add(wrapped);
+        mapper.writeValue(registrationFile, allData);
+        System.out.println(">>> Saved to registration.json");
+
+        // ==== Determine Event Type and Email Policy ====
+        String sessionTime = body.getOrDefault("selectedSlot", "unspecified").toString();
+        String event = body.getOrDefault("event", "register").toString().toLowerCase().trim();
+        String customAvailability = body.getOrDefault("customAvailability", "Not specified").toString();
+
+        // Read "eligible" (default true if absent)
+        boolean eligible = parseBooleanFlexible(body.get("eligible"), true);
+
+        // Build once
+        String encodedEmail = java.net.URLEncoder.encode(email, java.nio.charset.StandardCharsets.UTF_8);
+        // Availability page for those who skipped picking times
+        String availabilityLink = "https://codecomprehensibility.site/availabilityWM.html?email=" + encodedEmail;
+
+        String subject = null;
+        String message = null;
+
+        switch (event) {
+            case "cancel":
+                subject = "Code Comprehension Study Registration Canceled";
+                message = "Your registration for the Code Comprehension Study has been canceled.\n\n"
+                        + "If this was a mistake or you’d like to pick a new time slot, "
+                        + "please contact us at kgdesilva@wm.edu.\n\n"
+                        + "— Code Comprehension Study Team";
+                break;
+
+            case "modify":
+                subject = "Code Comprehension Study Registration Updated";
+                message = "You've successfully modified your session for the Code Comprehension Study.\n\n"
+                        + "📅 Your updated session time: " + sessionTime + "\n\n"
+                        + "If you need to cancel or modify again, please "
+                        + "contact us at kgdesilva@wm.edu.\n\n"
+                        + "— Code Comprehension Study Team";
+                break;
+
+            case "pending":
+                subject = "Code Comprehension Study – Availability Received";
+                message = "Thank you for suggesting your available time slots for the Code Comprehension Study.\n\n"
+                        + "📅 Your availability:\n" + customAvailability + "\n\n"
+                        + "We'll review your responses and reach out shortly to confirm your session time.\n\n"
+                        + "If you have any questions or issues, please contact us at kgdesilva@wm.edu.\n\n"
+                        + "— Code Comprehension Study Team";
+                break;
+
+            case "availability":
+                subject = "Code Comprehension Study – Availability Received";
+                message = "Thank you for sharing your available time slots for the Code Comprehension Study.\n\n"
+                        + "📅 Your availability:\n" + sessionTime + "\n\n"
+                        + "We'll review your availability and follow up soon to confirm your session time and location.\n"
+                        + "The session will take place at William & Mary.\n\n"
+                        + "If you have any questions or concerns, please contact us at kgdesilva@wm.edu.\n\n"
+                        + "— Code Comprehension Study Team";
+                break;
+
+            case "eligibility":
+                if (eligible) {
+                    subject = "You're eligible for the Code Comprehension Study 🎉";
+                    message = "Great news—you’re eligible to participate in our Code Comprehension Study!\n\n"
+                            + "✅ Next step: pick your available time(s).\n"
+                            + "You can do that here:\n" + availabilityLink + "\n\n"
+                            + "If you already provided availability on the website, you can ignore this step.\n\n"
+                            + "Questions? Just contact us at kgdesilva@wm.edu.\n\n"
+                            + "— Code Comprehension Study Team";
+                } else {
+                    System.out.println(">>> Ineligible submission; email suppressed for: " + email);
+                }
+                break;
+
+            case "register":
+            default:
+                subject = "Code Comprehension Study Registration Confirmation";
+                message = "Thank you for registering!\n\n"
+                        + "📅 Your session is scheduled for: " + sessionTime + "\n\n"
+                        + "We'll follow up with the exact room location.\n\n"
+                        + "If you need to cancel or change your time slot, please reply to this email "
+                        + "or contact us at kgdesilva@wm.edu.\n\n"
+                        + "If you have any questions or issues, please contact us at kgdesilva@wm.edu.\n\n"
+                        + "— Code Comprehension Study Team";
+                break;
         }
 
-        File registrationFile = new File("submissions/registration.json");
-        ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+        // Global guard — if eligible == false, never email (regardless of event)
+        if (!eligible) {
+            System.out.println(">>> Global eligibility guard: skipping email for ineligible user: " + email);
+            return "Registration saved.";
+        }
 
-        try {
-            Map<String, Object> wrapped = new HashMap<>();
-            wrapped.put("timestamp", timestamp);
-            wrapped.put("data", body);
-
-            List<Map<String, Object>> allData = registrationFile.exists()
-                    ? mapper.readValue(registrationFile, new TypeReference<>() {
-                    })
-                    : new ArrayList<>();
-            allData.add(wrapped);
-            mapper.writeValue(registrationFile, allData);
-            System.out.println(">>> Saved to registration.json");
-
-            // ==== Determine Event Type and Send Appropriate Email ====
-            String sessionTime = body.getOrDefault("selectedSlot", "unspecified").toString();
-            String event = body.getOrDefault("event", "register").toString().toLowerCase().trim();
-            String subject;
-            String message;
-            String customAvailability = body.getOrDefault("customAvailability", "Not specified").toString();
-
-            switch (event) {
-                case "cancel":
-                    subject = "Code Comprehension Study Registration Canceled";
-                    message = "Your registration for the Code Comprehension Study has been successfully canceled.\n\n" +
-                            "If this was a mistake or you’d like to pick a new time slot, please re-register at:\n" +
-                            "https://codecomprehensibility.site/eligibility.html\n\n" +
-                            "If you have any questions or issues, please reply to this email or contact us at ea442@njit.edu.\n\n"
-                            +
-                            "— Code Comprehension Study Team";
-                    break;
-
-                case "modify":
-                    subject = "Code Comprehension Study Registration Updated";
-                    String modifyLink = "https://codecomprehensibility.site/cancelModifyRegistration.html" +
-                            "?email=" + java.net.URLEncoder.encode(email, StandardCharsets.UTF_8) +
-                            "&slot=" + java.net.URLEncoder.encode(sessionTime, StandardCharsets.UTF_8);
-
-                    message = "You've successfully modified your session for the Code Comprehension Study.\n\n" +
-                            "📅 Your updated session time: " + sessionTime + "\n\n" +
-                            "If you need to cancel or modify again, please use this link:\n" + modifyLink + "\n\n" +
-                            "If you have any questions or issues, please contact us at kgdesilva@wm.edu.\n\n"
-                            +
-                            "— Code Comprehension Study Team";
-                    break;
-                case "pending":
-                    subject = "Code Comprehension Study – Availability Received";
-
-                    message = "Thank you for suggesting your available time slots for the Code Comprehension Study.\n\n"
-                            +
-                            "📅 Your availability:\n" +
-                            customAvailability + "\n\n" +
-                            "We'll review your responses and reach out shortly to confirm your session time.\n\n" +
-                            "If you have any questions or issues, contact us at kgdesilva@wm.edu.\n\n"
-                            +
-                            "— Code Comprehension Study Team";
-                    break;
-                case "availability":
-                    subject = "Code Comprehension Study – Availability Received";
-
-                    message = "Thank you for sharing your available time slots for the Code Comprehension Study.\n\n" +
-                            "📅 Your availability:\n" +
-                            sessionTime + "\n\n" +
-                            "We'll review your availability and follow up soon to confirm your session time and location.\n"
-                            +
-                            "The session will take place at W&M.\n\n" +
-                            "If you have any questions or concerns, feel free to contact us at kgdesilva@wm.edu.\n\n"
-                            +
-                            "— Code Comprehension Study Team";
-                    break;
-                case "register":
-                default:
-                    subject = "Code Comprehension Study Registration Confirmation";
-                    String cancelLink = "https://codecomprehensibility.site/cancelModifyRegistration.html" +
-                            "?email=" + java.net.URLEncoder.encode(email, StandardCharsets.UTF_8) +
-                            "&slot=" + java.net.URLEncoder.encode(sessionTime, StandardCharsets.UTF_8);
-
-                    message = "Thank you for registering!\n\n" +
-                            "📅 Your session is scheduled for: " + sessionTime + "\n\n" +
-                            "We'll follow up with the exact room location, but it will be in one of the rooms at GITC, NJIT.\n\n"
-                            +
-                            "If you want to cancel or change your time slot, please use this link:\n" + cancelLink
-                            + "\n\n" +
-                            "If you have any questions or issues, please contact us at kgdesilva@wm.edu.edu.\n\n"
-                            +
-                            "— Code Comprehension Study Team";
-                    break;
-            }
-
+        // Only send if we composed a message
+        if (subject != null && message != null) {
             System.out.println(">>> Sending " + event + " email to: " + email);
             sendEmailViaPython(email, subject, message);
-
-            return "Registration saved.";
-        } catch (IOException e) {
-            System.err.println(">>> ERROR saving registration for: " + email);
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save registration.");
+        } else {
+            System.out.println(">>> No email composed for event='" + event + "' (likely eligibility/ineligible).");
         }
+
+        return "Registration saved.";
+    } catch (IOException e) {
+        System.err.println(">>> ERROR saving registration (WM) for: " + email);
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save registration (WM).");
     }
+}
+
 
     private static String buildConsentLink(String baseUrl, String email) {
         // Safer than plain query strings; decodes with atob() on the client if you

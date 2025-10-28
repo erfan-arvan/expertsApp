@@ -557,17 +557,54 @@ function prevQuestion() {
 }
 
 function checkEligibility() {
+  // Determine eligibility
+  let eligible = true;
   for (let i = 0; i < answers.length; i++) {
     const opt = questions[i].options[answers[i]];
-    if (opt.ineligible) {
-      document.getElementById('survey-box').classList.add('hidden');
-      document.getElementById('ineligible-modal').classList.remove('hidden');
-      return;
-    }
+    if (opt?.ineligible) { eligible = false; break; }
   }
+
+  // Send outcome (✅ this posts both eligible and ineligible cases)
+  sendEligibilityOutcome(eligible);
+
+  // Existing UI flow
+  if (!eligible) {
+    document.getElementById('survey-box').classList.add('hidden');
+    document.getElementById('ineligible-modal').classList.remove('hidden');
+    return;
+  }
+
   document.getElementById('survey-box').classList.add('hidden');
   document.getElementById('eligibility-success').classList.remove('hidden');
   document.getElementById('slots-box').classList.remove('hidden');
+}
+
+
+function sendEligibilityOutcome(eligible) {
+  const email = (localStorage.getItem("student_email") || document.getElementById('email')?.value || "").trim().toLowerCase();
+
+  const eligibilityResponses = questions.map((q, index) => {
+    const selectedIndex = answers[index];
+    return {
+      question: q.text,
+      selectedOption: q.options[selectedIndex]?.label ?? "No answer",
+      ineligible: Boolean(q.options[selectedIndex]?.ineligible)
+    };
+  });
+
+  const payload = {
+    email,
+    event: "eligibility",        // <-- distinguish this server-side
+    eligible,                    // true/false
+    eligibilityResponses,
+    submitted: true
+  };
+
+  fetch("/register_studentWM", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  }).catch(err => console.error("❌ Network error posting eligibility:", err));
 }
 
 
