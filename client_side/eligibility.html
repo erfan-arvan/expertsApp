@@ -353,7 +353,7 @@ input.input-error {
   </p>
   
 <div id="custom-time-box" style="display: none; margin-top: 1em; border: 1px solid #ccc; padding: 1em; border-radius: 8px;">
-  <p><strong>Please contact us at kgdesilva@wm.edu.</strong></p>
+  <p><strong>Please contact us at ea442@njit.edu</strong></p>
 </div>
 
   
@@ -374,24 +374,29 @@ input.input-error {
   </label>
 
   <!-- SMS opt-in -->
-  <label style="display: block; margin: 12px 0;">
-    <input type="checkbox" id="sms-checkbox" onchange="toggleSmsInput()">
-    I don’t check email often—also send me SMS notifications
-  </label>
+<label style="display: block; margin: 12px 0;">
+  <input type="checkbox" id="sms-checkbox" checked onchange="toggleSmsInput()">
+  I don’t check email often — <strong style="color:#4CAF50;">we recommend also receiving SMS notifications</strong>
+</label>
 
-  <!-- Phone input (hidden until SMS is chosen) -->
-  <div id="sms-input-wrap" class="hidden">
-    <input
-      type="tel"
-      id="phone-input"
-      class="input-field"
-      placeholder="Mobile number (e.g., +1 973 555 0123)"
-      inputmode="tel"
-      autocomplete="tel"
-      aria-label="Mobile number for SMS notifications"
-    />
-    <small style="color:#666;">We’ll only use this number for study-related notifications.</small>
-  </div>
+<div id="sms-input-wrap">
+  <p style="margin: 6px 0 10px 0; color: #444; font-size: 15px;">
+    💬 <strong>Tip:</strong> If you don’t check email often, we recommend entering your phone number to also receive SMS updates.
+  </p>
+
+  <input
+    type="tel"
+    id="phone-input"
+    class="input-field"
+    placeholder="Mobile number (e.g., +1 973 555 0123)"
+    inputmode="tel"
+    autocomplete="tel"
+    aria-label="Mobile number for SMS notifications"
+  />
+  <small style="color:#666;">We’ll only use this number for study-related notifications.</small>
+</div>
+
+
 
   <button onclick="finalizeRegistration()">Finalize My Registration</button>
 </div>
@@ -1031,11 +1036,18 @@ function selectSlot(el) {
 </script>
 
 <script>
-  function toggleSmsInput() {
+function toggleSmsInput() {
   const wrap = document.getElementById('sms-input-wrap');
   const smsChecked = document.getElementById('sms-checkbox').checked;
   wrap.classList.toggle('hidden', !smsChecked);
 }
+
+// show it by default when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('sms-checkbox').checked = true;
+  document.getElementById('sms-input-wrap').classList.remove('hidden');
+});
+
 
 /** Very light validation:
  * Accepts E.164 (+country …) or common US forms.
