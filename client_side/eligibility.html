@@ -1111,9 +1111,10 @@ function isPlausiblePhone(s) {
   }
 
   const msgBase = `You’ve selected <strong>${count}</strong> time slot${count > 1 ? 's' : ''}.`;
-  const nudge = (count < 3)
-    ? `<br><small style="color:#666;">Tip: Selecting multiple options helps us match a time more easily.</small>`
-    : '';
+const nudge = (count < 3)
+  ? `<br><strong style="color:#d00;">Tip: Selecting multiple options helps us match a time more easily.</strong>`
+  : '';
+
   const finalQ = `<br><br><strong>Have you selected <u>all</u> of your available times in the next two weeks (weekdays only)?</strong>`;
 
   document.getElementById('slot-confirm-text').innerHTML = msgBase + nudge + finalQ;
