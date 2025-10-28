@@ -1120,7 +1120,7 @@ function openSlotConfirmModal() {
   const nudge = (count < 3)
     ? `<br><strong style="color:#d00;">Please select <u>all</u> of your available time slots so we can schedule your session more easily.</strong>`
     : '';
-  const finalQ = `<br><br><strong>Have you selected <u>all</u> of your available times in the next two weeks (weekdays only)?</strong>`;
+const finalQ = `<br><br><strong>We recommend selecting <span style="color:red;">at least 5</span> slots.</strong>`;
 
   document.getElementById('slot-confirm-text').innerHTML = msgBase + nudge + finalQ;
 
