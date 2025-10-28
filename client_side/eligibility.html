@@ -1101,23 +1101,25 @@ function isPlausiblePhone(s) {
 
 
 <script>
-function openSlotConfirmModal() {
+  function openSlotConfirmModal() {
   const selectedEls = document.querySelectorAll('.slots-box .time-slot.selected');
   const count = selectedEls.length;
 
-  if (count < 3) {
-    showWarningModal("Please select at least 3 available time slots so we can better match your schedule.");
+  if (count === 0) {
+    alert("Please select at least one time slot.");
     return;
   }
 
-
-  const msgBase = `You’ve selected <strong>${count}</strong> time slots.`;
+  const msgBase = `You’ve selected <strong>${count}</strong> time slot${count > 1 ? 's' : ''}.`;
+  const nudge = (count < 3)
+    ? `<br><small style="color:#666;">Tip: Selecting multiple options helps us match a time more easily.</small>`
+    : '';
   const finalQ = `<br><br><strong>Have you selected <u>all</u> of your available times in the next two weeks (weekdays only)?</strong>`;
 
-  document.getElementById('slot-confirm-text').innerHTML = msgBase + finalQ;
+  document.getElementById('slot-confirm-text').innerHTML = msgBase + nudge + finalQ;
+
   document.getElementById('slot-confirm-modal').classList.remove('hidden');
 }
-
 
 function closeSlotConfirmModal() {
   document.getElementById('slot-confirm-modal').classList.add('hidden');
