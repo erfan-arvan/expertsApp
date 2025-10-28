@@ -372,24 +372,23 @@ input.input-error {
   </label>
 
   <!-- SMS opt-in -->
-  <label style="display: block; margin: 12px 0;">
-    <input type="checkbox" id="sms-checkbox" onchange="toggleSmsInput()">
+<label style="display: block; margin: 12px 0;">
+  <input type="checkbox" id="sms-checkbox" checked onchange="toggleSmsInput()">
     I don’t check email often—also send me SMS notifications
-  </label>
+</label>
 
-  <!-- Phone input (hidden until SMS is chosen) -->
-  <div id="sms-input-wrap" class="hidden">
-    <input
-      type="tel"
-      id="phone-input"
-      class="input-field"
-      placeholder="Mobile number (e.g., +1 973 555 0123)"
-      inputmode="tel"
-      autocomplete="tel"
-      aria-label="Mobile number for SMS notifications"
-    />
-    <small style="color:#666;">We’ll only use this number for study-related notifications.</small>
-  </div>
+<div id="sms-input-wrap">
+  <input
+    type="tel"
+    id="phone-input"
+    class="input-field"
+    placeholder="Mobile number (e.g., +1 973 555 0123)"
+    inputmode="tel"
+    autocomplete="tel"
+    aria-label="Mobile number for SMS notifications"
+  />
+  <small style="color:#666;">We’ll only use this number for study-related notifications.</small>
+</div>
 
   <button onclick="finalizeRegistration()">Finalize My Registration</button>
 </div>
@@ -953,6 +952,9 @@ function finalizeMultiSlotSelection() {
   document.getElementById('selected-slot-info').innerText = selectedSlots.join(", ");
   document.getElementById('notify-email').innerText = localStorage.getItem("student_email");
   document.getElementById('confirm-box').classList.remove('hidden');
+
+  sendAvailabilityBeforeNotif(selectedSlots);
+
 }
 
 
@@ -1026,11 +1028,12 @@ function selectSlot(el) {
 </script>
 
 <script>
-  function toggleSmsInput() {
+function toggleSmsInput() {
   const wrap = document.getElementById('sms-input-wrap');
   const smsChecked = document.getElementById('sms-checkbox').checked;
   wrap.classList.toggle('hidden', !smsChecked);
 }
+
 
 /** Very light validation:
  * Accepts E.164 (+country …) or common US forms.
@@ -1047,5 +1050,33 @@ function isPlausiblePhone(s) {
 
 </script>
 
+<script>
+    async function sendAvailabilityBeforeNotif(selectedSlots) {
+  const email = localStorage.getItem("student_email") || "unknown";
+  const payload = {
+    email: email,
+    event: "availabilityBeforeNotif",
+    selectedSlot: selectedSlots.join(", "),
+    submitted: true
+  };
+
+  try {
+    const res = await fetch("/register_student", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      console.warn("⚠️ Failed to submit availabilityBeforeNotif:", res.statusText);
+    } else {
+      console.log("✅ Sent availabilityBeforeNotif successfully for", email);
+    }
+  } catch (err) {
+    console.error("❌ Network error while sending availabilityBeforeNotif:", err);
+  }
+}
+
+</script>
 </body>
 </html>
