@@ -488,7 +488,7 @@ const questions = [
       { label: "1–2 years", gt1y: true },
       { label: "3–4 years", gt1y: true },
       { label: "5+ years", gt1y: true },
-      { label: "Prefer not to say", ineligible: true }
+      { label: "Prefer not to say" }
     ]
   }
 ];
@@ -593,6 +593,7 @@ function checkEligibility() {
   document.getElementById('eligibility-success').classList.remove('hidden');
   document.getElementById('slots-box').classList.remove('hidden');
 }
+
 
 
 
