@@ -440,63 +440,38 @@ input.input-error {
 
 <script>
 const questions = [
-// {
-//   text: "Where are you studying?",
-//   options: [
-//     { label: "NJIT" },
-//     { label: "College of William & Mary" },
-//     { label: "Another university or college", ineligible: true }
-//   ]
-// }
-// ,
-{
+  {
     text: "what's your class standing?",
     options: [
-        { label: "Freshman" },
-        { label: "Sophomore" },
-        { label: "Junior" },
-        { label: "Senior" },
-        { label: "Graduate student", ineligible: true }
+      { label: "Freshman" },
+      { label: "Sophomore" },
+      { label: "Junior" },
+      { label: "Senior" },
+      { label: "Graduate student", ineligible: true }
     ]
-    },
+  },
   {
     text: "What is your age?",
     options: [
-         { label: "Under 18", ineligible: true },
-         { label: "18–24" },
-         { label: "25–34" },
-         { label: "35–44" },
-         { label: "45–54" },
-         { label: "55–64" },
-         { label: "65 or older" }
+      { label: "Under 18", ineligible: true },
+      { label: "18–24" },
+      { label: "25–34" },
+      { label: "35–44" },
+      { label: "45–54" },
+      { label: "55–64" },
+      { label: "65 or older" }
     ]
   },
   {
+    id: "cs288",
     text: "Have you taken CS 288: Intensive Programming?",
     options: [
-      { label: "I completed the course with a grade of C or better" },
-      { label: "I am currently enrolled in the course" },
-      {label: "I have taken the course but did not receive a grade of C or better, and I am not currently enrolled", ineligible:true},
-      { label: "I have not taken CS 288", ineligible: true }
+      { label: "I completed the course with a grade of C or better", course_ok: true },
+      { label: "I am currently enrolled in the course", course_ok: true },
+      { label: "I have taken the course but did not receive a grade of C or better, and I am not currently enrolled"},
+      { label: "I have not taken CS 288"}
     ]
   },
-//   {
-//   text: "Have you been diagnosed with a reading or learning disability, or any condition that affects your ability to read or understand code or instructions??",
-//   options: [
-//     { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
-//     { label: "No, I have not been diagnosed with any such condition" }
-//   ]
-// },
-  // {
-  //   text: "How comfortable are you with reading English-language text?",
-  //   options: [
-  //     { label: "Not comfortable", ineligible: true },
-  //     { label: "Slightly comfortable" },
-  //     { label: "Moderately comfortable" },
-  //     { label: "Very comfortable" },
-  //     { label: "Native speaker / fluent" }
-  //   ]
-  // },
   {
     text: "Are you willing to bring your own laptop to the session?",
     options: [
@@ -505,17 +480,19 @@ const questions = [
     ]
   },
   {
+    id: "javaYears",
     text: "How many years have you been programming in Java (through coursework, personal projects, or other experiences)?",
     options: [
       { label: "I am not familiar with Java", ineligible: true },
       { label: "Less than 1 year" },
-      { label: "1–2 years" },
-      { label: "3–4 years" },
-      { label: "5+ years" },
+      { label: "1–2 years", gt1y: true },
+      { label: "3–4 years", gt1y: true },
+      { label: "5+ years", gt1y: true },
       { label: "Prefer not to say", ineligible: true }
     ]
   }
 ];
+
 
 let currentQuestion = 0;
 let answers = [];
@@ -585,17 +562,32 @@ function prevQuestion() {
 }
 
 function checkEligibility() {
-  // Determine eligibility
-  let eligible = true;
+  let hasIneligible = false;
+  let courseOk = false;
+  let hasJavaGT1 = false;
+
   for (let i = 0; i < answers.length; i++) {
-    const opt = questions[i].options[answers[i]];
-    if (opt?.ineligible) { eligible = false; break; }
+    const q = questions[i];
+    const opt = q.options[answers[i]];
+    if (!opt) continue;
+
+    // Global disqualification
+    if (opt.ineligible) {
+      hasIneligible = true;
+      break;
+    }
+
+    // Record key conditions
+    if (opt.course_ok) courseOk = true;
+    if (opt.gt1y) hasJavaGT1 = true;
   }
 
-  // Send outcome (✅ this posts both eligible and ineligible cases)
+  // ✅ Final rule: must meet both conditions and have no ineligible options
+  const eligible = !hasIneligible && courseOk && hasJavaGT1;
+
+  // Keep your existing flow
   sendEligibilityOutcome(eligible);
 
-  // Existing UI flow
   if (!eligible) {
     document.getElementById('survey-box').classList.add('hidden');
     document.getElementById('ineligible-modal').classList.remove('hidden');
@@ -606,6 +598,7 @@ function checkEligibility() {
   document.getElementById('eligibility-success').classList.remove('hidden');
   document.getElementById('slots-box').classList.remove('hidden');
 }
+
 
 
 
@@ -1091,6 +1084,8 @@ function isPlausiblePhone(s) {
 }
 
 </script>
+
+
 
 </body>
 </html>
