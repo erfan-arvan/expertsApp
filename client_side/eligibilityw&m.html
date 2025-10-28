@@ -343,7 +343,7 @@ input.input-error {
   <strong>📅 Please select <u>all</u> of your available times in the next two weeks (weekdays only):</strong><br>
     <span style="color:#555;">We need this information to schedule your session at a time that best matches your availability.</span>
   </p>
-  
+
   <div id="dynamic-cards"></div>
 
 
@@ -439,82 +439,59 @@ input.input-error {
 
 <script>
 const questions = [
-// {
-//   text: "Where are you studying?",
-//   options: [
-//     { label: "NJIT" },
-//     { label: "College of William & Mary" },
-//     { label: "Another university or college", ineligible: true }
-//   ]
-// }
-// ,
-{
+  {
     text: "what's your class standing?",
     options: [
-        { label: "Freshman" },
-        { label: "Sophomore" },
-        { label: "Junior" },
-        { label: "Senior" },
-        { label: "Graduate student", ineligible: true }
+      { label: "Freshman" },
+      { label: "Sophomore" },
+      { label: "Junior" },
+      { label: "Senior" },
+      { label: "Graduate student", ineligible: true } // disqualifier
     ]
-    },
+  },
   {
     text: "What is your age?",
     options: [
-         { label: "Under 18", ineligible: true },
-         { label: "18–24" },
-         { label: "25–34" },
-         { label: "35–44" },
-         { label: "45–54" },
-         { label: "55–64" },
-         { label: "65 or older" }
+      { label: "Under 18", ineligible: true },       // disqualifier
+      { label: "18–24" },
+      { label: "25–34" },
+      { label: "35–44" },
+      { label: "45–54" },
+      { label: "55–64" },
+      { label: "65 or older" }
     ]
   },
   {
+    id: "csci301",
     text: "Have you taken CSCI 301: Software Development?",
     options: [
-      { label: "I completed the course with a grade of C or better" },
-      { label: "I am currently enrolled in the course" },
-      {label: "I have taken the course but did not receive a grade of C or better, and I am not currently enrolled", ineligible:true},
-      { label: "I have not taken CS 301", ineligible: true }
+      { label: "I completed the course with a grade of C or better", course_ok: true },
+      { label: "I am currently enrolled in the course", course_ok: true },
+      { label: "I have taken the course but did not receive a grade of C or better, and I am not currently enrolled" }, // neutral (not auto-DQ)
+      { label: "I have not taken CSCI 301" } // neutral (not auto-DQ)
     ]
   },
-//   {
-//   text: "Have you been diagnosed with a reading or learning disability, or any condition that affects your ability to read or understand code or instructions??",
-//   options: [
-//     { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
-//     { label: "No, I have not been diagnosed with any such condition" }
-//   ]
-// },
-  // {
-  //   text: "How comfortable are you with reading English-language text?",
-  //   options: [
-  //     { label: "Not comfortable", ineligible: true },
-  //     { label: "Slightly comfortable" },
-  //     { label: "Moderately comfortable" },
-  //     { label: "Very comfortable" },
-  //     { label: "Native speaker / fluent" }
-  //   ]
-  // },
   {
     text: "Are you willing to bring your own laptop to the session?",
     options: [
       { label: "Yes" },
-      { label: "No", ineligible: true }
+      { label: "No", ineligible: true } // disqualifier
     ]
   },
   {
+    id: "javaYears",
     text: "How many years have you been programming in Java (through coursework, personal projects, or other experiences)?",
     options: [
-      { label: "I am not familiar with Java", ineligible: true },
-      { label: "Less than 1 year" },
-      { label: "1–2 years" },
-      { label: "3–4 years" },
-      { label: "5+ years" },
-      { label: "Prefer not to say", ineligible: true }
+      { label: "I am not familiar with Java", ineligible: true }, // disqualifier
+      { label: "Less than 1 year" },                              // neutral (not eligible signal)
+      { label: "1–2 years", exp_ok: true },                       // eligible signal (>= ~1 year)
+      { label: "3–4 years", exp_ok: true },                       // eligible signal
+      { label: "5+ years", exp_ok: true },                        // eligible signal
+      { label: "Prefer not to say" }                              // neutral (not auto-DQ)
     ]
   }
 ];
+
 
 let currentQuestion = 0;
 let answers = [];
@@ -584,17 +561,29 @@ function prevQuestion() {
 }
 
 function checkEligibility() {
-  // Determine eligibility
-  let eligible = true;
+  let hasIneligible = false;
+  let courseOk = false; // passed or currently enrolled in CSCI 301
+  let expOk = false;    // >= ~1 year Java experience (1–2, 3–4, 5+)
+
   for (let i = 0; i < answers.length; i++) {
-    const opt = questions[i].options[answers[i]];
-    if (opt?.ineligible) { eligible = false; break; }
+    const q = questions[i];
+    const opt = q?.options?.[answers[i]];
+    if (!opt) continue;
+
+    if (opt.ineligible === true) { // any disqualifier kills eligibility
+      hasIneligible = true;
+      break;
+    }
+    if (opt.course_ok === true) courseOk = true;
+    if (opt.exp_ok === true)    expOk = true;
   }
 
-  // Send outcome (✅ this posts both eligible and ineligible cases)
+  // Final rule: NO disqualifiers AND (course ok OR sufficient experience)
+  const eligible = !hasIneligible && (courseOk || expOk);
+
+  // Keep your existing reporting + flow
   sendEligibilityOutcome(eligible);
 
-  // Existing UI flow
   if (!eligible) {
     document.getElementById('survey-box').classList.add('hidden');
     document.getElementById('ineligible-modal').classList.remove('hidden');
@@ -605,6 +594,7 @@ function checkEligibility() {
   document.getElementById('eligibility-success').classList.remove('hidden');
   document.getElementById('slots-box').classList.remove('hidden');
 }
+
 
 
 function sendEligibilityOutcome(eligible) {
