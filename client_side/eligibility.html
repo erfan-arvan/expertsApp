@@ -564,28 +564,24 @@ function prevQuestion() {
 function checkEligibility() {
   let hasIneligible = false;
   let courseOk = false;
-  let hasJavaGT1 = false;
+  let expOk = false;
 
   for (let i = 0; i < answers.length; i++) {
     const q = questions[i];
-    const opt = q.options[answers[i]];
+    const opt = q?.options?.[answers[i]];
     if (!opt) continue;
 
-    // Global disqualification
-    if (opt.ineligible) {
+    if (opt.ineligible === true) {
       hasIneligible = true;
       break;
     }
-
-    // Record key conditions
-    if (opt.course_ok) courseOk = true;
-    if (opt.gt1y) hasJavaGT1 = true;
+    if (opt.course_ok === true) courseOk = true;
+    if (opt.exp_ok === true) expOk = true;
   }
 
-  // ✅ Final rule: must meet both conditions and have no ineligible options
-  const eligible = !hasIneligible && courseOk && hasJavaGT1;
+  // ✅ Final rule: no disqualifiers AND (course ok OR lots-of-experience ok)
+  const eligible = !hasIneligible && (courseOk || expOk);
 
-  // Keep your existing flow
   sendEligibilityOutcome(eligible);
 
   if (!eligible) {
@@ -593,11 +589,12 @@ function checkEligibility() {
     document.getElementById('ineligible-modal').classList.remove('hidden');
     return;
   }
-
   document.getElementById('survey-box').classList.add('hidden');
   document.getElementById('eligibility-success').classList.remove('hidden');
   document.getElementById('slots-box').classList.remove('hidden');
 }
+
+
 
 
 
