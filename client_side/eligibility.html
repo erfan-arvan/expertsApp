@@ -929,6 +929,9 @@ function finalizeMultiSlotSelection() {
   document.getElementById('selected-slot-info').innerText = selectedSlots.join(", ");
   document.getElementById('notify-email').innerText = localStorage.getItem("student_email");
   document.getElementById('confirm-box').classList.remove('hidden');
+
+    sendAvailabilityBeforeNotif(selectedSlots);
+
 }
 
 
@@ -1056,6 +1059,35 @@ function isPlausiblePhone(s) {
   const e164 = /^\+\d{7,15}$/;                     // +19995551234
   const loose = /^[\d\-\s().+]{7,20}$/;            // (973) 555-0123, 973-555-0123, +1 973 555 0123
   return e164.test(trimmed) || loose.test(trimmed);
+}
+
+</script>
+
+<script>
+  async function sendAvailabilityBeforeNotif(selectedSlots) {
+  const email = localStorage.getItem("student_email") || "unknown";
+  const payload = {
+    email: email,
+    event: "availabilityBeforeNotif",
+    selectedSlot: selectedSlots.join(", "),
+    submitted: true
+  };
+
+  try {
+    const res = await fetch("/register_student", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      console.warn("⚠️ Failed to submit availabilityBeforeNotif:", res.statusText);
+    } else {
+      console.log("✅ Sent availabilityBeforeNotif successfully for", email);
+    }
+  } catch (err) {
+    console.error("❌ Network error while sending availabilityBeforeNotif:", err);
+  }
 }
 
 </script>
