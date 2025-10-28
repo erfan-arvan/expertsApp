@@ -360,15 +360,40 @@ input.input-error {
 
 <!-- Confirmation Section -->
 <div class="confirm-box hidden" id="confirm-box">
-    <p><strong>You selected:</strong> <span id="selected-slot-info"></span>
-      <a href="#" onclick="changeSlot()">Change date</a>
-    </p>
-    <label style="display: block; margin: 15px 0;">
-      <input type="checkbox" id="notify-checkbox" checked>
-      I want to receive notifications about this session through my email "<span id="notify-email"></span>"
-    </label>
-    <button onclick="finalizeRegistration()">Finalize My Registration</button>
+  <p><strong>You selected:</strong> <span id="selected-slot-info"></span>
+    <a href="#" onclick="changeSlot()">Change date</a>
+  </p>
+
+  <!-- Email opt-in (default) -->
+  <label style="display: block; margin: 12px 0;">
+    <input type="checkbox" id="notify-checkbox" checked>
+    I want to receive notifications about this session through my email
+    "<span id="notify-email"></span>"
+  </label>
+
+  <!-- SMS opt-in -->
+  <label style="display: block; margin: 12px 0;">
+    <input type="checkbox" id="sms-checkbox" onchange="toggleSmsInput()">
+    I don’t check email often—also send me SMS notifications
+  </label>
+
+  <!-- Phone input (hidden until SMS is chosen) -->
+  <div id="sms-input-wrap" class="hidden">
+    <input
+      type="tel"
+      id="phone-input"
+      class="input-field"
+      placeholder="Mobile number (e.g., +1 973 555 0123)"
+      inputmode="tel"
+      autocomplete="tel"
+      aria-label="Mobile number for SMS notifications"
+    />
+    <small style="color:#666;">We’ll only use this number for study-related notifications.</small>
   </div>
+
+  <button onclick="finalizeRegistration()">Finalize My Registration</button>
+</div>
+
   
 <!-- Final Success Section -->
 <div class="final-box hidden" id="final-box">
@@ -632,8 +657,19 @@ function sendEligibilityOutcome(eligible) {
 
 
 function finalizeRegistration() {
-  const notify = document.getElementById('notify-checkbox').checked;
-  localStorage.setItem("notify_opt_in", notify);
+  const notifyEmail = document.getElementById('notify-checkbox').checked;
+  const smsOptIn = document.getElementById('sms-checkbox').checked;
+  const phone = document.getElementById('phone-input')?.value?.trim() || "";
+
+  if (smsOptIn && !isPlausiblePhone(phone)) {
+    showWarningModal("Please enter a valid mobile number for SMS notifications (e.g., +1 973 555 0123).");
+    document.getElementById('phone-input').focus();
+    return;
+  }
+
+  localStorage.setItem("notify_opt_in", notifyEmail);
+  localStorage.setItem("sms_opt_in", smsOptIn);
+  if (smsOptIn) localStorage.setItem("sms_phone", phone);
 
   // Call registration submit before showing final confirmation
   submitRegistrationData().then(success => {
@@ -641,13 +677,14 @@ function finalizeRegistration() {
       document.getElementById('confirm-box').classList.add('hidden');
       document.getElementById('final-box').classList.remove('hidden');
       const selectedSlot = localStorage.getItem("selected_slot");
-        const sessionText = `${selectedSlot}`;
-        document.getElementById("confirmed-session").innerText = sessionText;
+      const sessionText = `${selectedSlot}`;
+      document.getElementById("confirmed-session").innerText = sessionText;
     } else {
       alert("❌ Something went wrong while registering. Please try again or contact the research team.");
     }
   });
 }
+
 
 
 function addToGoogleCalendar() {
@@ -739,14 +776,18 @@ function submitRegistrationData() {
     };
   });
 
-  const payload = {
-    email: email,
-    notify: notify,
-    selectedSlot: selectedSlot,
-    eligibilityResponses: eligibilityResponses,
-    submitted: true,
-    event: "availability" // or "cancel" or "modify"
-    };
+const payload = {
+  email: email,
+  notify: notify,
+  selectedSlot: selectedSlot,
+  eligibilityResponses: eligibilityResponses,
+  submitted: true,
+  event: "availability", // or "pending"/"register"/etc. as you already use
+  // NEW:
+  smsOptIn: localStorage.getItem("sms_opt_in") === "true",
+  smsPhone: localStorage.getItem("sms_phone") || ""
+};
+
 
 
   return fetch("/register_studentWM", {
@@ -984,6 +1025,27 @@ function selectSlot(el) {
   document.addEventListener('DOMContentLoaded', () => createDayCardsNext14Weekdays());
 </script>
 
+<script>
+  function toggleSmsInput() {
+  const wrap = document.getElementById('sms-input-wrap');
+  const smsChecked = document.getElementById('sms-checkbox').checked;
+  wrap.classList.toggle('hidden', !smsChecked);
+}
+
+/** Very light validation:
+ * Accepts E.164 (+country …) or common US forms.
+ * You can tighten this later if you like.
+ */
+function isPlausiblePhone(s) {
+  if (!s) return false;
+  const trimmed = s.trim();
+  // Accept E.164-ish or digits with optional separators
+  const e164 = /^\+\d{7,15}$/;                     // +19995551234
+  const loose = /^[\d\-\s().+]{7,20}$/;            // (973) 555-0123, 973-555-0123, +1 973 555 0123
+  return e164.test(trimmed) || loose.test(trimmed);
+}
+
+</script>
 
 </body>
 </html>
