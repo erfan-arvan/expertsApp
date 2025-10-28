@@ -360,15 +360,14 @@ input.input-error {
 <div class="modal hidden" id="slot-confirm-modal">
   <div class="modal-content">
     <h3>Confirm your availability</h3>
-    <p id="slot-confirm-text" style="margin-top: 8px;">
-      <!-- Filled dynamically -->
-    </p>
+    <p id="slot-confirm-text" style="margin-top: 8px;"></p>
     <div style="margin-top: 16px; display:flex; gap:10px; justify-content:center;">
-      <button onclick="finalizeMultiSlotSelection()" style="padding:10px 16px;">Yes, submit</button>
-      <button onclick="closeSlotConfirmModal()" style="padding:10px 16px; background:#ddd; color:#333;">Go back</button>
+      <button id="slot-confirm-yes" onclick="finalizeMultiSlotSelection()" style="padding:10px 16px;">Yes, submit</button>
+      <button id="slot-confirm-no" onclick="closeSlotConfirmModal()" style="padding:10px 16px; background:#ddd; color:#333;">Go back</button>
     </div>
   </div>
 </div>
+
 
 
   
@@ -1101,7 +1100,7 @@ function isPlausiblePhone(s) {
 
 
 <script>
-  function openSlotConfirmModal() {
+function openSlotConfirmModal() {
   const selectedEls = document.querySelectorAll('.slots-box .time-slot.selected');
   const count = selectedEls.length;
 
@@ -1110,22 +1109,48 @@ function isPlausiblePhone(s) {
     return;
   }
 
+  // >10 → skip modal and proceed
+  if (count > 10) {
+    finalizeMultiSlotSelection();
+    return;
+  }
+
+  // Build the message
   const msgBase = `You’ve selected <strong>${count}</strong> time slot${count > 1 ? 's' : ''}.`;
-const nudge = (count < 3)
-  ? `<br><strong style="color:#d00;">Please select <u>all</u> of your available time slots so we can schedule your session more easily.</strong>`
-  : '';
-
-
+  const nudge = (count < 3)
+    ? `<br><strong style="color:#d00;">Please select <u>all</u> of your available time slots so we can schedule your session more easily.</strong>`
+    : '';
   const finalQ = `<br><br><strong>Have you selected <u>all</u> of your available times in the next two weeks (weekdays only)?</strong>`;
 
   document.getElementById('slot-confirm-text').innerHTML = msgBase + nudge + finalQ;
 
+  // Style the “Yes” button based on count
+  const yesBtn = document.getElementById('slot-confirm-yes');
+  if (count < 3) {
+    // Gray + de-emphasized (not disabled; still clickable if they insist)
+    yesBtn.style.background = '#ccc';
+    yesBtn.style.color = '#333';
+    yesBtn.style.border = 'none';
+    yesBtn.style.opacity = '0.9';
+    yesBtn.style.cursor = 'pointer';
+  } else {
+    // Normal/primary look
+    yesBtn.style.background = '#4CAF50';
+    yesBtn.style.color = '#fff';
+    yesBtn.style.border = 'none';
+    yesBtn.style.opacity = '1';
+    yesBtn.style.cursor = 'pointer';
+  }
+
+  // Show modal
   document.getElementById('slot-confirm-modal').classList.remove('hidden');
 }
 
 function closeSlotConfirmModal() {
   document.getElementById('slot-confirm-modal').classList.add('hidden');
 }
+
+
 
 </script>
 </body>
