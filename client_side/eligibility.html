@@ -346,7 +346,8 @@ input.input-error {
 
   <div id="dynamic-cards"></div>
 
-  <button onclick="finalizeMultiSlotSelection()">Next</button>
+<!-- Old: <button onclick="finalizeMultiSlotSelection()">Next</button> -->
+<button onclick="openSlotConfirmModal()">Next</button>
 
   <p style="margin-top: 1em;">
     <a href="#" onclick="toggleCustomTimeBox(); return false;">None of these work for you?</a>
@@ -355,6 +356,20 @@ input.input-error {
 <div id="custom-time-box" style="display: none; margin-top: 1em; border: 1px solid #ccc; padding: 1em; border-radius: 8px;">
   <p><strong>Please contact us at ea442@njit.edu</strong></p>
 </div>
+
+<div class="modal hidden" id="slot-confirm-modal">
+  <div class="modal-content">
+    <h3>Confirm your availability</h3>
+    <p id="slot-confirm-text" style="margin-top: 8px;">
+      <!-- Filled dynamically -->
+    </p>
+    <div style="margin-top: 16px; display:flex; gap:10px; justify-content:center;">
+      <button onclick="finalizeMultiSlotSelection()" style="padding:10px 16px;">Yes, submit</button>
+      <button onclick="closeSlotConfirmModal()" style="padding:10px 16px; background:#ddd; color:#333;">Go back</button>
+    </div>
+  </div>
+</div>
+
 
   
   
@@ -897,6 +912,11 @@ function toggleCustomSlot(el) {
 
 
 function finalizeMultiSlotSelection() {
+
+  // Close the confirm modal if open
+const m = document.getElementById('slot-confirm-modal');
+if (m && !m.classList.contains('hidden')) m.classList.add('hidden');
+
   const selectedEls = document.querySelectorAll('.slots-box .time-slot.selected');
   if (selectedEls.length === 0) {
     alert("Please select at least one time slot.");
@@ -1080,6 +1100,31 @@ function isPlausiblePhone(s) {
 </script>
 
 
+<script>
+  function openSlotConfirmModal() {
+  const selectedEls = document.querySelectorAll('.slots-box .time-slot.selected');
+  const count = selectedEls.length;
 
+  if (count === 0) {
+    alert("Please select at least one time slot.");
+    return;
+  }
+
+  const msgBase = `You’ve selected <strong>${count}</strong> time slot${count > 1 ? 's' : ''}.`;
+  const nudge = (count < 3)
+    ? `<br><small style="color:#666;">Tip: Selecting multiple options helps us match a time more easily.</small>`
+    : '';
+  const finalQ = `<br><br><strong>Have you selected <u>all</u> of your available times in the next two weeks (weekdays only)?</strong>`;
+
+  document.getElementById('slot-confirm-text').innerHTML = msgBase + nudge + finalQ;
+
+  document.getElementById('slot-confirm-modal').classList.remove('hidden');
+}
+
+function closeSlotConfirmModal() {
+  document.getElementById('slot-confirm-modal').classList.add('hidden');
+}
+
+</script>
 </body>
 </html>
