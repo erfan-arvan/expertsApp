@@ -359,7 +359,7 @@ input.input-error {
 
 <div class="modal hidden" id="slot-confirm-modal">
   <div class="modal-content">
-    <h3>Confirm your availability</h3>
+    <h3>Have you selected all of your available slots?</h3>
     <p id="slot-confirm-text" style="margin-top: 8px;"></p>
     <div style="margin-top: 16px; display:flex; gap:10px; justify-content:center;">
       <button id="slot-confirm-yes" onclick="finalizeMultiSlotSelection()" style="padding:10px 16px;">Yes, continue</button>
@@ -1121,7 +1121,7 @@ function isPlausiblePhone(s) {
       : '';
 
 
-  const finalQ = `<br><br><strong>Have you selected <u>all</u> of your available time slots in the next two weeks (weekdays only)?</strong>`;
+  const finalQ = ` `;
 
 
 
