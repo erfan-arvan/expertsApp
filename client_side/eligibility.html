@@ -1106,7 +1106,7 @@ function isPlausiblePhone(s) {
   const count = selectedEls.length;
 
   if (count === 0) {
-    alert("Please select at least 5 time slots.");
+    alert("Please select your available time slots.");
     return;
   }
 
@@ -1117,8 +1117,9 @@ function isPlausiblePhone(s) {
 
   const msgBase = `You’ve selected <strong>${count}</strong> time slot${count > 1 ? 's' : ''}.`;
   const nudge = (count < 3)
-    ? `<br><strong style="color:#d00;">Please select <u>at least 3</u> of your available time slots so we can schedule your session more easily.</strong>`
-    : '';
+      ? `<br><strong style="color:#d00;">We recommend selecting <u>at least 3</u> time slots to help us schedule your session easily.</strong>`
+      : '';
+
 
   const finalQ = `<br><br><strong>Have you selected <u>all</u> of your available time slots in the next two weeks (weekdays only)?</strong>`;
 
