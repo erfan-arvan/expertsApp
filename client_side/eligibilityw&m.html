@@ -271,7 +271,7 @@ input.input-error {
         <p><strong>🧠 What You'll Do:</strong> You'll review <strong>8 Java code snippets</strong> and answer a few questions about each one.</p>
 
         <p><strong>⏱️ Duration:</strong> The session typically lasts <strong>up to 60 minutes</strong>, but may take up to <strong>90 minutes</strong> including setup, the consent process, and serving snacks. There are no strict time limits—you may take breaks as needed.</p>
-         
+
         <p><strong>📍 Format:</strong> The study takes place <strong>in person</strong>, and you’ll use <strong>your own laptop</strong> to complete the tasks online.</p>
 
         <p><strong>🏫 Location:</strong> The exact room—somewhere on the W&M campus—will be shared with you in a follow-up message after registration.</p>
@@ -333,7 +333,7 @@ input.input-error {
 
 <div id="eligibility-success" class="success-message hidden">
     <button class="close-btn" onclick="document.getElementById('eligibility-success').classList.add('hidden')">✕</button>
-    🎉 You're eligible to participate in the study! Please select all time slots that work for you
+    🎉 You're eligible to participate in the study! Please select all time slots that work for you and click on Next.
   </div>
   
   
@@ -346,16 +346,29 @@ input.input-error {
 
   <div id="dynamic-cards"></div>
 
-
-  <button onclick="finalizeMultiSlotSelection()">Next</button>
+<!-- Old: <button onclick="finalizeMultiSlotSelection()">Next</button> -->
+<button onclick="openSlotConfirmModal()">Next</button>
 
   <p style="margin-top: 1em;">
     <a href="#" onclick="toggleCustomTimeBox(); return false;">None of these work for you?</a>
   </p>
   
 <div id="custom-time-box" style="display: none; margin-top: 1em; border: 1px solid #ccc; padding: 1em; border-radius: 8px;">
-  <p><strong>Please contact us at kgdesilva@wm.edu.</strong></p>
+  <p><strong>Please contact us at kgdesilva@wm.edu</strong></p>
 </div>
+
+<div class="modal hidden" id="slot-confirm-modal">
+  <div class="modal-content">
+    <h3>Confirm your availability</h3>
+    <p id="slot-confirm-text" style="margin-top: 8px;"></p>
+    <div style="margin-top: 16px; display:flex; gap:10px; justify-content:center;">
+      <button id="slot-confirm-yes" onclick="finalizeMultiSlotSelection()" style="padding:10px 16px;">Yes, submit</button>
+      <button id="slot-confirm-no" onclick="closeSlotConfirmModal()" style="padding:10px 16px; background:#ddd; color:#333;">Go back</button>
+    </div>
+  </div>
+</div>
+
+
 
   
   
@@ -392,6 +405,8 @@ input.input-error {
   />
   <small style="color:#666;">We’ll only use this number for study-related notifications.</small>
 </div>
+
+
 
   <button onclick="finalizeRegistration()">Finalize My Registration</button>
 </div>
@@ -446,13 +461,13 @@ const questions = [
       { label: "Sophomore" },
       { label: "Junior" },
       { label: "Senior" },
-      { label: "Graduate student", ineligible: true } // disqualifier
+      { label: "Graduate student", ineligible: true }
     ]
   },
   {
     text: "What is your age?",
     options: [
-      { label: "Under 18", ineligible: true },       // disqualifier
+      { label: "Under 18", ineligible: true },
       { label: "18–24" },
       { label: "25–34" },
       { label: "35–44" },
@@ -462,32 +477,32 @@ const questions = [
     ]
   },
   {
-    id: "csci301",
+    id: "cs288",
     text: "Have you taken CSCI 301: Software Development?",
     options: [
       { label: "I completed the course with a grade of C or better", course_ok: true },
       { label: "I am currently enrolled in the course", course_ok: true },
-      { label: "I have taken the course but did not receive a grade of C or better, and I am not currently enrolled" }, // neutral (not auto-DQ)
-      { label: "I have not taken CSCI 301" } // neutral (not auto-DQ)
+      { label: "I have taken the course but did not receive a grade of C or better, and I am not currently enrolled"},
+      { label: "I have not taken CSCI 301"}
     ]
   },
   {
     text: "Are you willing to bring your own laptop to the session?",
     options: [
       { label: "Yes" },
-      { label: "No", ineligible: true } // disqualifier
+      { label: "No", ineligible: true }
     ]
   },
   {
     id: "javaYears",
     text: "How many years have you been programming in Java (through coursework, personal projects, or other experiences)?",
     options: [
-      { label: "I am not familiar with Java", ineligible: true }, // disqualifier
-      { label: "Less than 1 year" },                              // neutral (not eligible signal)
-      { label: "1–2 years"},                       // eligible signal (>= ~1 year)
-      { label: "3–4 years", exp_ok: true },                       // eligible signal
-      { label: "5+ years", exp_ok: true },                        // eligible signal
-      { label: "Prefer not to say" }                              // neutral (not auto-DQ)
+      { label: "I am not familiar with Java", ineligible: true },
+      { label: "Less than 1 year" },
+      { label: "1–2 years"},
+      { label: "3–4 years", gt1y: true },
+      { label: "5+ years", gt1y: true },
+      { label: "Prefer not to say" }
     ]
   }
 ];
@@ -562,26 +577,21 @@ function prevQuestion() {
 
 function checkEligibility() {
   let hasIneligible = false;
-  let courseOk = false; // passed or currently enrolled in CSCI 301
-  let expOk = false;    // >= ~1 year Java experience (1–2, 3–4, 5+)
+  let courseOk = false;
+  let expOk = false; // lots of experience (accept exp_ok or gt1y)
 
   for (let i = 0; i < answers.length; i++) {
     const q = questions[i];
     const opt = q?.options?.[answers[i]];
     if (!opt) continue;
 
-    if (opt.ineligible === true) { // any disqualifier kills eligibility
-      hasIneligible = true;
-      break;
-    }
+    if (opt.ineligible === true) { hasIneligible = true; break; }
     if (opt.course_ok === true) courseOk = true;
-    if (opt.exp_ok === true)    expOk = true;
+    if (opt.exp_ok === true || opt.gt1y === true) expOk = true; // <-- key line
   }
 
-  // Final rule: NO disqualifiers AND (course ok OR sufficient experience)
   const eligible = !hasIneligible && (courseOk || expOk);
 
-  // Keep your existing reporting + flow
   sendEligibilityOutcome(eligible);
 
   if (!eligible) {
@@ -589,7 +599,6 @@ function checkEligibility() {
     document.getElementById('ineligible-modal').classList.remove('hidden');
     return;
   }
-
   document.getElementById('survey-box').classList.add('hidden');
   document.getElementById('eligibility-success').classList.remove('hidden');
   document.getElementById('slots-box').classList.remove('hidden');
@@ -597,32 +606,8 @@ function checkEligibility() {
 
 
 
-function sendEligibilityOutcome(eligible) {
-  const email = (localStorage.getItem("student_email") || document.getElementById('email')?.value || "").trim().toLowerCase();
 
-  const eligibilityResponses = questions.map((q, index) => {
-    const selectedIndex = answers[index];
-    return {
-      question: q.text,
-      selectedOption: q.options[selectedIndex]?.label ?? "No answer",
-      ineligible: Boolean(q.options[selectedIndex]?.ineligible)
-    };
-  });
 
-  const payload = {
-    email,
-    event: "eligibility",        // <-- distinguish this server-side
-    eligible,                    // true/false
-    eligibilityResponses,
-    submitted: true
-  };
-
-  fetch("/register_studentWM", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  }).catch(err => console.error("❌ Network error posting eligibility:", err));
-}
 
 
 // function selectSlot(el) {
@@ -926,6 +911,11 @@ function toggleCustomSlot(el) {
 
 
 function finalizeMultiSlotSelection() {
+
+  // Close the confirm modal if open
+const m = document.getElementById('slot-confirm-modal');
+if (m && !m.classList.contains('hidden')) m.classList.add('hidden');
+
   const selectedEls = document.querySelectorAll('.slots-box .time-slot.selected');
   if (selectedEls.length === 0) {
     alert("Please select at least one time slot.");
@@ -946,7 +936,7 @@ function finalizeMultiSlotSelection() {
   document.getElementById('notify-email').innerText = localStorage.getItem("student_email");
   document.getElementById('confirm-box').classList.remove('hidden');
 
-  sendAvailabilityBeforeNotif(selectedSlots);
+    sendAvailabilityBeforeNotif(selectedSlots);
 
 }
 
@@ -1021,11 +1011,47 @@ function selectSlot(el) {
 </script>
 
 <script>
+  function sendEligibilityOutcome(eligible) {
+  const email = (localStorage.getItem("student_email") || document.getElementById('email')?.value || "").trim().toLowerCase();
+
+  const eligibilityResponses = questions.map((q, index) => {
+    const selectedIndex = answers[index];
+    return {
+      question: q.text,
+      selectedOption: q.options[selectedIndex]?.label ?? "No answer",
+      ineligible: Boolean(q.options[selectedIndex]?.ineligible)
+    };
+  });
+
+  const payload = {
+    email,
+    event: "eligibility",        // <-- distinguish this server-side
+    eligible,                    // true/false
+    eligibilityResponses,
+    submitted: true
+  };
+
+  fetch("/register_studentWM", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  }).catch(err => console.error("❌ Network error posting eligibility:", err));
+}
+
+</script>
+
+<script>
 function toggleSmsInput() {
   const wrap = document.getElementById('sms-input-wrap');
   const smsChecked = document.getElementById('sms-checkbox').checked;
   wrap.classList.toggle('hidden', !smsChecked);
 }
+
+// show it by default when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('sms-checkbox').checked = true;
+  document.getElementById('sms-input-wrap').classList.remove('hidden');
+});
 
 
 /** Very light validation:
@@ -1044,7 +1070,7 @@ function isPlausiblePhone(s) {
 </script>
 
 <script>
-    async function sendAvailabilityBeforeNotif(selectedSlots) {
+  async function sendAvailabilityBeforeNotif(selectedSlots) {
   const email = localStorage.getItem("student_email") || "unknown";
   const payload = {
     email: email,
@@ -1054,7 +1080,7 @@ function isPlausiblePhone(s) {
   };
 
   try {
-    const res = await fetch("/register_student", {
+    const res = await fetch("/register_studentWM", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -1069,6 +1095,80 @@ function isPlausiblePhone(s) {
     console.error("❌ Network error while sending availabilityBeforeNotif:", err);
   }
 }
+
+</script>
+
+
+<script>
+
+  function openSlotConfirmModal() {
+  const selectedEls = document.querySelectorAll('.slots-box .time-slot.selected');
+  const count = selectedEls.length;
+
+  if (count === 0) {
+    alert("Please select at least 5 time slots.");
+    return;
+  }
+
+  if (count > 10) {
+    finalizeMultiSlotSelection();
+    return;
+  }
+
+  const msgBase = `You’ve selected <strong>${count}</strong> time slot${count > 1 ? 's' : ''}.`;
+  const nudge = (count < 3)
+    ? `<br><strong style="color:#d00;">Please select <u>at least 3</u> of your available time slots so we can schedule your session more easily.</strong>`
+    : '';
+
+  const finalQ = `<br><br><strong>Have you selected <u>all</u> of your available time slots in the next two weeks (weekdays only)?</strong>`;
+
+
+
+  document.getElementById('slot-confirm-text').innerHTML = msgBase + nudge + finalQ;
+
+  // Style the buttons dynamically
+  const yesBtn = document.getElementById('slot-confirm-yes');
+  const noBtn = document.getElementById('slot-confirm-no');
+
+  if (count < 3) {
+    // Gray submit button (de-emphasized)
+    yesBtn.style.background = '#ccc';
+    yesBtn.style.color = '#333';
+    yesBtn.style.border = 'none';
+    yesBtn.style.opacity = '0.9';
+    yesBtn.style.cursor = 'pointer';
+
+    // Green "Go back" button (emphasized)
+    noBtn.style.background = '#4CAF50';
+    noBtn.style.color = '#fff';
+    noBtn.style.border = 'none';
+    noBtn.style.opacity = '1';
+    noBtn.style.cursor = 'pointer';
+  } else {
+    // Normal buttons
+    yesBtn.style.background = '#4CAF50';
+    yesBtn.style.color = '#fff';
+    yesBtn.style.border = 'none';
+    yesBtn.style.opacity = '1';
+    yesBtn.style.cursor = 'pointer';
+
+    noBtn.style.background = '#ddd';
+    noBtn.style.color = '#333';
+    noBtn.style.border = 'none';
+    noBtn.style.opacity = '1';
+    noBtn.style.cursor = 'pointer';
+  }
+
+  // Show modal
+  document.getElementById('slot-confirm-modal').classList.remove('hidden');
+}
+
+
+function closeSlotConfirmModal() {
+  document.getElementById('slot-confirm-modal').classList.add('hidden');
+}
+
+
 
 </script>
 </body>
