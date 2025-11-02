@@ -1406,6 +1406,7 @@ async function submitFinalAnswersToServer() {
 
     if (state.i >= topics.length) {
       qtext.textContent = 'Done!';
+      submitFinalAnswersToServer();
       opts.innerHTML = '';
       next.disabled = true;
       prev.disabled = true;
