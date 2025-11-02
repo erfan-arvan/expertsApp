@@ -1408,10 +1408,15 @@ async function submitFinalAnswersToServer() {
       qtext.textContent = 'Done!';
       // submitFinalAnswersToServer();
       opts.innerHTML = '';
-      next.disabled = true;
-      prev.disabled = true;
+      next.textContent = "Go to Last Survey";
+      next.onclick = () => {
+        window.location.href = "postStudySurvey.html";
+      };
+
+      // next.disabled = true;
+      // prev.disabled = true;
       bar.style.width = '100%';
-      window.location.href = 'postStudySurvey.html';
+      // window.location.href = 'postStudySurvey.html';
       return;
     }
     render();
