@@ -1409,7 +1409,7 @@ async function submitFinalAnswersToServer() {
       // submitFinalAnswersToServer();
       opts.innerHTML = '';
       next.textContent = "Go to Last Survey";
-      localStorage.setItem('pausedUnload', 'true');
+      localStorage.setItem('FromPrevPage', 'true');
       next.onclick = () => {
         window.location.href = "postStudySurvey.html";
       };
