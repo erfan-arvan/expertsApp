@@ -460,7 +460,7 @@ input.input-error {
     <h2>Submitting ...</h2>
     <img src="img/submitting.gif" alt="Relax..." style="max-width: 100%; height: auto;">
     <br>
-    <!-- <button onclick="window.location.href='thankyou.html';">Close this page</button> -->
+    <button onclick="window.location.href='thankyou.html';">Close this page</button>
   </div>
 </div>
 
@@ -1011,73 +1011,104 @@ function showValidationMessage(message) {
 
 
 <script>
-  async function submitFinalAnswersToServer() {
+async function submitFinalAnswersToServer() {
   const username = getStoredUsername();
+
+  // Parse snippetOrder if it's a JSON array string; otherwise keep as-is
+  let snippetOrderRaw = localStorage.getItem("snippetOrder");
+  let snippetOrder = snippetOrderRaw;
+  try {
+    const parsed = JSON.parse(snippetOrderRaw || "null");
+    if (Array.isArray(parsed)) snippetOrder = parsed;
+  } catch (_) { /* leave as string */ }
+
   const payload = {
-    username: username,
-    submitted: '1',
-    snippetOrder: localStorage.getItem("snippetOrder"),
+    username,
+    submitted: "1",
+    snippetOrder,
     answers: {},
-    metadata: {}
+    metadata: {
+      // client/env hints (optional but handy)
+      submittedAtIso: new Date().toISOString(),
+      userAgent: navigator.userAgent
+    }
   };
 
-  // Include javaExperience, backgroundQuestionnaire, and postSurvey from localStorage
+  // Include other materials already in localStorage
   try {
-    const javaExp = JSON.parse(localStorage.getItem("javaExperience") || '{}');
-    const backgroundQ = JSON.parse(localStorage.getItem("backgroundQuestionnaire") || '{}');
-    const postSurvey = JSON.parse(localStorage.getItem("postSurvey") || '{}');
+    const javaExp     = JSON.parse(localStorage.getItem("javaExperience") || "{}");
+    const backgroundQ = JSON.parse(localStorage.getItem("backgroundQuestionnaire") || "{}");
+    const postSurvey  = JSON.parse(localStorage.getItem("postSurvey") || "{}");
 
     payload.metadata.javaExperience = javaExp;
     payload.metadata.backgroundQuestionnaire = backgroundQ;
     payload.metadata.postSurvey = postSurvey;
-    // payload.metadata.background = 
   } catch (err) {
     console.warn("⚠️ Failed to parse one or more survey fields:", err);
   }
 
-  // Add per-snippet answers
+  // ✅ Include CS Knowledge Survey answers from localStorage
+  try {
+    const csAnswers = JSON.parse(localStorage.getItem("csKnowledgeSurveyAnswers") || "{}");
+    payload.metadata.csKnowledgeSurvey = {
+      answers: csAnswers,
+      // Optional quick summary for server-side inspection
+      summary: (() => {
+        const topicIds = Object.keys(csAnswers || {});
+        const totalTopics = topicIds.length;
+        let famYes = 0, mcqAnswered = 0;
+        topicIds.forEach(id => {
+          const r = csAnswers[id] || {};
+          if (r.fam === "yes") famYes++;
+          if (typeof r.mcq === "number") mcqAnswered++;
+        });
+        return { totalTopics, famYes, mcqAnswered };
+      })()
+    };
+  } catch (err) {
+    console.warn("⚠️ Failed to parse csKnowledgeSurveyAnswers:", err);
+  }
+
+  // Per-snippet answers (your current logic)
   for (let snippet = 1; snippet <= 8; snippet++) {
     const snippetKey = `snippet-${snippet}`;
     payload.answers[snippetKey] = {
-      readTime: parseInt(localStorage.getItem(`time-q-${snippet}-1`) || '0'),
+      readTime: parseInt(localStorage.getItem(`time-q-${snippet}-1`) || "0", 10),
       questions: []
     };
 
-    const questions = questionsPerSnippet[snippet] || [];
-
+    const questions = (window.questionsPerSnippet && questionsPerSnippet[snippet]) || [];
     questions.forEach((q, i) => {
-      const answer = localStorage.getItem(`answer-${snippet}-${q.id}`) || '[No answer]';
-      const time = parseInt(localStorage.getItem(`time-q-${snippet}-${i + 2}`) || '0');
+      const answer = localStorage.getItem(`answer-${snippet}-${q.id}`) || "[No answer]";
+      const time = parseInt(localStorage.getItem(`time-q-${snippet}-${i + 2}`) || "0", 10);
       const entry = {
         id: q.id,
-        prompt: q.prompt || '[Missing prompt]',
-        answer: answer,
+        prompt: q.prompt || "[Missing prompt]",
+        answer,
         timeSec: time
       };
-
       if (q.id2 && q.question2) {
-        const secondAnswer = localStorage.getItem(`answer-${snippet}-${q.id2}`) || '[No answer]';
+        const secondAnswer = localStorage.getItem(`answer-${snippet}-${q.id2}`) || "[No answer]";
         entry.followUp = {
           id: q.id2,
           prompt: q.question2,
           answer: secondAnswer
         };
       }
-
       payload.answers[snippetKey].questions.push(entry);
     });
   }
 
+  // Ship it
   try {
-    const response = await fetch('/submit_students_part', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/submit_students_part", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
 
     if (response.ok) {
-      // alert("✅ Final answers submitted successfully.");
-      window.location.href='thankyou.html';
+      window.location.href = "thankyou.html";
     } else {
       const error = await response.text();
       alert("❌ Submission failed:\n" + error);
@@ -1349,6 +1380,7 @@ function showValidationMessage(message) {
       }
     }
     state.answers[t.id] = rec;
+    saveState();
     next.disabled = false; // enabled once a choice is made
   });
 
@@ -1380,6 +1412,7 @@ function showValidationMessage(message) {
       bar.style.width = '100%';
       return;
     }
+    saveState();
     render();
   };
 
@@ -1404,7 +1437,19 @@ function showValidationMessage(message) {
   // render();
 </script>
 
+<script>
+  function saveState() {
+  localStorage.setItem("csKnowledgeSurveyAnswers", JSON.stringify(state.answers));
+}
 
+function loadState() {
+  const saved = localStorage.getItem("csKnowledgeSurveyAnswers");
+  if (saved) {
+    state.answers = JSON.parse(saved);
+  }
+}
+
+</script>
 
 </body>
 </html>
