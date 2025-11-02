@@ -1409,6 +1409,7 @@ async function submitFinalAnswersToServer() {
       // submitFinalAnswersToServer();
       opts.innerHTML = '';
       next.textContent = "Go to Last Survey";
+      localStorage.setItem('pausedUnload', 'true');
       next.onclick = () => {
         window.location.href = "postStudySurvey.html";
       };
@@ -1416,7 +1417,7 @@ async function submitFinalAnswersToServer() {
       // next.disabled = true;
       // prev.disabled = true;
       bar.style.width = '100%';
-      // window.location.href = 'postStudySurvey.html';
+      window.location.href = 'postStudySurvey.html';
       return;
     }
     render();
