@@ -988,7 +988,7 @@ function showValidationMessage(message) {
 
 
 <script>
-  async function submitFinalAnswersToServer() {
+async function submitFinalAnswersToServer() {
   const username = getStoredUsername();
   const payload = {
     username: username,
@@ -998,20 +998,22 @@ function showValidationMessage(message) {
     metadata: {}
   };
 
-  // Include javaExperience, backgroundQuestionnaire, and postSurvey from localStorage
+  // ✅ Include all survey metadata
   try {
     const javaExp = JSON.parse(localStorage.getItem("javaExperience") || '{}');
     const backgroundQ = JSON.parse(localStorage.getItem("backgroundQuestionnaire") || '{}');
     const postSurvey = JSON.parse(localStorage.getItem("postSurvey") || '{}');
+    const csKnowledge = JSON.parse(localStorage.getItem("csKnowledgeSurveyAnswers") || '{}'); // 👈 new line
 
     payload.metadata.javaExperience = javaExp;
     payload.metadata.backgroundQuestionnaire = backgroundQ;
     payload.metadata.postSurvey = postSurvey;
+    payload.metadata.csKnowledgeSurveyAnswers = csKnowledge; // 👈 add to payload
   } catch (err) {
     console.warn("⚠️ Failed to parse one or more survey fields:", err);
   }
 
-  // Add per-snippet answers
+  // Include per-snippet answers
   for (let snippet = 1; snippet <= 8; snippet++) {
     const snippetKey = `snippet-${snippet}`;
     payload.answers[snippetKey] = {
@@ -1052,8 +1054,7 @@ function showValidationMessage(message) {
     });
 
     if (response.ok) {
-      // alert("✅ Final answers submitted successfully.");
-      window.location.href='thankyou.html';
+      window.location.href = 'thankyou.html';
     } else {
       const error = await response.text();
       alert("❌ Submission failed:\n" + error);
@@ -1063,6 +1064,7 @@ function showValidationMessage(message) {
     alert("❌ Submission error: " + err.message);
   }
 }
+
 
 </script>
 

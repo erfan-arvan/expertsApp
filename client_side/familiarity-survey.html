@@ -1403,17 +1403,17 @@ async function submitFinalAnswersToServer() {
       state.i++;
       state.step = 'fam';
     }
-
+    saveState();
     if (state.i >= topics.length) {
       qtext.textContent = 'Done!';
-      submitFinalAnswersToServer();
+      // submitFinalAnswersToServer();
       opts.innerHTML = '';
       next.disabled = true;
       prev.disabled = true;
       bar.style.width = '100%';
+      window.location.href = 'postStudySurvey.html';
       return;
     }
-    saveState();
     render();
   };
 
