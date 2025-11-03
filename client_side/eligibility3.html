@@ -398,7 +398,7 @@
     </div>
 
     <p style="margin-top: 1em;">
-      <a href="#" onclick="toggleCustomTimeBox2(); return false;">None of these work for you?</a>
+      <a id="selectedvsall" href="#" onclick="toggleCustomTimeBox2(); return false;">None of these work for you?</a>
     </p>
 
 <div id="allTimes" style="display: none;">
@@ -1238,17 +1238,27 @@
 
 <script>
   function toggleCustomTimeBox2() {
-    const allTimes = document.getElementById('allTimes');       // the big “select all your times” panel
-    const selected = document.getElementById('selectedOnes');   // the small, preset slots panel
+    const allTimes  = document.getElementById('allTimes');       // full availability picker
+    const selected  = document.getElementById('selectedOnes');   // recommended slots list
+    const link      = document.getElementById('selectedvsall');
 
-    // Decide whether to show the allTimes panel
-    const isAllTimesHidden = getComputedStyle(allTimes).display === 'none';
+    const showAllTimes = getComputedStyle(allTimes).display === 'none';
 
-    // Show one, hide the other
-    allTimes.style.display = isAllTimesHidden ? 'block' : 'none';
-    selected.style.display = isAllTimesHidden ? 'none' : 'block';
+    // swap panels
+    allTimes.style.display = showAllTimes ? 'block' : 'none';
+    selected.style.display = showAllTimes ? 'none'  : 'block';
+
+    // update link text + a11y
+    if (link) {
+      link.textContent = showAllTimes
+        ? 'go back to the recommended slots'
+        : 'None of these work for you?';
+      link.setAttribute('aria-expanded', String(showAllTimes));
+      link.setAttribute('aria-controls', 'allTimes');
+    }
   }
 </script>
+
 
 </body>
 
