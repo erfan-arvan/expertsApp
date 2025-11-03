@@ -1,16 +1,17 @@
-  const snippetsOriginal = [
-    {
-      id: 99,
-      title: "Sample Snippet",
-      code: `
-      <span class="keyword">public static</span> <span class="type">int</span> <span class="function">addPositive</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
-        <span class="keyword">if</span> (a &lt; 0 || b &lt; 0) {
-          <span class="keyword">return</span> <span class="literal">-1</span>;
-        }
-        <span class="keyword">return</span> a + b;
-      }`
-    }
-  ];
+const snippetsOriginal = [
+  {
+    id: 99,
+    title: "Sample Snippet",
+    code: `
+<span class="keyword">public static</span> <span class="type">int</span> <span class="function">addPositive</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+  <span class="keyword">if</span> (a &lt; 0 || b &lt; 0) {
+    <span class="keyword">return</span> <span class="literal">-1</span>;
+  }
+  <span class="keyword">return</span> a + b;
+}`
+  }
+];
+
 
   const questionsPerSnippetOriginal = {
     "99": [
