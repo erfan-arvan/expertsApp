@@ -13,6 +13,10 @@
     button{margin-top:20px;padding:12px 20px;border:none;border-radius:6px;background:#4CAF50;color:#fff;font-size:16px;cursor:pointer}
     button:hover{background:#45a049}
     a#selectedvsall{display:inline-block;margin-top:8px}
+    #sms-input-wrap{margin-top:10px}
+    input[type="tel"]{width:100%;padding:10px;font-size:15px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box}
+    input[type="tel"]:focus{border-color:#4CAF50;outline:none;box-shadow:0 0 4px rgba(76,175,80,0.4)}
+    label{display:block;margin-top:12px}
   </style>
 </head>
 <body>
@@ -28,33 +32,24 @@
     <div id="selectedOnes">
       <h3>Recommended slots</h3>
 
-      <!-- Example recommended cards. Replace/extend as needed -->
       <div class="day-card" data-date="2025-11-07">
         <h4>Friday 7 Nov</h4>
-        <div>
-          <div class="time-slot" onclick="selectRecommendedSlot(this)">1:00 PM – 2:30 PM</div>
-        </div>
+        <div><div class="time-slot" onclick="selectRecommendedSlot(this)">1:00 PM – 2:30 PM</div></div>
       </div>
 
       <div class="day-card" data-date="2025-11-14">
         <h4>Friday 14 Nov</h4>
-        <div>
-          <div class="time-slot" onclick="selectRecommendedSlot(this)">4:00 PM – 5:30 PM</div>
-        </div>
+        <div><div class="time-slot" onclick="selectRecommendedSlot(this)">4:00 PM – 5:30 PM</div></div>
       </div>
 
       <div class="day-card" data-date="2025-11-18">
         <h4>Tuesday 18 Nov</h4>
-        <div>
-          <div class="time-slot" onclick="selectRecommendedSlot(this)">2:30 PM – 4:00 PM</div>
-        </div>
+        <div><div class="time-slot" onclick="selectRecommendedSlot(this)">2:30 PM – 4:00 PM</div></div>
       </div>
 
       <div class="day-card" data-date="2025-11-19">
         <h4>Wednesday 19 Nov</h4>
-        <div>
-          <div class="time-slot" onclick="selectRecommendedSlot(this)">4:00 PM – 5:30 PM</div>
-        </div>
+        <div><div class="time-slot" onclick="selectRecommendedSlot(this)">4:00 PM – 5:30 PM</div></div>
       </div>
     </div>
 
@@ -68,15 +63,39 @@
       <div id="dynamic-cards"></div>
     </div>
 
+    <!-- SMS Opt-in -->
+    <label><input type="checkbox" id="sms-checkbox" checked onchange="toggleSmsInput()"> 
+      I’d also like to receive text message reminders (recommended)
+    </label>
+    <div id="sms-input-wrap">
+      <input type="tel" id="phone-input" placeholder="Mobile number (e.g. +1 973 555 0123)" />
+      <small style="color:#666;">We'll only use this number for study-related notifications.</small>
+    </div>
+
     <button onclick="submitAvailability()">Submit</button>
   </div>
 
   <script>
-    // --- Email from URL (optional, used in payload) ---
+    // --- Email from URL (kept from before) ---
     const params = new URLSearchParams(window.location.search);
     const userEmail = decodeURIComponent(params.get("email") || "");
 
-    // --- Build the full availability grid (multi-select) ---
+    // --- Helper: check phone plausibility ---
+    function isPlausiblePhone(s) {
+      if (!s) return false;
+      const trimmed = s.trim();
+      const e164 = /^\+\d{7,15}$/;
+      const loose = /^[\d\-\s().+]{7,20}$/;
+      return e164.test(trimmed) || loose.test(trimmed);
+    }
+
+    function toggleSmsInput() {
+      const wrap = document.getElementById('sms-input-wrap');
+      const checked = document.getElementById('sms-checkbox').checked;
+      wrap.style.display = checked ? 'block' : 'none';
+    }
+
+    // --- Build the full availability grid ---
     function createDayCardsNext14Weekdays(containerId = 'dynamic-cards') {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
@@ -96,14 +115,14 @@
 
       const today = new Date();
       let generated = 0;
-      let offset = 3; // start 3 days from now
+      let offset = 3;
 
       while (generated < 14) {
         const d = new Date(today);
         d.setDate(today.getDate() + offset);
         offset++;
 
-        const dow = d.getDay(); // 0=Sun,6=Sat
+        const dow = d.getDay();
         if (dow === 0 || dow === 6) continue;
 
         const card = document.createElement('div');
@@ -119,7 +138,7 @@
           const slot = document.createElement('div');
           slot.className = 'time-slot';
           slot.textContent = t;
-          slot.onclick = () => slot.classList.toggle('selected'); // multi-select here
+          slot.onclick = () => slot.classList.toggle('selected');
           slotWrap.appendChild(slot);
         });
 
@@ -129,42 +148,42 @@
       }
     }
 
-    // --- Toggle between recommended (single) and allTimes (multi) ---
+    // --- Toggle between recommended and allTimes ---
     function toggleSelectedVsAll() {
       const allTimes = document.getElementById('allTimes');
       const selected = document.getElementById('selectedOnes');
-      const link     = document.getElementById('selectedvsall');
-
+      const link = document.getElementById('selectedvsall');
       const showAll = getComputedStyle(allTimes).display === 'none';
+
       allTimes.style.display = showAll ? 'block' : 'none';
-      selected.style.display = showAll ? 'none'  : 'block';
-
-      link.textContent = showAll
-        ? 'go back to the recommended slots'
-        : 'None of these work for you?';
-
-      link.setAttribute('aria-expanded', String(showAll));
-      link.setAttribute('aria-controls', 'allTimes');
+      selected.style.display = showAll ? 'none' : 'block';
+      link.textContent = showAll ? 'go back to the recommended slots' : 'None of these work for you?';
     }
 
-    // --- Single-select behavior for recommended list ---
+    // --- Single-select for recommended list ---
     function selectRecommendedSlot(el) {
       const container = document.getElementById('selectedOnes');
       container.querySelectorAll('.time-slot.selected').forEach(s => s.classList.remove('selected'));
       el.classList.add('selected');
     }
 
-    // --- Submit the availability (single or multi) ---
+    // --- Submit availability (single or multi + phone) ---
     async function submitAvailability() {
       const allTimesVisible = getComputedStyle(document.getElementById('allTimes')).display !== 'none';
+      const smsOptIn = document.getElementById('sms-checkbox').checked;
+      const phone = document.getElementById('phone-input').value.trim();
+
+      if (smsOptIn && !isPlausiblePhone(phone)) {
+        alert("Please enter a valid phone number (e.g. +1 973 555 0123).");
+        return;
+      }
 
       let selectedSlots = [];
 
       if (allTimesVisible) {
-        // multi-select from full grid
         const selectedEls = document.querySelectorAll('#allTimes .time-slot.selected');
         if (selectedEls.length === 0) {
-          alert("Please select at least one time slot in the full availability.");
+          alert("Please select at least one time slot in the full availability view.");
           return;
         }
         selectedSlots = Array.from(selectedEls).map(el => {
@@ -172,10 +191,9 @@
           return `${day} at ${el.innerText.trim()}`;
         });
       } else {
-        // single from recommended
         const chosen = document.querySelector('#selectedOnes .time-slot.selected');
         if (!chosen) {
-          alert("Please select one recommended slot, or click “None of these work for you?” to provide all your availabilities.");
+          alert("Please select a recommended slot, or switch to full availability.");
           return;
         }
         const day = chosen.closest('.day-card').querySelector('h4').innerText;
@@ -184,8 +202,10 @@
 
       const payload = {
         email: userEmail || "unknown",
-        event: allTimesVisible ? "availability" : "availability", // keep same event; server can parse 1 vs many
+        event: "availability",
         selectedSlot: selectedSlots.join(", "),
+        smsOptIn: smsOptIn,
+        smsPhone: phone,
         submitted: true
       };
 
@@ -209,6 +229,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       createDayCardsNext14Weekdays();
+      toggleSmsInput(); // initialize visibility
     });
   </script>
 </body>
