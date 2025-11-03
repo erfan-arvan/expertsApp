@@ -1504,8 +1504,8 @@ function loadQuestion() {
       nextBtn.textContent = 'Go to next snippet';
       if (currentSnippet >= TOTAL_SNIPPETS) {
         nextBtn.textContent = 'Go to the next Survey';
+        autoSaveProgress();
         nextBtn.onclick = () => {
-          autoSaveProgress();
           localStorage.setItem('FromPrevPage', 'true');
           window.location = "familiarity-survey.html";
         };
