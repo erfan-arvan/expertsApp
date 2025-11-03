@@ -332,7 +332,7 @@ input.input-error {
 
 <div class="survey-box" id="survey-box">
   <h3>Participant Background Questionnaire</h3>
-  <p>The following questions help us understand your background. Some may disqualify you from participating. All responses are anonymous and used only for research purposes.</p>
+  <p>The following questions help us understand your background.</p>
   <div id="question-container"></div>
   <div style="margin-top: 20px;">
     <button onclick="prevQuestion()" id="prevBtn" disabled>Previous</button>
@@ -434,12 +434,13 @@ const questions = [
     text: "What is your age?",
     code: "demographics.age",
     options: [
-      { label: "18–20" },
-      { label: "21–24" },
-      { label: "25–30" },
-      { label: "31–40" },
-      { label: "Over 40" },
-      { label: "Prefer not to say" }
+      { label: "Under 18",},
+      { label: "18–24" },
+      { label: "25–34" },
+      { label: "35–44" },
+      { label: "45–54" },
+      { label: "55–64" },
+      { label: "65 or older" }
     ]
   },
   {
