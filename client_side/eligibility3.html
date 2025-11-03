@@ -1016,6 +1016,24 @@
       finalizeSingleSlot(el);
     }
 
+      function finalizeSingleSlot(el) {
+    const dayText = el.closest('.day-card').querySelector('h4').innerText;
+    const selectedSlot = `${dayText} at ${el.innerText.trim()}`;
+
+    // persist
+    localStorage.setItem("selected_slot", selectedSlot);
+
+    // go to confirmation UI
+    document.getElementById('slots-box').classList.add('hidden');
+    document.getElementById('eligibility-success').classList.add('hidden');
+    document.getElementById('selected-slot-info').innerText = selectedSlot;
+    document.getElementById('notify-email').innerText = localStorage.getItem("student_email");
+    document.getElementById('confirm-box').classList.remove('hidden');
+
+    // fire your “before notify” hook
+    sendAvailabilityBeforeNotif([selectedSlot]);
+  }
+
   </script>
 
   <footer
