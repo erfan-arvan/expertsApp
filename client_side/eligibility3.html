@@ -397,6 +397,10 @@
       </div>
     </div>
 
+    <p style="margin-top: 1em;">
+      <a href="#" onclick="toggleCustomTimeBox2(); return false;">None of these work for you?</a>
+    </p>
+
 <div id="allTimes" class="">
       <p>
       <strong>📅 Please select <u>all</u> of your available times in the next two weeks (weekdays only):</strong><br>
@@ -882,6 +886,14 @@
       box.style.display = (box.style.display === 'none') ? 'block' : 'none';
     }
 
+    function toggleCustomTimeBox2() {
+      const box = document.getElementById('allTimes');
+      box.style.display = (box.style.display === 'none') ? 'block' : 'none';
+
+      const box2 = document.getElementById('selectedOnes');
+      box.style.display = (box.style.display === 'none') ? 'block' : 'none';
+    }
+
     function reviewCustomTime() {
       const selected = Array.from(document.querySelectorAll('#custom-time-box .time-slot.selected'))
         .map(el => {
@@ -999,6 +1011,7 @@
 
     function selectSlot(el) {
       el.classList.toggle('selected');
+      finalizeMultiSlotSelection();
     }
   </script>
 
