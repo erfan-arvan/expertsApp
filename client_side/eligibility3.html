@@ -886,14 +886,6 @@
       box.style.display = (box.style.display === 'none') ? 'block' : 'none';
     }
 
-    function toggleCustomTimeBox2() {
-      const box = document.getElementById('allTimes');
-      box.style.display = (box.style.display === 'none') ? 'block' : 'none';
-
-      const box2 = document.getElementById('selectedOnes');
-      box.style.display = (box.style.display === 'none') ? 'block' : 'none';
-    }
-
     function reviewCustomTime() {
       const selected = Array.from(document.querySelectorAll('#custom-time-box .time-slot.selected'))
         .map(el => {
@@ -1242,6 +1234,22 @@
 
 
   </script>
+
+
+<script>
+  function toggleCustomTimeBox2() {
+    const allTimes = document.getElementById('allTimes');       // the big “select all your times” panel
+    const selected = document.getElementById('selectedOnes');   // the small, preset slots panel
+
+    // Decide whether to show the allTimes panel
+    const isAllTimesHidden = getComputedStyle(allTimes).display === 'none';
+
+    // Show one, hide the other
+    allTimes.style.display = isAllTimesHidden ? 'block' : 'none';
+    selected.style.display = isAllTimesHidden ? 'none' : 'block';
+  }
+</script>
+
 </body>
 
 </html>
