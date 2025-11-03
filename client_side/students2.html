@@ -1507,6 +1507,7 @@ function loadQuestion() {
         nextBtn.textContent = 'Go to the next Survey';
         nextBtn.onclick = () => {
           localStorage.setItem('FromPrevPage', 'true');
+          recordQuestionTime(currentSnippet, currentQuestionIndex);
           window.location = "familiarity-survey.html";
         };
       }
