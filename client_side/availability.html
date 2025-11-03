@@ -1,77 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Select Availability</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background-color: #F4C41C;
-      margin: 40px;
-      color: #333;
-    }
-
-    .slots-box {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .day-card {
-      background-color: #f3f3f3;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-    }
-
-    .time-slot {
-      display: inline-block;
-      margin: 5px;
-      padding: 10px 16px;
-      border-radius: 6px;
-      background-color: #ccc;
-      cursor: pointer;
-    }
-
-    .time-slot.selected {
-      background-color: #4CAF50;
-      color: white;
-      font-weight: bold;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 6px;
-      background-color: #4CAF50;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#F4C41C;margin:40px;color:#333}
+    .slots-box{background:#fff;padding:20px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .day-card{background:#f3f3f3;padding:15px;margin-bottom:20px;border-radius:8px}
+    .time-slot{display:inline-block;margin:5px;padding:10px 16px;border-radius:6px;background:#ccc;cursor:pointer}
+    .time-slot.selected{background:#4CAF50;color:#fff;font-weight:700}
+    button{margin-top:20px;padding:12px 20px;border:none;border-radius:6px;background:#4CAF50;color:#fff;font-size:16px;cursor:pointer}
+    button:hover{background:#45a049}
+    a#selectedvsall{display:inline-block;margin-top:8px}
   </style>
 </head>
 <body>
 
   <div class="slots-box">
     <h2>📅 Select Your Available Times</h2>
-    <p>Please select all time slots that work for you. Then click <strong>Submit</strong>.</p>
-    <div id="dynamic-cards"></div>
+    <p>
+      First, pick <strong>one</strong> recommended slot below.
+      If none work, switch to the full availability picker and choose <strong>all</strong> that work for you.
+    </p>
+
+    <!-- Recommended (single-select) -->
+    <div id="selectedOnes">
+      <h3>Recommended slots</h3>
+
+      <!-- Example recommended cards. Replace/extend as needed -->
+      <div class="day-card" data-date="2025-11-07">
+        <h4>Friday 7 Nov</h4>
+        <div>
+          <div class="time-slot" onclick="selectRecommendedSlot(this)">1:00 PM – 2:30 PM</div>
+        </div>
+      </div>
+
+      <div class="day-card" data-date="2025-11-14">
+        <h4>Friday 14 Nov</h4>
+        <div>
+          <div class="time-slot" onclick="selectRecommendedSlot(this)">4:00 PM – 5:30 PM</div>
+        </div>
+      </div>
+
+      <div class="day-card" data-date="2025-11-18">
+        <h4>Tuesday 18 Nov</h4>
+        <div>
+          <div class="time-slot" onclick="selectRecommendedSlot(this)">2:30 PM – 4:00 PM</div>
+        </div>
+      </div>
+
+      <div class="day-card" data-date="2025-11-19">
+        <h4>Wednesday 19 Nov</h4>
+        <div>
+          <div class="time-slot" onclick="selectRecommendedSlot(this)">4:00 PM – 5:30 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin:8px 0 16px;">
+      <a id="selectedvsall" href="#" onclick="toggleSelectedVsAll(); return false;">None of these work for you?</a>
+    </p>
+
+    <!-- Full availability (multi-select) -->
+    <div id="allTimes" style="display:none;">
+      <h3>Full availability (next two weeks, weekdays)</h3>
+      <div id="dynamic-cards"></div>
+    </div>
+
     <button onclick="submitAvailability()">Submit</button>
   </div>
 
   <script>
-    // --- Extract email from URL ---
+    // --- Email from URL (optional, used in payload) ---
     const params = new URLSearchParams(window.location.search);
     const userEmail = decodeURIComponent(params.get("email") || "");
 
-    // --- Generate weekday slots ---
+    // --- Build the full availability grid (multi-select) ---
     function createDayCardsNext14Weekdays(containerId = 'dynamic-cards') {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
@@ -86,8 +91,8 @@
       ];
 
       const fmtWeekday = new Intl.DateTimeFormat(undefined, { weekday: 'long' });
-      const fmtDay = new Intl.DateTimeFormat(undefined, { day: 'numeric' });
-      const fmtMonth = new Intl.DateTimeFormat(undefined, { month: 'short' });
+      const fmtDay     = new Intl.DateTimeFormat(undefined, { day: 'numeric' });
+      const fmtMonth   = new Intl.DateTimeFormat(undefined, { month: 'short' });
 
       const today = new Date();
       let generated = 0;
@@ -98,8 +103,8 @@
         d.setDate(today.getDate() + offset);
         offset++;
 
-        const dayOfWeek = d.getDay();
-        if (dayOfWeek === 0 || dayOfWeek === 6) continue; // skip weekends
+        const dow = d.getDay(); // 0=Sun,6=Sat
+        if (dow === 0 || dow === 6) continue;
 
         const card = document.createElement('div');
         card.className = 'day-card';
@@ -114,7 +119,7 @@
           const slot = document.createElement('div');
           slot.className = 'time-slot';
           slot.textContent = t;
-          slot.onclick = () => slot.classList.toggle('selected');
+          slot.onclick = () => slot.classList.toggle('selected'); // multi-select here
           slotWrap.appendChild(slot);
         });
 
@@ -124,22 +129,62 @@
       }
     }
 
-    // --- Submit selected availability ---
+    // --- Toggle between recommended (single) and allTimes (multi) ---
+    function toggleSelectedVsAll() {
+      const allTimes = document.getElementById('allTimes');
+      const selected = document.getElementById('selectedOnes');
+      const link     = document.getElementById('selectedvsall');
+
+      const showAll = getComputedStyle(allTimes).display === 'none';
+      allTimes.style.display = showAll ? 'block' : 'none';
+      selected.style.display = showAll ? 'none'  : 'block';
+
+      link.textContent = showAll
+        ? 'go back to the recommended slots'
+        : 'None of these work for you?';
+
+      link.setAttribute('aria-expanded', String(showAll));
+      link.setAttribute('aria-controls', 'allTimes');
+    }
+
+    // --- Single-select behavior for recommended list ---
+    function selectRecommendedSlot(el) {
+      const container = document.getElementById('selectedOnes');
+      container.querySelectorAll('.time-slot.selected').forEach(s => s.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    // --- Submit the availability (single or multi) ---
     async function submitAvailability() {
-      const selectedEls = document.querySelectorAll('.time-slot.selected');
-      if (selectedEls.length === 0) {
-        alert("Please select at least one time slot.");
-        return;
+      const allTimesVisible = getComputedStyle(document.getElementById('allTimes')).display !== 'none';
+
+      let selectedSlots = [];
+
+      if (allTimesVisible) {
+        // multi-select from full grid
+        const selectedEls = document.querySelectorAll('#allTimes .time-slot.selected');
+        if (selectedEls.length === 0) {
+          alert("Please select at least one time slot in the full availability.");
+          return;
+        }
+        selectedSlots = Array.from(selectedEls).map(el => {
+          const day = el.closest('.day-card').querySelector('h4').innerText;
+          return `${day} at ${el.innerText.trim()}`;
+        });
+      } else {
+        // single from recommended
+        const chosen = document.querySelector('#selectedOnes .time-slot.selected');
+        if (!chosen) {
+          alert("Please select one recommended slot, or click “None of these work for you?” to provide all your availabilities.");
+          return;
+        }
+        const day = chosen.closest('.day-card').querySelector('h4').innerText;
+        selectedSlots = [`${day} at ${chosen.innerText.trim()}`];
       }
 
-      const selectedSlots = Array.from(selectedEls).map(el => {
-        const dayText = el.closest('.day-card').querySelector('h4').innerText;
-        return `${dayText} at ${el.innerText}`;
-      });
-
       const payload = {
-        email: userEmail,
-        event: "availability",
+        email: userEmail || "unknown",
+        event: allTimesVisible ? "availability" : "availability", // keep same event; server can parse 1 vs many
         selectedSlot: selectedSlots.join(", "),
         submitted: true
       };
@@ -162,8 +207,9 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', () => createDayCardsNext14Weekdays());
+    document.addEventListener('DOMContentLoaded', () => {
+      createDayCardsNext14Weekdays();
+    });
   </script>
-
 </body>
 </html>
