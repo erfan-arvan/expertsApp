@@ -308,7 +308,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
           { 
             "type": "bin",
             "id": "syntaxBL",
-            "prompt": "Is the variable <span class=\"qcode\">modifiers</span> initialized using a method call?",
+            "prompt": "Is the variable <span class=\"qcode\">modifiers</span> initialized using a method call on the right-hand side?",
             "type2": "",
             "id2": "",
             "question2": ""
