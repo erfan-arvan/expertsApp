@@ -18,7 +18,7 @@ const snippetsOriginal = [
       {
         "type": "short",
         "id": "output",
-        "prompt": "What value does the method return when called with the input <code>addPositive(3, -2)</code>?",
+        "prompt": "What value does the method return when called with the input <code>addPositive(3, -2)</code>? \n\n<div class=\"assumptions\">\n  <p><strong>Notes:</strong></p>\n  <ul>\n    <li>Here might be some extra information about the snippet.</li>\n    <li>For example, clarifying assumptions or explaining special cases.</li>\n  </ul>\n</div>",
         "type2": "",
         "id2": "",
         "question2": ""
