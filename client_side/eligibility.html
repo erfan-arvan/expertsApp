@@ -364,20 +364,59 @@
 
 
   <div class="slots-box hidden" id="slots-box">
-    <p>
-      <strong>📅 Please select <u>all</u> of your available times in the next two weeks (weekdays only):</strong><br>
-      <span style="color:#555;">We need this information to schedule your session at a time that best matches your
-        availability.</span>
-    </p>
+    <div id="selectedOnes">
+      <p>
+        <strong>📅 Please select a time slot that works for you:</strong><br>
+      </p>
+      <div class="day-card" data-date="2025-11-07">
+        <h4>Friday 7 Nov</h4>
+        <div>
+          <div class="time-slot" onclick="selectSlot(this)">1:00 PM – 2:30 PM</div>
+        </div>
+      </div>
 
-    <div id="dynamic-cards"></div>
+      <div class="day-card" data-date="2025-11-14">
+        <h4>Friday 14 Nov</h4>
+        <div>
+          <div class="time-slot" onclick="selectSlot(this)">4:00 PM – 5:30 PM</div>
+        </div>
+      </div>
 
-    <!-- Old: <button onclick="finalizeMultiSlotSelection()">Next</button> -->
-    <button onclick="openSlotConfirmModal()">Next</button>
+      <div class="day-card" data-date="2025-11-18">
+        <h4>Tuesday 18 Nov</h4>
+        <div>
+          <div class="time-slot" onclick="selectSlot(this)">2:30 PM – 4:00 PM</div>
+        </div>
+      </div>
+
+      <div class="day-card" data-date="2025-11-19">
+        <h4>Wednesday 19 Nov</h4>
+        <div>
+          <div class="time-slot" onclick="selectSlot(this)">4:00 PM – 5:30 PM</div>
+        </div>
+      </div>
+    </div>
 
     <p style="margin-top: 1em;">
-      <a href="#" onclick="toggleCustomTimeBox(); return false;">None of these work for you?</a>
+      <a id="selectedvsall" href="#" onclick="toggleCustomTimeBox2(); return false;">None of these work for you?</a>
     </p>
+
+    <div id="allTimes" style="display: none;">
+      <p>
+        <strong>📅 Please select <u>all</u> of your available times in the next two weeks (weekdays only):</strong><br>
+        <span style="color:#555;">We need this information to schedule your session at a time that best matches your
+          availability.</span>
+      </p>
+
+      <div id="dynamic-cards"></div>
+
+      <!-- Old: <button onclick="finalizeMultiSlotSelection()">Next</button> -->
+      <button onclick="openSlotConfirmModal()">Next</button>
+
+      <p style="margin-top: 1em;">
+        <a href="#" onclick="toggleCustomTimeBox(); return false;">None of these work for you?</a>
+      </p>
+    </div>
 
     <div id="custom-time-box"
       style="display: none; margin-top: 1em; border: 1px solid #ccc; padding: 1em; border-radius: 8px;">
@@ -963,8 +1002,38 @@
 
 
     function selectSlot(el) {
-      el.classList.toggle('selected');
+      // Find the container that holds the "recommended" slots
+      const container = document.getElementById('selectedOnes');
+
+      // Remove 'selected' from any previously chosen slot
+      container.querySelectorAll('.time-slot.selected')
+        .forEach(s => s.classList.remove('selected'));
+
+      // Mark the newly clicked slot as selected
+      el.classList.add('selected');
+
+      // Continue to the next step (optional)
+      finalizeSingleSlot(el);
     }
+
+      function finalizeSingleSlot(el) {
+    const dayText = el.closest('.day-card').querySelector('h4').innerText;
+    const selectedSlot = `${dayText} at ${el.innerText.trim()}`;
+
+    // persist
+    localStorage.setItem("selected_slot", selectedSlot);
+
+    // go to confirmation UI
+    document.getElementById('slots-box').classList.add('hidden');
+    document.getElementById('eligibility-success').classList.add('hidden');
+    document.getElementById('selected-slot-info').innerText = selectedSlot;
+    document.getElementById('notify-email').innerText = localStorage.getItem("student_email");
+    document.getElementById('confirm-box').classList.remove('hidden');
+
+    // fire your “before notify” hook
+    sendAvailabilityBeforeNotif([selectedSlot]);
+  }
+
   </script>
 
   <footer
@@ -1194,6 +1263,32 @@
 
 
   </script>
+
+
+  <script>
+    function toggleCustomTimeBox2() {
+      const allTimes = document.getElementById('allTimes');       // full availability picker
+      const selected = document.getElementById('selectedOnes');   // recommended slots list
+      const link = document.getElementById('selectedvsall');
+
+      const showAllTimes = getComputedStyle(allTimes).display === 'none';
+
+      // swap panels
+      allTimes.style.display = showAllTimes ? 'block' : 'none';
+      selected.style.display = showAllTimes ? 'none' : 'block';
+
+      // update link text + a11y
+      if (link) {
+        link.textContent = showAllTimes
+          ? 'go back to the recommended slots'
+          : 'None of these work for you?';
+        link.setAttribute('aria-expanded', String(showAllTimes));
+        link.setAttribute('aria-controls', 'allTimes');
+      }
+    }
+  </script>
+
+
 </body>
 
 </html>
