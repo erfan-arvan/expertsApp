@@ -34,6 +34,288 @@
     #validation-modal button{ margin-top:12px; background:#ff9999; color:#fff; }
 
     .hint { font-size:13px; color:#666; margin-top:6px; }
+
+        body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0 40px 40px 40px;
+      background-color: #f9f9f9;
+    }
+
+    .step-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .status-bar {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .phase-link {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    .phase-link:hover:not(.disabled) {
+      background-color: #4CAF50;
+    }
+
+    .phase-link.active {
+      background-color: #4CAF50;
+    }
+
+    .phase-link.disabled {
+      pointer-events: none;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .snippet-preview-box {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background-color: #fefefe;
+      border: 1px solid #bbb;
+      margin-bottom: 20px;
+    }
+
+    .snippet-header {
+      background-color: #f5f5f5;
+      padding: 10px 15px;
+      font-weight: bold;
+      font-size: 16px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .code-box {
+      background-color: #f9f9f9;
+      color: #222;
+      padding: 0;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      margin-bottom: 20px;
+    }
+
+    .code-container {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      background-color: inherit;
+      color: inherit;
+      overflow-x: auto;
+      padding: 0;
+    }
+
+    .line-numbers {
+      text-align: right;
+      padding-right: 12px;
+      user-select: none;
+      color: #999;
+      border-right: 1px solid #ccc;
+    }
+
+    .code-content {
+      padding-left: 12px;
+      white-space: pre;
+      word-break: break-word;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      font-size: 14px;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .buttons {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-right: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    button[disabled] {
+      background-color: #888;
+      cursor: not-allowed;
+    }
+
+    button#submit-review {
+      display: none;
+      animation: glowPulse 1.5s infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      0% {
+        box-shadow: 0 0 10px #4CAF50;
+      }
+
+      100% {
+        box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+      }
+    }
+
+    /* Light/Dark mode support */
+
+    body.dark-mode .snippet-preview-box {
+      background-color: #1e1e1e;
+      border: 1px solid #444;
+    }
+
+    body.dark-mode .code-box {
+      background-color: #2d2d2d;
+      color: #ddd;
+    }
+
+    body.dark-mode .line-numbers {
+      color: #777;
+      border-right: 1px solid #555;
+    }
+
+    body.dark-mode .card {
+      background-color: #2a2a2a;
+      border-color: #555;
+      color: #ddd;
+    }
+
+    /* Syntax Highlighting */
+    .keyword {
+      color: #0000ff;
+      font-weight: bold;
+    }
+
+    .type {
+      color: #007070;
+    }
+
+    .function {
+      color: #7928a1;
+      font-weight: bold;
+    }
+
+    .literal {
+      color: #009999;
+    }
+
+    .string {
+      color: #a31515;
+    }
+
+    .comment {
+      color: #6a9955;
+      font-style: italic;
+    }
+
+    .number {
+      color: #098658;
+    }
+
+    .dark-mode .keyword {
+      color: #82aaff;
+    }
+
+    .dark-mode .type {
+      color: #89ddff;
+    }
+
+    .dark-mode .function {
+      color: #c792ea;
+    }
+
+    .dark-mode .literal {
+      color: #ffcb6b;
+    }
+
+    .dark-mode .string {
+      color: #c3e88d;
+    }
+
+    .dark-mode .comment {
+      color: #7f848e;
+    }
+
+    .dark-mode .number {
+      color: #f78c6c;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+
+    .comparison-container {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+
+    #code-comparison {
+      flex: 2;
+      min-width: 60%;
+      max-width: 80%;
+      box-sizing: border-box;
+    }
+
+    .explanation-box {
+      flex: 1;
+      min-width: 20%;
+      max-width: 40%;
+      box-sizing: border-box;
+    }
+
+    .explanation-box textarea {
+      width: 100%;
+      box-sizing: border-box;
+    }
   </style>
 </head>
 <body>
@@ -51,7 +333,7 @@
     <a href="phase3.html" class="phase-link" id="link-phase3">Phase 3</a>
     <a href="review.html" class="phase-link disabled" id="link-review">Review & Submit</a>
   </div>
-  
+
   <!-- Instructions -->
   <div class="card" id="instructions">
     <div style="display:flex; justify-content:space-between; align-items:center;">
