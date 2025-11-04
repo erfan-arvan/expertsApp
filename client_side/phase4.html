@@ -286,6 +286,7 @@
       width: 100%;
       box-sizing: border-box;
     }
+    .card {background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px;}
   </style>
 
 </head>
@@ -309,16 +310,20 @@
 
 
   <!-- Instructions -->
-  <div class="card" id="instructions">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h2>Phase 4: CS Knowledge Survey</h2>
-      <button onclick="document.getElementById('instructions-body').classList.toggle('hidden'); this.textContent = (document.getElementById('instructions-body').classList.contains('hidden') ? 'Show' : 'Hide');" style="background:#fff; border:1px solid #ccc; color:#222;">Hide</button>
+     <div id="instructions-box"
+    style="background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 80px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h2 style="margin: 0;">Phase 3: Explain Your Ranking</h2>
+      <button onclick="toggleInstructions()"
+        style="padding: 6px 12px; font-size: 14px; border-radius: 5px; background-color: #ffffff; border: none; cursor: pointer; color: #222; border: solid;">Hide</button>
     </div>
-    <div id="instructions-body">
-      <p>In this final phase, please answer a short CS familiarity survey. If you answer <em>Yes</em> to a topic, you’ll get one quick multiple‑choice question. If you answer <em>No</em>, we’ll skip the MCQ for that topic.</p>
-      <p class="hint"><strong>Note:</strong> You can’t change a “Yes/No” once you’ve moved on to the MCQ for that topic. This keeps the flow consistent for everyone.</p>
+
+    <div id="instructions-content" style="margin-top: 15px;">
+      <p>In this final phase, please answer a short familiarity survey.</p>
+      <p>Note: your answers to this survey will <strong>not</strong> be shared with other experts.</p>
     </div>
   </div>
+
 
   <!-- Survey Card -->
   <div class="card" id="survey-card">
