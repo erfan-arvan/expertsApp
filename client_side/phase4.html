@@ -331,13 +331,15 @@
     <div class="progress"><span id="bar"></span></div>
     <div id="qtext"></div>
     <div id="opts"></div>
-    <div class="row">
-      <button id="prev" class="" onclick="goPrev()">Previous</button>
-      <div style="display:flex; gap:8px;">
+    <div class="row" 
+        style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px;">
+      <button id="prev" onclick="goPrev()">Previous</button>
+      <div style="display: flex; gap: 8px;">
         <button class="primary" id="next">Next</button>
         <button id="goto-review" class="primary" style="display:none;" onclick="finishPhase4()">Go to Review & Submit</button>
       </div>
     </div>
+
   </div>
 
     <div id="validation-modal" style="
