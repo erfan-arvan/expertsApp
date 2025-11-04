@@ -397,8 +397,6 @@
     function showValidationMessage(msg){ document.getElementById('validation-message').textContent = msg; document.getElementById('validation-modal').style.display='block'; }
 
  
-    window.addEventListener('beforeunload', saveToServer);
-
     /* ---------- Auth helpers ---------- */
     function logout(){ sessionStorage.clear(); localStorage.clear(); document.cookie.split(';').forEach(c=>{ const n=c.split('=')[0].trim(); document.cookie=`${n}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`; }); window.location.href='index.html'; }
   </script>
@@ -694,10 +692,13 @@
     }
 
     // Auto-save every 2 minutes
-    setInterval(() => {
-      try { saveToServer(); console.log('[Auto-Save] Progress saved to server.'); }
-      catch (e) { console.warn('[Auto-Save] Failed to save:', e); }
-    }, 120000);
+    // setInterval(() => {
+    //   try { saveToServer(); console.log('[Auto-Save] Progress saved to server.'); }
+    //   catch (e) { console.warn('[Auto-Save] Failed to save:', e); }
+    // }, 120000);
+
+    window.addEventListener('beforeunload', saveToServer);
+
   };
 </script>
 
