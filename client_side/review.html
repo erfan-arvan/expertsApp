@@ -566,8 +566,67 @@ function renderPhase2() {
   });
 }
 
+  // Phase 4 topics (ids must match what Phase 4 stored)
+  const phase4Topics = [
+    { id: "uri_scheme",                label: "URI schemes" },
+    { id: "file_vs_network_uri",       label: "Filesystem vs network URIs" },
+    { id: "reflection",                label: "Java Reflection API" },
+    { id: "visitor_walkFileTree",      label: "Visitor pattern (Files.walkFileTree)" },
+    { id: "utf8_utf16",                label: "UTF-8 vs UTF-16" },
+    { id: "bitwise_ops",               label: "Bitwise operators (&, |, ^, >>, >>>)" },
+    { id: "hex_to_dec",                label: "Hex ↔ Decimal conversion" },
+    { id: "quadratic",                 label: "Quadratic formula" },
+    { id: "atan",                      label: "Arctangent (atan)" },
+    { id: "nan",                       label: "NaN behavior in Java" },
+    { id: "fp_singularities",          label: "Floating-point singularities (e.g., 1.0/0.0)" }
+  ];
+</script>
 
-    function renderPhase3() {
+<script>
+  function renderPhase4() {
+    const container = document.getElementById('phase4');
+    container.innerHTML = '';
+
+    // answers saved by Phase 4 as { [id]: 'yes'|'no' }
+    const ans = JSON.parse(localStorage.getItem('csKnowledgeSurveyAnswers') || '{}');
+    if (!ans || Object.keys(ans).length === 0) {
+      container.innerHTML = '<em>No data found.</em>';
+      return;
+    }
+
+    let complete = true;
+    const rows = phase4Topics.map(t => {
+      const v = ans[t.id];
+      if (v !== 'yes' && v !== 'no') complete = false;
+      const pretty = (v === 'yes') ? 'Yes' : (v === 'no' ? 'No' : '<em>Not answered</em>');
+      return `<tr><td style="padding:6px 10px;">${t.label}</td><td style="padding:6px 10px;"><strong>${pretty}</strong></td></tr>`;
+    }).join('');
+
+    container.innerHTML = `
+      <div style="overflow-x:auto">
+        <table style="border-collapse:collapse; width:100%;">
+          <thead>
+            <tr style="background:#f5f5f5;">
+              <th style="text-align:left; padding:8px 10px;">Topic</th>
+              <th style="text-align:left; padding:8px 10px;">Familiar?</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+      <div style="margin-top:10px; color:${complete ? '#2e7d32' : '#9b0000'};">
+        ${complete ? '✅ All Phase 4 questions are answered.' : '⚠️ Some Phase 4 items are unanswered.'}
+      </div>
+    `;
+
+    // reflect completion to nav if fully answered
+    if (complete) {
+      localStorage.setItem('phase4Complete','true');
+      document.getElementById('link-review')?.classList.remove('disabled');
+    }
+  }
+
+  function renderPhase3() {
       const data = JSON.parse(sessionStorage.getItem('phase3_reasoning') || '{}');
       const container = document.getElementById('phase3');
       if (!data || Object.keys(data).length === 0) {
@@ -786,67 +845,7 @@ function renderPhase2() {
   </script>
 
   
-<script>
-  // Phase 4 topics (ids must match what Phase 4 stored)
-  const phase4Topics = [
-    { id: "uri_scheme",                label: "URI schemes" },
-    { id: "file_vs_network_uri",       label: "Filesystem vs network URIs" },
-    { id: "reflection",                label: "Java Reflection API" },
-    { id: "visitor_walkFileTree",      label: "Visitor pattern (Files.walkFileTree)" },
-    { id: "utf8_utf16",                label: "UTF-8 vs UTF-16" },
-    { id: "bitwise_ops",               label: "Bitwise operators (&, |, ^, >>, >>>)" },
-    { id: "hex_to_dec",                label: "Hex ↔ Decimal conversion" },
-    { id: "quadratic",                 label: "Quadratic formula" },
-    { id: "atan",                      label: "Arctangent (atan)" },
-    { id: "nan",                       label: "NaN behavior in Java" },
-    { id: "fp_singularities",          label: "Floating-point singularities (e.g., 1.0/0.0)" }
-  ];
-</script>
 
-<script>
-  function renderPhase4() {
-    const container = document.getElementById('phase4');
-    container.innerHTML = '';
-
-    // answers saved by Phase 4 as { [id]: 'yes'|'no' }
-    const ans = JSON.parse(localStorage.getItem('csKnowledgeSurveyAnswers') || '{}');
-    if (!ans || Object.keys(ans).length === 0) {
-      container.innerHTML = '<em>No data found.</em>';
-      return;
-    }
-
-    let complete = true;
-    const rows = phase4Topics.map(t => {
-      const v = ans[t.id];
-      if (v !== 'yes' && v !== 'no') complete = false;
-      const pretty = (v === 'yes') ? 'Yes' : (v === 'no' ? 'No' : '<em>Not answered</em>');
-      return `<tr><td style="padding:6px 10px;">${t.label}</td><td style="padding:6px 10px;"><strong>${pretty}</strong></td></tr>`;
-    }).join('');
-
-    container.innerHTML = `
-      <div style="overflow-x:auto">
-        <table style="border-collapse:collapse; width:100%;">
-          <thead>
-            <tr style="background:#f5f5f5;">
-              <th style="text-align:left; padding:8px 10px;">Topic</th>
-              <th style="text-align:left; padding:8px 10px;">Familiar?</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
-      </div>
-      <div style="margin-top:10px; color:${complete ? '#2e7d32' : '#9b0000'};">
-        ${complete ? '✅ All Phase 4 questions are answered.' : '⚠️ Some Phase 4 items are unanswered.'}
-      </div>
-    `;
-
-    // reflect completion to nav if fully answered
-    if (complete) {
-      localStorage.setItem('phase4Complete','true');
-      document.getElementById('link-review')?.classList.remove('disabled');
-    }
-  }
-</script>
 
 
   <footer
