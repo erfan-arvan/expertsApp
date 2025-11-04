@@ -376,9 +376,18 @@
     function checkLogin(){ if(!isLoggedIn()){ alert('You must be logged in to access this page. Redirecting to the homepage.'); window.location.href = '/'; } }
     function markNav(){
       // Enable earlier phases based on flags
-      if (sessionStorage.getItem('phase1Complete')==='true' || localStorage.getItem('phase1Complete')==='true') document.getElementById('link-phase2')?.classList.remove('disabled');
-      if (sessionStorage.getItem('phase2Complete')==='true' || localStorage.getItem('phase2Complete')==='true') document.getElementById('link-phase3')?.classList.remove('disabled');
-      if (sessionStorage.getItem('phase3Complete')==='true' || localStorage.getItem('phase3Complete')==='true') document.getElementById('link-review')?.classList.remove('disabled');
+      if (sessionStorage.getItem('phase1Complete') === 'true') {
+        document.getElementById('link-phase2')?.classList.remove('disabled');
+      }
+      if (sessionStorage.getItem('phase2Complete') === 'true') {
+        document.getElementById('link-phase3')?.classList.remove('disabled');
+      }
+      if (sessionStorage.getItem('phase3Complete') === 'true') {
+        document.getElementById('link-phase4')?.classList.remove('disabled');
+      }
+      if (sessionStorage.getItem('phase4Complete') === 'true') {
+        document.getElementById('link-review')?.classList.remove('disabled');
+      }
       // Mark Phase 4 as active visually
       document.getElementById('link-phase4')?.classList.add('active');
     }

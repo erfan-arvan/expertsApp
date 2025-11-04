@@ -128,6 +128,7 @@
     <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
     <a href="phase2.html" class="phase-link" id="link-phase2">Phase 2</a>
     <a href="phase3.html" class="phase-link" id="link-phase3">Phase 3</a>
+    <a href="phase4.html" class="phase-link" id="link-phase4">Phase 4</a>
     <a href="review.html" class="phase-link active" id="link-review">Review & Submit</a>
   </div>
 
@@ -632,6 +633,9 @@ function renderPhase2() {
         document.getElementById('link-phase3')?.classList.remove('disabled');
       }
       if (sessionStorage.getItem('phase3Complete') === 'true') {
+        document.getElementById('link-phase4')?.classList.remove('disabled');
+      }
+      if (sessionStorage.getItem('phase4Complete') === 'true') {
         document.getElementById('link-review')?.classList.remove('disabled');
       }
 
