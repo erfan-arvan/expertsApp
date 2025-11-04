@@ -544,5 +544,91 @@
     /* ---------- Auth helpers ---------- */
     function logout(){ sessionStorage.clear(); localStorage.clear(); document.cookie.split(';').forEach(c=>{ const n=c.split('=')[0].trim(); document.cookie=`${n}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`; }); window.location.href='index.html'; }
   </script>
+
+  <script>
+  // Optional helper for Phase 4
+  function validatePhase4() {
+    // Each topic must have fam answered; if fam==='yes', it must also have an mcq (number)
+    const answers = JSON.parse(localStorage.getItem('csKnowledgeSurveyAnswers') || '{}');
+    // If you have the global `topics` array on this page:
+    if (!Array.isArray(window.topics) || window.topics.length === 0) return false;
+
+    for (const t of topics) {
+      const r = answers[t.id] || {};
+      if (!r.fam) return false;
+      if (r.fam === 'yes' && typeof r.mcq !== 'number') return false;
+    }
+    return true;
+  }
+
+  window.onload = () => {
+    // If you have a theme system on this page, call applyTheme(); otherwise remove this line.
+    if (typeof applyTheme === 'function') applyTheme();
+    if (typeof displayUserName === 'function') displayUserName();
+
+    // Restore any Phase 4 survey state from localStorage if needed (already stored as csKnowledgeSurveyAnswers)
+    // (No cookie restore here; Phase 4 uses localStorage.)
+
+    // Mark completed phases (enable nav links)
+    if (sessionStorage.getItem('phase1Complete') === 'true' || localStorage.getItem('phase1Complete') === 'true') {
+      document.getElementById('link-phase2')?.classList.remove('disabled');
+    }
+    if (sessionStorage.getItem('phase2Complete') === 'true' || localStorage.getItem('phase2Complete') === 'true') {
+      document.getElementById('link-phase3')?.classList.remove('disabled');
+    }
+    if (sessionStorage.getItem('phase3Complete') === 'true' || localStorage.getItem('phase3Complete') === 'true') {
+      document.getElementById('link-review')?.classList.remove('disabled');
+    }
+
+    // Highlight current tab (includes Phase 4)
+    const current = window.location.pathname.split('/').pop() || '';
+    if (current.includes('phase1')) document.getElementById('link-phase1')?.classList.add('active');
+    else if (current.includes('phase2')) document.getElementById('link-phase2')?.classList.add('active');
+    else if (current.includes('phase3')) document.getElementById('link-phase3')?.classList.add('active');
+    else if (current.includes('phase4')) document.getElementById('link-phase4')?.classList.add('active');
+    else if (current.includes('review')) document.getElementById('link-review')?.classList.add('active');
+
+    // Show/hide the "Go to Review & Submit" button based on Phase 4 completion
+    const gotoBtn = document.getElementById('goto-review');
+    const phase4Complete =
+      localStorage.getItem('phase4Complete') === 'true' ||
+      (typeof validatePhase4 === 'function' && validatePhase4());
+
+    if (phase4Complete) {
+      localStorage.setItem('phase4Complete', 'true');
+      document.getElementById('link-review')?.classList.remove('disabled');
+      if (gotoBtn) gotoBtn.style.display = 'inline-block';
+    } else {
+      localStorage.setItem('phase4Complete', 'false');
+      if (gotoBtn) gotoBtn.style.display = 'none';
+    }
+
+    // Re-check once after the UI initializes (mirrors your Phase 3 setTimeout)
+    setTimeout(() => {
+      const ok = (typeof validatePhase4 === 'function') && validatePhase4();
+      if (ok) {
+        localStorage.setItem('phase4Complete', 'true');
+        document.getElementById('link-review')?.classList.remove('disabled');
+        if (gotoBtn) gotoBtn.style.display = 'inline-block';
+      } else {
+        localStorage.setItem('phase4Complete', 'false');
+        if (gotoBtn) gotoBtn.style.display = 'none';
+      }
+    }, 500);
+
+    // Auto-save to server every 2 minutes (same pattern you use elsewhere)
+    setInterval(() => {
+      try {
+        if (typeof saveToServer === 'function') {
+          saveToServer();
+          console.log('[Auto-Save] Progress saved to server.');
+        }
+      } catch (e) {
+        console.warn('[Auto-Save] Failed to save:', e);
+      }
+    }, 120000);
+  };
+</script>
+
 </body>
 </html>
