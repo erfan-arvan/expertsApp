@@ -1,41 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>Phase 4: CS Knowledge Survey</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <title>Phase 4: Explain Your Ranking Decisions</title>
   <style>
-    :root { --brand:#4CAF50; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0 40px 40px; background:#f9f9f9; color:#333; }
-    .status-bar { position:fixed; top:0; left:0; right:0; z-index:1000; background:#333; color:#fff; display:flex; align-items:center; gap:30px; padding:10px 20px; }
-    .phase-link { color:#fff; text-decoration:none; font-weight:600; padding:8px 12px; border-radius:4px; }
-    .phase-link:hover:not(.disabled) { background: var(--brand); }
-    .phase-link.active { background: var(--brand); }
-    .phase-link.disabled { pointer-events:none; opacity:.5; cursor:not-allowed; }
-    .user-dropdown { margin-right:auto; }
-
-    .card { background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.1); margin-top:90px; }
-    h2 { margin:0 0 10px; }
-    .progress { height:6px; background:#eee; border-radius:4px; overflow:hidden; margin:8px 0 16px; }
-    .progress span { display:block; height:100%; background:var(--brand); width:0%; transition:width .3s ease; }
-    #qtext { font-size:16px; margin:6px 0 12px; }
-    #opts label { display:block; margin:8px 0; }
-    textarea.input-field { width:100%; padding:12px 14px; font-size:16px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box; }
-    .row { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:18px; }
-    button { padding:10px 16px; border:none; border-radius:6px; font-size:15px; cursor:pointer; }
-    button.primary { background:var(--brand); color:#fff; }
-    button.primary:hover { filter:brightness(.95); }
-    button[disabled] { opacity:.6; cursor:not-allowed; }
-
-    /* Timer controls (kept consistent with other phases) */
-
-    /* Validation modal */
-    #validation-modal{ display:none; position:fixed; top:30%; left:50%; transform:translate(-50%, -50%); background:#fff0f0; color:#660000; border:1px solid #ff9999; padding:20px; border-radius:10px; width:440px; box-shadow:0 4px 16px rgba(0,0,0,.2); z-index:1002; text-align:center; }
-    #validation-modal button{ margin-top:12px; background:#ff9999; color:#fff; }
-
-    .hint { font-size:13px; color:#666; margin-top:6px; }
-
-        body {
+    body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0 40px 40px 40px;
       background-color: #f9f9f9;
@@ -317,9 +287,11 @@
       box-sizing: border-box;
     }
   </style>
+
 </head>
+
 <body>
-  <!-- Top status/nav consistent with other phases -->
+
   <div class="status-bar">
     <div class="user-dropdown" style="position: relative;">
       <div style="padding: 8px 12px; color: gainsboro; font-weight: bold;"><span id="user-info"></span> (<button
@@ -333,6 +305,8 @@
     <a href="phase3.html" class="phase-link" id="link-phase3">Phase 3</a>
     <a href="review.html" class="phase-link disabled" id="link-review">Review & Submit</a>
   </div>
+
+
 
   <!-- Instructions -->
   <div class="card" id="instructions">
@@ -360,10 +334,33 @@
     </div>
   </div>
 
-  <!-- Validation Modal -->
-  <div id="validation-modal">
-    <p id="validation-message" style="font-weight:700;"></p>
-    <button onclick="document.getElementById('validation-modal').style.display='none'">OK</button>
+    <div id="validation-modal" style="
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff0f0;
+  color: #660000;
+  border: 1px solid #ff9999;
+  padding: 20px;
+  border-radius: 10px;
+  width: 440px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  z-index: 1002;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  ">
+    <p id="validation-message" style="font-weight: bold;"></p>
+    <button onclick="document.getElementById('validation-modal').style.display = 'none';" style="
+      margin-top: 15px;
+      padding: 8px 14px;
+      background-color: #ff9999;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    ">OK</button>
   </div>
 
   <script>
