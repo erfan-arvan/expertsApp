@@ -412,88 +412,81 @@
     }
   }
 
-  function loadPreviousData() {
-    const username = sessionStorage.getItem('username') || localStorage.getItem('username');
-    if (!username) {
-      alert("Username not found.");
-      return Promise.reject("No username");  // return a rejected promise
-    }
+function loadPreviousData() {
+  const username = sessionStorage.getItem('username') || localStorage.getItem('username');
+  if (!username) {
+    alert("Username not found.");
+    return Promise.reject("No username");
+  }
 
-    return fetch('/get_latest_submission', {
-
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username })  // ✅ Correct key
-    })
+  return fetch('/get_latest_submission', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username })
+  })
     .then(res => res.ok ? res.json() : Promise.reject("Not found"))
     .then(data => {
       console.log("Loaded data:", data);
 
-      // Phase 1: restore summary + compSummary per snippet
+      // 🧩 Phase 1
       Object.entries(data.phase1 || {}).forEach(([key, value]) => {
         const i = key.replace('snippet', '');
         const summary = value.summary || '';
         const comp = value.comprehensibility || '';
-
         sessionStorage.setItem(`summary${i}`, summary);
         sessionStorage.setItem(`compSummary${i}`, comp);
-
         localStorage.setItem(`summary${i}`, summary);
         localStorage.setItem(`compSummary${i}`, comp);
       });
 
-      // Phase 2 and 3
+      // 🧩 Phase 2 (ranking)
       if (data.phase2) {
         const p2 = JSON.stringify(data.phase2);
         sessionStorage.setItem('phase3_ranking', p2);
         localStorage.setItem('phase3_ranking', p2);
       }
 
+      // 🧩 Phase 3 (reasoning)
       if (data.phase3) {
         const p3 = JSON.stringify(data.phase3);
         sessionStorage.setItem('phase3_reasoning', p3);
         localStorage.setItem('phase3_reasoning', p3);
       }
 
-      // Participant name
+      // 🧩 Phase 4 (familiarity)
+      if (data.phase4) {
+        const p4 = JSON.stringify(data.phase4);
+        localStorage.setItem('csKnowledgeSurveyAnswers', p4);
+        sessionStorage.setItem('csKnowledgeSurveyAnswers', p4);
+      }
+
+      // 🧩 Participant info
       if (data.participantName) {
         sessionStorage.setItem('participantName', data.participantName);
         localStorage.setItem('participantName', data.participantName);
       }
 
-      // Snippet order
+      // 🧩 Snippet order
       if (data.snippetOrder) {
         const order = JSON.stringify(data.snippetOrder);
         sessionStorage.setItem('snippetOrder', order);
         localStorage.setItem('snippetOrder', order);
       }
 
-      // ✅ Restore additional flags
-      if ('phase1Complete' in data) {
-        sessionStorage.setItem('phase1Complete', data.phase1Complete);
-        localStorage.setItem('phase1Complete', data.phase1Complete);
-      }
-      if ('phase2Complete' in data) {
-        sessionStorage.setItem('phase2Complete', data.phase2Complete);
-        localStorage.setItem('phase2Complete', data.phase2Complete);
-      }
-      if ('phase3Complete' in data) {
-        sessionStorage.setItem('phase3Complete', data.phase3Complete);
-        localStorage.setItem('phase3Complete', data.phase3Complete);
-      }
+      // 🧩 Completion flags
+      const flags = ['phase1Complete', 'phase2Complete', 'phase3Complete', 'phase4Complete', 'codeTheme', 'submitted'];
+      flags.forEach(flag => {
+        if (flag in data) {
+          sessionStorage.setItem(flag, data[flag]);
+          localStorage.setItem(flag, data[flag]);
+        }
+      });
 
-      if ('codeTheme' in data) {
-        sessionStorage.setItem('codeTheme', data.codeTheme); // No cookie needed
-        localStorage.setItem('codeTheme', data.codeTheme); // No cookie needed
-      }
-      if ('submitted' in data) {
-        sessionStorage.setItem('submitted', data.submitted);
-        localStorage.setItem('submitted', data.submitted);
-      }
-      console.log("Previous data loaded successfully.");
+      console.log("Previous data loaded successfully (including Phase 4).");
     })
-    .catch(() => console.log("Could not load previous submission."));
-  }
+    .catch(err => console.warn("Could not load previous submission:", err));
+}
+
 
 
   </script>
