@@ -582,15 +582,14 @@
     // (No cookie restore here; Phase 4 uses localStorage.)
 
     // Mark completed phases (enable nav links)
-    if (sessionStorage.getItem('phase1Complete') === 'true' || localStorage.getItem('phase1Complete') === 'true') {
-      document.getElementById('link-phase2')?.classList.remove('disabled');
-    }
-    if (sessionStorage.getItem('phase2Complete') === 'true' || localStorage.getItem('phase2Complete') === 'true') {
-      document.getElementById('link-phase3')?.classList.remove('disabled');
-    }
-    if (sessionStorage.getItem('phase3Complete') === 'true' || localStorage.getItem('phase3Complete') === 'true') {
-      document.getElementById('link-review')?.classList.remove('disabled');
-    }
+      if (isComplete("phase1Complete"))
+        document.getElementById("link-phase2").classList.remove("disabled");
+      if (isComplete("phase2Complete"))
+        document.getElementById("link-phase3").classList.remove("disabled");
+      if (isComplete("phase3Complete"))
+        document.getElementById("link-phase4").classList.remove("disabled");
+      if (isComplete("phase4Complete"))
+        document.getElementById("link-review").classList.remove("disabled");
 
     // Highlight current tab (includes Phase 4)
     const current = window.location.pathname.split('/').pop() || '';
@@ -654,6 +653,13 @@
       button.textContent = "Show";
     }
   }
+
+      function isComplete(key) {
+      return (
+        sessionStorage.getItem(key) === "true" ||
+        localStorage.getItem(key) === "true"
+      );
+    }
 </script>
 </body>
 </html>
