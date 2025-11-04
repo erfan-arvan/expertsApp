@@ -28,9 +28,6 @@
     button[disabled] { opacity:.6; cursor:not-allowed; }
 
     /* Timer controls (kept consistent with other phases) */
-    #timer-wrapper { display:flex; align-items:center; gap:10px; }
-    #timer-wrapper button { background:transparent; border:2px solid var(--brand); color:var(--brand); padding:6px 10px; border-radius:6px; font-size:14px; cursor:pointer; transition:all .2s; }
-    #timer-wrapper button:hover { background:var(--brand); color:#fff; }
 
     /* Validation modal */
     #validation-modal{ display:none; position:fixed; top:30%; left:50%; transform:translate(-50%, -50%); background:#fff0f0; color:#660000; border:1px solid #ff9999; padding:20px; border-radius:10px; width:440px; box-shadow:0 4px 16px rgba(0,0,0,.2); z-index:1002; text-align:center; }
@@ -52,11 +49,10 @@
     <a href="index.html" class="phase-link" id="link-home">🏠 Home</a>
     <a href="phase1.html" class="phase-link" id="link-phase1">Phase 1</a>
     <a href="phase2.html" class="phase-link" id="link-phase2">Phase 2</a>
-    <a href="phase3.html" class="phase-link" id="link-phase3">Phase 3</a>
+    $1<a href="phase4.html" class="phase-link active" id="link-phase4">Phase 4</a>
     <a href="review.html" class="phase-link disabled" id="link-review">Review & Submit</a>
 
-    <div id="timer-wrapper">
-      <div id="timer" style="font-weight:bold;">⏱️ 00:00</div>
+    
       <button id="pause-btn" title="Pause Timer" onclick="pauseStudy()">⏸️</button>
       <button id="resume-btn" title="Resume Timer" onclick="resumeStudy()" style="display:none;">▶️</button>
       <button id="toggle-timer-btn" title="Show/Hide Timer" onclick="toggleTimer()">Hide Timer</button>
@@ -105,24 +101,10 @@
       if (sessionStorage.getItem('phase1Complete')==='true' || localStorage.getItem('phase1Complete')==='true') document.getElementById('link-phase2')?.classList.remove('disabled');
       if (sessionStorage.getItem('phase2Complete')==='true' || localStorage.getItem('phase2Complete')==='true') document.getElementById('link-phase3')?.classList.remove('disabled');
       if (sessionStorage.getItem('phase3Complete')==='true' || localStorage.getItem('phase3Complete')==='true') document.getElementById('link-review')?.classList.remove('disabled');
-      // Mark Phase 4 as active visually (we reuse the toolbar but Phase 4 is current page)
-      // (Optionally add a Phase 4 tab later; for now we highlight via title.)
+      // Mark Phase 4 as active visually
+      document.getElementById('link-phase4')?.classList.add('active');
     }
     window.addEventListener('load', checkLogin);
-
-    /* ---------- Timer (kept consistent) ---------- */
-    let timerInterval=null, startTime=null, pausedAt=null, totalPausedTime=0;
-    function formatTime(s){ const m=String(Math.floor(s/60)).padStart(2,'0'); const ss=String(s%60).padStart(2,'0'); return `${m}:${ss}`; }
-    function updateTimerDisplay(){ const el=document.getElementById('timer'); if(!startTime) return; const now=Date.now(); const elapsed=Math.floor((now-startTime-totalPausedTime)/1000); el.textContent = `⏱️ ${formatTime(elapsed)}`; }
-    function startTimer(){ if(!startTime){ const stored=localStorage.getItem('startTime'); startTime = stored? parseInt(stored,10): Date.now(); localStorage.setItem('startTime', startTime); }
-      if(timerInterval) clearInterval(timerInterval);
-      timerInterval=setInterval(updateTimerDisplay,1000);
-    }
-    function pauseTimer(){ clearInterval(timerInterval); }
-    function pauseStudy(){ updateTimerDisplay(); pauseTimer(); pausedAt=Date.now(); localStorage.setItem('pausedAt', pausedAt); document.getElementById('pause-btn').style.display='none'; document.getElementById('resume-btn').style.display='inline'; }
-    function resumeStudy(){ const stored=parseInt(localStorage.getItem('pausedAt')||'0',10); if(stored){ totalPausedTime += (Date.now()-stored); localStorage.removeItem('pausedAt'); } document.getElementById('pause-btn').style.display='inline'; document.getElementById('resume-btn').style.display='none'; startTimer(); }
-    function toggleTimer(){ const timerEl=document.getElementById('timer'); const btn=document.getElementById('toggle-timer-btn'); const hidden = timerEl.style.display==='none'; timerEl.style.display = hidden? 'inline':'none'; btn.textContent = hidden? 'Hide Timer':'Show Timer'; }
-    window.addEventListener('load',()=>{ displayUserName(); markNav(); const storedStart=localStorage.getItem('startTime'); const storedPaused=localStorage.getItem('pausedAt'); if(storedStart) startTime=parseInt(storedStart,10); if(storedPaused){ totalPausedTime += (Date.now()-parseInt(storedPaused,10)); localStorage.removeItem('pausedAt'); } startTimer(); });
 
     /* ---------- Validation helper ---------- */
     function showValidationMessage(msg){ document.getElementById('validation-message').textContent = msg; document.getElementById('validation-modal').style.display='block'; }
