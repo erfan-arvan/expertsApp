@@ -167,6 +167,13 @@
     <button class="nav-button" onclick="location.href='/phase3.html'">Update Phase 3</button>
   </div>
 
+  <div class="section">
+  <h2>Phase 4: Familiarity Survey</h2>
+  <div id="phase4"></div>
+  <button class="nav-button" onclick="location.href='/phase4.html'">Update Phase 4</button>
+</div>
+
+
   <button class="submit-button" onclick="submitAll()">✅ Submit All Responses</button>
 
   <div id="validation-modal" style="
@@ -572,50 +579,55 @@ function renderPhase2() {
       });
     }
 
-    function submitAll() {
-      const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
-      const username = localStorage.getItem('username') || 'anonymous';
+  function submitAll() {
+    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
+    const username = localStorage.getItem('username') || 'anonymous';
 
-      // Phase 1
-      const phase1 = {};
-      for (let i = 1; i <= 8; i++) {
-        const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
-        const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
-        phase1[`snippet${i}`] = { summary, comprehensibility: comp };
-      }
-
-      // Phase 2 & 3
-      const phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
-      const phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
-
-      const flags = {
-        phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
-        phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
-        phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
-        codeTheme: localStorage.getItem('codeTheme') || 'light',
-        submitted: '1' // final submission flag
-      };
-
-      const payload = {
-        username,
-        participantName: name,
-        phase1,
-        phase2,
-        phase3,
-        ...flags
-      };
-
-      console.log("🚀 Submitting FINAL payload via Beacon:", payload);
-
-      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-      const success = navigator.sendBeacon('/submit_final', blob);
-
-      if (success) {
-        showSubmissionModal('✅ Submission successful!\n\nWe will notify you about the possible next steps. \n\nYou can still resubmit your responses before the deadline if needed.');
-      } else {
-        showValidationMessage('❌ Submission failed. Beacon transmission failed.');
-      }
+    // Phase 1
+    const phase1 = {};
+    for (let i = 1; i <= 8; i++) {
+      const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
+      const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
+      phase1[`snippet${i}`] = { summary, comprehensibility: comp };
     }
+
+    // Phase 2 & 3
+    const phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
+    const phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
+
+    // Phase 4 (familiarity only)
+    const phase4 = JSON.parse(localStorage.getItem('csKnowledgeSurveyAnswers') || '{}');
+
+    const flags = {
+      phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
+      phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
+      phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
+      phase4Complete: localStorage.getItem('phase4Complete') || 'false',
+      codeTheme: localStorage.getItem('codeTheme') || 'light',
+      submitted: '1'
+    };
+
+    const payload = {
+      username,
+      participantName: name,
+      phase1,
+      phase2,
+      phase3,
+      phase4,   // ← NEW
+      ...flags
+    };
+
+    console.log("🚀 Submitting FINAL payload via Beacon:", payload);
+
+    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    const success = navigator.sendBeacon('/submit_final', blob);
+
+    if (success) {
+      showSubmissionModal('✅ Submission successful!\n\nWe will notify you about the possible next steps. \n\nYou can still resubmit your responses before the deadline if needed.');
+    } else {
+      showValidationMessage('❌ Submission failed. Beacon transmission failed.');
+    }
+  }
 
 
     renderPhase1();
@@ -730,50 +742,41 @@ function renderPhase2() {
   </script>
 
   <script>
-    function saveToServer() {
-      const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
-      const username = localStorage.getItem('username') || 'anonymous';
+  function saveToServer() {
+    const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
+    const username = localStorage.getItem('username') || 'anonymous';
 
-      // Phase 1 data
-      const phase1 = {};
-      for (let i = 1; i <= 8; i++) {
-        const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
-        const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
-        phase1[`snippet${i}`] = { summary, comprehensibility: comp };
-      }
-
-      // Phase 2 & 3 data
-      let phase2 = {}, phase3 = {};
-      try {
-        phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
-        phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
-      } catch (e) {
-        console.warn("Error parsing phase2 or phase3 data", e);
-      }
-
-      // Completion flags and theme
-      const flags = {
-        phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
-        phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
-        phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
-        codeTheme: localStorage.getItem('codeTheme') || 'light',
-        submitted: '0',
-      };
-
-      const payload = {
-        username,
-        participantName: name,
-        phase1,
-        phase2,
-        phase3,
-        ...flags
-      };
-
-      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-      navigator.sendBeacon('/submit_final', blob);
-
-      console.log(payload);
+    // Phase 1
+    const phase1 = {};
+    for (let i = 1; i <= 8; i++) {
+      const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
+      const comp = sessionStorage.getItem(`compSummary${i}`) || localStorage.getItem(`compSummary${i}`) || '';
+      phase1[`snippet${i}`] = { summary, comprehensibility: comp };
     }
+
+    // Phase 2 & 3
+    let phase2 = {}, phase3 = {};
+    try {
+      phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
+      phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
+    } catch {}
+
+    // Phase 4
+    const phase4 = JSON.parse(localStorage.getItem('csKnowledgeSurveyAnswers') || '{}');
+
+    const flags = {
+      phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
+      phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
+      phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
+      phase4Complete: localStorage.getItem('phase4Complete') || 'false',
+      codeTheme: localStorage.getItem('codeTheme') || 'light',
+      submitted: '0',
+    };
+
+    const payload = { username, participantName: name, phase1, phase2, phase3, phase4, ...flags };
+    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    navigator.sendBeacon('/submit_final', blob);
+  }
 
     window.addEventListener('beforeunload', function (e) {
       saveToServer();
@@ -782,6 +785,68 @@ function renderPhase2() {
   </script>
 
   
+<script>
+  // Phase 4 topics (ids must match what Phase 4 stored)
+  const phase4Topics = [
+    { id: "uri_scheme",                label: "URI schemes" },
+    { id: "file_vs_network_uri",       label: "Filesystem vs network URIs" },
+    { id: "reflection",                label: "Java Reflection API" },
+    { id: "visitor_walkFileTree",      label: "Visitor pattern (Files.walkFileTree)" },
+    { id: "utf8_utf16",                label: "UTF-8 vs UTF-16" },
+    { id: "bitwise_ops",               label: "Bitwise operators (&, |, ^, >>, >>>)" },
+    { id: "hex_to_dec",                label: "Hex ↔ Decimal conversion" },
+    { id: "quadratic",                 label: "Quadratic formula" },
+    { id: "atan",                      label: "Arctangent (atan)" },
+    { id: "nan",                       label: "NaN behavior in Java" },
+    { id: "fp_singularities",          label: "Floating-point singularities (e.g., 1.0/0.0)" }
+  ];
+</script>
+
+<script>
+  function renderPhase4() {
+    const container = document.getElementById('phase4');
+    container.innerHTML = '';
+
+    // answers saved by Phase 4 as { [id]: 'yes'|'no' }
+    const ans = JSON.parse(localStorage.getItem('csKnowledgeSurveyAnswers') || '{}');
+    if (!ans || Object.keys(ans).length === 0) {
+      container.innerHTML = '<em>No data found.</em>';
+      return;
+    }
+
+    let complete = true;
+    const rows = phase4Topics.map(t => {
+      const v = ans[t.id];
+      if (v !== 'yes' && v !== 'no') complete = false;
+      const pretty = (v === 'yes') ? 'Yes' : (v === 'no' ? 'No' : '<em>Not answered</em>');
+      return `<tr><td style="padding:6px 10px;">${t.label}</td><td style="padding:6px 10px;"><strong>${pretty}</strong></td></tr>`;
+    }).join('');
+
+    container.innerHTML = `
+      <div style="overflow-x:auto">
+        <table style="border-collapse:collapse; width:100%;">
+          <thead>
+            <tr style="background:#f5f5f5;">
+              <th style="text-align:left; padding:8px 10px;">Topic</th>
+              <th style="text-align:left; padding:8px 10px;">Familiar?</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+      <div style="margin-top:10px; color:${complete ? '#2e7d32' : '#9b0000'};">
+        ${complete ? '✅ All Phase 4 questions are answered.' : '⚠️ Some Phase 4 items are unanswered.'}
+      </div>
+    `;
+
+    // reflect completion to nav if fully answered
+    if (complete) {
+      localStorage.setItem('phase4Complete','true');
+      document.getElementById('link-review')?.classList.remove('disabled');
+    }
+  }
+</script>
+
 
   <footer
     style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">

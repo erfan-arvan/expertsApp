@@ -1089,7 +1089,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
     const username = localStorage.getItem('username') || 'anonymous';
 
-    // Phase 1 data
+    // Phase 1
     const phase1 = {};
     for (let i = 1; i <= 8; i++) {
       const summary = sessionStorage.getItem(`summary${i}`) || localStorage.getItem(`summary${i}`) || '';
@@ -1097,39 +1097,32 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       phase1[`snippet${i}`] = { summary, comprehensibility: comp };
     }
 
-    // Phase 2 & 3 data
+    // Phase 2 & 3
     let phase2 = {}, phase3 = {};
     try {
       phase2 = JSON.parse(sessionStorage.getItem('phase3_ranking') || localStorage.getItem('phase3_ranking') || '{}');
       phase3 = JSON.parse(sessionStorage.getItem('phase3_reasoning') || localStorage.getItem('phase3_reasoning') || '{}');
-    } catch (e) {
-      console.warn("Error parsing phase2 or phase3 data", e);
-    }
+    } catch {}
 
-    // Completion flags and theme
+    // Phase 4
+    const phase4 = JSON.parse(localStorage.getItem('csKnowledgeSurveyAnswers') || '{}');
+
     const flags = {
       phase1Complete: sessionStorage.getItem('phase1Complete') || localStorage.getItem('phase1Complete') || 'false',
       phase2Complete: sessionStorage.getItem('phase2Complete') || localStorage.getItem('phase2Complete') || 'false',
       phase3Complete: sessionStorage.getItem('phase3Complete') || localStorage.getItem('phase3Complete') || 'false',
+      phase4Complete: localStorage.getItem('phase4Complete') || 'false',
       codeTheme: localStorage.getItem('codeTheme') || 'light',
       submitted: '0',
     };
 
-    const payload = {
-      username,
-      participantName: name,
-      phase1,
-      phase2,
-      phase3,
-      ...flags
-    };
-
+    const payload = { username, participantName: name, phase1, phase2, phase3, phase4, ...flags };
     const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
     navigator.sendBeacon('/submit_final', blob);
-
-    console.log(payload);
   }
+</script>
 
+<script>
   window.addEventListener('beforeunload', function (e) {
     saveToServer();
   });
