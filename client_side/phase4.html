@@ -396,7 +396,106 @@
     /* ---------- Validation helper ---------- */
     function showValidationMessage(msg){ document.getElementById('validation-message').textContent = msg; document.getElementById('validation-modal').style.display='block'; }
 
-    /* ---------- Topics: familiarity only (no MCQs) ---------- */
+ 
+    window.addEventListener('beforeunload', saveToServer);
+
+    /* ---------- Auth helpers ---------- */
+    function logout(){ sessionStorage.clear(); localStorage.clear(); document.cookie.split(';').forEach(c=>{ const n=c.split('=')[0].trim(); document.cookie=`${n}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`; }); window.location.href='index.html'; }
+  </script>
+
+  <script>
+
+  window.onload = () => {
+    // If you have a theme system on this page, call applyTheme(); otherwise remove this line.
+    if (typeof applyTheme === 'function') applyTheme();
+    if (typeof displayUserName === 'function') displayUserName();
+
+    // Restore any Phase 4 survey state from localStorage if needed (already stored as csKnowledgeSurveyAnswers)
+    // (No cookie restore here; Phase 4 uses localStorage.)
+
+    // Mark completed phases (enable nav links)
+      if (isComplete("phase1Complete"))
+        document.getElementById("link-phase2").classList.remove("disabled");
+      if (isComplete("phase2Complete"))
+        document.getElementById("link-phase3").classList.remove("disabled");
+      if (isComplete("phase3Complete"))
+        document.getElementById("link-phase4").classList.remove("disabled");
+      if (isComplete("phase4Complete"))
+        document.getElementById("link-review").classList.remove("disabled");
+
+    // Highlight current tab (includes Phase 4)
+    const current = window.location.pathname.split('/').pop() || '';
+    if (current.includes('phase1')) document.getElementById('link-phase1')?.classList.add('active');
+    else if (current.includes('phase2')) document.getElementById('link-phase2')?.classList.add('active');
+    else if (current.includes('phase3')) document.getElementById('link-phase3')?.classList.add('active');
+    else if (current.includes('phase4')) document.getElementById('link-phase4')?.classList.add('active');
+    else if (current.includes('review')) document.getElementById('link-review')?.classList.add('active');
+
+    // Show/hide the "Go to Review & Submit" button based on Phase 4 completion
+    const gotoBtn = document.getElementById('goto-review');
+    const phase4Complete =
+      localStorage.getItem('phase4Complete') === 'true' ||
+      (typeof validatePhase4 === 'function' && validatePhase4());
+
+    if (phase4Complete) {
+      localStorage.setItem('phase4Complete', 'true');
+      document.getElementById('link-review')?.classList.remove('disabled');
+      if (gotoBtn) gotoBtn.style.display = 'inline-block';
+    } else {
+      localStorage.setItem('phase4Complete', 'false');
+      if (gotoBtn) gotoBtn.style.display = 'none';
+    }
+
+    // Re-check once after the UI initializes (mirrors your Phase 3 setTimeout)
+    setTimeout(() => {
+      const ok = (typeof validatePhase4 === 'function') && validatePhase4();
+      if (ok) {
+        localStorage.setItem('phase4Complete', 'true');
+        document.getElementById('link-review')?.classList.remove('disabled');
+        if (gotoBtn) gotoBtn.style.display = 'inline-block';
+      } else {
+        localStorage.setItem('phase4Complete', 'false');
+        if (gotoBtn) gotoBtn.style.display = 'none';
+      }
+    }, 500);
+
+    // Auto-save to server every 2 minutes (same pattern you use elsewhere)
+    setInterval(() => {
+      try {
+        if (typeof saveToServer === 'function') {
+          saveToServer();
+          console.log('[Auto-Save] Progress saved to server.');
+        }
+      } catch (e) {
+        console.warn('[Auto-Save] Failed to save:', e);
+      }
+    }, 120000);
+  };
+</script>
+<script>
+    function toggleInstructions() {
+    const content = document.getElementById("instructions-content");
+    const button = event.target;
+
+    if (content.style.display === "none") {
+      content.style.display = "block";
+      button.textContent = "Hide";
+    } else {
+      content.style.display = "none";
+      button.textContent = "Show";
+    }
+  }
+
+      function isComplete(key) {
+      return (
+        sessionStorage.getItem(key) === "true" ||
+        localStorage.getItem(key) === "true"
+      );
+    }
+</script>
+
+<script>
+  /* ---------- Topics: familiarity only (no MCQs) ---------- */
   const topics = [
     { id: "uri_scheme", tag: "URIs", q: "Are you familiar with the concept of Uniform Resource Identifier (URI) schemes?" },
     { id: "file_vs_network_uri", tag: "URIs", q: "Do you know the difference between filesystem URIs and remote/network URIs?" },
@@ -600,117 +699,7 @@
       catch (e) { console.warn('[Auto-Save] Failed to save:', e); }
     }, 120000);
   };
-
-
-    window.addEventListener('beforeunload', saveToServer);
-
-    /* ---------- Auth helpers ---------- */
-    function logout(){ sessionStorage.clear(); localStorage.clear(); document.cookie.split(';').forEach(c=>{ const n=c.split('=')[0].trim(); document.cookie=`${n}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`; }); window.location.href='index.html'; }
-  </script>
-
-  <script>
-  // Optional helper for Phase 4
-  function validatePhase4() {
-    // Each topic must have fam answered; if fam==='yes', it must also have an mcq (number)
-    const answers = JSON.parse(localStorage.getItem('csKnowledgeSurveyAnswers') || '{}');
-    // If you have the global `topics` array on this page:
-    if (!Array.isArray(window.topics) || window.topics.length === 0) return false;
-
-    for (const t of topics) {
-      const r = answers[t.id] || {};
-      if (!r.fam) return false;
-      if (r.fam === 'yes' && typeof r.mcq !== 'number') return false;
-    }
-    return true;
-  }
-
-  window.onload = () => {
-    // If you have a theme system on this page, call applyTheme(); otherwise remove this line.
-    if (typeof applyTheme === 'function') applyTheme();
-    if (typeof displayUserName === 'function') displayUserName();
-
-    // Restore any Phase 4 survey state from localStorage if needed (already stored as csKnowledgeSurveyAnswers)
-    // (No cookie restore here; Phase 4 uses localStorage.)
-
-    // Mark completed phases (enable nav links)
-      if (isComplete("phase1Complete"))
-        document.getElementById("link-phase2").classList.remove("disabled");
-      if (isComplete("phase2Complete"))
-        document.getElementById("link-phase3").classList.remove("disabled");
-      if (isComplete("phase3Complete"))
-        document.getElementById("link-phase4").classList.remove("disabled");
-      if (isComplete("phase4Complete"))
-        document.getElementById("link-review").classList.remove("disabled");
-
-    // Highlight current tab (includes Phase 4)
-    const current = window.location.pathname.split('/').pop() || '';
-    if (current.includes('phase1')) document.getElementById('link-phase1')?.classList.add('active');
-    else if (current.includes('phase2')) document.getElementById('link-phase2')?.classList.add('active');
-    else if (current.includes('phase3')) document.getElementById('link-phase3')?.classList.add('active');
-    else if (current.includes('phase4')) document.getElementById('link-phase4')?.classList.add('active');
-    else if (current.includes('review')) document.getElementById('link-review')?.classList.add('active');
-
-    // Show/hide the "Go to Review & Submit" button based on Phase 4 completion
-    const gotoBtn = document.getElementById('goto-review');
-    const phase4Complete =
-      localStorage.getItem('phase4Complete') === 'true' ||
-      (typeof validatePhase4 === 'function' && validatePhase4());
-
-    if (phase4Complete) {
-      localStorage.setItem('phase4Complete', 'true');
-      document.getElementById('link-review')?.classList.remove('disabled');
-      if (gotoBtn) gotoBtn.style.display = 'inline-block';
-    } else {
-      localStorage.setItem('phase4Complete', 'false');
-      if (gotoBtn) gotoBtn.style.display = 'none';
-    }
-
-    // Re-check once after the UI initializes (mirrors your Phase 3 setTimeout)
-    setTimeout(() => {
-      const ok = (typeof validatePhase4 === 'function') && validatePhase4();
-      if (ok) {
-        localStorage.setItem('phase4Complete', 'true');
-        document.getElementById('link-review')?.classList.remove('disabled');
-        if (gotoBtn) gotoBtn.style.display = 'inline-block';
-      } else {
-        localStorage.setItem('phase4Complete', 'false');
-        if (gotoBtn) gotoBtn.style.display = 'none';
-      }
-    }, 500);
-
-    // Auto-save to server every 2 minutes (same pattern you use elsewhere)
-    setInterval(() => {
-      try {
-        if (typeof saveToServer === 'function') {
-          saveToServer();
-          console.log('[Auto-Save] Progress saved to server.');
-        }
-      } catch (e) {
-        console.warn('[Auto-Save] Failed to save:', e);
-      }
-    }, 120000);
-  };
 </script>
-<script>
-    function toggleInstructions() {
-    const content = document.getElementById("instructions-content");
-    const button = event.target;
 
-    if (content.style.display === "none") {
-      content.style.display = "block";
-      button.textContent = "Hide";
-    } else {
-      content.style.display = "none";
-      button.textContent = "Show";
-    }
-  }
-
-      function isComplete(key) {
-      return (
-        sessionStorage.getItem(key) === "true" ||
-        localStorage.getItem(key) === "true"
-      );
-    }
-</script>
 </body>
 </html>
