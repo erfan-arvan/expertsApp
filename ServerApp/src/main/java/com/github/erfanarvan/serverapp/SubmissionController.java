@@ -35,30 +35,21 @@ public class SubmissionController {
     private static final File CHAT_FILE = new File(CHAT_DIR, "chats_all.json");
     private static final File CHAT_SEEN_FILE = new File("submissions/chat/seen_state.json");
 
-    // TODO: Move Hard coding Passwords to a separate DB
-    private static final Map<String, String> userPasswords = Map.of(
-            "martin", "kudXKSspt6QT",
-            "oscar", "NMgxVXWCn6D7",
-            "erfan", "fmtHu98Tz7rd",
-            "nadeeshan", "xGAXPnnLD3yH");
+    // --- Load users from JSON file instead of hardcoding ---
+    private static final String USERS_FILE = "users/experts_panel.json";
 
-    private static final Map<String, String> userEmails = Map.of(
-            "erfan", "ea442@njit.edu",
-            "nadeeshan", "kgdesilva@wm.edu",
-            "oscar", "ojcch1@gmail.com",
-            "martin", "martin.kellogg@njit.edu");
+    private static final Map<String, String> userPasswords =
+            Collections.unmodifiableMap(loadSectionStringMap(USERS_FILE, "passwords"));
 
-    private static final Map<String, String> userNames = Map.of(
-            "martin", "Martin Kellogg",
-            "oscar", "Oscar Chaparro",
-            "erfan", "Erfan Arvan",
-            "nadeeshan", "De Silva, Nadeeshan");
+    private static final Map<String, String> userEmails =
+            Collections.unmodifiableMap(loadSectionStringMap(USERS_FILE, "emails"));
 
-    private static final Map<String, List<Integer>> userSnippetOrders = Map.of(
-            "martin", List.of(3, 1, 4, 7, 8, 2, 6, 5),
-            "oscar", List.of(1, 2, 3, 4, 5, 6, 7, 8),
-            "erfan", List.of(6, 7, 8, 1, 2, 3, 4, 5),
-            "nadeeshan", List.of(7, 6, 8, 1, 2, 3, 4, 5));
+    private static final Map<String, String> userNames =
+            Collections.unmodifiableMap(loadSectionStringMap(USERS_FILE, "names"));
+
+    private static final Map<String, List<Integer>> userSnippetOrders =
+            Collections.unmodifiableMap(loadSectionIntListMap(USERS_FILE, "snippetOrders"));
+
 
     // Helper: case-insensitive lookup
     private String emailForUser(String handle) {
@@ -1717,5 +1708,60 @@ public class SubmissionController {
     private static boolean looksLikeEmail(String s) {
         return s != null && s.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
     }
+
+    @SuppressWarnings("unchecked")
+private static Map<String, String> loadSectionStringMap(String path, String section) {
+    try {
+        com.fasterxml.jackson.databind.ObjectMapper m = new com.fasterxml.jackson.databind.ObjectMapper();
+        java.io.File f = new java.io.File(path);
+        if (!f.exists()) {
+            System.err.println("⚠️ Users file not found: " + f.getAbsolutePath());
+            return Collections.emptyMap();
+        }
+        Map<String, Object> root = m.readValue(f, new com.fasterxml.jackson.core.type.TypeReference<Map<String,Object>>() {});
+        Object sec = root.get(section);
+        if (sec instanceof Map<?, ?> map) {
+            Map<String, String> out = new LinkedHashMap<>();
+            for (Map.Entry<?, ?> e : map.entrySet()) {
+                if (e.getKey() != null && e.getValue() != null)
+                    out.put(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
+            }
+            System.out.println("Loaded " + out.size() + " entries for " + section);
+            return out;
+        }
+    } catch (Exception e) {
+        System.err.println("Error reading " + section + " from " + path + ": " + e.getMessage());
+    }
+    return Collections.emptyMap();
+}
+
+@SuppressWarnings("unchecked")
+private static Map<String, List<Integer>> loadSectionIntListMap(String path, String section) {
+    try {
+        com.fasterxml.jackson.databind.ObjectMapper m = new com.fasterxml.jackson.databind.ObjectMapper();
+        Map<String, Object> root = m.readValue(new java.io.File(path), new com.fasterxml.jackson.core.type.TypeReference<Map<String,Object>>() {});
+        Object sec = root.get(section);
+        if (sec instanceof Map<?, ?> map) {
+            Map<String, List<Integer>> out = new LinkedHashMap<>();
+            for (Map.Entry<?, ?> e : map.entrySet()) {
+                if (e.getKey() == null || e.getValue() == null) continue;
+                List<Integer> list = new ArrayList<>();
+                if (e.getValue() instanceof List<?> raw) {
+                    for (Object o : raw) {
+                        try { list.add(Integer.parseInt(String.valueOf(o))); }
+                        catch (NumberFormatException ignored) {}
+                    }
+                }
+                out.put(String.valueOf(e.getKey()), Collections.unmodifiableList(list));
+            }
+            System.out.println("Loaded " + out.size() + " entries for " + section);
+            return out;
+        }
+    } catch (Exception e) {
+        System.err.println("Error reading " + section + " from " + path + ": " + e.getMessage());
+    }
+    return Collections.emptyMap();
+}
+
 
 }
