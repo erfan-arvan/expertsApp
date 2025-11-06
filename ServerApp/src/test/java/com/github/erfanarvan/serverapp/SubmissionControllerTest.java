@@ -23,19 +23,20 @@ public class SubmissionControllerTest {
 
     @Test
     void testValidCredentials() throws Exception {
-        Map<String, String> payload = Map.of("username", "martin", "password", "kudXKSspt6QT");
+        Map<String, String> payload = Map.of("username", "facilitator", "password", "p6Jr92Xy");
 
         mockMvc.perform(post("/get_snippet_order")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(payload)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.participantName").value("Martin Kellogg"))
+                .andExpect(jsonPath("$.participantName").value("Erfan Arvan"))
                 .andExpect(jsonPath("$.snippetOrder").isArray());
     }
 
     @Test
     void testInvalidCredentials() throws Exception {
-        Map<String, String> payload = Map.of("username", "martin", "password", "wrong");
+        // checks an invalid password for robustness
+        Map<String, String> payload = Map.of("username", "facilitator", "password", "wrong");
 
         mockMvc.perform(post("/get_snippet_order")
                 .contentType(MediaType.APPLICATION_JSON)
