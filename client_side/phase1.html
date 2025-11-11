@@ -1090,6 +1090,7 @@ function submitAndCloseModal() {
 
 <script>
   function saveToServer() {
+    saveSummary();
     const name = sessionStorage.getItem('participantName') || localStorage.getItem('participantName') || 'Anonymous';
     const username = localStorage.getItem('username') || 'anonymous';
 
