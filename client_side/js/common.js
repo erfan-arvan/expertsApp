@@ -125,7 +125,7 @@ async function saveToServer() {
 
 // Clear storage and redirect to login
 function logout() {
-  saveSummary();
+  saveToServer();
   sessionStorage.clear();
   localStorage.clear();
 

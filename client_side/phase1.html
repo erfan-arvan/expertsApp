@@ -1126,4 +1126,10 @@ function submitAndCloseModal() {
   }
 </script>
 
+<script>
+    window.addEventListener('beforeunload', function (e) {
+    saveToServer();
+  });
+</script>
+
 </html>
