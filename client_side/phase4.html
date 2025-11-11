@@ -400,7 +400,7 @@
 
  
     /* ---------- Auth helpers ---------- */
-    function logout(){ sessionStorage.clear(); localStorage.clear(); document.cookie.split(';').forEach(c=>{ const n=c.split('=')[0].trim(); document.cookie=`${n}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`; }); window.location.href='index.html'; }
+    function logout(){ saveToServer(); sessionStorage.clear(); localStorage.clear(); document.cookie.split(';').forEach(c=>{ const n=c.split('=')[0].trim(); document.cookie=`${n}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`; }); window.location.href='index.html'; }
   </script>
 
   <script>
@@ -703,6 +703,7 @@
 
   };
 </script>
+
 
 </body>
 </html>
