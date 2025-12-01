@@ -24,7 +24,7 @@
       display: flex;
       gap: 10px;
       overflow-x: visible;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
   
     .ranking-row-numbers {
@@ -32,17 +32,7 @@
       gap: 10px;
       margin-bottom: 0;
     }
-  
-    .ranking-slot {
-      flex: 1 1 100px;
-      background: #e8f5e9;
-      border: 2px dashed #4CAF50;
-      border-radius: 6px;
-      padding: 10px;
-      min-height: 80px;
-      text-align: center;
-    }
-  
+
     .ranking-number {
       flex: 1;
       text-align: center;
@@ -231,7 +221,7 @@
   
     /* === Dark mode overrides === */
     body.dark-mode .card {
-      background-color: #2a2a2a!important;
+      background-color: #2a2a2a;
       border-color: #555;
       color: #ddd;
     }
@@ -242,7 +232,7 @@
     }
   
     body.dark-mode .code-box {
-      background-color: #2d2d2d!important;
+      background-color: #2d2d2d;
       color: #ddd;
     }
   
@@ -327,7 +317,7 @@
     }
 
     .participant-section-wide{
-      height: 300px;
+      height: 100px;
     }
 
     .ranking-row {
@@ -351,25 +341,35 @@
 
     .ranking-slot {
       flex: 1;
-      min-height: 100px;
+      min-height: 30px;
       border: 2px dashed #4CAF50;
       background-color: #e8f5e9;
       border-radius: 6px;
-      padding: 10px;
+      padding-left: 1px;
+      padding-right: 1px;
+
+      display: flex;           /* make contents align inline */
+      flex-wrap: wrap;         /* allow wrapping to next line */
+      gap: 5px;                /* optional: spacing between items */
+      justify-content: center; /* optional: center items horizontally */
+      align-items: center;     /* optional: center items vertically */
     }
 
     .ranking-slot button {
-      display: block;
-      width: 100%;
-      margin: 5px 0;
-      padding: 6px;
+      display: inline-block;         /* allows buttons to sit next to each other */
+      width: auto;                   /* removes the full-width constraint */
+      margin: 1px;                   /* spacing around each button */
+      padding: 1px 5px;             /* more natural button padding */
       border: none;
       border-radius: 4px;
       background-color: #4CAF50;
       color: white;
+      font-size: 12px;
       font-weight: bold;
       cursor: pointer;
+      flex: 0 0 auto;                /* optional: don't grow/shrink in flex layout */
     }
+
 
     .ranking-slot button:hover {
       background-color: #45a049;
@@ -448,11 +448,11 @@
   overflow-x: auto;
 }
 
-.code-content {
-  background-color: #f0f0f0;
-  padding: 10px;
-  border-radius: 4px;
-}
+/*.code-content {*/
+/*  background-color: #f0f0f0;*/
+/*  padding: 10px;*/
+/*  border-radius: 4px;*/
+/*}*/
 
 .participant {
       background: #f9f9f9;
@@ -760,7 +760,7 @@ a:hover {
   /* margin-bottom: 100px; */
   overflow-y: visible;
   padding: 10px 20px;
-  display: none;
+  /*display: none;*/
 }
 
 #phase2-resize-handle {
@@ -768,93 +768,16 @@ a:hover {
   background: #ccc;
   cursor: ns-resize;
   position: relative;
-  display: none;
+  /*display: none;*/
 }
 
- /* === Dark mode overrides === */
-    body.dark-mode .card {
-      background-color: #2a2a2a;
-      border-color: #555;
-      color: #ddd;
+    .fade {
+      transition: opacity 0.4s ease;
+      opacity: 1;
     }
-  
-    body.dark-mode .snippet-preview-box {
-      background-color: #1e1e1e;
-      border: 1px solid #444;
+    .fade.hidden {
+      opacity: 0;
     }
-  
-    body.dark-mode .code-box {
-      background-color: #2d2d2d;
-      color: #ddd;
-    }
-  
-  
-    /*code box*/
-    /* Basic syntax highlighting classes */
-    .keyword {
-      color: #0000ff;
-      font-weight: bold;
-    }
-  
-    .type {
-      color: #007070;
-    }
-  
-    .function {
-      color: #7928a1;
-      font-weight: bold;
-    }
-  
-    .literal {
-      color: #009999;
-    }
-  
-    .string {
-      color: #a31515;
-    }
-  
-    .comment {
-      color: #6a9955;
-      font-style: italic;
-    }
-  
-    .number {
-      color: #098658;
-    }
-  
-    /* Dark mode overrides */
-    .dark-mode .keyword {
-      color: #82aaff;
-    }
-  
-    .dark-mode .type {
-      color: #89ddff;
-    }
-  
-    .dark-mode .function {
-      color: #c792ea;
-    }
-  
-    .dark-mode .literal {
-      color: #ffcb6b;
-    }
-  
-    .dark-mode .string {
-      color: #c3e88d;
-    }
-  
-    .dark-mode .comment {
-      color: #7f848e;
-    }
-  
-    .dark-mode .number {
-      color: #f78c6c;
-    }
-  
-    html {
-      scroll-behavior: smooth;
-    }
-
 
   </style>
 </head>
