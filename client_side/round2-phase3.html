@@ -2117,6 +2117,30 @@ const disagreements = [
   }
 ];
 
+  const snippetMap = {
+  1: "isValidProjectName",
+  2: "isRemote",
+  3: "isMachineTypeDefined",
+  4: "indexOfIgnoreCase",
+  5: "deleteRecursively",
+  6: "encodedLength",
+  7: "lowestPositiveRoot",
+  8: "atan2"
+};
+
+function linkifySnippets(text) {
+  for (const [id, name] of Object.entries(snippetMap)) {
+    const pattern = new RegExp(`\\b${name}\\b`, "g");   // whole word match
+    const replacement = `<a onclick="show_snippet(${id})">${name}</a>`;
+    text = text.replace(pattern, replacement);
+  }
+  return text;
+}
+
+disagreements.forEach(d => {
+  d.text = linkifySnippets(d.text);
+});
+
 
     const username = localStorage.getItem("username") || "anonymous";
     const snippetOrder = JSON.parse(sessionStorage.getItem('snippetOrder') || localStorage.getItem('snippetOrder') || '[]');
@@ -2684,6 +2708,7 @@ function togglePhaseSection() {
     }
 });
 </script>
+
 <footer
   style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
   Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
