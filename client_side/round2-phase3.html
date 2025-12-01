@@ -771,6 +771,90 @@ a:hover {
   display: none;
 }
 
+ /* === Dark mode overrides === */
+    body.dark-mode .card {
+      background-color: #2a2a2a;
+      border-color: #555;
+      color: #ddd;
+    }
+  
+    body.dark-mode .snippet-preview-box {
+      background-color: #1e1e1e;
+      border: 1px solid #444;
+    }
+  
+    body.dark-mode .code-box {
+      background-color: #2d2d2d;
+      color: #ddd;
+    }
+  
+  
+    /*code box*/
+    /* Basic syntax highlighting classes */
+    .keyword {
+      color: #0000ff;
+      font-weight: bold;
+    }
+  
+    .type {
+      color: #007070;
+    }
+  
+    .function {
+      color: #7928a1;
+      font-weight: bold;
+    }
+  
+    .literal {
+      color: #009999;
+    }
+  
+    .string {
+      color: #a31515;
+    }
+  
+    .comment {
+      color: #6a9955;
+      font-style: italic;
+    }
+  
+    .number {
+      color: #098658;
+    }
+  
+    /* Dark mode overrides */
+    .dark-mode .keyword {
+      color: #82aaff;
+    }
+  
+    .dark-mode .type {
+      color: #89ddff;
+    }
+  
+    .dark-mode .function {
+      color: #c792ea;
+    }
+  
+    .dark-mode .literal {
+      color: #ffcb6b;
+    }
+  
+    .dark-mode .string {
+      color: #c3e88d;
+    }
+  
+    .dark-mode .comment {
+      color: #7f848e;
+    }
+  
+    .dark-mode .number {
+      color: #f78c6c;
+    }
+  
+    html {
+      scroll-behavior: smooth;
+    }
+
 
   </style>
 </head>
