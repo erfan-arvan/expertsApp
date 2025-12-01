@@ -2712,6 +2712,27 @@ function togglePhaseSection() {
 
 
 </script>
+
+<script>document.addEventListener("DOMContentLoaded", function () {
+    const username = localStorage.getItem("username"); 
+    if (!username) return;
+
+    const container = document.querySelector("#phase-section-content");
+    if (!container) return;
+
+    // find the matching participant section
+    const sections = Array.from(container.querySelectorAll(".participant-section"));
+    const match = sections.find(sec => {
+        const strong = sec.querySelector("strong");
+        return strong && strong.textContent.trim().toLowerCase() === username.trim().toLowerCase();
+    });
+
+    if (match) {
+        // move it to the top
+        container.prepend(match);
+    }
+});
+</script>
 <footer
   style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 14px; color: #666;">
   Please contact us if you have any questions or issues: <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>
