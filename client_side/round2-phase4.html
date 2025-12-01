@@ -766,8 +766,8 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       card.draggable = true;
       card.id = `snippet-${snippet.id}`;
       card.innerHTML = `
-<strong>${snippet.title.length > 15 
-    ? snippet.title.slice(0, 15) + "..." 
+<strong>${snippet.title.length > 10 
+    ? snippet.title.slice(0, 10) + ".." 
     : snippet.title
 }</strong>
           <br><label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
