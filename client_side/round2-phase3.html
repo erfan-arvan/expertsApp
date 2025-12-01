@@ -2714,13 +2714,12 @@ function togglePhaseSection() {
 </script>
 
 <script>document.addEventListener("DOMContentLoaded", function () {
-    const username = localStorage.getItem("username"); 
+    const username = localStorage.getItem("username"); // e.g., "expertC"
     if (!username) return;
 
     const container = document.querySelector("#phase-section-content");
     if (!container) return;
 
-    // find the matching participant section
     const sections = Array.from(container.querySelectorAll(".participant-section"));
     const match = sections.find(sec => {
         const strong = sec.querySelector("strong");
@@ -2728,8 +2727,18 @@ function togglePhaseSection() {
     });
 
     if (match) {
-        // move it to the top
+        // Move this participant-section to the top
         container.prepend(match);
+
+        // Update its title: "expertC" -> "expertC (you)"
+        const strong = match.querySelector("strong");
+        if (strong) {
+            const current = strong.textContent.trim();
+            // avoid duplicating "(you)" if already present
+            if (!/\(you\)/i.test(current)) {
+                strong.textContent = current + " (you)";
+            }
+        }
     }
 });
 </script>
