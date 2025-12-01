@@ -1,5 +1,5 @@
 
-const participantRankings = [   
-      
+const participantRankings = [
+
   ];
   
