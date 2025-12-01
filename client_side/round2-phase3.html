@@ -2932,7 +2932,7 @@ function attachAutosaveListeners() {
 
 <script>
       function show_snippet(id) {
-    const snippet = snippets.find(s => s.id === id);
+    const snippet = originalSnippets.find(s => s.id === id);
     if (!snippet) return;
 
     document.getElementById('modal-snippet-title').innerText = snippet.title;
