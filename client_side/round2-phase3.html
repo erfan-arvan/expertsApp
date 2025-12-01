@@ -3045,12 +3045,11 @@ function togglePhaseSection() {
   const handle = document.getElementById('phase2-resize-handle');
   const button = document.querySelector('.toggle-btn');
 
-  const isVisible = section.style.display === 'block';
+  // Correct way when default is visible (CSS: display:block)
+  const isVisible = getComputedStyle(section).display !== 'none';
 
-  // Toggle content
+  // Toggle
   section.style.display = isVisible ? 'none' : 'block';
-
-  // Show/hide handler only if content is visible
   handle.style.display = isVisible ? 'none' : 'block';
 
   // Adjust page layout
@@ -3061,9 +3060,10 @@ function togglePhaseSection() {
     body.style.marginTop = `${extraHeight + 50}px`;
   }, 0);
 
-  // Update button label
+  // Button label
   button.textContent = isVisible ? 'Show' : 'Hide';
 }
+
 
 
 
