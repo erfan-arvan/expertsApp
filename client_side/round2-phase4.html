@@ -693,7 +693,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     order.forEach((index, newId) => {
       snippet = { ...originalSnippets[index - 1] }; 
       snippet.id = newId + 1;
-      snippet.title = `Snippet ${newId + 1}`;
+      // snippet.title = `Snippet ${newId + 1}`;
       snippets.push(snippet);
     });
   } else {
