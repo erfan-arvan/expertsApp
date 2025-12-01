@@ -2086,9 +2086,77 @@ function renderParticipantRankings() {
 
  <script>
 const disagreements = [
-  {
+    {
     snippet: "isValidProjectName",
-    text: "isValidProjectName shows noticeable disagreement across experts, with most placing it in the easiest tier and others rating it slightly or significantly harder.\n<br>*Experts A, B, and E all ranked isValidProjectName in Position 1.\n<br>– Expert A described it as “simple to understand” with “very clear” method and variable names. They emphasized that short, self-contained methods like this have an obvious purpose and that “the purpose of local variables and called methods is clear,” which makes it belong among the easiest code.\n<br>– Expert B also viewed it as one of the simplest methods, praising its well-structured conditions and noting that each check contributes independently to the overall validation. In comparing it to isRemote, they said that “the problem of defining a valid project name is more straightforward than that of defining a URI as local” and that the project-name validator is “very self explanatory,” reinforcing why they consider it strictly easier.\n<br>– Expert E likewise considered it very easy, saying that the method signature and the simple sequence of checks made it “pretty easy to understand.” They highlighted that “everything isValidProjectName does is right there in front of you and self-contained,” unlike isRemote, which relies on domain knowledge about URI schemes and an unseen helper.\n<br>\n<br>*Expert C ranked isValidProjectName slightly harder, in Position 2.\n<br>– They found it mostly easy to follow but were unsure why both a letter-or-digit check and a separate valid-character-set check were necessary. They explained that isValidProjectName (and isRemote) requires a bit more domain knowledge to understand the special cases, whereas their easiest methods—indexOfIgnoreCase and deleteRecursively—can be followed line by line without additional assumptions.\n<br>\n<br>*Expert D placed isValidProjectName much higher, at Position 4.\n<br>– They wrote that the method is understandable, but that the initial chain of validations is too long and could be “summarized a little without losing the readability.” They consistently favored code whose naming and structure felt more compact and directly aligned with its purpose, which pushed isValidProjectName outside the easiest tier for them.\n<br>\n<br>Overall, the disagreement arises from how experts weigh the method's length, redundancy of checks, and the small amount of domain knowledge it assumes. For some, these details are negligible, leaving the method firmly among the easiest; for others, they introduce enough overhead to move it into a slightly or significantly harder tier."
+    text: `
+<p>
+  <strong>isValidProjectName</strong> shows noticeable disagreement across experts,
+  with most placing it in the easiest tier and others rating it slightly or significantly harder.
+</p>
+
+<ul>
+  <li>
+    <strong>Experts A, B, and E</strong> all ranked <code>isValidProjectName</code> in Position 1.
+    <ul>
+      <li>
+        <strong>Expert A</strong> described it as “simple to understand” with “very clear”
+        method and variable names. They emphasized that short, self-contained methods like this
+        have an obvious purpose and that “the purpose of local variables and called methods is
+        clear,” which makes it belong among the easiest code.
+      </li>
+      <li>
+        <strong>Expert B</strong> also viewed it as one of the simplest methods, praising its
+        well-structured conditions and noting that each check contributes independently to the
+        overall validation. In comparing it to <code>isRemote</code>, they said that “the problem
+        of defining a valid project name is more straightforward than that of defining a URI as
+        local” and that the project-name validator is “very self explanatory,” reinforcing why
+        they consider it strictly easier.
+      </li>
+      <li>
+        <strong>Expert E</strong> likewise considered it very easy, saying that the method
+        signature and the simple sequence of checks made it “pretty easy to understand.” They
+        highlighted that “everything isValidProjectName does is right there in front of you and
+        self-contained,” unlike <code>isRemote</code>, which relies on domain knowledge about URI
+        schemes and an unseen helper.
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Expert C</strong> ranked <code>isValidProjectName</code> slightly harder, in Position 2.
+    <ul>
+      <li>
+        They found it mostly easy to follow but were unsure why both a letter-or-digit check and
+        a separate valid-character-set check were necessary. They explained that
+        <code>isValidProjectName</code> (and <code>isRemote</code>) requires a bit more domain
+        knowledge to understand the special cases, whereas their easiest methods—
+        <code>indexOfIgnoreCase</code> and <code>deleteRecursively</code>—can be followed line by
+        line without additional assumptions.
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Expert D</strong> placed <code>isValidProjectName</code> much higher, at Position 4.
+    <ul>
+      <li>
+        They wrote that the method is understandable, but that the initial chain of validations is
+        too long and could be “summarized a little without losing the readability.” They
+        consistently favored code whose naming and structure felt more compact and directly aligned
+        with its purpose, which pushed <code>isValidProjectName</code> outside the easiest tier
+        for them.
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>
+  <strong>Overall</strong>, the disagreement arises from how experts weigh the method's length,
+  redundancy of checks, and the small amount of domain knowledge it assumes. For some, these
+  details are negligible, leaving the method firmly among the easiest; for others, they introduce
+  enough overhead to move it into a slightly or significantly harder tier.
+</p>
+`
   },
 
   {
