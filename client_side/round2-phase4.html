@@ -772,7 +772,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       const card = document.createElement('div');
       card.className = 'card';
       card.draggable = true;
-      card.id = `snippet-${snippet.title}`;
+      card.id = `snippet-${snippet.id}`;
       card.innerHTML = `
           <strong>${snippet.title}</strong>
           <br><label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
