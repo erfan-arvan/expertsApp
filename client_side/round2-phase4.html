@@ -693,7 +693,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
     order.forEach((index, newId) => {
       snippet = { ...originalSnippets[index - 1] }; 
       snippet.id = newId + 1;
-      const shortTitle = snippet.title.slice(0, 15);
+      // snippet.title = `Snippet ${newId + 1}`;
       snippets.push(snippet);
     });
   } else {
@@ -766,7 +766,10 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       card.draggable = true;
       card.id = `snippet-${snippet.id}`;
       card.innerHTML = `
-          <strong>${snippet.title}</strong>
+<strong>${snippet.title.length > 15 
+    ? snippet.title.slice(0, 15) + "..." 
+    : snippet.title
+}</strong>
           <br><label><input type="checkbox" onchange="togglePreview(${snippet.id}, this)"> View</label>
         `;
       card.addEventListener('dragstart', () => card.classList.add('dragging'));
@@ -783,6 +786,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
       });
     });
   }
+
   function togglePreview(id, checkbox) {
     const previewArea = document.getElementById('previewArea');
     const snippet = snippets.find(s => s.id === id);
