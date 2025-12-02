@@ -1809,7 +1809,7 @@ async function saveToServer() {
 
   // Round 2 responses
   const round2Responses = {};
-  for (let i = 0; i <= 4; i++) {
+  for (let i = 0; i <= 5; i++) {
     const key = `round2_response_${i}`;
     const val = localStorage.getItem(key) || sessionStorage.getItem(key);
     if (val) {
