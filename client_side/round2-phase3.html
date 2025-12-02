@@ -1665,6 +1665,16 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
   }
 
   function goToPhase4() {
+    const q1 = document.getElementById('q1').value.trim();
+    const q2 = document.getElementById('q2').value.trim();
+    const q3 = document.getElementById('q3').value.trim();
+
+    if (!q1 || !q2 || !q3) {
+        showValidationMessage("⚠️ Please answer all three questions before continuing.");
+        return;
+    }
+
+    saveRound2Response(index, { q1, q2, q3 });
     next();
     if (areAllDisagreementsAnswered()) {
       location.href = '/round2-phase4.html';
