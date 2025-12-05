@@ -2640,17 +2640,21 @@ function markCurrentUserName(text, username) {
 
 
     function render() {
-        const container = document.getElementById('disagreement-box');
-        const entry = disagreements[index];
-        const localSnippets = getLocalSnippetMapping();
-        const username = sessionStorage.getItem('username') || localStorage.getItem('username') || 'anonymous';
+    const container = document.getElementById('disagreement-box');
+    const entry = disagreements[index];
+    const localSnippets = getLocalSnippetMapping();
+    const username = sessionStorage.getItem('username') || localStorage.getItem('username') || 'anonymous';
 
-        container.innerHTML = `
-            <h3 style="margin-bottom: 10px;">Disagreement ${index + 1}</h3>
-            <div class="disagreement-text" style="margin-bottom: 20px;">
-                ${personalize(entry.text, username, localSnippets)}
-            </div>
-        `;
+    const heading = entry.title
+        ? entry.title
+        : `Disagreement ${index + 1}`;
+
+    container.innerHTML = `
+        <h3 style="margin-bottom: 10px;">${heading}</h3>
+        <div class="disagreement-text" style="margin-bottom: 20px;">
+            ${personalize(entry.text, username, localSnippets)}
+        </div>
+    `;
 
 
         const questionsContainer = document.getElementById('question-box');
