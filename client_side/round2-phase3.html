@@ -2645,8 +2645,9 @@ function markCurrentUserName(text, username) {
     const localSnippets = getLocalSnippetMapping();
     const username = sessionStorage.getItem('username') || localStorage.getItem('username') || 'anonymous';
 
+    // ░░░ NEW HEADER FORMAT ░░░
     const heading = entry.title
-        ? entry.title
+        ? `Disagreement ${index + 1}: ${entry.title}`
         : `Disagreement ${index + 1}`;
 
     container.innerHTML = `
@@ -2655,7 +2656,6 @@ function markCurrentUserName(text, username) {
             ${personalize(entry.text, username, localSnippets)}
         </div>
     `;
-
 
         const questionsContainer = document.getElementById('question-box');
 
