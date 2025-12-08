@@ -2552,7 +2552,7 @@ function markCurrentUserName(text, username) {
           const nextBtn = document.getElementById("nextBtn");
           if (index === disagreements.length - 1) {
               nextBtn.disabled = true;
-              nextBtn.innerText = "Done"; // optional
+              nextBtn.style.display = "none"; // optional
               if(areAllDisagreementsAnswered){
                   sessionStorage.setItem("round2-phase3-complete","true");
                   localStorage.setItem("round2-phase3-complete","true");
@@ -2571,6 +2571,7 @@ function markCurrentUserName(text, username) {
               }
           } else {
               nextBtn.disabled = false;
+              nextBtn.style.display = "inline-block";
               nextBtn.innerText = "Next Disagreement ➡️"; // optional
           }
 
