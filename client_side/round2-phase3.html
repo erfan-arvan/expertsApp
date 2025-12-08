@@ -2101,82 +2101,75 @@ const disagreements = [
   title: "Comparison-based disagreement: isValidProjectName vs. isRemote",
   text: `
 <p>
-  Experts agree that <strong>isValidProjectName</strong> and <strong>isRemote</strong> are on the
-  easier side of the set — but they disagree on <em>how</em> they are easy and whether they truly
-  merit the very lowest difficulty tier. The main tension is whether self-containment or domain
-  knowledge drives comprehensibility.
+  Experts largely consider <strong>isValidProjectName</strong> and <strong>isRemote</strong> among
+  the easier methods in the set — but they disagree on <em>which one is easier</em> and why.
+  The debate centers on the role of <em>domain knowledge</em> and <em>redundancy of checks</em>.
 </p>
 
-<h4>isValidProjectName — disagreement on length vs. transparency</h4>
+<h4>isValidProjectName — disagreement mainly on length & redundancy</h4>
 <ul>
   <li>
-    <strong>Experts A, B, and E</strong> ranked it in Position 1 (easiest).
+    <strong>Experts A, B, and E</strong> ranked it in Position 1.
     <ul>
-      <li>Clear purpose, obvious validation steps, and no hidden behavior.</li>
+      <li>Expert A: “simple to understand” with very clear naming and a fully self-contained purpose.</li>
+      <li>Expert B: “very self explanatory,” especially compared to <code>isRemote</code> which relies on URI semantics.</li>
+      <li>Expert E: praised that “everything it does is right there in front of you,” no hidden helpers.</li>
     </ul>
   </li>
 
   <li>
-    <strong>Expert C</strong> rated it slightly harder (Position 2),
-    citing uncertainty about the need for two different character checks and some
-    small domain considerations.
+    <strong>Expert C</strong> placed it slightly harder (Position 2),
+    questioning why both alphanumeric and valid-character checks were needed and noting
+    the bit of domain reasoning required.
   </li>
 
   <li>
-    <strong>Expert D</strong> placed it much higher (Position 4),
-    not because it is confusing, but because the longer chain of validations feels
-    less compact and introduces “overhead” that pushes it outside the very easiest tier.
+    <strong>Expert D</strong> ranked it noticeably harder (Position 4),
+    finding the long chain of validations less “compact” than their preferred style.
   </li>
 </ul>
 
-<h4>isRemote — disagreement on hidden knowledge vs. clear structure</h4>
+<h4>isRemote — disagreement mainly on hidden knowledge & external behavior</h4>
 <ul>
   <li>
-    <strong>Experts A and D</strong> put it in Position 1,
-    praising its concise structure and straightforward conditional flow.
+    <strong>Experts A and D</strong> ranked it as one of the easiest (Position 1),
+    praising its concise structure and clear conditional flow.
   </li>
 
   <li>
-    <strong>Experts B, C, and E</strong> placed it slightly harder (Position 2):
+    <strong>Experts B, C, and E</strong> placed it at Position 2 instead:
     <ul>
-      <li>It depends on understanding URI schemes (<code>'file'</code>, <code>'jar'</code>)</li>
-      <li>It calls <code>isFilesystemPath(uri)</code>, whose behavior is not visible</li>
-      <li>Local-vs-remote semantics require some background knowledge</li>
+      <li>Expert E: clear overall, but requires understanding URI schemes and <code>isFilesystemPath(uri)</code>.</li>
+      <li>Expert B: evaluating “local vs remote” is less straightforward than project-name validation.</li>
+      <li>Expert C: domain knowledge needed to understand why <code>'file'</code> and <code>'jar'</code> differ from others.</li>
     </ul>
-  </li>
-
-  <li>
-    One expert explicitly questioned whether such domain reasoning should appear in
-    code that is otherwise structurally simple — preventing them from ranking it as the easiest.
   </li>
 </ul>
 
 <p>
-  <strong>Overall</strong>, the disagreement produces two contrasting interpretations:
+  <strong>Overall</strong>, the experts split into two camps:
 </p>
 
 <ul>
   <li>
-    <strong>Structure-first experts</strong>
-    → prefer the concise shape of <code>isRemote</code> and penalize 
-      <code>isValidProjectName</code> for length (e.g., Expert D).
+    Those who prefer <strong>compact, structure-driven code</strong> →
+    rate <code>isRemote</code> easier and penalize <code>isValidProjectName</code> for length/repetition
+    (Experts A, D).
   </li>
-
   <li>
-    <strong>Self-containment-first experts</strong>
-    → prefer <code>isValidProjectName</code> since it needs no domain knowledge,
-      whereas <code>isRemote</code> requires external interpretation (B, C, E).
+    Those who prefer <strong>fully self-contained logic with minimal domain reliance</strong> →
+    rate <code>isValidProjectName</code> easier and see <code>isRemote</code> as slightly harder
+    (Experts B, C, E).
   </li>
 </ul>
 
 <p>
-  Thus, even though both methods live near the “top” of the ranked list,
-  their exact positions reflect nuanced trade-offs between
-  <em>compact structure</em> and <em>domain transparency</em>.
+  The disagreement highlights two competing views of what makes code easy:
+  simplicity in <em>structure</em> versus simplicity in <em>domain assumptions</em>.
 </p>
 `
-}
-,
+},
+
 
 {
   snippet: "isMachineTypeDefined",
