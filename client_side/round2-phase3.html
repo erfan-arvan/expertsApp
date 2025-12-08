@@ -2096,140 +2096,87 @@ function renderParticipantRankings() {
 
  <script>
 const disagreements = [
-    {
-    snippet: "isValidProjectName",
-    title: "minor",
-    text: `
-<p>
-  <strong>isValidProjectName</strong> shows noticeable disagreement across experts,
-  with most placing it in the easiest tier and others rating it slightly or significantly harder.
-</p>
-
-<ul>
-  <li>
-    <strong>Experts A, B, and E</strong> all ranked <code>isValidProjectName</code> in Position 1.
-    <ul>
-      <li>
-        <strong>Expert A</strong> described it as “simple to understand” with “very clear”
-        method and variable names. They emphasized that short, self-contained methods like this
-        have an obvious purpose and that “the purpose of local variables and called methods is
-        clear,” which makes it belong among the easiest code.
-      </li>
-      <li>
-        <strong>Expert B</strong> also viewed it as one of the simplest methods, praising its
-        well-structured conditions and noting that each check contributes independently to the
-        overall validation. In comparing it to <code>isRemote</code>, they said that “the problem
-        of defining a valid project name is more straightforward than that of defining a URI as
-        local” and that the project-name validator is “very self explanatory,” reinforcing why
-        they consider it strictly easier.
-      </li>
-      <li>
-        <strong>Expert E</strong> likewise considered it very easy, saying that the method
-        signature and the simple sequence of checks made it “pretty easy to understand.” They
-        highlighted that “everything isValidProjectName does is right there in front of you and
-        self-contained,” unlike <code>isRemote</code>, which relies on domain knowledge about URI
-        schemes and an unseen helper.
-      </li>
-    </ul>
-  </li>
-
-  <li>
-    <strong>Expert C</strong> ranked <code>isValidProjectName</code> slightly harder, in Position 2.
-    <ul>
-      <li>
-        They found it mostly easy to follow but were unsure why both a letter-or-digit check and
-        a separate valid-character-set check were necessary. They explained that
-        <code>isValidProjectName</code> (and <code>isRemote</code>) requires a bit more domain
-        knowledge to understand the special cases, whereas their easiest methods—
-        <code>indexOfIgnoreCase</code> and <code>deleteRecursively</code>—can be followed line by
-        line without additional assumptions.
-      </li>
-    </ul>
-  </li>
-
-  <li>
-    <strong>Expert D</strong> placed <code>isValidProjectName</code> much higher, at Position 4.
-    <ul>
-      <li>
-        They wrote that the method is understandable, but that the initial chain of validations is
-        too long and could be “summarized a little without losing the readability.” They
-        consistently favored code whose naming and structure felt more compact and directly aligned
-        with its purpose, which pushed <code>isValidProjectName</code> outside the easiest tier
-        for them.
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<p>
-  <strong>Overall</strong>, the disagreement arises from how experts weigh the method's length,
-  redundancy of checks, and the small amount of domain knowledge it assumes. For some, these
-  details are negligible, leaving the method firmly among the easiest; for others, they introduce
-  enough overhead to move it into a slightly or significantly harder tier.
-</p>
-`
-  },
-
 {
-  snippet: "isRemote",
+  snippet: "isValidProjectName, isRemote",
+  title: "Comparison-based disagreement: isValidProjectName vs. isRemote",
   text: `
 <p>
-  <strong>isRemote</strong> shows disagreement relative to mid-range snippets, even though most
-  experts view it as generally clear.
+  Experts agree that <strong>isValidProjectName</strong> and <strong>isRemote</strong> are on the
+  easier side of the set — but they disagree on <em>how</em> they are easy and whether they truly
+  merit the very lowest difficulty tier. The main tension is whether self-containment or domain
+  knowledge drives comprehensibility.
 </p>
 
+<h4>isValidProjectName — disagreement on length vs. transparency</h4>
 <ul>
   <li>
-    <strong>Experts A and D</strong> placed <code>isRemote</code> in Position 1.
+    <strong>Experts A, B, and E</strong> ranked it in Position 1 (easiest).
     <ul>
-      <li>
-        <strong>Expert A</strong> called it “concise,” with explicit and simple method names and
-        “overall, good comprehensibility.” They emphasized that short, self-contained methods like
-        this do not require extensive background knowledge.
-      </li>
-      <li>
-        <strong>Expert D</strong> similarly described the method as “clear and easy to read in its
-        operation,” noting that it has good structure and intuitive flow.
-      </li>
+      <li>Clear purpose, obvious validation steps, and no hidden behavior.</li>
     </ul>
   </li>
 
   <li>
-    <strong>Experts B, C, and E</strong> placed <code>isRemote</code> in Position 2.
+    <strong>Expert C</strong> rated it slightly harder (Position 2),
+    citing uncertainty about the need for two different character checks and some
+    small domain considerations.
+  </li>
+
+  <li>
+    <strong>Expert D</strong> placed it much higher (Position 4),
+    not because it is confusing, but because the longer chain of validations feels
+    less compact and introduces “overhead” that pushes it outside the very easiest tier.
+  </li>
+</ul>
+
+<h4>isRemote — disagreement on hidden knowledge vs. clear structure</h4>
+<ul>
+  <li>
+    <strong>Experts A and D</strong> put it in Position 1,
+    praising its concise structure and straightforward conditional flow.
+  </li>
+
+  <li>
+    <strong>Experts B, C, and E</strong> placed it slightly harder (Position 2):
     <ul>
-      <li>
-        <strong>Expert E</strong> found it “pretty straightforward,” praising the switch statement
-        for organizing the cases clearly. However, when contrasting it with
-        <code>isValidProjectName</code>, they said that <code>isRemote</code> requires reasoning
-        about URI schemes and about the behavior of <code>isFilesystemPath(uri)</code>, which is
-        not shown.
-      </li>
-      <li>
-        <strong>Expert B</strong> said <code>isRemote</code> is “not bad” but “not perfect either,”
-        explaining that defining a URI as local vs remote is inherently less straightforward than
-        validating a project name. They also noted that URI is “one of those classes you don’t use
-        every day,” often requiring documentation.
-      </li>
-      <li>
-        <strong>Expert C</strong> questioned why schemes like <code>'file'</code> and
-        <code>'jar'</code> were treated as special cases and said understanding these rules
-        “requires more knowledge of the domain.” They contrasted this with
-        <code>indexOfIgnoreCase</code> and <code>deleteRecursively</code>, which they viewed as
-        line-by-line understandable without domain assumptions.
-      </li>
+      <li>It depends on understanding URI schemes (<code>'file'</code>, <code>'jar'</code>)</li>
+      <li>It calls <code>isFilesystemPath(uri)</code>, whose behavior is not visible</li>
+      <li>Local-vs-remote semantics require some background knowledge</li>
     </ul>
+  </li>
+
+  <li>
+    One expert explicitly questioned whether such domain reasoning should appear in
+    code that is otherwise structurally simple — preventing them from ranking it as the easiest.
   </li>
 </ul>
 
 <p>
-  <strong>Overall</strong>, these differences reveal a split between experts who see
-  <code>isRemote</code> as very easy and those who believe the method demands additional domain or
-  library knowledge—specifically understanding URI schemes and helper behavior—which elevates its
-  difficulty slightly above the simplest methods.
+  <strong>Overall</strong>, the disagreement produces two contrasting interpretations:
+</p>
+
+<ul>
+  <li>
+    <strong>Structure-first experts</strong>
+    → prefer the concise shape of <code>isRemote</code> and penalize 
+      <code>isValidProjectName</code> for length (e.g., Expert D).
+  </li>
+
+  <li>
+    <strong>Self-containment-first experts</strong>
+    → prefer <code>isValidProjectName</code> since it needs no domain knowledge,
+      whereas <code>isRemote</code> requires external interpretation (B, C, E).
+  </li>
+</ul>
+
+<p>
+  Thus, even though both methods live near the “top” of the ranked list,
+  their exact positions reflect nuanced trade-offs between
+  <em>compact structure</em> and <em>domain transparency</em>.
 </p>
 `
-},
-
+}
+,
 
 {
   snippet: "isMachineTypeDefined",
