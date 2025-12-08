@@ -2096,81 +2096,79 @@ function renderParticipantRankings() {
 
  <script>
 const disagreements = [
-{
-  snippet: "isValidProjectName, isRemote",
-  title: "Comparison-based disagreement: isValidProjectName vs. isRemote",
-  text: `
+    {
+    snippet: "isValidProjectName",
+    // title: "minor disagreement on isValidProjectName",
+    text: `
 <p>
-  Experts largely consider <strong>isValidProjectName</strong> and <strong>isRemote</strong> among
-  the easier methods in the set — but they disagree on <em>which one is easier</em> and why.
-  The debate centers on the role of <em>domain knowledge</em> and <em>redundancy of checks</em>.
-</p>
-
-<h4>isValidProjectName — disagreement mainly on length & redundancy</h4>
-<ul>
-  <li>
-    <strong>Experts A, B, and E</strong> ranked it in Position 1.
-    <ul>
-      <li>Expert A: “simple to understand” with very clear naming and a fully self-contained purpose.</li>
-      <li>Expert B: “very self explanatory,” especially compared to <code>isRemote</code> which relies on URI semantics.</li>
-      <li>Expert E: praised that “everything it does is right there in front of you,” no hidden helpers.</li>
-    </ul>
-  </li>
-
-  <li>
-    <strong>Expert C</strong> placed it slightly harder (Position 2),
-    questioning why both alphanumeric and valid-character checks were needed and noting
-    the bit of domain reasoning required.
-  </li>
-
-  <li>
-    <strong>Expert D</strong> ranked it noticeably harder (Position 4),
-    finding the long chain of validations less “compact” than their preferred style.
-  </li>
-</ul>
-
-<h4>isRemote — disagreement mainly on hidden knowledge & external behavior</h4>
-<ul>
-  <li>
-    <strong>Experts A and D</strong> ranked it as one of the easiest (Position 1),
-    praising its concise structure and clear conditional flow.
-  </li>
-
-  <li>
-    <strong>Experts B, C, and E</strong> placed it at Position 2 instead:
-    <ul>
-      <li>Expert E: clear overall, but requires understanding URI schemes and <code>isFilesystemPath(uri)</code>.</li>
-      <li>Expert B: evaluating “local vs remote” is less straightforward than project-name validation.</li>
-      <li>Expert C: domain knowledge needed to understand why <code>'file'</code> and <code>'jar'</code> differ from others.</li>
-    </ul>
-  </li>
-</ul>
-
-<p>
-  <strong>Overall</strong>, the experts split into two camps:
+  <strong>isValidProjectName</strong> shows noticeable disagreement across experts,
+  with most placing it in the easiest tier and others rating it slightly or significantly harder.
 </p>
 
 <ul>
   <li>
-    Those who prefer <strong>compact, structure-driven code</strong> →
-    rate <code>isRemote</code> easier and penalize <code>isValidProjectName</code> for length/repetition
-    (Experts A, D).
+    <strong>Experts A, B, and E</strong> all ranked <code>isValidProjectName</code> in Position 1.
+    <ul>
+      <li>
+        <strong>Expert A</strong> described it as “simple to understand” with “very clear”
+        method and variable names. They emphasized that short, self-contained methods like this
+        have an obvious purpose and that “the purpose of local variables and called methods is
+        clear,” which makes it belong among the easiest code.
+      </li>
+      <li>
+        <strong>Expert B</strong> also viewed it as one of the simplest methods, praising its
+        well-structured conditions and noting that each check contributes independently to the
+        overall validation. In comparing it to <code>isRemote</code>, they said that “the problem
+        of defining a valid project name is more straightforward than that of defining a URI as
+        local” and that the project-name validator is “very self explanatory,” reinforcing why
+        they consider it strictly easier.
+      </li>
+      <li>
+        <strong>Expert E</strong> likewise considered it very easy, saying that the method
+        signature and the simple sequence of checks made it “pretty easy to understand.” They
+        highlighted that “everything isValidProjectName does is right there in front of you and
+        self-contained,” unlike <code>isRemote</code>, which relies on domain knowledge about URI
+        schemes and an unseen helper.
+      </li>
+    </ul>
   </li>
+
   <li>
-    Those who prefer <strong>fully self-contained logic with minimal domain reliance</strong> →
-    rate <code>isValidProjectName</code> easier and see <code>isRemote</code> as slightly harder
-    (Experts B, C, E).
+    <strong>Expert C</strong> ranked <code>isValidProjectName</code> slightly harder, in Position 2.
+    <ul>
+      <li>
+        They found it mostly easy to follow but were unsure why both a letter-or-digit check and
+        a separate valid-character-set check were necessary. They explained that
+        <code>isValidProjectName</code> (and <code>isRemote</code>) requires a bit more domain
+        knowledge to understand the special cases, whereas their easiest methods—
+        <code>indexOfIgnoreCase</code> and <code>deleteRecursively</code>—can be followed line by
+        line without additional assumptions.
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Expert D</strong> placed <code>isValidProjectName</code> much higher, at Position 4.
+    <ul>
+      <li>
+        They wrote that the method is understandable, but that the initial chain of validations is
+        too long and could be “summarized a little without losing the readability.” They
+        consistently favored code whose naming and structure felt more compact and directly aligned
+        with its purpose, which pushed <code>isValidProjectName</code> outside the easiest tier
+        for them.
+      </li>
+    </ul>
   </li>
 </ul>
 
 <p>
-  The disagreement highlights two competing views of what makes code easy:
-  simplicity in <em>structure</em> versus simplicity in <em>domain assumptions</em>.
+  <strong>Overall</strong>, the disagreement arises from how experts weigh the method's length,
+  redundancy of checks, and the small amount of domain knowledge it assumes. For some, these
+  details are negligible, leaving the method firmly among the easiest; for others, they introduce
+  enough overhead to move it into a slightly or significantly harder tier.
 </p>
 `
-},
-
-
+  },
 {
   snippet: "isMachineTypeDefined",
   text: `
@@ -2378,81 +2376,6 @@ const disagreements = [
   <strong>Overall</strong>, <code>lowestPositiveRoot</code> ranges from moderately complex to one
   of the hardest methods, depending on the expert's mathematical comfort level, expectations about
   naming clarity, and tolerance for compact representations of formulas.
-</p>
-`
-},
-
-
- {
-  snippet: "atan2",
-  text: `
-<p>
-  <strong>atan2</strong> is part of the most contested hardest cluster, with experts sharply
-  divided on its difficulty.
-</p>
-
-<ul>
-  <li>
-    <strong>Experts A and B</strong> placed <code>atan2</code> in Position 8.
-    <ul>
-      <li>
-        <strong>Expert A</strong> said that even though names like “atan” and “HALF_PI” hint at
-        trigonometry, “neither the method name nor the local variables shed any light on the
-        purpose of the method.” They described it as “ciphered,” understandable only with prior
-        mathematical knowledge, and criticized its use of magic numbers. They also compared it to
-        <code>encodedLength</code>, arguing that both methods fail to convey their purpose clearly.
-      </li>
-      <li>
-        <strong>Expert B</strong> called the method “terrible,” noting that one of the early
-        branches seems to do nothing and that the final return value does not align with what one
-        expects from an atan2-style computation. They grouped it with
-        <code>encodedLength</code> and <code>isMachineTypeDefined</code> as methods that are “hacky
-        or cryptic,” containing errors or confusing design choices that require heavy mental
-        debugging.
-      </li>
-    </ul>
-  </li>
-
-  <li>
-    <strong>Expert E</strong> also placed <code>atan2</code> in Position 8.
-    <ul>
-      <li>
-        They said understanding it requires reasoning about numerical methods and trigonometry.
-        They contrasted it with <code>encodedLength</code>, saying that even though the UTF-8 code
-        uses tricky bit-level logic, it still has an overall logical structure, whereas
-        <code>atan2</code> has a much less intuitive flow. They highlighted unusual constructs like
-        <code>n != n</code> for NaN detection and quadrant-dependent arithmetic like
-        <code>x + HALF_PI</code>, which require reconstructing the intended behavior.
-      </li>
-    </ul>
-  </li>
-
-  <li>
-    <strong>Experts C and D</strong> placed <code>atan2</code> in Position 6.
-    <ul>
-      <li>
-        <strong>Expert C</strong> criticized the extremely short variable names (“x,” “y,” “n”) and
-        said the early if/else block adjusts values in edge cases without making the purpose clear.
-        They said that at least in <code>isMachineTypeDefined</code> they could infer some logic
-        from the name, whereas <code>atan2</code> requires specific mathematical or library context.
-        However, they still found it slightly easier than <code>encodedLength</code>, which they
-        described as involving unfamiliar bitwise and UTF-8 concepts.
-      </li>
-      <li>
-        <strong>Expert D</strong> said the overall intention is broadly understandable, but the
-        cryptic naming, lack of braces, and complex control flow make the method harder to parse.
-        They placed it above the most cryptic low-level encoding code but still within the harder
-        tier.
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<p>
-  These differences show that some experts viewed <code>atan2</code> as opaque without strong
-  numerical-method and trigonometry background, while others judged it slightly more accessible
-  than the trickiest low-level encoding logic but still difficult due to its unconventional flow,
-  naming, and mathematical assumptions.
 </p>
 `
 }
