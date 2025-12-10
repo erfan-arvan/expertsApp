@@ -531,6 +531,7 @@ function submitAll() {
 
     // Clear storage and redirect to login
     function logout() {
+      saveToServer();
       sessionStorage.clear();
       localStorage.clear();
 

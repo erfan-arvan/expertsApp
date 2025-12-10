@@ -1007,6 +1007,7 @@ code: `<span class="keyword">public static</span> <span class="type">int</span> 
 
   // Clear storage and redirect to login
   function logout() {
+    saveToServer();
     sessionStorage.clear();
     localStorage.clear();
 
