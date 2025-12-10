@@ -471,6 +471,7 @@ async function saveToServer() {
 
   <script>
       function logout() {
+      saveToServer();
     sessionStorage.clear();
     localStorage.clear();
 
