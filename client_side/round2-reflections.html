@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Round 3 Reflections — Expert Disagreement Summary</title>
+    <title>round 2 Reflections — Expert Disagreement Summary</title>
     <script>
         /* Apply stored theme ASAP to avoid flash */
         (function () {
@@ -633,7 +633,7 @@
     </a>
     <header>
         <div class="bar">
-            <div class="title">Round 3 Reflections — Expert Disagreement Summary</div>
+            <div class="title">round 2 Reflections — Expert Disagreement Summary</div>
             <div class="controls">
                 <button id="btn-expand" class="pill" title="Expand all details">Expand all</button>
                 <button id="btn-collapse" class="pill" title="Collapse all details">Collapse all</button>
@@ -663,13 +663,13 @@
             <main id="content"></main>
         </div>
 
-        <div class="footer">Generated summary uses the exact discussion-point text and the exact Round 3 questions and
+        <div class="footer">Generated summary uses the exact discussion-point text and the exact round 2 questions and
             answers provided by each expert.</div>
     </div>
 
     <script>
         // ========= Source Data =========
-        // Exact Round 3 questions (verbatim)
+        // Exact round 2 questions (verbatim)
         const QUESTIONS = [
             "1. Did any of the other experts’ perspectives seem reasonable or worth reflecting on, even if you don’t fully agree with them?",
             "2. Did the other experts’ feedback affect your understanding of the snippet’s difficulty or its comprehensibility for typical software engineers?",
@@ -846,7 +846,7 @@
             }
         ];
 
-        // Exact Round 3 answers by expert, aligned to disagreements order above (index 0..3)
+        // Exact round 2 answers by expert, aligned to disagreements order above (index 0..3)
         const expertResponses = {
             Martin: [
                 { q1: `Oscar's point that the method is easy to understand _for him_ makes sense. However, I stand by my claim that _for an average engineer_ this snippet belongs to the right of snippets 3, 4, 6, and 8, because it uses a complex and rare language feature that they don't, and none of those snippets are particularly hard to understand, either.`, q2: `No.`, q3: `No.` },
@@ -962,7 +962,7 @@
 
                 const hr = document.createElement('div'); hr.style.height = '8px';
                 card.appendChild(hr);
-                const qaTitle = document.createElement('h3'); qaTitle.textContent = 'Round 3 — Exact Answers'; qaTitle.style.margin = '0 0 8px'; qaTitle.style.fontSize = '16px';
+                const qaTitle = document.createElement('h3'); qaTitle.textContent = 'round 2 — Exact Answers'; qaTitle.style.margin = '0 0 8px'; qaTitle.style.fontSize = '16px';
                 card.appendChild(qaTitle);
                 card.appendChild(expertsWrap);
 
@@ -1078,14 +1078,14 @@
     <!-- Top sheet: slides from the top, half-screen by default -->
     <div id="summary-top-sheet" class="top-sheet" aria-hidden="true">
         <div class="top-sheet-header">
-            <span>Round 3 Summary</span>
+            <span>round 2 Summary</span>
             <button id="summary-sheet-close" class="panel-close" aria-label="Close">X</button>
         </div>
 
         <!-- “X” overlay on the iframe itself (handy when scrolled) -->
         <button id="summary-frame-close" class="frame-close-btn" aria-label="Close">X</button>
 
-        <iframe id="summary-frame" src="about:blank" title="Round 3 Summary"></iframe>
+        <iframe id="summary-frame" src="about:blank" title="round 2 Summary"></iframe>
 
         <!-- Drag handle to resize vertically -->
         <div id="summary-resizer" class="top-sheet-resizer" title="Drag to resize"></div>
