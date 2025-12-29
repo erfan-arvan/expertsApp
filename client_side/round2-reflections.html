@@ -623,7 +623,6 @@
             }
         }
     </style>
-
 </head>
 
 <body>
@@ -635,19 +634,17 @@
         <div class="bar">
             <div class="title">round 2 Reflections — Expert Disagreement Summary</div>
             <div class="controls">
-                <button id="btn-expand" class="pill" title="Expand all details">Expand all</button>
-                <button id="btn-collapse" class="pill" title="Collapse all details">Collapse all</button>
-                <button id="btn-print" class="pill" title="Print or save to PDF">Print</button>
-                <button id="btn-theme" class="pill" title="Theme mode">Theme: Auto 🌗</button>
-                <button style="color: white; background: linear-gradient(145deg, var(--accent), var(--accent2));
-" id="summary-open-btn" type="button" class="done-toggle-btn" aria-controls="summary-top-sheet" aria-expanded="false">
-                    <strong>Round 2 Rankings</strong>
-                </button>
-                <select id="expert-filter" class="pill" title="Filter by expert">
+                <!-- <button id="btn-expand" class="pill">Expand all</button> -->
+                <!-- <button id="btn-collapse" class="pill">Collapse all</button> -->
+                <button id="btn-print" class="pill">Print</button>
+                <!-- <button id="btn-theme" class="pill">Theme: Auto 🌗</button> -->
+                <select id="expert-filter" class="pill">
                     <option value="all">Show all experts</option>
-                    <option value="Martin">Martin only</option>
-                    <option value="Oscar">Oscar only</option>
-                    <option value="Nadeeshan">Nadeeshan only</option>
+<option value="expertA">expertA only</option>
+<option value="expertB">expertB only</option>
+<option value="expertC">expertC only</option>
+<option value="expertD">expertD only</option>
+<option value="expertE">expertE only</option>
                 </select>
             </div>
         </div>
@@ -657,535 +654,72 @@
         <div class="grid">
             <nav class="toc" id="toc">
                 <h3>Disagreements</h3>
-                <!-- dynamically populated -->
             </nav>
-
             <main id="content"></main>
         </div>
-
-        <div class="footer">Generated summary uses the exact discussion-point text and the exact round 2 questions and
-            answers provided by each expert.</div>
+        <div class="footer">Round 2 only. No prior reflections included.</div>
     </div>
 
-    <script>
-        // ========= Source Data =========
-        // Exact round 2 questions (verbatim)
-        const QUESTIONS = [
-            "1. Did any of the other experts’ perspectives seem reasonable or worth reflecting on, even if you don’t fully agree with them?",
-            "2. Did the other experts’ feedback affect your understanding of the snippet’s difficulty or its comprehensibility for typical software engineers?",
-            "3. Would you consider revising your ranking for this snippet later, after completing all the disagreement reflections?"
-        ];
-
-        // Exact disagreement texts (the 'text' body used for Round 2 recap is preserved verbatim)
-        const disagreements = [
-            {
-                snippet: 3,
-                text: `The experts disagreed significantly on the comprehensibility of isMachineTypeDefined, particularly in how much the use of Java reflection and the unclear method purpose should affect its difficulty rating. 
-<ul>
-  <li><strong>Oscar</strong> ranked the snippet as one of the easiest in round 1 (Position 1), describing its logic as straightforward and noting that nested control flow did not add complexity. In round 2, he acknowledged that reflection might introduce difficulty for some readers but continued to view the snippet as relatively simple, adjusting his ranking only slightly to Position 2.</li>
-  <li><strong>Martin</strong> placed the snippet in Position 6 in round 1 and emphasized that the use of reflection, unfamiliar constants, and a vague method purpose made it difficult to understand. In round 2, he reinforced these concerns and suggested that Oscar’s view understated the complexity introduced by reflection and lack of context.</li>
-  <li><strong>Nadeeshan</strong> also found the snippet confusing, particularly due to the unexplained use of a getter method with a null argument and unfamiliar class-level elements. While he initially ranked it higher, in round 2 he revised his ranking downward to Position 6 to align more closely with Martin’s view.</li>
-</ul>
-<p>The core disagreement remains: Oscar sees the snippet as fundamentally simple despite the use of reflection, while Martin and Nadeeshan believe the reliance on reflection and unclear semantics make it significantly harder for a typical software engineer to understand.</p>
-<details>
-  <summary style="cursor: pointer; font-weight: bold; margin-top: 1em;">View Round 2 Reflections</summary>
-  <div style="margin-top: 0.5em;">
-
-    <details>
-      <summary style="cursor: pointer; font-weight: bold;">View Summary of Disagreement</summary>
-      <div style="margin-top: 0.5em;">
-        isMachineTypeDefined (<code>isMachineTypeDefined</code>) appears to be a point of disagreement among the experts.
-        <br><strong>Oscar</strong> ranked it as one of the easiest (Position 1), describing it as having straightforward logic. He noted that the presence of nested if statements or loops did not make it harder to understand. However, in his detailed comments, he did mention that it was unclear what a "synthetic field" is, and that the snippet might be harder to understand for someone unfamiliar with the constants used.
-        <br><strong>Nadeeshan</strong> placed it in Position 4, stating that it was relatively hard to understand due to unfamiliarity with <code>CoffMachineType</code>. He emphasized that the snippet needs more context to be understood, and highlighted an unusual use of a getter with an argument — specifically pointing to a line where <code>null</code> is passed, which he found unnecessary and confusing.
-        <br><strong>Martin</strong>, who placed it in Position 6, noted that the method required bottom-up reasoning, meaning it was necessary to carefully examine each line to figure out what the method was doing. He pointed to the use of Java’s reflective features and the unclear nature of the <code>type</code> variable (possibly representing a non-standard enumeration) as contributing factors to its complexity. He also remarked that the overall purpose of the method was not easily discernible from the code alone.
-      </div>
-    </details>
-
-    <p><strong>Martin:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> I agree with Nadeeshan that this snippet needs more context for complete understanding. I think that Oscar's detailed comments suggest that he agrees that there is some subtlety here, even if his initial ranking is that it's an easy snippet.</li>
-      <li><strong>Q2:</strong> I think that I may have overestimated the difficulty a bit. Nadeeshan's ranking (position 4 or thereabouts) seems like a reasonable place to settle, given that it's between Oscar's and mine. I do think that Oscar's ranking is too low, and I don't buy his argument that the logic is straightforward: the use of reflection complicates it significantly, and the overall purpose is hard to understand (even if some of the logic is simple).</li>
-      <li><strong>Q3:</strong> Yes.</li>
-    </ul>
-
-    <p><strong>Nadeeshan:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> I agree with Martin's point that "overall purpose of the method was not easily discernible from the code alone".</li>
-      <li><strong>Q2:</strong> Yes. Confirming my understanding, I am on the same page as Martin that he mentioned usage of Java's reflection contributes to the code's complexity.</li>
-      <li><strong>Q3:</strong> I'd like to change the rank of isMachineTypeDefined -- from rank 4 to rank 6</li>
-    </ul>
-
-    <p><strong>Oscar:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> Yes, the use of reflection is definitely a key thing here. If a person doesn't know the method, it might be hard to understand.</li>
-      <li><strong>Q2:</strong> Not really. I think I understand the snippet pretty well, but their feedback made me understand that for other people unfamiliar with this implementation pattern (reflection + checking numerical constants defined in a class), the method may be a little harder to understand.</li>
-      <li><strong>Q3:</strong> Yes, I would move it to the right a bit.</li>
-    </ul>
-
-  </div>
-</details>
-`
-            },
-            {
-                snippet: 2,
-                text: `In round 2, the experts disagreed about how understandable isRemote would be for a typical software engineer, especially in terms of the background knowledge it assumes about URI schemes.
-<ul>
-  <li><strong>Oscar</strong> placed the snippet in Position 4, indicating that he found it more difficult than most others. He questioned whether checking if the scheme is "jar" or "file" is enough to determine whether a URI is remote. Although he found the logic structurally simple, he felt the method’s purpose was unclear without understanding the significance of those schemes. For him, knowing what counts as a remote URI is not necessarily common knowledge, and that gap affects how easily the method can be understood.</li>
-  <li><strong>Martin</strong> placed the snippet in Position 2, seeing it as relatively easy. He acknowledged that the method relies on domain knowledge about URI schemes but believed that most engineers would still be able to follow the logic. He found the structure clean and the intent straightforward once the scheme check is interpreted correctly. From his perspective, the need for external knowledge was minimal and did not prevent comprehension.</li>
-  <li><strong>Nadeeshan</strong> originally placed the snippet in Position 1, seeing it as the easiest. After considering Oscar’s comments, he moved it to Position 2, recognizing that the use of "jar" and "file" might not be immediately intuitive to everyone. However, he still felt that the overall purpose of the method remained understandable and that the control flow supported clarity.</li>
-</ul>
-<p>The disagreement reflects a broader question: To what extent does familiarity with concepts like URI schemes affect how understandable this method would be for the average software engineer? Oscar believed this knowledge gap adds meaningful difficulty. Martin and Nadeeshan judged the snippet to be accessible in spite of it.</p>
-<p>The disagreement also raises a related but distinct point that was not directly discussed: how much familiarity with URI schemes can reasonably be assumed of typical software engineers. While the experts differed in how much this knowledge mattered for understanding the snippet, they did not explicitly address whether such knowledge is commonly held.</p>
-
-<details>
-  <summary style="cursor: pointer; font-weight: bold; margin-top: 1em;">View Round 2 Reflections</summary>
-  <div style="margin-top: 0.5em;">
-
-    <details>
-      <summary style="cursor: pointer; font-weight: bold;">View Summary of Disagreement</summary>
-      <div style="margin-top: 0.5em;">
-        isRemote (<code>isRemote</code>) appears to be a point of partial disagreement among the experts.
-        <br><strong>Nadeeshan</strong> considers it easy to understand and places it in the easiest position, alongside isValidProjectName. He believes it has a meaningful method name, clear internal method invocations, and a straightforward switch statement.
-        <br><strong>Oscar</strong> also finds the snippet relatively easy, but slightly more difficult than isValidProjectName (<code>isValidProjectName</code>). He expressed uncertainty about the meaning of <code>isFilesystemPath</code> and the use of the URI scheme, stating:
-        <br><em>“I am not familiar with a URI's scheme and why implementing that logic (in isRemote) is enough to check if it is remote.”</em>
-        <br><strong>Martin</strong> also places isRemote in Position 1 (easiest) and describes it as generally clear. He notes:
-        <br><em>“There are some subtleties here (how do we know that 'jar' and 'file' are the only URI schemes that are not remote? I think that's domain knowledge...), but overall the purpose is clear and easy to understand from the code's structure.”</em>
-        <br>However, unlike Nadeeshan and Oscar, Martin ranked isValidProjectName slightly lower, placing it in Position 2, indicating that he finds isRemote just a bit easier due to its shorter and simpler set of rules.
-      </div>
-    </details>
-
-    <p><strong>Martin:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> We broadly agree. I think it's worth differentiating this snippet from isValidProjectName, and Oscar and I agree that this one is a little bit trickier. I think Nadeeshan would agree that, if he had to choose between this one and isValidProjectName, this one is a little more complex. So, I think we'll agree here on isValidProjectName at the bottom, and this one above it.</li>
-      <li><strong>Q2:</strong> No.</li>
-      <li><strong>Q3:</strong> No.</li>
-    </ul>
-
-    <p><strong>Nadeeshan:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> I agree with Oscar on isRemote's URI implementation logic. However, despite that uncertainty, the purpose of the method remains clear to me.</li>
-      <li><strong>Q2:</strong> Yes.</li>
-      <li><strong>Q3:</strong> I would change rank of isRemote -- from rank 1 to 2</li>
-    </ul>
-
-    <p><strong>Oscar:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> I think the other experts rated with less importance the fact that it is unclear why the implemented logic is enough to achieve that intended functionality (check that the URI is remote).</li>
-      <li><strong>Q2:</strong> I agree with them that the logic is simple, but I found it more complicated than other snippets because the intention of the code is not clear (i.e., why checking the scheme is jar or file is enough to check that the URI is or isn't remote).</li>
-      <li><strong>Q3:</strong> I don't think I would change the ranking for this snippet: simple logic does not equate entirely to simplicity of understanding the code, i.e., the code intention is also important to understand.</li>
-    </ul>
-
-  </div>
-</details>
-`
-            },
-            {
-                snippet: 5,
-                text: `In round 2, the experts disagreed on how understandable deleteRecursively would be for a typical software engineer, particularly in relation to the prior experience it assumes with Java’s file system APIs and the Visitor design pattern.
-<ul>
-  <li><strong>Oscar</strong> placed the snippet in Position 2, continuing to view it as relatively easy. He acknowledged that engineers unfamiliar with the Visitor pattern might find it harder to understand, but he still believed the structure and naming made the method accessible. He did not express strong motivation to move it out of the "easy" tier and suggested only a slight shift to the right in his ranking.</li>
-  <li><strong>Nadeeshan</strong> placed the snippet in Position 5, moving it slightly up from his initial ranking but continuing to see it as significantly more difficult than Oscar did. He agreed with Martin’s earlier point that understanding the method depends on prior familiarity with Java’s file-handling APIs, including the role of <code>postVisitDirectory</code> and the behavior of <code>FileVisitor</code>. For him, these assumptions limit how easily the method can be understood by engineers who have not worked with this part of the API.</li>
-  <li><strong>Martin</strong> placed the snippet in Position 4 and shared a similar view. He found the method’s specification clear, but believed that understanding its behavior relies on recognizing the idiomatic use of <code>walkFileTree</code> and overridden visitor methods. He was willing to shift the snippet slightly lower in his ranking, but still saw it as easier than others that rely on reflection or encoding logic.</li>
-</ul>
-<p>The disagreement reflects two underlying questions. First, how much familiarity with the Java file system API and the Visitor pattern can reasonably be assumed of typical software engineers? Second, to what extent does that familiarity, or lack of it, impact how easily this method can be understood? Oscar believed that clear structure and naming could compensate for unfamiliarity. Martin and Nadeeshan viewed comprehension as closely tied to experience with the underlying API.</p>
-
-<details>
-  <summary style="cursor: pointer; font-weight: bold; margin-top: 1em;">View Round 2 Reflections</summary>
-  <div style="margin-top: 0.5em;">
-
-    <details>
-      <summary style="cursor: pointer; font-weight: bold;">View Summary of Disagreement</summary>
-      <div style="margin-top: 0.5em;">
-        deleteRecursively (<code>deleteRecursively</code>) is another point of disagreement among the experts.
-        <br><strong>Oscar</strong> placed it in the easiest position (Position 1). He stated that he is “familiar with the visitor pattern” and that “identifiers help clarify.” He described the snippet as having straightforward logic and noted that it was hard for him to distinguish between Snippets 1, 3, and 5 in terms of comprehensibility, as all seemed similarly clear to him.
-        <br><strong>Nadeeshan</strong>, who placed it in Position 6, described it as:
-        <br><em>“Harder due to unclear postVisitDirectory. Assumes dir is a Path object passed from FileVisitor.”</em>
-        <br>However, he also acknowledged that <em>“deleteRecursively has clear logic.”</em>
-        This suggests that while the overall intent was understandable, specific implementation details (e.g., method assumptions and API context) made it more difficult for him.
-        <br><strong>Martin</strong> placed deleteRecursively in Position 5 and offered a nuanced perspective:
-        <br><em>“This was easy for me to understand, but it required domain-specific knowledge of how Java handles file system operations that I do have: I immediately recognized the structure of the walkFileTree call with the anonymous visitor, and knew that I only needed to look at the names of the overridden methods and their bodies (i.e., lines 8 and 13) to figure out what the method does.”</em>
-        <br>He also grouped this snippet with Snippets 4 and 7, noting:
-        <br><em>“These three snippets are actually pretty similar: all are implementations of some kind of simple specification that's a bit tricky to get right in practice.”</em>
-      </div>
-    </details>
-
-    <p><strong>Martin:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> I think Nadeeshan and I broadly agree on this snippet's comprehensibility: we both see the difficulty with the implementation but agree on the clear spec. Oscar also agrees that the spec is clear, but I think he (like me) is familiar with this Java idiom and so ranks the snippet as very easy. But for a non-expert, I think this would be a bit tricky. So, I prefer the ranking in the middle somewhere, as Nadeeshan and I have it; I think this is definitely trickier to understand than e.g., isRemote or the validation method that I ranked at the bottom.</li>
-      <li><strong>Q2:</strong> We all agree on what's there, but not on how to interpret it.</li>
-      <li><strong>Q3:</strong> Yes: I'm willing to shift it a bit downwards, but not below snippets 4 and 7.</li>
-    </ul>
-
-    <p><strong>Nadeeshan:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> I agree with Martin's comment that understanding deleteRecursively properly requires knowledge of Java's file system handling.</li>
-      <li><strong>Q2:</strong> Yes.</li>
-      <li><strong>Q3:</strong> Yes I would. From rank 6 to 5. However, I still believe that a person familiar with the Visitor design pattern, as Oscar pointed out, and with specific domain knowledge of Java file handling is required to fully understand the method. Therefore, I think the ranking is valid in this case.</li>
-    </ul>
-
-    <p><strong>Oscar:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> Same as with the reflection-based method, I recognize the method would be harder to understand for people unfamiliar with the visitor pattern and its usage with file systems.</li>
-      <li><strong>Q2:</strong> Not really.</li>
-      <li><strong>Q3:</strong> I may rank it more to the right.</li>
-    </ul>
-
-  </div>
-</details>
-`
-            },
-            {
-                snippet: 4,
-                text: `In round 2, the experts disagreed on how difficult indexOfIgnoreCase would be for a typical software engineer to understand, especially in terms of how much prior knowledge of Java’s string APIs is required.
-<ul>
-  <li><strong>Oscar</strong> placed indexOfIgnoreCase in Position 6, suggesting that many engineers might find it hard to follow. He pointed to missing context and uncertainty about what <code>regionMatches</code> is doing, indicating that the method depends on familiarity with less common API behavior. Although he understood the overall purpose, he believed the logic was more complex than in other snippets and that many engineers might struggle to follow it precisely.</li>
-  <li><strong>Martin</strong> placed indexOfIgnoreCase in Position 4 and grouped it with Snippets <code>lowestPositiveRoot</code> and <code>deleteRecursively</code>. He argued that all three have clear specifications but complicated implementations that require attention to detail. While not trivial, he considered indexOfIgnoreCase to be understandable for most engineers, assuming they read it carefully. He viewed it as more accessible than snippets like isMachineTypeDefined, which involve reflection.</li>
-  <li><strong>Nadeeshan</strong> placed indexOfIgnoreCase even higher, in Position 3, and similarly judged it to be approachable for engineers. He described the logic as straightforward when read from top to bottom and noted that it did not rely on specialized domain knowledge. Compared to deleteRecursively, which uses a design pattern he thought many engineers might not know well, indexOfIgnoreCase seemed easier to understand.</li>
-</ul>
-<p>The main disagreement in round 2 concerns whether engineers unfamiliar with specific Java APIs would find indexOfIgnoreCase hard to follow. Oscar believed API familiarity would be a barrier, while Martin and Nadeeshan considered the logic clear enough for most engineers with basic Java experience.</p>`
-            }
-        ];
-
-        // Exact round 2 answers by expert, aligned to disagreements order above (index 0..3)
-        const expertResponses = {
-            Martin: [
-                { q1: `Oscar's point that the method is easy to understand _for him_ makes sense. However, I stand by my claim that _for an average engineer_ this snippet belongs to the right of snippets 3, 4, 6, and 8, because it uses a complex and rare language feature that they don't, and none of those snippets are particularly hard to understand, either.`, q2: `No.`, q3: `No.` },
-                { q1: `I think there are two more-fundamental questions about this snippet that are driving the disagreement between me/Nadeeshan and Oscar:\n1. is this snippet correctly checking whether a URI is remote?\n2. does its correctness actually matter to understanding it?\n\nOn reflection, I think Oscar's concern is that the answer to question 1 might be "no". He's likely right about that: this seems like a coarse heuristic for "remoteness". Without some other artifact (e.g., Javadoc or a PR description) we can't know whether that was intentional or not.\n\nI think Nadeeshan and I would agree that the answer to question 2 is "not really", though: the snippet's logic is pretty straightforward; it's only the name that is misleading. Given that misleadingness, I'm willing to compromise on this snippet and rank it a bit higher in difficulty (e.g., above indexOfIgnoreCase).`, q2: `Yes.`, q3: `Yes, see above.` },
-                { q1: `> First, how much familiarity with the Java file system API and the Visitor pattern can reasonably be assumed of typical software engineers? Second, to what extent does that familiarity, or lack of it, impact how easily this method can be understood?\n\nThese points are key. Typical engineers who are working in Java _should_ be familiar with these APIs, and so I'm willing to adjust my ranking here to shift this snippet even lower. Really, I think that _the Java File API_ is hard to understand/confusing and could've been better designed, and I'm punishing this snippet in my ranking for that. But actually if you know that API then this snippet itself is easy, as Oscar suggested.\n\nAnother interesting point of comparison is how this snippet's use of the File API differs from isValidProjectName's use of reflection. I would argue that reflection is trickier to reason about than the file API, generally, but both feel a bit similar in the sense that they're both APIs that have plenty of footguns.`, q2: `Yes.`, q3: `Yes.` },
-                { q1: `I stand by my round 2 response: this snippet isn't too hard to follow. The only tricky part is regionMatches, and IRL any engineer who's unfamiliar with that would immediately look it up if they wanted to understand this method. I read its Javadoc (https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#regionMatches-int-java.lang.String-int-int-), and it's not that complex.`, q2: `No.`, q3: `Yes: I think I agree with Nadeeshan that it could be shifted left, below atan2 and maybe isMachineTypeDefined.` }
-            ],
-            Oscar: [
-                { q1: `Since both Nadeeshan and Martin think that reflection introduces complexity, I think I would move this snippet to the right, depending on how I rank the other snippets`, q2: `yep`, q3: `yeah` },
-                { q1: `Yeah, maybe I'm giving too much importance to understanding the intention of checking the scheme is jar or file to check that the URI is or isn't remote.`, q2: `yep`, q3: `yep, need to see the other snippets.` },
-                { q1: `I guess the visitor pattern may specialized knowledge that not everybody has, so I may be willing to change my ranking (move the snippet to the right)`, q2: `yes`, q3: `yes, see above (Q1)` },
-                { q1: `Tend to agree with Nadeeshan about S4 and S5: S4 doesn't require a lot of specialized knowledge, despite some API calls may be unknown, but S5 requires this knowledge (about visitors), which may make the code look more obscure.`, q2: `yeah`, q3: `yeah, I will factor in more the specialized knowledge needed to understand the code` }
-            ],
-            Nadeeshan: [
-                { q1: `Since both Oscar and Martin agree that using Java reflection makes the method harder to understand, it confirms my understanding of the snippet, and I think their perspectives are reasonable. I agree with them.`, q2: `Yes`, q3: `Yes. I believe the suitable position for encodedLength would be 5 or 6. But I'll keep it at position 6.` },
-                { q1: `Yes. Considering both Oscar and Martin's comments, I would think that deleteRecursively requires some basic knowledge about how remote file schemes work in Java.`, q2: `From the perspective of a typical average software engineer, I’d say simply understanding the snippet from top to bottom would be sufficient, even without prior knowledge of the Java file system API manipulation. However, when it comes to performing any related software engineering task, a deeper understanding would be required. Given the snippet’s simple, synthetic structure and the assumption of no access to the Java API documentation, I’d say achieving that deeper understanding could be somewhat challenging.`, q3: `Yes. Matching to both other expert's I'd change the rank of deleteRecursively from rank 2 to rank 3.` },
-                { q1: `We can roughly agree that developers unfamiliar with the Visitor pattern may find the snippet harder to understand. I also share Oscar’s view that while the structure and naming make the method easy to "read", they do not necessarily make it easy to fully comprehend.`, q2: `As I mentioned for deleteRecursively, the method is easy to read even without knowledge of Java file system APIs or design patterns. However, when it comes to working with or extending that method, such knowledge becomes critical. In contrast, I find atan2 far more complex in terms of structure.`, q3: `I would adjust the ranking of atan2 from 5 to 4 to align with Martin’s judgment.` },
-                { q1: `I agree on the point that the overall purpose of the code is clear.`, q2: `From the perspective of a typical software engineer, if one carefully reads the code, I would say the logic behind it is straightforward to understand. Even without documentation for the "regionMatches method", simply examining its parameters makes it relatively easy to infer what the method is supposed to do.`, q3: `No I would not change the rank of lowestPositiveRoot.` }
-            ]
-        };
-
-    </script>
-
-    <script>
-        // ---- names -> use these instead of indices/ids ----
-        const SNIPPET_NAMES = {
-            1: "isValidProjectName",
-            2: "isRemote",
-            3: "isMachineTypeDefined",
-            4: "indexOfIgnoreCase",
-            5: "deleteRecursively",
-            6: "encodedLength",
-            7: "lowestPositiveRoot",
-            8: "atan2",
-        };
-        const nameFor = id => SNIPPET_NAMES[id] || `Snippet ${id}`;
-        const slugify = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-
-        // ========= Rendering =========
-        const content = document.getElementById('content');
-        const toc = document.getElementById('toc');
-
-        function render() {
-            content.innerHTML = '';
-            toc.innerHTML = '<h3>Disagreements</h3>';
-
-            disagreements.forEach((d, idx) => {
-                const snippetName = nameFor(d.snippet);
-                const anchor = `d-${slugify(snippetName)}`;
-
-                const card = document.createElement('section');
-                card.className = 'card disagreement';
-                card.id = anchor;
-
-                const h = document.createElement('h2');
-                // show the name, not the numeric id
-                h.textContent = `Disagreement ${idx + 1} — ${snippetName}`;
-
-                const meta = document.createElement('div');
-                meta.className = 'meta';
-                meta.innerHTML = `<span>Round 2 discussion point:</span>`;
-
-                // OPTIONAL fallback: if d.text still contains "Snippet X", rewrite to names here.
-                // (You can remove this block if you already ran the Python replacer on the HTML.)
-                let html = d.text;
-                Object.entries(SNIPPET_NAMES).forEach(([id, nm]) => {
-                    const re = new RegExp(`\\b[Ss]nippet\\s+${id}(?![0-9A-Za-z])`, 'g'); // singular only
-                    html = html.replace(re, nm);
-                });
-
-                const point = document.createElement('div');
-                point.innerHTML = html; // preserve exact structure (post-rewrite if fallback used)
-
-                const chips = document.createElement('div');
-                chips.className = 'chips';
-                ['Exact recap', 'Reflection Q&A included', 'Printable'].forEach(c => {
-                    const span = document.createElement('span');
-                    span.className = 'chip';
-                    span.textContent = c; chips.appendChild(span);
-                });
-
-                const expertsWrap = document.createElement('div');
-                expertsWrap.className = 'experts';
-
-                const filterVal = document.getElementById('expert-filter')?.value || 'all';
-
-                Object.entries(expertResponses).forEach(([name, arr]) => {
-                    const resp = arr[idx]; // keeps your existing alignment by disagreement order
-                    if (!resp) return;
-                    if (filterVal !== 'all' && filterVal !== name) return;
-
-                    const box = document.createElement('article');
-                    box.className = 'expert';
-                    box.dataset.expert = name;
-                    box.innerHTML = `<h4>${name}</h4>`;
-
-                    // Render the three Q/A exactly, using the provided QUESTION labels
-                    QUESTIONS.forEach((q, qi) => {
-                        const qa = document.createElement('div');
-                        qa.className = 'qa';
-                        const qEl = document.createElement('div'); qEl.className = 'q'; qEl.textContent = q;
-                        const aEl = document.createElement('div'); aEl.className = 'a'; aEl.textContent = String(resp[`q${qi + 1}`] ?? '');
-                        qa.appendChild(qEl); qa.appendChild(aEl); box.appendChild(qa);
-                    });
-
-                    expertsWrap.appendChild(box);
-                });
-
-                card.appendChild(h);
-                card.appendChild(meta);
-                card.appendChild(point);
-                card.appendChild(chips);
-
-                const hr = document.createElement('div'); hr.style.height = '8px';
-                card.appendChild(hr);
-                const qaTitle = document.createElement('h3'); qaTitle.textContent = 'round 2 — Exact Answers'; qaTitle.style.margin = '0 0 8px'; qaTitle.style.fontSize = '16px';
-                card.appendChild(qaTitle);
-                card.appendChild(expertsWrap);
-
-                content.appendChild(card);
-
-                // TOC entry uses the name, not the id
-                const link = document.createElement('a');
-                link.href = `#${anchor}`;
-                link.textContent = snippetName;
-                toc.appendChild(link);
-            });
-        }
-
-        render();
-
-        // ========= UI Actions =========
-        const btnExpand = document.getElementById('btn-expand');
-        const btnCollapse = document.getElementById('btn-collapse');
-        const btnPrint = document.getElementById('btn-print');
-        const expertFilter = document.getElementById('expert-filter');
-
-        btnExpand.addEventListener('click', () => {
-            document.querySelectorAll('details').forEach(d => d.open = true);
-        });
-        btnCollapse.addEventListener('click', () => {
-            document.querySelectorAll('details').forEach(d => d.open = false);
-        });
-        btnPrint.addEventListener('click', () => window.print());
-        expertFilter.addEventListener('change', render);
-    </script>
-
-
-    <script>
-        /**
-         * Theme control using existing 'codeTheme' key.
-         * Values:
-         *   - 'light' => force light
-         *   - 'dark'  => force dark
-         *   - AUTO    => (key absent) follow OS
-         * Reads from sessionStorage first, then localStorage.
-         * Writes back to the same store it was read from; defaults to localStorage.
-         */
-        (function () {
-            const KEY = 'codeTheme';
-            const btn = document.getElementById('btn-theme');
-
-            function readStore() {
-                try {
-                    const s = sessionStorage.getItem(KEY);
-                    if (s === 'dark' || s === 'light') return { val: s, store: 'session' };
-                } catch { }
-                try {
-                    const l = localStorage.getItem(KEY);
-                    if (l === 'dark' || l === 'light') return { val: l, store: 'local' };
-                } catch { }
-                return { val: 'auto', store: null };
-            }
-
-            function writeStore(mode, storeHint) {
-                if (mode === 'auto') {
-                    try { sessionStorage.removeItem(KEY); } catch { }
-                    try { localStorage.removeItem(KEY); } catch { }
-                    return;
-                }
-                const where = storeHint || 'local';
-                try {
-                    if (where === 'session') sessionStorage.setItem(KEY, mode);
-                    else localStorage.setItem(KEY, mode);
-                } catch {
-                    // fallback to localStorage if session fails
-                    try { localStorage.setItem(KEY, mode); } catch { }
-                }
-            }
-
-            function apply(mode) {
-                if (mode === 'dark') {
-                    document.documentElement.setAttribute('data-theme', 'dark');
-                } else if (mode === 'light') {
-                    document.documentElement.setAttribute('data-theme', 'light');
-                } else {
-                    document.documentElement.removeAttribute('data-theme'); // AUTO
-                }
-                updateBtn(mode);
-            }
-
-            function updateBtn(mode) {
-                const label = mode === 'dark' ? 'Dark 🌙' : mode === 'light' ? 'Light 🌞' : 'Auto 🌗';
-                if (btn) {
-                    btn.textContent = `Theme: ${label}`;
-                    btn.setAttribute('aria-label', `Switch theme (current: ${mode})`);
-                }
-            }
-
-            function cycle() {
-                const cur = readStore();
-                const next = cur.val === 'auto' ? 'light' : (cur.val === 'light' ? 'dark' : 'auto');
-                writeStore(next, cur.store);
-                apply(next);
-            }
-
-            // init
-            const initial = readStore().val;
-            apply(initial);
-
-            // react to OS changes when in AUTO
-            const mql = window.matchMedia('(prefers-color-scheme: dark)');
-            mql.addEventListener?.('change', () => { if (readStore().val === 'auto') apply('auto'); });
-
-            if (btn) btn.addEventListener('click', cycle);
-        })();
-    </script>
-
-    <!-- Top sheet: slides from the top, half-screen by default -->
-    <div id="summary-top-sheet" class="top-sheet" aria-hidden="true">
-        <div class="top-sheet-header">
-            <span>round 2 Summary</span>
-            <button id="summary-sheet-close" class="panel-close" aria-label="Close">X</button>
-        </div>
-
-        <!-- “X” overlay on the iframe itself (handy when scrolled) -->
-        <button id="summary-frame-close" class="frame-close-btn" aria-label="Close">X</button>
-
-        <iframe id="summary-frame" src="about:blank" title="round 2 Summary"></iframe>
-
-        <!-- Drag handle to resize vertically -->
-        <div id="summary-resizer" class="top-sheet-resizer" title="Drag to resize"></div>
-    </div>
-
-    <script>
-        (function () {
-            const openBtn = document.getElementById('summary-open-btn');
-            const sheet = document.getElementById('summary-top-sheet');
-            const closeHdr = document.getElementById('summary-sheet-close');
-            const closeFab = document.getElementById('summary-frame-close');
-            const resizer = document.getElementById('summary-resizer');
-            const frame = document.getElementById('summary-frame');
-
-            if (!openBtn || !sheet || !frame) return;
-
-            function setOpenSummary(isOpen) {
-                if (isOpen) {
-                    // load the page (cache-busted) only when opening
-                    const base = 'round2-rankings.html';
-                    frame.src = base + '?t=' + Date.now();
-
-                    sheet.classList.add('open');
-                    sheet.setAttribute('aria-hidden', 'false');
-                    openBtn.setAttribute('aria-expanded', 'true');
-                } else {
-                    sheet.classList.remove('open');
-                    sheet.setAttribute('aria-hidden', 'true');
-                    openBtn.setAttribute('aria-expanded', 'false');
-                    // optional: clear src to stop timers in the iframe
-                    // frame.src = 'about:blank';
-                }
-            }
-            // Expose if you want to control it elsewhere
-            window.setOpenSummary = setOpenSummary;
-
-            // Open button
-            openBtn.addEventListener('click', () => setOpenSummary(true));
-            openBtn.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpenSummary(true); }
-            });
-
-            // Close buttons
-            closeHdr?.addEventListener('click', () => setOpenSummary(false));
-            closeFab?.addEventListener('click', () => setOpenSummary(false));
-
-            // Escape to close
-            window.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && sheet.classList.contains('open')) setOpenSummary(false);
-            });
-
-            // Vertical resize (drag bottom edge)
-            if (resizer) {
-                let dragging = false;
-                function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
-
-                function start(e) {
-                    if (!sheet.classList.contains('open')) return;
-                    dragging = true;
-                    document.body.classList.add('no-select');
-                    // prevent iframe from stealing events while dragging
-                    frame.style.pointerEvents = 'none';
-                    e.preventDefault();
-                }
-                function move(e) {
-                    if (!dragging) return;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                    const vh = window.innerHeight;
-                    const min = 240;
-                    const max = Math.round(vh * 0.95);
-                    const newH = clamp(clientY, min, max); // distance from top to cursor
-                    sheet.style.height = newH + 'px';
-                }
-                function end() {
-                    if (!dragging) return;
-                    dragging = false;
-                    document.body.classList.remove('no-select');
-                    frame.style.pointerEvents = '';
-                }
-
-                resizer.addEventListener('mousedown', start);
-                window.addEventListener('mousemove', move);
-                window.addEventListener('mouseup', end);
-
-                resizer.addEventListener('touchstart', start, { passive: false });
-                window.addEventListener('touchmove', move, { passive: false });
-                window.addEventListener('touchend', end);
-            }
-
-            // Keep height reasonable on viewport resize
-            window.addEventListener('resize', () => {
-                if (!sheet.classList.contains('open')) return;
-                const h = sheet.getBoundingClientRect().height;
-                const max = Math.round(window.innerHeight * 0.95);
-                sheet.style.height = Math.min(h, max) + 'px';
-            });
-        })();
-
-    </script>
+<script>
+const QUESTIONS = ["1. Did any of the other experts\u2019 perspectives seem reasonable or worth reflecting on, even if you don\u2019t fully agree with them?", "2. Did the other experts\u2019 feedback affect your understanding of the snippet\u2019s difficulty or its comprehensibility for typical software engineers?", "3. Would you consider revising your ranking for this snippet later, after completing all the disagreement reflections?"];
+const disagreements = [{"snippet": "isMachineTypeDefined", "text": "\n<p>\n  <strong>isMachineTypeDefined</strong> is one of the most divisive methods, with experts placing it\n  anywhere from near-easy to the hardest in the set.\n</p>\n\n<ul>\n  <li><strong>Expert D</strong> placed <code>isMachineTypeDefined</code> toward the easy side at Position 2.</li>\n  <li><strong>Expert C</strong> placed it in Position 3.</li>\n  <li><strong>Expert A</strong> placed it in Position 4.</li>\n  <li><strong>Expert E</strong> placed it at Position 6.</li>\n  <li><strong>Expert B</strong> placed it at Position 8.</li>\n</ul>\n"}, {"snippet": "isValidProjectName", "text": "\n<p>\n  <strong>isValidProjectName</strong> shows noticeable disagreement across experts.\n</p>\n"}, {"snippet": "indexOfIgnoreCase", "text": "\n<p>\n  <strong>indexOfIgnoreCase</strong> shows varied difficulty assessments.\n</p>\n"}, {"snippet": "lowestPositiveRoot", "text": "\n<p>\n  <strong>lowestPositiveRoot</strong> shows disagreement about how much mathematical familiarity\n  should influence perceived difficulty.\n</p>\n"}];
+const expertResponses = {"expertA": [{"q1": "Yes. Expert D also mentions the role of previous knowledge about reflection. I guess the disagreement is just on the difficulty score. I would consider that a snippet that requires previous knowledge is in principle, difficult. The thing is that this snippet is short enough to not be \n\"that\" difficult.", "q2": "No", "q3": "No"}, {"q1": "No. The comments that explain the higher ranking (and in turn the whole disagreement) do not seem to be about the comprehensibility of the snippet, but rather about its quality.", "q2": "NO", "q3": "No"}, {"q1": "I do share the reasoning of Expert E when it comes to less intuitive snippets that require previous knowledge.", "q2": "No", "q3": "Maybe down to 4. The purpose of the method is easy to understand mostly due to its title, but its implementation is still hard to follow due to poor variable naming."}, {"q1": "Expert 5 reasoning suggests that more than one pass was required to get an idea of the purpose of the method (see \"once you recognize the flow\"). If multiple passes and careful walkthroughs are needed, the method is simply very hard (> 5) to understand.", "q2": "No", "q3": "No"}], "expertB": [{"q1": "Yes, after reading the feedback for the method from other experts I realised the null pointer exception is not an issue and instead the method returns final static fields only.", "q2": "Yes, in particular the explanation of Expert E made things clearer.", "q3": "Yes, I'd position it now into number 6 in the ranking."}, {"q1": "I agree with the experts that set it as the easiest snippet", "q2": "No", "q3": "No"}, {"q1": "I agree with most of the comments by other experts.", "q2": "No", "q3": "Yes, maybe I could consider moving it one step upwards in the list (to position 4)"}, {"q1": "Yes, the variable names are still not the clearest and having previous math knowledge is required in order to understand the full code. Extra comments or more explicit names could help", "q2": "Yes", "q3": "Yes, I would consider moving it one step downwards in the ranking (to position 5)"}], "expertC": [{"q1": "The need to specific API knowledge and understanding what 'synthetic' means in this context.", "q2": "It's made me realize it's easier to understand if you're familiar with reflection but overall doesn't change my understanding (without looking it up myself)", "q3": "No, but if I read the API spec or looked it up I bet I would change my ranking to be easier"}, {"q1": "I agree with Expert D that it could be shorter", "q2": "Not really but I think I understand it completely", "q3": "No, I put it in position 2 because I think the other methods were just slightly easier to understand. Not that this one was hard but it wasn't the easiest."}, {"q1": "Not really resonating but rather I disagree with the feedback on variable names, they make sense to me and I think make the code more readable.", "q2": "No.", "q3": "No."}, {"q1": "A and D's notes on variable names and unannotated mathematical steps - I agree!", "q2": "Seeing the feedback that this is how you would solve quadratic by hand makes me think this code is easier to understand, given that background knowledge.", "q3": "I'd leave it at 7"}], "expertD": [{"q1": "I'm mildly agree with the observations, given that the constants used by the code can be deduced from the names of those constants. However, it is true that the code can fail at one point, and this is confusing.", "q2": "allowed me to see details that I hadn't noticed before", "q3": "With that clarification, I would change my decision, but not by much."}, {"q1": "I agree with the statements made by the other experts, as the code has aspects of readability that make it understandable.", "q2": "The comments show me some points of comparison with other functions that justify why it is more readable than other pieces of code.", "q3": "I would change the order of this piece of code. I wouldn't leave it in first position, but I would leave it in second position."}, {"q1": "In some respects, such as the naming of variables, I disagree, since variables can be understood.", "q2": "No, because the comments explain why it is in third place, in my opinion.", "q3": "I don't see the need for it."}, {"q1": "I strongly agree that the code expects the reader to understand the context of how the square root works and that the names of the variables should be improved.", "q2": "I think most of us end up in a similar position.", "q3": "No, because the method must improve the names of the variables to better explain the mathematical procedure."}], "expertE": [{"q1": "Yes, several of the concerns raised by the other experts resonate with me, especially those from Experts C, A, and E. I agree that while the overall control flow is understandable, the method relies heavily on familiarity with Java\u2019s reflection API and concepts like synthetic fields and field modifiers. Without that background, it\u2019s harder to quickly grasp what the code is doing and why reflection is being used in the first place. I also agree that understanding the intent requires some domain context about CoffMachineType, which isn\u2019t obvious from the method alone.", "q2": "Yes, their feedback helped clarify why this method can feel harder or easier depending on perspective and experience. In particular, it highlighted how much the perceived difficulty depends on prior experience with reflection and how much domain context a reader assumes. While my understanding of what the code does didn\u2019t change, the feedback made it clearer why others might rate it as easier if they see the reflective pattern immediately, or much harder if they focus on the hidden assumptions and required background knowledge.", "q3": "No, I would not change my ranking. After reviewing the feedback, I still think placing this snippet toward the harder side is appropriate. While the intent becomes clear once you recognize the reflective pattern, the method still depends on specific API knowledge, familiarity with reflection details in Java and some implicit domain context. The feedback reinforced why others might rank it differently, but it didn\u2019t change my assessment of the overall cognitive effort required to understand it."}, {"q1": "To a small extent, yes. I can see why Experts C and D mentioned the length of the validation chain and questioned whether some of the checks could be consolidated. The distinction between checking for letters or digits and then separately checking a predefined valid character set could momentarily raise questions about redundancy, and the method does assume some understanding of what characters are considered valid in the project\u2019s domain. With that said, these concerns didn\u2019t significantly affect my perception of difficulty, since each check is still simple and the overall intent remains very clear.", "q2": "Their feedback didn\u2019t change my understanding of what the snippet does, but it did help clarify why some people might rate it as slightly harder. In particular, the comments about check redundancy and method length made it clearer how different experts / developers might weigh conciseness versus explicitness. While I still find the method fairly easy to understand, the feedback does definitely highlight how even small design choices can affect perceived complexity for some developers.", "q3": "No, I would not change my ranking. After reviewing the feedback, I still think placing this snippet on the easiest side of the ranking make sense. The method is self-contained, the logic is explicit, and each check is easy to follow on its own. While some experts preferred a more compact approach, the clarity and straightforward structure outweigh those concerns for me."}, {"q1": "Yes, some of their concerns do resonate with me, particularly those from Experts A and B. I can see how the number of intermediate variables and the manual implementation of a substring search might make the method feel more involved than the simplest snippets. The naming choices, like str and endLimit, are serviceable but not especially descriptive, and that can slightly slow down comprehension. With that said, these issues didn\u2019t outweigh the fact that the control flow is still clear and the logic follows a familiar / logical pattern, which is why I kept it on the easier side overall.", "q2": "Their feedback didn\u2019t change my understanding of what the snippet does, but again it did help clarify why some people might rate it as harder than I did. In particular, the points about naming choices and the fact that the method reimplements functionality that could be handled by built-in APIs made it clearer why others see additional cognitive overhead. While I still find the logic easy to follow, the feedback highlighted how design decisions like naming and abstraction level can influence perceived readability.", "q3": "No, I would not change my ranking. After considering the feedback, I still think Position 3 is appropriate. The method remains readable, self-contained and follows a familiar search pattern, even if it has more moving parts than the very simplest snippets. The feedback helped explain differing opinions, but it didn\u2019t change my overall assessment of its difficulty as I think some of the complaints are more related to style rather than the logic of the method."}, {"q1": "Yes, some of their concerns resonate with me, especially the points about naming conventions of the variables and mathematical background. I agree that abbreviated variable names like det, invA, r1, and r2 don\u2019t offer much help to someone who isn\u2019t already comfortable with the quadratic formula. I also understand why the swapping of the roots might be confusing without that context. With that said, I still see the method as more of a math-familiarity issue than a code-structure problem, which is why I didn\u2019t place it among the hardest snippets.", "q2": "Their feedback didn\u2019t change my understanding of what the snippet is doing, but again it did clarify why others found it significantly harder to comprehend. In particular, it highlighted how much the perceived difficulty depends on a reader\u2019s comfort with the underlying math and their expectations around variable naming and documentation. While I was able to follow the logic by recognizing the quadratic formula, the feedback helped explain why someone without that background might struggle more with the snippet.", "q3": "No, I would not change my ranking. After reviewing the feedback, I still think Position 5 is appropriate. The method\u2019s control flow is straightforward and self-contained, and the primary challenge comes from the underlying math rather than the code itself. While clearer variable names or brief comments could lower the barrier for readers without a strong math background, the feedback didn\u2019t change my overall assessment of its difficulty relative to the other snippets."}]};
+
+const content = document.getElementById('content');
+const toc = document.getElementById('toc');
+
+function render() {
+  content.innerHTML = '';
+  toc.innerHTML = '<h3>Disagreements</h3>';
+
+  disagreements.forEach((d, idx) => {
+    const anchor = 'd-' + d.snippet;
+    const card = document.createElement('section');
+    card.className = 'card disagreement';
+    card.id = anchor;
+
+    card.innerHTML = `
+      <h2>Disagreement ${idx + 1} — ${d.snippet}</h2>
+      ${d.text}
+      <h3>round 2 — Exact Answers</h3>
+      <div class="experts"></div>
+    `;
+
+    const expertsWrap = card.querySelector('.experts');
+    const filterVal = document.getElementById('expert-filter').value;
+
+    Object.entries(expertResponses).forEach(([name, arr]) => {
+      if (filterVal !== 'all' && filterVal !== name) return;
+      const r = arr[idx];
+      const box = document.createElement('article');
+      box.className = 'expert';
+      box.innerHTML = `<h4>${name}</h4>`;
+
+      QUESTIONS.forEach((q, qi) => {
+        box.innerHTML += `
+          <div class="qa">
+            <div class="q">${q}</div>
+            <div class="a">${r['q' + (qi + 1)] || ''}</div>
+          </div>`;
+      });
+      expertsWrap.appendChild(box);
+    });
+
+    content.appendChild(card);
+
+    const link = document.createElement('a');
+    link.href = '#' + anchor;
+    link.textContent = d.snippet;
+    toc.appendChild(link);
+  });
+}
+
+render();
+document.getElementById('expert-filter').addEventListener('change', render);
+document.getElementById('btn-expand').onclick = () => document.querySelectorAll('details').forEach(d => d.open = true);
+document.getElementById('btn-collapse').onclick = () => document.querySelectorAll('details').forEach(d => d.open = false);
+document.getElementById('btn-print').onclick = () => window.print();
+</script>
 
 </body>
-
 </html>
