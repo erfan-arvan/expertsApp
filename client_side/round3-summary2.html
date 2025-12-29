@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Round 3 Rankings & Reasonings</title>
+  <title>round 2 Rankings & Reasonings</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
@@ -895,7 +895,7 @@ button:hover {
 </a>
 
   <div class="container">
-    <h1>Round 3 Rankings & Reasonings</h1>
+    <h1>round 2 Rankings & Reasonings</h1>
     <div class="last-updated" style="display: none;">
       Last updated: <time id="last-updated" datetime="2025-09-19T06:47:32.337309+00:00"></time>
     </div>
@@ -916,8 +916,8 @@ button:hover {
     </div>
 
 
-    <div class="participant-section">
-      <strong>martin</strong>
+     <div class="participant-section">
+      <strong>expertC</strong>
       <div class="ranking-labels">
         <div class="ranking-label">1 (easiest)</div>
         <div class="ranking-label">2</div>
@@ -930,55 +930,57 @@ button:hover {
       </div>
       <div class="ranking-row">
         <div class="ranking-slot" style="position: relative;">
-          <button class="snippet-1" onclick="show_snippet(1)">isValidProjectN</button>
-            <div class="reasoning-point" onclick="compare([1],[2])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">isRemote involves a little more domain knowledge, but both have simple structure and similar purpose: check some arbitrary conditions.</div>
+          <button class="snippet-3" onclick="show_snippet(3)">isMachineTypeDe</button>
+<button class="snippet-8" onclick="show_snippet(8)">atan2</button>
+            <div class="reasoning-point" onclick="compare([3],[8])" style="position: absolute; top: -7px; right: 50px;"></div>
+            <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>I can go line by line through each and know what each line does. All variable names/method names make sense. Error cases are clear.<br><br>The business logic is straightforward based on the method name/signature.</div>
+            <div class="reasoning-point" onclick="compare([3,8],[2,4])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">Position 2 requires more knowledge of the domain, like why are &#x27;file&#x27; and &#x27;jar&#x27; unique cases in isRemote.<br><br>for isValidProjectName, I would almost put that in position 1 but I only knocked it down because of the unclear reason for line 13 having two checks (why a separate letter or digit check? could be performance reasons, not sure)</div>
           </div>
 
           <div class="ranking-slot" style="position: relative;">
           <button class="snippet-2" onclick="show_snippet(2)">isRemote</button>
-            <div class="reasoning-point" onclick="compare([2],[4])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">isRemote has simpler control flow. indexOfIgnoreCase has a clearer specification (i.e., is easier to understand without reading the code), but once you get into the details it&#x27;s a bit trickier. For both, you need to know something about the standard library (for isRemote, URIs; for indexOfIgnoreCase, String#regionMatches)</div>
-          </div>
-
-          <div class="ranking-slot" style="position: relative;">
-          <button class="snippet-4" onclick="show_snippet(4)">indexOfIgnoreCa</button>
-            <div class="reasoning-point" onclick="compare([4],[5])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">The File API is confusing and easy to get wrong. And, fewer engineers work in codebases that need to deal with files compared to codebases that need to deal with Strings. But, both of these methods have simple high-level specifications and there&#x27;s really only one tricky thing about them, so they&#x27;re easy to follow overall.</div>
-          </div>
-
-          <div class="ranking-slot" style="position: relative;">
-          <button class="snippet-5" onclick="show_snippet(5)">deleteRecursive</button>
-            <div class="reasoning-point" onclick="compare([5],[7])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">deleteRecursively is pretty easy to understand at a high-level without much domain knowledge. lowestPositiveRoot has a lot more going on, but the spec is also pretty simple.</div>
+<button class="snippet-4" onclick="show_snippet(4)">indexOfIgnoreCa</button>
+            <div class="reasoning-point" onclick="compare([2],[4])" style="position: absolute; top: -7px; right: 50px;"></div>
+            <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>Kinda explained in the last one. Requires some business knowledge or knowledge of the unique cases here</div>
+            <div class="reasoning-point" onclick="compare([2,4],[7])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">isMachineTypeDefined requires even more business knowledge about the domain, is this any machine? only coffee machines? is &quot;Coff&quot; even &quot;Coffee&quot; for sure?. I can make better guesses for Position 2 stuff.<br><br>This also uses advanced Java stuff that is not very common, checking class declared fields. I usually stay away from doing that</div>
           </div>
 
           <div class="ranking-slot" style="position: relative;">
           <button class="snippet-7" onclick="show_snippet(7)">lowestPositiveR</button>
-            <div class="reasoning-point" onclick="compare([7],[3])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">reflection</div>
+            <div class="reasoning-point" onclick="compare([7],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">At least in isMachienTypeDefined I can take good guesses at the logic, and at minimum the method name makes it clear what it&#x27;s trying to check for.<br><br>atan2 requires either math knowledge or context in the package - I still don&#x27;t know if it&#x27;s a V2 or squared<br><br>Depending on a user knowing math is difficult, I would add more comments</div>
           </div>
 
           <div class="ranking-slot" style="position: relative;">
-          <button class="snippet-3" onclick="show_snippet(3)">isMachineTypeDe</button>
-            <div class="reasoning-point" onclick="compare([3],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">encodings require serious, rare domain knowledge</div>
+          
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          
           </div>
 
           <div class="ranking-slot" style="position: relative;">
           <button class="snippet-6" onclick="show_snippet(6)">encodedLength</button>
-            <div class="reasoning-point" onclick="compare([6],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">Both require line-by-line reasoning, but `atan2` requires _two_ kinds of domain-specific knowledge (numerical methods + trig) vs just one for `encodedLength` (encodings).</div>
+            <div class="reasoning-point" onclick="compare([6],[1])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">lowestPositiveRoot is even more complicated math in my mind. Also it&#x27;s confusing why line 10-17 are written the way they are, I think it could be combined and simplified</div>
           </div>
 
           <div class="ranking-slot" style="position: relative;">
-          <button class="snippet-8" onclick="show_snippet(8)">atan2</button>
+          <button class="snippet-1" onclick="show_snippet(1)">isValidProjectN</button>
+            <div class="reasoning-point" onclick="compare([1],[5])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">I put CharSequence as most difficult because it&#x27;s doing bitwise stuff and UTF stuff I&#x27;m not familiar with. Based on the comment about being optimized, I think it&#x27;s complicated on purpose so that it&#x27;s efficient. What&#x27;s good for computers isn&#x27;t always good for humans</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-5" onclick="show_snippet(5)">deleteRecursive</button>
           </div>
       </div>
     </div>
 
     <div class="participant-section">
-      <strong>oscar</strong>
+      <strong>expertD</strong>
       <div class="ranking-labels">
         <div class="ranking-label">1 (easiest)</div>
         <div class="ranking-label">2</div>
@@ -991,55 +993,55 @@ button:hover {
       </div>
       <div class="ranking-row">
         <div class="ranking-slot" style="position: relative;">
-          <button class="snippet-1" onclick="show_snippet(1)">isValidProjectN</button>
-            <div class="reasoning-point" onclick="compare([1],[2])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">both snippets implement simple logic and their overall intent is easy to understand -- the identifiers help quite a bit. <br><br>S2 is slightly harder to understand because it is unclear why checking for file and jar is enough to determine that the URI is not remote. I guess my familiarity with the URI&#x27;s scheme is not enough to fully understand the method.<br><br>This ordering is also consistent with the one from my colleagues.</div>
+          <button class="snippet-3" onclick="show_snippet(3)">isMachineTypeDe</button>
+            <div class="reasoning-point" onclick="compare([3],[5])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">I can understand isValidProjectName better than isRemote because of the clarity of the code flow.</div>
           </div>
 
           <div class="ranking-slot" style="position: relative;">
-          <button class="snippet-2" onclick="show_snippet(2)">isRemote</button>
-            <div class="reasoning-point" onclick="compare([2],[7])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">Both implement simple logic as well, but S7 requires people to understand/remember the quadratic formula, hence it is slightly harder to understand than S2.</div>
+          <button class="snippet-5" onclick="show_snippet(5)">deleteRecursive</button>
+            <div class="reasoning-point" onclick="compare([5],[1])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">isRemote is simpler and easier to understand than isMachineTypeDefined due to the control flow.<br>Additionally, the complexity of the isRemote problem is perceived as less complex.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-1" onclick="show_snippet(1)">isValidProjectN</button>
+            <div class="reasoning-point" onclick="compare([1],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">The deleteRecursively code can be improved by using native Java resources, which I see are not being used. Unlike isMachineTypeDefined, which uses Java methods to shorten the code logic.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-6" onclick="show_snippet(6)">encodedLength</button>
+            <div class="reasoning-point" onclick="compare([6],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">The way indexOfIgnoreCase is resolved seems to be a more complicated problem than deleteRecursively, when in fact it is not, since an exception is not centralized as a response and this validation is performed several times.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-8" onclick="show_snippet(8)">atan2</button>
+            <div class="reasoning-point" onclick="compare([8],[7])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">On lowestPositiveRoot, I disagree with naming variables as letters, because the code looks like a mathematical equation rather than the solution to an algorithm.</div>
           </div>
 
           <div class="ranking-slot" style="position: relative;">
           <button class="snippet-7" onclick="show_snippet(7)">lowestPositiveR</button>
             <div class="reasoning-point" onclick="compare([7],[4])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">I think the logic of S4 is more complex, although I understand what it does -- it requires more nuanced understanding</div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">The atan2 method expects a context to understand how each of its validations works. In this case, it shares several errors with lowestPositiveRoot, but lowestPositiveRoot handles the code better in fragments.</div>
           </div>
 
           <div class="ranking-slot" style="position: relative;">
           <button class="snippet-4" onclick="show_snippet(4)">indexOfIgnoreCa</button>
-            <div class="reasoning-point" onclick="compare([4],[5])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">S5 requires knowing the visitor pattern to fully understand what it does -- it can be obscure for people unfamiliar with the pattern. S4, on the other hand, doesn&#x27;t implement any patterns: it is just regular code.</div>
+            <div class="reasoning-point" onclick="compare([4],[2])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">la logica que se usa en las validaciones de encodedLength es muy complicado de entender</div>
           </div>
 
           <div class="ranking-slot" style="position: relative;">
-          <button class="snippet-5" onclick="show_snippet(5)">deleteRecursive</button>
-            <div class="reasoning-point" onclick="compare([5],[3])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">I guess reflection is harder to understand than the visitor pattern, as my colleagues point out. To me, both are pretty straightforward to understand, though, because I am familiar with these concepts and the identifiers make both pretty easy to understand.</div>
-          </div>
-
-          <div class="ranking-slot" style="position: relative;">
-          <button class="snippet-3" onclick="show_snippet(3)">isMachineTypeDe</button>
-            <div class="reasoning-point" onclick="compare([3],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">not idea what the UFT8-2-UT16 entails, so for sure S6 is harder to understand than S3</div>
-          </div>
-
-          <div class="ranking-slot" style="position: relative;">
-          <button class="snippet-6" onclick="show_snippet(6)">encodedLength</button>
-            <div class="reasoning-point" onclick="compare([6],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">atan2 is just very hard to understand because I don&#x27;t remember how arctan&#x27;s math works -- this is by far the hardest to understand for me.</div>
-          </div>
-
-          <div class="ranking-slot" style="position: relative;">
-          <button class="snippet-8" onclick="show_snippet(8)">atan2</button>
+          <button class="snippet-2" onclick="show_snippet(2)">isRemote</button>
           </div>
       </div>
     </div>
 
     <div class="participant-section">
-      <strong>nadeeshan</strong>
+      <strong>expertB</strong>
       <div class="ranking-labels">
         <div class="ranking-label">1 (easiest)</div>
         <div class="ranking-label">2</div>
@@ -1052,9 +1054,78 @@ button:hover {
       </div>
       <div class="ranking-row">
         <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-6" onclick="show_snippet(6)">encodedLength</button>
+            <div class="reasoning-point" onclick="compare([6],[1])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">Because the problem of defining a valid project name is more straightforward than that of defining a URI as local. The URI class is one of those classes that you don&#x27;t use everyday and you need to go to check the documentation to remember how it is composed. On the other hand the valid project name function is very self explanatory.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
           <button class="snippet-1" onclick="show_snippet(1)">isValidProjectN</button>
-            <div class="reasoning-point" onclick="compare([1],[7,2,4])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">lowestPositiveR is way shorter than lowestPositiveR</div>
+            <div class="reasoning-point" onclick="compare([1],[2])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">While reading the `deleteRecursively` method for the first time I was looking for the recursion pattern in the code and instead the code used the Files.walkFileTree method to traverse the files. Because of this reading this code was a bit more confusing than the snippet checking whether a URI is remote.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-2" onclick="show_snippet(2)">isRemote</button>
+            <div class="reasoning-point" onclick="compare([2],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">`deleteRecursively` is still clearer than `indexOfIgnoreCase` in that the method reads quite nicely with well defined variable names and usage of the familiar Files java library. Despite the fact that the method uses a Visitor pattern, even not knowing what the pattern exactly does a reader could understand the file tree traversing method happening based on the names of the overridden methods for the SimpleFileVisitor instance. Even though `indexOfIgnoreCase` is a simple method I still consider that its implementation needs a bit more thinking and mental compilation than the `deleteRecursively` method.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-8" onclick="show_snippet(8)">atan2</button>
+            <div class="reasoning-point" onclick="compare([8],[7])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">`indexOfIgnoreCase` requires less background knowledge to understand what the method is doing. The issue with `lowestPositiveRoot` is still that the names are not fully explicit and the fact that we&#x27;re using the quadratic formula is not given anywhere in the code. Some comments or better naming could make this more explicit.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-7" onclick="show_snippet(7)">lowestPositiveR</button>
+            <div class="reasoning-point" onclick="compare([7],[5])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">The difference in the ranking for these two methods is a bit harder to give as they sit close in how comprehensible they are. I still consider that `lowestPositiveRoot` reads easier than `isMachineTypeDefined` once you know you&#x27;re dealing with the quadratic formula. On the other hand `isMachineTypeDefined` has the difficulties of dealing with the reflection libraries which is always a bit confusing.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-5" onclick="show_snippet(5)">deleteRecursive</button>
+            <div class="reasoning-point" onclick="compare([5],[3,4])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">`isMachineTypeDefined` is still a well defined method that can be understood even if it has some struggles due to the reflection library used. On the other hand both `encodedLength` and `atan2` methods are still very cryptic on their implementations. Despite other experts clarifications I still find the explanations not fully convincing and the two methods feel equally incomprehensible to me.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-4" onclick="show_snippet(4)">indexOfIgnoreCa</button>
+<button class="snippet-3" onclick="show_snippet(3)">isMachineTypeDe</button>
+            <div class="reasoning-point" onclick="compare([3],[4])" style="position: absolute; top: -7px; right: 50px;"></div>
+            <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>After reading the feedback from other experts, it&#x27;s still unclear to me whether the methods actually do what they are intended to do. One of the experts explained that `atan2` is an approximation method but I&#x27;m still not convinced the mathematics behind it are sound. And `encodedLenght` using binary shifts and validating a set of ascii characters, that to me still don&#x27;t make sense, make this method not easy to comprehend. I still think they are equally cryptic and possibly equally flawed</div>
+          </div>
+      </div>
+    </div>
+
+    <div class="participant-section">
+      <strong>expertA</strong>
+      <div class="ranking-labels">
+        <div class="ranking-label">1 (easiest)</div>
+        <div class="ranking-label">2</div>
+        <div class="ranking-label">3</div>
+        <div class="ranking-label">4</div>
+        <div class="ranking-label">5</div>
+        <div class="ranking-label">6</div>
+        <div class="ranking-label">7</div>
+        <div class="ranking-label">8 (hardest)</div>
+      </div>
+      <div class="ranking-row">
+        <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-6" onclick="show_snippet(6)">encodedLength</button>
+<button class="snippet-2" onclick="show_snippet(2)">isRemote</button>
+            <div class="reasoning-point" onclick="compare([2],[6])" style="position: absolute; top: -7px; right: 50px;"></div>
+            <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>Short snippets. The purpose of local variables and called methods is clear.</div>
+            <div class="reasoning-point" onclick="compare([2,6],[1,4,7])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">Short and simple. The simplicity also includes the fact that no specific previous knowledge is required. In contrast, the ones in Position 4 do require specific knowledge. Also, isValidProjectN suffers from bad naming.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          
           </div>
 
           <div class="ranking-slot" style="position: relative;">
@@ -1064,17 +1135,15 @@ button:hover {
           <div class="ranking-slot" style="position: relative;">
           <button class="snippet-4" onclick="show_snippet(4)">indexOfIgnoreCa</button>
 <button class="snippet-7" onclick="show_snippet(7)">lowestPositiveR</button>
-<button class="snippet-2" onclick="show_snippet(2)">isRemote</button>
-            <div class="reasoning-point" onclick="compare([7],[2,4])" style="position: absolute; top: -7px; right: 50px;"></div>
-            <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>All of them require some background knowledge about maths or Java APIs.</div>
-            <div class="reasoning-point" onclick="compare([7,2,4],[5])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">The complex structure of isRemote makes it harder to understand.</div>
+<button class="snippet-1" onclick="show_snippet(1)">isValidProjectN</button>
+            <div class="reasoning-point" onclick="compare([1],[4,7])" style="position: absolute; top: -7px; right: 50px;"></div>
+            <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>4 and seven required specific knowledge. <br>1 was downgraded from Position 5 after reading reviewer&#x27;s comments.</div>
+            <div class="reasoning-point" onclick="compare([1,4,7],[3])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">Variable names easily convey the purpose of the method. Specific knowledge is required only to understand the implementation in detail. <br><br>isMachineTypeDe suffers from bad variable naming. Specific knowledge is required to understand the purpose AND the actual implementation of the method.</div>
           </div>
 
           <div class="ranking-slot" style="position: relative;">
-          <button class="snippet-5" onclick="show_snippet(5)">deleteRecursive</button>
-            <div class="reasoning-point" onclick="compare([5],[3])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">Without identifying the isMachineTypeDe uses Java reflection, it is hard to understand the logic straightforwardly.</div>
+          
           </div>
 
           <div class="ranking-slot" style="position: relative;">
@@ -1083,18 +1152,76 @@ button:hover {
 
           <div class="ranking-slot" style="position: relative;">
           <button class="snippet-3" onclick="show_snippet(3)">isMachineTypeDe</button>
-            <div class="reasoning-point" onclick="compare([3],[6])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">Since encodedLength requires knowledge of UTF-8 to UTF-16 conversion, it assumes some familiarity with character encoding concepts.</div>
-          </div>
-
-          <div class="ranking-slot" style="position: relative;">
-          <button class="snippet-6" onclick="show_snippet(6)">encodedLength</button>
-            <div class="reasoning-point" onclick="compare([6],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
-            <div class="tooltip-box" style="top: 35px; right: -160px;">atan2 require special domain knowledge--how atan works specifically</div>
+            <div class="reasoning-point" onclick="compare([3],[5,8])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">The name of the method gives a good (but not complete) idea of its purpose. In Position 8, nothing seems to be descriptive enough to decipher their purpose.</div>
           </div>
 
           <div class="ranking-slot" style="position: relative;">
           <button class="snippet-8" onclick="show_snippet(8)">atan2</button>
+<button class="snippet-5" onclick="show_snippet(5)">deleteRecursive</button>
+            <div class="reasoning-point" onclick="compare([5],[8])" style="position: absolute; top: -7px; right: 50px;"></div>
+            <div class="tooltip-box" style="position: absolute; top: 25px; left: 10px; width: 360px;">💡 <strong>Reason:</strong><br>suffer from the same issue: names that do not really convey the purpose of the method. Also, the existence of some magic numbers with unclear meaning.</div>
+          </div>
+      </div>
+    </div>
+
+    <div class="participant-section">
+      <strong>expertE</strong>
+      <div class="ranking-labels">
+        <div class="ranking-label">1 (easiest)</div>
+        <div class="ranking-label">2</div>
+        <div class="ranking-label">3</div>
+        <div class="ranking-label">4</div>
+        <div class="ranking-label">5</div>
+        <div class="ranking-label">6</div>
+        <div class="ranking-label">7</div>
+        <div class="ranking-label">8 (hardest)</div>
+      </div>
+      <div class="ranking-row">
+        <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-6" onclick="show_snippet(6)">encodedLength</button>
+            <div class="reasoning-point" onclick="compare([6],[4])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">I found the project name validation snippet easier to understand than the URI one because everything it does is right there in front of you and self-contained. It just walks through a series of simple checks on a single string: null, leading dot, length range, and allowed characters. The loop is straightforward, the conditions are easy to read, and the intent matches the method name exactly.<br><br>The isRemote method is still pretty readable, but it pulls in a bit more context. You have to reason about URI schemes and what counts as “remote”.  And, there’s also a dependency on isFilesystemPath(uri), whose behavior you don’t see in this snippet and must infer. That extra bit of indirection and the need to think and infer about external behavior makes it slightly less immediate to understand than the project name validator.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-4" onclick="show_snippet(4)">indexOfIgnoreCa</button>
+            <div class="reasoning-point" onclick="compare([4],[8])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">The isRemote snippet is easier to understand because it’s shorter, more linear, and deals with only a couple of simple conditions. You can read straight through it and immediately see the intent: check a few properties of the URI and return true or false based on the scheme. There are no loops and the branching stays relatively shallow.<br><br>The indexOfIgnoreCase snippet, while still readable, requires a little more mental work to parse out its logic. It has more parameters to consider, several edge-case checks, and a loop that searches through the characters. You also have to reason about the starting position, the calculated end boundary, and infer what regionMatches does. None of the code is overly complex, but there are simply more moving parts than in isRemote, which makes it take a bit more effort to follow.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-8" onclick="show_snippet(8)">atan2</button>
+            <div class="reasoning-point" onclick="compare([8],[1])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">The substring search method is easier to understand because everything it’s doing is contained within the method itself. Even though it has a loop and a few boundary checks, the overall idea is straightforward: adjust the starting position, calculate how far you can search, and then scan through the string looking for a match. The control flow is familiar and the logic stays localized.<br><br>Conversely, the recursive delete method requires understanding how Files.walkFileTree works and how the SimpleFileVisitor callbacks interact with it. The actual deletion logic is simple, but the pattern itself isn’t something you interpret linearly—you have to mentally connect the visitor methods to the traversal process and understand that the framework is controlling the recursion. Because the behavior depends on the external file-tree traversal API rather than just the code in front of you, it takes more effort to follow and understand what’s happening in the function.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-1" onclick="show_snippet(1)">isValidProjectN</button>
+            <div class="reasoning-point" onclick="compare([1],[5])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">The recursive delete snippet is easier to understand because the overall intent is clear right away: walk through a directory tree and delete everything in it. Even though it uses walkFileTree, the logic inside the visitor is simple—delete each file, then delete each directory. Once you recognize the pattern, the flow is pretty easy to follow.<br><br>The quadratic-root snippet requires more mental work because you have to track the math. You need to remember how the discriminant works, how the quadratic formula is applied, and why the roots are swapped. The code itself isn’t really complicated — it’s the underlying math that makes you pause. A brief comment explaining the steps of the quadratic calculation would make it easier to understand more quickly. The method is still readable, but you do have to think through the algebra and the ordering logic, which makes it a bit more involved than just iterating over a file tree and deleting entries.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-5" onclick="show_snippet(5)">deleteRecursive</button>
+            <div class="reasoning-point" onclick="compare([5],[2])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">The quadratic-root snippet, even though it requires some math, has a very linear and predictable flow. You compute the discriminant, calculate two roots, reorder them if necessary, and then return the smallest positive one. The logic is contained entirely within the method, and once you understand the math, the code itself is straightforward and easy to follow, particularly with the variables named appropriately.<br><br>The machine-type snippet is harder because it relies heavily on reflection, which is much less intuitive to read. Instead of simply working with local variables, the code dynamically inspects fields on another class, checks their modifiers, and retrieves values at runtime. Understanding what’s happening means keeping track of the reflection API, the meaning of synthetic fields, and why static final fields are being filtered. Without comments, you also have to infer why reflection is even being used. All of that requires more mental overhead and analysis outside of the function itself than following the quadratic formula.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-2" onclick="show_snippet(2)">isRemote</button>
+            <div class="reasoning-point" onclick="compare([2],[3])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">The machine-type snippet is easier to understand because, even though it uses reflection, the overall idea is straightforward: loop through a set of constants and check whether any of them match the input value. Once you recognize the pattern, the flow is pretty direct, and most of the complexity comes from the API calls rather than any tricky or confusing logic.<br><br>The UTF-8 encoded-length snippet is more difficult because the logic is dense and optimized in ways that aren’t immediately obvious or intuitive. You have to understand character ranges, multi-byte UTF-8 encoding rules, and why certain bit-level expressions, like ((0x7f - c) &gt;&gt;&gt; 31), work the way they do. There’s also an abrupt jump to a helper method when a non-ASCII, non-2-byte character is found, which adds another layer you have to understand and think about. The method is correct but compact and “clever,” so it takes more effort to unpack than the reflection loop.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-3" onclick="show_snippet(3)">isMachineTypeDe</button>
+            <div class="reasoning-point" onclick="compare([3],[7])" style="position: absolute; top: 10px; right: -12px;"></div>
+            <div class="tooltip-box" style="top: 35px; right: -160px;">The UTF-8 length calculation snippet is tricky because of the bit-level optimizations, but the overall structure is still pretty logical. It walks through the characters, handles ASCII first, then moves on to multi-byte ranges, and finally checks for overflow. Even if you don’t fully understand the condensed/clever arithmetic, you can still follow the high-level idea.<br><br>The atan2 snippet is harder because the flow is much less intuitive. It uses unusual NaN-detection tricks like n != n and n - n != n - n, which aren’t patterns most developers use or encounter, since they would typically rely on built-in helper functions. On top of that, the method branches into several quadrant-handling cases, and the fallback returns involve expressions like x + HALF_PI, which require you to reason about what x actually represents at that point. Without comments, you have to mentally reconstruct how each case produces the correct angle. All of that makes the atan2 code more confusing and less straightforward than the UTF-8 length calculation.</div>
+          </div>
+
+          <div class="ranking-slot" style="position: relative;">
+          <button class="snippet-7" onclick="show_snippet(7)">lowestPositiveR</button>
           </div>
       </div>
     </div>
