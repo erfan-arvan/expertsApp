@@ -670,181 +670,295 @@
     <script>
         // ========= Source Data =========
         // Exact round 2 questions (verbatim)
-        const QUESTIONS = [
-            "1. Did any of the other experts’ perspectives seem reasonable or worth reflecting on, even if you don’t fully agree with them?",
-            "2. Did the other experts’ feedback affect your understanding of the snippet’s difficulty or its comprehensibility for typical software engineers?",
-            "3. Would you consider revising your ranking for this snippet later, after completing all the disagreement reflections?"
-        ];
+const QUESTIONS = ["1. Did any of the other experts\u2019 perspectives seem reasonable or worth reflecting on, even if you don\u2019t fully agree with them?", "2. Did the other experts\u2019 feedback affect your understanding of the snippet\u2019s difficulty or its comprehensibility for typical software engineers?", "3. Would you consider revising your ranking for this snippet later, after completing all the disagreement reflections?"];
 
         // Exact disagreement texts (the 'text' body used for Round 2 recap is preserved verbatim)
-        const disagreements = [
-            {
-                snippet: 3,
-                text: `The experts disagreed significantly on the comprehensibility of isMachineTypeDefined, particularly in how much the use of Java reflection and the unclear method purpose should affect its difficulty rating. 
+
+const disagreements = [
+  {
+  snippet: "isMachineTypeDefined",
+  text: `
+<p>
+  <strong>isMachineTypeDefined</strong> is one of the most divisive methods, with experts placing it
+  anywhere from near-easy to the hardest in the set.
+</p>
+
 <ul>
-  <li><strong>Oscar</strong> ranked the snippet as one of the easiest in round 1 (Position 1), describing its logic as straightforward and noting that nested control flow did not add complexity. In round 2, he acknowledged that reflection might introduce difficulty for some readers but continued to view the snippet as relatively simple, adjusting his ranking only slightly to Position 2.</li>
-  <li><strong>Martin</strong> placed the snippet in Position 6 in round 1 and emphasized that the use of reflection, unfamiliar constants, and a vague method purpose made it difficult to understand. In round 2, he reinforced these concerns and suggested that Oscar’s view understated the complexity introduced by reflection and lack of context.</li>
-  <li><strong>Nadeeshan</strong> also found the snippet confusing, particularly due to the unexplained use of a getter method with a null argument and unfamiliar class-level elements. While he initially ranked it higher, in round 2 he revised his ranking downward to Position 6 to align more closely with Martin’s view.</li>
+  <li>
+    <strong>Expert D</strong> placed <code>isMachineTypeDefined</code> toward the easy side at Position 2.
+    <ul>
+      <li>
+        They described it as “clear, concise,” praising how reflection is used in a straightforward
+        way to iterate over constants and check for a match. Even though reflection requires some
+        prior knowledge, they felt the intent remained easy to follow.
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Expert C</strong> placed it in Position 3.
+    <ul>
+      <li>
+        They said the control flow is understandable but expressed uncertainty about what each field
+        represents and what <code>isSynthetic</code> is doing. They noted that the method “requires
+        business knowledge about the domain,” and that using reflection to inspect declared fields
+        is “advanced Java stuff that is not very common.”
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Expert A</strong> placed it in Position 4.
+    <ul>
+      <li>
+        They wrote that the method is “simple to comprehend for someone familiar with reflection”
+        but still requires specific API knowledge. They viewed it similarly to
+        <code>deleteRecursively</code> in terms of difficulty and noted that both methods require
+        more contextual knowledge than the simplest ones like <code>isValidProjectName</code>.
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Expert E</strong> placed it significantly harder, at Position 6.
+    <ul>
+      <li>
+        They explained that although the reflective loop is recognizable once you see that it's
+        iterating over constants, the method still relies on understanding modifiers, synthetic vs
+        non-synthetic fields, and why reflection is being used at all. They consistently judged it
+        harder than more linear, mathematical methods like <code>lowestPositiveRoot</code>.
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Expert B</strong> placed <code>isMachineTypeDefined</code> at the extreme hard end
+    (Position 8).
+    <ul>
+      <li>
+        They called it “difficult to comprehend,” arguing that the name implies a general
+        MachineType check, yet the implementation is tied specifically to
+        <code>CoffMachineType</code>. They also noted that one path always triggers a null-pointer
+        exception. They grouped it with <code>encodedLength</code> and <code>atan2</code> as “hacky
+        or cryptic” functions full of hidden assumptions and errors requiring significant “mental
+        debugging.”
+      </li>
+    </ul>
+  </li>
 </ul>
-<p>The core disagreement remains: Oscar sees the snippet as fundamentally simple despite the use of reflection, while Martin and Nadeeshan believe the reliance on reflection and unclear semantics make it significantly harder for a typical software engineer to understand.</p>
-<details>
-  <summary style="cursor: pointer; font-weight: bold; margin-top: 1em;">View Round 2 Reflections</summary>
-  <div style="margin-top: 0.5em;">
 
-    <details>
-      <summary style="cursor: pointer; font-weight: bold;">View Summary of Disagreement</summary>
-      <div style="margin-top: 0.5em;">
-        isMachineTypeDefined (<code>isMachineTypeDefined</code>) appears to be a point of disagreement among the experts.
-        <br><strong>Oscar</strong> ranked it as one of the easiest (Position 1), describing it as having straightforward logic. He noted that the presence of nested if statements or loops did not make it harder to understand. However, in his detailed comments, he did mention that it was unclear what a "synthetic field" is, and that the snippet might be harder to understand for someone unfamiliar with the constants used.
-        <br><strong>Nadeeshan</strong> placed it in Position 4, stating that it was relatively hard to understand due to unfamiliarity with <code>CoffMachineType</code>. He emphasized that the snippet needs more context to be understood, and highlighted an unusual use of a getter with an argument — specifically pointing to a line where <code>null</code> is passed, which he found unnecessary and confusing.
-        <br><strong>Martin</strong>, who placed it in Position 6, noted that the method required bottom-up reasoning, meaning it was necessary to carefully examine each line to figure out what the method was doing. He pointed to the use of Java’s reflective features and the unclear nature of the <code>type</code> variable (possibly representing a non-standard enumeration) as contributing factors to its complexity. He also remarked that the overall purpose of the method was not easily discernible from the code alone.
-      </div>
-    </details>
-
-    <p><strong>Martin:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> I agree with Nadeeshan that this snippet needs more context for complete understanding. I think that Oscar's detailed comments suggest that he agrees that there is some subtlety here, even if his initial ranking is that it's an easy snippet.</li>
-      <li><strong>Q2:</strong> I think that I may have overestimated the difficulty a bit. Nadeeshan's ranking (position 4 or thereabouts) seems like a reasonable place to settle, given that it's between Oscar's and mine. I do think that Oscar's ranking is too low, and I don't buy his argument that the logic is straightforward: the use of reflection complicates it significantly, and the overall purpose is hard to understand (even if some of the logic is simple).</li>
-      <li><strong>Q3:</strong> Yes.</li>
-    </ul>
-
-    <p><strong>Nadeeshan:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> I agree with Martin's point that "overall purpose of the method was not easily discernible from the code alone".</li>
-      <li><strong>Q2:</strong> Yes. Confirming my understanding, I am on the same page as Martin that he mentioned usage of Java's reflection contributes to the code's complexity.</li>
-      <li><strong>Q3:</strong> I'd like to change the rank of isMachineTypeDefined -- from rank 4 to rank 6</li>
-    </ul>
-
-    <p><strong>Oscar:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> Yes, the use of reflection is definitely a key thing here. If a person doesn't know the method, it might be hard to understand.</li>
-      <li><strong>Q2:</strong> Not really. I think I understand the snippet pretty well, but their feedback made me understand that for other people unfamiliar with this implementation pattern (reflection + checking numerical constants defined in a class), the method may be a little harder to understand.</li>
-      <li><strong>Q3:</strong> Yes, I would move it to the right a bit.</li>
-    </ul>
-
-  </div>
-</details>
+<p>
+  <strong>Overall</strong>, experts disagreed sharply depending on how comfortable they are with
+  reflection, how much domain context they inferred or expected, and how they assessed the clarity
+  and intention behind the method’s structure.
+</p>
 `
-            },
-            {
-                snippet: 2,
-                text: `In round 2, the experts disagreed about how understandable isRemote would be for a typical software engineer, especially in terms of the background knowledge it assumes about URI schemes.
+},
+    {
+    snippet: "isValidProjectName",
+    // title: "minor disagreement on isValidProjectName",
+    text: `
+<p>
+  <strong>isValidProjectName</strong> shows noticeable disagreement across experts,
+  with most placing it in the easiest tier and others rating it slightly or significantly harder.
+</p>
+
 <ul>
-  <li><strong>Oscar</strong> placed the snippet in Position 4, indicating that he found it more difficult than most others. He questioned whether checking if the scheme is "jar" or "file" is enough to determine whether a URI is remote. Although he found the logic structurally simple, he felt the method’s purpose was unclear without understanding the significance of those schemes. For him, knowing what counts as a remote URI is not necessarily common knowledge, and that gap affects how easily the method can be understood.</li>
-  <li><strong>Martin</strong> placed the snippet in Position 2, seeing it as relatively easy. He acknowledged that the method relies on domain knowledge about URI schemes but believed that most engineers would still be able to follow the logic. He found the structure clean and the intent straightforward once the scheme check is interpreted correctly. From his perspective, the need for external knowledge was minimal and did not prevent comprehension.</li>
-  <li><strong>Nadeeshan</strong> originally placed the snippet in Position 1, seeing it as the easiest. After considering Oscar’s comments, he moved it to Position 2, recognizing that the use of "jar" and "file" might not be immediately intuitive to everyone. However, he still felt that the overall purpose of the method remained understandable and that the control flow supported clarity.</li>
+  <li>
+    <strong>Experts A, B, and E</strong> all ranked <code>isValidProjectName</code> in Position 1.
+    <ul>
+      <li>
+        <strong>Expert A</strong> described it as “simple to understand” with “very clear”
+        method and variable names. They emphasized that short, self-contained methods like this
+        have an obvious purpose and that “the purpose of local variables and called methods is
+        clear,” which makes it belong among the easiest code.
+      </li>
+      <li>
+        <strong>Expert B</strong> also viewed it as one of the simplest methods, praising its
+        well-structured conditions and noting that each check contributes independently to the
+        overall validation. In comparing it to <code>isRemote</code>, they said that “the problem
+        of defining a valid project name is more straightforward than that of defining a URI as
+        local” and that the project-name validator is “very self explanatory,” reinforcing why
+        they consider it strictly easier.
+      </li>
+      <li>
+        <strong>Expert E</strong> likewise considered it very easy, saying that the method
+        signature and the simple sequence of checks made it “pretty easy to understand.” They
+        highlighted that “everything isValidProjectName does is right there in front of you and
+        self-contained,” unlike <code>isRemote</code>, which relies on domain knowledge about URI
+        schemes and an unseen helper.
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Expert C</strong> ranked <code>isValidProjectName</code> slightly harder, in Position 2.
+    <ul>
+      <li>
+        They found it mostly easy to follow but were unsure why both a letter-or-digit check and
+        a separate valid-character-set check were necessary. They explained that
+        <code>isValidProjectName</code> (and <code>isRemote</code>) requires a bit more domain
+        knowledge to understand the special cases, whereas their easiest methods—
+        <code>indexOfIgnoreCase</code> and <code>deleteRecursively</code>—can be followed line by
+        line without additional assumptions.
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Expert D</strong> placed <code>isValidProjectName</code> much higher, at Position 4.
+    <ul>
+      <li>
+        They wrote that the method is understandable, but that the initial chain of validations is
+        too long and could be “summarized a little without losing the readability.” They
+        consistently favored code whose naming and structure felt more compact and directly aligned
+        with its purpose, which pushed <code>isValidProjectName</code> outside the easiest tier
+        for them.
+      </li>
+    </ul>
+  </li>
 </ul>
-<p>The disagreement reflects a broader question: To what extent does familiarity with concepts like URI schemes affect how understandable this method would be for the average software engineer? Oscar believed this knowledge gap adds meaningful difficulty. Martin and Nadeeshan judged the snippet to be accessible in spite of it.</p>
-<p>The disagreement also raises a related but distinct point that was not directly discussed: how much familiarity with URI schemes can reasonably be assumed of typical software engineers. While the experts differed in how much this knowledge mattered for understanding the snippet, they did not explicitly address whether such knowledge is commonly held.</p>
 
-<details>
-  <summary style="cursor: pointer; font-weight: bold; margin-top: 1em;">View Round 2 Reflections</summary>
-  <div style="margin-top: 0.5em;">
-
-    <details>
-      <summary style="cursor: pointer; font-weight: bold;">View Summary of Disagreement</summary>
-      <div style="margin-top: 0.5em;">
-        isRemote (<code>isRemote</code>) appears to be a point of partial disagreement among the experts.
-        <br><strong>Nadeeshan</strong> considers it easy to understand and places it in the easiest position, alongside isValidProjectName. He believes it has a meaningful method name, clear internal method invocations, and a straightforward switch statement.
-        <br><strong>Oscar</strong> also finds the snippet relatively easy, but slightly more difficult than isValidProjectName (<code>isValidProjectName</code>). He expressed uncertainty about the meaning of <code>isFilesystemPath</code> and the use of the URI scheme, stating:
-        <br><em>“I am not familiar with a URI's scheme and why implementing that logic (in isRemote) is enough to check if it is remote.”</em>
-        <br><strong>Martin</strong> also places isRemote in Position 1 (easiest) and describes it as generally clear. He notes:
-        <br><em>“There are some subtleties here (how do we know that 'jar' and 'file' are the only URI schemes that are not remote? I think that's domain knowledge...), but overall the purpose is clear and easy to understand from the code's structure.”</em>
-        <br>However, unlike Nadeeshan and Oscar, Martin ranked isValidProjectName slightly lower, placing it in Position 2, indicating that he finds isRemote just a bit easier due to its shorter and simpler set of rules.
-      </div>
-    </details>
-
-    <p><strong>Martin:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> We broadly agree. I think it's worth differentiating this snippet from isValidProjectName, and Oscar and I agree that this one is a little bit trickier. I think Nadeeshan would agree that, if he had to choose between this one and isValidProjectName, this one is a little more complex. So, I think we'll agree here on isValidProjectName at the bottom, and this one above it.</li>
-      <li><strong>Q2:</strong> No.</li>
-      <li><strong>Q3:</strong> No.</li>
-    </ul>
-
-    <p><strong>Nadeeshan:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> I agree with Oscar on isRemote's URI implementation logic. However, despite that uncertainty, the purpose of the method remains clear to me.</li>
-      <li><strong>Q2:</strong> Yes.</li>
-      <li><strong>Q3:</strong> I would change rank of isRemote -- from rank 1 to 2</li>
-    </ul>
-
-    <p><strong>Oscar:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> I think the other experts rated with less importance the fact that it is unclear why the implemented logic is enough to achieve that intended functionality (check that the URI is remote).</li>
-      <li><strong>Q2:</strong> I agree with them that the logic is simple, but I found it more complicated than other snippets because the intention of the code is not clear (i.e., why checking the scheme is jar or file is enough to check that the URI is or isn't remote).</li>
-      <li><strong>Q3:</strong> I don't think I would change the ranking for this snippet: simple logic does not equate entirely to simplicity of understanding the code, i.e., the code intention is also important to understand.</li>
-    </ul>
-
-  </div>
-</details>
+<p>
+  <strong>Overall</strong>, the disagreement arises from how experts weigh the method's length,
+  redundancy of checks, and the small amount of domain knowledge it assumes. For some, these
+  details are negligible, leaving the method firmly among the easiest; for others, they introduce
+  enough overhead to move it into a slightly or significantly harder tier.
+</p>
 `
-            },
-            {
-                snippet: 5,
-                text: `In round 2, the experts disagreed on how understandable deleteRecursively would be for a typical software engineer, particularly in relation to the prior experience it assumes with Java’s file system APIs and the Visitor design pattern.
+  },
+
+ {
+  snippet: "indexOfIgnoreCase",
+  text: `
+<p>
+  <strong>indexOfIgnoreCase</strong> shows varied difficulty assessments, with experts split
+  between viewing it as one of the easiest methods and placing it solidly in the mid-range.
+</p>
+
 <ul>
-  <li><strong>Oscar</strong> placed the snippet in Position 2, continuing to view it as relatively easy. He acknowledged that engineers unfamiliar with the Visitor pattern might find it harder to understand, but he still believed the structure and naming made the method accessible. He did not express strong motivation to move it out of the "easy" tier and suggested only a slight shift to the right in his ranking.</li>
-  <li><strong>Nadeeshan</strong> placed the snippet in Position 5, moving it slightly up from his initial ranking but continuing to see it as significantly more difficult than Oscar did. He agreed with Martin’s earlier point that understanding the method depends on prior familiarity with Java’s file-handling APIs, including the role of <code>postVisitDirectory</code> and the behavior of <code>FileVisitor</code>. For him, these assumptions limit how easily the method can be understood by engineers who have not worked with this part of the API.</li>
-  <li><strong>Martin</strong> placed the snippet in Position 4 and shared a similar view. He found the method’s specification clear, but believed that understanding its behavior relies on recognizing the idiomatic use of <code>walkFileTree</code> and overridden visitor methods. He was willing to shift the snippet slightly lower in his ranking, but still saw it as easier than others that rely on reflection or encoding logic.</li>
+  <li>
+    <strong>Expert C</strong> placed <code>indexOfIgnoreCase</code> in Position 1.
+    <ul>
+      <li>
+        They said it “flowed very naturally,” with each condition playing an obvious role in the
+        search logic. They grouped it with <code>deleteRecursively</code>, explaining that both
+        methods can be followed line by line, with meaningful variable names and straightforward
+        logic.
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Experts E and D</strong> placed <code>indexOfIgnoreCase</code> in Position 3.
+    <ul>
+      <li>
+        <strong>Expert E</strong> emphasized that the method's control flow is clear and the
+        earlier return checks are intuitive. They also contrasted it with more complicated methods
+        such as reflection-based ones or UTF-8 encoding, noting that
+        <code>indexOfIgnoreCase</code> is fully self-contained.
+      </li>
+      <li>
+        <strong>Expert D</strong> described it as structurally clear and readable, though more
+        complex than the very simplest methods.
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Experts A and B</strong> placed it at Position 5.
+    <ul>
+      <li>
+        <strong>Expert A</strong> acknowledged that the implementation is generally expected but
+        pointed out naming issues (e.g., “str,” “endLimit”), saying these reduce readability. They
+        felt this pushes the method slightly harder than some reflection-based ones because the
+        naming obscures intent.
+      </li>
+      <li>
+        <strong>Expert B</strong> called the method “ok” but noted that the number of intermediate
+        values and the hand-rolled search logic makes it less transparent than shorter, simpler
+        methods. They said <code>deleteRecursively</code> is easier to follow once one ignores its
+        misleading name, and they argued that <code>lowestPositiveRoot</code> can be easier than
+        <code>indexOfIgnoreCase</code> because the latter is “reinventing the wheel” instead of
+        using built-in substring operations.
+      </li>
+    </ul>
+  </li>
 </ul>
-<p>The disagreement reflects two underlying questions. First, how much familiarity with the Java file system API and the Visitor pattern can reasonably be assumed of typical software engineers? Second, to what extent does that familiarity, or lack of it, impact how easily this method can be understood? Oscar believed that clear structure and naming could compensate for unfamiliarity. Martin and Nadeeshan viewed comprehension as closely tied to experience with the underlying API.</p>
 
-<details>
-  <summary style="cursor: pointer; font-weight: bold; margin-top: 1em;">View Round 2 Reflections</summary>
-  <div style="margin-top: 0.5em;">
-
-    <details>
-      <summary style="cursor: pointer; font-weight: bold;">View Summary of Disagreement</summary>
-      <div style="margin-top: 0.5em;">
-        deleteRecursively (<code>deleteRecursively</code>) is another point of disagreement among the experts.
-        <br><strong>Oscar</strong> placed it in the easiest position (Position 1). He stated that he is “familiar with the visitor pattern” and that “identifiers help clarify.” He described the snippet as having straightforward logic and noted that it was hard for him to distinguish between Snippets 1, 3, and 5 in terms of comprehensibility, as all seemed similarly clear to him.
-        <br><strong>Nadeeshan</strong>, who placed it in Position 6, described it as:
-        <br><em>“Harder due to unclear postVisitDirectory. Assumes dir is a Path object passed from FileVisitor.”</em>
-        <br>However, he also acknowledged that <em>“deleteRecursively has clear logic.”</em>
-        This suggests that while the overall intent was understandable, specific implementation details (e.g., method assumptions and API context) made it more difficult for him.
-        <br><strong>Martin</strong> placed deleteRecursively in Position 5 and offered a nuanced perspective:
-        <br><em>“This was easy for me to understand, but it required domain-specific knowledge of how Java handles file system operations that I do have: I immediately recognized the structure of the walkFileTree call with the anonymous visitor, and knew that I only needed to look at the names of the overridden methods and their bodies (i.e., lines 8 and 13) to figure out what the method does.”</em>
-        <br>He also grouped this snippet with Snippets 4 and 7, noting:
-        <br><em>“These three snippets are actually pretty similar: all are implementations of some kind of simple specification that's a bit tricky to get right in practice.”</em>
-      </div>
-    </details>
-
-    <p><strong>Martin:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> I think Nadeeshan and I broadly agree on this snippet's comprehensibility: we both see the difficulty with the implementation but agree on the clear spec. Oscar also agrees that the spec is clear, but I think he (like me) is familiar with this Java idiom and so ranks the snippet as very easy. But for a non-expert, I think this would be a bit tricky. So, I prefer the ranking in the middle somewhere, as Nadeeshan and I have it; I think this is definitely trickier to understand than e.g., isRemote or the validation method that I ranked at the bottom.</li>
-      <li><strong>Q2:</strong> We all agree on what's there, but not on how to interpret it.</li>
-      <li><strong>Q3:</strong> Yes: I'm willing to shift it a bit downwards, but not below snippets 4 and 7.</li>
-    </ul>
-
-    <p><strong>Nadeeshan:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> I agree with Martin's comment that understanding deleteRecursively properly requires knowledge of Java's file system handling.</li>
-      <li><strong>Q2:</strong> Yes.</li>
-      <li><strong>Q3:</strong> Yes I would. From rank 6 to 5. However, I still believe that a person familiar with the Visitor design pattern, as Oscar pointed out, and with specific domain knowledge of Java file handling is required to fully understand the method. Therefore, I think the ranking is valid in this case.</li>
-    </ul>
-
-    <p><strong>Oscar:</strong></p>
-    <ul>
-      <li><strong>Q1:</strong> Same as with the reflection-based method, I recognize the method would be harder to understand for people unfamiliar with the visitor pattern and its usage with file systems.</li>
-      <li><strong>Q2:</strong> Not really.</li>
-      <li><strong>Q3:</strong> I may rank it more to the right.</li>
-    </ul>
-
-  </div>
-</details>
+<p>
+  <strong>Overall</strong>, <code>indexOfIgnoreCase</code> is a clear point of disagreement about
+  what counts as truly easy code: some see it as a straightforward implementation of string search,
+  while others find its naming, intermediate variables, and reinvention of built-in functionality
+  enough to place it in a more effortful mid-range tier.
+</p>
 `
-            },
-            {
-                snippet: 4,
-                text: `In round 2, the experts disagreed on how difficult indexOfIgnoreCase would be for a typical software engineer to understand, especially in terms of how much prior knowledge of Java’s string APIs is required.
+},
+
+ {
+  snippet: "lowestPositiveRoot",
+  text: `
+<p>
+  <strong>lowestPositiveRoot</strong> shows disagreement about how much mathematical familiarity
+  should influence perceived difficulty.
+</p>
+
 <ul>
-  <li><strong>Oscar</strong> placed indexOfIgnoreCase in Position 6, suggesting that many engineers might find it hard to follow. He pointed to missing context and uncertainty about what <code>regionMatches</code> is doing, indicating that the method depends on familiarity with less common API behavior. Although he understood the overall purpose, he believed the logic was more complex than in other snippets and that many engineers might struggle to follow it precisely.</li>
-  <li><strong>Martin</strong> placed indexOfIgnoreCase in Position 4 and grouped it with Snippets <code>lowestPositiveRoot</code> and <code>deleteRecursively</code>. He argued that all three have clear specifications but complicated implementations that require attention to detail. While not trivial, he considered indexOfIgnoreCase to be understandable for most engineers, assuming they read it carefully. He viewed it as more accessible than snippets like isMachineTypeDefined, which involve reflection.</li>
-  <li><strong>Nadeeshan</strong> placed indexOfIgnoreCase even higher, in Position 3, and similarly judged it to be approachable for engineers. He described the logic as straightforward when read from top to bottom and noted that it did not rely on specialized domain knowledge. Compared to deleteRecursively, which uses a design pattern he thought many engineers might not know well, indexOfIgnoreCase seemed easier to understand.</li>
+  <li>
+    <strong>Expert B</strong> placed <code>lowestPositiveRoot</code> in Position 4.
+    <ul>
+      <li>
+        They described the method as “alright,” explaining that implementing a well-known quadratic
+        formula makes it easier to follow than methods like <code>indexOfIgnoreCase</code>. Although
+        variable names like “det” and “inv” are not ideal, the mathematical structure is familiar.
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Expert E</strong> placed it in Position 5.
+    <ul>
+      <li>
+        They noted that once you recognize the flow as a direct translation of how one solves a
+        quadratic equation by hand, the logic becomes easy to track. Still, they acknowledged it
+        requires some mathematical background. They contrasted it with reflection-heavy methods,
+        saying <code>lowestPositiveRoot</code> has a linear and self-contained structure.
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Experts A, C, and D</strong> all placed <code>lowestPositiveRoot</code> at Position 7.
+    <ul>
+      <li>
+        <strong>Expert A</strong> wrote “Not good,” highlighting that it requires previous
+        knowledge of the quadratic formula and that abbreviated names like “det,” “sqrtD,” “invA,”
+        “r1,” and “r2” provide no clarity to someone unfamiliar with the math involved.
+      </li>
+      <li>
+        <strong>Expert C</strong> said they were “not familiar enough” with the abbreviations and
+        felt uncertain about the purpose of swapping the roots. They compared it unfavorably to
+        <code>encodedLength</code>, saying <code>lowestPositiveRoot</code> involves “even more
+        complicated math.”
+      </li>
+      <li>
+        <strong>Expert D</strong> similarly argued that the unclear variable names and reliance on
+        unannotated mathematical steps make the method “quite difficult to understand,” even though
+        the underlying idea is just the quadratic formula.
+      </li>
+    </ul>
+  </li>
 </ul>
-<p>The main disagreement in round 2 concerns whether engineers unfamiliar with specific Java APIs would find indexOfIgnoreCase hard to follow. Oscar believed API familiarity would be a barrier, while Martin and Nadeeshan considered the logic clear enough for most engineers with basic Java experience.</p>`
-            }
-        ];
+
+<p>
+  <strong>Overall</strong>, <code>lowestPositiveRoot</code> ranges from moderately complex to one
+  of the hardest methods, depending on the expert's mathematical comfort level, expectations about
+  naming clarity, and tolerance for compact representations of formulas.
+</p>
+`
+}
+];
+
 
         // Exact round 2 answers by expert, aligned to disagreements order above (index 0..3)
 const expertResponses = {"expertA": [{"q1": "Yes. Expert D also mentions the role of previous knowledge about reflection. I guess the disagreement is just on the difficulty score. I would consider that a snippet that requires previous knowledge is in principle, difficult. The thing is that this snippet is short enough to not be \n\"that\" difficult.", "q2": "No", "q3": "No"}, {"q1": "No. The comments that explain the higher ranking (and in turn the whole disagreement) do not seem to be about the comprehensibility of the snippet, but rather about its quality.", "q2": "NO", "q3": "No"}, {"q1": "I do share the reasoning of Expert E when it comes to less intuitive snippets that require previous knowledge.", "q2": "No", "q3": "Maybe down to 4. The purpose of the method is easy to understand mostly due to its title, but its implementation is still hard to follow due to poor variable naming."}, {"q1": "Expert 5 reasoning suggests that more than one pass was required to get an idea of the purpose of the method (see \"once you recognize the flow\"). If multiple passes and careful walkthroughs are needed, the method is simply very hard (> 5) to understand.", "q2": "No", "q3": "No"}], "expertB": [{"q1": "Yes, after reading the feedback for the method from other experts I realised the null pointer exception is not an issue and instead the method returns final static fields only.", "q2": "Yes, in particular the explanation of Expert E made things clearer.", "q3": "Yes, I'd position it now into number 6 in the ranking."}, {"q1": "I agree with the experts that set it as the easiest snippet", "q2": "No", "q3": "No"}, {"q1": "I agree with most of the comments by other experts.", "q2": "No", "q3": "Yes, maybe I could consider moving it one step upwards in the list (to position 4)"}, {"q1": "Yes, the variable names are still not the clearest and having previous math knowledge is required in order to understand the full code. Extra comments or more explicit names could help", "q2": "Yes", "q3": "Yes, I would consider moving it one step downwards in the ranking (to position 5)"}], "expertC": [{"q1": "The need to specific API knowledge and understanding what 'synthetic' means in this context.", "q2": "It's made me realize it's easier to understand if you're familiar with reflection but overall doesn't change my understanding (without looking it up myself)", "q3": "No, but if I read the API spec or looked it up I bet I would change my ranking to be easier"}, {"q1": "I agree with Expert D that it could be shorter", "q2": "Not really but I think I understand it completely", "q3": "No, I put it in position 2 because I think the other methods were just slightly easier to understand. Not that this one was hard but it wasn't the easiest."}, {"q1": "Not really resonating but rather I disagree with the feedback on variable names, they make sense to me and I think make the code more readable.", "q2": "No.", "q3": "No."}, {"q1": "A and D's notes on variable names and unannotated mathematical steps - I agree!", "q2": "Seeing the feedback that this is how you would solve quadratic by hand makes me think this code is easier to understand, given that background knowledge.", "q3": "I'd leave it at 7"}], "expertD": [{"q1": "I'm mildly agree with the observations, given that the constants used by the code can be deduced from the names of those constants. However, it is true that the code can fail at one point, and this is confusing.", "q2": "allowed me to see details that I hadn't noticed before", "q3": "With that clarification, I would change my decision, but not by much."}, {"q1": "I agree with the statements made by the other experts, as the code has aspects of readability that make it understandable.", "q2": "The comments show me some points of comparison with other functions that justify why it is more readable than other pieces of code.", "q3": "I would change the order of this piece of code. I wouldn't leave it in first position, but I would leave it in second position."}, {"q1": "In some respects, such as the naming of variables, I disagree, since variables can be understood.", "q2": "No, because the comments explain why it is in third place, in my opinion.", "q3": "I don't see the need for it."}, {"q1": "I strongly agree that the code expects the reader to understand the context of how the square root works and that the names of the variables should be improved.", "q2": "I think most of us end up in a similar position.", "q3": "No, because the method must improve the names of the variables to better explain the mathematical procedure."}], "expertE": [{"q1": "Yes, several of the concerns raised by the other experts resonate with me, especially those from Experts C, A, and E. I agree that while the overall control flow is understandable, the method relies heavily on familiarity with Java\u2019s reflection API and concepts like synthetic fields and field modifiers. Without that background, it\u2019s harder to quickly grasp what the code is doing and why reflection is being used in the first place. I also agree that understanding the intent requires some domain context about CoffMachineType, which isn\u2019t obvious from the method alone.", "q2": "Yes, their feedback helped clarify why this method can feel harder or easier depending on perspective and experience. In particular, it highlighted how much the perceived difficulty depends on prior experience with reflection and how much domain context a reader assumes. While my understanding of what the code does didn\u2019t change, the feedback made it clearer why others might rate it as easier if they see the reflective pattern immediately, or much harder if they focus on the hidden assumptions and required background knowledge.", "q3": "No, I would not change my ranking. After reviewing the feedback, I still think placing this snippet toward the harder side is appropriate. While the intent becomes clear once you recognize the reflective pattern, the method still depends on specific API knowledge, familiarity with reflection details in Java and some implicit domain context. The feedback reinforced why others might rank it differently, but it didn\u2019t change my assessment of the overall cognitive effort required to understand it."}, {"q1": "To a small extent, yes. I can see why Experts C and D mentioned the length of the validation chain and questioned whether some of the checks could be consolidated. The distinction between checking for letters or digits and then separately checking a predefined valid character set could momentarily raise questions about redundancy, and the method does assume some understanding of what characters are considered valid in the project\u2019s domain. With that said, these concerns didn\u2019t significantly affect my perception of difficulty, since each check is still simple and the overall intent remains very clear.", "q2": "Their feedback didn\u2019t change my understanding of what the snippet does, but it did help clarify why some people might rate it as slightly harder. In particular, the comments about check redundancy and method length made it clearer how different experts / developers might weigh conciseness versus explicitness. While I still find the method fairly easy to understand, the feedback does definitely highlight how even small design choices can affect perceived complexity for some developers.", "q3": "No, I would not change my ranking. After reviewing the feedback, I still think placing this snippet on the easiest side of the ranking make sense. The method is self-contained, the logic is explicit, and each check is easy to follow on its own. While some experts preferred a more compact approach, the clarity and straightforward structure outweigh those concerns for me."}, {"q1": "Yes, some of their concerns do resonate with me, particularly those from Experts A and B. I can see how the number of intermediate variables and the manual implementation of a substring search might make the method feel more involved than the simplest snippets. The naming choices, like str and endLimit, are serviceable but not especially descriptive, and that can slightly slow down comprehension. With that said, these issues didn\u2019t outweigh the fact that the control flow is still clear and the logic follows a familiar / logical pattern, which is why I kept it on the easier side overall.", "q2": "Their feedback didn\u2019t change my understanding of what the snippet does, but again it did help clarify why some people might rate it as harder than I did. In particular, the points about naming choices and the fact that the method reimplements functionality that could be handled by built-in APIs made it clearer why others see additional cognitive overhead. While I still find the logic easy to follow, the feedback highlighted how design decisions like naming and abstraction level can influence perceived readability.", "q3": "No, I would not change my ranking. After considering the feedback, I still think Position 3 is appropriate. The method remains readable, self-contained and follows a familiar search pattern, even if it has more moving parts than the very simplest snippets. The feedback helped explain differing opinions, but it didn\u2019t change my overall assessment of its difficulty as I think some of the complaints are more related to style rather than the logic of the method."}, {"q1": "Yes, some of their concerns resonate with me, especially the points about naming conventions of the variables and mathematical background. I agree that abbreviated variable names like det, invA, r1, and r2 don\u2019t offer much help to someone who isn\u2019t already comfortable with the quadratic formula. I also understand why the swapping of the roots might be confusing without that context. With that said, I still see the method as more of a math-familiarity issue than a code-structure problem, which is why I didn\u2019t place it among the hardest snippets.", "q2": "Their feedback didn\u2019t change my understanding of what the snippet is doing, but again it did clarify why others found it significantly harder to comprehend. In particular, it highlighted how much the perceived difficulty depends on a reader\u2019s comfort with the underlying math and their expectations around variable naming and documentation. While I was able to follow the logic by recognizing the quadratic formula, the feedback helped explain why someone without that background might struggle more with the snippet.", "q3": "No, I would not change my ranking. After reviewing the feedback, I still think Position 5 is appropriate. The method\u2019s control flow is straightforward and self-contained, and the primary challenge comes from the underlying math rather than the code itself. While clearer variable names or brief comments could lower the barrier for readers without a strong math background, the feedback didn\u2019t change my overall assessment of its difficulty relative to the other snippets."}]};
