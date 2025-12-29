@@ -2894,7 +2894,7 @@ bindHover(downCount, 'Disliked by', downUsers);
             if (isOpen) {
                 panel.classList.add('open');
                 panel.setAttribute('aria-hidden', 'false');
-                toggleBar.textContent = '✖ Close';
+                toggleBar.textContent = '✖';
                 toggleBar.setAttribute('aria-expanded', 'true');
 
                 // reload the iframe once when opening (cache-busted)
@@ -3005,7 +3005,7 @@ bindHover(downCount, 'Disliked by', downUsers);
                 if (isOpen) {
                     panelUpdate.classList.add('open');
                     panelUpdate.setAttribute('aria-hidden', 'false');
-                    updateBar.textContent = '✖ Close';
+                    updateBar.textContent = '✖';
                     updateBar.setAttribute('aria-expanded', 'true');
 
                     // force a fresh load of the Update Ranking iframe
