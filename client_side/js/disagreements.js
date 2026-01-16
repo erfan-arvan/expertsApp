@@ -132,14 +132,13 @@ After accounting for the major disagreements, the remaining differences in Round
 </ul>
 
 <ul>
-  <li><code>encodedLength</code>:<br>
-  Experts C and D rank <code>encodedLength</code> as easier than <code>atan2</code>, Experts A and B consider them equally difficult, and Expert E reverses the ordering.</li>
-</ul>
-
-<ul>
-  <li><code>atan2</code>:<br>
-  Most experts agree that <code>atan2</code> belongs toward the harder end of the remaining snippets, with disagreement limited to whether it is strictly harder than or comparable to <code>encodedLength</code>.</li>
-</ul>
-`
+  <li>
+    <code>atan2</code> vs. <code>encodedLength</code>:<br>
+    All experts place both snippets in difficult positions, but differ on ordering:
+    Experts C and D rank <code>atan2</code> as easier,
+    Experts A and B group them together,
+    and Expert E ranks <code>atan2</code> as harder.
+  </li>
+</ul>`
   }
 ];
