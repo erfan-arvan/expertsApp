@@ -22,7 +22,7 @@ This tension becomes clear in Round 2, where experts diverged on whether these m
 </ul>
 
 <ul>
-  <li><b>Expert D</b> placed deleteRecursively at Position 4 and indexOfIgnoreCase at Position 5.<br>
+  <li><b>Expert D</b> placed <code>deleteRecursively</code> at Position 4 and indexOfIgnoreCase at Position 5.<br>
   – They felt both methods are readable but unnecessarily complicated relative to the problems they solve. In particular, they noted that indexOfIgnoreCase performs repeated validations and lacks centralized error handling, making it feel more complex than expected.</li>
 </ul>
 
@@ -32,8 +32,8 @@ This tension becomes clear in Round 2, where experts diverged on whether these m
 </ul>
 
 <ul>
-  <li><b>Expert E</b> placed indexOfIgnoreCase at Position 3 and deleteRecursively at Position 4.<br>
-  – They emphasized that indexOfIgnoreCase has more moving parts and requires reasoning about bounds and helper methods like <code>regionMatches</code>, while deleteRecursively requires understanding how <code>Files.walkFileTree</code> drives control flow externally.</li>
+  <li><b>Expert E</b> placed <code>indexOfIgnoreCase</code> at Position 3 and deleteRecursively at Position 4.<br>
+  – They emphasized that indexOfIgnoreCase has more moving parts and requires reasoning about bounds and helper methods like <code>regionMatches</code>, while <code>deleteRecursively</code> requires understanding how <code>Files.walkFileTree</code> drives control flow externally.</li>
 </ul>
 
 <br>
