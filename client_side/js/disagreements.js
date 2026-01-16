@@ -55,7 +55,7 @@ As discussion progressed, experts increasingly framed their disagreement not aro
 
 <ul>
   <li><b>Expert D</b> placed isMachineTypeDefined at Position 3.<br>
-  – They described the method as “clear, concise,” and praised its use of Java’s native reflection facilities to shorten the logic. In their view, the control flow is simpler than methods like atan2 that rely on mathematical reasoning or low-level encoding logic.</li>
+  – They described the method as “clear, concise,” and praised its use of Java’s native reflection facilities to shorten the logic. In their view, the control flow is simpler than methods like <code>atan2</code> that rely on mathematical reasoning or low-level encoding logic.</li>
 </ul>
 
 <ul>
