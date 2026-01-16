@@ -93,12 +93,8 @@ This divergence reflects a deeper split between experts who weigh mathematical b
 After accounting for the major disagreements, the remaining differences in Round 2 involve fine-grained boundary placements among otherwise well-aligned rankings.
 <br><br>
 
-*<code>isValidProjectName</code>:
-Most experts (B, D, and E) consistently rank <code>isValidProjectName</code> as easier than <code>isRemote</code>, while Experts A and C sometimes treat the two as equally difficult rather than strictly ordered.
-<br><br>
-
-*<code>isRemote</code>:
-Experts B, D, and E generally place <code>isRemote</code> as slightly harder than <code>isValidProjectName</code>, whereas Experts A and C group the two together, reflecting a tie-versus-ordering difference.
+*<code>isValidProjectName</code> vs. <code>isRemote</code>:
+All experts agree that these two snippets belong at the easier end of the difficulty spectrum. Experts B, D, and E consistently rank <code>isRemote</code> as slightly harder than <code>isValidProjectName</code>, while Experts A and C group the two together as equally easy. This reflects a tie-versus-ordering judgment rather than a substantive disagreement about code comprehension.
 <br><br>
 
 *<code>encodedLength</code>:
@@ -108,8 +104,6 @@ Experts C and D rank <code>encodedLength</code> as easier than <code>atan2</code
 *<code>atan2</code>:
 Most experts agree that <code>atan2</code> belongs toward the harder end of the remaining snippets, with disagreement limited to whether it is strictly harder than or comparable to <code>encodedLength</code>.
 <br><br>
-
-These cases summarize the remaining minor disagreements after isolating the major points of contention.
 `
 }
 ];
