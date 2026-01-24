@@ -1724,7 +1724,11 @@ private static Map<String, String> loadSectionStringMap(String path, String sect
             Map<String, String> out = new LinkedHashMap<>();
             for (Map.Entry<?, ?> e : map.entrySet()) {
                 if (e.getKey() != null && e.getValue() != null)
-                    out.put(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
+                    out.put(
+                        String.valueOf(e.getKey()).toLowerCase(Locale.ROOT),
+                        String.valueOf(e.getValue())
+                    );
+
             }
             System.out.println("Loaded " + out.size() + " entries for " + section);
             return out;
