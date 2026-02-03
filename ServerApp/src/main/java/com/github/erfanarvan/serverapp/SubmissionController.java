@@ -59,20 +59,28 @@ public class SubmissionController {
         return userEmails.getOrDefault(h, null);
     }
 
-    @PostMapping("/get_snippet_order")
-    public Map<String, Object> getSnippetOrder(@RequestBody Map<String, String> credentials) {
-        String username = credentials.get("username");
-        String password = credentials.get("password");
+@PostMapping("/get_snippet_order")
+public Map<String, Object> getSnippetOrder(@RequestBody Map<String, String> credentials) {
+    String usernameRaw = credentials.get("username");
+    String password = credentials.get("password");
 
-        if (!userPasswords.containsKey(username) || !userPasswords.get(username).equals(password)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
-        }
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("participantName", userNames.get(username));
-        response.put("snippetOrder", userSnippetOrders.get(username));
-        return response;
+    if (usernameRaw == null || password == null) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing credentials");
     }
+
+    String username = usernameRaw.trim().toLowerCase(Locale.ROOT);
+
+    if (!userPasswords.containsKey(username) ||
+        !userPasswords.get(username).equals(password)) {
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+    }
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("participantName", userNames.get(username));
+    response.put("snippetOrder", userSnippetOrders.get(username));
+    return response;
+}
+
 
     @CrossOrigin(origins = { "http://localhost:8000", "http://codecomprehensibility.site" })
     @PostMapping("/submit_final")
