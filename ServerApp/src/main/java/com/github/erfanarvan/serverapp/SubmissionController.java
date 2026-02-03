@@ -1764,7 +1764,11 @@ private static Map<String, List<Integer>> loadSectionIntListMap(String path, Str
                         catch (NumberFormatException ignored) {}
                     }
                 }
-                out.put(String.valueOf(e.getKey()), Collections.unmodifiableList(list));
+            out.put(
+                String.valueOf(e.getKey()).toLowerCase(Locale.ROOT),
+                Collections.unmodifiableList(list)
+            );
+
             }
             System.out.println("Loaded " + out.size() + " entries for " + section);
             return out;
