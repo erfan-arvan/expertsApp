@@ -300,7 +300,7 @@ function buildTable() {
   days.forEach(day => {
     html += `<tr><th>${day}</th>`;
     slots.forEach(slot => {
-      html += `<td class="slot" data-day="${day}" data-slot="${slot}"></td>`;
+      html += `<td class="slot" data-day="${day}" data-slot="${slot}" title="${day} at ${slot}"></td>`;
     });
     html += "</tr>";
   });
