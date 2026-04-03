@@ -44,8 +44,65 @@ button {
 
 <body>
 
-<h1>Proposal Defense Availability</h1>
+<h1>Erfan Arvan's Proposal Defense Availability</h1>
 <h1 id="email-display"></h1>
+
+<div id="instructions-box" style="
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+">
+
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2 style="margin: 0;">Availability Instructions</h2>
+    <button onclick="toggleInstructions()" style="
+        padding: 6px 12px;
+        font-size: 14px;
+        border-radius: 5px;
+        background-color: #ffffff;
+        border: solid 1px #ccc;
+        cursor: pointer;
+        color: #222;
+    ">
+      Hide
+    </button>
+  </div>
+
+  <div id="instructions-content" style="margin-top: 15px; line-height: 1.6;">
+    
+    <p>
+      We need to find a 2-hour time slot for my proposal defense. Since everyone’s schedule can be busy, I’m asking you to mark your availability in 30-minute slots. Then I’ll look for any consecutive 2-hour window where all of you are available.
+    </p>
+
+    <p>
+      If you’re not free at a time but could possibly adjust your schedule, please mark it as 
+      <span style="background: orange; color: white; padding: 2px 6px; border-radius: 4px;">Maybe</span>.
+    </p>
+
+    <p>
+      Each slot represents a 30-minute interval (for example, 8:00 means 8:00–8:30 AM).
+    </p>
+
+    <p>
+      Click once to mark a slot as 
+      <span style="background: #4CAF50; color: white; padding: 2px 6px; border-radius: 4px;">Yes</span>, 
+      click again for 
+      <span style="background: orange; color: white; padding: 2px 6px; border-radius: 4px;">Maybe</span>, 
+      and a third time for 
+      <span style="background: #e74c3c; color: white; padding: 2px 6px; border-radius: 4px;">No</span>.
+    </p>
+
+    <p>
+      Empty slots will be treated as 
+      <span style="background: #e74c3c; color: white; padding: 2px 6px; border-radius: 4px;">No</span>.
+    </p>
+
+  </div>
+</div>
+
+
 
 <table id="table"></table>
 
@@ -193,5 +250,20 @@ buildTable();
 load();
 </script>
 
+
+<script>
+function toggleInstructions() {
+  const content = document.getElementById("instructions-content");
+  const btn = event.target;
+
+  if (content.style.display === "none") {
+    content.style.display = "block";
+    btn.innerText = "Hide";
+  } else {
+    content.style.display = "none";
+    btn.innerText = "Show";
+  }
+}
+</script>
 </body>
 </html>
