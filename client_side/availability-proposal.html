@@ -282,7 +282,10 @@ function save() {
       availability: state
     })
   })
-  .then(res => alert(res.ok ? "Saved!" : "Error"));
+.then(res => alert(res.ok 
+  ? "Saved! You can use the same link anytime to update your availability." 
+  : "Something went wrong. Please try again. If the problem persists, please contact me at ea442@njit.edu."
+))
 }
 
 // Toggle instructions
