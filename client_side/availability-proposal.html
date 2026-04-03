@@ -10,19 +10,21 @@ body {
   font-family: "Segoe UI", Tahoma, sans-serif;
   background: #f4f6f8;
   margin: 0;
-  font-size: 24px;
+
+  /* responsive font */
+  font-size: clamp(16px, 1.5vw, 24px);
 }
 
 /* Main container */
 .container {
   width: 90%;
-  /* max-width: 1200px; */
   margin: 40px auto;
 }
 
 /* Titles */
 h1 {
   margin-bottom: 5px;
+  font-size: clamp(22px, 2.5vw, 32px);
 }
 
 .subtitle {
@@ -33,7 +35,7 @@ h1 {
 /* Card style */
 .card {
   background: white;
-  padding: 20px;
+  padding: clamp(15px, 2vw, 20px);
   border-radius: 10px;
   box-shadow: 0 3px 10px rgba(0,0,0,0.08);
   margin-bottom: 20px;
@@ -44,7 +46,7 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 24px;
+  font-size: clamp(16px, 2vw, 24px);
   border-bottom: 1px solid #e0e0e0;
   padding-bottom: 10px;
   margin-bottom: 15px;
@@ -53,35 +55,39 @@ h1 {
 .instructions-content ul {
   padding-left: 20px;
   line-height: 1.6;
-  font-size:30px;
+  font-size: clamp(16px, 2vw, 26px);
 }
 
+/* Tags */
 .tag {
   padding: 2px 6px;
   border-radius: 4px;
   color: white;
-  font-size: 23px;
+  font-size: clamp(14px, 1.8vw, 22px);
 }
 
 .yes-tag { background: #4CAF50; }
 .maybe-tag { background: orange; }
 .no-tag { background: #e74c3c; }
 
-/* Table */
+/* Table wrapper */
 .table-wrapper {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
+/* Table */
 table {
   border-collapse: collapse;
   width: 100%;
-  font-size: 24px;
+  font-size: clamp(14px, 1.5vw, 22px);
+  min-width: 800px; /* prevents crushing on mobile */
 }
 
 th, td {
   border: 1px solid #ddd;
   text-align: center;
-  padding: 8px;
+  padding: clamp(6px, 1vw, 10px);
 }
 
 th {
@@ -94,12 +100,14 @@ th {
 td {
   cursor: pointer;
   transition: background 0.2s;
+  min-width: 60px;
 }
 
 td:hover {
   background: #eef3ff;
 }
 
+/* Slot colors */
 .slot.yes { background: #4CAF50; color: white; }
 .slot.maybe { background: orange; color: white; }
 .slot.no { background: #e74c3c; color: white; }
@@ -114,8 +122,8 @@ button {
   background: #4CAF50;
   color: white;
   border: none;
-  padding: 12px 30px;
-  font-size: 26px;
+  padding: clamp(10px, 1.5vw, 14px) clamp(20px, 2vw, 30px);
+  font-size: clamp(16px, 2vw, 26px);
   border-radius: 6px;
   cursor: pointer;
   box-shadow: 0 3px 6px rgba(0,0,0,0.1);
@@ -125,38 +133,13 @@ button:hover {
   background: #43a047;
 }
 
+/* Email */
 #email-display {
-  color: #2e7d32;       /* nice green */
+  color: #2e7d32;
   font-weight: 500;
 }
 
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-  background: white;
-  margin: 15% auto;
-  padding: 25px;
-  border-radius: 10px;
-  width: 400px;
-  text-align: center;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  font-size: 18px;
-}
-
-#modal-close {
-  float: right;
-  font-size: 22px;
-  cursor: pointer;
-}
+/* Modal */
 .modal {
   display: none;
   position: fixed;
@@ -171,7 +154,7 @@ button:hover {
 .modal-content {
   background: white;
   margin: 10% auto;
-  padding: 30px;
+  padding: clamp(20px, 3vw, 30px);
   border-radius: 12px;
   width: 500px;
   max-width: 90%;
@@ -187,7 +170,7 @@ button:hover {
 
 #modal-close {
   float: right;
-  font-size: 28px;
+  font-size: clamp(20px, 3vw, 28px);
   cursor: pointer;
   color: #888;
 }
@@ -197,19 +180,56 @@ button:hover {
 }
 
 .modal-icon {
-  font-size: 60px;
+  font-size: clamp(40px, 6vw, 60px);
   margin-bottom: 10px;
 }
 
 #modal-title {
   margin: 10px 0;
-  font-size: 40px;
+  font-size: clamp(22px, 3vw, 40px);
 }
 
 #modal-message {
-  font-size: 30px;
+  font-size: clamp(16px, 2.5vw, 28px);
   line-height: 1.5;
   color: #444;
+}
+
+/* Footer */
+footer {
+  font-size: clamp(14px, 1.8vw, 20px);
+}
+
+/* ========================= */
+/* 📱 MOBILE SPECIFIC FIXES */
+/* ========================= */
+@media (max-width: 768px) {
+
+  .container {
+    width: 95%;
+    margin: 20px auto;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  .instructions-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  td {
+    padding: 10px;
+  }
+
+  .modal-content {
+    margin: 20% auto;
+  }
 }
 </style>
 </head>
