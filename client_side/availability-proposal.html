@@ -136,7 +136,7 @@ button:hover {
 <div class="container">
 
   <h1>Proposal Defense Availability</h1>
-  <h2 id="email-display"></h2>
+  <h2>Email: <span id="email-display"></span></h2>
 
   <!-- Instructions -->
   <div class="card">
@@ -204,7 +204,7 @@ let state = {};
 // Email
 const params = new URLSearchParams(window.location.search);
 const email = params.get("email");
-document.getElementById("email-display").innerText = "Email: " + email;
+document.getElementById("email-display").innerText = email;
 
 // Build table
 function buildTable() {
