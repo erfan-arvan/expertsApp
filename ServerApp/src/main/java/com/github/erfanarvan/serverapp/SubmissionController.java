@@ -1780,4 +1780,88 @@ private static Map<String, List<Integer>> loadSectionIntListMap(String path, Str
 }
 
 
+// ===============================
+// Proposal Defense Availability (NEW)
+// ===============================
+
+private static final File PROPOSAL_FILE = new File("submissions/proposal_availability.json");
+
+// -------------------------------
+// GET existing availability
+// -------------------------------
+@CrossOrigin(origins = { "http://localhost:8000", "http://codecomprehensibility.site" })
+@PostMapping("/get_proposal_availability")
+public synchronized Map<String, Object> getProposalAvailability(@RequestBody Map<String, String> body) {
+
+    String email = body.getOrDefault("email", "").trim().toLowerCase();
+
+    if (email.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email required");
+    }
+
+    ObjectMapper mapper = new ObjectMapper();
+
+    try {
+        if (!PROPOSAL_FILE.exists()) {
+            return Map.of("exists", false);
+        }
+
+        Map<String, Object> allData =
+            mapper.readValue(PROPOSAL_FILE, new TypeReference<>() {});
+
+        if (!allData.containsKey(email)) {
+            return Map.of("exists", false);
+        }
+
+        return Map.of(
+            "exists", true,
+            "data", allData.get(email)
+        );
+
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read data");
+    }
+}
+
+
+// -------------------------------
+// SAVE availability
+// -------------------------------
+@CrossOrigin(origins = { "http://localhost:8000", "http://codecomprehensibility.site" })
+@PostMapping("/save_proposal_availability")
+public synchronized String saveProposalAvailability(@RequestBody Map<String, Object> body) {
+
+    String email = ((String) body.getOrDefault("email", "")).trim().toLowerCase();
+    Object availability = body.get("availability");
+
+    if (email.isEmpty() || availability == null) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing fields");
+    }
+
+    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
+    try {
+        Map<String, Object> allData = PROPOSAL_FILE.exists()
+            ? mapper.readValue(PROPOSAL_FILE, new TypeReference<>() {})
+            : new HashMap<>();
+
+        Map<String, Object> entry = new HashMap<>();
+        entry.put("timestamp",
+            ZonedDateTime.now(ZoneId.of("America/New_York")).toString());
+        entry.put("availability", availability);
+
+        allData.put(email, entry); // overwrite existing
+
+        PROPOSAL_FILE.getParentFile().mkdirs();
+        mapper.writeValue(PROPOSAL_FILE, allData);
+
+        return "Saved";
+
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save");
+    }
+}
+
 }
