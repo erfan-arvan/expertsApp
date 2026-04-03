@@ -64,10 +64,14 @@ const days = [
 ];
 
 const slots = [];
-for (let h = 8; h < 20; h++) {
+
+for (let h = 8; h < 17; h++) {
   slots.push(`${h}:00`);
   slots.push(`${h}:30`);
 }
+
+// Add final slot manually
+slots.push("16:30"); // 4:30 PM
 
 let state = {}; // day -> slot -> value
 
