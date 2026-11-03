@@ -1864,4 +1864,88 @@ public synchronized String saveProposalAvailability(@RequestBody Map<String, Obj
     }
 }
 
+// ===============================
+// Dissertation Defense Availability (Mahshad Koohi)
+// ===============================
+
+private static final File DISSERTATION_DEFENSE_FILE = new File("submissions/dissertation_defense_availability.json");
+
+// -------------------------------
+// GET existing availability
+// -------------------------------
+@CrossOrigin(origins = { "http://localhost:8000", "http://codecomprehensibility.site" })
+@PostMapping("/get_dissertation_defense_availability")
+public synchronized Map<String, Object> getDissertationDefenseAvailability(@RequestBody Map<String, String> body) {
+
+    String email = body.getOrDefault("email", "").trim().toLowerCase();
+
+    if (email.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email required");
+    }
+
+    ObjectMapper mapper = new ObjectMapper();
+
+    try {
+        if (!DISSERTATION_DEFENSE_FILE.exists()) {
+            return Map.of("exists", false);
+        }
+
+        Map<String, Object> allData =
+            mapper.readValue(DISSERTATION_DEFENSE_FILE, new TypeReference<>() {});
+
+        if (!allData.containsKey(email)) {
+            return Map.of("exists", false);
+        }
+
+        return Map.of(
+            "exists", true,
+            "data", allData.get(email)
+        );
+
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read data");
+    }
+}
+
+
+// -------------------------------
+// SAVE availability
+// -------------------------------
+@CrossOrigin(origins = { "http://localhost:8000", "http://codecomprehensibility.site" })
+@PostMapping("/save_dissertation_defense_availability")
+public synchronized String saveDissertationDefenseAvailability(@RequestBody Map<String, Object> body) {
+
+    String email = ((String) body.getOrDefault("email", "")).trim().toLowerCase();
+    Object availability = body.get("availability");
+
+    if (email.isEmpty() || availability == null) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing fields");
+    }
+
+    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
+    try {
+        Map<String, Object> allData = DISSERTATION_DEFENSE_FILE.exists()
+            ? mapper.readValue(DISSERTATION_DEFENSE_FILE, new TypeReference<>() {})
+            : new HashMap<>();
+
+        Map<String, Object> entry = new HashMap<>();
+        entry.put("timestamp",
+            ZonedDateTime.now(ZoneId.of("America/New_York")).toString());
+        entry.put("availability", availability);
+
+        allData.put(email, entry); // overwrite existing
+
+        DISSERTATION_DEFENSE_FILE.getParentFile().mkdirs();
+        mapper.writeValue(DISSERTATION_DEFENSE_FILE, allData);
+
+        return "Saved";
+
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save");
+    }
+}
+
 }
