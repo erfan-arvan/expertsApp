@@ -1948,4 +1948,237 @@ public synchronized String saveDissertationDefenseAvailability(@RequestBody Map<
     }
 }
 
+
+// =====================================================================
+// Study 2: code verifiability and comprehensibility
+// =====================================================================
+//
+// Version assignment uses shuffled pairs, kept separately for each site (njit, wm):
+//  - the first participant of a pair gets a random pattern with half the snippets
+//    on the high-verifiability version and half on the low one;
+//  - the next participant from the same site gets the exact opposite pattern.
+// After every completed pair, both versions of every snippet have been assigned
+// equally often, and each participant sees a near-even mix of high and low.
+// Browsers only ever see the neutral labels A/B (see study2-version-key.json).
+//
+// Files (relative to the server's working directory):
+//  submissions/study2_assignments.json  assignment state and one record per participant
+//  submissions/study2_submissions.json  final submissions, keyed by participant ID
+//  submissions/study2_log.txt           "started" / "finished" lines in Eastern time
+//  study2-version-key.json              which of A/B is high/low per snippet (never served to browsers)
+
+private static final File STUDY2_ASSIGNMENTS_FILE = new File("submissions/study2_assignments.json");
+private static final File STUDY2_SUBMISSIONS_FILE = new File("submissions/study2_submissions.json");
+private static final File STUDY2_LOG_FILE = new File("submissions/study2_log.txt");
+private static final File STUDY2_VERSION_KEY_FILE = new File("study2-version-key.json");
+private static final java.util.regex.Pattern STUDY2_ID_PATTERN =
+        java.util.regex.Pattern.compile("^(WMstudent|student)\\d{9}$");
+private static final java.util.regex.Pattern STUDY2_SNIPPET_ID_PATTERN =
+        java.util.regex.Pattern.compile("^[A-Za-z0-9_-]{1,40}$");
+private static final java.security.SecureRandom STUDY2_RANDOM = new java.security.SecureRandom();
+
+private static String study2Site(String participantId) {
+    return participantId.startsWith("WMstudent") ? "wm" : "njit";
+}
+
+private static String study2EasternNow() {
+    return ZonedDateTime.now(ZoneId.of("America/New_York"))
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z"));
+}
+
+private void study2Log(String message) {
+    try {
+        STUDY2_LOG_FILE.getParentFile().mkdirs();
+        java.nio.file.Files.writeString(STUDY2_LOG_FILE.toPath(),
+                study2EasternNow() + " | " + message + System.lineSeparator(),
+                StandardCharsets.UTF_8,
+                java.nio.file.StandardOpenOption.CREATE,
+                java.nio.file.StandardOpenOption.APPEND);
+    } catch (IOException e) {
+        System.err.println(">>> [study2] Failed to write log: " + e.getMessage());
+    }
+}
+
+private String study2ValidParticipantId(Object raw) {
+    String id = raw == null ? "" : raw.toString().trim();
+    if (!STUDY2_ID_PATTERN.matcher(id).matches()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid participant ID");
+    }
+    return id;
+}
+
+@SuppressWarnings("unchecked")
+private Map<String, Object> study2ReadMap(File file) throws IOException {
+    if (!file.exists()) return new LinkedHashMap<>();
+    return new ObjectMapper().readValue(file, new TypeReference<LinkedHashMap<String, Object>>() {});
+}
+
+private void study2WriteMap(File file, Map<String, Object> data) throws IOException {
+    file.getParentFile().mkdirs();
+    File tmp = new File(file.getPath() + ".tmp");
+    new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT).writeValue(tmp, data);
+    java.nio.file.Files.move(tmp.toPath(), file.toPath(),
+            java.nio.file.StandardCopyOption.REPLACE_EXISTING,
+            java.nio.file.StandardCopyOption.ATOMIC_MOVE);
+}
+
+// -------------------------------
+// Assign snippet versions (called when the participant clicks "Start Study")
+// -------------------------------
+@CrossOrigin(origins = { "http://localhost:8000", "http://codecomprehensibility.site" })
+@PostMapping("/study2_assignment")
+@SuppressWarnings("unchecked")
+public synchronized Map<String, Object> study2Assignment(@RequestBody Map<String, Object> body) {
+    String participantId = study2ValidParticipantId(body.get("participantId"));
+    String site = study2Site(participantId);
+
+    Object rawIds = body.get("snippetIds");
+    if (!(rawIds instanceof List) || ((List<?>) rawIds).isEmpty() || ((List<?>) rawIds).size() > 100) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing snippet IDs");
+    }
+    List<String> snippetIds = new ArrayList<>();
+    for (Object o : (List<?>) rawIds) {
+        String sid = o == null ? "" : o.toString();
+        if (!STUDY2_SNIPPET_ID_PATTERN.matcher(sid).matches() || snippetIds.contains(sid)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid snippet IDs");
+        }
+        snippetIds.add(sid);
+    }
+
+    try {
+        Map<String, Object> state = study2ReadMap(STUDY2_ASSIGNMENTS_FILE);
+        Map<String, Object> participants = (Map<String, Object>) state.computeIfAbsent("participants", k -> new LinkedHashMap<>());
+        Map<String, Object> pending = (Map<String, Object>) state.computeIfAbsent("pendingBySite", k -> new LinkedHashMap<>());
+
+        // Same participant asking again (e.g. after a reload): return the same assignment.
+        if (participants.containsKey(participantId)) {
+            Map<String, Object> existing = (Map<String, Object>) participants.get(participantId);
+            return Map.of("assignmentId", existing.get("assignmentId"), "versions", existing.get("versions"));
+        }
+
+        int assignmentId = ((Number) state.getOrDefault("nextAssignmentId", 1)).intValue();
+        int pairId;
+        int pairPosition;
+        Map<String, String> versions = new LinkedHashMap<>();
+
+        Map<String, Object> waiting = (Map<String, Object>) pending.get(site);
+        if (waiting != null && snippetIds.equals(waiting.get("snippetIds"))) {
+            // Second member of the pair: the opposite pattern of the first.
+            versions.putAll((Map<String, String>) waiting.get("versions"));
+            pairId = ((Number) waiting.get("pairId")).intValue();
+            pairPosition = 2;
+            pending.remove(site);
+        } else {
+            // First member of a new pair: a random half of the snippets get the high-verifiability
+            // version and the rest the low one. The balance is on high/low (not on the A/B labels,
+            // which map to high/low differently per snippet), using the server-side version key.
+            Map<String, Object> key = study2ReadMap(STUDY2_VERSION_KEY_FILE);
+            List<String> shuffled = new ArrayList<>(snippetIds);
+            Collections.shuffle(shuffled, STUDY2_RANDOM);
+            int numHigh = shuffled.size() / 2;
+            if (shuffled.size() % 2 == 1 && STUDY2_RANDOM.nextBoolean()) numHigh++;
+            Set<String> highSet = new HashSet<>(shuffled.subList(0, numHigh));
+            Map<String, String> opposite = new LinkedHashMap<>();
+            for (String sid : snippetIds) {
+                // Letter of the high version; if the key has no entry for this snippet, A counts as "high".
+                Object entry = key.get(sid);
+                String highLetter = entry instanceof Map && "high".equals(((Map<String, Object>) entry).get("B")) ? "B" : "A";
+                String lowLetter = "A".equals(highLetter) ? "B" : "A";
+                boolean high = highSet.contains(sid);
+                versions.put(sid, high ? highLetter : lowLetter);
+                opposite.put(sid, high ? lowLetter : highLetter);
+            }
+            pairId = ((Number) state.getOrDefault("nextPairId", 1)).intValue();
+            state.put("nextPairId", pairId + 1);
+            pairPosition = 1;
+            Map<String, Object> next = new LinkedHashMap<>();
+            next.put("pairId", pairId);
+            next.put("snippetIds", snippetIds);
+            next.put("versions", opposite);
+            pending.put(site, next);
+        }
+
+        Map<String, Object> record = new LinkedHashMap<>();
+        record.put("assignmentId", assignmentId);
+        record.put("site", site);
+        record.put("pairId", pairId);
+        record.put("pairPosition", pairPosition);
+        record.put("versions", versions);
+        record.put("startedAt", ZonedDateTime.now(ZoneId.of("America/New_York")).toString());
+        record.put("finished", false);
+        participants.put(participantId, record);
+        state.put("nextAssignmentId", assignmentId + 1);
+        study2WriteMap(STUDY2_ASSIGNMENTS_FILE, state);
+
+        study2Log(participantId + " started study (site=" + site + ", assignment=" + assignmentId
+                + ", pair=" + pairId + "/" + pairPosition + ")");
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("assignmentId", assignmentId);
+        response.put("versions", versions);
+        return response;
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to assign versions");
+    }
+}
+
+// -------------------------------
+// Final submission (called when the participant clicks "Submit Study")
+// -------------------------------
+@CrossOrigin(origins = { "http://localhost:8000", "http://codecomprehensibility.site" })
+@PostMapping("/submit_study2")
+@SuppressWarnings("unchecked")
+public synchronized Map<String, Object> submitStudy2(@RequestBody Map<String, Object> body) {
+    String participantId = study2ValidParticipantId(body.get("participantId"));
+
+    try {
+        // Add each snippet's condition (high/low) from the server-side key, for analysis.
+        Map<String, Object> key = study2ReadMap(STUDY2_VERSION_KEY_FILE);
+        Map<String, String> conditions = new LinkedHashMap<>();
+        Object versionsObj = body.get("versions");
+        if (versionsObj instanceof Map) {
+            for (Map.Entry<String, Object> e : ((Map<String, Object>) versionsObj).entrySet()) {
+                Object snippetKey = key.get(e.getKey());
+                Object cond = snippetKey instanceof Map ? ((Map<String, Object>) snippetKey).get(String.valueOf(e.getValue())) : null;
+                conditions.put(e.getKey(), cond == null ? "unknown" : cond.toString());
+            }
+        }
+
+        Map<String, Object> wrapped = new LinkedHashMap<>();
+        wrapped.put("receivedAt", ZonedDateTime.now(ZoneId.of("America/New_York")).toString());
+        wrapped.put("conditions", conditions);
+        wrapped.put("data", body);
+
+        Map<String, Object> all = study2ReadMap(STUDY2_SUBMISSIONS_FILE);
+        List<Object> list = (List<Object>) all.computeIfAbsent(participantId, k -> new ArrayList<>());
+        list.add(wrapped);
+        study2WriteMap(STUDY2_SUBMISSIONS_FILE, all);
+
+        // Mark the participant as finished in the assignment records.
+        Map<String, Object> state = study2ReadMap(STUDY2_ASSIGNMENTS_FILE);
+        Map<String, Object> participants = (Map<String, Object>) state.get("participants");
+        Object rec = participants == null ? null : participants.get(participantId);
+        if (rec instanceof Map) {
+            ((Map<String, Object>) rec).put("finished", true);
+            ((Map<String, Object>) rec).put("finishedAt", ZonedDateTime.now(ZoneId.of("America/New_York")).toString());
+            study2WriteMap(STUDY2_ASSIGNMENTS_FILE, state);
+        }
+
+        String activeTime = "";
+        Object timing = body.get("timing");
+        if (timing instanceof Map && ((Map<String, Object>) timing).get("totalActiveMs") instanceof Number) {
+            long secs = ((Number) ((Map<String, Object>) timing).get("totalActiveMs")).longValue() / 1000;
+            activeTime = String.format(", active time %d:%02d", secs / 60, secs % 60);
+        }
+        study2Log(participantId + " finished study" + (rec == null ? " (no assignment record)" : "")
+                + (list.size() > 1 ? " (submission #" + list.size() + ")" : "") + activeTime);
+
+        return Map.of("status", "saved");
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save submission");
+    }
+}
+
 }

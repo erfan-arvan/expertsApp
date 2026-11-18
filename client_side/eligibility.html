@@ -282,11 +282,9 @@
       <p><strong>📘 Study Overview:</strong> You're invited to participate in a research study exploring how students
         understand real-world Java code.</p>
 
-      <p><strong>🧠 What You'll Do:</strong> You'll review <strong>8 Java code snippets</strong> and answer a few
-        questions about each one.</p>
+      <p><strong>🧠 What You'll Do:</strong> You'll read <strong>up to 20 short Java methods</strong> and work out what each one returns for a given input.</p>
 
-      <p><strong>⏱️ Duration:</strong> The session typically lasts <strong>up to 60 minutes</strong>, but may take up to
-        <strong>90 minutes</strong> including setup, the consent process, and serving snacks. There are no strict time
+      <p><strong>⏱️ Duration:</strong> The session takes <strong>up to 90 minutes</strong>, including the introduction and the consent process. There are no strict time
         limits—you may take breaks as needed.
       </p>
 
@@ -320,8 +318,8 @@
           </li>
           <li>🔍 The main study tasks:
             <ul>
-              <li>Read 8 Java code snippets</li>
-              <li>Answer some questions for each snippet</li>
+              <li>One practice snippet, then up to 20 short Java methods</li>
+              <li>For each method, work out what it returns for a given input</li>
             </ul>
           </li>
           <li>📝 A quick post survey
@@ -553,7 +551,15 @@
   <script>
     const questions = [
       {
-        text: "what's your class standing?",
+        text: "Where are you studying?",
+        options: [
+          { label: "NJIT" },
+          { label: "Another university or college", ineligible: true },
+          { label: "I am not currently a student", ineligible: true }
+        ]
+      },
+      {
+        text: "What is your class standing?",
         options: [
           { label: "Freshman" },
           { label: "Sophomore" },
@@ -566,26 +572,42 @@
         text: "What is your age?",
         options: [
           { label: "Under 18", ineligible: true },
-          { label: "18–24" },
-          { label: "25–34" },
-          { label: "35–44" },
-          { label: "45–54" },
-          { label: "55–64" },
-          { label: "65 or older" }
+          { label: "18–20" },
+          { label: "21–24" },
+          { label: "25–30" },
+          { label: "31–40" },
+          { label: "Over 40" }
         ]
       },
       {
-        id: "cs288",
+        id: "course",
         text: "Have you taken CS 288: Intensive Programming?",
         options: [
           { label: "I completed the course with a grade of C or better", course_ok: true },
           { label: "I am currently enrolled in the course", course_ok: true },
-          { label: "I have taken the course but did not receive a grade of C or better, and I am not currently enrolled" },
-          { label: "I have not taken CS 288" }
+          { label: "I have taken the course but did not receive a grade of C or better, and I am not currently enrolled", ineligible: true },
+          { label: "I have not taken CS 288", ineligible: true }
         ]
       },
       {
-        text: "Are you willing to bring your own laptop to the session?",
+        text: "Have you been diagnosed with a reading or learning disability, or any condition that affects your ability to read or understand code or instructions?",
+        options: [
+          { label: "Yes, I have been diagnosed with such a condition", ineligible: true },
+          { label: "No, I have not been diagnosed with any such condition" }
+        ]
+      },
+      {
+        text: "How comfortable are you with reading English-language text?",
+        options: [
+          { label: "Not comfortable", ineligible: true },
+          { label: "Slightly comfortable" },
+          { label: "Moderately comfortable" },
+          { label: "Very comfortable" },
+          { label: "Native speaker / fluent" }
+        ]
+      },
+      {
+        text: "Do you have access to a personal laptop you can bring to the session?",
         options: [
           { label: "Yes" },
           { label: "No", ineligible: true }
@@ -598,9 +620,17 @@
           { label: "I am not familiar with Java", ineligible: true },
           { label: "Less than 1 year" },
           { label: "1–2 years" },
-          { label: "3–4 years", gt1y: true },
-          { label: "5+ years", gt1y: true },
-          // { label: "Prefer not to say" }
+          { label: "3–4 years" },
+          { label: "5+ years" },
+          { label: "Prefer not to say", ineligible: true }
+        ]
+      },
+      {
+        text: "Have you already taken part in a session of this study, including a pilot session?",
+        note: "Students who took part in our earlier code comprehension study are welcome to participate.",
+        options: [
+          { label: "Yes", ineligible: true },
+          { label: "No" }
         ]
       }
     ];
@@ -646,6 +676,7 @@
       const q = questions[currentQuestion];
       const container = document.getElementById('question-container');
       let html = `<p><strong>${q.text}</strong></p>`;
+      if (q.note) html += `<p style="color:#555;">${q.note}</p>`;
       q.options.forEach((opt, i) => {
         const checked = answers[currentQuestion] === i ? 'checked' : '';
         html += `<label><input type="radio" name="q${currentQuestion}" value="${i}" ${checked}> ${opt.label}</label><br>`;
@@ -688,7 +719,7 @@
         if (opt.exp_ok === true || opt.gt1y === true) expOk = true; // <-- key line
       }
 
-      const eligible = !hasIneligible && (courseOk || expOk);
+      const eligible = !hasIneligible && courseOk; // study 2: course requirement is mandatory
 
       sendEligibilityOutcome(eligible);
 
@@ -870,7 +901,7 @@
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ ...payload, study: "study2" })
       })
         .then(res => res.ok)
         .catch(err => {
@@ -991,7 +1022,7 @@
       fetch("/register_student", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ ...payload, study: "study2" })
       }).then(response => {
         if (response.ok) {
           document.getElementById('final-confirmation-panel').style.display = 'none';
@@ -1163,7 +1194,7 @@
       fetch("/register_student", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ ...payload, study: "study2" })
       }).catch(err => console.error("❌ Network error posting eligibility:", err));
     }
 
@@ -1212,7 +1243,7 @@
         const res = await fetch("/register_student", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({ ...payload, study: "study2" })
         });
 
         if (!res.ok) {

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You</title>
+  <link rel="stylesheet" href="css/study2.css?v=1">
+</head>
+<body>
+<main style="padding-top:40px;">
+  <div class="card" style="text-align:center;">
+    <img src="img/success.gif" alt="" style="max-width:160px;">
+    <h1>Thank you!</h1>
+    <p>Your responses have been submitted successfully.</p>
+    <p>Please leave the room quietly. On your way out, help yourself to some food and take a debriefing sheet,
+      which explains the purpose of the study in more detail.</p>
+    <p>You have been entered into the drawing for a $50 Amazon gift card. The winner will be notified by email after
+      all sessions are completed.</p>
+    <p class="muted">Please don't discuss the study with other students who may participate later.</p>
+  </div>
+  <footer class="s2-footer">
+    Questions? Contact <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>.
+  </footer>
+</main>
+
+<script src="js/study2-common.js?v=1"></script>
+<script>
+(function () {
+  if (!S2.get('done', false)) { S2.go(S2.entryPage()); return; }
+  // Responses are on the server now: remove them from this browser, keeping only the "done" flag
+  // (so reopening start.html says the study is complete) and the entry page.
+  S2.clearAll(['done', 'entryPage', 'stage']);
+  S2.remove('navigating');
+})();
+</script>
+</body>
+</html>

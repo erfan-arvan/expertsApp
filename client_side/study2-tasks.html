@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Tasks</title>
+  <link rel="stylesheet" href="css/study2.css?v=1">
+</head>
+<body>
+<main>
+  <div id="task"></div>
+  <footer class="s2-footer">
+    Questions or issues? Pause the study and raise your hand, or contact
+    <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>.
+  </footer>
+</main>
+
+<!-- Scheduled break overlay -->
+<div class="overlay hidden" id="break-overlay">
+  <div class="box">
+    <h2 id="break-title">Short Break</h2>
+    <img id="break-img" src="img/relax.gif" alt="">
+    <p id="break-text"></p>
+    <div class="countdown" id="break-countdown">01:00</div>
+    <p class="warn" id="break-warn"></p>
+    <button type="button" id="break-resume">Resume</button>
+  </div>
+</div>
+
+<script src="js/study2-data.js?v=1"></script>
+<script src="js/study2-common.js?v=1"></script>
+<script src="js/study2-task.js?v=1"></script>
+<script>
+(function () {
+  if (!S2.guard('tasks')) return;
+  S2.mountStatusBar('Code Comprehension Study');
+  S2.initTimedPage();
+
+  // Break rules (from the IRB protocol).
+  const SHORT_EVERY = 5;                 // short break after every 5 snippets
+  const SHORT = { lengthMs: 60_000, unlockMs: 30_000 };
+  const LONG = { lengthMs: 10 * 60_000, unlockMs: 60_000 };
+
+  const snippetsById = Object.fromEntries(window.STUDY2_SNIPPETS.map(s => [s.id, s]));
+  const order = S2.get('order');
+  const versions = (S2.get('assignment') || {}).versions || {};
+  const total = order.length;
+  const midpoint = Math.floor(total / 2);
+  const container = document.getElementById('task');
+
+  /** Which break (if any) follows the given number of completed snippets. */
+  function breakAfter(completed) {
+    if (completed >= total) return null;
+    if (completed === midpoint) return 'long';
+    if (completed % SHORT_EVERY === 0) return 'short';
+    return null;
+  }
+
+  function showTask(index) {
+    if (index >= total) {
+      S2.setStage('post');
+      S2.go(S2.pageForStage('post'));
+      return;
+    }
+    const s = snippetsById[order[index]];
+    const version = versions[s.id];
+    window.scrollTo(0, 0);
+    S2Task.renderTask({
+      container,
+      key: `task-${index}`,
+      snippetId: s.id,
+      version,
+      code: s.versions[version],
+      question: s.question,
+      javadoc: s.javadoc,
+      heading: `Snippet ${index + 1} of ${total}`,
+      position: index + 1,
+      practice: false,
+      nextLabel: index + 1 === total ? 'Finish' : 'Next Snippet',
+      onComplete: result => {
+        const tasks = S2.get('tasks', []);
+        tasks.push(result);
+        S2.set('tasks', tasks);
+        S2.set('taskIndex', index + 1);
+        const type = breakAfter(index + 1);
+        if (type) startBreak(type, index + 1);
+        else showTask(index + 1);
+      }
+    });
+  }
+
+  // ---------------------------------------------------------------- breaks
+  let breakTicker = null;
+
+  function startBreak(type, afterTask) {
+    S2.pause('break');
+    S2.set('break', { type, afterTask, startedAt: Date.now() });
+    container.innerHTML = '';
+    showBreak();
+  }
+
+  function showBreak() {
+    const b = S2.get('break');
+    const cfg = b.type === 'long' ? LONG : SHORT;
+    S2.setPauseLocked(true);
+    if (!S2.isPaused()) S2.pause('break');
+
+    document.getElementById('break-title').textContent = b.type === 'long' ? 'Long Break (halfway point)' : 'Short Break';
+    document.getElementById('break-img').src = b.type === 'long' ? 'img/stretch.gif' : 'img/relax.gif';
+    document.getElementById('break-text').textContent = b.type === 'long'
+      ? 'You are halfway through. Take a break of up to 10 minutes. You may leave your seat to stretch or use the ' +
+        'restroom; please leave and return quietly and do not talk to others. The Resume button unlocks after 1 minute.'
+      : 'Please stay seated and rest for a minute. The Resume button unlocks after 30 seconds.';
+    document.getElementById('break-warn').textContent = '';
+    document.getElementById('break-overlay').classList.remove('hidden');
+
+    const resumeBtn = document.getElementById('break-resume');
+    const tick = () => {
+      const elapsed = Date.now() - b.startedAt;
+      const remaining = Math.max(0, cfg.lengthMs - elapsed);
+      document.getElementById('break-countdown').textContent = remaining > 0
+        ? S2.formatDuration(remaining + 999)
+        : 'Break over';
+      const unlocked = elapsed >= cfg.unlockMs;
+      resumeBtn.classList.toggle('secondary', !unlocked);
+      resumeBtn.dataset.unlocked = unlocked ? '1' : '0';
+      if (remaining === 0) {
+        document.getElementById('break-warn').textContent = '';
+        document.getElementById('break-text').textContent = 'Your break time is over. Click Resume to continue.';
+      }
+    };
+    tick();
+    clearInterval(breakTicker);
+    breakTicker = setInterval(tick, 250);
+
+    resumeBtn.onclick = () => {
+      if (resumeBtn.dataset.unlocked !== '1') {
+        document.getElementById('break-warn').textContent = 'Not so fast! You’ve earned this break, stay put.';
+        return;
+      }
+      clearInterval(breakTicker);
+      const breaks = S2.get('breaks', []);
+      breaks.push({ type: b.type, afterTask: b.afterTask, durationMs: Date.now() - b.startedAt });
+      S2.set('breaks', breaks);
+      S2.remove('break');
+      document.getElementById('break-overlay').classList.add('hidden');
+      S2.setPauseLocked(false);
+      S2.resume();
+      showTask(S2.get('taskIndex', 0));
+    };
+  }
+
+  if (S2.get('break')) showBreak();
+  else showTask(S2.get('taskIndex', 0));
+})();
+</script>
+</body>
+</html>

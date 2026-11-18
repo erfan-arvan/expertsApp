@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post-Study Questionnaire</title>
+  <link rel="stylesheet" href="css/study2.css?v=1">
+</head>
+<body>
+<main>
+  <div class="card" id="survey-card">
+    <h2>Post-Study Questionnaire</h2>
+    <p class="muted">Almost done! Please answer a few short questions about the study.</p>
+    <div id="survey"></div>
+  </div>
+
+  <div class="card hidden" id="submit-card">
+    <h2>Submit Your Responses</h2>
+    <p>Click <strong>Submit Study</strong> to upload your anonymous responses to our server.</p>
+    <button type="button" id="submit-btn">Submit Study</button>
+    <p id="submit-status" class="muted" style="margin-top:12px;"></p>
+    <div id="submit-error" class="hidden" style="margin-top:12px;">
+      <p style="color:#c0392b;"><strong>Your responses could not be submitted.</strong> Please check your Wi-Fi
+        connection and click Submit Study again. If it still fails, raise your hand.</p>
+      <button type="button" class="secondary" id="download-btn">Download a backup copy</button>
+    </div>
+  </div>
+
+  <footer class="s2-footer">
+    Questions or issues? Pause the study and raise your hand, or contact
+    <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>.
+  </footer>
+</main>
+
+<script src="js/study2-data.js?v=1"></script>
+<script src="js/study2-common.js?v=1"></script>
+<script>
+(function () {
+  if (!S2.guard('post')) return;
+  S2.mountStatusBar('Code Comprehension Study');
+  S2.initTimedPage();
+
+  const POST = [
+    {
+      id: 'clarity', text: 'Were the instructions and question formats clear and easy to follow?',
+      options: [{ label: 'Yes' }, { label: 'Somewhat' }, { label: 'No' }]
+    },
+    {
+      id: 'technicalIssues', text: 'Did you encounter any technical issues using the website?',
+      options: [{ label: 'Yes', input: true, inputPlaceholder: 'Please describe the issue (optional)' }, { label: 'No' }]
+    },
+    { id: 'feedback', text: 'Do you have any feedback or suggestions about the study or the tasks?', type: 'text', optional: true }
+  ];
+
+  function showSubmit() {
+    document.getElementById('survey-card').classList.add('hidden');
+    document.getElementById('submit-card').classList.remove('hidden');
+  }
+
+  document.getElementById('submit-btn').addEventListener('click', async () => {
+    const btn = document.getElementById('submit-btn');
+    const status = document.getElementById('submit-status');
+    btn.disabled = true;
+    status.textContent = 'Submitting…';
+    document.getElementById('submit-error').classList.add('hidden');
+    try {
+      await S2.postJSON('/submit_study2', S2.buildSubmission(), 30000);
+    } catch (e) {
+      console.error(e);
+      btn.disabled = false;
+      status.textContent = '';
+      document.getElementById('submit-error').classList.remove('hidden');
+      return;
+    }
+    S2.set('done', true);
+    S2.setStage('done');
+    S2.go(S2.pageForStage('done'));
+  });
+
+  document.getElementById('download-btn').addEventListener('click', () => {
+    const data = S2.buildSubmission();
+    S2.downloadJSON(`${data.participantId || 'study2'}-responses.json`, data);
+  });
+
+  if (S2.get('post')) showSubmit();
+  else S2.runQuestionnaire({
+    container: document.getElementById('survey'),
+    questions: POST,
+    storageKey: 'post',
+    finishLabel: 'Continue',
+    onDone: showSubmit
+  });
+})();
+</script>
+</body>
+</html>

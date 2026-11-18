@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programming Experience</title>
+  <link rel="stylesheet" href="css/study2.css?v=1">
+</head>
+<body>
+<main>
+  <div class="card">
+    <h2>Programming Experience Self-Assessment</h2>
+    <p class="muted">Please rate your programming experience on the following dimensions.</p>
+    <div id="survey"></div>
+  </div>
+  <footer class="s2-footer">
+    Questions or issues? Pause the study and raise your hand, or contact
+    <a href="mailto:ea442@njit.edu">ea442@njit.edu</a>.
+  </footer>
+</main>
+
+<script src="js/study2-data.js?v=1"></script>
+<script src="js/study2-common.js?v=1"></script>
+<script>
+(function () {
+  if (!S2.guard('experience')) return;
+  S2.mountStatusBar('Code Comprehension Study');
+  S2.initTimedPage();
+
+  const five = ['1 — Very inexperienced', '2 — Inexperienced', '3 — Moderate', '4 — Experienced', '5 — Very experienced']
+    .map(label => ({ label }));
+  const ten = Array.from({ length: 10 }, (_, i) => ({
+    label: i === 0 ? '1 — Very inexperienced' : i === 9 ? '10 — Very experienced' : String(i + 1)
+  }));
+
+  const EXPERIENCE = [
+    { id: 'classmates', text: 'Compared to your classmates, how would you rate your programming experience?', options: five },
+    { id: 'logical', text: 'How experienced are you with logical programming (e.g., Prolog)?', options: five },
+    { id: 'overall', text: 'On a scale from 1 to 10, how would you rate your overall programming experience?', options: ten },
+    {
+      id: 'objectOriented', text: 'How experienced are you with object-oriented programming?',
+      note: '(e.g., working with classes, inheritance, interfaces)', options: five
+    },
+    {
+      id: 'javaYears',
+      text: 'How many years have you been programming in Java, whether through classes, personal projects, or other experiences?',
+      options: [
+        { label: 'I am not familiar with Java', ineligible: true }, { label: 'Less than 1 year' }, { label: '1–2 years' },
+        { label: '3–4 years' }, { label: '5+ years' }, { label: 'Prefer not to say' }
+      ]
+    }
+  ];
+
+  S2.runQuestionnaire({
+    container: document.getElementById('survey'),
+    questions: EXPERIENCE,
+    storageKey: 'experience',
+    onDone: () => { S2.setStage('practice'); S2.go(S2.pageForStage('practice')); }
+  });
+})();
+</script>
+</body>
+</html>

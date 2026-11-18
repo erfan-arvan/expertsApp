@@ -1,0 +1,8 @@
+{
+  "_note": "Which version each snippet's A/B label is. Kept on the server only; never copy this into client_side.",
+  "s1": { "A": "high", "B": "low" },
+  "s2": { "A": "low", "B": "high" },
+  "s3": { "A": "high", "B": "low" },
+  "s4": { "A": "low", "B": "high" },
+  "s5": { "A": "high", "B": "low" }
+}
