@@ -7,7 +7,10 @@
  * step: {target: selector or () => Element, title, text,
  *        action?: 'click'          wait for a click on the target
  *        waitFor?: () => boolean   after the click, wait until this is true
- *        actionText?: string       shown instead of the Next button}
+ *        actionText?: string       shown instead of the Next button
+ *        allowClick?: boolean      on a Next step, still let the target be clicked}
+ * On a Next step the highlighted element is NOT clickable (unless allowClick), so a
+ * stray click (e.g. on Pause) cannot open something the tour then covers.
  */
 (function () {
   'use strict';
@@ -22,6 +25,10 @@
         document.body.appendChild(b);
         return b;
       });
+      // Covers the highlighted hole itself on Next steps.
+      const holeBlock = document.createElement('div');
+      holeBlock.className = 'tour-block';
+      document.body.appendChild(holeBlock);
       const spot = document.createElement('div');
       spot.className = 'tour-spot';
       const tip = document.createElement('div');
@@ -44,6 +51,7 @@
         const x = Math.max(0, r.left - PAD), y = Math.max(0, r.top - PAD);
         const w = r.width + PAD * 2, h = r.height + PAD * 2;
         Object.assign(spot.style, { left: x + 'px', top: y + 'px', width: w + 'px', height: h + 'px' });
+        Object.assign(holeBlock.style, { left: x + 'px', top: y + 'px', width: w + 'px', height: h + 'px' });
         // Four click blockers around the highlighted hole.
         const vw = window.innerWidth, vh = window.innerHeight;
         Object.assign(blocks[0].style, { left: '0px', top: '0px', width: vw + 'px', height: y + 'px' });
@@ -74,6 +82,7 @@
         if (!target) return show(i + 1);
         target.scrollIntoView({ block: 'center', behavior: 'smooth' });
         spot.classList.toggle('tour-pulse', step.action === 'click');
+        holeBlock.style.display = step.action === 'click' || step.allowClick ? 'none' : 'block';
         const last = i === steps.length - 1;
         tip.innerHTML = `
           <h3>${escapeHtml(step.title)}</h3>
@@ -106,6 +115,7 @@
       function finish() {
         cancelAnimationFrame(raf);
         blocks.forEach(b => b.remove());
+        holeBlock.remove();
         spot.remove();
         tip.remove();
         resolve();

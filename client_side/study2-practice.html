@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Practice Snippet</title>
-  <link rel="stylesheet" href="css/study2.css?v=2">
+  <link rel="stylesheet" href="css/study2.css?v=3">
 </head>
 <body>
 <main>
@@ -38,7 +38,7 @@
 <script src="js/study2-data.js?v=2"></script>
 <script src="js/study2-common.js?v=1"></script>
 <script src="js/study2-task.js?v=2"></script>
-<script src="js/study2-tour.js?v=1"></script>
+<script src="js/study2-tour.js?v=2"></script>
 <script>
 (function () {
   if (!S2.guard('practice')) return;
@@ -85,8 +85,19 @@
     await S2Tour.run([
       {
         target: '.s2-timer-wrap', title: 'The timer',
-        text: 'This timer counts up while you work. If you need to stop working (for example, to ask a question), ' +
-          'click <strong>Pause</strong> first and <strong>Resume</strong> when you continue. You can also hide it.'
+        text: 'This timer counts up while you work. You can hide it with <strong>Hide Timer</strong> if it distracts you.'
+      },
+      {
+        target: '#s2-pause', title: 'Pausing the study', action: 'click', waitFor: () => S2.isPaused(),
+        actionText: 'Click Pause to try it',
+        text: 'If you need to stop working (for example, to ask a question or rest), click <strong>Pause</strong> ' +
+          'first. Try it now.'
+      },
+      {
+        target: '#s2-pause-resume', title: 'Resuming the study', action: 'click', waitFor: () => !S2.isPaused(),
+        actionText: 'Click Resume',
+        text: 'While the study is paused, the screen is covered and the timer stops. Click <strong>Resume</strong> ' +
+          'when you are ready to continue.'
       },
       {
         target: '#code-panel .code-box', title: 'The code',
@@ -97,7 +108,7 @@
         text: 'You can show the code on a light or a dark background. Click this button to switch the theme.'
       },
       {
-        target: '#theme-toggle', title: 'Pick what is comfortable',
+        target: '#theme-toggle', title: 'Pick what is comfortable', allowClick: true,
         text: 'Click again to switch back if you prefer. Your choice is kept for all the snippets.'
       },
       {
