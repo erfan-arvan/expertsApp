@@ -2181,4 +2181,74 @@ public synchronized Map<String, Object> submitStudy2(@RequestBody Map<String, Ob
     }
 }
 
+// -------------------------------
+// Study 2 registration (eligibility.html / eligibilityw&m.html)
+// -------------------------------
+// event "eligibility":  outcome of the eligibility questions (no email)
+// event "availability": selected predefined session times (slotSource "predefined")
+//                       or the student's own availability Dec 1-15 (slotSource "custom");
+//                       a confirmation email is sent.
+// Stored in submissions/study2_registrations.json, separate from study data.
+private static final File STUDY2_REGISTRATIONS_FILE = new File("submissions/study2_registrations.json");
+
+@CrossOrigin(origins = { "http://localhost:8000", "http://codecomprehensibility.site" })
+@PostMapping("/register_study2")
+@SuppressWarnings("unchecked")
+public synchronized Map<String, Object> registerStudy2(@RequestBody Map<String, Object> body) {
+    String email = String.valueOf(body.getOrDefault("email", "")).trim().toLowerCase(Locale.ROOT);
+    if (!email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$") || email.length() > 200) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email");
+    }
+    String site = "wm".equals(body.get("site")) ? "wm" : "njit";
+    String event = String.valueOf(body.getOrDefault("event", "")).trim();
+    if (!event.equals("eligibility") && !event.equals("availability")) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid event");
+    }
+    boolean eligible = parseBooleanFlexible(body.get("eligible"), false);
+
+    List<String> slots = new ArrayList<>();
+    if (body.get("slots") instanceof List) {
+        for (Object o : (List<Object>) body.get("slots")) {
+            if (o != null && slots.size() < 200) slots.add(o.toString());
+        }
+    }
+    if (event.equals("availability") && slots.isEmpty()) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No times selected");
+    }
+
+    try {
+        Map<String, Object> record = new LinkedHashMap<>();
+        record.put("receivedAt", ZonedDateTime.now(ZoneId.of("America/New_York")).toString());
+        record.put("data", body);
+
+        Map<String, Object> all = study2ReadMap(STUDY2_REGISTRATIONS_FILE);
+        List<Object> list = (List<Object>) all.computeIfAbsent("registrations", k -> new ArrayList<>());
+        list.add(record);
+        study2WriteMap(STUDY2_REGISTRATIONS_FILE, all);
+        System.out.println(">>> [register_study2] " + event + " from " + email + " (site=" + site + ", eligible=" + eligible + ")");
+
+        if (event.equals("availability") && eligible) {
+            boolean predefined = "predefined".equals(body.get("slotSource"));
+            String place = site.equals("wm") ? "in a room on the W&M campus" : "in a room in the GITC building at NJIT";
+            String list2 = "  • " + String.join("\n  • ", slots);
+            String subject = "Code Comprehension Study – Registration Received";
+            String message = "Thank you for registering for the Code Comprehension Study!\n\n"
+                    + (predefined ? "📅 Session times you selected:\n" : "📅 Your availability:\n")
+                    + list2 + "\n\n"
+                    + (predefined
+                        ? "We'll email you soon to confirm one of these session times.\n"
+                        : "We'll email you soon to schedule a session that fits your availability.\n")
+                    + "The session takes up to 90 minutes and will be held " + place + ". "
+                    + "Please bring your own laptop.\n\n"
+                    + "If you need to change your times or have any questions, reply to this email or contact us at ea442@njit.edu.\n\n"
+                    + "— Code Comprehension Study Team";
+            sendEmailViaPython(email, subject, message);
+        }
+        return Map.of("status", "saved");
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save registration");
+    }
+}
+
 }

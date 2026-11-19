@@ -234,7 +234,7 @@
    * question: {id, text, options:[{label, ineligible?, input?}]} or {id, text, type:'text', optional?}
    * The draft is saved after each answer so a reload keeps the progress.
    */
-  function runQuestionnaire({ container, questions, storageKey, finishLabel = 'Next', onDone }) {
+  function runQuestionnaire({ container, questions, storageKey, finishLabel = 'Next', onDone, blockIneligible = true }) {
     const draftKey = storageKey + '_draft';
     const draft = get(draftKey, { index: 0, answers: {} });
 
@@ -283,7 +283,7 @@
         const opt = q.options[index];
         const input = container.querySelector(`#q-input-${index}`);
         answer = { index, label: opt.label, text: input ? input.value.trim() : undefined };
-        if (opt.ineligible) {
+        if (opt.ineligible && blockIneligible) {
           draft.answers[q.id] = answer;
           set(draftKey, draft);
           return showMessage('Not eligible',
@@ -306,7 +306,11 @@
         else responses[qq.id] = a.text ? `${a.label}: ${a.text}` : a.label;
       });
       set(storageKey, responses);
-      onDone(responses);
+      const anyIneligible = questions.some(qq => {
+        const a = draft.answers[qq.id];
+        return a && qq.options && qq.options[a.index] && qq.options[a.index].ineligible;
+      });
+      onDone(responses, { anyIneligible });
     }
 
     render();
