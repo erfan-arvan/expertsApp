@@ -63,11 +63,6 @@
         { label: 'I am not familiar with Java', ineligible: true }, { label: 'Less than 1 year' }, { label: '1–2 years' },
         { label: '3–4 years' }, { label: '5+ years' }, { label: 'Prefer not to say', ineligible: true }
       ]
-    },
-    {
-      id: 'alreadyParticipated', text: 'Have you already taken part in a session of this study, including a pilot session?',
-      note: 'Students who took part in our earlier code comprehension study are welcome to participate.',
-      options: [{ label: 'Yes', ineligible: true }, { label: 'No' }]
     }
   ];
 
@@ -285,11 +280,6 @@
     const body = $('about-body');
     body.classList.toggle('hidden');
     $('about-toggle').textContent = body.classList.contains('hidden') ? 'Show' : 'Hide';
-  });
-  $('more-link').addEventListener('click', e => {
-    e.preventDefault();
-    $('more-info').classList.remove('hidden');
-    e.target.classList.add('hidden');
   });
   show('email-card');
 })();
