@@ -4,22 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Practice Snippet</title>
-  <link rel="stylesheet" href="css/study2.css?v=1">
+  <link rel="stylesheet" href="css/study2.css?v=2">
 </head>
 <body>
 <main>
   <div class="card hidden" id="intro-card">
     <h2>Practice Snippet</h2>
     <p>Before the study tasks, you will work on one practice snippet to get familiar with the interface.</p>
-    <ul>
-      <li>You will see a Java method and a question about it. The code stays visible while you answer.</li>
-      <li>Work out what value the method returns for the given input and type it in the box.</li>
-      <li>Some questions list assumptions about code outside the snippet. Use them when working out the answer.</li>
-      <li>Underlined method names open their Javadoc.</li>
-      <li>After you submit your answer, you cannot change it. You will then be asked whether you have seen the
-        code before.</li>
-      <li>Keep the timer running while you work, and pause it if you stop.</li>
-    </ul>
+    <p>A short guided tour will show you each part of the screen. Follow the highlighted steps, then answer the
+      practice question.</p>
     <button type="button" id="begin-practice">Start Practice</button>
   </div>
 
@@ -42,14 +35,15 @@
   </footer>
 </main>
 
-<script src="js/study2-data.js?v=1"></script>
+<script src="js/study2-data.js?v=2"></script>
 <script src="js/study2-common.js?v=1"></script>
-<script src="js/study2-task.js?v=1"></script>
+<script src="js/study2-task.js?v=2"></script>
+<script src="js/study2-tour.js?v=1"></script>
 <script>
 (function () {
   if (!S2.guard('practice')) return;
   S2.mountStatusBar('Code Comprehension Study');
-  S2.initTimedPage();
+  S2.initTimedPage(() => { if (pendingTour) { pendingTour = false; runTour(); } });
 
   const P = window.STUDY2_PRACTICE;
 
@@ -67,12 +61,72 @@
       heading: 'Practice Snippet',
       position: 0,
       practice: true,
-      nextLabel: 'Finish Practice',
+      noAutofocus: !S2.get('tutorialDone', false),
       onComplete: result => {
         S2.set('practice', result);
         showDone();
       }
     });
+    if (!S2.get('tutorialDone', false)) startTourWhenReady();
+  }
+
+  // The tour waits until the study is not paused (e.g. after a reload, the pause screen comes first).
+  function startTourWhenReady() {
+    if (S2.isPaused()) { pendingTour = true; return; }
+    runTour();
+  }
+  let pendingTour = false;
+  let tourRunning = false;
+
+  async function runTour() {
+    if (tourRunning) return;
+    tourRunning = true;
+    const jdOpen = () => { const o = document.getElementById('s2-javadoc'); return o && !o.classList.contains('hidden'); };
+    await S2Tour.run([
+      {
+        target: '.s2-timer-wrap', title: 'The timer',
+        text: 'This timer counts up while you work. If you need to stop working (for example, to ask a question), ' +
+          'click <strong>Pause</strong> first and <strong>Resume</strong> when you continue. You can also hide it.'
+      },
+      {
+        target: '#code-panel .code-box', title: 'The code',
+        text: 'Each task shows one Java method. The code stays on the screen while you answer.'
+      },
+      {
+        target: '#theme-toggle', title: 'Light or dark?', action: 'click', actionText: 'Click the button to try it',
+        text: 'You can show the code on a light or a dark background. Click this button to switch the theme.'
+      },
+      {
+        target: '#theme-toggle', title: 'Pick what is comfortable',
+        text: 'Click again to switch back if you prefer. Your choice is kept for all the snippets.'
+      },
+      {
+        target: '#code-panel a.tok-doc', title: 'Javadoc links', action: 'click', waitFor: jdOpen,
+        actionText: 'Click the underlined method name',
+        text: 'Underlined method names are links to their official documentation (Javadoc). ' +
+          'Click <strong>min</strong> to open its Javadoc.'
+      },
+      {
+        target: '#s2-jd-close', title: 'Closing the Javadoc', action: 'click', waitFor: () => !jdOpen(),
+        actionText: 'Click Close',
+        text: 'The Javadoc opens in this window, on top of the code. When you are done reading, click ' +
+          '<strong>Close</strong> to return to the code.'
+      },
+      {
+        target: '#question-panel', title: 'The question',
+        text: 'Read the question carefully. Some questions list assumptions about code outside the method; use them ' +
+          'when you work out the answer.'
+      },
+      {
+        target: '#answer-row', title: 'Your answer',
+        text: 'Type the value the method returns, then click <strong>Submit answer</strong>. You cannot change it ' +
+          'after you submit. Give it a try now!'
+      }
+    ]);
+    tourRunning = false;
+    S2.set('tutorialDone', true);
+    const input = document.getElementById('task-answer');
+    if (input) input.focus();
   }
 
   function showDone() {

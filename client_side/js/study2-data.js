@@ -29,30 +29,27 @@ const JD_STRING = {
   substring: JD + 'java/lang/String.html#substring-int-int-'
 };
 
-// Practice snippet: same interface as the real tasks; not part of the analysis.
+// Practice snippet: the sample method from the first study (with Math.min, so the
+// tutorial has a Javadoc link to show); same interface as the real tasks; not analyzed.
 const STUDY2_PRACTICE = {
   id: 'practice',
   code: `
-public static int countVowels(String s) {
-    int count = 0;
-    for (int i = 0; i < s.length(); i++) {
-        char c = Character.toLowerCase(s.charAt(i));
-        if ("aeiou".indexOf(c) >= 0) {
-            count++;
-        }
-    }
-    return count;
+public static int addPositive(int a, int b) {
+  if (Math.min(a, b) < 0) {
+    return -1;
+  }
+  return a + b;
 }`,
   question: {
-    text: 'What value does the method return when called with s = "Java Code"?',
-    assumptions: []
+    text: 'What value does the method return when called with addPositive(3, -2)?',
+    assumptions: [
+      'Here might be some extra information about the snippet.',
+      'For example, clarifying assumptions.'
+    ]
   },
-  expectedAnswer: '4',
+  expectedAnswer: '-1',
   javadoc: {
-    length: JD_STRING.length,
-    charAt: JD_STRING.charAt,
-    indexOf: JD_STRING.indexOf,
-    'Character.toLowerCase': JD + 'java/lang/Character.html#toLowerCase-char-'
+    'Math.min': JD + 'java/lang/Math.html#min-int-int-'
   }
 };
 

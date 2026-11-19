@@ -231,3 +231,55 @@ footer.s2-footer {
   padding-top: 16px;
   border-top: 1px solid #ccc;
 }
+
+/* ---------- Code toolbar and light theme ---------- */
+.code-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.code-toolbar button { padding: 6px 12px; font-size: 14px; }
+.code-box.light { background: #f6f8fa; color: #24292f; border: 1px solid #d0d7de; }
+.code-box.light td.ln { color: #8c959f; border-right-color: #d0d7de; }
+.code-box.light .tok-keyword, .code-box.light .tok-literal { color: #cf222e; }
+.code-box.light .tok-type { color: #0550ae; }
+.code-box.light .tok-string { color: #0a3069; }
+.code-box.light .tok-number { color: #0550ae; }
+.code-box.light .tok-comment { color: #6e7781; }
+.code-box.light .tok-function { color: #8250df; }
+.code-box.light .tok-annotation { color: #953800; }
+.code-box.light a.tok-doc { color: #8250df; }
+.code-box.light a.tok-doc:hover { color: #24292f; }
+
+/* ---------- Guided tutorial (practice page) ---------- */
+.tour-block { position: fixed; z-index: 3000; background: transparent; }
+.tour-spot {
+  position: fixed;
+  z-index: 3001;
+  border-radius: 8px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 0 3px #4CAF50;
+  pointer-events: none;
+  transition: top 0.2s, left 0.2s, width 0.2s, height 0.2s;
+}
+.tour-tip {
+  position: fixed;
+  z-index: 3002;
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px 18px;
+  width: 340px;
+  max-width: calc(100vw - 24px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+.tour-tip h3 { margin: 0 0 6px; font-size: 18px; }
+.tour-tip p { margin: 0 0 10px; }
+.tour-tip .tour-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.tour-tip .tour-step { color: var(--muted); font-size: 13px; }
+.tour-tip .tour-action { color: #2e7d32; font-weight: 600; font-size: 14px; }
+.tour-pulse { animation: tour-pulse 1.4s ease-in-out infinite; }
+@keyframes tour-pulse {
+  0%, 100% { box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 0 3px #4CAF50; }
+  50% { box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 0 7px rgba(76, 175, 80, 0.55); }
+}

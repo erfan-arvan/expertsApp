@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Study Tasks</title>
-  <link rel="stylesheet" href="css/study2.css?v=1">
+  <link rel="stylesheet" href="css/study2.css?v=2">
 </head>
 <body>
 <main>
@@ -21,15 +21,14 @@
     <h2 id="break-title">Short Break</h2>
     <img id="break-img" src="img/relax.gif" alt="">
     <p id="break-text"></p>
-    <div class="countdown" id="break-countdown">01:00</div>
     <p class="warn" id="break-warn"></p>
     <button type="button" id="break-resume">Resume</button>
   </div>
 </div>
 
-<script src="js/study2-data.js?v=1"></script>
+<script src="js/study2-data.js?v=2"></script>
 <script src="js/study2-common.js?v=1"></script>
-<script src="js/study2-task.js?v=1"></script>
+<script src="js/study2-task.js?v=2"></script>
 <script>
 (function () {
   if (!S2.guard('tasks')) return;
@@ -39,7 +38,7 @@
   // Break rules (from the IRB protocol).
   const SHORT_EVERY = 5;                 // short break after every 5 snippets
   const SHORT = { lengthMs: 60_000, unlockMs: 30_000 };
-  const LONG = { lengthMs: 10 * 60_000, unlockMs: 60_000 };
+  const LONG = { lengthMs: 7 * 60_000, unlockMs: 60_000 };
 
   const snippetsById = Object.fromEntries(window.STUDY2_SNIPPETS.map(s => [s.id, s]));
   const order = S2.get('order');
@@ -76,7 +75,6 @@
       heading: `Snippet ${index + 1} of ${total}`,
       position: index + 1,
       practice: false,
-      nextLabel: index + 1 === total ? 'Finish' : 'Next Snippet',
       onComplete: result => {
         const tasks = S2.get('tasks', []);
         tasks.push(result);
@@ -108,7 +106,7 @@
     document.getElementById('break-title').textContent = b.type === 'long' ? 'Long Break (halfway point)' : 'Short Break';
     document.getElementById('break-img').src = b.type === 'long' ? 'img/stretch.gif' : 'img/relax.gif';
     document.getElementById('break-text').textContent = b.type === 'long'
-      ? 'You are halfway through. Take a break of up to 10 minutes. You may leave your seat to stretch or use the ' +
+      ? 'You are halfway through. Take a break of up to 7 minutes. You may leave your seat to stretch or use the ' +
         'restroom; please leave and return quietly and do not talk to others. The Resume button unlocks after 1 minute.'
       : 'Please stay seated and rest for a minute. The Resume button unlocks after 30 seconds.';
     document.getElementById('break-warn').textContent = '';
@@ -118,9 +116,6 @@
     const tick = () => {
       const elapsed = Date.now() - b.startedAt;
       const remaining = Math.max(0, cfg.lengthMs - elapsed);
-      document.getElementById('break-countdown').textContent = remaining > 0
-        ? S2.formatDuration(remaining + 999)
-        : 'Break over';
       const unlocked = elapsed >= cfg.unlockMs;
       resumeBtn.classList.toggle('secondary', !unlocked);
       resumeBtn.dataset.unlocked = unlocked ? '1' : '0';

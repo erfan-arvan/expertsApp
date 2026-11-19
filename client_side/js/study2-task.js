@@ -1,18 +1,29 @@
 /*
  * One input/output task: the code and the question are shown together.
- * 1. The participant types the return value and clicks "Submit answer"
- *    (answer time = active time from showing the snippet until this click).
- * 2. The answer is locked and the familiarity question appears; "Next" finishes the task.
- * The in-progress task is saved in s2_cur, so a reload continues the same task
- * with its timing intact (time while paused or closed is not counted).
+ * The participant types the return value and clicks "Submit answer"; the answer
+ * time is the active time from showing the snippet until that click (time while
+ * paused, on a break, or with the page closed is not counted).
+ * For the practice snippet, the answer is then locked and the correct answer shown.
+ * The in-progress task is saved in s2_cur, so a reload continues the same task.
  */
 (function () {
   'use strict';
   const { get, set, remove, activeMs, renderCode, escapeHtml, showMessage } = window.S2;
 
+  function themeLabel() {
+    return get('codeTheme', 'dark') === 'dark' ? '☀️ Switch to Light Mode' : '🌙 Switch to Dark Mode';
+  }
+
+  function applyTheme(root) {
+    const light = get('codeTheme', 'dark') === 'light';
+    root.querySelectorAll('.code-box').forEach(el => el.classList.toggle('light', light));
+    const btn = root.querySelector('#theme-toggle');
+    if (btn) btn.textContent = themeLabel();
+  }
+
   /**
    * opts: {container, key, snippetId, version, code, question, javadoc,
-   *        heading, position, practice, expectedAnswer, nextLabel, onComplete(result)}
+   *        heading, position, practice, expectedAnswer, submitLabel, onComplete(result)}
    */
   function renderTask(opts) {
     let cur = get('cur');
@@ -39,27 +50,53 @@
         <h2 style="margin:0;">${escapeHtml(opts.heading)}</h2>
       </div>
       <div class="task-grid">
-        <div>${renderCode(opts.code, opts.javadoc || {})}
-          <p class="hint">Underlined method names link to their Javadoc.</p>
+        <div id="code-panel">
+          <div class="code-toolbar">
+            <span class="hint" style="margin:0;">Underlined method names open their Javadoc.</span>
+            <button type="button" class="secondary" id="theme-toggle"></button>
+          </div>
+          ${renderCode(opts.code, opts.javadoc || {})}
         </div>
-        <div class="card" style="margin:0;">
+        <div class="card" style="margin:0;" id="question-panel">
           <p class="question-text">${escapeHtml(q.text)}</p>
           ${assumptions}
           <div id="task-answer-area"></div>
         </div>
       </div>`;
 
-    const area = opts.container.querySelector('#task-answer-area');
+    const root = opts.container;
+    root.querySelector('#theme-toggle').addEventListener('click', () => {
+      set('codeTheme', get('codeTheme', 'dark') === 'dark' ? 'light' : 'dark');
+      applyTheme(root);
+    });
+    applyTheme(root);
+
+    const area = root.querySelector('#task-answer-area');
+
+    function result() {
+      return {
+        position: opts.position,
+        snippetId: cur.snippetId,
+        version: cur.version,
+        answer: cur.answer,
+        answerTimeMs: cur.answerMs,
+        pausesDuringTask: get('pauseCount', 0) - cur.startPauses,
+        codeTheme: get('codeTheme', 'dark'),
+        shownAt: cur.shownAt,
+        answeredAt: cur.answeredAt
+      };
+    }
 
     function renderAnswerPhase() {
       area.innerHTML = `
-        <div class="answer-row">
+        <div class="answer-row" id="answer-row">
           <label for="task-answer">Return value</label>
           <input type="text" id="task-answer" autocomplete="off" spellcheck="false" autocapitalize="off">
           <p class="hint">Write the value as Java would show it, for example <code>true</code>, <code>42</code>,
-            <code>"abc"</code>, or <code>["a", "b"]</code> for a list or array.</p>
-        </div>
-        <div class="task-actions"><button type="button" id="task-submit">Submit answer</button></div>`;
+            <code>"abc"</code>, or <code>["a", "b"]</code> for a list or array. You cannot change your answer after
+            you submit it.</p>
+          <div class="task-actions"><button type="button" id="task-submit">${escapeHtml(opts.submitLabel || 'Submit answer')}</button></div>
+        </div>`;
       const input = area.querySelector('#task-answer');
       input.addEventListener('keydown', e => { if (e.key === 'Enter') e.preventDefault(); });
       area.querySelector('#task-submit').addEventListener('click', () => {
@@ -71,55 +108,35 @@
         cur.answer = value;
         cur.answerMs = activeMs() - cur.startActive;
         cur.answeredAt = new Date().toISOString();
-        cur.phase = 'familiarity';
-        cur.famStart = activeMs();
-        set('cur', cur);
-        renderFamiliarityPhase();
+        if (opts.practice) {
+          cur.phase = 'feedback';
+          set('cur', cur);
+          renderFeedbackPhase();
+        } else {
+          remove('cur');
+          opts.onComplete(result());
+        }
       });
-      input.focus();
+      if (!opts.noAutofocus) input.focus();
     }
 
-    function renderFamiliarityPhase() {
-      const feedback = opts.practice && opts.expectedAnswer !== undefined
-        ? `<div class="practice-feedback">This is only practice. The correct answer is <code>${escapeHtml(opts.expectedAnswer)}</code>.</div>`
-        : '';
+    function renderFeedbackPhase() {
       area.innerHTML = `
         <div class="answer-row">
           <label>Your answer</label>
           <div class="locked-answer">${escapeHtml(cur.answer)}</div>
         </div>
-        ${feedback}
-        <div class="fam-box">
-          <p class="question-text">Have you seen or worked with this code snippet before?</p>
-          <label><input type="radio" name="fam" value="Yes"> Yes</label>
-          <label><input type="radio" name="fam" value="No"> No</label>
-        </div>
-        <div class="task-actions"><button type="button" id="task-next">${escapeHtml(opts.nextLabel || 'Next')}</button></div>`;
+        <div class="practice-feedback">This was only practice. The correct answer is
+          <code>${escapeHtml(opts.expectedAnswer)}</code>.</div>
+        <div class="task-actions"><button type="button" id="task-next">Finish Practice</button></div>`;
       area.querySelector('#task-next').addEventListener('click', () => {
-        const fam = area.querySelector('input[name="fam"]:checked');
-        if (!fam) {
-          showMessage('Missing answer', 'Please tell us whether you have seen this code before.');
-          return;
-        }
-        const result = {
-          position: opts.position,
-          snippetId: cur.snippetId,
-          version: cur.version,
-          answer: cur.answer,
-          answerTimeMs: cur.answerMs,
-          familiarity: fam.value,
-          familiarityTimeMs: activeMs() - cur.famStart,
-          pausesDuringTask: get('pauseCount', 0) - cur.startPauses,
-          shownAt: cur.shownAt,
-          answeredAt: cur.answeredAt,
-          completedAt: new Date().toISOString()
-        };
+        const r = result();
         remove('cur');
-        opts.onComplete(result);
+        opts.onComplete(r);
       });
     }
 
-    if (cur.phase === 'familiarity') renderFamiliarityPhase();
+    if (cur.phase === 'feedback') renderFeedbackPhase();
     else renderAnswerPhase();
   }
 
