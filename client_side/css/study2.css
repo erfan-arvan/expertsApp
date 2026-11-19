@@ -303,3 +303,12 @@ footer.s2-footer {
 input[type="email"] {
   width: 100%; padding: 10px 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; margin: 8px 0 14px;
 }
+
+/* Registration pages: the first study's yellow background and glowing email box */
+body.reg-page { background-color: #F4C41C; }
+body.reg-page footer.s2-footer { color: #333; border-top-color: rgba(0, 0, 0, 0.2); }
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 10px #4CAF50; }
+  100% { box-shadow: 0 0 20px #4CAF50, 0 0 30px #4CAF50; }
+}
+body.reg-page #email { animation: glowPulse 1.5s infinite alternate; }
