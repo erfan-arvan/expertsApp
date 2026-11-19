@@ -232,7 +232,17 @@
     show('review-card');
   }
 
+  function isPlausiblePhone(v) {
+    return /^\+\d{7,15}$/.test(v) || /^[\d\-\s().+]{7,20}$/.test(v);
+  }
+
   async function submit() {
+    const smsOptIn = $('sms-checkbox').checked;
+    const phone = $('phone-input').value.trim();
+    if (smsOptIn && !isPlausiblePhone(phone)) {
+      showMessage('Check your phone number', 'Please enter a valid mobile number for SMS notifications (e.g., +1 973 555 0123), or uncheck the SMS option.');
+      return;
+    }
     const btn = $('submit-btn');
     btn.disabled = true;
     $('submit-status').textContent = 'Submitting…';
@@ -242,7 +252,9 @@
         slotSource: state.source,
         slots: state.slots.map(slotText),
         slotsRaw: state.slots,
-        emailReminders: $('reminders').checked
+        emailReminders: $('reminders').checked,
+        smsOptIn,
+        smsPhone: smsOptIn ? phone : ''
       });
     } catch (e) {
       console.error(e);
@@ -267,6 +279,8 @@
   $('custom-next').addEventListener('click', () => continueFrom('custom'));
   $('change-btn').addEventListener('click', () => (state.source === 'custom' ? showCustom() : showPredefined()));
   $('submit-btn').addEventListener('click', submit);
+  $('sms-checkbox').addEventListener('change', () =>
+    $('sms-input-wrap').classList.toggle('hidden', !$('sms-checkbox').checked));
   $('about-toggle').addEventListener('click', () => {
     const body = $('about-body');
     body.classList.toggle('hidden');

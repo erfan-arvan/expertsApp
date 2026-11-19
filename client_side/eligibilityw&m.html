@@ -85,6 +85,15 @@
     <label style="display:block; margin:10px 0;">
       <input type="checkbox" id="reminders" checked> Send me email reminders about my session
     </label>
+    <label style="display:block; margin:10px 0;">
+      <input type="checkbox" id="sms-checkbox" checked>
+      I don’t check email often — also send me SMS notifications (<span style="color:red;">recommended</span>).
+    </label>
+    <div id="sms-input-wrap">
+      <input type="text" id="phone-input" inputmode="tel" autocomplete="tel"
+        placeholder="Mobile number (any format, e.g., 973-555-0123 or +1 973 555 0123)" aria-label="Mobile number for SMS notifications">
+      <p class="hint">We’ll only use this number for study-related notifications.</p>
+    </div>
     <div class="reg-actions">
       <button type="button" id="submit-btn">Submit Registration</button>
       <button type="button" class="secondary" id="change-btn">Change times</button>
@@ -117,6 +126,6 @@
 </script>
 <script src="js/study2-common.js?v=2"></script>
 <script src="js/study2-slots.js?v=1"></script>
-<script src="js/study2-eligibility.js?v=1"></script>
+<script src="js/study2-eligibility.js?v=2"></script>
 </body>
 </html>
