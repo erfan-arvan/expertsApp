@@ -2184,7 +2184,8 @@ public synchronized Map<String, Object> submitStudy2(@RequestBody Map<String, Ob
 // -------------------------------
 // Study 2 registration (eligibility.html / eligibilityw&m.html)
 // -------------------------------
-// event "eligibility":  outcome of the eligibility questions (no email)
+// event "eligibility":  outcome of the eligibility questions; eligible students get an
+//                       email with a link back to the page to pick their times
 // event "availability": selected predefined session times (slotSource "predefined")
 //                       or the student's own availability Dec 1-15 (slotSource "custom");
 //                       a confirmation email is sent.
@@ -2226,6 +2227,20 @@ public synchronized Map<String, Object> registerStudy2(@RequestBody Map<String, 
         list.add(record);
         study2WriteMap(STUDY2_REGISTRATIONS_FILE, all);
         System.out.println(">>> [register_study2] " + event + " from " + email + " (site=" + site + ", eligible=" + eligible + ")");
+
+        if (event.equals("eligibility") && eligible) {
+            // Same as the first study: tell eligible students, with a link to pick their times later.
+            String page = site.equals("wm") ? "eligibilityw%26m.html" : "eligibility.html";
+            String timesLink = "https://codecomprehensibility.site/" + page + "?step=times&email="
+                    + java.net.URLEncoder.encode(email, StandardCharsets.UTF_8);
+            sendEmailViaPython(email, "You're eligible for the Code Comprehension Study 🎉",
+                    "Great news—you’re eligible to participate in our Code Comprehension Study!\n\n"
+                    + "✅ Next step: pick your available time(s).\n"
+                    + "You can do that here:\n" + timesLink + "\n\n"
+                    + "If you already provided availability on the website, you can ignore this step.\n\n"
+                    + "Questions? Just reply to this email or contact us at ea442@njit.edu.\n\n"
+                    + "— Code Comprehension Study Team");
+        }
 
         if (event.equals("availability") && eligible) {
             boolean predefined = "predefined".equals(body.get("slotSource"));

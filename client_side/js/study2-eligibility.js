@@ -281,5 +281,14 @@
     body.classList.toggle('hidden');
     $('about-toggle').textContent = body.classList.contains('hidden') ? 'Show' : 'Hide';
   });
-  show('email-card');
+  // Link from the "You're eligible" email: go straight to choosing times.
+  const params = new URLSearchParams(location.search);
+  const linkEmail = (params.get('email') || '').trim().toLowerCase();
+  if (params.get('step') === 'times' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(linkEmail)) {
+    state.email = linkEmail;
+    $('about-card').classList.add('hidden');
+    showPredefined();
+  } else {
+    show('email-card');
+  }
 })();
